@@ -335,14 +335,8 @@
                 <div class="input-group">
                     <label>Telescopio:</label>
                     <select id="preset-telescope" onchange="applicaPresetTelescopio()">
-                        <option value="">-- Personalizza --</option>
-                        <option value="400" selected>Askar FRA 400 (400mm)</option>
-                        <option value="731">Explore Scientific Comet Hunter (731mm)</option>
-                        <option value="135">Samyang 135mm f/2 (135mm)</option>
-                        <option value="250">William Optics RedCat 51 (250mm)</option>
-                        <option value="1000">Newton 200/1000 (1000mm)</option>
-                        <option value="2032">Celestron C8 (2032mm)</option>
-                    </select>
+        <option value="">-- Seleziona Telescopio --</option>
+    </select>
                 </div>
                 <div class="input-group">
                     <label>Focale (mm):</label>
@@ -352,13 +346,8 @@
                 <div class="input-group">
                     <label>Sensore:</label>
                     <select id="preset-sensor" onchange="applicaPresetSensore()">
-                        <option value="">-- Personalizza --</option>
-                        <option value="23.5,15.7" selected>IMX571 - Poseidon C (23.5 x 15.7)</option>
-                        <option value="11.14,6.26">IMX585 - Uranus C (11.1 x 6.3)</option>
-                        <option value="36,24">Full Frame - ASI6200 (36 x 24)</option>
-                        <option value="17.7,13.4">Micro 4/3 - ASI294 (17.7 x 13.4)</option>
-                        <option value="11.3,11.3">Square 1" - ASI533 (11.3 x 11.3)</option>
-                    </select>
+        <option value="">-- Seleziona Camera --</option>
+    </select>
                 </div>
                 <div class="input-group"><label>Larg. W (mm):</label><input type="number" id="sensor-width" value="23.5" step="0.1" oninput="aggiornaFOV()"></div>
                 <div class="input-group"><label>Alet. H (mm):</label><input type="number" id="sensor-height" value="15.7" step="0.1" oninput="aggiornaFOV()"></div>
@@ -491,6 +480,57 @@
     </div>
 
     <script>
+// --- DATABASE ATTREZZATURA ---
+const dbTelescopi = [
+    { nome: "Askar FRA 400 (400mm)", focale: 400 },
+    { nome: "Explore Scientific Comethunter (731mm)", focale: 731 },
+    { nome: "SW Explorer 150P (750mm)", focale: 750 },
+    { nome: "SW Explorer 200P (1000mm)", focale: 1000 },
+    { nome: "SW Quattro 150P (600mm)", focale: 600 },
+    { nome: "SW Quattro 200P (800mm)", focale: 800 },
+    { nome: "SW Quattro 250P (1000mm)", focale: 1000 },
+    { nome: "SW 72ED Evostar (420mm)", focale: 420 },
+    { nome: "SW 80ED Evostar (600mm)", focale: 600 },
+    { nome: "SW Esprit 80ED (400mm)", focale: 400 },
+    { nome: "SW Esprit 100ED (550mm)", focale: 550 },
+    { nome: "Celestron C8 SCT (2032mm)", focale: 2032 },
+    { nome: "Celestron C8 @ f/6.3 (1280mm)", focale: 1280 },
+    { nome: "ZWO Seestar S50 (250mm)", focale: 250 },
+    { nome: "Samyang 135mm f/2", focale: 135 }
+];
+
+const dbCamere = [
+    { nome: "ASI 533MC/MM (Square)", w: 11.31, h: 11.31 },
+    { nome: "ASI 294MC/MM (4/3\")", w: 19.1, h: 13.0 },
+    { nome: "ASI 2600MC/MM (APS-C)", w: 23.5, h: 15.7 },
+    { nome: "ASI 6200MC/MM (Full Frame)", w: 36.0, h: 24.0 },
+    { nome: "ASI 183MC/MM (1\")", w: 13.2, h: 8.8 },
+    { nome: "ASI 585MC (Compact)", w: 11.14, h: 6.26 },
+    { nome: "ASI 1600MM (4/3\")", w: 17.7, h: 13.4 },
+    { nome: "Reflex APS-C (Canon/Nikon)", w: 22.3, h: 14.9 }
+];
+
+// Funzione per popolare i menu a tendina all'avvio
+function popolaMenuAttrezzatura() {
+    const selTel = document.getElementById('preset-telescope');
+    dbTelescopi.forEach(t => {
+        let opt = document.createElement('option');
+        opt.value = t.focale;
+        opt.textContent = t.nome;
+        selTel.appendChild(opt);
+    });
+
+    const selCam = document.getElementById('preset-sensor');
+    dbCamere.forEach(c => {
+        let opt = document.createElement('option');
+        opt.value = `${c.w},${c.h}`;
+        opt.textContent = c.nome;
+        selCam.appendChild(opt);
+    });
+}
+
+// Chiama la funzione all'avvio (aggiungila in fondo al file vicino a scaricaDatiPrevisionali)
+popolaMenuAttrezzatura();
         // CORE LOGIC
         let latCorrente = 46.062, lonCorrente = 13.235, datiMeteo = null, indicePartenza = 0, chartAltezza = null, targetSelezionato = null, aladinSkyMap = null, vistaPrecedente = 'dashboard-view';
         let mappaScura = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { maxZoom: 19 });
