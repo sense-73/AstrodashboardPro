@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AstroDashboard v3.5 - Pianificatore Celeste</title>
+    <title>AstroDashboard v4.1 - N.I.N.A. Master Edition</title>
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -161,28 +161,22 @@
         .guide-section li { margin-bottom: 12px; }
         .guide-section strong { color: #fff; }
         .filosofia-box { background: rgba(187,134,252,0.1); padding: 20px; border-left: 4px solid #bb86fc; border-radius: 4px; margin-bottom: 30px;}
-/* ========================================== */
+        
+        /* ========================================== */
         /* OTTIMIZZAZIONE MOBILE (SMARTPHONE)         */
         /* ========================================== */
         @media (max-width: 768px) {
-            /* Riorganizza l'intestazione in colonna */
             .main-header { grid-template-columns: 1fr; gap: 15px; text-align: center; }
             .center-logo { height: 90px; }
             .author-section { justify-self: center; flex-direction: column; text-align: center; }
-            
-            /* Adatta le barre di ricerca e l'effemeride */
             .search-local-input { width: 100% !important; box-sizing: border-box; }
             .search-suggestions { width: 100%; }
             .ephemeris-box { flex-direction: column; gap: 15px; text-align: center; }
             .weather-container { border: none; border-top: 1px solid #444; border-bottom: 1px solid #444; padding: 10px 0; width: 100%; }
             .times-grid { grid-template-columns: 1fr 1fr; padding-left: 0; }
-            
-            /* Adatta i moduli di inserimento */
             .input-group { display: flex; flex-direction: column; align-items: flex-start; }
             .input-group label { width: 100%; margin-bottom: 5px; text-align: left; }
             input[type="text"]:not(.search-local-input), input[type="number"], select, input[type="time"] { width: 100% !important; max-width: 100%; }
-            
-            /* Riorganizza la tabella del Calcolatore Smart */
             .calc-row { flex-direction: column; align-items: flex-start; gap: 10px; padding-bottom: 15px; }
             .calc-total { text-align: left; width: 100%; padding-left: 10px; font-weight: bold; border-top: 1px dashed #444; padding-top: 5px; }
             .twilight-grid { grid-template-columns: 1fr 1fr; }
@@ -196,7 +190,7 @@
         <img src="astro_logo.png" alt="AstroDashboard Pro" class="center-logo">
         <div class="author-section">
             <div style="text-align: right;">
-                <p style="margin: 0; font-size: 0.9em; color: #fff;">v3.5.0-Perfect</p>
+                <p style="margin: 0; font-size: 0.9em; color: #fff;">v4.1.0-NINA Master</p>
                 <p style="margin: 3px 0 0 0; font-size: 0.8em; color: #aaa;">Creato da <b style="color:#bb86fc;">Enrico Salis</b></p>
                 <button class="btn-guide" onclick="apriGuida()">📖 Apri Manuale</button>
             </div>
@@ -302,7 +296,6 @@
         </div>
     </div> 
 
-
     <div id="planning-view">
         <div class="planning-header-row">
             <button class="btn-back" onclick="tornaDashboard()">Torna alla Dashboard</button>
@@ -335,8 +328,8 @@
                 <div class="input-group">
                     <label>Telescopio:</label>
                     <select id="preset-telescope" onchange="applicaPresetTelescopio()">
-        <option value="">-- Seleziona Telescopio --</option>
-    </select>
+                        <option value="">-- Seleziona Telescopio --</option>
+                    </select>
                 </div>
                 <div class="input-group">
                     <label>Focale (mm):</label>
@@ -346,8 +339,8 @@
                 <div class="input-group">
                     <label>Sensore:</label>
                     <select id="preset-sensor" onchange="applicaPresetSensore()">
-        <option value="">-- Seleziona Camera --</option>
-    </select>
+                        <option value="">-- Seleziona Camera --</option>
+                    </select>
                 </div>
                 <div class="input-group"><label>Larg. W (mm):</label><input type="number" id="sensor-width" value="23.5" step="0.1" oninput="aggiornaFOV()"></div>
                 <div class="input-group"><label>Alet. H (mm):</label><input type="number" id="sensor-height" value="15.7" step="0.1" oninput="aggiornaFOV()"></div>
@@ -427,7 +420,6 @@
                     </div>
                     <div class="calc-total" id="dither-tot" style="color: #ffaa00;">0m</div>
                 </div>
-
             </div>
 
             <div class="time-summary">
@@ -437,6 +429,48 @@
                     <h4>Tempo Residuo</h4><span id="calc-residual" class="text-green">--h --m</span>
                     <p id="calc-warning" style="margin: 5px 0 0 0; font-size: 0.85em; display: none;" class="text-red">⚠️ Sforamento tempo!</p>
                 </div>
+            </div>
+        </div>
+
+        <div class="panel" style="margin-top: 20px; border: 1px solid #bb86fc; background: linear-gradient(180deg, #1a1a1a 0%, #121212 100%);">
+            <h3 style="color: #bb86fc;">🚀 Esportazione N.I.N.A. Advanced Sequencer</h3>
+            <p style="font-size: 0.85em; color: #aaa; margin-top: 0;">Il file .json generato importerà coordinate, filtri, tempi calcolati dall'IA e le istruzioni di automazione dell'hardware.</p>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px;">
+                <div style="background: #222; padding: 15px; border-radius: 8px;">
+                    <h4 style="margin: 0 0 10px 0; color: #fff;">Avvio Sequenza</h4>
+                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; width: 100%; cursor: pointer; color: #aaa; font-size: 0.9em;">
+                        <input type="checkbox" id="nina-cool" checked style="transform: scale(1.2);"> Raffredda Camera a <input type="number" id="nina-temp" value="-10" style="width: 60px!important; padding: 4px!important;"> °C
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; width: 100%; cursor: pointer; color: #aaa; font-size: 0.9em;">
+                        <input type="checkbox" id="nina-slew" checked style="transform: scale(1.2);"> Slew & Center (Plate Solve)
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 8px; width: 100%; cursor: pointer; color: #aaa; font-size: 0.9em;">
+                        <input type="checkbox" id="nina-guide" checked style="transform: scale(1.2);"> Avvia Autoguida
+                    </label>
+                </div>
+                <div style="background: #222; padding: 15px; border-radius: 8px;">
+                    <h4 style="margin: 0 0 10px 0; color: #fff;">Fine / Sicurezza</h4>
+                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; width: 100%; cursor: pointer; color: #aaa; font-size: 0.9em;">
+                        <input type="checkbox" id="nina-warm" checked style="transform: scale(1.2);"> Riscalda Camera (Warm Up)
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; width: 100%; cursor: pointer; color: #aaa; font-size: 0.9em;">
+                        <input type="checkbox" id="nina-park" checked style="transform: scale(1.2);"> Parcheggia Montatura
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 8px; width: 100%; cursor: pointer; color: #aaa; font-size: 0.9em;">
+                        <input type="checkbox" id="nina-flip" checked style="transform: scale(1.2);"> Attiva Meridian Flip
+                    </label>
+                </div>
+                <div style="background: #222; padding: 15px; border-radius: 8px; grid-column: 1 / -1;">
+                    <h4 style="margin: 0 0 5px 0; color: #fff;">Mappatura Nomi Filtri <span class="info-icon" title="N.I.N.A. richiede il nome esatto della tua ruota portafiltri. Scrivili qui. Il sistema li ricorderà per le prossime volte!">ℹ️</span></h4>
+                    <p style="font-size: 0.8em; color: #777; margin-top: 0; margin-bottom: 10px;">Attenzione: Maiuscole e minuscole sono importanti (es. "Luminance" non è "luminance").</p>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px;" id="nina-filters-container">
+                        </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 25px;">
+                <button class="btn-smart" style="background: linear-gradient(135deg, #ff4444 0%, #aa0000 100%); box-shadow: 0 4px 15px rgba(255, 68, 68, 0.3);" onclick="esportaNINA()">💾 Genera File per N.I.N.A.</button>
             </div>
         </div>
     </div>
@@ -478,60 +512,46 @@
             </ul>
         </div>
     </div>
+<script>
+        // --- DATABASE ATTREZZATURA ---
+        const dbTelescopi = [
+            { nome: "Askar FRA 400 (400mm)", focale: 400 },
+            { nome: "Explore Scienific Comethunter (731mm)", focale: 731 },
+            { nome: "SW Explorer 130 PDS (650mm)", focale: 650 },
+            { nome: "SW Explorer 150P (750mm)", focale: 750 },
+            { nome: "SW Explorer 200P (1000mm)", focale: 1000 },
+            { nome: "SW Quattro 150P (600mm)", focale: 600 },
+            { nome: "SW Quattro 200P (800mm)", focale: 800 },
+            { nome: "SW Quattro 250P (1000mm)", focale: 1000 },
+            { nome: "SW 72ED Evostar (420mm)", focale: 420 },
+            { nome: "SW 80ED Evostar (600mm)", focale: 600 },
+            { nome: "SW Esprit 80ED (400mm)", focale: 400 },
+            { nome: "SW Esprit 100ED (550mm)", focale: 550 },
+            { nome: "Celestron C8 SCT (2032mm)", focale: 2032 },
+            { nome: "Celestron C8 @ f/6.3 (1280mm)", focale: 1280 },
+            { nome: "ZWO Seestar S50 (250mm)", focale: 250 },
+            { nome: "Samyang 135mm f/2", focale: 135 }
+        ];
 
-    <script>
-// --- DATABASE ATTREZZATURA ---
-const dbTelescopi = [
-    { nome: "Askar FRA 400 (400mm)", focale: 400 },
-    { nome: "Explore Scientific Comethunter (731mm)", focale: 731 },
-    { nome: "SW Explorer 150P (750mm)", focale: 750 },
-    { nome: "SW Explorer 200P (1000mm)", focale: 1000 },
-    { nome: "SW Quattro 150P (600mm)", focale: 600 },
-    { nome: "SW Quattro 200P (800mm)", focale: 800 },
-    { nome: "SW Quattro 250P (1000mm)", focale: 1000 },
-    { nome: "SW 72ED Evostar (420mm)", focale: 420 },
-    { nome: "SW 80ED Evostar (600mm)", focale: 600 },
-    { nome: "SW Esprit 80ED (400mm)", focale: 400 },
-    { nome: "SW Esprit 100ED (550mm)", focale: 550 },
-    { nome: "Celestron C8 SCT (2032mm)", focale: 2032 },
-    { nome: "Celestron C8 @ f/6.3 (1280mm)", focale: 1280 },
-    { nome: "ZWO Seestar S50 (250mm)", focale: 250 },
-    { nome: "Samyang 135mm f/2", focale: 135 }
-];
+        const dbCamere = [
+            { nome: "ASI 533MC/MM (Square)", w: 11.31, h: 11.31 },
+            { nome: "ASI 294MC/MM (4/3\")", w: 19.1, h: 13.0 },
+            { nome: "SONY IMX571 ", w: 23.5, h: 15.7 },
+            { nome: "ASI 6200MC/MM (Full Frame)", w: 36.0, h: 24.0 },
+            { nome: "ASI 183MC/MM (1\")", w: 13.2, h: 8.8 },
+            { nome: "SONY IMX585", w: 11.14, h: 6.26 },
+            { nome: "ASI 1600MM (4/3\")", w: 17.7, h: 13.4 },
+            { nome: "Reflex APS-C (Canon/Nikon)", w: 22.3, h: 14.9 }
+        ];
 
-const dbCamere = [
-    { nome: "ASI 533MC/MM (Square)", w: 11.31, h: 11.31 },
-    { nome: "ASI 294MC/MM (4/3\")", w: 19.1, h: 13.0 },
-    { nome: "ASI 2600MC/MM (APS-C)", w: 23.5, h: 15.7 },
-    { nome: "ASI 6200MC/MM (Full Frame)", w: 36.0, h: 24.0 },
-    { nome: "ASI 183MC/MM (1\")", w: 13.2, h: 8.8 },
-    { nome: "ASI 585MC (Compact)", w: 11.14, h: 6.26 },
-    { nome: "ASI 1600MM (4/3\")", w: 17.7, h: 13.4 },
-    { nome: "Reflex APS-C (Canon/Nikon)", w: 22.3, h: 14.9 }
-];
+        function popolaMenuAttrezzatura() {
+            const selTel = document.getElementById('preset-telescope');
+            dbTelescopi.forEach(t => { let opt = document.createElement('option'); opt.value = t.focale; opt.textContent = t.nome; selTel.appendChild(opt); });
+            const selCam = document.getElementById('preset-sensor');
+            dbCamere.forEach(c => { let opt = document.createElement('option'); opt.value = `${c.w},${c.h}`; opt.textContent = c.nome; selCam.appendChild(opt); });
+        }
 
-// Funzione per popolare i menu a tendina all'avvio
-function popolaMenuAttrezzatura() {
-    const selTel = document.getElementById('preset-telescope');
-    dbTelescopi.forEach(t => {
-        let opt = document.createElement('option');
-        opt.value = t.focale;
-        opt.textContent = t.nome;
-        selTel.appendChild(opt);
-    });
-
-    const selCam = document.getElementById('preset-sensor');
-    dbCamere.forEach(c => {
-        let opt = document.createElement('option');
-        opt.value = `${c.w},${c.h}`;
-        opt.textContent = c.nome;
-        selCam.appendChild(opt);
-    });
-}
-
-// Chiama la funzione all'avvio (aggiungila in fondo al file vicino a scaricaDatiPrevisionali)
-popolaMenuAttrezzatura();
-        // CORE LOGIC
+        // CORE LOGIC E MAPPA
         let latCorrente = 46.062, lonCorrente = 13.235, datiMeteo = null, indicePartenza = 0, chartAltezza = null, targetSelezionato = null, aladinSkyMap = null, vistaPrecedente = 'dashboard-view';
         let mappaScura = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { maxZoom: 19 });
         let map = L.map('map', { center: [latCorrente, lonCorrente], zoom: 8, layers: [mappaScura], zoomControl: false });
@@ -562,8 +582,7 @@ popolaMenuAttrezzatura();
         function getPuntoCardinale(az) { return ["N", "NE", "E", "SE", "S", "SW", "W", "NW", "N"][Math.round(az / 45) % 8]; }
 
         function cercaIndirizzo() {
-            let query = document.getElementById('ricerca').value;
-            let dropdown = document.getElementById('dropdown-risultati');
+            let query = document.getElementById('ricerca').value, dropdown = document.getElementById('dropdown-risultati');
             if (query.length < 3) { dropdown.style.display = 'none'; return; }
             clearTimeout(timerRicerca);
             timerRicerca = setTimeout(() => {
@@ -574,8 +593,7 @@ popolaMenuAttrezzatura();
                             dropdown.style.display = 'block';
                             data.forEach(l => {
                                 let li = document.createElement('li'); li.textContent = l.display_name;
-                                li.onclick = () => selezionaLuogo(l.lat, l.lon, l.display_name);
-                                dropdown.appendChild(li);
+                                li.onclick = () => selezionaLuogo(l.lat, l.lon, l.display_name); dropdown.appendChild(li);
                             });
                         } else dropdown.style.display = 'none';
                     });
@@ -585,8 +603,7 @@ popolaMenuAttrezzatura();
         function selezionaLuogo(lat, lon, nome) {
             latCorrente = parseFloat(lat); lonCorrente = parseFloat(lon);
             document.getElementById('ricerca').value = nome.split(',')[0];
-            document.getElementById('lat').value = latCorrente.toFixed(5);
-            document.getElementById('lon').value = lonCorrente.toFixed(5);
+            document.getElementById('lat').value = latCorrente.toFixed(5); document.getElementById('lon').value = lonCorrente.toFixed(5);
             document.getElementById('dropdown-risultati').style.display = 'none';
             map.flyTo([latCorrente, lonCorrente], 9);
             if (marker) map.removeLayer(marker);
@@ -728,7 +745,6 @@ popolaMenuAttrezzatura();
         function apriPianificazione(t) {
             targetSelezionato = t; document.getElementById('dashboard-view').style.display = 'none'; document.getElementById('planning-view').style.display = 'block';
             document.getElementById('plan-target-name').innerText = "Pianificazione: " + t.name;
-            document.getElementById('calc-title').innerHTML = `⏱️ Calcolatore Sessione Smart AI <span class="info-icon" onclick="apriGuida('guida-smart')" title="Scopri come l'AI calcola le pose">ℹ️</span>`;
             document.getElementById('stat-type').innerText = t.type || "--"; document.getElementById('stat-mag').innerText = t.mag || "--"; document.getElementById('stat-dist').innerText = t.dist || "--";
             document.getElementById('target-description').innerText = t.desc || "Nessuna descrizione."; document.getElementById('target-tips').innerText = t.tips || "Nessun consiglio.";
             let wl = document.getElementById('target-wiki'); if(t.link) { wl.href = t.link; wl.style.display = 'inline-block'; } else wl.style.display = 'none';
@@ -771,6 +787,7 @@ popolaMenuAttrezzatura();
                 r.innerHTML = `<div style="display:flex; align-items:center; width: 140px;">${isL ? `<input type="checkbox" id="${f.id}-check" checked style="margin-right:10px; transform: scale(1.2); cursor: pointer;" onchange="calcolaTempi()">` : `<span style="display:inline-block; width: 23px; margin-right:10px;"></span>`}<label style="width:auto; cursor: ${isL?'pointer':'default'};" ${isL?`onclick="document.getElementById('${f.id}-check').click()"`:''}>${f.name}</label></div><div class="calc-inputs"><input type="number" id="${f.id}-count" value="${f.dC}" min="0" oninput="calcolaTempi()"> <span>x</span> <input type="number" id="${f.id}-exp" value="${f.dE}" min="0" oninput="calcolaTempi()"> <span>s</span></div><div class="calc-total" id="${f.id}-tot">0h 0m</div>`;
                 c.appendChild(r);
             });
+            aggiornaFiltriNina();
         }
 
         function calcolaTempi() {
@@ -832,8 +849,102 @@ popolaMenuAttrezzatura();
             calcolaTempi();
         }
 
+        // --- GESTIONE N.I.N.A. ---
+        const defaultNinaFilters = { 'm-l': 'Luminance', 'm-r': 'Red', 'm-g': 'Green', 'm-b': 'Blue', 'm-ha': 'Ha', 'm-oiii': 'OIII', 'm-sii': 'SII' };
+        function aggiornaFiltriNina() {
+            let isM = document.getElementById('sensor-type').value === 'mono', c = document.getElementById('nina-filters-container'); if (!c) return;
+            c.innerHTML = '';
+            if (!isM) { c.innerHTML = '<span style="color:#aaa; font-size:0.9em;">OSC Camera: Nessun filtro da configurare.</span>'; return; }
+            framesMono.forEach(f => {
+                if (!f.id.includes('dark') && !f.id.includes('bias')) {
+                    let savedName = localStorage.getItem('nina_filter_' + f.id) || defaultNinaFilters[f.id] || f.name;
+                    let d = document.createElement('div');
+                    d.style = "display: flex; align-items: center; justify-content: space-between; font-size: 0.85em; background: #1a1a1a; padding: 5px 10px; border-radius: 4px; border: 1px solid #444;";
+                    d.innerHTML = `<label style="color:#aaa; width:auto; margin:0; font-weight:bold;">${f.name}</label><input type="text" id="nina-name-${f.id}" value="${savedName}" onchange="salvaFiltroNina('${f.id}')" style="width: 80px!important; padding: 4px!important; font-size: 0.9em; background: #222; border-color: #555;">`;
+                    c.appendChild(d);
+                }
+            });
+        }
+        function salvaFiltroNina(id) { localStorage.setItem('nina_filter_' + id, document.getElementById(`nina-name-${id}`).value.trim()); }
+
+        // MOTORE DI GENERAZIONE N.I.N.A. JSON
+        function esportaNINA() {
+            if (!targetSelezionato) { alert("Scegli prima un bersaglio dal Planetario 🔭!"); return; }
+            
+            let doCool = document.getElementById('nina-cool').checked, tempTarget = parseFloat(document.getElementById('nina-temp').value) || -10;
+            let doSlew = document.getElementById('nina-slew').checked, doGuide = document.getElementById('nina-guide').checked;
+            let doWarm = document.getElementById('nina-warm').checked, doPark = document.getElementById('nina-park').checked;
+            let doFlip = document.getElementById('nina-flip').checked;
+            let doDither = document.getElementById('dither-check') && document.getElementById('dither-check').checked, ditherFreq = parseInt(document.getElementById('dither-freq').value) || 1;
+            let isMono = document.getElementById('sensor-type').value === 'mono', frameList = isMono ? framesMono : framesColor, esposizioni = [];
+
+            frameList.forEach(f => {
+                let count = parseInt(document.getElementById(`${f.id}-count`).value) || 0, exp = parseInt(document.getElementById(`${f.id}-exp`).value) || 0;
+                if (count > 0 && exp > 0) {
+                    let isLight = !f.id.includes('dark') && !f.id.includes('bias');
+                    esposizioni.push({ count: count, exp: exp, filter: (isMono && isLight) ? document.getElementById(`nina-name-${f.id}`).value.trim() : null, type: f.id.includes('dark') ? "DARK" : f.id.includes('bias') ? "FLAT" : "LIGHT" });
+                }
+            });
+
+            if (esposizioni.length === 0) { alert("Nessuna posa calcolata!"); return; }
+
+            let idCounter = 1; function nextId() { return (idCounter++).toString(); }
+            function makeObs(type, values) { return { "$id": nextId(), "$type": `System.Collections.ObjectModel.ObservableCollection\`1[[${type}, NINA.Sequencer]], System.ObjectModel`, "$values": values }; }
+
+            let ra = targetSelezionato.ra, rh = Math.floor(ra), rm = Math.floor((ra - rh) * 60), rs = ((ra - rh) * 60 - rm) * 60;
+            let dec = targetSelezionato.dec, negD = dec < 0, aD = Math.abs(dec), dd = Math.floor(aD), dm = Math.floor((aD - dd) * 60), ds = ((aD - dd) * 60 - dm) * 60;
+
+            let rootId = nextId(), startAreaId = nextId(), targetAreaId = nextId(), endAreaId = nextId(), startItems = [];
+            if (doCool) startItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Camera.CoolCamera, NINA.Sequencer", "Temperature": tempTarget, "Duration": 0.0, "Parent": {"$ref": startAreaId}, "ErrorBehavior": 0, "Attempts": 1 });
+
+            let dsoContainerId = nextId(), imagingContainerId = nextId(), dsoItems = [];
+            if (doSlew) dsoItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Platesolving.Center, NINA.Sequencer", "Inherited": true, "Coordinates": { "$id": nextId(), "$type": "NINA.Astrometry.InputCoordinates, NINA.Astrometry", "RAHours": rh, "RAMinutes": rm, "RASeconds": rs, "NegativeDec": negD, "DecDegrees": dd, "DecMinutes": dm, "DecSeconds": ds }, "Parent": {"$ref": dsoContainerId}, "ErrorBehavior": 0, "Attempts": 1 });
+            if (doGuide) dsoItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Guider.StartGuiding, NINA.Sequencer", "ForceCalibration": false, "Parent": {"$ref": dsoContainerId}, "ErrorBehavior": 0, "Attempts": 1 });
+
+            let imagingItems = [];
+            esposizioni.forEach(expo => {
+                let blockId = nextId(), blockItems = [];
+                if (expo.filter) blockItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.FilterWheel.SwitchFilter, NINA.Sequencer", "Filter": { "$id": nextId(), "$type": "NINA.Core.Model.Equipment.FilterInfo, NINA.Core", "_name": expo.filter, "_focusOffset": 0, "_position": 0, "_autoFocusExposureTime": -1.0, "_autoFocusFilter": false }, "Parent": {"$ref": blockId}, "ErrorBehavior": 0, "Attempts": 1 });
+                blockItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Imaging.TakeExposure, NINA.Sequencer", "ExposureTime": expo.exp, "Gain": -1, "Offset": -1, "Binning": { "$id": nextId(), "$type": "NINA.Core.Model.Equipment.BinningMode, NINA.Core", "X": 1, "Y": 1 }, "ImageType": expo.type, "ExposureCount": expo.count, "Parent": {"$ref": blockId}, "ErrorBehavior": 0, "Attempts": 1 });
+
+                let blockTriggers = [];
+                if (doDither && expo.type === "LIGHT" && ditherFreq > 0) {
+                    let trigRunnerId = nextId();
+                    blockTriggers.push({ "$id": nextId(), "$type": "NINA.Sequencer.Trigger.Guider.DitherAfterExposures, NINA.Sequencer", "AfterExposures": ditherFreq, "Parent": {"$ref": blockId}, "TriggerRunner": { "$id": trigRunnerId, "$type": "NINA.Sequencer.Container.SequentialContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", [{ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Guider.Dither, NINA.Sequencer", "Parent": {"$ref": trigRunnerId}, "ErrorBehavior": 0, "Attempts": 1 }]), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", []), "Parent": null, "ErrorBehavior": 0, "Attempts": 1 } });
+                }
+                imagingItems.push({ "$id": blockId, "$type": "NINA.Sequencer.Container.SequentialContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Name": expo.filter ? `Ripresa ${expo.filter}` : `Ripresa ${expo.type}`, "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", blockItems), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", blockTriggers), "Parent": {"$ref": imagingContainerId}, "ErrorBehavior": 0, "Attempts": 1 });
+            });
+
+            let imagingTriggers = [];
+            if (doFlip) {
+                let trigRunnerId = nextId();
+                imagingTriggers.push({ "$id": nextId(), "$type": "NINA.Sequencer.Trigger.MeridianFlip.MeridianFlipTrigger, NINA.Sequencer", "Parent": {"$ref": imagingContainerId}, "TriggerRunner": { "$id": trigRunnerId, "$type": "NINA.Sequencer.Container.SequentialContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", []), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", []), "Parent": null, "ErrorBehavior": 0, "Attempts": 1 } });
+            }
+
+            dsoItems.push({ "$id": imagingContainerId, "$type": "NINA.Sequencer.Container.SequentialContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Name": "Target Imaging Instructions", "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", imagingItems), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", imagingTriggers), "Parent": {"$ref": dsoContainerId}, "ErrorBehavior": 0, "Attempts": 1 });
+
+            let targetItems = [{ "$id": dsoContainerId, "$type": "NINA.Sequencer.Container.DeepSkyObjectContainer, NINA.Sequencer", "Target": { "$id": nextId(), "$type": "NINA.Astrometry.InputTarget, NINA.Astrometry", "Expanded": true, "TargetName": targetSelezionato.name, "PositionAngle": 0.0, "InputCoordinates": { "$id": nextId(), "$type": "NINA.Astrometry.InputCoordinates, NINA.Astrometry", "RAHours": rh, "RAMinutes": rm, "RASeconds": rs, "NegativeDec": negD, "DecDegrees": dd, "DecMinutes": dm, "DecSeconds": ds } }, "ExposureInfoListExpanded": false, "ExposureInfoList": null, "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Name": targetSelezionato.name, "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", dsoItems), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", []), "Parent": {"$ref": targetAreaId}, "ErrorBehavior": 0, "Attempts": 1 }];
+
+            let endItems = [];
+            if (doWarm) endItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Camera.WarmCamera, NINA.Sequencer", "Duration": 0.0, "Parent": {"$ref": endAreaId}, "ErrorBehavior": 0, "Attempts": 1 });
+            if (doPark) endItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Telescope.ParkScope, NINA.Sequencer", "Parent": {"$ref": endAreaId}, "ErrorBehavior": 0, "Attempts": 1 });
+
+            let ninaJSON = {
+                "$id": rootId, "$type": "NINA.Sequencer.Container.SequenceRootContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Name": `AstroDashboard - ${targetSelezionato.name}`, "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true,
+                "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", [
+                    { "$id": startAreaId, "$type": "NINA.Sequencer.Container.StartAreaContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Name": "Avvio", "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", startItems), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", []), "Parent": {"$ref": rootId}, "ErrorBehavior": 0, "Attempts": 1 },
+                    { "$id": targetAreaId, "$type": "NINA.Sequencer.Container.TargetAreaContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Name": "Ripresa", "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", targetItems), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", []), "Parent": {"$ref": rootId}, "ErrorBehavior": 0, "Attempts": 1 },
+                    { "$id": endAreaId, "$type": "NINA.Sequencer.Container.EndAreaContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Name": "Fine", "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", endItems), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", []), "Parent": {"$ref": rootId}, "ErrorBehavior": 0, "Attempts": 1 }
+                ]),
+                "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", []), "Parent": null, "ErrorBehavior": 0, "Attempts": 1
+            };
+
+            let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(ninaJSON, null, 2));
+            let dlAnchorElem = document.createElement('a'); dlAnchorElem.setAttribute("href", dataStr); dlAnchorElem.setAttribute("download", `AD_Sequenza_${targetSelezionato.name.replace(/\s+/g, '_')}.json`); document.body.appendChild(dlAnchorElem); dlAnchorElem.click(); dlAnchorElem.remove();
+        }
+
         window.addEventListener('resize', () => { if(document.getElementById('planning-view').style.display === 'block') aggiornaFOV(); });
-        aggiornaEffemeridi(new Date()); scaricaDatiPrevisionali();
+        popolaMenuAttrezzatura(); aggiornaEffemeridi(new Date()); scaricaDatiPrevisionali();
     </script>
 </body>
 </html>
