@@ -3,7 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AstroDashboard v5.0 - International Edition</title>
+    <title>AstroDashboard v5.5 - Global Edition</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#121212">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="AstroDash">
+    <link rel="apple-touch-icon" href="astro_logo.png">
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -24,13 +31,15 @@
         .info-icon { font-size: 0.85em; cursor: pointer; opacity: 0.6; transition: 0.2s; filter: grayscale(100%); }
         .info-icon:hover { opacity: 1; filter: grayscale(0) drop-shadow(0 0 5px rgba(187, 134, 252, 0.8)); transform: scale(1.1);}
         
-        .main-header { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; max-width: 1200px; margin: 0 auto 20px auto; background: #1a1a1a; padding: 15px 25px; border-radius: 12px; border: 1px solid #333; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
-        .center-logo { height: 120px; object-fit: contain; justify-self: center; filter: drop-shadow(0 0 8px rgba(187, 134, 252, 0.2));}
-        .author-section { display: flex; align-items: center; gap: 15px; background: #222; padding: 10px 15px; border-radius: 8px; border: 1px solid #444; justify-self: end; text-align: right;}
+        /* HEADER */
+        .main-header { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; max-width: 1200px; margin: 0 auto 20px auto; background: #1a1a1a; padding: 15px 25px; border-radius: 12px; border: 1px solid #333; box-shadow: 0 5px 15px rgba(0,0,0,0.5); box-sizing: border-box; width: 100%;}
+        .logo-container { justify-self: center; }
+        .center-logo { height: 100px; object-fit: contain; filter: drop-shadow(0 0 8px rgba(187, 134, 252, 0.2));}
+        .author-section { display: flex; align-items: center; gap: 15px; justify-self: end; text-align: right;}
         .btn-guide { background: transparent; border: 1px solid #bb86fc; color: #bb86fc; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.85em; transition: 0.2s; font-weight: bold; margin-top: 5px;}
         .btn-guide:hover { background: #bb86fc; color: #121212;}
         
-        /* STILE TOGGLE LINGUA E SETTORI HEADER */
+        /* LINGUA PILL */
         .lang-container { justify-self: start; text-align: left; display: flex; flex-direction: column; gap: 5px; }
         .lang-toggle { display: inline-flex; background: #1a1a1a; border-radius: 20px; border: 1px solid #444; overflow: hidden; box-shadow: inset 0 0 5px rgba(0,0,0,0.5); }
         .lang-btn { background: transparent; border: none; color: #777; padding: 6px 14px; font-size: 0.95em; cursor: pointer; transition: 0.3s; font-weight: bold; display: flex; align-items: center; }
@@ -162,11 +171,14 @@
         .guide-section strong { color: #fff; }
         .filosofia-box { background: rgba(187,134,252,0.1); padding: 20px; border-left: 4px solid #bb86fc; border-radius: 4px; margin-bottom: 30px;}
         
+        /* FIX MOBILE LAYOUT */
         @media (max-width: 768px) {
-            .main-header { grid-template-columns: 1fr; gap: 15px; text-align: center; }
-            .lang-container { justify-self: center !important; text-align: center !important; align-items: center; }
-            .center-logo { height: 90px; }
-            .author-section { justify-self: center; flex-direction: column; text-align: center; }
+            .main-header { display: flex !important; flex-direction: column; gap: 15px; align-items: center; justify-content: center; text-align: center; padding: 20px 15px; width: 100%; box-sizing: border-box; }
+            .main-header > div { justify-self: center !important; width: 100%; display: flex; flex-direction: column; align-items: center; }
+            .lang-container { align-items: center; text-align: center; }
+            .author-section { flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+            .author-section > div { align-items: center; text-align: center; }
+            .center-logo { height: 80px; }
             .search-local-input { width: 100% !important; box-sizing: border-box; }
             .search-suggestions { width: 100%; }
             .ephemeris-box { flex-direction: column; gap: 15px; text-align: center; }
@@ -183,9 +195,9 @@
 </head>
 <body>
 
-    <div class="main-header" style="display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; width: 100%;">
+    <div class="main-header">
         
-        <div class="lang-container" style="justify-self: start;">
+        <div class="lang-container">
             <span style="font-size: 0.75em; color: #aaa; font-weight: bold; letter-spacing: 1px; padding-left: 5px;">LANGUAGE</span>
             <div class="lang-toggle">
                 <button class="lang-btn active" id="btn-lang-it" onclick="changeLanguage('it')">
@@ -203,13 +215,13 @@
             </div>
         </div>
         
-        <div style="justify-self: center;">
-            <img src="astro_logo.png" alt="AstroDashboard Pro" class="center-logo" style="height: 100px; object-fit: contain;">
+        <div class="logo-container">
+            <img src="astro_logo.png" alt="AstroDashboard Pro" class="center-logo">
         </div>
         
-        <div class="author-section" style="justify-self: end; display: flex; align-items: center; gap: 15px;">
-            <div style="text-align: right; display: flex; flex-direction: column; gap: 6px;">
-                <p style="margin: 0; font-size: 0.9em; color: #fff; font-weight: bold;">v5.5.0-Global</p>
+        <div class="author-section">
+            <div>
+                <p style="margin: 0 0 6px 0; font-size: 0.9em; color: #fff; font-weight: bold;">v5.5.0-Global</p>
                 <button class="btn-guide" onclick="apriGuida()" style="margin: 0;"><span data-i18n="manual_btn">📖 Apri Manuale</span></button>
             </div>
             <img src="logo astro enrico sfondo.png" alt="Enrico Salis Logo" style="height: 60px; object-fit: contain; border-radius: 5px;">
@@ -312,7 +324,8 @@
             </div>
         </div>
     </div>
-<div id="planning-view">
+
+    <div id="planning-view">
         <div class="planning-header-row">
             <button class="btn-back" onclick="tornaDashboard()" data-i18n="back_dash">Torna alla Dashboard</button>
             <div class="search-wrapper" style="margin-bottom: 30px;">
@@ -485,7 +498,8 @@
             </div>
         </div>
     </div>
-<div id="guide-view">
+
+    <div id="guide-view">
         <button class="btn-back" style="margin-bottom: 40px;" onclick="chiudiGuida()" data-i18n="back_dash">Torna Indietro</button>
         
         <div id="guide-it">
@@ -504,7 +518,11 @@
             <div class="guide-section"><h3>🌍 1. Weather & Environmental Data</h3><ul><li><strong>The Map:</strong> The visible 50km radius helps you find clear sky gaps if you are mobile.</li><li><strong>Jet Stream:</strong> The Seeing killer. < 50 km/h: steady skies. > 100 km/h: heavy turbulence, avoid high focal lengths.</li><li><strong>Humidity:</strong> Above 85% it turns red: turn on your dew heaters!</li></ul></div>
             <div class="guide-section"><h3>🔭 2. Hybrid Planetarium (Local + SIMBAD)</h3><ul><li><strong>Local Engine:</strong> Search known targets to get tactical imaging advice from pros.</li><li><strong>SIMBAD Engine:</strong> Search exotic IDs, the AI connects to Strasbourg to download precise coordinates and Wikipedia for info.</li></ul></div>
             <div class="guide-section"><h3>📸 3. Field of View (FOV) Simulator</h3><ul><li><strong>Calculation:</strong> Select your scope and sensor to get precise FOV degrees.</li><li><strong>Visual Plate Solving:</strong> Drag the real DSS2 image to frame your target.</li></ul></div>
-	<div id="guide-es" style="display:none;">
+            <div class="guide-section"><h3>✨ 4. Smart AI & Dithering</h3><ul><li><strong>Dithering:</strong> Input frequency and mount settle time. The AI calculates the hidden time lost over the night.</li><li><strong>AI Logic:</strong> Assigns short exposures to clusters, long to nebulas. For mono galaxies, it enforces short 30s Lum shots but dedicates 50% of total darkness to it.</li></ul></div>
+            <div class="guide-section"><h3>🤖 5. N.I.N.A. Advanced Sequencer Export</h3><ul><li><strong>Filter Mapping:</strong> NINA requires filter names to match your hardware profile <em>exactly</em> (case sensitive). The dashboard saves them automatically.</li><li><strong>Usage:</strong> Click the red button, then drag & drop the downloaded file into N.I.N.A.'s Advanced Sequencer.</li></ul></div>
+        </div>
+
+        <div id="guide-es" style="display:none;">
             <h2 style="font-size: 2.2em; border-bottom: 2px solid #bb86fc; padding-bottom: 15px; margin-bottom: 30px;">📖 Manual de AstroDashboard</h2>
             <div class="filosofia-box"><h3 style="color: #fff; margin-top:0;">La Filosofía</h3><p>Fusionar la potencia de múltiples softwares en una única plataforma inteligente. Sin distracciones, solo datos puros para optimizar tu noche bajo las estrellas.</p></div>
             <div class="guide-section"><h3>🌍 1. Datos Ambientales y Clima</h3><ul><li><strong>El Mapa:</strong> El radio visible (50 Km) es orientativo. Sirve para encontrar "huecos despejados" si eres itinerante.</li><li><strong>Jet Stream:</strong> El asesino del Seeing. < 50 km/h: cielos estables. > 100 km/h: fuerte turbulencia.</li><li><strong>Humedad:</strong> Si supera el 85% se vuelve roja: ¡enciende los calentadores anticondensación!</li></ul></div>
@@ -523,12 +541,8 @@
             <div class="guide-section"><h3>✨ 4. AI 智能计算</h3><ul><li><strong>抖动 (Dithering):</strong> 输入抖动频率和赤道仪稳定时间，AI 会扣除隐藏的损失时间。</li><li><strong>AI 逻辑:</strong> 星团短曝光，星云长曝光。对于黑白相机，分配50%时间给明度(L)通道。</li></ul></div>
             <div class="guide-section"><h3>🤖 5. N.I.N.A. 序列导出</h3><ul><li><strong>滤镜映射:</strong> N.I.N.A. 要求滤镜名称必须与您的设备配置文件<em>完全</em>匹配（区分大小写）。</li><li><strong>使用方法:</strong> 点击红色按钮生成，将文件拖入 N.I.N.A. 的高级序列器中。</li></ul></div>
         </div>
-            <div class="guide-section"><h3>✨ 4. Smart AI & Dithering</h3><ul><li><strong>Dithering:</strong> Input frequency and mount settle time. The AI calculates the hidden time lost over the night.</li><li><strong>AI Logic:</strong> Assigns short exposures to clusters, long to nebulas. For mono galaxies, it enforces short 30s Lum shots but dedicates 50% of total darkness to it.</li></ul></div>
-            <div class="guide-section"><h3>🤖 5. N.I.N.A. Advanced Sequencer Export</h3><ul><li><strong>Filter Mapping:</strong> NINA requires filter names to match your hardware profile <em>exactly</em> (case sensitive). The dashboard saves them automatically.</li><li><strong>Usage:</strong> Click the red button, then drag & drop the downloaded file into N.I.N.A.'s Advanced Sequencer.</li></ul></div>
-        </div>
     </div>
-
-    <script>
+<script>
         // --- MOTORE MULTI-LINGUA (i18n) ---
         const i18n = {
             it: {
@@ -554,7 +568,8 @@
                 "new_moon": "Luna Nuova", "waxing_crescent": "Falce Crescente", "first_quarter": "Primo Quarto", "waxing_gibbous": "Gibbosa Crescente", "full_moon": "Luna Piena", "waning_gibbous": "Gibbosa Calante", "last_quarter": "Ultimo Quarto", "waning_crescent": "Falce Calante",
                 "galaxy": "Galassia", "nebula": "Nebulosa", "cluster": "Ammasso", "star": "Stella", "unknown": "Sconosciuta",
                 "alert_planetarium": "Scegli prima un bersaglio dal Planetario 🔭!", "alert_noseq": "Nessuna posa calcolata! Clicca prima su 'Genera Sequenza Ottimale'.",
-                "alert_calib": "I frame di calibrazione occupano tutto il tempo!", "alert_nolight": "Seleziona almeno un filtro Light.", "alert_times": "Imposta prima gli orari di Inizio e Fine.", "no_target": "Nessun oggetto visibile.", "too_bright": "☀️ Cielo troppo luminoso.", "dso_too_bright": "☀️ Cielo troppo luminoso per il Deep Sky.", "select_opt": "-- Seleziona --"
+                "alert_calib": "I frame di calibrazione occupano tutto il tempo!", "alert_nolight": "Seleziona almeno un filtro Light.", "alert_times": "Imposta prima gli orari di Inizio e Fine.", "no_target": "Nessun oggetto visibile.", "too_bright": "☀️ Cielo troppo luminoso.", "dso_too_bright": "☀️ Cielo troppo luminoso per il Deep Sky.", "select_opt": "-- Seleziona --",
+                "jupiter": "Giove", "mars": "Marte", "venus": "Venere", "moon": "Luna"
             },
             en: {
                 "manual_btn": "📖 Open Manual", "pos_title": "📍 Location", "find_place": "Find Place:", "search_place": "E.g. Yellowstone...",
@@ -579,7 +594,8 @@
                 "new_moon": "New Moon", "waxing_crescent": "Waxing Crescent", "first_quarter": "First Quarter", "waxing_gibbous": "Waxing Gibbous", "full_moon": "Full Moon", "waning_gibbous": "Waning Gibbous", "last_quarter": "Last Quarter", "waning_crescent": "Waning Crescent",
                 "galaxy": "Galaxy", "nebula": "Nebula", "cluster": "Cluster", "star": "Star", "unknown": "Unknown",
                 "alert_planetarium": "Choose a target from the Planetarium first 🔭!", "alert_noseq": "No exposures calculated! Click 'Generate Optimal Sequence' first.",
-                "alert_calib": "Calibration frames take up all the time!", "alert_nolight": "Select at least one Light filter.", "alert_times": "Please set Start and End times.", "no_target": "No visible objects.", "too_bright": "☀️ Sky is too bright.", "dso_too_bright": "☀️ Sky is too bright for Deep Sky.", "select_opt": "-- Select --"
+                "alert_calib": "Calibration frames take up all the time!", "alert_nolight": "Select at least one Light filter.", "alert_times": "Please set Start and End times.", "no_target": "No visible objects.", "too_bright": "☀️ Sky is too bright.", "dso_too_bright": "☀️ Sky is too bright for Deep Sky.", "select_opt": "-- Select --",
+                "jupiter": "Jupiter", "mars": "Mars", "venus": "Venus", "moon": "Moon"
             },
             es: {
                 "manual_btn": "📖 Abrir Manual", "pos_title": "📍 Ubicación", "find_place": "Buscar Lugar:", "search_place": "Ej. Atacama...",
@@ -604,7 +620,8 @@
                 "new_moon": "Luna Nueva", "waxing_crescent": "Luna Creciente", "first_quarter": "Cuarto Creciente", "waxing_gibbous": "Gibosa Creciente", "full_moon": "Luna Llena", "waning_gibbous": "Gibosa Menguante", "last_quarter": "Cuarto Menguante", "waning_crescent": "Luna Menguante",
                 "galaxy": "Galaxia", "nebula": "Nebulosa", "cluster": "Cúmulo", "star": "Estrella", "unknown": "Desconocido",
                 "alert_planetarium": "¡Elige primero un objetivo en el Planetario 🔭!", "alert_noseq": "¡No se han calculado tomas! Haz clic en 'Generar Secuencia Óptima'.",
-                "alert_calib": "¡Las tomas de calibración ocupan todo el tiempo!", "alert_nolight": "Selecciona al menos un filtro Light.", "alert_times": "Configura las horas de Inicio y Fin.", "no_target": "No hay objetos visibles.", "too_bright": "☀️ Cielo demasiado brillante.", "dso_too_bright": "☀️ Cielo demasiado brillante para cielo profundo.", "select_opt": "-- Seleccionar --"
+                "alert_calib": "¡Las tomas de calibración ocupan todo el tiempo!", "alert_nolight": "Selecciona al menos un filtro Light.", "alert_times": "Configura las horas de Inicio y Fin.", "no_target": "No hay objetos visibles.", "too_bright": "☀️ Cielo demasiado brillante.", "dso_too_bright": "☀️ Cielo demasiado brillante para cielo profundo.", "select_opt": "-- Seleccionar --",
+                "jupiter": "Júpiter", "mars": "Marte", "venus": "Venus", "moon": "Luna"
             },
             zh: {
                 "manual_btn": "📖 打开手册", "pos_title": "📍 位置", "find_place": "查找地点:", "search_place": "例如: 丽江...",
@@ -629,7 +646,8 @@
                 "new_moon": "新月", "waxing_crescent": "蛾眉月", "first_quarter": "上弦月", "waxing_gibbous": "盈凸月", "full_moon": "满月", "waning_gibbous": "亏凸月", "last_quarter": "下弦月", "waning_crescent": "残月",
                 "galaxy": "星系", "nebula": "星云", "cluster": "星团", "star": "恒星", "unknown": "未知",
                 "alert_planetarium": "请先从星图中选择一个目标 🔭！", "alert_noseq": "没有计算出任何曝光！请先点击 '生成最佳曝光序列'。",
-                "alert_calib": "校准帧占据了所有可用时间！", "alert_nolight": "请至少选择一个亮场 (Light) 滤镜。", "alert_times": "请先设置开始和结束时间。", "no_target": "当前没有可见目标。", "too_bright": "☀️ 天空太亮了。", "dso_too_bright": "☀️ 天空对深空目标来说太亮了。", "select_opt": "-- 请选择 --"
+                "alert_calib": "校准帧占据了所有可用时间！", "alert_nolight": "请至少选择一个亮场 (Light) 滤镜。", "alert_times": "请先设置开始和结束时间。", "no_target": "当前没有可见目标。", "too_bright": "☀️ 天空太亮了。", "dso_too_bright": "☀️ 天空对深空目标来说太亮了。", "select_opt": "-- 请选择 --",
+                "jupiter": "木星", "mars": "火星", "venus": "金星", "moon": "月球"
             }
         };
 
@@ -675,7 +693,8 @@
         let marker = L.marker([latCorrente, lonCorrente]).addTo(map).bindPopup("<b>Udine</b>").openPopup();
         let timerRicerca;
 
-        const planetsDatabase = [ { id: "jupiter", name: "Jupiter", icon: "🪐", ra: 7.15, dec: 22.8 }, { id: "mars", name: "Mars", icon: "🔴", ra: 18.50, dec: -23.5 }, { id: "venus", name: "Venus", icon: "✨", ra: 23.50, dec: -3.5 } ];
+        // I pianeti ora usano nomi "chiave" che il dizionario traduce automaticamente
+        const planetsDatabase = [ { id: "jupiter", name: "jupiter", icon: "🪐", ra: 7.15, dec: 22.8 }, { id: "mars", name: "mars", icon: "🔴", ra: 18.50, dec: -23.5 }, { id: "venus", name: "venus", icon: "✨", ra: 23.50, dec: -3.5 } ];
 
         function getJulianDate(date) { return (date.getTime() / 86400000) + 2440587.5; }
         function calcolaAltAz(ra, dec, lat, lon, date) {
@@ -784,7 +803,7 @@
             if (SunCalc.getPosition(dOra, latCorrente, lonCorrente).altitude * (180/Math.PI) > -6) { pL.innerHTML = dL.innerHTML = `<p style="color:#aaa; padding:10px;">${t("too_bright")}</p>`; return; }
 
             let vP = [], mP = SunCalc.getMoonPosition(dOra, latCorrente, lonCorrente), mA = mP.altitude * (180/Math.PI);
-            if (mA > 5) vP.push({ html: creaCardHTML({name: "Moon", icon: "🌕"}, mA, (mP.azimuth * 180/Math.PI + 180) % 360, false), alt: mA });
+            if (mA > 5) vP.push({ html: creaCardHTML({name: "moon", icon: "🌕"}, mA, (mP.azimuth * 180/Math.PI + 180) % 360, false), alt: mA });
             planetsDatabase.forEach(p => { let pos = calcolaAltAz(p.ra, p.dec, latCorrente, lonCorrente, dOra); if (pos.alt > 10) vP.push({ html: creaCardHTML(p, pos.alt, pos.az, false), alt: pos.alt }); });
             vP.sort((a, b) => b.alt - a.alt).forEach(i => pL.appendChild(i.html));
 
@@ -797,9 +816,23 @@
 
         function mapTypeTrans(type) { let m = {"Galassia": "galaxy", "Nebulosa": "nebula", "Ammasso": "cluster", "Stella": "star"}; return t(m[type] || "unknown"); }
 
+        // --- NUOVO ESTRATTORE NOMI INTELLIGENTE ---
+        function getLocalizedName(obj) {
+            if (!obj) return "";
+            // 1. Se è un pianeta o la luna, prende il nome dal dizionario i18n
+            if (['jupiter', 'mars', 'venus', 'moon'].includes(obj.id)) return t(obj.id);
+            // 2. Se è un DSO e ha il campo specifico per la lingua selezionata (es. obj.en = "Cigar Galaxy")
+            if (obj[lang]) return `${obj.name} - ${obj[lang]}`;
+            // 3. Fallback: Se la lingua manca, prova in inglese
+            if (obj['en']) return `${obj.name} - ${obj['en']}`;
+            // 4. Se arriva da SIMBAD o non ha traduzioni, restituisce il nome originale (es. NGC 2841)
+            return obj.name; 
+        }
+
         function creaCardHTML(tObj, alt, az, c) {
             let div = document.createElement('div'); div.className = c ? 'dso-card card-clickable' : 'dso-card card-static';
-            div.innerHTML = `<div class="dso-icon">${tObj.icon}</div><div class="dso-info"><h4>${tObj.name}</h4><p>Alt: <b>${Math.round(alt)}°</b></p><span class="dso-direction">${getPuntoCardinale(az)}</span></div>`;
+            let finalName = getLocalizedName(tObj);
+            div.innerHTML = `<div class="dso-icon">${tObj.icon}</div><div class="dso-info"><h4>${finalName}</h4><p>Alt: <b>${Math.round(alt)}°</b></p><span class="dso-direction">${getPuntoCardinale(az)}</span></div>`;
             if(c) div.onclick = () => apriPianificazione(tObj); return div;
         }
 
@@ -809,8 +842,9 @@
                 if (typeof dsoDatabase === 'undefined') return;
                 let v = inp.value.trim().toLowerCase().replace(/\s+/g, ''); box.innerHTML = '';
                 if (!v) { box.style.display = 'none'; return; }
-                let m = dsoDatabase.filter(d => d.id.toLowerCase().includes(v) || d.name.toLowerCase().replace(/\s+/g, '').includes(v));
-                if (m.length > 0) { box.style.display = 'block'; m.forEach(x => { let li = document.createElement('li'); li.innerHTML = `${x.icon} ${x.name}`; li.onclick = () => { inp.value = x.name; box.style.display = 'none'; apriPianificazione(x); }; box.appendChild(li); }); } else box.style.display = 'none';
+                // Cerca sia nell'ID, sia nel nome base, sia nelle traduzioni!
+                let m = dsoDatabase.filter(d => d.id.toLowerCase().includes(v) || d.name.toLowerCase().replace(/\s+/g, '').includes(v) || (d[lang] && d[lang].toLowerCase().replace(/\s+/g, '').includes(v)));
+                if (m.length > 0) { box.style.display = 'block'; m.forEach(x => { let li = document.createElement('li'); li.innerHTML = `${x.icon} ${getLocalizedName(x)}`; li.onclick = () => { inp.value = getLocalizedName(x); box.style.display = 'none'; apriPianificazione(x); }; box.appendChild(li); }); } else box.style.display = 'none';
             });
             inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); box.style.display = 'none'; eseguiRicerca(iId); } });
             document.addEventListener('click', e => { if (e.target !== inp) box.style.display = 'none'; });
@@ -823,8 +857,10 @@
             let qn = q.toLowerCase().replace(/\s+/g, ''), st = document.getElementById('status-' + iId);
             if(st) st.style.display = 'none';
 
-            let ex = dsoDatabase.find(d => d.id.toLowerCase() === qn), pt = dsoDatabase.find(d => d.name.toLowerCase().replace(/\s+/g, '').includes(qn));
-            if (ex) { inp.value = ex.name; apriPianificazione(ex); return; } if (pt) { inp.value = pt.name; apriPianificazione(pt); return; }
+            let ex = dsoDatabase.find(d => d.id.toLowerCase() === qn || (d[lang] && d[lang].toLowerCase().replace(/\s+/g, '') === qn));
+            let pt = dsoDatabase.find(d => d.name.toLowerCase().replace(/\s+/g, '').includes(qn) || (d[lang] && d[lang].toLowerCase().replace(/\s+/g, '').includes(qn)));
+            
+            if (ex) { inp.value = getLocalizedName(ex); apriPianificazione(ex); return; } if (pt) { inp.value = getLocalizedName(pt); apriPianificazione(pt); return; }
 
             if(st) { st.style.display = 'block'; st.style.color = '#ffaa00'; st.innerText = "SIMBAD Search... 🛰️"; }
             fetch(`https://cds.unistra.fr/cgi-bin/nph-sesame/-oI/A?${encodeURIComponent(q)}`).then(r => r.text()).then(d => {
@@ -851,7 +887,7 @@
 
         function apriPianificazione(tObj) {
             targetSelezionato = tObj; document.getElementById('dashboard-view').style.display = 'none'; document.getElementById('planning-view').style.display = 'block';
-            document.getElementById('plan-target-name').innerText = targetSelezionato.name;
+            document.getElementById('plan-target-name').innerText = translateDSO(targetSelezionato.name);
             document.getElementById('stat-type').innerText = mapTypeTrans(targetSelezionato.type) || "--"; document.getElementById('stat-mag').innerText = targetSelezionato.mag || "--"; document.getElementById('stat-dist').innerText = targetSelezionato.dist || "--";
             document.getElementById('target-description').innerText = targetSelezionato.desc || "--"; document.getElementById('target-tips').innerText = targetSelezionato.tips || "--";
             let wl = document.getElementById('target-wiki'); if(targetSelezionato.link) { wl.href = targetSelezionato.link; wl.style.display = 'inline-block'; } else wl.style.display = 'none';
@@ -1031,6 +1067,15 @@
             aggiornaEffemeridi(new Date()); 
             scaricaDatiPrevisionali();
         });
+
+        // Inizializzazione PWA (Service Worker)
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').then(reg => {
+                    console.log('App in background attivata!', reg.scope);
+                }).catch(err => console.error('Errore App:', err));
+            });
+        }
     </script>
 </body>
 </html>
