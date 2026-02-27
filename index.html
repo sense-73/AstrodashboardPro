@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AstroDashboard v4.1 - N.I.N.A. Master Edition</title>
+    <title>AstroDashboard v5.0 - International Edition</title>
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -29,6 +29,13 @@
         .author-section { display: flex; align-items: center; gap: 15px; background: #222; padding: 10px 15px; border-radius: 8px; border: 1px solid #444; justify-self: end; text-align: right;}
         .btn-guide { background: transparent; border: 1px solid #bb86fc; color: #bb86fc; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.85em; transition: 0.2s; font-weight: bold; margin-top: 5px;}
         .btn-guide:hover { background: #bb86fc; color: #121212;}
+        
+        /* STILE TOGGLE LINGUA E SETTORI HEADER */
+        .lang-container { justify-self: start; text-align: left; display: flex; flex-direction: column; gap: 5px; }
+        .lang-toggle { display: inline-flex; background: #1a1a1a; border-radius: 20px; border: 1px solid #444; overflow: hidden; box-shadow: inset 0 0 5px rgba(0,0,0,0.5); }
+        .lang-btn { background: transparent; border: none; color: #777; padding: 6px 14px; font-size: 0.95em; cursor: pointer; transition: 0.3s; font-weight: bold; display: flex; align-items: center; }
+        .lang-btn.active { background: #bb86fc; color: #121212; }
+        .lang-btn:hover:not(.active) { color: #fff; background: #333; }
 
         .ephemeris-box { display: flex; justify-content: space-around; align-items: center; background-color: #2a2a2a; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #333; width: 100%; flex-wrap: wrap;}
         .moon-container { display: flex; flex-direction: column; align-items: center; margin-right: 20px; min-width: 120px;}
@@ -80,9 +87,8 @@
         .dso-info p { margin: 0; font-size: 0.85em; color: #aaa;}
         .dso-direction { display: inline-block; padding: 2px 6px; background-color: #bb86fc; color: #121212; border-radius: 4px; font-weight: bold; font-size: 0.8em; margin-top: 5px;}
         .top-target { border: 2px solid #ffd700; box-shadow: 0 0 15px rgba(255, 215, 0, 0.3); }
-        .top-target::after { content: '⭐ Consigliato'; position: absolute; top: -10px; right: 10px; background-color: #ffd700; color: #000; font-size: 0.7em; padding: 2px 6px; border-radius: 10px; font-weight: bold;}
+        .top-target::after { content: '⭐'; position: absolute; top: -10px; right: 10px; background-color: #ffd700; color: #000; font-size: 0.8em; padding: 2px 6px; border-radius: 10px; font-weight: bold;}
 
-        /* RICERCA IBRIDA */
         .search-local-box { background-color: #2a2a2a; padding: 15px; border-radius: 8px; margin-top: 25px; text-align: center; border: 1px solid #444; }
         .search-local-box h4 { margin: 0 0 10px 0; color: #fff; font-size: 1.1em;}
         .search-wrapper { position: relative; display: inline-block; text-align: left; }
@@ -95,14 +101,11 @@
         .search-suggestions li:hover { background-color: #bb86fc; color: #121212; font-weight: bold; }
         .search-status { margin: 10px 0 0 0; font-size: 0.9em; display: none; text-align: center; width: 100%; font-weight: bold;}
 
-        /* PLANNING VIEW */
         #planning-view { display: none; text-align: left; max-width: 1200px; margin: 0 auto;}
         .btn-back { background: linear-gradient(135deg, #7c4dff 0%, #bb86fc 100%); color: #ffffff; border: none; padding: 12px 28px; border-radius: 50px; cursor: pointer; font-size: 1.1em; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(124, 77, 255, 0.3); transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); letter-spacing: 0.5px; text-transform: uppercase;}
         .btn-back:hover { background: linear-gradient(135deg, #9e75ff 0%, #d2aaff 100%); box-shadow: 0 8px 25px rgba(187, 134, 252, 0.5), 0 0 10px rgba(255,255,255,0.2) inset; transform: translateY(-3px) scale(1.02); color: #fff; }
-        .btn-back:active { transform: translateY(-1px) scale(0.98); box-shadow: 0 4px 10px rgba(124, 77, 255, 0.3); }
         .planning-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;}
 
-        /* DOSSIER */
         .stat-grid { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 15px;}
         .stat-box { background: #2a2a2a; padding: 10px; border-radius: 5px; flex: 1; min-width: 120px; box-shadow: inset 0 0 5px rgba(0,0,0,0.5);}
         .stat-box.t-type { border-left: 3px solid #bb86fc; }
@@ -113,7 +116,6 @@
         .info-box { background-color: #222; border-left: 4px solid #bb86fc; padding: 15px; margin-bottom: 10px; border-radius: 4px; font-size: 0.95em; line-height: 1.5; color: #ddd;}
         .tip-box { background-color: rgba(255, 215, 0, 0.1); border-left: 4px solid #ffd700; padding: 15px; border-radius: 4px; font-size: 0.95em; color: #fff;}
         .wiki-link { display: inline-block; margin-top: 10px; color: #bb86fc; text-decoration: none; font-weight: bold;}
-        .wiki-link:hover { color: #fff; text-decoration: underline;}
 
         .planning-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
         @media (max-width: 768px) { .planning-grid { grid-template-columns: 1fr; } }
@@ -124,7 +126,6 @@
         .chart-container { background-color: #1e1e1e; padding: 15px; border-radius: 8px; height: 160px; margin-top: 15px; box-shadow: inset 0 0 10px rgba(0,0,0,0.5);}
         .zoom-control { display: flex; align-items: center; justify-content: center; padding: 10px; background: #2a2a2a; border-radius: 0 0 8px 8px;}
 
-        /* SESSION CALCULATOR & SMART BUTTON */
         .session-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; margin-top: 20px; }
         @media (max-width: 768px) { .session-grid { grid-template-columns: 1fr; } }
         
@@ -153,7 +154,6 @@
         .btn-smart { background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%); color: white; padding: 12px 30px; font-size: 1.1em; font-weight: bold; border: none; border-radius: 50px; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(0, 114, 255, 0.3);}
         .btn-smart:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 6px 20px rgba(0, 114, 255, 0.5);}
 
-        /* GUIDE VIEW */
         #guide-view { display: none; text-align: left; max-width: 1000px; margin: 0 auto; background-color: #1e1e1e; padding: 40px; border-radius: 12px; box-shadow: 0 4px 25px rgba(0,0,0,0.8); line-height: 1.7; color: #ddd; }
         .guide-section { margin-bottom: 35px; padding-bottom: 25px; border-bottom: 1px solid #333;}
         .guide-section h3 { color: #bb86fc; margin-top: 0; font-size: 1.5em; border-bottom: none;}
@@ -162,11 +162,9 @@
         .guide-section strong { color: #fff; }
         .filosofia-box { background: rgba(187,134,252,0.1); padding: 20px; border-left: 4px solid #bb86fc; border-radius: 4px; margin-bottom: 30px;}
         
-        /* ========================================== */
-        /* OTTIMIZZAZIONE MOBILE (SMARTPHONE)         */
-        /* ========================================== */
         @media (max-width: 768px) {
             .main-header { grid-template-columns: 1fr; gap: 15px; text-align: center; }
+            .lang-container { justify-self: center !important; text-align: center !important; align-items: center; }
             .center-logo { height: 90px; }
             .author-section { justify-self: center; flex-direction: column; text-align: center; }
             .search-local-input { width: 100% !important; box-sizing: border-box; }
@@ -185,17 +183,38 @@
 </head>
 <body>
 
-    <div class="main-header">
-        <div></div>
-        <img src="astro_logo.png" alt="AstroDashboard Pro" class="center-logo">
-        <div class="author-section">
-            <div style="text-align: right;">
-                <p style="margin: 0; font-size: 0.9em; color: #fff;">v4.1.0-NINA Master</p>
-                <p style="margin: 3px 0 0 0; font-size: 0.8em; color: #aaa;">Creato da <b style="color:#bb86fc;">Enrico Salis</b></p>
-                <button class="btn-guide" onclick="apriGuida()">📖 Apri Manuale</button>
+    <div class="main-header" style="display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; width: 100%;">
+        
+        <div class="lang-container" style="justify-self: start;">
+            <span style="font-size: 0.75em; color: #aaa; font-weight: bold; letter-spacing: 1px; padding-left: 5px;">LANGUAGE</span>
+            <div class="lang-toggle">
+                <button class="lang-btn active" id="btn-lang-it" onclick="changeLanguage('it')">
+                    <svg viewBox="0 0 3 2" style="width: 18px; height: 12px; border-radius: 2px; margin-right: 6px;"><rect width="1" height="2" fill="#009246"/><rect x="1" width="1" height="2" fill="#F1F2F1"/><rect x="2" width="1" height="2" fill="#CE2B37"/></svg>ITA
+                </button>
+                <button class="lang-btn" id="btn-lang-en" onclick="changeLanguage('en')">
+                    <svg viewBox="0 0 60 30" style="width: 18px; height: 12px; border-radius: 2px; margin-right: 6px;"><clipPath id="t"><path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z"/></clipPath><path d="M0,0 v30 h60 v-30 z" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" clip-path="url(#t)" stroke="#C8102E" stroke-width="4"/><path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/><path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/></svg>ENG
+                </button>
+                <button class="lang-btn" id="btn-lang-es" onclick="changeLanguage('es')">
+                    <svg viewBox="0 0 750 500" style="width: 18px; height: 12px; border-radius: 2px; margin-right: 6px;"><rect width="750" height="500" fill="#c60b1e"/><rect y="125" width="750" height="250" fill="#ffc400"/></svg>ESP
+                </button>
+                <button class="lang-btn" id="btn-lang-zh" onclick="changeLanguage('zh')">
+                    <svg viewBox="0 0 30 20" style="width: 18px; height: 12px; border-radius: 2px; margin-right: 6px;"><rect width="30" height="20" fill="#de2910"/><path d="M5,5 l-1,3.07 2.61,-1.9 -2.61,-1.9 1,3.07z" fill="#ffde00"/></svg>CHN
+                </button>
+            </div>
+        </div>
+        
+        <div style="justify-self: center;">
+            <img src="astro_logo.png" alt="AstroDashboard Pro" class="center-logo" style="height: 100px; object-fit: contain;">
+        </div>
+        
+        <div class="author-section" style="justify-self: end; display: flex; align-items: center; gap: 15px;">
+            <div style="text-align: right; display: flex; flex-direction: column; gap: 6px;">
+                <p style="margin: 0; font-size: 0.9em; color: #fff; font-weight: bold;">v5.5.0-Global</p>
+                <button class="btn-guide" onclick="apriGuida()" style="margin: 0;"><span data-i18n="manual_btn">📖 Apri Manuale</span></button>
             </div>
             <img src="logo astro enrico sfondo.png" alt="Enrico Salis Logo" style="height: 60px; object-fit: contain; border-radius: 5px;">
         </div>
+        
     </div>
 
     <div id="dashboard-view">
@@ -208,45 +227,45 @@
                 <div class="weather-container">
                     <span style="font-size: 2em; margin-bottom: 5px;">🌡️</span>
                     <span id="meteo-temp" style="font-size: 1.4em; font-weight: bold; color: #fff;">--°C</span>
-                    <span id="meteo-umidita" style="font-size: 0.9em; color: #44ff44;">Umidità: --%</span>
+                    <span id="meteo-umidita" style="font-size: 0.9em; color: #44ff44;"><span data-i18n="humidity">Umidità</span>: --%</span>
                 </div>
                 <div class="times-grid">
-                    <div class="time-item"><span class="icon-normal">🌅</span> Alba Sole<br><span id="alba-sole">--:--</span></div>
-                    <div class="time-item"><span class="icon-normal">🌇</span> Tramonto Sole<br><span id="tramonto-sole">--:--</span></div>
-                    <div class="time-item"><span class="icon-normal">🌒</span> Alba Luna<br><span id="alba-luna">--:--</span></div>
-                    <div class="time-item"><span class="icon-normal">🌘</span> Tramonto Luna<br><span id="tramonto-luna">--:--</span></div>
+                    <div class="time-item"><span class="icon-normal">🌅</span> <span data-i18n="sunrise">Alba</span> Sole<br><span id="alba-sole">--:--</span></div>
+                    <div class="time-item"><span class="icon-normal">🌇</span> <span data-i18n="sunset">Tramonto</span> Sole<br><span id="tramonto-sole">--:--</span></div>
+                    <div class="time-item"><span class="icon-normal">🌒</span> <span data-i18n="sunrise">Alba</span> Luna<br><span id="alba-luna">--:--</span></div>
+                    <div class="time-item"><span class="icon-normal">🌘</span> <span data-i18n="sunset">Tramonto</span> Luna<br><span id="tramonto-luna">--:--</span></div>
                 </div>
             </div>
         </div>
 
         <div class="container">
             <div class="panel">
-                <h3>📍 Posizione <span class="info-icon" onclick="apriGuida('guida-meteo')" title="Scopri come funziona la mappa">ℹ️</span></h3>
+                <h3><span data-i18n="pos_title">📍 Posizione</span> <span class="info-icon" onclick="apriGuida('guida-meteo')">ℹ️</span></h3>
                 <div class="input-group">
-                    <label for="ricerca">Trova Luogo:</label>
-                    <input type="text" id="ricerca" placeholder="es. Monte Lussari..." oninput="cercaIndirizzo()">
+                    <label for="ricerca" data-i18n="find_place">Trova Luogo:</label>
+                    <input type="text" id="ricerca" placeholder="Es. Monte Lussari..." data-i18n="search_place" oninput="cercaIndirizzo()">
                     <ul id="dropdown-risultati"></ul>
                 </div>
                 <div class="input-group">
-                    <label for="lat">Latitudine:</label>
+                    <label for="lat" data-i18n="lat">Latitudine:</label>
                     <input type="text" id="lat" readonly value="46.06200">
                 </div>
                 <div class="input-group">
-                    <label for="lon">Longitudine:</label>
+                    <label for="lon" data-i18n="lon">Longitudine:</label>
                     <input type="text" id="lon" readonly value="13.23500">
                 </div>
             </div>
 
             <div class="panel">
-                <h3>🎛️ Dati Ambientali Astrofotografici <span class="info-icon" onclick="apriGuida('guida-meteo')" title="Come leggere questi dati">ℹ️</span></h3>
+                <h3><span data-i18n="env_data">🎛️ Dati Ambientali Astrofotografici</span> <span class="info-icon" onclick="apriGuida('guida-meteo')">ℹ️</span></h3>
                 <div class="meteo-grid">
-                    <div class="meteo-item m-bassa active" id="btn-basse" onclick="toggleLayer('basse')"><h4>Nuvole Basse</h4><span id="val-basse">--%</span></div>
-                    <div class="meteo-item m-media active" id="btn-medie" onclick="toggleLayer('medie')"><h4>Nuvole Medie</h4><span id="val-medie">--%</span></div>
-                    <div class="meteo-item m-alta active" id="btn-alte" onclick="toggleLayer('alte')"><h4>Nuvole Alte</h4><span id="val-alte">--%</span></div>
+                    <div class="meteo-item m-bassa active" id="btn-basse" onclick="toggleLayer('basse')"><h4 data-i18n="low_clouds">Nuvole Basse</h4><span id="val-basse">--%</span></div>
+                    <div class="meteo-item m-media active" id="btn-medie" onclick="toggleLayer('medie')"><h4 data-i18n="mid_clouds">Nuvole Medie</h4><span id="val-medie">--%</span></div>
+                    <div class="meteo-item m-alta active" id="btn-alte" onclick="toggleLayer('alte')"><h4 data-i18n="high_clouds">Nuvole Alte</h4><span id="val-alte">--%</span></div>
                     <div class="meteo-item m-jet active" id="btn-jet" onclick="toggleLayer('jet')"><h4>Jet Stream</h4><span id="val-jet">--<span class="jet-unit">km/h</span></span></div>
-                    <div class="meteo-item m-luna active" id="btn-luna" onclick="toggleLayer('luna')"><h4>Inq. Lunare</h4><span id="val-luna">--%</span></div>
-                    <div class="meteo-item m-umidita active" id="btn-umidita" onclick="toggleLayer('umidita')"><h4>Umidità</h4><span id="val-umidita-layer" style="color:#00ffff;">--%</span></div>
-                    <div class="meteo-item m-seeing active" id="btn-seeing"><h4>Stima Seeing</h4><span id="val-seeing" style="color:#bb86fc;">--/5</span></div>
+                    <div class="meteo-item m-luna active" id="btn-luna" onclick="toggleLayer('luna')"><h4 data-i18n="moon_poll">Inq. Lunare</h4><span id="val-luna">--%</span></div>
+                    <div class="meteo-item m-umidita active" id="btn-umidita" onclick="toggleLayer('umidita')"><h4 data-i18n="humidity">Umidità</h4><span id="val-umidita-layer" style="color:#00ffff;">--%</span></div>
+                    <div class="meteo-item m-seeing active" id="btn-seeing"><h4 data-i18n="seeing_est">Stima Seeing</h4><span id="val-seeing" style="color:#bb86fc;">--/5</span></div>
                 </div>
             </div>
         </div>
@@ -256,15 +275,14 @@
                 <div id="time-display" class="time-display">Caricamento Timeline Meteo...</div>
                 <input type="range" id="timeSlider" min="0" max="23" value="0" oninput="syncSliders(this.value)" disabled>
                 <div style="display:flex; justify-content: space-between; font-size:0.8em; color:#aaa; padding-top: 5px;">
-                    <span>Adesso</span><span>+12h</span><span>+24h</span>
+                    <span data-i18n="now">Adesso</span><span>+12h</span><span>+24h</span>
                 </div>
             </div>
             <div id="map"></div>
         </div>
 
         <div class="container dso-container" style="flex-direction: column;">
-            <h3>🔭 Planetario Predittivo Ibrido <span class="info-icon" onclick="apriGuida('guida-ricerca')" title="Cos'è il motore Ibrido?">ℹ️</span></h3>
-            <p style="color:#aaa; font-size: 0.9em; margin-top:0;">Le linee temporali sono sincronizzate. Scorri il tempo per vedere come cambia l'altezza degli oggetti in cielo.</p>
+            <h3><span data-i18n="hybrid_planetarium">🔭 Planetario Predittivo Ibrido</span> <span class="info-icon" onclick="apriGuida('guida-ricerca')">ℹ️</span></h3>
             
             <div class="timeline-container" style="margin-top: 10px; margin-bottom: 20px; padding: 10px; background-color: #222;">
                 <div id="astro-time-display" class="time-display" style="color: #44ff44;">Caricamento Timeline Astro...</div>
@@ -272,37 +290,35 @@
             </div>
 
             <div class="astro-section">
-                <h4 style="color: #ffaa00; margin-bottom: 0; margin-top: 10px; border-bottom: 1px solid #333; padding-bottom: 5px;">🪐 Sistema Solare (Solo visivo)</h4>
+                <h4 style="color: #ffaa00; margin-bottom: 0; margin-top: 10px; border-bottom: 1px solid #333; padding-bottom: 5px;" data-i18n="solar_system">🪐 Sistema Solare (Solo visivo)</h4>
                 <div class="horizontal-scroll" id="planets-list"></div>
             </div>
 
             <div class="astro-section" style="margin-top: 15px; margin-bottom: 25px;">
-                <h4 style="color: #bb86fc; margin-bottom: 0; margin-top: 10px; border-bottom: 1px solid #333; padding-bottom: 5px;">🌌 Oggetti Consigliati Visibili</h4>
+                <h4 style="color: #bb86fc; margin-bottom: 0; margin-top: 10px; border-bottom: 1px solid #333; padding-bottom: 5px;" data-i18n="rec_targets">🌌 Oggetti Consigliati Visibili</h4>
                 <div class="horizontal-scroll" id="dso-list"></div>
             </div>
 
             <div class="search-local-box">
-                <h4>🔍 Ricerca Libera Oggetto <span class="info-icon" onclick="apriGuida('guida-ricerca')" title="Come cercare bersagli">ℹ️</span></h4>
-                <p style="color:#aaa; font-size: 0.85em; margin-top:0;">Cerca nel DB Locale. Se non lo trovi, interrogheremo il server mondiale SIMBAD.</p>
+                <h4><span data-i18n="free_search">🔍 Ricerca Libera Oggetto</span> <span class="info-icon" onclick="apriGuida('guida-ricerca')">ℹ️</span></h4>
                 <div style="display: flex; justify-content: center; align-items: flex-start; flex-wrap: wrap; gap: 10px; margin-top: 15px;">
                     <div class="search-wrapper">
-                        <input type="text" id="search-dash-input" class="search-local-input" placeholder="Es. M31, Pleiadi, NGC 1234..." autocomplete="off">
+                        <input type="text" id="search-dash-input" class="search-local-input" placeholder="Es. M31, Pleiadi, NGC 1234..." data-i18n="search_target" autocomplete="off">
                         <ul id="sugg-dash" class="search-suggestions"></ul>
                     </div>
-                    <button class="btn-search" onclick="eseguiRicerca('search-dash-input')">Pianifica Oggetto 🚀</button>
+                    <button class="btn-search" onclick="eseguiRicerca('search-dash-input')" data-i18n="plan_target_btn">Pianifica Oggetto 🚀</button>
                 </div>
                 <p id="status-search-dash-input" class="search-status"></p>
             </div>
         </div>
-    </div> 
-
-    <div id="planning-view">
+    </div>
+<div id="planning-view">
         <div class="planning-header-row">
-            <button class="btn-back" onclick="tornaDashboard()">Torna alla Dashboard</button>
+            <button class="btn-back" onclick="tornaDashboard()" data-i18n="back_dash">Torna alla Dashboard</button>
             <div class="search-wrapper" style="margin-bottom: 30px;">
                 <div style="display: flex; align-items: center;">
-                    <input type="text" id="search-plan-input" class="search-local-input" placeholder="Cerca un altro oggetto..." autocomplete="off">
-                    <button class="btn-search" onclick="eseguiRicerca('search-plan-input')">Cambia</button>
+                    <input type="text" id="search-plan-input" class="search-local-input" placeholder="..." autocomplete="off">
+                    <button class="btn-search" onclick="eseguiRicerca('search-plan-input')" data-i18n="change_target">Cambia</button>
                 </div>
                 <ul id="sugg-plan" class="search-suggestions"></ul>
                 <p id="status-search-plan-input" class="search-status" style="position:absolute; top:100%; left:0; text-align: left;"></p>
@@ -312,48 +328,47 @@
         <h2 id="plan-target-name">Nome Oggetto</h2>
         
         <div class="panel" style="margin-bottom: 20px;">
-            <h3 style="margin-top:0;">📖 Dossier Astrofotografico</h3>
+            <h3 style="margin-top:0;" data-i18n="dossier">📖 Dossier Astrofotografico</h3>
             <div class="stat-grid">
-                <div class="stat-box t-type"><span>Tipologia</span><b id="stat-type">--</b></div>
-                <div class="stat-box t-mag"><span>Magnitudine App.</span><b id="stat-mag">--</b></div>
-                <div class="stat-box t-dist"><span>Distanza</span><b id="stat-dist">--</b></div>
+                <div class="stat-box t-type"><span data-i18n="type">Tipologia</span><b id="stat-type">--</b></div>
+                <div class="stat-box t-mag"><span data-i18n="app_mag">Magnitudine App.</span><b id="stat-mag">--</b></div>
+                <div class="stat-box t-dist"><span data-i18n="distance">Distanza</span><b id="stat-dist">--</b></div>
             </div>
-            <div class="info-box"><span id="target-description">Caricamento...</span><br><a href="#" id="target-wiki" class="wiki-link" target="_blank">🔗 Approfondisci su Wikipedia</a></div>
-            <div class="tip-box"><b>💡 Consiglio Tattico:</b> <span id="target-tips">--</span></div>
+            <div class="info-box"><span id="target-description">Caricamento...</span><br><a href="#" id="target-wiki" class="wiki-link" target="_blank" data-i18n="wiki_link">🔗 Wikipedia</a></div>
+            <div class="tip-box"><b data-i18n="tactical_tip">💡 Consiglio Tattico:</b> <span id="target-tips">--</span></div>
         </div>
 
         <div class="planning-grid">
             <div class="panel">
-                <h3>📸 Setup Ottico <span class="info-icon" onclick="apriGuida('guida-fov')" title="Come usare il simulatore FOV">ℹ️</span></h3>
+                <h3><span data-i18n="optical_setup">📸 Setup Ottico</span> <span class="info-icon" onclick="apriGuida('guida-fov')">ℹ️</span></h3>
                 <div class="input-group">
-                    <label>Telescopio:</label>
+                    <label data-i18n="telescope">Telescopio:</label>
                     <select id="preset-telescope" onchange="applicaPresetTelescopio()">
-                        <option value="">-- Seleziona Telescopio --</option>
+                        <option value="" data-i18n="select_opt">-- Seleziona --</option>
                     </select>
                 </div>
                 <div class="input-group">
-                    <label>Focale (mm):</label>
+                    <label data-i18n="focal_len">Focale (mm):</label>
                     <input type="number" id="focal-length" value="400" oninput="aggiornaFOV()">
                 </div>
                 <hr style="border: 1px solid #333; margin: 15px 0;">
                 <div class="input-group">
-                    <label>Sensore:</label>
+                    <label data-i18n="sensor">Sensore:</label>
                     <select id="preset-sensor" onchange="applicaPresetSensore()">
-                        <option value="">-- Seleziona Camera --</option>
+                        <option value="" data-i18n="select_opt">-- Seleziona --</option>
                     </select>
                 </div>
-                <div class="input-group"><label>Larg. W (mm):</label><input type="number" id="sensor-width" value="23.5" step="0.1" oninput="aggiornaFOV()"></div>
-                <div class="input-group"><label>Alet. H (mm):</label><input type="number" id="sensor-height" value="15.7" step="0.1" oninput="aggiornaFOV()"></div>
+                <div class="input-group"><label data-i18n="width">Larg. W (mm):</label><input type="number" id="sensor-width" value="23.5" step="0.1" oninput="aggiornaFOV()"></div>
+                <div class="input-group"><label data-i18n="height">Alet. H (mm):</label><input type="number" id="sensor-height" value="15.7" step="0.1" oninput="aggiornaFOV()"></div>
                 <div style="margin-top: 25px; padding: 15px; background-color: #2a2a2a; border-radius: 8px; text-align: center;">
-                    <h4 style="margin:0 0 5px 0; color:#aaa;">Campo Inquadrato Calcolato</h4>
+                    <h4 style="margin:0 0 5px 0; color:#aaa;" data-i18n="fov_calc">Campo Inquadrato Calcolato</h4>
                     <p id="fov-result" style="font-weight: bold; color: #44ff44; font-size: 1.4em; margin: 0;">--° x --°</p>
                 </div>
             </div>
             
             <div style="display: flex; flex-direction: column;">
                 <div class="panel" style="padding:0; overflow:hidden;">
-                    <h3 style="padding: 15px 20px 0 20px;">📐 Simulatore FOV Realistico (DSS2)</h3>
-                    <p style="padding: 0 20px 5px 20px; margin:0; font-size: 0.8em; color:#aaa;">Trascina il cielo per pre-posizionare l'inquadratura.</p>
+                    <h3 style="padding: 15px 20px 0 20px;" data-i18n="fov_sim">📐 Simulatore FOV Realistico (DSS2)</h3>
                     <div class="fov-simulator-container" id="fov-simulator-container">
                         <div id="aladin-lite-div"></div>
                         <div class="center-cross">+</div>
@@ -369,41 +384,39 @@
             </div>
         </div>
 
-        <h2 id="calc-title" style="margin-top: 30px; border-top: 1px solid #333; padding-top: 20px;">⏱️ Calcolatore Sessione Smart AI <span class="info-icon" onclick="apriGuida('guida-smart')" title="Scopri come l'AI calcola le pose">ℹ️</span></h2>
+        <h2 id="calc-title" style="margin-top: 30px; border-top: 1px solid #333; padding-top: 20px;"><span data-i18n="smart_calc">⏱️ Calcolatore Sessione Smart AI</span> <span class="info-icon" onclick="apriGuida('guida-smart')">ℹ️</span></h2>
         
         <div class="twilight-grid">
-            <div class="twilight-item"><span class="icon">🌇</span><span class="label">Tramonto</span><b id="info-sunset">--:--</b></div>
-            <div class="twilight-item"><span class="icon">✨</span><span class="label">Inizio Notte Astr.</span><b id="info-nightstart" class="twilight-night">--:--</b></div>
-            <div class="twilight-item"><span class="icon">🔭</span><span class="label">Fine Notte Astr.</span><b id="info-nightend" class="twilight-night">--:--</b></div>
-            <div class="twilight-item"><span class="icon">🌅</span><span class="label">Alba</span><b id="info-sunrise">--:--</b></div>
+            <div class="twilight-item"><span class="icon">🌇</span><span class="label" data-i18n="sunset">Tramonto</span><b id="info-sunset">--:--</b></div>
+            <div class="twilight-item"><span class="icon">✨</span><span class="label" data-i18n="night_start">Inizio Notte Astr.</span><b id="info-nightstart" class="twilight-night">--:--</b></div>
+            <div class="twilight-item"><span class="icon">🔭</span><span class="label" data-i18n="night_end">Fine Notte Astr.</span><b id="info-nightend" class="twilight-night">--:--</b></div>
+            <div class="twilight-item"><span class="icon">🌅</span><span class="label" data-i18n="sunrise">Alba</span><b id="info-sunrise">--:--</b></div>
         </div>
         
         <div class="panel" style="margin-bottom: 20px; text-align: center; display: flex; justify-content: space-around; flex-wrap: wrap;">
-            <div class="input-group" style="margin: 0;"><label style="width: auto; margin-right: 10px; color:#fff;">Inizio Sessione:</label><input type="time" id="time-start" onchange="calcolaTempi()"></div>
-            <div class="input-group" style="margin: 0;"><label style="width: auto; margin-right: 10px; color:#fff;">Fine Sessione:</label><input type="time" id="time-end" onchange="calcolaTempi()"></div>
+            <div class="input-group" style="margin: 0;"><label style="width: auto; margin-right: 10px; color:#fff;" data-i18n="session_start">Inizio Sessione:</label><input type="time" id="time-start" onchange="calcolaTempi()"></div>
+            <div class="input-group" style="margin: 0;"><label style="width: auto; margin-right: 10px; color:#fff;" data-i18n="session_end">Fine Sessione:</label><input type="time" id="time-end" onchange="calcolaTempi()"></div>
             <div class="input-group" style="margin: 0;">
-                <label style="width: auto; margin-right: 10px; color:#bb86fc;">Tipo Sensore:</label>
+                <label style="width: auto; margin-right: 10px; color:#bb86fc;" data-i18n="sensor_type">Tipo Sensore:</label>
                 <select id="sensor-type" onchange="toggleSensorMode(); calcolaTempi();" style="border-color: #bb86fc; width: auto !important;">
-                    <option value="color">OSC (Colori)</option>
-                    <option value="mono">Monocromatico</option>
+                    <option value="color">OSC (Color)</option>
+                    <option value="mono">Mono</option>
                 </select>
             </div>
         </div>
 
         <div class="session-grid">
             <div class="panel">
-                <h3>Impostazione Sequenza</h3>
-                <p style="font-size: 0.85em; color: #aaa; margin-top: 0;">Spunta i filtri Light da usare. Lascia Dark e Flat in fondo come tempi fissi.</p>
+                <h3 data-i18n="seq_setup">Impostazione Sequenza</h3>
                 
                 <div class="smart-button-container">
-                    <button class="btn-smart" onclick="generaSequenzaOttimale()">✨ Genera Sequenza Ottimale</button>
-                    <p style="margin: 5px 0 0 0; font-size: 0.8em; color: #aaa;">L'algoritmo distribuisce il buio rimanente calcolando i pesi ottimali.</p>
+                    <button class="btn-smart" onclick="generaSequenzaOttimale()" data-i18n="gen_seq_btn">✨ Genera Sequenza Ottimale</button>
                 </div>
 
                 <div style="display:flex; justify-content: space-between; margin-bottom: 10px; padding:0 10px; font-size:0.8em; color:#aaa;">
-                    <span style="width:140px;">Usa | Frame</span>
-                    <span>Pose x Sec.</span>
-                    <span style="width:80px; text-align:right;">Totale</span>
+                    <span style="width:140px;" data-i18n="use_frame">Usa | Frame</span>
+                    <span data-i18n="poses_sec">Pose x Sec.</span>
+                    <span style="width:80px; text-align:right;" data-i18n="total">Totale</span>
                 </div>
                 
                 <div id="frames-container"></div>
@@ -412,10 +425,10 @@
                     <div style="display:flex; align-items:center; width: 140px;">
                         <input type="checkbox" id="dither-check" checked style="margin-right:10px; transform: scale(1.2); cursor: pointer;" onchange="calcolaTempi()">
                         <label style="cursor: pointer; color: #ffaa00;" onclick="document.getElementById('dither-check').click()">Dither</label>
-                        <span class="info-icon" style="margin-left: 8px; color: #ffaa00; font-size: 1.1em;" title="Spiega all'IA quanto tempo perdi nel dithering:&#10;• 1° valore: ogni quanti scatti fai la manovra.&#10;• 't': i secondi che la montatura impiega per riassestarsi.">ℹ️</span>
+                        <span class="info-icon" style="margin-left: 8px; color: #ffaa00; font-size: 1.1em;">ℹ️</span>
                     </div>
                     <div class="calc-inputs" style="font-size: 0.85em; color: #aaa; display: flex; align-items: center; gap: 6px;">
-                        Ogni <input type="number" id="dither-freq" value="3" min="1" oninput="calcolaTempi()" style="width: 45px !important; padding: 5px !important; text-align: center;">
+                        <span data-i18n="every">Ogni</span> <input type="number" id="dither-freq" value="3" min="1" oninput="calcolaTempi()" style="width: 45px !important; padding: 5px !important; text-align: center;">
                         t <input type="number" id="dither-duration" value="15" min="0" oninput="calcolaTempi()" style="width: 45px !important; padding: 5px !important; text-align: center;"> s
                     </div>
                     <div class="calc-total" id="dither-tot" style="color: #ffaa00;">0m</div>
@@ -423,163 +436,234 @@
             </div>
 
             <div class="time-summary">
-                <div class="summary-box"><h4>Finestra Disponibile</h4><span id="calc-available">--h --m</span></div>
-                <div class="summary-box"><h4>Tempo Acquisizione</h4><span id="calc-total" style="color: #bb86fc;">--h --m</span></div>
+                <div class="summary-box"><h4 data-i18n="avail_window">Finestra Disponibile</h4><span id="calc-available">--h --m</span></div>
+                <div class="summary-box"><h4 data-i18n="acq_time">Tempo Acquisizione</h4><span id="calc-total" style="color: #bb86fc;">--h --m</span></div>
                 <div class="summary-box" style="border-color: #444; background-color: #222;">
-                    <h4>Tempo Residuo</h4><span id="calc-residual" class="text-green">--h --m</span>
-                    <p id="calc-warning" style="margin: 5px 0 0 0; font-size: 0.85em; display: none;" class="text-red">⚠️ Sforamento tempo!</p>
+                    <h4 data-i18n="res_time">Tempo Residuo</h4><span id="calc-residual" class="text-green">--h --m</span>
+                    <p id="calc-warning" style="margin: 5px 0 0 0; font-size: 0.85em; display: none;" class="text-red" data-i18n="time_overflow">⚠️ Sforamento tempo!</p>
                 </div>
             </div>
         </div>
 
         <div class="panel" style="margin-top: 20px; border: 1px solid #bb86fc; background: linear-gradient(180deg, #1a1a1a 0%, #121212 100%);">
-            <h3 style="color: #bb86fc;">🚀 Esportazione N.I.N.A. Advanced Sequencer</h3>
-            <p style="font-size: 0.85em; color: #aaa; margin-top: 0;">Il file .json generato importerà coordinate, filtri, tempi calcolati dall'IA e le istruzioni di automazione dell'hardware.</p>
+            <h3 style="color: #bb86fc;" data-i18n="nina_export_title">🚀 Esportazione N.I.N.A. Advanced Sequencer</h3>
             
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px;">
                 <div style="background: #222; padding: 15px; border-radius: 8px;">
-                    <h4 style="margin: 0 0 10px 0; color: #fff;">Avvio Sequenza</h4>
+                    <h4 style="margin: 0 0 10px 0; color: #fff;" data-i18n="seq_start">Avvio Sequenza</h4>
                     <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; width: 100%; cursor: pointer; color: #aaa; font-size: 0.9em;">
-                        <input type="checkbox" id="nina-cool" checked style="transform: scale(1.2);"> Raffredda Camera a <input type="number" id="nina-temp" value="-10" style="width: 60px!important; padding: 4px!important;"> °C
+                        <input type="checkbox" id="nina-cool" checked style="transform: scale(1.2);"> <span data-i18n="cool_cam">Raffredda Camera a</span> <input type="number" id="nina-temp" value="-10" style="width: 60px!important; padding: 4px!important;"> °C
                     </label>
                     <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; width: 100%; cursor: pointer; color: #aaa; font-size: 0.9em;">
-                        <input type="checkbox" id="nina-slew" checked style="transform: scale(1.2);"> Slew & Center (Plate Solve)
+                        <input type="checkbox" id="nina-slew" checked style="transform: scale(1.2);"> <span data-i18n="slew_center">Slew & Center (Plate Solve)</span>
                     </label>
                     <label style="display: flex; align-items: center; gap: 8px; width: 100%; cursor: pointer; color: #aaa; font-size: 0.9em;">
-                        <input type="checkbox" id="nina-guide" checked style="transform: scale(1.2);"> Avvia Autoguida
+                        <input type="checkbox" id="nina-guide" checked style="transform: scale(1.2);"> <span data-i18n="start_guide">Avvia Autoguida</span>
                     </label>
                 </div>
                 <div style="background: #222; padding: 15px; border-radius: 8px;">
-                    <h4 style="margin: 0 0 10px 0; color: #fff;">Fine / Sicurezza</h4>
+                    <h4 style="margin: 0 0 10px 0; color: #fff;" data-i18n="end_sec">Fine / Sicurezza</h4>
                     <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; width: 100%; cursor: pointer; color: #aaa; font-size: 0.9em;">
-                        <input type="checkbox" id="nina-warm" checked style="transform: scale(1.2);"> Riscalda Camera (Warm Up)
+                        <input type="checkbox" id="nina-warm" checked style="transform: scale(1.2);"> <span data-i18n="warm_cam">Riscalda Camera (Warm Up)</span>
                     </label>
                     <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; width: 100%; cursor: pointer; color: #aaa; font-size: 0.9em;">
-                        <input type="checkbox" id="nina-park" checked style="transform: scale(1.2);"> Parcheggia Montatura
+                        <input type="checkbox" id="nina-park" checked style="transform: scale(1.2);"> <span data-i18n="park_mount">Parcheggia Montatura</span>
                     </label>
                     <label style="display: flex; align-items: center; gap: 8px; width: 100%; cursor: pointer; color: #aaa; font-size: 0.9em;">
-                        <input type="checkbox" id="nina-flip" checked style="transform: scale(1.2);"> Attiva Meridian Flip
+                        <input type="checkbox" id="nina-flip" checked style="transform: scale(1.2);"> <span data-i18n="meridian_flip">Attiva Meridian Flip</span>
                     </label>
                 </div>
                 <div style="background: #222; padding: 15px; border-radius: 8px; grid-column: 1 / -1;">
-                    <h4 style="margin: 0 0 5px 0; color: #fff;">Mappatura Nomi Filtri <span class="info-icon" title="N.I.N.A. richiede il nome esatto della tua ruota portafiltri. Scrivili qui. Il sistema li ricorderà per le prossime volte!">ℹ️</span></h4>
-                    <p style="font-size: 0.8em; color: #777; margin-top: 0; margin-bottom: 10px;">Attenzione: Maiuscole e minuscole sono importanti (es. "Luminance" non è "luminance").</p>
+                    <h4 style="margin: 0 0 5px 0; color: #fff;"><span data-i18n="filter_map">Mappatura Nomi Filtri</span> <span class="info-icon">ℹ️</span></h4>
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px;" id="nina-filters-container">
-                        </div>
+                    </div>
                 </div>
             </div>
 
             <div style="text-align: center; margin-top: 25px;">
-                <button class="btn-smart" style="background: linear-gradient(135deg, #ff4444 0%, #aa0000 100%); box-shadow: 0 4px 15px rgba(255, 68, 68, 0.3);" onclick="esportaNINA()">💾 Genera File per N.I.N.A.</button>
+                <button class="btn-smart" style="background: linear-gradient(135deg, #ff4444 0%, #aa0000 100%); box-shadow: 0 4px 15px rgba(255, 68, 68, 0.3);" onclick="esportaNINA()" data-i18n="gen_nina_btn">💾 Genera File per N.I.N.A.</button>
             </div>
         </div>
     </div>
-
-    <div id="guide-view">
-        <button class="btn-back" style="margin-bottom: 40px;" onclick="chiudiGuida()">Torna alla Dashboard</button>
+<div id="guide-view">
+        <button class="btn-back" style="margin-bottom: 40px;" onclick="chiudiGuida()" data-i18n="back_dash">Torna Indietro</button>
         
-        <h2 style="font-size: 2.2em; border-bottom: 2px solid #bb86fc; padding-bottom: 15px; margin-bottom: 30px;">📖 Manuale Utente Completo - AstroDashboard Pro</h2>
-        
-        <div class="filosofia-box">
-            <h3 style="color: #fff; margin-top:0;">La Filosofia del Progetto</h3>
-            <p style="margin-bottom: 0;">L'astrofotografia richiede la pianificazione perfetta di innumerevoli variabili. Lo scopo di AstroDashboard Pro è fondere la potenza di molteplici software in un'unica piattaforma intelligente: dal monitoraggio meteo avanzato, alla scelta predittiva del bersaglio, fino alla generazione automatica della sequenza di scatto per l'osservatorio. Niente distrazioni, solo dati puri e automazione totale per dominare la tua notte sotto le stelle.</p>
+        <div id="guide-it">
+            <h2 style="font-size: 2.2em; border-bottom: 2px solid #bb86fc; padding-bottom: 15px; margin-bottom: 30px;">📖 Manuale AstroDashboard</h2>
+            <div class="filosofia-box"><h3 style="color: #fff; margin-top:0;">La Filosofia</h3><p>Fondere la potenza di molteplici software in un'unica piattaforma intelligente. Niente distrazioni, solo dati puri per ottimizzare la tua notte sotto le stelle.</p></div>
+            <div class="guide-section"><h3>🌍 1. Dati Ambientali e Meteo</h3><ul><li><strong>La Mappa:</strong> Il raggio visibile (50 Km) è indicativo. Serve per capire se le perturbazioni nuvolose ti permettono di trovare "buchi di sereno" spostandoti.</li><li><strong>Jet Stream:</strong> Il killer del Seeing. < 50 km/h: cieli fermi. > 100 km/h: forte turbolenza, evita alte focali.</li><li><strong>Umidità:</strong> Se supera l'85% scatta l'allerta rossa: accendi le fasce anticondensa!</li></ul></div>
+            <div class="guide-section"><h3>🔭 2. Planetario Ibrido (Locale + SIMBAD)</h3><ul><li><strong>Motore Locale:</strong> Usa la barra di ricerca in basso. Gli oggetti salvati in memoria contengono consigli tattici.</li><li><strong>Motore SIMBAD:</strong> Se cerchi un oggetto esotico non in lista, la IA si collega all'Università di Strasburgo per scaricare le coordinate, e a Wikipedia per i testi.</li></ul></div>
+            <div class="guide-section"><h3>📸 3. Simulatore Field of View (FOV)</h3><ul><li><strong>Calcolo:</strong> Usa i preset o inserisci i dati per vedere l'esatto angolo di campo della tua inquadratura.</li><li><strong>Plate Solving Visivo:</strong> Trascina la reale immagine a colori DSS2 per simulare il decentramento.</li></ul></div>
+            <div class="guide-section"><h3>✨ 4. Smart AI & Dithering</h3><ul><li><strong>Dithering:</strong> Inserisci il numero di scatti e i secondi persi (t) per il riassestamento. L'IA calcolerà il tempo invisibile perso.</li><li><strong>Come ragiona l'AI?</strong> Assegna pose brevi agli ammassi, lunghe alle nebulose. Per le galassie in Mono, impone scatti brevi (30s) alla Luminanza ma le dedica il 50% delle ore notturne di buio, splittando il resto sull'RGB.</li></ul></div>
+            <div class="guide-section"><h3>🤖 5. N.I.N.A. Advanced Sequencer Export</h3><ul><li><strong>Mappatura Filtri:</strong> N.I.N.A. richiede che i nomi dei filtri in input corrispondano <em>esattamente</em> a quelli configurati nella tua ruota (maiuscole comprese). Vengono salvati in automatico per il futuro.</li><li><strong>Utilizzo:</strong> Clicca il tasto rosso e trascina il file scaricato dentro la schermata Advanced Sequencer di N.I.N.A.</li></ul></div>
         </div>
 
-        <div id="guida-meteo" class="guide-section">
-            <h3>🌍 1. Modulo Dati Ambientali e Meteo</h3>
-            <p>La schermata principale è una stazione di monitoraggio atmosferico, focalizzata sui parametri critici per le riprese astronomiche.</p>
-            <ul>
-                <li><strong>La Mappa e i Layer:</strong> I cerchi colorati indicano l'intensità dei fenomeni atmosferici entro un raggio di 50-100 Km. Usali per capire in che direzione muoverti con l'auto per trovare "buchi di sereno". Puoi accendere o spegnere i singoli layer dai pulsanti.</li>
-                <li><strong>Timeline Sincronizzata:</strong> Muovendo lo slider temporale, vedrai evolvere sia il meteo sulla mappa, sia l'altezza degli oggetti nel planetario sottostante!</li>
-                <li><strong>Jet Stream (Correnti a Getto):</strong> È il vero responsabile del <em>Seeing</em> (la nitidezza del cielo). Sotto i 50 km/h avrai stelle puntiformi. Sopra i 100-120 km/h la forte turbolenza in alta quota rovinerà inesorabilmente le pose ad alta focale.</li>
-                <li><strong>Allerta Umidità:</strong> Quando supera l'85%, il valore diventa rosso: è il segnale per accendere immediatamente le fasce anticondensa sui tubi ottici!</li>
-            </ul>
+        <div id="guide-en" style="display:none;">
+            <h2 style="font-size: 2.2em; border-bottom: 2px solid #bb86fc; padding-bottom: 15px; margin-bottom: 30px;">📖 AstroDashboard Manual</h2>
+            <div class="filosofia-box"><h3 style="color: #fff; margin-top:0;">The Philosophy</h3><p>Merging the power of multiple software into a single smart platform. No distractions, just pure data to optimize your night under the stars.</p></div>
+            <div class="guide-section"><h3>🌍 1. Weather & Environmental Data</h3><ul><li><strong>The Map:</strong> The visible 50km radius helps you find clear sky gaps if you are mobile.</li><li><strong>Jet Stream:</strong> The Seeing killer. < 50 km/h: steady skies. > 100 km/h: heavy turbulence, avoid high focal lengths.</li><li><strong>Humidity:</strong> Above 85% it turns red: turn on your dew heaters!</li></ul></div>
+            <div class="guide-section"><h3>🔭 2. Hybrid Planetarium (Local + SIMBAD)</h3><ul><li><strong>Local Engine:</strong> Search known targets to get tactical imaging advice from pros.</li><li><strong>SIMBAD Engine:</strong> Search exotic IDs, the AI connects to Strasbourg to download precise coordinates and Wikipedia for info.</li></ul></div>
+            <div class="guide-section"><h3>📸 3. Field of View (FOV) Simulator</h3><ul><li><strong>Calculation:</strong> Select your scope and sensor to get precise FOV degrees.</li><li><strong>Visual Plate Solving:</strong> Drag the real DSS2 image to frame your target.</li></ul></div>
+	<div id="guide-es" style="display:none;">
+            <h2 style="font-size: 2.2em; border-bottom: 2px solid #bb86fc; padding-bottom: 15px; margin-bottom: 30px;">📖 Manual de AstroDashboard</h2>
+            <div class="filosofia-box"><h3 style="color: #fff; margin-top:0;">La Filosofía</h3><p>Fusionar la potencia de múltiples softwares en una única plataforma inteligente. Sin distracciones, solo datos puros para optimizar tu noche bajo las estrellas.</p></div>
+            <div class="guide-section"><h3>🌍 1. Datos Ambientales y Clima</h3><ul><li><strong>El Mapa:</strong> El radio visible (50 Km) es orientativo. Sirve para encontrar "huecos despejados" si eres itinerante.</li><li><strong>Jet Stream:</strong> El asesino del Seeing. < 50 km/h: cielos estables. > 100 km/h: fuerte turbulencia.</li><li><strong>Humedad:</strong> Si supera el 85% se vuelve roja: ¡enciende los calentadores anticondensación!</li></ul></div>
+            <div class="guide-section"><h3>🔭 2. Planetario Híbrido</h3><ul><li><strong>Motor Local:</strong> Busca objetos en memoria con consejos tácticos.</li><li><strong>Motor SIMBAD:</strong> Para IDs exóticos, la IA se conecta a Estrasburgo para coordenadas y a Wikipedia.</li></ul></div>
+            <div class="guide-section"><h3>📸 3. Simulador de Campo (FOV)</h3><ul><li><strong>Cálculo:</strong> Usa los preajustes para ver tu campo de visión exacto.</li><li><strong>Resolución Visual:</strong> Arrastra la imagen real DSS2 para simular el encuadre.</li></ul></div>
+            <div class="guide-section"><h3>✨ 4. Smart IA & Dithering</h3><ul><li><strong>Dithering:</strong> Introduce los tiempos de estabilización. La IA calculará el tiempo fantasma perdido.</li><li><strong>Lógica IA:</strong> Asigna tomas cortas a cúmulos, largas a nebulosas y equilibra filtros monocromáticos.</li></ul></div>
+            <div class="guide-section"><h3>🤖 5. Exportación N.I.N.A.</h3><ul><li><strong>Mapeo de Filtros:</strong> N.I.N.A. requiere que los nombres de los filtros coincidan <em>exactamente</em> con tu rueda.</li><li><strong>Uso:</strong> Arrastra el archivo descargado al Secuenciador Avanzado de N.I.N.A.</li></ul></div>
         </div>
 
-        <div id="guida-ricerca" class="guide-section">
-            <h3>🔭 2. Planetario Predittivo Ibrido</h3>
-            <p>Un "motore di ricerca stellare" che ti propone solo ciò che è utile, scremando il cielo in tempo reale.</p>
-            <ul>
-                <li><strong>Gli Oggetti Consigliati:</strong> La striscia orizzontale mostra gli oggetti Deep Sky ordinati per altezza (dal più alto al più basso). L'oggetto incorniciato in oro è il bersaglio matematicamente ottimale in quel momento.</li>
-                <li><strong>Motore Locale:</strong> Usa la barra di ricerca in basso. Gli oggetti salvati nel nostro database contengono preziosi "consigli tattici" per la ripresa scritti da astrofotografi esperti.</li>
-                <li><strong>Connessione a SIMBAD:</strong> Se cerchi una sigla esotica (es. "NGC 2841") non presente nel database, l'Intelligenza Artificiale si collegherà in tempo reale al database mondiale SIMBAD (Università di Strasburgo) per scaricare le coordinate di puntamento precise e a Wikipedia per estrarre la descrizione.</li>
-            </ul>
+        <div id="guide-zh" style="display:none;">
+            <h2 style="font-size: 2.2em; border-bottom: 2px solid #bb86fc; padding-bottom: 15px; margin-bottom: 30px;">📖 AstroDashboard 用户手册</h2>
+            <div class="filosofia-box"><h3 style="color: #fff; margin-top:0;">设计理念</h3><p>将多个软件的强大功能融合到一个智能平台中。没有干扰，只有纯粹的数据，优化星空下的拍摄之夜。</p></div>
+            <div class="guide-section"><h3>🌍 1. 天气与环境数据</h3><ul><li><strong>地图:</strong> 50公里可见半径有助于移动观测者寻找晴空区域。</li><li><strong>急流 (Jet Stream):</strong> 视宁度杀手。< 50 km/h: 稳定。> 100 km/h: 强湍流，避免长焦。</li><li><strong>湿度:</strong> 超过 85% 变红: 请打开除露带！</li></ul></div>
+            <div class="guide-section"><h3>🔭 2. 混合星图引擎</h3><ul><li><strong>本地引擎:</strong> 搜索已知目标获取专业建议。</li><li><strong>SIMBAD引擎:</strong> 搜索深空编号，AI 将连接斯特拉斯堡获取精确坐标和维基百科数据。</li></ul></div>
+            <div class="guide-section"><h3>📸 3. 视野 (FOV) 模拟器</h3><ul><li><strong>计算:</strong> 选择望远镜和相机以获取精确的 FOV 角度。</li><li><strong>可视化星板解析:</strong> 拖动真实 DSS2 图像进行构图。</li></ul></div>
+            <div class="guide-section"><h3>✨ 4. AI 智能计算</h3><ul><li><strong>抖动 (Dithering):</strong> 输入抖动频率和赤道仪稳定时间，AI 会扣除隐藏的损失时间。</li><li><strong>AI 逻辑:</strong> 星团短曝光，星云长曝光。对于黑白相机，分配50%时间给明度(L)通道。</li></ul></div>
+            <div class="guide-section"><h3>🤖 5. N.I.N.A. 序列导出</h3><ul><li><strong>滤镜映射:</strong> N.I.N.A. 要求滤镜名称必须与您的设备配置文件<em>完全</em>匹配（区分大小写）。</li><li><strong>使用方法:</strong> 点击红色按钮生成，将文件拖入 N.I.N.A. 的高级序列器中。</li></ul></div>
         </div>
-
-        <div id="guida-fov" class="guide-section">
-            <h3>📸 3. Simulatore Field of View (FOV)</h3>
-            <p>Una vera "sala di prova" integrata per perfezionare le tue inquadrature spaziali.</p>
-            <ul>
-                <li><strong>Preset Attrezzatura:</strong> Scegli dai comodi menu a tendina il tuo telescopio (Sky-Watcher, Celestron, Askar...) e il formato del tuo sensore (APS-C, Full Frame, ecc.). Il sistema calcolerà istantaneamente i gradi esatti del tuo Campo Inquadrato.</li>
-                <li><strong>Plate Solving Visivo (DSS2):</strong> Il riquadro nero farà apparire una fotografia reale a colori del profondo cielo circostante. Trascina l'immagine spaziale col mouse per pre-calcolare decentramenti astrofotografici o inquadrature artistiche. Usa i pulsanti +/- per fare zoom e inquadrare il reticolo rosso.</li>
-            </ul>
+            <div class="guide-section"><h3>✨ 4. Smart AI & Dithering</h3><ul><li><strong>Dithering:</strong> Input frequency and mount settle time. The AI calculates the hidden time lost over the night.</li><li><strong>AI Logic:</strong> Assigns short exposures to clusters, long to nebulas. For mono galaxies, it enforces short 30s Lum shots but dedicates 50% of total darkness to it.</li></ul></div>
+            <div class="guide-section"><h3>🤖 5. N.I.N.A. Advanced Sequencer Export</h3><ul><li><strong>Filter Mapping:</strong> NINA requires filter names to match your hardware profile <em>exactly</em> (case sensitive). The dashboard saves them automatically.</li><li><strong>Usage:</strong> Click the red button, then drag & drop the downloaded file into N.I.N.A.'s Advanced Sequencer.</li></ul></div>
         </div>
-
-        <div id="guida-smart" class="guide-section">
-            <h3>✨ 4. Calcolatore Sessione Smart AI</h3>
-            <p>Dimentica carta, penna e calcolatrici. L'Intelligenza Artificiale fa il lavoro logico per te.</p>
-            <ul>
-                <li><strong>Orari Automatici:</strong> Il planner calcola e imposta da solo l'inizio e la fine della sessione leggendo gli esatti orari del Crepuscolo Astronomico Locale (il momento in cui il Sole scende oltre i -18° e il buio è totale).</li>
-                <li><strong>Il "Tempo Fantasma" del Dithering:</strong> Inserisci ogni quanti scatti esegui il Dither e quanti secondi impiega la montatura a stabilizzarsi (es. 15s). L'algoritmo calcolerà il tempo invisibile perso nel corso della notte e lo sottrarrà in automatico dal totale!</li>
-                <li><strong>Il Cervello dell'IA:</strong> In base alla tipologia di oggetto inquadrato, l'IA assegna pose brevi agli ammassi stellari, pose medie alle galassie e pose lunghe (300s+) per le nebulose. Se hai una camera monocromatica, l'IA protegge sempre i dettagli assegnando la quota maggiore di tempo di buio (es. 50%) alla fondamentale Luminanza, splittando il residuo sui canali RGB/SHO.</li>
-            </ul>
-        </div>
-
-        <div id="guida-nina" class="guide-section">
-            <h3>🤖 5. N.I.N.A. Advanced Sequencer Export</h3>
-            <p>Il vero "Ponte di Comando". Trasforma i tuoi calcoli in un file di automazione pronto per pilotare l'intero osservatorio.</p>
-            <ul>
-                <li><strong>Cosa fa?</strong> Una volta che hai premuto "Genera Sequenza Ottimale" e i tempi sono stati approvati, questo modulo costruisce e scarica un file <code>.json</code> con la complessa architettura a blocchi richiesta dal Sequenziatore Avanzato di N.I.N.A.</li>
-                <li><strong>⚠️ Mappatura Filtri (FONDAMENTALE):</strong> N.I.N.A. richiede che i nomi dei filtri in input corrispondano <em>letteralmente</em> a quelli configurati nella tua ruota portafiltri hardware (es. se su NINA hai scritto "LUMINANZA" tutto maiuscolo, devi scriverlo esattamente così nei box della dashboard). <strong>Comodità:</strong> Il sistema salverà i nomi che scrivi nella memoria del dispositivo, così dovrai configurarli una sola volta nella vita!</li>
-                <li><strong>Automazione Hardware:</strong> Usa le spunte per ordinare all'osservatorio le azioni pre e post sessione:
-                    <ul>
-                        <li><em>Avvio:</em> Raffreddamento sensore, Plate Solving (Centratura), e avvio dell'Autoguida PHD2.</li>
-                        <li><em>Sicurezza e Fine:</em> Attivazione del Meridian Flip globale, Parcheggio finale della montatura e riscaldamento graduale del sensore (Warm Up).</li>
-                    </ul>
-                </li>
-                <li><strong>Utilizzo:</strong> Clicca sul tasto rosso "Genera File per N.I.N.A.". Prendi il file appena scaricato e trascinalo (Drag & Drop) dentro la schermata "Advanced Sequencer" in N.I.N.A. ...Premi Play e vai a dormire tranquillo!</li>
-            </ul>
-        </div>
-        
-        <p style="text-align: center; color: #bb86fc; font-weight: bold; margin-top: 40px; font-size: 1.2em;">Cieli Sereni e Buone Riprese!</p>
     </div>
-<script>
-        // --- DATABASE ATTREZZATURA ---
-        const dbTelescopi = [
-            { nome: "Askar FRA 400 (400mm)", focale: 400 },
-            { nome: "Explore Scienific Comethunter (731mm)", focale: 731 },
-            { nome: "SW Explorer 130 PDS (650mm)", focale: 650 },
-            { nome: "SW Explorer 150P (750mm)", focale: 750 },
-            { nome: "SW Explorer 200P (1000mm)", focale: 1000 },
-            { nome: "SW Quattro 150P (600mm)", focale: 600 },
-            { nome: "SW Quattro 200P (800mm)", focale: 800 },
-            { nome: "SW Quattro 250P (1000mm)", focale: 1000 },
-            { nome: "SW 72ED Evostar (420mm)", focale: 420 },
-            { nome: "SW 80ED Evostar (600mm)", focale: 600 },
-            { nome: "SW Esprit 80ED (400mm)", focale: 400 },
-            { nome: "SW Esprit 100ED (550mm)", focale: 550 },
-            { nome: "Celestron C8 SCT (2032mm)", focale: 2032 },
-            { nome: "Celestron C8 @ f/6.3 (1280mm)", focale: 1280 },
-            { nome: "ZWO Seestar S50 (250mm)", focale: 250 },
-            { nome: "Samyang 135mm f/2", focale: 135 }
-        ];
 
-        const dbCamere = [
-            { nome: "ASI 533MC/MM (Square)", w: 11.31, h: 11.31 },
-            { nome: "ASI 294MC/MM (4/3\")", w: 19.1, h: 13.0 },
-            { nome: "SONY IMX571 ", w: 23.5, h: 15.7 },
-            { nome: "ASI 6200MC/MM (Full Frame)", w: 36.0, h: 24.0 },
-            { nome: "ASI 183MC/MM (1\")", w: 13.2, h: 8.8 },
-            { nome: "SONY IMX585", w: 11.14, h: 6.26 },
-            { nome: "ASI 1600MM (4/3\")", w: 17.7, h: 13.4 },
-            { nome: "Reflex APS-C (Canon/Nikon)", w: 22.3, h: 14.9 }
-        ];
+    <script>
+        // --- MOTORE MULTI-LINGUA (i18n) ---
+        const i18n = {
+            it: {
+                "manual_btn": "📖 Apri Manuale", "pos_title": "📍 Posizione", "find_place": "Trova Luogo:", "search_place": "Es. Monte Lussari...",
+                "lat": "Latitudine:", "lon": "Longitudine:", "env_data": "🎛️ Dati Ambientali Astrofotografici",
+                "low_clouds": "Nuvole Basse", "mid_clouds": "Nuvole Medie", "high_clouds": "Nuvole Alte", "moon_poll": "Inq. Lunare",
+                "humidity": "Umidità", "seeing_est": "Stima Seeing", "now": "Adesso",
+                "hybrid_planetarium": "🔭 Planetario Predittivo Ibrido", "solar_system": "🪐 Sistema Solare (Solo visivo)",
+                "rec_targets": "🌌 Oggetti Consigliati Visibili", "free_search": "🔍 Ricerca Libera Oggetto", "search_target": "Es. M31, Pleiadi...",
+                "plan_target_btn": "Pianifica Oggetto 🚀", "back_dash": "Torna alla Dashboard", "change_target": "Cambia",
+                "dossier": "📖 Dossier Astrofotografico", "type": "Tipologia", "app_mag": "Magnitudine App.", "distance": "Distanza", "wiki_link": "🔗 Wikipedia",
+                "tactical_tip": "💡 Consiglio Tattico:", "optical_setup": "📸 Setup Ottico", "telescope": "Telescopio:", "focal_len": "Focale (mm):",
+                "sensor": "Sensore:", "width": "Larg. W (mm):", "height": "Alet. H (mm):", "fov_calc": "Campo Inquadrato Calcolato",
+                "fov_sim": "📐 Simulatore FOV Realistico (DSS2)", "smart_calc": "⏱️ Calcolatore Sessione Smart AI",
+                "sunset": "Tramonto", "night_start": "Inizio Notte Astr.", "night_end": "Fine Notte Astr.", "sunrise": "Alba",
+                "session_start": "Inizio Sessione:", "session_end": "Fine Sessione:", "sensor_type": "Tipo Sensore:",
+                "seq_setup": "Impostazione Sequenza", "gen_seq_btn": "✨ Genera Sequenza Ottimale", "use_frame": "Usa | Frame", "poses_sec": "Pose x Sec.",
+                "total": "Totale", "every": "Ogni", "avail_window": "Finestra Disponibile", "acq_time": "Tempo Acquisizione", "res_time": "Tempo Residuo", "time_overflow": "⚠️ Sforamento tempo!",
+                "nina_export_title": "🚀 Esportazione N.I.N.A. Advanced Sequencer", "seq_start": "Avvio Sequenza", "cool_cam": "Raffredda Camera a",
+                "slew_center": "Slew & Center (Plate Solve)", "start_guide": "Avvia Autoguida", "end_sec": "Fine / Sicurezza", "warm_cam": "Riscalda Camera (Warm Up)",
+                "park_mount": "Parcheggia Montatura", "meridian_flip": "Attiva Meridian Flip", "filter_map": "Mappatura Nomi Filtri", "gen_nina_btn": "💾 Genera File per N.I.N.A.",
+                "clear": "Sereno", "partly_cloudy": "Poco Nuvoloso", "mostly_cloudy": "Nubi Sparse", "overcast": "Coperto", "daytime": "Giorno",
+                "new_moon": "Luna Nuova", "waxing_crescent": "Falce Crescente", "first_quarter": "Primo Quarto", "waxing_gibbous": "Gibbosa Crescente", "full_moon": "Luna Piena", "waning_gibbous": "Gibbosa Calante", "last_quarter": "Ultimo Quarto", "waning_crescent": "Falce Calante",
+                "galaxy": "Galassia", "nebula": "Nebulosa", "cluster": "Ammasso", "star": "Stella", "unknown": "Sconosciuta",
+                "alert_planetarium": "Scegli prima un bersaglio dal Planetario 🔭!", "alert_noseq": "Nessuna posa calcolata! Clicca prima su 'Genera Sequenza Ottimale'.",
+                "alert_calib": "I frame di calibrazione occupano tutto il tempo!", "alert_nolight": "Seleziona almeno un filtro Light.", "alert_times": "Imposta prima gli orari di Inizio e Fine.", "no_target": "Nessun oggetto visibile.", "too_bright": "☀️ Cielo troppo luminoso.", "dso_too_bright": "☀️ Cielo troppo luminoso per il Deep Sky.", "select_opt": "-- Seleziona --"
+            },
+            en: {
+                "manual_btn": "📖 Open Manual", "pos_title": "📍 Location", "find_place": "Find Place:", "search_place": "E.g. Yellowstone...",
+                "lat": "Latitude:", "lon": "Longitude:", "env_data": "🎛️ Astrophotography Env Data",
+                "low_clouds": "Low Clouds", "mid_clouds": "Mid Clouds", "high_clouds": "High Clouds", "moon_poll": "Moon Poll.",
+                "humidity": "Humidity", "seeing_est": "Seeing Est.", "now": "Now",
+                "hybrid_planetarium": "🔭 Hybrid Predictive Planetarium", "solar_system": "🪐 Solar System (Visual)",
+                "rec_targets": "🌌 Recommended Targets", "free_search": "🔍 Free Target Search", "search_target": "E.g. M31, Pleiades...",
+                "plan_target_btn": "Plan Target 🚀", "back_dash": "Back to Dashboard", "change_target": "Change",
+                "dossier": "📖 Astrophotography Dossier", "type": "Type", "app_mag": "App. Magnitude", "distance": "Distance", "wiki_link": "🔗 Wikipedia",
+                "tactical_tip": "💡 Tactical Tip:", "optical_setup": "📸 Optical Setup", "telescope": "Telescope:", "focal_len": "Focal (mm):",
+                "sensor": "Sensor:", "width": "Width (mm):", "height": "Height (mm):", "fov_calc": "Calculated Field of View",
+                "fov_sim": "📐 Realistic FOV Simulator (DSS2)", "smart_calc": "⏱️ Smart AI Session Calculator",
+                "sunset": "Sunset", "night_start": "Astr. Night Starts", "night_end": "Astr. Night Ends", "sunrise": "Sunrise",
+                "session_start": "Session Start:", "session_end": "Session End:", "sensor_type": "Sensor Type:",
+                "seq_setup": "Sequence Setup", "gen_seq_btn": "✨ Generate Optimal Sequence", "use_frame": "Use | Frame", "poses_sec": "Exposures x Sec",
+                "total": "Total", "every": "Every", "avail_window": "Available Window", "acq_time": "Acquisition Time", "res_time": "Residual Time", "time_overflow": "⚠️ Time Overflow!",
+                "nina_export_title": "🚀 N.I.N.A. Advanced Sequencer Export", "seq_start": "Sequence Start", "cool_cam": "Cool Camera to",
+                "slew_center": "Slew & Center (Plate Solve)", "start_guide": "Start Autoguiding", "end_sec": "End / Safety", "warm_cam": "Warm Up Camera",
+                "park_mount": "Park Mount", "meridian_flip": "Enable Meridian Flip", "filter_map": "Filter Name Mapping", "gen_nina_btn": "💾 Generate N.I.N.A. File",
+                "clear": "Clear", "partly_cloudy": "Partly Cloudy", "mostly_cloudy": "Mostly Cloudy", "overcast": "Overcast", "daytime": "Daytime",
+                "new_moon": "New Moon", "waxing_crescent": "Waxing Crescent", "first_quarter": "First Quarter", "waxing_gibbous": "Waxing Gibbous", "full_moon": "Full Moon", "waning_gibbous": "Waning Gibbous", "last_quarter": "Last Quarter", "waning_crescent": "Waning Crescent",
+                "galaxy": "Galaxy", "nebula": "Nebula", "cluster": "Cluster", "star": "Star", "unknown": "Unknown",
+                "alert_planetarium": "Choose a target from the Planetarium first 🔭!", "alert_noseq": "No exposures calculated! Click 'Generate Optimal Sequence' first.",
+                "alert_calib": "Calibration frames take up all the time!", "alert_nolight": "Select at least one Light filter.", "alert_times": "Please set Start and End times.", "no_target": "No visible objects.", "too_bright": "☀️ Sky is too bright.", "dso_too_bright": "☀️ Sky is too bright for Deep Sky.", "select_opt": "-- Select --"
+            },
+            es: {
+                "manual_btn": "📖 Abrir Manual", "pos_title": "📍 Ubicación", "find_place": "Buscar Lugar:", "search_place": "Ej. Atacama...",
+                "lat": "Latitud:", "lon": "Longitud:", "env_data": "🎛️ Datos Ambientales",
+                "low_clouds": "Nubes Bajas", "mid_clouds": "Nubes Medias", "high_clouds": "Nubes Altas", "moon_poll": "Ilum. Lunar",
+                "humidity": "Humedad", "seeing_est": "Est. Seeing", "now": "Ahora",
+                "hybrid_planetarium": "🔭 Planetario Híbrido", "solar_system": "🪐 Sistema Solar",
+                "rec_targets": "🌌 Objetivos Recomendados", "free_search": "🔍 Búsqueda Libre", "search_target": "Ej. M31, Pléyades...",
+                "plan_target_btn": "Planificar 🚀", "back_dash": "Volver al Panel", "change_target": "Cambiar",
+                "dossier": "📖 Dosier Fotográfico", "type": "Tipo", "app_mag": "Magnitud", "distance": "Distancia", "wiki_link": "🔗 Wikipedia",
+                "tactical_tip": "💡 Consejo Táctico:", "optical_setup": "📸 Equipo Óptico", "telescope": "Telescopio:", "focal_len": "Focal (mm):",
+                "sensor": "Sensor:", "width": "Ancho (mm):", "height": "Alto (mm):", "fov_calc": "Campo de Visión (FOV)",
+                "fov_sim": "📐 Simulador FOV Realista (DSS2)", "smart_calc": "⏱️ Calculadora de Sesión IA",
+                "sunset": "Atardecer", "night_start": "Inicio Noche Oscura", "night_end": "Fin Noche Oscura", "sunrise": "Amanecer",
+                "session_start": "Inicio Sesión:", "session_end": "Fin Sesión:", "sensor_type": "Tipo de Sensor:",
+                "seq_setup": "Configuración de Secuencia", "gen_seq_btn": "✨ Generar Secuencia Óptima", "use_frame": "Usar | Frame", "poses_sec": "Tomas x Seg",
+                "total": "Total", "every": "Cada", "avail_window": "Tiempo Disponible", "acq_time": "Tiempo de Captura", "res_time": "Tiempo Restante", "time_overflow": "⚠️ ¡Tiempo excedido!",
+                "nina_export_title": "🚀 Exportar Secuencia a N.I.N.A.", "seq_start": "Inicio Secuencia", "cool_cam": "Enfriar Cámara a",
+                "slew_center": "Apuntar y Centrar (Plate Solve)", "start_guide": "Iniciar Guiado", "end_sec": "Fin / Seguridad", "warm_cam": "Calentar Cámara",
+                "park_mount": "Aparcar Montura", "meridian_flip": "Activar Meridian Flip", "filter_map": "Mapeo Nombres de Filtros", "gen_nina_btn": "💾 Generar Archivo N.I.N.A.",
+                "clear": "Despejado", "partly_cloudy": "Poco Nublado", "mostly_cloudy": "Nublado", "overcast": "Cubierto", "daytime": "Día",
+                "new_moon": "Luna Nueva", "waxing_crescent": "Luna Creciente", "first_quarter": "Cuarto Creciente", "waxing_gibbous": "Gibosa Creciente", "full_moon": "Luna Llena", "waning_gibbous": "Gibosa Menguante", "last_quarter": "Cuarto Menguante", "waning_crescent": "Luna Menguante",
+                "galaxy": "Galaxia", "nebula": "Nebulosa", "cluster": "Cúmulo", "star": "Estrella", "unknown": "Desconocido",
+                "alert_planetarium": "¡Elige primero un objetivo en el Planetario 🔭!", "alert_noseq": "¡No se han calculado tomas! Haz clic en 'Generar Secuencia Óptima'.",
+                "alert_calib": "¡Las tomas de calibración ocupan todo el tiempo!", "alert_nolight": "Selecciona al menos un filtro Light.", "alert_times": "Configura las horas de Inicio y Fin.", "no_target": "No hay objetos visibles.", "too_bright": "☀️ Cielo demasiado brillante.", "dso_too_bright": "☀️ Cielo demasiado brillante para cielo profundo.", "select_opt": "-- Seleccionar --"
+            },
+            zh: {
+                "manual_btn": "📖 打开手册", "pos_title": "📍 位置", "find_place": "查找地点:", "search_place": "例如: 丽江...",
+                "lat": "纬度:", "lon": "经度:", "env_data": "🎛️ 天文摄影环境数据",
+                "low_clouds": "低云", "mid_clouds": "中云", "high_clouds": "高云", "moon_poll": "月光影响",
+                "humidity": "湿度", "seeing_est": "视宁度预估", "now": "现在",
+                "hybrid_planetarium": "🔭 混合预测星图", "solar_system": "🪐 太阳系 (仅目视)",
+                "rec_targets": "🌌 推荐深空目标", "free_search": "🔍 自由搜索目标", "search_target": "如: M31, 仙女座...",
+                "plan_target_btn": "计划拍摄 🚀", "back_dash": "返回仪表板", "change_target": "更改",
+                "dossier": "📖 天文目标档案", "type": "类型", "app_mag": "视星等", "distance": "距离", "wiki_link": "🔗 维基百科",
+                "tactical_tip": "💡 拍摄建议:", "optical_setup": "📸 光学设置", "telescope": "望远镜:", "focal_len": "焦距 (mm):",
+                "sensor": "传感器:", "width": "宽度 (mm):", "height": "高度 (mm):", "fov_calc": "视场 (FOV) 计算",
+                "fov_sim": "📐 真实视场模拟器 (DSS2)", "smart_calc": "⏱️ AI 智能序列计算",
+                "sunset": "日落", "night_start": "天文黑夜开始", "night_end": "天文黑夜结束", "sunrise": "日出",
+                "session_start": "拍摄开始:", "session_end": "拍摄结束:", "sensor_type": "相机类型:",
+                "seq_setup": "序列设置", "gen_seq_btn": "✨ 生成最佳曝光序列", "use_frame": "使用 | 帧类型", "poses_sec": "曝光数 x 秒",
+                "total": "总计", "every": "每隔", "avail_window": "可用拍摄窗口", "acq_time": "总曝光时间", "res_time": "剩余时间", "time_overflow": "⚠️ 时间溢出！",
+                "nina_export_title": "🚀 N.I.N.A. 高级序列导出", "seq_start": "序列开始前", "cool_cam": "相机降温至",
+                "slew_center": "指向并居中 (星板解析)", "start_guide": "开始导星", "end_sec": "结束 / 安全", "warm_cam": "相机回温",
+                "park_mount": "赤道仪归位", "meridian_flip": "启用自动中天翻转", "filter_map": "滤镜名称映射", "gen_nina_btn": "💾 生成 N.I.N.A. 文件",
+                "clear": "晴朗", "partly_cloudy": "少云", "mostly_cloudy": "多云", "overcast": "阴天", "daytime": "白天",
+                "new_moon": "新月", "waxing_crescent": "蛾眉月", "first_quarter": "上弦月", "waxing_gibbous": "盈凸月", "full_moon": "满月", "waning_gibbous": "亏凸月", "last_quarter": "下弦月", "waning_crescent": "残月",
+                "galaxy": "星系", "nebula": "星云", "cluster": "星团", "star": "恒星", "unknown": "未知",
+                "alert_planetarium": "请先从星图中选择一个目标 🔭！", "alert_noseq": "没有计算出任何曝光！请先点击 '生成最佳曝光序列'。",
+                "alert_calib": "校准帧占据了所有可用时间！", "alert_nolight": "请至少选择一个亮场 (Light) 滤镜。", "alert_times": "请先设置开始和结束时间。", "no_target": "当前没有可见目标。", "too_bright": "☀️ 天空太亮了。", "dso_too_bright": "☀️ 天空对深空目标来说太亮了。", "select_opt": "-- 请选择 --"
+            }
+        };
+
+        let lang = localStorage.getItem('ad_lang') || 'it';
+        function t(key) { return i18n[lang][key] || key; }
+
+        function changeLanguage(l) {
+            lang = l; localStorage.setItem('ad_lang', l);
+            
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            let actBtn = document.getElementById('btn-lang-' + l);
+            if(actBtn) actBtn.classList.add('active');
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                let k = el.getAttribute('data-i18n');
+                if (el.tagName === 'INPUT') el.placeholder = t(k); else el.innerHTML = t(k);
+            });
+
+            ['it','en','es','zh'].forEach(lg => {
+                let guide = document.getElementById('guide-'+lg);
+                if(guide) guide.style.display = (lang===lg ? 'block' : 'none');
+            });
+            
+            aggiornaEffemeridi(new Date()); 
+            if(datiMeteo){cambiaOraMeteo(); cambiaOraAstro();}
+        }
+
+        // --- DATABASE ATTREZZATURA ---
+        const dbTelescopi = [{ nome: "Askar FRA 400 (400mm)", focale: 400 }, { nome: "Explore Scienific Comethunter (731mm)", focale: 731 }, { nome: "SW Explorer 130 PDS (650mm)", focale: 650 }, { nome: "SW Explorer 150P (750mm)", focale: 750 }, { nome: "SW Explorer 200P (1000mm)", focale: 1000 }, { nome: "SW Quattro 150P (600mm)", focale: 600 }, { nome: "SW Quattro 200P (800mm)", focale: 800 }, { nome: "SW Quattro 250P (1000mm)", focale: 1000 }, { nome: "SW 72ED Evostar (420mm)", focale: 420 }, { nome: "SW 80ED Evostar (600mm)", focale: 600 }, { nome: "SW Esprit 80ED (400mm)", focale: 400 }, { nome: "SW Esprit 100ED (550mm)", focale: 550 }, { nome: "Celestron C8 SCT (2032mm)", focale: 2032 }, { nome: "Celestron C8 @ f/6.3 (1280mm)", focale: 1280 }, { nome: "ZWO Seestar S50 (250mm)", focale: 250 }, { nome: "Samyang 135mm f/2", focale: 135 }];
+        const dbCamere = [{ nome: "ASI 533MC/MM (Square)", w: 11.31, h: 11.31 }, { nome: "ASI 294MC/MM (4/3\")", w: 19.1, h: 13.0 }, { nome: "SONY IMX571 ", w: 23.5, h: 15.7 }, { nome: "ASI 6200MC/MM (Full Frame)", w: 36.0, h: 24.0 }, { nome: "ASI 183MC/MM (1\")", w: 13.2, h: 8.8 }, { nome: "SONY IMX585", w: 11.14, h: 6.26 }, { nome: "ASI 1600MM (4/3\")", w: 17.7, h: 13.4 }, { nome: "Reflex APS-C (Canon/Nikon)", w: 22.3, h: 14.9 }];
 
         function popolaMenuAttrezzatura() {
-            const selTel = document.getElementById('preset-telescope');
-            dbTelescopi.forEach(t => { let opt = document.createElement('option'); opt.value = t.focale; opt.textContent = t.nome; selTel.appendChild(opt); });
-            const selCam = document.getElementById('preset-sensor');
-            dbCamere.forEach(c => { let opt = document.createElement('option'); opt.value = `${c.w},${c.h}`; opt.textContent = c.nome; selCam.appendChild(opt); });
+            const selTel = document.getElementById('preset-telescope'); dbTelescopi.forEach(t => { let opt = document.createElement('option'); opt.value = t.focale; opt.textContent = t.nome; selTel.appendChild(opt); });
+            const selCam = document.getElementById('preset-sensor'); dbCamere.forEach(c => { let opt = document.createElement('option'); opt.value = `${c.w},${c.h}`; opt.textContent = c.nome; selCam.appendChild(opt); });
         }
 
         // CORE LOGIC E MAPPA
@@ -591,23 +675,17 @@
         let marker = L.marker([latCorrente, lonCorrente]).addTo(map).bindPopup("<b>Udine</b>").openPopup();
         let timerRicerca;
 
-        const planetsDatabase = [
-            { id: "jupiter", name: "Giove", icon: "🪐", ra: 7.15, dec: 22.8 },
-            { id: "mars", name: "Marte", icon: "🔴", ra: 18.50, dec: -23.5 },
-            { id: "venus", name: "Venere", icon: "✨", ra: 23.50, dec: -3.5 }
-        ];
+        const planetsDatabase = [ { id: "jupiter", name: "Jupiter", icon: "🪐", ra: 7.15, dec: 22.8 }, { id: "mars", name: "Mars", icon: "🔴", ra: 18.50, dec: -23.5 }, { id: "venus", name: "Venus", icon: "✨", ra: 23.50, dec: -3.5 } ];
 
         function getJulianDate(date) { return (date.getTime() / 86400000) + 2440587.5; }
         function calcolaAltAz(ra, dec, lat, lon, date) {
-            let jd = getJulianDate(date), d = jd - 2451545.0, lst = (280.46061837 + 360.98564736629 * d + lon) % 360;
-            if (lst < 0) lst += 360;
+            let jd = getJulianDate(date), d = jd - 2451545.0, lst = (280.46061837 + 360.98564736629 * d + lon) % 360; if (lst < 0) lst += 360;
             let ra_deg = ra * 15, ha_deg = lst - ra_deg, rad = Math.PI / 180;
             let sin_alt = Math.sin(lat*rad)*Math.sin(dec*rad) + Math.cos(lat*rad)*Math.cos(dec*rad)*Math.cos(ha_deg*rad);
             let alt_deg = Math.asin(sin_alt) / rad;
             let cos_az = (Math.sin(dec*rad) - Math.sin(lat*rad)*sin_alt) / (Math.cos(lat*rad) * Math.cos(Math.asin(sin_alt)));
             cos_az = Math.max(-1, Math.min(1, cos_az)); 
-            let az_deg = Math.acos(cos_az) / rad;
-            if (Math.sin(ha_deg*rad) > 0) az_deg = 360 - az_deg;
+            let az_deg = Math.acos(cos_az) / rad; if (Math.sin(ha_deg*rad) > 0) az_deg = 360 - az_deg;
             return { alt: alt_deg, az: az_deg };
         }
         function getPuntoCardinale(az) { return ["N", "NE", "E", "SE", "S", "SW", "W", "NW", "N"][Math.round(az / 45) % 8]; }
@@ -621,11 +699,7 @@
                     .then(r => r.json()).then(data => {
                         dropdown.innerHTML = ''; 
                         if (data.length > 0) {
-                            dropdown.style.display = 'block';
-                            data.forEach(l => {
-                                let li = document.createElement('li'); li.textContent = l.display_name;
-                                li.onclick = () => selezionaLuogo(l.lat, l.lon, l.display_name); dropdown.appendChild(li);
-                            });
+                            dropdown.style.display = 'block'; data.forEach(l => { let li = document.createElement('li'); li.textContent = l.display_name; li.onclick = () => selezionaLuogo(l.lat, l.lon, l.display_name); dropdown.appendChild(li); });
                         } else dropdown.style.display = 'none';
                     });
             }, 500); 
@@ -646,10 +720,10 @@
             let orariSole = SunCalc.getTimes(data, latCorrente, lonCorrente), orariLuna = SunCalc.getMoonTimes(data, latCorrente, lonCorrente), faseLuna = SunCalc.getMoonIllumination(data);
             let formattaOra = (d) => d && !isNaN(d) ? d.toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'}) : '--:--';
             document.getElementById('alba-sole').innerText = formattaOra(orariSole.sunrise); document.getElementById('tramonto-sole').innerText = formattaOra(orariSole.sunset);
-            document.getElementById('alba-luna').innerText = orariLuna.rise ? formattaOra(orariLuna.rise) : 'Non sorge'; document.getElementById('tramonto-luna').innerText = orariLuna.set ? formattaOra(orariLuna.set) : 'Non tramonta';
-            let f = faseLuna.phase, i = '🌑', n = 'Luna Nuova';
-            if(f>0.03&&f<=0.22){i='🌒';n='Falce Crescente';}else if(f>0.22&&f<=0.28){i='🌓';n='Primo Quarto';}else if(f>0.28&&f<=0.47){i='🌔';n='Gibbosa Crescente';}else if(f>0.47&&f<=0.53){i='🌕';n='Luna Piena';}else if(f>0.53&&f<=0.72){i='🌖';n='Gibbosa Calante';}else if(f>0.72&&f<=0.78){i='🌗';n='Ultimo Quarto';}else if(f>0.78&&f<=0.97){i='🌘';n='Falce Calante';}
-            document.getElementById('moon-emoji').innerText = i; document.getElementById('moon-phase-name').innerText = n;
+            document.getElementById('alba-luna').innerText = orariLuna.rise ? formattaOra(orariLuna.rise) : '--:--'; document.getElementById('tramonto-luna').innerText = orariLuna.set ? formattaOra(orariLuna.set) : '--:--';
+            let f = faseLuna.phase, i = '🌑', n = 'new_moon';
+            if(f>0.03&&f<=0.22){i='🌒';n='waxing_crescent';}else if(f>0.22&&f<=0.28){i='🌓';n='first_quarter';}else if(f>0.28&&f<=0.47){i='🌔';n='waxing_gibbous';}else if(f>0.47&&f<=0.53){i='🌕';n='full_moon';}else if(f>0.53&&f<=0.72){i='🌖';n='waning_gibbous';}else if(f>0.72&&f<=0.78){i='🌗';n='last_quarter';}else if(f>0.78&&f<=0.97){i='🌘';n='waning_crescent';}
+            document.getElementById('moon-emoji').innerText = i; document.getElementById('moon-phase-name').innerText = t(n);
         }
 
         function syncSliders(val) { document.getElementById('timeSlider').value = val; document.getElementById('astroSlider').value = val; cambiaOraMeteo(); cambiaOraAstro(); }
@@ -658,35 +732,35 @@
             fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latCorrente}&longitude=${lonCorrente}&hourly=cloud_cover_low,cloud_cover_mid,cloud_cover_high,wind_speed_250hPa,wind_speed_10m,temperature_2m,relative_humidity_2m&forecast_days=3&timezone=auto`)
             .then(r => r.json()).then(data => {
                 datiMeteo = data.hourly; let adesso = new Date();
-                indicePartenza = Math.max(0, datiMeteo.time.findIndex(t => new Date(t).getTime() >= adesso.getTime() - 3600000));
+                indicePartenza = Math.max(0, datiMeteo.time.findIndex(x => new Date(x).getTime() >= adesso.getTime() - 3600000));
                 document.getElementById('timeSlider').disabled = false; document.getElementById('timeSlider').value = 0; 
                 document.getElementById('astroSlider').disabled = false; document.getElementById('astroSlider').value = 0; 
                 cambiaOraMeteo(); cambiaOraAstro();
-            }).catch(e => document.getElementById('time-display').innerText = "⚠️ Errore meteo");
+            });
         }
 
         function cambiaOraMeteo() {
             if (!datiMeteo) return;
             let step = parseInt(document.getElementById('timeSlider').value), i = indicePartenza + step, dOra = new Date(datiMeteo.time[i]);
-            let tOra = step === 0 ? "Adesso (" + new Date().toLocaleTimeString('it-IT', {hour: '2-digit', minute:'2-digit'}) + ")" : dOra.toLocaleDateString('it-IT', { weekday: 'short', day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
+            let tOra = step === 0 ? t("now") + " (" + new Date().toLocaleTimeString('it-IT', {hour: '2-digit', minute:'2-digit'}) + ")" : dOra.toLocaleDateString(lang==='it'?'it-IT':'en-US', { weekday: 'short', day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
             if (step > 0 && dOra.getHours() === 0) aggiornaEffemeridi(dOra);
 
             let b = datiMeteo.cloud_cover_low[i], m = datiMeteo.cloud_cover_mid[i], a = datiMeteo.cloud_cover_high[i], jet = Math.round(datiMeteo.wind_speed_250hPa[i]), vs = datiMeteo.wind_speed_10m[i], temp = datiMeteo.temperature_2m[i], um = datiMeteo.relative_humidity_2m[i];
             let altS = SunCalc.getPosition(dOra, latCorrente, lonCorrente).altitude * (180/Math.PI), mP = SunCalc.getMoonPosition(dOra, latCorrente, lonCorrente);
             
-            let maxC = Math.max(b, m, a), icM = "☁️", dsM = "Coperto";
-            if (maxC < 15) { icM = "☀️"; dsM = "Sereno"; } else if (maxC < 40) { icM = "🌤️"; dsM = "Poco Nuvoloso"; } else if (maxC < 75) { icM = "⛅"; dsM = "Nubi Sparse"; }
+            let maxC = Math.max(b, m, a), icM = "☁️", dsM = "overcast";
+            if (maxC < 15) { icM = "☀️"; dsM = "clear"; } else if (maxC < 40) { icM = "🌤️"; dsM = "partly_cloudy"; } else if (maxC < 75) { icM = "⛅"; dsM = "mostly_cloudy"; }
             if (altS < -6) { if (maxC < 15) icM = "✨"; else if (maxC < 40) icM = "🌙"; }
 
-            document.getElementById('time-display').innerHTML = `<span style="font-size: 1.5em; vertical-align: middle; margin-right: 5px;">${icM}</span> ${tOra} <br><span style="font-size: 0.75em; color: #aaa; text-transform: uppercase;">Condizioni: <b style="color: #fff;">${dsM}</b></span>`;
+            document.getElementById('time-display').innerHTML = `<span style="font-size: 1.5em; vertical-align: middle; margin-right: 5px;">${icM}</span> ${tOra} <br><span style="font-size: 0.75em; color: #aaa; text-transform: uppercase;">Meteo: <b style="color: #fff;">${t(dsM)}</b></span>`;
             document.getElementById('meteo-temp').innerText = Math.round(temp) + "°C";
-            document.getElementById('meteo-umidita').innerText = "Umidità: " + um + "%"; document.getElementById('meteo-umidita').style.color = um > 85 ? "#ff4444" : "#44ff44";
+            document.getElementById('meteo-umidita').innerText = t("humidity")+": " + um + "%"; document.getElementById('meteo-umidita').style.color = um > 85 ? "#ff4444" : "#44ff44";
             document.getElementById('val-umidita-layer').innerText = um + "%";
             
             let inqL = (altS < -6 && mP.altitude > 0) ? Math.max(0, Math.round((SunCalc.getMoonIllumination(dOra).fraction * Math.sin(mP.altitude)) * 100)) : 0;
             let scS = 5; if(jet>120)scS-=3;else if(jet>80)scS-=2;else if(jet>50)scS-=1; if(vs>15)scS-=1; if(vs>30)scS-=1;
             
-            document.getElementById('val-seeing').innerText = altS > -6 ? "Giorno" : Math.max(1, scS) + "/5";
+            document.getElementById('val-seeing').innerText = altS > -6 ? t("daytime") : Math.max(1, scS) + "/5";
             document.getElementById('val-seeing').style.color = altS > -6 ? "#ffaa00" : "#bb86fc";
             document.getElementById('val-basse').innerText = b+"%"; document.getElementById('val-medie').innerText = m+"%"; document.getElementById('val-alte').innerText = a+"%"; document.getElementById('val-jet').innerHTML = jet+' <span class="jet-unit">km/h</span>'; document.getElementById('val-luna').innerText = inqL+"%";
 
@@ -704,13 +778,13 @@
         function cambiaOraAstro() {
             if (!datiMeteo) return;
             let step = parseInt(document.getElementById('astroSlider').value), dOra = new Date(datiMeteo.time[indicePartenza + step]);
-            document.getElementById('astro-time-display').innerText = "🔭 " + (step === 0 ? "Adesso (" + new Date().toLocaleTimeString('it-IT', {hour: '2-digit', minute:'2-digit'}) + ")" : dOra.toLocaleDateString('it-IT', { weekday: 'short', day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }));
+            document.getElementById('astro-time-display').innerText = "🔭 " + (step === 0 ? t("now") + " (" + new Date().toLocaleTimeString('it-IT', {hour: '2-digit', minute:'2-digit'}) + ")" : dOra.toLocaleDateString(lang==='it'?'it-IT':'en-US', { weekday: 'short', day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }));
             
             let pL = document.getElementById('planets-list'), dL = document.getElementById('dso-list'); pL.innerHTML = ''; dL.innerHTML = '';
-            if (SunCalc.getPosition(dOra, latCorrente, lonCorrente).altitude * (180/Math.PI) > -6) { pL.innerHTML = dL.innerHTML = `<p style="color:#aaa; padding:10px;">☀️ Cielo troppo luminoso.</p>`; return; }
+            if (SunCalc.getPosition(dOra, latCorrente, lonCorrente).altitude * (180/Math.PI) > -6) { pL.innerHTML = dL.innerHTML = `<p style="color:#aaa; padding:10px;">${t("too_bright")}</p>`; return; }
 
             let vP = [], mP = SunCalc.getMoonPosition(dOra, latCorrente, lonCorrente), mA = mP.altitude * (180/Math.PI);
-            if (mA > 5) vP.push({ html: creaCardHTML({name: "Luna", icon: "🌕", desc: "", tips: ""}, mA, (mP.azimuth * 180/Math.PI + 180) % 360, false), alt: mA });
+            if (mA > 5) vP.push({ html: creaCardHTML({name: "Moon", icon: "🌕"}, mA, (mP.azimuth * 180/Math.PI + 180) % 360, false), alt: mA });
             planetsDatabase.forEach(p => { let pos = calcolaAltAz(p.ra, p.dec, latCorrente, lonCorrente, dOra); if (pos.alt > 10) vP.push({ html: creaCardHTML(p, pos.alt, pos.az, false), alt: pos.alt }); });
             vP.sort((a, b) => b.alt - a.alt).forEach(i => pL.appendChild(i.html));
 
@@ -718,13 +792,15 @@
             if (typeof dsoDatabase !== 'undefined') dsoDatabase.forEach(d => { let pos = calcolaAltAz(d.ra, d.dec, latCorrente, lonCorrente, dOra); if (pos.alt > 15) vD.push({ html: creaCardHTML(d, pos.alt, pos.az, true), alt: pos.alt }); });
             vD.sort((a, b) => b.alt - a.alt); if (vD.length > 0) vD[0].html.classList.add('top-target');
             vD.forEach(i => dL.appendChild(i.html));
-            if (dL.innerHTML === '') dL.innerHTML = `<p style="color:#777; padding:10px;">Nessun oggetto visibile.</p>`;
+            if (dL.innerHTML === '') dL.innerHTML = `<p style="color:#777; padding:10px;">${t("no_target")}</p>`;
         }
 
-        function creaCardHTML(t, alt, az, c) {
+        function mapTypeTrans(type) { let m = {"Galassia": "galaxy", "Nebulosa": "nebula", "Ammasso": "cluster", "Stella": "star"}; return t(m[type] || "unknown"); }
+
+        function creaCardHTML(tObj, alt, az, c) {
             let div = document.createElement('div'); div.className = c ? 'dso-card card-clickable' : 'dso-card card-static';
-            div.innerHTML = `<div class="dso-icon">${t.icon}</div><div class="dso-info"><h4>${t.name}</h4><p>Altezza: <b>${Math.round(alt)}°</b></p><span class="dso-direction">${getPuntoCardinale(az)}</span></div>`;
-            if(c) div.onclick = () => apriPianificazione(t); return div;
+            div.innerHTML = `<div class="dso-icon">${tObj.icon}</div><div class="dso-info"><h4>${tObj.name}</h4><p>Alt: <b>${Math.round(alt)}°</b></p><span class="dso-direction">${getPuntoCardinale(az)}</span></div>`;
+            if(c) div.onclick = () => apriPianificazione(tObj); return div;
         }
 
         function setupSearch(iId, sId) {
@@ -742,7 +818,7 @@
         setupSearch('search-dash-input', 'sugg-dash'); setupSearch('search-plan-input', 'sugg-plan');
 
         function eseguiRicerca(iId) {
-            if (typeof dsoDatabase === 'undefined') { alert("Database locale assente."); return; }
+            if (typeof dsoDatabase === 'undefined') return;
             let inp = document.getElementById(iId), q = inp.value.trim(); if (!q) return;
             let qn = q.toLowerCase().replace(/\s+/g, ''), st = document.getElementById('status-' + iId);
             if(st) st.style.display = 'none';
@@ -750,7 +826,7 @@
             let ex = dsoDatabase.find(d => d.id.toLowerCase() === qn), pt = dsoDatabase.find(d => d.name.toLowerCase().replace(/\s+/g, '').includes(qn));
             if (ex) { inp.value = ex.name; apriPianificazione(ex); return; } if (pt) { inp.value = pt.name; apriPianificazione(pt); return; }
 
-            if(st) { st.style.display = 'block'; st.style.color = '#ffaa00'; st.innerText = "Ricerca su SIMBAD in corso... 🛰️"; }
+            if(st) { st.style.display = 'block'; st.style.color = '#ffaa00'; st.innerText = "SIMBAD Search... 🛰️"; }
             fetch(`https://cds.unistra.fr/cgi-bin/nph-sesame/-oI/A?${encodeURIComponent(q)}`).then(r => r.text()).then(d => {
                 let lines = d.split('\n'), fc = false, ra, dec, ty = "Sconosciuta", mg = "N/D";
                 for(let i=0; i<lines.length; i++) {
@@ -758,33 +834,33 @@
                     if(lines[i].startsWith('%T')) { let rt = lines[i].substring(2).trim().toLowerCase(); ty = rt.includes('galaxy') ? "Galassia" : rt.includes('nebula')||rt.includes('h ii') ? "Nebulosa" : rt.includes('cluster') ? "Ammasso" : rt.includes('star') ? "Stella" : lines[i].substring(2).trim(); }
                     if(lines[i].startsWith('%M')) { let rm = lines[i].substring(2).trim(), mv = rm.match(/V=([\d.]+)/), mb = rm.match(/B=([\d.]+)/), mn = rm.match(/[\d.]+/); mg = mv ? "+"+mv[1]+" (V)" : mb ? "+"+mb[1]+" (B)" : mn ? "~ "+mn[0] : mg; }
                 }
-                if (!fc) { if(st) { st.style.color = '#ff4444'; st.innerText = "Oggetto inesistente."; } else alert("Oggetto inesistente."); } 
+                if (!fc) { if(st) { st.style.color = '#ff4444'; st.innerText = "Not Found."; } } 
                 else {
-                    if(st) st.innerText = "Scaricamento info da Wikipedia... 📚";
+                    if(st) st.innerText = "Wikipedia... 📚";
                     fetch(`https://it.wikipedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrsearch=${encodeURIComponent(q)}&prop=extracts&exintro=1&explaintext=1&exchars=600&gsrlimit=1`).then(w => w.json()).then(wd => {
-                        if(st) st.style.display = 'none'; let sn = `Dati SIMBAD.\nTipo: ${ty}.`, wl = `https://it.wikipedia.org/w/index.php?search=${encodeURIComponent(q)}`;
-                        if (wd.query && wd.query.pages) { let pid = Object.keys(wd.query.pages)[0]; if (wd.query.pages[pid].extract) { sn = "Dati web.\n\n" + wd.query.pages[pid].extract; wl = `https://it.wikipedia.org/?curid=${pid}`; } }
-                        inp.value = ''; apriPianificazione({ name: q.toUpperCase() + " (SIMBAD)", ra: ra/15, dec: dec, type: ty, mag: mg, dist: "N/D", link: wl, desc: sn, tips: ty==="Galassia"?"Filtri L-RGB.":"Pose test 120s." });
-                    }).catch(e => { if(st) st.style.display = 'none'; inp.value = ''; apriPianificazione({ name: q.toUpperCase(), ra: ra/15, dec: dec, type: ty, mag: mg, dist: "N/D", link: `https://it.wikipedia.org/w/index.php?search=${encodeURIComponent(q)}`, desc: `Wikipedia non raggiungibile.`, tips: "Test suggerito." }); });
+                        if(st) st.style.display = 'none'; let sn = `SIMBAD Data.\nType: ${ty}.`, wl = `https://en.wikipedia.org/w/index.php?search=${encodeURIComponent(q)}`;
+                        if (wd.query && wd.query.pages) { let pid = Object.keys(wd.query.pages)[0]; if (wd.query.pages[pid].extract) { sn = wd.query.pages[pid].extract; wl = `https://en.wikipedia.org/?curid=${pid}`; } }
+                        inp.value = ''; apriPianificazione({ name: q.toUpperCase(), ra: ra/15, dec: dec, type: ty, mag: mg, dist: "N/D", link: wl, desc: sn, tips: ty==="Galassia"?"L-RGB Filters.":"120s test." });
+                    }).catch(e => { if(st) st.style.display = 'none'; inp.value = ''; apriPianificazione({ name: q.toUpperCase(), ra: ra/15, dec: dec, type: ty, mag: mg, dist: "N/D", link: `https://en.wikipedia.org/w/index.php?search=${encodeURIComponent(q)}`, desc: `Wiki error.`, tips: "Test." }); });
                 }
-            }).catch(e => { if(st) { st.style.color = '#ff4444'; st.innerText = "Errore di rete."; } });
+            }).catch(e => { if(st) { st.style.color = '#ff4444'; st.innerText = "Network Error."; } });
         }
 
-        function apriGuida(a=null) { vistaPrecedente = document.getElementById('planning-view').style.display === 'block' ? 'planning-view' : 'dashboard-view'; document.getElementById('dashboard-view').style.display = 'none'; document.getElementById('planning-view').style.display = 'none'; document.getElementById('guide-view').style.display = 'block'; if(a) setTimeout(() => document.getElementById(a).scrollIntoView({behavior: 'smooth'}), 100); else window.scrollTo(0,0); }
+        function apriGuida() { vistaPrecedente = document.getElementById('planning-view').style.display === 'block' ? 'planning-view' : 'dashboard-view'; document.getElementById('dashboard-view').style.display = 'none'; document.getElementById('planning-view').style.display = 'none'; document.getElementById('guide-view').style.display = 'block'; window.scrollTo(0,0); }
         function chiudiGuida() { document.getElementById('guide-view').style.display = 'none'; document.getElementById(vistaPrecedente).style.display = 'block'; if(vistaPrecedente==='planning-view') aggiornaFOV(); window.scrollTo(0,0); }
 
-        function apriPianificazione(t) {
-            targetSelezionato = t; document.getElementById('dashboard-view').style.display = 'none'; document.getElementById('planning-view').style.display = 'block';
-            document.getElementById('plan-target-name').innerText = "Pianificazione: " + t.name;
-            document.getElementById('stat-type').innerText = t.type || "--"; document.getElementById('stat-mag').innerText = t.mag || "--"; document.getElementById('stat-dist').innerText = t.dist || "--";
-            document.getElementById('target-description').innerText = t.desc || "Nessuna descrizione."; document.getElementById('target-tips').innerText = t.tips || "Nessun consiglio.";
-            let wl = document.getElementById('target-wiki'); if(t.link) { wl.href = t.link; wl.style.display = 'inline-block'; } else wl.style.display = 'none';
+        function apriPianificazione(tObj) {
+            targetSelezionato = tObj; document.getElementById('dashboard-view').style.display = 'none'; document.getElementById('planning-view').style.display = 'block';
+            document.getElementById('plan-target-name').innerText = targetSelezionato.name;
+            document.getElementById('stat-type').innerText = mapTypeTrans(targetSelezionato.type) || "--"; document.getElementById('stat-mag').innerText = targetSelezionato.mag || "--"; document.getElementById('stat-dist').innerText = targetSelezionato.dist || "--";
+            document.getElementById('target-description').innerText = targetSelezionato.desc || "--"; document.getElementById('target-tips').innerText = targetSelezionato.tips || "--";
+            let wl = document.getElementById('target-wiki'); if(targetSelezionato.link) { wl.href = targetSelezionato.link; wl.style.display = 'inline-block'; } else wl.style.display = 'none';
             
             let d = new Date(), at = SunCalc.getTimes(d, latCorrente, lonCorrente), ft = (x) => x && !isNaN(x) ? x.toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'}) : '--:--';
             document.getElementById('info-sunset').innerText = ft(at.sunset); document.getElementById('info-nightstart').innerText = ft(at.night); document.getElementById('info-nightend').innerText = ft(at.nightEnd); document.getElementById('info-sunrise').innerText = ft(at.sunrise);
             if (ft(at.night) !== '--:--') document.getElementById('time-start').value = ft(at.night); if (ft(at.nightEnd) !== '--:--') document.getElementById('time-end').value = ft(at.nightEnd);
 
-            if (!aladinSkyMap) { aladinSkyMap = A.aladin('#aladin-lite-div', { survey: "P/DSS2/color", fov: 2, target: (t.ra * 15) + " " + t.dec, showReticle: false, showZoomControl: false, showFullscreenControl: false, showLayersControl: false, showGotoControl: false }); setTimeout(() => aggiornaFOV(), 300); } else { setTimeout(() => { aladinSkyMap.gotoRaDec(t.ra * 15, t.dec); aggiornaFOV(); }, 100); }
+            if (!aladinSkyMap) { aladinSkyMap = A.aladin('#aladin-lite-div', { survey: "P/DSS2/color", fov: 2, target: (targetSelezionato.ra * 15) + " " + targetSelezionato.dec, showReticle: false, showZoomControl: false, showFullscreenControl: false, showLayersControl: false, showGotoControl: false }); setTimeout(() => aggiornaFOV(), 300); } else { setTimeout(() => { aladinSkyMap.gotoRaDec(targetSelezionato.ra * 15, targetSelezionato.dec); aggiornaFOV(); }, 100); }
             disegnaGraficoAltezza(); toggleSensorMode(); calcolaTempi(); window.scrollTo(0,0);
         }
 
@@ -805,7 +881,7 @@
             if (!targetSelezionato) return; if (chartAltezza) chartAltezza.destroy();
             let lbl = [], dat = [], d = new Date(), sd = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 18, 0, 0);
             for (let i = 0; i <= 12; i++) { let fd = new Date(sd.getTime() + i*3600000); lbl.push(fd.getHours() + "h"); dat.push(Math.max(0, calcolaAltAz(targetSelezionato.ra, targetSelezionato.dec, latCorrente, lonCorrente, fd).alt)); }
-            chartAltezza = new Chart(document.getElementById('altitudeChart').getContext('2d'), { type: 'line', data: { labels: lbl, datasets: [{ label: 'Altezza (°)', data: dat, borderColor: '#bb86fc', backgroundColor: 'rgba(187, 134, 252, 0.3)', tension: 0.4, fill: true, pointRadius: 2, borderWidth: 2 }] }, options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 90, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#aaa', font: { size: 10 }, stepSize: 30 } }, x: { grid: { display: false }, ticks: { color: '#aaa', font: { size: 10 }, maxRotation: 0 } } }, plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false } }, layout: { padding: 0 } } });
+            chartAltezza = new Chart(document.getElementById('altitudeChart').getContext('2d'), { type: 'line', data: { labels: lbl, datasets: [{ label: 'Alt (°)', data: dat, borderColor: '#bb86fc', backgroundColor: 'rgba(187, 134, 252, 0.3)', tension: 0.4, fill: true, pointRadius: 2, borderWidth: 2 }] }, options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 90, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#aaa', font: { size: 10 }, stepSize: 30 } }, x: { grid: { display: false }, ticks: { color: '#aaa', font: { size: 10 }, maxRotation: 0 } } }, plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false } }, layout: { padding: 0 } } });
         }
 
         const framesColor = [{ id: "c-light", name: "Light", class: "f-l", dC: 0, dE: 180 }, { id: "c-dark", name: "Dark", class: "f-dark", dC: 0, dE: 180 }, { id: "c-bias", name: "Bias/Flat", class: "f-bias", dC: 0, dE: 0 }];
@@ -847,16 +923,16 @@
         }
 
         function generaSequenzaOttimale() {
-            if (!targetSelezionato) return;
-            let tS = document.getElementById('time-start').value, tE = document.getElementById('time-end').value; if(!tS || !tE) { alert("Imposta orari."); return; }
+            if (!targetSelezionato) { alert(t("alert_planetarium")); return; }
+            let tS = document.getElementById('time-start').value, tE = document.getElementById('time-end').value; if(!tS || !tE) { alert(t("alert_times")); return; }
             let dS = new Date(`1970-01-01T${tS}:00`), dE = new Date(`1970-01-01T${tE}:00`); if (dE <= dS) dE.setDate(dE.getDate() + 1);
             let aS = (dE - dS) / 1000, isM = document.getElementById('sensor-type').value === 'mono', fL = isM ? framesMono : framesColor, cS = 0;
             
             fL.forEach(f => { if (f.id.includes('dark') || f.id.includes('bias')) cS += (parseInt(document.getElementById(`${f.id}-count`).value)||0) * (parseInt(document.getElementById(`${f.id}-exp`).value)||0); });
-            let rS = aS - cS; if (rS <= 0) { alert("I frame di calibrazione occupano tutto il tempo!"); return; }
+            let rS = aS - cS; if (rS <= 0) { alert(t("alert_calib")); return; }
             
             let aL = []; fL.forEach(f => { if (!f.id.includes('dark') && !f.id.includes('bias')) { let c = document.getElementById(`${f.id}-check`); if (c && c.checked) aL.push(f); } });
-            if (aL.length === 0) { alert("Seleziona almeno un filtro Light."); return; }
+            if (aL.length === 0) { alert(t("alert_nolight")); return; }
 
             let w = {};
             if (!isM) w[aL[0].id] = 1.0;
@@ -866,7 +942,7 @@
                 else { let eq = 1.0 / aL.length; aL.forEach(f => w[f.id] = eq); }
             }
 
-            let ty = targetSelezionato.type ? targetSelezionato.type.toLowerCase() : "", isA = ty.includes('ammasso')||ty.includes('cluster'), isG = ty.includes('galassia')||ty.includes('galaxy')||ty.includes('riflessione')||ty.includes('stella');
+            let ty = targetSelezionato.type ? targetSelezionato.type.toLowerCase() : "", isA = ty.includes('ammasso')||ty.includes('cluster'), isG = ty.includes('galassia')||ty.includes('galaxy')||ty.includes('riflessione')||ty.includes('stella')||ty.includes('star');
             let dC = document.getElementById('dither-check'), uD = dC && dC.checked, dF = parseInt(document.getElementById('dither-freq').value)||1, dD = parseInt(document.getElementById('dither-duration').value)||0;
 
             aL.forEach(f => {
@@ -880,17 +956,15 @@
             calcolaTempi();
         }
 
-        // --- GESTIONE N.I.N.A. ---
         const defaultNinaFilters = { 'm-l': 'Luminance', 'm-r': 'Red', 'm-g': 'Green', 'm-b': 'Blue', 'm-ha': 'Ha', 'm-oiii': 'OIII', 'm-sii': 'SII' };
         function aggiornaFiltriNina() {
             let isM = document.getElementById('sensor-type').value === 'mono', c = document.getElementById('nina-filters-container'); if (!c) return;
             c.innerHTML = '';
-            if (!isM) { c.innerHTML = '<span style="color:#aaa; font-size:0.9em;">OSC Camera: Nessun filtro da configurare.</span>'; return; }
+            if (!isM) { c.innerHTML = `<span style="color:#aaa; font-size:0.9em;">OSC Camera.</span>`; return; }
             framesMono.forEach(f => {
                 if (!f.id.includes('dark') && !f.id.includes('bias')) {
                     let savedName = localStorage.getItem('nina_filter_' + f.id) || defaultNinaFilters[f.id] || f.name;
-                    let d = document.createElement('div');
-                    d.style = "display: flex; align-items: center; justify-content: space-between; font-size: 0.85em; background: #1a1a1a; padding: 5px 10px; border-radius: 4px; border: 1px solid #444;";
+                    let d = document.createElement('div'); d.style = "display: flex; align-items: center; justify-content: space-between; font-size: 0.85em; background: #1a1a1a; padding: 5px 10px; border-radius: 4px; border: 1px solid #444;";
                     d.innerHTML = `<label style="color:#aaa; width:auto; margin:0; font-weight:bold;">${f.name}</label><input type="text" id="nina-name-${f.id}" value="${savedName}" onchange="salvaFiltroNina('${f.id}')" style="width: 80px!important; padding: 4px!important; font-size: 0.9em; background: #222; border-color: #555;">`;
                     c.appendChild(d);
                 }
@@ -898,36 +972,24 @@
         }
         function salvaFiltroNina(id) { localStorage.setItem('nina_filter_' + id, document.getElementById(`nina-name-${id}`).value.trim()); }
 
-        // MOTORE DI GENERAZIONE N.I.N.A. JSON
         function esportaNINA() {
-            if (!targetSelezionato) { alert("Scegli prima un bersaglio dal Planetario 🔭!"); return; }
-            
+            if (!targetSelezionato) { alert(t("alert_planetarium")); return; }
             let doCool = document.getElementById('nina-cool').checked, tempTarget = parseFloat(document.getElementById('nina-temp').value) || -10;
-            let doSlew = document.getElementById('nina-slew').checked, doGuide = document.getElementById('nina-guide').checked;
-            let doWarm = document.getElementById('nina-warm').checked, doPark = document.getElementById('nina-park').checked;
-            let doFlip = document.getElementById('nina-flip').checked;
-            let doDither = document.getElementById('dither-check') && document.getElementById('dither-check').checked, ditherFreq = parseInt(document.getElementById('dither-freq').value) || 1;
+            let doSlew = document.getElementById('nina-slew').checked, doGuide = document.getElementById('nina-guide').checked, doWarm = document.getElementById('nina-warm').checked, doPark = document.getElementById('nina-park').checked, doFlip = document.getElementById('nina-flip').checked, doDither = document.getElementById('dither-check') && document.getElementById('dither-check').checked, ditherFreq = parseInt(document.getElementById('dither-freq').value) || 1;
             let isMono = document.getElementById('sensor-type').value === 'mono', frameList = isMono ? framesMono : framesColor, esposizioni = [];
 
             frameList.forEach(f => {
                 let count = parseInt(document.getElementById(`${f.id}-count`).value) || 0, exp = parseInt(document.getElementById(`${f.id}-exp`).value) || 0;
-                if (count > 0 && exp > 0) {
-                    let isLight = !f.id.includes('dark') && !f.id.includes('bias');
-                    esposizioni.push({ count: count, exp: exp, filter: (isMono && isLight) ? document.getElementById(`nina-name-${f.id}`).value.trim() : null, type: f.id.includes('dark') ? "DARK" : f.id.includes('bias') ? "FLAT" : "LIGHT" });
-                }
+                if (count > 0 && exp > 0) { let isLight = !f.id.includes('dark') && !f.id.includes('bias'); esposizioni.push({ count: count, exp: exp, filter: (isMono && isLight) ? document.getElementById(`nina-name-${f.id}`).value.trim() : null, type: f.id.includes('dark') ? "DARK" : f.id.includes('bias') ? "FLAT" : "LIGHT" }); }
             });
-
-            if (esposizioni.length === 0) { alert("Nessuna posa calcolata!"); return; }
+            if (esposizioni.length === 0) { alert(t("alert_noseq")); return; }
 
             let idCounter = 1; function nextId() { return (idCounter++).toString(); }
             function makeObs(type, values) { return { "$id": nextId(), "$type": `System.Collections.ObjectModel.ObservableCollection\`1[[${type}, NINA.Sequencer]], System.ObjectModel`, "$values": values }; }
-
             let ra = targetSelezionato.ra, rh = Math.floor(ra), rm = Math.floor((ra - rh) * 60), rs = ((ra - rh) * 60 - rm) * 60;
             let dec = targetSelezionato.dec, negD = dec < 0, aD = Math.abs(dec), dd = Math.floor(aD), dm = Math.floor((aD - dd) * 60), ds = ((aD - dd) * 60 - dm) * 60;
-
             let rootId = nextId(), startAreaId = nextId(), targetAreaId = nextId(), endAreaId = nextId(), startItems = [];
             if (doCool) startItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Camera.CoolCamera, NINA.Sequencer", "Temperature": tempTarget, "Duration": 0.0, "Parent": {"$ref": startAreaId}, "ErrorBehavior": 0, "Attempts": 1 });
-
             let dsoContainerId = nextId(), imagingContainerId = nextId(), dsoItems = [];
             if (doSlew) dsoItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Platesolving.Center, NINA.Sequencer", "Inherited": true, "Coordinates": { "$id": nextId(), "$type": "NINA.Astrometry.InputCoordinates, NINA.Astrometry", "RAHours": rh, "RAMinutes": rm, "RASeconds": rs, "NegativeDec": negD, "DecDegrees": dd, "DecMinutes": dm, "DecSeconds": ds }, "Parent": {"$ref": dsoContainerId}, "ErrorBehavior": 0, "Attempts": 1 });
             if (doGuide) dsoItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Guider.StartGuiding, NINA.Sequencer", "ForceCalibration": false, "Parent": {"$ref": dsoContainerId}, "ErrorBehavior": 0, "Attempts": 1 });
@@ -937,22 +999,16 @@
                 let blockId = nextId(), blockItems = [];
                 if (expo.filter) blockItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.FilterWheel.SwitchFilter, NINA.Sequencer", "Filter": { "$id": nextId(), "$type": "NINA.Core.Model.Equipment.FilterInfo, NINA.Core", "_name": expo.filter, "_focusOffset": 0, "_position": 0, "_autoFocusExposureTime": -1.0, "_autoFocusFilter": false }, "Parent": {"$ref": blockId}, "ErrorBehavior": 0, "Attempts": 1 });
                 blockItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Imaging.TakeExposure, NINA.Sequencer", "ExposureTime": expo.exp, "Gain": -1, "Offset": -1, "Binning": { "$id": nextId(), "$type": "NINA.Core.Model.Equipment.BinningMode, NINA.Core", "X": 1, "Y": 1 }, "ImageType": expo.type, "ExposureCount": expo.count, "Parent": {"$ref": blockId}, "ErrorBehavior": 0, "Attempts": 1 });
-
                 let blockTriggers = [];
                 if (doDither && expo.type === "LIGHT" && ditherFreq > 0) {
-                    let trigRunnerId = nextId();
-                    blockTriggers.push({ "$id": nextId(), "$type": "NINA.Sequencer.Trigger.Guider.DitherAfterExposures, NINA.Sequencer", "AfterExposures": ditherFreq, "Parent": {"$ref": blockId}, "TriggerRunner": { "$id": trigRunnerId, "$type": "NINA.Sequencer.Container.SequentialContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", [{ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Guider.Dither, NINA.Sequencer", "Parent": {"$ref": trigRunnerId}, "ErrorBehavior": 0, "Attempts": 1 }]), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", []), "Parent": null, "ErrorBehavior": 0, "Attempts": 1 } });
+                    let trigRunnerId = nextId(); blockTriggers.push({ "$id": nextId(), "$type": "NINA.Sequencer.Trigger.Guider.DitherAfterExposures, NINA.Sequencer", "AfterExposures": ditherFreq, "Parent": {"$ref": blockId}, "TriggerRunner": { "$id": trigRunnerId, "$type": "NINA.Sequencer.Container.SequentialContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", [{ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Guider.Dither, NINA.Sequencer", "Parent": {"$ref": trigRunnerId}, "ErrorBehavior": 0, "Attempts": 1 }]), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", []), "Parent": null, "ErrorBehavior": 0, "Attempts": 1 } });
                 }
                 imagingItems.push({ "$id": blockId, "$type": "NINA.Sequencer.Container.SequentialContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Name": expo.filter ? `Ripresa ${expo.filter}` : `Ripresa ${expo.type}`, "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", blockItems), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", blockTriggers), "Parent": {"$ref": imagingContainerId}, "ErrorBehavior": 0, "Attempts": 1 });
             });
 
             let imagingTriggers = [];
-            if (doFlip) {
-                let trigRunnerId = nextId();
-                imagingTriggers.push({ "$id": nextId(), "$type": "NINA.Sequencer.Trigger.MeridianFlip.MeridianFlipTrigger, NINA.Sequencer", "Parent": {"$ref": imagingContainerId}, "TriggerRunner": { "$id": trigRunnerId, "$type": "NINA.Sequencer.Container.SequentialContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", []), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", []), "Parent": null, "ErrorBehavior": 0, "Attempts": 1 } });
-            }
-
-            dsoItems.push({ "$id": imagingContainerId, "$type": "NINA.Sequencer.Container.SequentialContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Name": "Target Imaging Instructions", "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", imagingItems), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", imagingTriggers), "Parent": {"$ref": dsoContainerId}, "ErrorBehavior": 0, "Attempts": 1 });
+            if (doFlip) { let trigRunnerId = nextId(); imagingTriggers.push({ "$id": nextId(), "$type": "NINA.Sequencer.Trigger.MeridianFlip.MeridianFlipTrigger, NINA.Sequencer", "Parent": {"$ref": imagingContainerId}, "TriggerRunner": { "$id": trigRunnerId, "$type": "NINA.Sequencer.Container.SequentialContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", []), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", []), "Parent": null, "ErrorBehavior": 0, "Attempts": 1 } }); }
+            dsoItems.push({ "$id": imagingContainerId, "$type": "NINA.Sequencer.Container.SequentialContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Name": "Target Imaging", "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", imagingItems), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", imagingTriggers), "Parent": {"$ref": dsoContainerId}, "ErrorBehavior": 0, "Attempts": 1 });
 
             let targetItems = [{ "$id": dsoContainerId, "$type": "NINA.Sequencer.Container.DeepSkyObjectContainer, NINA.Sequencer", "Target": { "$id": nextId(), "$type": "NINA.Astrometry.InputTarget, NINA.Astrometry", "Expanded": true, "TargetName": targetSelezionato.name, "PositionAngle": 0.0, "InputCoordinates": { "$id": nextId(), "$type": "NINA.Astrometry.InputCoordinates, NINA.Astrometry", "RAHours": rh, "RAMinutes": rm, "RASeconds": rs, "NegativeDec": negD, "DecDegrees": dd, "DecMinutes": dm, "DecSeconds": ds } }, "ExposureInfoListExpanded": false, "ExposureInfoList": null, "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Name": targetSelezionato.name, "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", dsoItems), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", []), "Parent": {"$ref": targetAreaId}, "ErrorBehavior": 0, "Attempts": 1 }];
 
@@ -960,22 +1016,21 @@
             if (doWarm) endItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Camera.WarmCamera, NINA.Sequencer", "Duration": 0.0, "Parent": {"$ref": endAreaId}, "ErrorBehavior": 0, "Attempts": 1 });
             if (doPark) endItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Telescope.ParkScope, NINA.Sequencer", "Parent": {"$ref": endAreaId}, "ErrorBehavior": 0, "Attempts": 1 });
 
-            let ninaJSON = {
-                "$id": rootId, "$type": "NINA.Sequencer.Container.SequenceRootContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Name": `AstroDashboard - ${targetSelezionato.name}`, "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true,
-                "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", [
-                    { "$id": startAreaId, "$type": "NINA.Sequencer.Container.StartAreaContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Name": "Avvio", "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", startItems), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", []), "Parent": {"$ref": rootId}, "ErrorBehavior": 0, "Attempts": 1 },
-                    { "$id": targetAreaId, "$type": "NINA.Sequencer.Container.TargetAreaContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Name": "Ripresa", "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", targetItems), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", []), "Parent": {"$ref": rootId}, "ErrorBehavior": 0, "Attempts": 1 },
-                    { "$id": endAreaId, "$type": "NINA.Sequencer.Container.EndAreaContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Name": "Fine", "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", endItems), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", []), "Parent": {"$ref": rootId}, "ErrorBehavior": 0, "Attempts": 1 }
-                ]),
-                "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", []), "Parent": null, "ErrorBehavior": 0, "Attempts": 1
-            };
+            let ninaJSON = { "$id": rootId, "$type": "NINA.Sequencer.Container.SequenceRootContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Name": `AstroDashboard - ${targetSelezionato.name}`, "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", [ { "$id": startAreaId, "$type": "NINA.Sequencer.Container.StartAreaContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Name": "Start", "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", startItems), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", []), "Parent": {"$ref": rootId}, "ErrorBehavior": 0, "Attempts": 1 }, { "$id": targetAreaId, "$type": "NINA.Sequencer.Container.TargetAreaContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Name": "Target", "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", targetItems), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", []), "Parent": {"$ref": rootId}, "ErrorBehavior": 0, "Attempts": 1 }, { "$id": endAreaId, "$type": "NINA.Sequencer.Container.EndAreaContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Name": "End", "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", endItems), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", []), "Parent": {"$ref": rootId}, "ErrorBehavior": 0, "Attempts": 1 } ]), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", []), "Parent": null, "ErrorBehavior": 0, "Attempts": 1 };
 
             let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(ninaJSON, null, 2));
-            let dlAnchorElem = document.createElement('a'); dlAnchorElem.setAttribute("href", dataStr); dlAnchorElem.setAttribute("download", `AD_Sequenza_${targetSelezionato.name.replace(/\s+/g, '_')}.json`); document.body.appendChild(dlAnchorElem); dlAnchorElem.click(); dlAnchorElem.remove();
+            let dlAnchorElem = document.createElement('a'); dlAnchorElem.setAttribute("href", dataStr); dlAnchorElem.setAttribute("download", `AD_Seq_${targetSelezionato.name.replace(/\s+/g, '_')}.json`); document.body.appendChild(dlAnchorElem); dlAnchorElem.click(); dlAnchorElem.remove();
         }
 
         window.addEventListener('resize', () => { if(document.getElementById('planning-view').style.display === 'block') aggiornaFOV(); });
-        popolaMenuAttrezzatura(); aggiornaEffemeridi(new Date()); scaricaDatiPrevisionali();
+        
+        // Avvio iniziale (Applica la lingua salvata)
+        document.addEventListener('DOMContentLoaded', () => {
+            changeLanguage(lang);
+            popolaMenuAttrezzatura();
+            aggiornaEffemeridi(new Date()); 
+            scaricaDatiPrevisionali();
+        });
     </script>
 </body>
 </html>
