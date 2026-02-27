@@ -476,41 +476,72 @@
     </div>
 
     <div id="guide-view">
-        <button class="btn-back" style="margin-bottom: 40px;" onclick="chiudiGuida()">Torna Indietro</button>
-        <h2 style="font-size: 2.2em; border-bottom: 2px solid #bb86fc; padding-bottom: 15px; margin-bottom: 30px;">📖 Manuale AstroDashboard</h2>
+        <button class="btn-back" style="margin-bottom: 40px;" onclick="chiudiGuida()">Torna alla Dashboard</button>
+        
+        <h2 style="font-size: 2.2em; border-bottom: 2px solid #bb86fc; padding-bottom: 15px; margin-bottom: 30px;">📖 Manuale Utente Completo - AstroDashboard Pro</h2>
+        
         <div class="filosofia-box">
-            <h3 style="color: #fff; margin-top:0;">La Filosofia</h3>
-            <p>Fondere la potenza di 4 software diversi in un'unica piattaforma intelligente. Niente distrazioni, solo dati puri per ottimizzare la tua notte sotto le stelle.</p>
+            <h3 style="color: #fff; margin-top:0;">La Filosofia del Progetto</h3>
+            <p style="margin-bottom: 0;">L'astrofotografia richiede la pianificazione perfetta di innumerevoli variabili. Lo scopo di AstroDashboard Pro è fondere la potenza di molteplici software in un'unica piattaforma intelligente: dal monitoraggio meteo avanzato, alla scelta predittiva del bersaglio, fino alla generazione automatica della sequenza di scatto per l'osservatorio. Niente distrazioni, solo dati puri e automazione totale per dominare la tua notte sotto le stelle.</p>
         </div>
+
         <div id="guida-meteo" class="guide-section">
-            <h3>🌍 1. Dati Ambientali e Meteo</h3>
+            <h3>🌍 1. Modulo Dati Ambientali e Meteo</h3>
+            <p>La schermata principale è una stazione di monitoraggio atmosferico, focalizzata sui parametri critici per le riprese astronomiche.</p>
             <ul>
-                <li><strong>La Mappa:</strong> Il raggio visibile (50 Km) è indicativo. Serve per capire se le perturbazioni nuvolose ti permettono di trovare "buchi di sereno" spostandoti.</li>
-                <li><strong>Jet Stream:</strong> Il killer del Seeing. < 50 km/h: cieli fermi. > 100 km/h: forte turbolenza, evita alte focali.</li>
-                <li><strong>Umidità:</strong> Se supera l'85% scatta l'allerta rossa: accendi le fasce anticondensa!</li>
+                <li><strong>La Mappa e i Layer:</strong> I cerchi colorati indicano l'intensità dei fenomeni atmosferici entro un raggio di 50-100 Km. Usali per capire in che direzione muoverti con l'auto per trovare "buchi di sereno". Puoi accendere o spegnere i singoli layer dai pulsanti.</li>
+                <li><strong>Timeline Sincronizzata:</strong> Muovendo lo slider temporale, vedrai evolvere sia il meteo sulla mappa, sia l'altezza degli oggetti nel planetario sottostante!</li>
+                <li><strong>Jet Stream (Correnti a Getto):</strong> È il vero responsabile del <em>Seeing</em> (la nitidezza del cielo). Sotto i 50 km/h avrai stelle puntiformi. Sopra i 100-120 km/h la forte turbolenza in alta quota rovinerà inesorabilmente le pose ad alta focale.</li>
+                <li><strong>Allerta Umidità:</strong> Quando supera l'85%, il valore diventa rosso: è il segnale per accendere immediatamente le fasce anticondensa sui tubi ottici!</li>
             </ul>
         </div>
+
         <div id="guida-ricerca" class="guide-section">
-            <h3>🔭 2. Planetario Ibrido (Locale + SIMBAD)</h3>
+            <h3>🔭 2. Planetario Predittivo Ibrido</h3>
+            <p>Un "motore di ricerca stellare" che ti propone solo ciò che è utile, scremando il cielo in tempo reale.</p>
             <ul>
-                <li><strong>Motore Locale:</strong> Usa il menu a tendina. Gli oggetti in memoria hanno consigli tattici scritti da astrofotografi.</li>
-                <li><strong>Motore SIMBAD:</strong> Se cerchi un oggetto esotico (es. NGC 2841), la IA si collega a Strasburgo per scaricare le coordinate, e a Wikipedia per i testi.</li>
+                <li><strong>Gli Oggetti Consigliati:</strong> La striscia orizzontale mostra gli oggetti Deep Sky ordinati per altezza (dal più alto al più basso). L'oggetto incorniciato in oro è il bersaglio matematicamente ottimale in quel momento.</li>
+                <li><strong>Motore Locale:</strong> Usa la barra di ricerca in basso. Gli oggetti salvati nel nostro database contengono preziosi "consigli tattici" per la ripresa scritti da astrofotografi esperti.</li>
+                <li><strong>Connessione a SIMBAD:</strong> Se cerchi una sigla esotica (es. "NGC 2841") non presente nel database, l'Intelligenza Artificiale si collegherà in tempo reale al database mondiale SIMBAD (Università di Strasburgo) per scaricare le coordinate di puntamento precise e a Wikipedia per estrarre la descrizione.</li>
             </ul>
         </div>
+
         <div id="guida-fov" class="guide-section">
             <h3>📸 3. Simulatore Field of View (FOV)</h3>
+            <p>Una vera "sala di prova" integrata per perfezionare le tue inquadrature spaziali.</p>
             <ul>
-                <li><strong>Calcolo:</strong> Usa i preset per vedere l'esatto angolo di campo della tua inquadratura.</li>
-                <li><strong>Plate Solving Visivo:</strong> Trascina la reale immagine DSS2 per simulare il decentramento.</li>
+                <li><strong>Preset Attrezzatura:</strong> Scegli dai comodi menu a tendina il tuo telescopio (Sky-Watcher, Celestron, Askar...) e il formato del tuo sensore (APS-C, Full Frame, ecc.). Il sistema calcolerà istantaneamente i gradi esatti del tuo Campo Inquadrato.</li>
+                <li><strong>Plate Solving Visivo (DSS2):</strong> Il riquadro nero farà apparire una fotografia reale a colori del profondo cielo circostante. Trascina l'immagine spaziale col mouse per pre-calcolare decentramenti astrofotografici o inquadrature artistiche. Usa i pulsanti +/- per fare zoom e inquadrare il reticolo rosso.</li>
             </ul>
         </div>
+
         <div id="guida-smart" class="guide-section">
-            <h3>✨ 4. Smart AI & Dithering</h3>
+            <h3>✨ 4. Calcolatore Sessione Smart AI</h3>
+            <p>Dimentica carta, penna e calcolatrici. L'Intelligenza Artificiale fa il lavoro logico per te.</p>
             <ul>
-                <li><strong>Dithering:</strong> Inserisci il numero di scatti e i secondi persi (t) per il riassestamento. L'IA calcolerà il tempo invisibile perso.</li>
-                <li><strong>Come ragiona l'AI?</strong> Riconosce l'oggetto. Assegna pose brevi agli ammassi, lunghe alle nebulose. Per le galassie in Mono, impone scatti brevi (30s) alla Luminanza ma le dedica il 50% delle ore notturne, splittando il resto sull'RGB.</li>
+                <li><strong>Orari Automatici:</strong> Il planner calcola e imposta da solo l'inizio e la fine della sessione leggendo gli esatti orari del Crepuscolo Astronomico Locale (il momento in cui il Sole scende oltre i -18° e il buio è totale).</li>
+                <li><strong>Il "Tempo Fantasma" del Dithering:</strong> Inserisci ogni quanti scatti esegui il Dither e quanti secondi impiega la montatura a stabilizzarsi (es. 15s). L'algoritmo calcolerà il tempo invisibile perso nel corso della notte e lo sottrarrà in automatico dal totale!</li>
+                <li><strong>Il Cervello dell'IA:</strong> In base alla tipologia di oggetto inquadrato, l'IA assegna pose brevi agli ammassi stellari, pose medie alle galassie e pose lunghe (300s+) per le nebulose. Se hai una camera monocromatica, l'IA protegge sempre i dettagli assegnando la quota maggiore di tempo di buio (es. 50%) alla fondamentale Luminanza, splittando il residuo sui canali RGB/SHO.</li>
             </ul>
         </div>
+
+        <div id="guida-nina" class="guide-section">
+            <h3>🤖 5. N.I.N.A. Advanced Sequencer Export</h3>
+            <p>Il vero "Ponte di Comando". Trasforma i tuoi calcoli in un file di automazione pronto per pilotare l'intero osservatorio.</p>
+            <ul>
+                <li><strong>Cosa fa?</strong> Una volta che hai premuto "Genera Sequenza Ottimale" e i tempi sono stati approvati, questo modulo costruisce e scarica un file <code>.json</code> con la complessa architettura a blocchi richiesta dal Sequenziatore Avanzato di N.I.N.A.</li>
+                <li><strong>⚠️ Mappatura Filtri (FONDAMENTALE):</strong> N.I.N.A. richiede che i nomi dei filtri in input corrispondano <em>letteralmente</em> a quelli configurati nella tua ruota portafiltri hardware (es. se su NINA hai scritto "LUMINANZA" tutto maiuscolo, devi scriverlo esattamente così nei box della dashboard). <strong>Comodità:</strong> Il sistema salverà i nomi che scrivi nella memoria del dispositivo, così dovrai configurarli una sola volta nella vita!</li>
+                <li><strong>Automazione Hardware:</strong> Usa le spunte per ordinare all'osservatorio le azioni pre e post sessione:
+                    <ul>
+                        <li><em>Avvio:</em> Raffreddamento sensore, Plate Solving (Centratura), e avvio dell'Autoguida PHD2.</li>
+                        <li><em>Sicurezza e Fine:</em> Attivazione del Meridian Flip globale, Parcheggio finale della montatura e riscaldamento graduale del sensore (Warm Up).</li>
+                    </ul>
+                </li>
+                <li><strong>Utilizzo:</strong> Clicca sul tasto rosso "Genera File per N.I.N.A.". Prendi il file appena scaricato e trascinalo (Drag & Drop) dentro la schermata "Advanced Sequencer" in N.I.N.A. ...Premi Play e vai a dormire tranquillo!</li>
+            </ul>
+        </div>
+        
+        <p style="text-align: center; color: #bb86fc; font-weight: bold; margin-top: 40px; font-size: 1.2em;">Cieli Sereni e Buone Riprese!</p>
     </div>
 <script>
         // --- DATABASE ATTREZZATURA ---
