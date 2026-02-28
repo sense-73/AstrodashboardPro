@@ -1035,18 +1035,60 @@ let latCorrente = 46.062, lonCorrente = 13.235, datiMeteo = null, indicePartenza
             fetch(`https://cds.unistra.fr/cgi-bin/nph-sesame/-oI/A?${encodeURIComponent(q)}`).then(r => r.text()).then(d => {
                 let lines = d.split('\n'), fc = false, ra, dec, ty = "Sconosciuta", mg = "N/D";
                 for(let i=0; i<lines.length; i++) {
-                    if(lines[i].startsWith('%J') && !fc) { let p = lines[i].trim().split(/\s+/); if(p.length >= 3) { ra = parseFloat(p[1]); dec = parseFloat(p[2]); fc = true; } }
-                    if(lines[i].startsWith('%T')) { let rt = lines[i].substring(2).trim().toLowerCase(); ty = rt.includes('galaxy') ? "Galassia" : rt.includes('nebula')||rt.includes('h ii') ? "Nebulosa" : rt.includes('cluster') ? "Ammasso" : rt.includes('star') ? "Stella" : lines[i].substring(2).trim(); }
-                    if(lines[i].startsWith('%M')) { let rm = lines[i].substring(2).trim(), mv = rm.match(/V=([\d.]+)/), mb = rm.match(/B=([\d.]+)/), mn = rm.match(/[\d.]+/); mg = mv ? "+"+mv[1]+" (V)" : mb ? "+"+mb[1]+" (B)" : mn ? "~ "+mn[0] : mg; }
+                    let line = lines[i].trim();
+                    if(line.startsWith('%J') && !fc) { let p = line.split(/\s+/); if(p.length >= 3) { ra = parseFloat(p[1]); dec = parseFloat(p[2]); fc = true; } }
+                    
+                    if(line.startsWith('%T')) { 
+                        let rt = line.substring(2).trim();
+                        if (/Gal|Seyfert|LINER|IG|SB|SA|S0|Ellip|Irreg/i.test(rt)) ty = "Galassia a Spirale";
+                        else if (/GlCl|Globular/i.test(rt)) ty = "Ammasso Globulare";
+                        else if (/OpCl|Cl|Cluster/i.test(rt)) ty = "Ammasso Aperto";
+                        else if (/PN|Planetary/i.test(rt)) ty = "Nebulosa Planetaria";
+                        else if (/SNR|Supernova/i.test(rt)) ty = "Resto di Supernova";
+                        else if (/HII|H2/i.test(rt)) ty = "Regione H II";
+                        else if (/Neb|Mol|Cloud|Dark|RefNe/i.test(rt)) ty = "Nebulosa a Emissione";
+                        else if (/\*|Star|V\*/i.test(rt)) ty = "Stella";
+                    }
+                    
+                    if(line.startsWith('%M')) { 
+                        let m = line.match(/([VBR])\s*=\s*([+\-]?\d+\.?\d*)/i);
+                        if (m) { mg = `${m[2]} (${m[1].toUpperCase()})`; }
+                        else { 
+                            let num = line.substring(2).match(/[+\-]?\d+\.\d+/); 
+                            if (num) mg = `~ ${num[0]}`; 
+                        }
+                    }
                 }
                 if (!fc) { if(st) { st.style.color = '#ff4444'; st.innerText = "Not Found."; } } 
                 else {
                     if(st) st.innerText = "Wikipedia... 📚";
-                    fetch(`https://it.wikipedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrsearch=${encodeURIComponent(q)}&prop=extracts&exintro=1&explaintext=1&exchars=600&gsrlimit=1`).then(w => w.json()).then(wd => {
-                        if(st) st.style.display = 'none'; let sn = `SIMBAD Data.\nType: ${ty}.`, wl = `https://en.wikipedia.org/w/index.php?search=${encodeURIComponent(q)}`;
-                        if (wd.query && wd.query.pages) { let pid = Object.keys(wd.query.pages)[0]; if (wd.query.pages[pid].extract) { sn = wd.query.pages[pid].extract; wl = `https://en.wikipedia.org/?curid=${pid}`; } }
-                        inp.value = ''; apriPianificazione({ name: q.toUpperCase(), ra: ra/15, dec: dec, type: ty, mag: mg, dist: "N/D", link: wl, desc: sn, tips: ty==="Galassia"?"L-RGB Filters.":"120s test." });
-                    }).catch(e => { if(st) st.style.display = 'none'; inp.value = ''; apriPianificazione({ name: q.toUpperCase(), ra: ra/15, dec: dec, type: ty, mag: mg, dist: "N/D", link: `https://en.wikipedia.org/w/index.php?search=${encodeURIComponent(q)}`, desc: `Wiki error.`, tips: "Test." }); });
+                    
+                    // Lingua corrente
+                    let wLang = (lang === 'it' || lang === 'es' || lang === 'zh') ? lang : 'en';
+                    // Aggiungiamo un suffisso astronomico "forzato" per evitare fucili o giocatori di hockey!
+                    let suffix = wLang === 'it' ? " astronomia" : wLang === 'es' ? " astronomía" : wLang === 'zh' ? " 天文学" : " astronomy";
+                    let wikiQ = q.trim() + suffix;
+                    
+                    let wikiApi = `https://${wLang}.wikipedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrsearch=${encodeURIComponent(wikiQ)}&prop=extracts&exintro=1&explaintext=1&exchars=600&gsrlimit=1`;
+
+                    fetch(wikiApi).then(w => w.json()).then(wd => {
+                        if(st) st.style.display = 'none'; 
+                        let sn = `Dati scaricati da server SIMBAD.\nTipologia: ${ty}.\nMagnitudine: ${mg}.`; 
+                        // Link di fallback pulito (senza la parola "astronomia")
+                        let wl = `https://${wLang}.wikipedia.org/w/index.php?search=${encodeURIComponent(q.trim())}`;
+                        
+                        if (wd.query && wd.query.pages) { 
+                            let pid = Object.keys(wd.query.pages)[0]; 
+                            if (wd.query.pages[pid].extract) { 
+                                sn = wd.query.pages[pid].extract; 
+                                wl = `https://${wLang}.wikipedia.org/?curid=${pid}`; 
+                            } 
+                        }
+                        inp.value = ''; apriPianificazione({ name: q.toUpperCase(), ra: ra/15, dec: dec, type: ty, mag: mg, dist: "N/D", link: wl, desc: sn, tips: "Dati estratti dal server. Algoritmo Multi-Nottata in fase di sviluppo..." });
+                    }).catch(e => { 
+                        if(st) st.style.display = 'none'; inp.value = ''; 
+                        apriPianificazione({ name: q.toUpperCase(), ra: ra/15, dec: dec, type: ty, mag: mg, dist: "N/D", link: `https://en.wikipedia.org/w/index.php?search=${encodeURIComponent(q.trim())}`, desc: `Dati SIMBAD: ${ty}, Mag: ${mg}. Errore Wikipedia.`, tips: "Algoritmo Multi-Nottata in fase di sviluppo..." }); 
+                    });
                 }
             }).catch(e => { if(st) { st.style.color = '#ff4444'; st.innerText = "Network Error."; } });
         }
