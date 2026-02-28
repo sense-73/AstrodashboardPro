@@ -292,18 +292,19 @@
                 <h3><span data-i18n="env_data">🎛️ Dati Ambientali</span> <span class="info-icon" onmouseenter="mostraTooltip(this, 'info_env')" onmouseleave="nascondiTooltip()">ℹ️</span></h3>
                 <div class="meteo-grid">
                     <div class="meteo-item m-bassa active" id="btn-basse" onclick="toggleLayer('basse')"><h4 data-i18n="low_clouds">Nuvole Basse</h4><span id="val-basse">--%</span></div>
-                    <div class="meteo-item m-media active" id="btn-medie" onclick="toggleLayer('medie')"><h4 data-i18n="mid_clouds">Nuvole Medie</h4><span id="val-medie">--%</span></div>
-                    <div class="meteo-item m-alta active" id="btn-alte" onclick="toggleLayer('alte')"><h4 data-i18n="high_clouds">Nuvole Alte</h4><span id="val-alte">--%</span></div>
-                    <div class="meteo-item m-jet active" id="btn-jet" onclick="toggleLayer('jet')"><h4>Jet Stream</h4><span id="val-jet">--<span class="jet-unit">km/h</span></span></div>
-                    <div class="meteo-item m-luna active" id="btn-luna" onclick="toggleLayer('luna')"><h4 data-i18n="moon_poll">Inq. Lunare</h4><span id="val-luna">--%</span></div>
-                    <div class="meteo-item m-umidita active" id="btn-umidita" onclick="toggleLayer('umidita')"><h4 data-i18n="humidity">Umidità</h4><span id="val-umidita-layer" style="color:#00ffff;">--%</span></div>
+                    <div class="meteo-item m-media disabled" id="btn-medie" onclick="toggleLayer('medie')"><h4 data-i18n="mid_clouds">Nuvole Medie</h4><span id="val-medie">--%</span></div>
+                    <div class="meteo-item m-alta disabled" id="btn-alte" onclick="toggleLayer('alte')"><h4 data-i18n="high_clouds">Nuvole Alte</h4><span id="val-alte">--%</span></div>
+                    <div class="meteo-item m-jet disabled" id="btn-jet" onclick="toggleLayer('jet')"><h4>Jet Stream</h4><span id="val-jet">--<span class="jet-unit">km/h</span></span></div>
+                    <div class="meteo-item m-luna disabled" id="btn-luna" onclick="toggleLayer('luna')"><h4 data-i18n="moon_poll">Inq. Lunare</h4><span id="val-luna">--%</span></div>
+                    <div class="meteo-item m-umidita disabled" id="btn-umidita" onclick="toggleLayer('umidita')"><h4 data-i18n="humidity">Umidità</h4><span id="val-umidita-layer" style="color:#00ffff;">--%</span></div>
                     <div class="meteo-item m-seeing active" id="btn-seeing"><h4 data-i18n="seeing_est">Stima Seeing</h4><span id="val-seeing" style="color:#bb86fc;">--/5</span></div>
                 </div>
             </div>
         </div>
 
         <div class="container" style="flex-direction: column;">
-            <div class="timeline-container">
+            <div class="timeline-container" style="position: relative;">
+                <span class="info-icon" style="position: absolute; right: 15px; top: 15px; font-size: 1.2em;" onmouseenter="mostraTooltip(this, 'info_map')" onmouseleave="nascondiTooltip()">ℹ️</span>
                 <div id="time-display" class="time-display">Caricamento Timeline Meteo...</div>
                 <input type="range" id="timeSlider" min="0" max="23" value="0" oninput="syncSliders(this.value)" disabled>
                 <div style="display:flex; justify-content: space-between; font-size:0.8em; color:#aaa; padding-top: 5px;">
@@ -322,7 +323,7 @@
             </div>
 
             <div class="astro-section">
-                <h4 style="color: #ffaa00; margin-bottom: 0; margin-top: 10px; border-bottom: 1px solid #333; padding-bottom: 5px;" data-i18n="solar_system">🪐 Sistema Solare (Solo visivo)</h4>
+                <h4 style="color: #ffaa00; margin-bottom: 0; margin-top: 10px; border-bottom: 1px solid #333; padding-bottom: 5px;" data-i18n="solar_system">🪐 Sistema Solare</h4>
                 <div class="horizontal-scroll" id="planets-list"></div>
             </div>
 
@@ -338,7 +339,7 @@
                         <input type="text" id="search-dash-input" class="search-local-input" placeholder="..." data-i18n="search_target" autocomplete="off">
                         <ul id="sugg-dash" class="search-suggestions"></ul>
                     </div>
-                    <button class="btn-search" onclick="eseguiRicerca('search-dash-input')" data-i18n="plan_target_btn">Pianifica Oggetto 🚀</button>
+                    <button class="btn-search" onclick="eseguiRicerca('search-dash-input')" data-i18n="plan_target_btn">Pianifica 🚀</button>
                 </div>
                 <p id="status-search-dash-input" class="search-status"></p>
             </div>
@@ -547,7 +548,7 @@
             <div style="text-align: center; margin-top: 25px;">
                 <button id="btn-export-nina" class="btn-smart" style="background: linear-gradient(135deg, #ff4444 0%, #aa0000 100%); box-shadow: 0 4px 15px rgba(255, 68, 68, 0.3);" onclick="esportaNINA()" data-i18n="gen_nina_btn">💾 Genera File per N.I.N.A.</button>
                 <button id="btn-report-mosaic" class="btn-smart" style="display: none; background: linear-gradient(135deg, #7c4dff 0%, #3f51b5 100%); box-shadow: 0 4px 15px rgba(124, 77, 255, 0.3);" onclick="apriReport()" data-i18n="gen_report_btn">📝 Genera Report Strategico</button>
-                <p id="nina-mosaic-msg" style="display: none; color: #ffaa00; font-size: 0.9em; text-align: justify; line-height: 1.5; margin-top: 15px; padding: 15px; background: rgba(255, 170, 0, 0.1); border-left: 3px solid #ffaa00; border-radius: 4px;" data-i18n="nina_mosaic_msg">📌 Modalità Mosaico attiva. Usa il Framing Assistant di N.I.N.A. per creare le coordinate dei pannelli, e imposta il Sequencer usando i tempi calcolati qui sopra.</p>
+                <p id="nina-mosaic-msg" style="display: none; color: #ffaa00; font-size: 0.9em; text-align: justify; line-height: 1.5; margin-top: 15px; padding: 15px; background: rgba(255, 170, 0, 0.1); border-left: 3px solid #ffaa00; border-radius: 4px;" data-i18n="nina_mosaic_msg">📌 Modalità Mosaico attiva. Usa il Framing Assistant di N.I.N.A. per le coordinate.</p>
             </div>
         </div>
     </div>
@@ -634,7 +635,7 @@
                 "alert_planetarium": "Scegli prima un bersaglio dal Planetario 🔭!", "alert_noseq": "Nessuna posa calcolata! Clicca prima su 'Genera Sequenza Ottimale'.",
                 "alert_calib": "I frame di calibrazione occupano tutto il tempo!", "alert_nolight": "Seleziona almeno un filtro Light.", "alert_times": "Imposta prima gli orari di Inizio e Fine.", "no_target": "Nessun oggetto visibile.", "too_bright": "☀️ Cielo troppo luminoso.", "dso_too_bright": "☀️ Cielo troppo luminoso per il Deep Sky.", "select_opt": "-- Seleziona --",
                 "jupiter": "Giove", "mars": "Marte", "venus": "Venere", "moon": "Luna", "sun": "Sole", "weather": "Meteo",
-                "mode": "Modalità:", "single_panel": "Scatto Singolo", "mosaic": "Mosaico", "panels": "Pannelli (X, Y):", "overlap": "Sovrapposizione:", "time_per_panel": "Tempo per Pannello", "fov_warning": "⚠️ L'oggetto è più grande del campo! Valuta un mosaico.", "nina_mosaic_msg": "📌 Modalità Mosaico attiva. Usa il Framing Assistant di N.I.N.A. per le coordinate, e imposta il Sequencer con i tempi calcolati.",
+                "mode": "Modalità:", "single_panel": "Scatto Singolo", "mosaic": "Mosaico", "panels": "Pannelli (X, Y):", "overlap": "Sovrapposizione:", "time_per_panel": "Tempo per Pannello", "fov_warning": "⚠️ L'oggetto è più grande del campo! Valuta un mosaico.", "nina_mosaic_msg": "📌 Modalità Mosaico attiva. Usa il Framing Assistant di N.I.N.A. per le coordinate.",
                 "gen_report_btn": "📝 Genera Report Strategico", "report_title": "Dossier Mosaico", "copy_report": "Copia negli Appunti", "copied": "Copiato!", "report_general": "Info Generali Mosaico", "report_strategy": "Strategia Singolo Pannello", "report_plan": "Piano di Scatto (Per Pannello)",
                 
                 "info_pos": "Cerca un luogo o inserisci coordinate. La mappa mostra un raggio di 50km utile per trovare 'buchi di sereno' spostandoti.",
@@ -671,7 +672,7 @@
                 "alert_planetarium": "Choose a target from the Planetarium first 🔭!", "alert_noseq": "No exposures calculated! Click 'Generate Optimal Sequence' first.",
                 "alert_calib": "Calibration frames take up all the time!", "alert_nolight": "Select at least one Light filter.", "alert_times": "Please set Start and End times.", "no_target": "No visible objects.", "too_bright": "☀️ Sky is too bright.", "dso_too_bright": "☀️ Sky is too bright for Deep Sky.", "select_opt": "-- Select --",
                 "jupiter": "Jupiter", "mars": "Mars", "venus": "Venus", "moon": "Moon", "sun": "Sun", "weather": "Weather",
-                "mode": "Mode:", "single_panel": "Single Panel", "mosaic": "Mosaic", "panels": "Panels (X, Y):", "overlap": "Overlap:", "time_per_panel": "Time per Panel", "fov_warning": "⚠️ Target is larger than your FOV! Consider a mosaic.", "nina_mosaic_msg": "📌 Mosaic Mode active. Use N.I.N.A.'s Framing Assistant to generate panel coordinates, and set up your Sequence using the exposure times calculated above.",
+                "mode": "Mode:", "single_panel": "Single Panel", "mosaic": "Mosaic", "panels": "Panels (X, Y):", "overlap": "Overlap:", "time_per_panel": "Time per Panel", "fov_warning": "⚠️ Target is larger than your FOV! Consider a mosaic.", "nina_mosaic_msg": "📌 Mosaic Mode active. Use N.I.N.A.'s Framing Assistant to generate panel coordinates.",
                 "gen_report_btn": "📝 Generate Strategic Report", "report_title": "Mosaic Dossier", "copy_report": "Copy to Clipboard", "copied": "Copied!", "report_general": "General Info", "report_strategy": "Per-Panel Strategy", "report_plan": "Exposure Plan (Per Panel)",
 
                 "info_pos": "Search a location. The map shows a 50km radius to help you find 'clear sky holes' while moving under the clouds.",
@@ -760,6 +761,15 @@
         };
 
         let lang = localStorage.getItem('ad_lang') || 'it';
+        i18n.it.mosaic_active_msg = "✅ Modalità Mosaico attiva.";
+        i18n.en.mosaic_active_msg = "✅ Mosaic Mode active.";
+        i18n.es.mosaic_active_msg = "✅ Modo Mosaico activo.";
+        i18n.zh.mosaic_active_msg = "✅ 拼接模式已激活。";
+	i18n.it.info_map = "Mappa Empirica di Visibilità. Visualizza un raggio simbolico di 50 km per mostrarti a colpo d'occhio le reali condizioni del cielo. La sovrapposizione dei vari strati ti farà capire subito se la serata sarà limpida o compromessa. Usa i bottoni superiori per attivare i filtri meteo (Nuvole, Jet Stream, Umidità) e scorri la linea temporale per prevedere la loro evoluzione nelle prossime ore.";
+        i18n.en.info_map = "Empirical Visibility Map. Shows a symbolic 50 km radius to give you at-a-glance real sky conditions. The overlay of different layers will let you know immediately if the night will be clear or compromised. Use the top buttons to toggle weather filters (Clouds, Jet Stream, Humidity) and slide the timeline to forecast their evolution.";
+        i18n.es.info_map = "Mapa Empírico de Visibilidad. Muestra un radio simbólico de 50 km para indicarte de un vistazo las condiciones reales del cielo. La superposición de capas te hará entender de inmediato si la noche será despejada o comprometida. Usa los botones superiores para activar filtros (Nubes, Jet Stream, Humedad) y desliza la línea temporal para prever su evolución.";
+        i18n.zh.info_map = "经验能见度地图。显示象征性的 50 公里半径，让您一目了然地了解真实的天空状况。不同图层的叠加将立即让您知道今晚是晴朗还是恶劣。使用顶部按钮激活天气滤镜（云层、急流、湿度），并滑动时间轴以预测它们在未来几小时内的演变。";
+        
         function t(key) { return i18n[lang][key] || key; }
 
         function changeLanguage(l) {
@@ -781,7 +791,19 @@
             
             aggiornaEffemeridi(new Date()); 
             if(datiMeteo){cambiaOraMeteo(); cambiaOraAstro();}
-        }
+	// Aggiorna in tempo reale i dati dinamici del Dossier se è aperto
+            if (targetSelezionato && document.getElementById('planning-view').style.display === 'block') {
+                document.getElementById('plan-target-name').innerText = getLocalizedName(targetSelezionato);
+                document.getElementById('stat-type').innerText = mapTypeTrans(targetSelezionato.type) || "--";
+                document.getElementById('target-description').innerText = getLocalizedText(targetSelezionato, 'desc');
+                document.getElementById('target-tips').innerText = getLocalizedText(targetSelezionato, 'tips');
+            }
+        // Aggiorna in tempo reale i dati dinamici del Dossier se è aperto
+            if (targetSelezionato && document.getElementById('planning-view').style.display === 'block') {
+                document.getElementById('plan-target-name').innerText = getLocalizedName(targetSelezionato);
+                document.getElementById('stat-type').innerText = mapTypeTrans(targetSelezionato.type) || "--";
+            }
+}
 
         const dbTelescopi = [{ nome: "Askar FRA 400 (400mm)", focale: 400 }, { nome: "Explore Scienific Comethunter (731mm)", focale: 731 }, { nome: "SW Explorer 130 PDS (650mm)", focale: 650 }, { nome: "SW Explorer 150P (750mm)", focale: 750 }, { nome: "SW Explorer 200P (1000mm)", focale: 1000 }, { nome: "SW Quattro 150P (600mm)", focale: 600 }, { nome: "SW Quattro 200P (800mm)", focale: 800 }, { nome: "SW Quattro 250P (1000mm)", focale: 1000 }, { nome: "SW 72ED Evostar (420mm)", focale: 420 }, { nome: "SW 80ED Evostar (600mm)", focale: 600 }, { nome: "SW Esprit 80ED (400mm)", focale: 400 }, { nome: "SW Esprit 100ED (550mm)", focale: 550 }, { nome: "Celestron C8 SCT (2032mm)", focale: 2032 }, { nome: "Celestron C8 @ f/6.3 (1280mm)", focale: 1280 }, { nome: "ZWO Seestar S50 (250mm)", focale: 250 }, { nome: "Samyang 135mm f/2", focale: 135 }];
         const dbCamere = [{ nome: "ASI 533MC/MM (Square)", w: 11.31, h: 11.31 }, { nome: "ASI 294MC/MM (4/3\")", w: 19.1, h: 13.0 }, { nome: "SONY IMX571 ", w: 23.5, h: 15.7 }, { nome: "ASI 6200MC/MM (Full Frame)", w: 36.0, h: 24.0 }, { nome: "ASI 183MC/MM (1\")", w: 13.2, h: 8.8 }, { nome: "SONY IMX585", w: 11.14, h: 6.26 }, { nome: "ASI 1600MM (4/3\")", w: 17.7, h: 13.4 }, { nome: "Reflex APS-C (Canon/Nikon)", w: 22.3, h: 14.9 }];
@@ -790,12 +812,11 @@
             const selTel = document.getElementById('preset-telescope'); dbTelescopi.forEach(t => { let opt = document.createElement('option'); opt.value = t.focale; opt.textContent = t.nome; selTel.appendChild(opt); });
             const selCam = document.getElementById('preset-sensor'); dbCamere.forEach(c => { let opt = document.createElement('option'); opt.value = `${c.w},${c.h}`; opt.textContent = c.nome; selCam.appendChild(opt); });
         }
-
-        let latCorrente = 46.062, lonCorrente = 13.235, datiMeteo = null, indicePartenza = 0, chartAltezza = null, targetSelezionato = null, aladinSkyMap = null, vistaPrecedente = 'dashboard-view';
-        let mappaScura = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { maxZoom: 19 });
+let latCorrente = 46.062, lonCorrente = 13.235, datiMeteo = null, indicePartenza = 0, chartAltezza = null, targetSelezionato = null, aladinSkyMap = null, vistaPrecedente = 'dashboard-view';
+        let mappaScura = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { maxZoom: 19, attribution: 'Meteo Data &copy; <a href="https://open-meteo.com/" target="_blank" style="color:#bb86fc;">Open-Meteo</a> | Map &copy; <a href="https://carto.com/" target="_blank">CartoDB</a>' });
         let map = L.map('map', { center: [latCorrente, lonCorrente], zoom: 8, layers: [mappaScura], zoomControl: false });
         L.control.zoom({ position: 'bottomright' }).addTo(map);
-        let layers = { basse: L.layerGroup().addTo(map), medie: L.layerGroup().addTo(map), alte: L.layerGroup().addTo(map), jet: L.layerGroup().addTo(map), luna: L.layerGroup().addTo(map), umidita: L.layerGroup().addTo(map) };
+        let layers = { basse: L.layerGroup().addTo(map), medie: L.layerGroup(), alte: L.layerGroup(), jet: L.layerGroup(), luna: L.layerGroup(), umidita: L.layerGroup() };
         let marker = L.marker([latCorrente, lonCorrente]).addTo(map).bindPopup("<b>Udine</b>").openPopup();
         let timerRicerca;
 
@@ -861,14 +882,14 @@
             });
         }
 
-            function syncSliders(val) { 
-            	document.getElementById('timeSlider').value = val; 
-            	document.getElementById('astroSlider').value = val; 
-            	cambiaOraMeteo(); 
-            	cambiaOraAstro(); 
+        function syncSliders(val) { 
+            document.getElementById('timeSlider').value = val; 
+            document.getElementById('astroSlider').value = val; 
+            cambiaOraMeteo(); 
+            cambiaOraAstro(); 
         }
 
-	    function cambiaOraMeteo() {
+        function cambiaOraMeteo() {
             if (!datiMeteo) return;
             let step = parseInt(document.getElementById('timeSlider').value), i = indicePartenza + step, dOra = new Date(datiMeteo.time[i]);
             let tOra = step === 0 ? t("now") + " (" + new Date().toLocaleTimeString('it-IT', {hour: '2-digit', minute:'2-digit'}) + ")" : dOra.toLocaleDateString(lang==='it'?'it-IT':'en-US', { weekday: 'short', day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
@@ -924,7 +945,41 @@
             if (dL.innerHTML === '') dL.innerHTML = `<p style="color:#777; padding:10px;">${t("no_target")}</p>`;
         }
 
-        function mapTypeTrans(type) { let m = {"Galassia": "galaxy", "Nebulosa": "nebula", "Ammasso": "cluster", "Stella": "star"}; return t(m[type] || "unknown"); }
+        function mapTypeTrans(type) { 
+            if (!type) return t("unknown");
+            let l = type.toLowerCase();
+            
+            let dict = {
+                it: { "spi": "Galassia a Spirale", "ell": "Galassia Ellittica", "len": "Galassia Lenticolare", "irr": "Galassia Irregolare", "starb": "Galassia Starburst", "ammg": "Ammasso di Galassie", "grup": "Gruppo di Galassie", "emi": "Nebulosa a Emissione", "rif": "Nebulosa a Riflessione", "osc": "Nebulosa Oscura", "pla": "Nebulosa Planetaria", "sup": "Resto di Supernova", "hii": "Regione H II", "mis": "Nebulosa Mista", "glo": "Ammasso Globulare", "ape": "Ammasso Aperto" },
+                en: { "spi": "Spiral Galaxy", "ell": "Elliptical Galaxy", "len": "Lenticular Galaxy", "irr": "Irregular Galaxy", "starb": "Starburst Galaxy", "ammg": "Galaxy Cluster", "grup": "Galaxy Group", "emi": "Emission Nebula", "rif": "Reflection Nebula", "osc": "Dark Nebula", "pla": "Planetary Nebula", "sup": "Supernova Remnant", "hii": "H II Region", "mis": "Mixed Nebula", "glo": "Globular Cluster", "ape": "Open Cluster" },
+                es: { "spi": "Galaxia Espiral", "ell": "Galaxia Elíptica", "len": "Galaxia Lenticular", "irr": "Galaxia Irregular", "starb": "Galaxia Starburst", "ammg": "Cúmulo de Galaxias", "grup": "Grupo de Galaxias", "emi": "Nebulosa de Emisión", "rif": "Nebulosa de Reflexión", "osc": "Nebulosa Oscura", "pla": "Nebulosa Planetaria", "sup": "Remanente de Supernova", "hii": "Región H II", "mis": "Nebulosa Mixta", "glo": "Cúmulo Globular", "ape": "Cúmulo Abierto" },
+                zh: { "spi": "螺旋星系", "ell": "椭圆星系", "len": "透镜状星系", "irr": "不规则星系", "starb": "星暴星系", "ammg": "星系团", "grup": "星系群", "emi": "发射星云", "rif": "反射星云", "osc": "暗星云", "pla": "行星状星云", "sup": "超新星遗迹", "hii": "H II 区", "mis": "混合星云", "glo": "球状星团", "ape": "疏散星团" }
+            };
+
+            let m = dict[lang] || dict['en'];
+            if(l.includes("spirale")) return m["spi"];
+            if(l.includes("ellittica")) return m["ell"];
+            if(l.includes("lenticolare")) return m["len"];
+            if(l.includes("irregolare")) return m["irr"];
+            if(l.includes("starburst")) return m["starb"];
+            if(l.includes("ammasso di galassie")) return m["ammg"];
+            if(l.includes("gruppo")) return m["grup"];
+            if(l.includes("emissione")) return m["emi"];
+            if(l.includes("riflessione")) return m["rif"];
+            if(l.includes("oscura")) return m["osc"];
+            if(l.includes("planetaria")) return m["pla"];
+            if(l.includes("supernova")) return m["sup"];
+            if(l.includes("h ii")) return m["hii"];
+            if(l.includes("mista")) return m["mis"];
+            if(l.includes("globulare")) return m["glo"];
+            if(l.includes("aperto")) return m["ape"];
+            
+            if(l.includes("galassi") || l.includes("galaxy")) return t("galaxy");
+            if(l.includes("nebulos") || l.includes("nebula")) return t("nebula");
+            if(l.includes("ammasso") || l.includes("cluster")) return t("cluster");
+            if(l.includes("stella") || l.includes("star")) return t("star");
+            return type; 
+        }
 
         function getLocalizedName(obj) {
             if (!obj) return "";
@@ -935,6 +990,13 @@
             if (obj[lang]) return `${obj.name} - ${obj[lang]}`;
             if (obj['en']) return `${obj.name} - ${obj['en']}`;
             return obj.name; 
+        }
+
+        // Funzione per pescare il testo giusto (Descrizione o Tips)
+        function getLocalizedText(obj, key) {
+            if (!obj) return "--";
+            if (obj[key + '_' + lang]) return obj[key + '_' + lang];
+            return obj[key] || "--"; // Fallback di sicurezza per la Ricerca Libera
         }
 
         function creaCardHTML(tObj, alt, az, c) {
@@ -1025,8 +1087,11 @@
         function apriPianificazione(tObj) {
             targetSelezionato = tObj; document.getElementById('dashboard-view').style.display = 'none'; document.getElementById('planning-view').style.display = 'block';
             document.getElementById('plan-target-name').innerText = getLocalizedName(targetSelezionato);
-            document.getElementById('stat-type').innerText = mapTypeTrans(targetSelezionato.type) || "--"; document.getElementById('stat-mag').innerText = targetSelezionato.mag || "--"; document.getElementById('stat-dist').innerText = targetSelezionato.dist || "--";
-            document.getElementById('target-description').innerText = targetSelezionato.desc || "--"; document.getElementById('target-tips').innerText = targetSelezionato.tips || "--";
+            document.getElementById('stat-type').innerText = mapTypeTrans(targetSelezionato.type) || "--";
+            document.getElementById('stat-mag').innerText = targetSelezionato.mag || "--";
+            document.getElementById('stat-dist').innerText = targetSelezionato.dist || "--";
+            document.getElementById('target-description').innerText = getLocalizedText(targetSelezionato, 'desc');
+            document.getElementById('target-tips').innerText = getLocalizedText(targetSelezionato, 'tips');
             let wl = document.getElementById('target-wiki'); if(targetSelezionato.link) { wl.href = targetSelezionato.link; wl.style.display = 'inline-block'; } else wl.style.display = 'none';
             
             let d = new Date(), at = SunCalc.getTimes(d, latCorrente, lonCorrente), ft = (x) => x && !isNaN(x) ? x.toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'}) : '--:--';
@@ -1132,15 +1197,33 @@
                 }
             }
 
+            let fovWarning = document.getElementById('fov-warning-msg');
             if (targetSelezionato && targetSelezionato.size) {
                 let currentTotalArcmin = Math.min(totFovW, totFovH) * 60; 
                 if (targetSelezionato.size > (currentTotalArcmin * 0.9)) { 
-                    document.getElementById('fov-warning-msg').style.display = 'block'; 
+                    fovWarning.setAttribute('data-i18n', 'fov_warning');
+                    fovWarning.style.display = 'block'; 
+                    fovWarning.style.color = '#ffaa00';
+                    fovWarning.innerHTML = t('fov_warning');
                 } else { 
-                    document.getElementById('fov-warning-msg').style.display = 'none'; 
+                    if (isMosaic) {
+                        fovWarning.setAttribute('data-i18n', 'mosaic_active_msg');
+                        fovWarning.style.display = 'block';
+                        fovWarning.style.color = '#bb86fc';
+                        fovWarning.innerHTML = t('mosaic_active_msg');
+                    } else {
+                        fovWarning.style.display = 'none'; 
+                    }
                 }
             } else { 
-                document.getElementById('fov-warning-msg').style.display = 'none'; 
+                if (isMosaic) {
+                    fovWarning.setAttribute('data-i18n', 'mosaic_active_msg');
+                    fovWarning.style.display = 'block';
+                    fovWarning.style.color = '#bb86fc';
+                    fovWarning.innerHTML = t('mosaic_active_msg');
+                } else {
+                    fovWarning.style.display = 'none'; 
+                }
             }
         }
 
@@ -1309,7 +1392,6 @@
             let dlAnchorElem = document.createElement('a'); dlAnchorElem.setAttribute("href", dataStr); dlAnchorElem.setAttribute("download", `AD_Seq_${targetSelezionato.name.replace(/\s+/g, '_')}.json`); document.body.appendChild(dlAnchorElem); dlAnchorElem.click(); dlAnchorElem.remove();
         }
 
-        // --- GESTIONE REPORT MOSAICO ---
         function apriReport() {
             if (!targetSelezionato) { alert(t("alert_planetarium")); return; }
             let isM = document.getElementById('sensor-type').value === 'mono';
@@ -1392,15 +1474,35 @@
 
         window.addEventListener('resize', () => { if(document.getElementById('planning-view').style.display === 'block') aggiornaFOV(); });
         
-        // Avvio iniziale (Applica la lingua salvata)
         document.addEventListener('DOMContentLoaded', () => {
             changeLanguage(lang);
             popolaMenuAttrezzatura();
             aggiornaEffemeridi(new Date()); 
             scaricaDatiPrevisionali();
+
+            // "Rubiamo" la rotellina del mouse nel simulatore FOV
+            let fovContainer = document.getElementById('fov-simulator-container');
+            if (fovContainer) {
+                fovContainer.addEventListener('wheel', function(e) {
+                    e.preventDefault(); // Blocca lo scroll della pagina
+                    e.stopPropagation(); // Blocca lo zoom nativo sfasato di Aladin
+                    
+                    let zoomSlider = document.getElementById('fov-zoom');
+                    let currentVal = parseInt(zoomSlider.value);
+                    
+                    // Rotellina su (zoom in) = +15, giù (zoom out) = -15
+                    if (e.deltaY < 0) { currentVal += 15; } else { currentVal -= 15; }
+                    
+                    // Rispettiamo i limiti minimi e massimi dello slider
+                    if (currentVal < 20) currentVal = 20;
+                    if (currentVal > 500) currentVal = 500;
+                    
+                    zoomSlider.value = currentVal;
+                    aggiornaFOV(); // Sincronizza lo sfondo e il rettangolo contemporaneamente!
+                }, { passive: false, capture: true });
+            }
         });
 
-        // Inizializzazione PWA (Service Worker)
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('sw.js').then(reg => {
