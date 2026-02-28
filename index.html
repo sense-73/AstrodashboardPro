@@ -31,7 +31,6 @@
         .info-icon { font-size: 0.85em; cursor: pointer; opacity: 0.6; transition: 0.2s; filter: grayscale(100%); }
         .info-icon:hover { opacity: 1; filter: grayscale(0) drop-shadow(0 0 5px rgba(187, 134, 252, 0.8)); transform: scale(1.1);}
         
-        /* HEADER */
         .main-header { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; max-width: 1200px; margin: 0 auto 20px auto; background: #1a1a1a; padding: 15px 25px; border-radius: 12px; border: 1px solid #333; box-shadow: 0 5px 15px rgba(0,0,0,0.5); box-sizing: border-box; width: 100%;}
         .logo-container { justify-self: center; }
         .center-logo { height: 100px; object-fit: contain; filter: drop-shadow(0 0 8px rgba(187, 134, 252, 0.2));}
@@ -39,7 +38,6 @@
         .btn-guide { background: transparent; border: 1px solid #bb86fc; color: #bb86fc; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.85em; transition: 0.2s; font-weight: bold; margin-top: 5px;}
         .btn-guide:hover { background: #bb86fc; color: #121212;}
         
-        /* LINGUA PILL */
         .lang-container { justify-self: start; text-align: left; display: flex; flex-direction: column; gap: 5px; }
         .lang-toggle { display: inline-flex; background: #1a1a1a; border-radius: 20px; border: 1px solid #444; overflow: hidden; box-shadow: inset 0 0 5px rgba(0,0,0,0.5); }
         .lang-btn { background: transparent; border: none; color: #777; padding: 6px 14px; font-size: 0.95em; cursor: pointer; transition: 0.3s; font-weight: bold; display: flex; align-items: center; }
@@ -130,7 +128,7 @@
         @media (max-width: 768px) { .planning-grid { grid-template-columns: 1fr; } }
         .fov-simulator-container { background-color: #000; height: 400px; border-radius: 8px; border: 2px solid #444; position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center;}
         #aladin-lite-div { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;}
-        #fov-rectangle { position: absolute; border: 2px solid #ff4444; box-shadow: inset 0 0 10px rgba(255, 68, 68, 0.3), 0 0 10px rgba(255, 68, 68, 0.5); pointer-events: none; transition: width 0.1s, height 0.1s; z-index: 1000;}
+        #fov-rectangle { position: absolute; pointer-events: none; transition: width 0.1s, height 0.1s; z-index: 1000;}
         .center-cross { position: absolute; color: rgba(68, 255, 68, 0.7); font-size: 1.5em; pointer-events: none; z-index: 1000;}
         .chart-container { background-color: #1e1e1e; padding: 15px; border-radius: 8px; height: 160px; margin-top: 15px; box-shadow: inset 0 0 10px rgba(0,0,0,0.5);}
         .zoom-control { display: flex; align-items: center; justify-content: center; padding: 10px; background: #2a2a2a; border-radius: 0 0 8px 8px;}
@@ -171,6 +169,18 @@
         .guide-section strong { color: #fff; }
         .filosofia-box { background: rgba(187,134,252,0.1); padding: 20px; border-left: 4px solid #bb86fc; border-radius: 4px; margin-bottom: 30px;}
         
+        /* MODAL REPORT STYLES */
+        .modal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); backdrop-filter: blur(5px); }
+        .modal-content { background-color: #1e1e1e; margin: 5% auto; padding: 25px; border: 1px solid #bb86fc; border-radius: 12px; width: 90%; max-width: 600px; position: relative; color: #fff; box-shadow: 0 0 20px rgba(187,134,252,0.3); max-height: 85vh; overflow-y: auto; text-align: left;}
+        .close-btn { position: absolute; right: 20px; top: 15px; color: #aaa; font-size: 28px; font-weight: bold; cursor: pointer; }
+        .close-btn:hover { color: #ff4444; }
+        .report-section { background: #2a2a2a; border-left: 4px solid #bb86fc; padding: 15px; margin-bottom: 15px; border-radius: 4px; }
+        .report-section h4 { margin: 0 0 10px 0; color: #bb86fc; text-transform: uppercase; font-size: 0.9em; letter-spacing: 1px; }
+        .report-line { display: flex; justify-content: space-between; border-bottom: 1px dashed #444; padding: 5px 0; font-size: 0.95em; }
+        .report-line:last-child { border-bottom: none; }
+        .btn-copy { background: #333; color: #fff; border: 1px solid #bb86fc; padding: 12px 15px; border-radius: 5px; cursor: pointer; margin-top: 10px; width: 100%; font-weight: bold; transition: 0.3s; font-size: 1em; }
+        .btn-copy:hover { background: #bb86fc; color: #121212; }
+
         /* FIX MOBILE LAYOUT */
         @media (max-width: 768px) {
             .main-header { display: flex !important; flex-direction: column; gap: 15px; align-items: center; justify-content: center; text-align: center; padding: 20px 15px; width: 100%; box-sizing: border-box; }
@@ -194,9 +204,7 @@
     </style>
 </head>
 <body>
-
     <div class="main-header">
-        
         <div class="lang-container">
             <span style="font-size: 0.75em; color: #aaa; font-weight: bold; letter-spacing: 1px; padding-left: 5px;">LANGUAGE</span>
             <div class="lang-toggle">
@@ -226,7 +234,6 @@
             </div>
             <img src="logo astro enrico sfondo.png" alt="Enrico Salis Logo" style="height: 60px; object-fit: contain; border-radius: 5px;">
         </div>
-        
     </div>
 
     <div id="dashboard-view">
@@ -242,34 +249,28 @@
                     <span id="meteo-umidita" style="font-size: 0.9em; color: #44ff44;"><span data-i18n="humidity">Umidità</span>: --%</span>
                 </div>
                 <div class="times-grid">
-                    <div class="time-item"><span class="icon-normal">🌅</span> <span data-i18n="sunrise">Alba</span> Sole<br><span id="alba-sole">--:--</span></div>
-                    <div class="time-item"><span class="icon-normal">🌇</span> <span data-i18n="sunset">Tramonto</span> Sole<br><span id="tramonto-sole">--:--</span></div>
-                    <div class="time-item"><span class="icon-normal">🌒</span> <span data-i18n="sunrise">Alba</span> Luna<br><span id="alba-luna">--:--</span></div>
-                    <div class="time-item"><span class="icon-normal">🌘</span> <span data-i18n="sunset">Tramonto</span> Luna<br><span id="tramonto-luna">--:--</span></div>
+                    <div class="time-item"><span class="icon-normal">🌅</span> <span data-i18n="sunrise">Alba</span> <span data-i18n="sun">Sole</span><br><span id="alba-sole">--:--</span></div>
+                    <div class="time-item"><span class="icon-normal">🌇</span> <span data-i18n="sunset">Tramonto</span> <span data-i18n="sun">Sole</span><br><span id="tramonto-sole">--:--</span></div>
+                    <div class="time-item"><span class="icon-normal">🌒</span> <span data-i18n="sunrise">Alba</span> <span data-i18n="moon">Luna</span><br><span id="alba-luna">--:--</span></div>
+                    <div class="time-item"><span class="icon-normal">🌘</span> <span data-i18n="sunset">Tramonto</span> <span data-i18n="moon">Luna</span><br><span id="tramonto-luna">--:--</span></div>
                 </div>
             </div>
         </div>
 
         <div class="container">
             <div class="panel">
-                <h3><span data-i18n="pos_title">📍 Posizione</span> <span class="info-icon" onclick="apriGuida('guida-meteo')">ℹ️</span></h3>
+                <h3><span data-i18n="pos_title">📍 Posizione</span> <span class="info-icon" onclick="apriGuida()">ℹ️</span></h3>
                 <div class="input-group">
                     <label for="ricerca" data-i18n="find_place">Trova Luogo:</label>
-                    <input type="text" id="ricerca" placeholder="Es. Monte Lussari..." data-i18n="search_place" oninput="cercaIndirizzo()">
+                    <input type="text" id="ricerca" placeholder="..." data-i18n="search_place" oninput="cercaIndirizzo()">
                     <ul id="dropdown-risultati"></ul>
                 </div>
-                <div class="input-group">
-                    <label for="lat" data-i18n="lat">Latitudine:</label>
-                    <input type="text" id="lat" readonly value="46.06200">
-                </div>
-                <div class="input-group">
-                    <label for="lon" data-i18n="lon">Longitudine:</label>
-                    <input type="text" id="lon" readonly value="13.23500">
-                </div>
+                <div class="input-group"><label for="lat" data-i18n="lat">Latitudine:</label><input type="text" id="lat" readonly value="46.06200"></div>
+                <div class="input-group"><label for="lon" data-i18n="lon">Longitudine:</label><input type="text" id="lon" readonly value="13.23500"></div>
             </div>
 
             <div class="panel">
-                <h3><span data-i18n="env_data">🎛️ Dati Ambientali Astrofotografici</span> <span class="info-icon" onclick="apriGuida('guida-meteo')">ℹ️</span></h3>
+                <h3><span data-i18n="env_data">🎛️ Dati Ambientali</span> <span class="info-icon" onclick="apriGuida()">ℹ️</span></h3>
                 <div class="meteo-grid">
                     <div class="meteo-item m-bassa active" id="btn-basse" onclick="toggleLayer('basse')"><h4 data-i18n="low_clouds">Nuvole Basse</h4><span id="val-basse">--%</span></div>
                     <div class="meteo-item m-media active" id="btn-medie" onclick="toggleLayer('medie')"><h4 data-i18n="mid_clouds">Nuvole Medie</h4><span id="val-medie">--%</span></div>
@@ -294,7 +295,7 @@
         </div>
 
         <div class="container dso-container" style="flex-direction: column;">
-            <h3><span data-i18n="hybrid_planetarium">🔭 Planetario Predittivo Ibrido</span> <span class="info-icon" onclick="apriGuida('guida-ricerca')">ℹ️</span></h3>
+            <h3><span data-i18n="hybrid_planetarium">🔭 Planetario Predittivo Ibrido</span> <span class="info-icon" onclick="apriGuida()">ℹ️</span></h3>
             
             <div class="timeline-container" style="margin-top: 10px; margin-bottom: 20px; padding: 10px; background-color: #222;">
                 <div id="astro-time-display" class="time-display" style="color: #44ff44;">Caricamento Timeline Astro...</div>
@@ -312,10 +313,10 @@
             </div>
 
             <div class="search-local-box">
-                <h4><span data-i18n="free_search">🔍 Ricerca Libera Oggetto</span> <span class="info-icon" onclick="apriGuida('guida-ricerca')">ℹ️</span></h4>
+                <h4><span data-i18n="free_search">🔍 Ricerca Libera Oggetto</span> <span class="info-icon" onclick="apriGuida()">ℹ️</span></h4>
                 <div style="display: flex; justify-content: center; align-items: flex-start; flex-wrap: wrap; gap: 10px; margin-top: 15px;">
                     <div class="search-wrapper">
-                        <input type="text" id="search-dash-input" class="search-local-input" placeholder="Es. M31, Pleiadi, NGC 1234..." data-i18n="search_target" autocomplete="off">
+                        <input type="text" id="search-dash-input" class="search-local-input" placeholder="..." data-i18n="search_target" autocomplete="off">
                         <ul id="sugg-dash" class="search-suggestions"></ul>
                     </div>
                     <button class="btn-search" onclick="eseguiRicerca('search-dash-input')" data-i18n="plan_target_btn">Pianifica Oggetto 🚀</button>
@@ -353,7 +354,7 @@
 
         <div class="planning-grid">
             <div class="panel">
-                <h3><span data-i18n="optical_setup">📸 Setup Ottico</span> <span class="info-icon" onclick="apriGuida('guida-fov')">ℹ️</span></h3>
+                <h3><span data-i18n="optical_setup">📸 Setup Ottico</span> <span class="info-icon" onclick="apriGuida()">ℹ️</span></h3>
                 <div class="input-group">
                     <label data-i18n="telescope">Telescopio:</label>
                     <select id="preset-telescope" onchange="applicaPresetTelescopio()">
@@ -373,9 +374,37 @@
                 </div>
                 <div class="input-group"><label data-i18n="width">Larg. W (mm):</label><input type="number" id="sensor-width" value="23.5" step="0.1" oninput="aggiornaFOV()"></div>
                 <div class="input-group"><label data-i18n="height">Alet. H (mm):</label><input type="number" id="sensor-height" value="15.7" step="0.1" oninput="aggiornaFOV()"></div>
+                
+                <div style="margin-top: 15px; padding: 15px; background-color: #222; border-radius: 8px; border: 1px solid #444;">
+                    <div class="input-group" style="margin-bottom: 5px; display: flex; align-items: center;">
+                        <label data-i18n="mode" style="width: auto; margin-right:10px; font-weight: bold; color: #bb86fc;">Modalità:</label>
+                        <select id="capture-mode" onchange="toggleMosaic()" style="flex: 1; padding: 6px; font-size: 0.95em; background: #1a1a1a; cursor: pointer;">
+                            <option value="single" data-i18n="single_panel">Scatto Singolo</option>
+                            <option value="mosaic" data-i18n="mosaic">Mosaico</option>
+                        </select>
+                    </div>
+                    <div id="mosaic-settings" style="display: none; flex-direction: column; gap: 10px; margin-top: 15px;">
+                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                            <label data-i18n="panels" style="width: auto; margin:0;">Pannelli (X, Y):</label>
+                            <div style="display: flex; align-items: center; gap: 5px;">
+                                <input type="number" id="mosaic-x" value="2" min="1" max="10" oninput="aggiornaFOV(); calcolaTempi();" style="width: 50px !important; padding: 4px !important; text-align: center;"> x 
+                                <input type="number" id="mosaic-y" value="2" min="1" max="10" oninput="aggiornaFOV(); calcolaTempi();" style="width: 50px !important; padding: 4px !important; text-align: center;">
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                            <label data-i18n="overlap" style="width: auto; margin:0;">Sovrapposizione:</label>
+                            <div style="display: flex; align-items: center; gap: 5px;">
+                                <input type="number" id="mosaic-overlap" value="20" min="5" max="50" step="5" oninput="aggiornaFOV()" style="width: 60px !important; padding: 4px !important; text-align: center;"> %
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div style="margin-top: 25px; padding: 15px; background-color: #2a2a2a; border-radius: 8px; text-align: center;">
                     <h4 style="margin:0 0 5px 0; color:#aaa;" data-i18n="fov_calc">Campo Inquadrato Calcolato</h4>
                     <p id="fov-result" style="font-weight: bold; color: #44ff44; font-size: 1.4em; margin: 0;">--° x --°</p>
+                    <p id="mosaic-fov-result" style="margin: 5px 0 0 0; font-size: 1em; color: #bb86fc; font-weight: bold; display: none;">Totale: --° x --°</p>
+                    <p id="fov-warning-msg" style="color: #ffaa00; font-size: 0.85em; margin-top: 10px; display: none; font-weight: bold;" data-i18n="fov_warning">⚠️ L'oggetto è più grande del tuo campo inquadrato! Valuta un mosaico.</p>
                 </div>
             </div>
             
@@ -397,7 +426,7 @@
             </div>
         </div>
 
-        <h2 id="calc-title" style="margin-top: 30px; border-top: 1px solid #333; padding-top: 20px;"><span data-i18n="smart_calc">⏱️ Calcolatore Sessione Smart AI</span> <span class="info-icon" onclick="apriGuida('guida-smart')">ℹ️</span></h2>
+        <h2 id="calc-title" style="margin-top: 30px; border-top: 1px solid #333; padding-top: 20px;"><span data-i18n="smart_calc">⏱️ Calcolatore Sessione Smart AI</span> <span class="info-icon" onclick="apriGuida()">ℹ️</span></h2>
         
         <div class="twilight-grid">
             <div class="twilight-item"><span class="icon">🌇</span><span class="label" data-i18n="sunset">Tramonto</span><b id="info-sunset">--:--</b></div>
@@ -420,7 +449,10 @@
 
         <div class="session-grid">
             <div class="panel">
-                <h3 data-i18n="seq_setup">Impostazione Sequenza</h3>
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                    <h3 data-i18n="seq_setup" style="margin: 0;">Impostazione Sequenza</h3>
+                    <span id="mosaic-total-badge" style="display:none; background: #bb86fc; color: #121212; padding: 4px 10px; border-radius: 4px; font-size: 0.9em; font-weight: bold;"></span>
+                </div>
                 
                 <div class="smart-button-container">
                     <button class="btn-smart" onclick="generaSequenzaOttimale()" data-i18n="gen_seq_btn">✨ Genera Sequenza Ottimale</button>
@@ -494,8 +526,19 @@
             </div>
 
             <div style="text-align: center; margin-top: 25px;">
-                <button class="btn-smart" style="background: linear-gradient(135deg, #ff4444 0%, #aa0000 100%); box-shadow: 0 4px 15px rgba(255, 68, 68, 0.3);" onclick="esportaNINA()" data-i18n="gen_nina_btn">💾 Genera File per N.I.N.A.</button>
+                <button id="btn-export-nina" class="btn-smart" style="background: linear-gradient(135deg, #ff4444 0%, #aa0000 100%); box-shadow: 0 4px 15px rgba(255, 68, 68, 0.3);" onclick="esportaNINA()" data-i18n="gen_nina_btn">💾 Genera File per N.I.N.A.</button>
+                <button id="btn-report-mosaic" class="btn-smart" style="display: none; background: linear-gradient(135deg, #7c4dff 0%, #3f51b5 100%); box-shadow: 0 4px 15px rgba(124, 77, 255, 0.3);" onclick="apriReport()" data-i18n="gen_report_btn">📝 Genera Report Strategico</button>
+                <p id="nina-mosaic-msg" style="display: none; color: #ffaa00; font-size: 0.9em; text-align: justify; line-height: 1.5; margin-top: 15px; padding: 15px; background: rgba(255, 170, 0, 0.1); border-left: 3px solid #ffaa00; border-radius: 4px;" data-i18n="nina_mosaic_msg">📌 Modalità Mosaico attiva. Usa il Framing Assistant di N.I.N.A. per creare le coordinate dei pannelli, e imposta il Sequencer usando i tempi calcolati qui sopra.</p>
             </div>
+        </div>
+    </div>
+
+    <div id="report-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="chiudiReport()">&times;</span>
+            <h2 style="color: #bb86fc; margin-top:0; border-bottom: none; display: flex; align-items: center; gap: 10px;"><span data-i18n="report_title">Dossier Mosaico</span></h2>
+            <div id="report-content"></div>
+            <button class="btn-copy" onclick="copiaReport()" id="btn-copy-report"><span data-i18n="copy_report">📋 Copia negli Appunti</span></button>
         </div>
     </div>
 
@@ -569,7 +612,9 @@
                 "galaxy": "Galassia", "nebula": "Nebulosa", "cluster": "Ammasso", "star": "Stella", "unknown": "Sconosciuta",
                 "alert_planetarium": "Scegli prima un bersaglio dal Planetario 🔭!", "alert_noseq": "Nessuna posa calcolata! Clicca prima su 'Genera Sequenza Ottimale'.",
                 "alert_calib": "I frame di calibrazione occupano tutto il tempo!", "alert_nolight": "Seleziona almeno un filtro Light.", "alert_times": "Imposta prima gli orari di Inizio e Fine.", "no_target": "Nessun oggetto visibile.", "too_bright": "☀️ Cielo troppo luminoso.", "dso_too_bright": "☀️ Cielo troppo luminoso per il Deep Sky.", "select_opt": "-- Seleziona --",
-                "jupiter": "Giove", "mars": "Marte", "venus": "Venere", "moon": "Luna"
+                "jupiter": "Giove", "mars": "Marte", "venus": "Venere", "moon": "Luna", "sun": "Sole", "weather": "Meteo",
+                "mode": "Modalità:", "single_panel": "Scatto Singolo", "mosaic": "Mosaico", "panels": "Pannelli (X, Y):", "overlap": "Sovrapposizione:", "time_per_panel": "Tempo per Pannello", "fov_warning": "⚠️ L'oggetto è più grande del tuo campo inquadrato! Valuta un mosaico.", "nina_mosaic_msg": "📌 Modalità Mosaico attiva. Usa il Framing Assistant di N.I.N.A. per creare le coordinate dei pannelli, e imposta il Sequencer usando i tempi calcolati qui sopra.",
+                "gen_report_btn": "📝 Genera Report Strategico", "report_title": "Dossier Mosaico", "copy_report": "Copia negli Appunti", "copied": "Copiato!", "report_general": "Info Generali Mosaico", "report_strategy": "Strategia Singolo Pannello", "report_plan": "Piano di Scatto (Per Pannello)"
             },
             en: {
                 "manual_btn": "📖 Open Manual", "pos_title": "📍 Location", "find_place": "Find Place:", "search_place": "E.g. Yellowstone...",
@@ -595,7 +640,9 @@
                 "galaxy": "Galaxy", "nebula": "Nebula", "cluster": "Cluster", "star": "Star", "unknown": "Unknown",
                 "alert_planetarium": "Choose a target from the Planetarium first 🔭!", "alert_noseq": "No exposures calculated! Click 'Generate Optimal Sequence' first.",
                 "alert_calib": "Calibration frames take up all the time!", "alert_nolight": "Select at least one Light filter.", "alert_times": "Please set Start and End times.", "no_target": "No visible objects.", "too_bright": "☀️ Sky is too bright.", "dso_too_bright": "☀️ Sky is too bright for Deep Sky.", "select_opt": "-- Select --",
-                "jupiter": "Jupiter", "mars": "Mars", "venus": "Venus", "moon": "Moon"
+                "jupiter": "Jupiter", "mars": "Mars", "venus": "Venus", "moon": "Moon", "sun": "Sun", "weather": "Weather",
+                "mode": "Mode:", "single_panel": "Single Panel", "mosaic": "Mosaic", "panels": "Panels (X, Y):", "overlap": "Overlap:", "time_per_panel": "Time per Panel", "fov_warning": "⚠️ Target is larger than your FOV! Consider a mosaic.", "nina_mosaic_msg": "📌 Mosaic Mode active. Use N.I.N.A.'s Framing Assistant to generate panel coordinates, and set up your Sequence using the exposure times calculated above.",
+                "gen_report_btn": "📝 Generate Strategic Report", "report_title": "Mosaic Dossier", "copy_report": "Copy to Clipboard", "copied": "Copied!", "report_general": "General Info", "report_strategy": "Per-Panel Strategy", "report_plan": "Exposure Plan (Per Panel)"
             },
             es: {
                 "manual_btn": "📖 Abrir Manual", "pos_title": "📍 Ubicación", "find_place": "Buscar Lugar:", "search_place": "Ej. Atacama...",
@@ -621,7 +668,9 @@
                 "galaxy": "Galaxia", "nebula": "Nebulosa", "cluster": "Cúmulo", "star": "Estrella", "unknown": "Desconocido",
                 "alert_planetarium": "¡Elige primero un objetivo en el Planetario 🔭!", "alert_noseq": "¡No se han calculado tomas! Haz clic en 'Generar Secuencia Óptima'.",
                 "alert_calib": "¡Las tomas de calibración ocupan todo el tiempo!", "alert_nolight": "Selecciona al menos un filtro Light.", "alert_times": "Configura las horas de Inicio y Fin.", "no_target": "No hay objetos visibles.", "too_bright": "☀️ Cielo demasiado brillante.", "dso_too_bright": "☀️ Cielo demasiado brillante para cielo profundo.", "select_opt": "-- Seleccionar --",
-                "jupiter": "Júpiter", "mars": "Marte", "venus": "Venus", "moon": "Luna"
+                "jupiter": "Júpiter", "mars": "Marte", "venus": "Venus", "moon": "Luna", "sun": "Sol", "weather": "Clima",
+                "mode": "Modo:", "single_panel": "Panel Único", "mosaic": "Mosaico", "panels": "Paneles (X, Y):", "overlap": "Solapamiento:", "time_per_panel": "Tiempo por Panel", "fov_warning": "⚠️ ¡El objeto es más grande que tu campo visual! Considera un mosaico.", "nina_mosaic_msg": "📌 Modo Mosaico activo. Utiliza el Framing Assistant de N.I.N.A. para crear las coordenadas de los paneles, y configura tu Secuencia usando los tiempos calculados arriba.",
+                "gen_report_btn": "📝 Generar Informe Estratégico", "report_title": "Dosier Mosaico", "copy_report": "Copiar al Portapapeles", "copied": "¡Copiado!", "report_general": "Info General", "report_strategy": "Estrategia por Panel", "report_plan": "Plan de Captura (Por Panel)"
             },
             zh: {
                 "manual_btn": "📖 打开手册", "pos_title": "📍 位置", "find_place": "查找地点:", "search_place": "例如: 丽江...",
@@ -647,7 +696,9 @@
                 "galaxy": "星系", "nebula": "星云", "cluster": "星团", "star": "恒星", "unknown": "未知",
                 "alert_planetarium": "请先从星图中选择一个目标 🔭！", "alert_noseq": "没有计算出任何曝光！请先点击 '生成最佳曝光序列'。",
                 "alert_calib": "校准帧占据了所有可用时间！", "alert_nolight": "请至少选择一个亮场 (Light) 滤镜。", "alert_times": "请先设置开始和结束时间。", "no_target": "当前没有可见目标。", "too_bright": "☀️ 天空太亮了。", "dso_too_bright": "☀️ 天空对深空目标来说太亮了。", "select_opt": "-- 请选择 --",
-                "jupiter": "木星", "mars": "火星", "venus": "金星", "moon": "月球"
+                "jupiter": "木星", "mars": "火星", "venus": "金星", "moon": "月球", "sun": "太阳", "weather": "天气",
+                "mode": "模式:", "single_panel": "单面板", "mosaic": "拼接", "panels": "面板 (X, Y):", "overlap": "重叠度:", "time_per_panel": "每块面板时间", "fov_warning": "⚠️ 目标比你的视场还要大！考虑使用拼接拍摄。", "nina_mosaic_msg": "📌 拼接模式已激活。请使用 N.I.N.A. 的构图助手生成面板坐标，并使用上面计算的曝光时间设置序列。",
+                "gen_report_btn": "📝 生成策略报告", "report_title": "拼接拍摄档案", "copy_report": "复制到剪贴板", "copied": "已复制!", "report_general": "基本信息", "report_strategy": "单面板策略", "report_plan": "曝光计划 (单面板)"
             }
         };
 
@@ -675,7 +726,6 @@
             if(datiMeteo){cambiaOraMeteo(); cambiaOraAstro();}
         }
 
-        // --- DATABASE ATTREZZATURA ---
         const dbTelescopi = [{ nome: "Askar FRA 400 (400mm)", focale: 400 }, { nome: "Explore Scienific Comethunter (731mm)", focale: 731 }, { nome: "SW Explorer 130 PDS (650mm)", focale: 650 }, { nome: "SW Explorer 150P (750mm)", focale: 750 }, { nome: "SW Explorer 200P (1000mm)", focale: 1000 }, { nome: "SW Quattro 150P (600mm)", focale: 600 }, { nome: "SW Quattro 200P (800mm)", focale: 800 }, { nome: "SW Quattro 250P (1000mm)", focale: 1000 }, { nome: "SW 72ED Evostar (420mm)", focale: 420 }, { nome: "SW 80ED Evostar (600mm)", focale: 600 }, { nome: "SW Esprit 80ED (400mm)", focale: 400 }, { nome: "SW Esprit 100ED (550mm)", focale: 550 }, { nome: "Celestron C8 SCT (2032mm)", focale: 2032 }, { nome: "Celestron C8 @ f/6.3 (1280mm)", focale: 1280 }, { nome: "ZWO Seestar S50 (250mm)", focale: 250 }, { nome: "Samyang 135mm f/2", focale: 135 }];
         const dbCamere = [{ nome: "ASI 533MC/MM (Square)", w: 11.31, h: 11.31 }, { nome: "ASI 294MC/MM (4/3\")", w: 19.1, h: 13.0 }, { nome: "SONY IMX571 ", w: 23.5, h: 15.7 }, { nome: "ASI 6200MC/MM (Full Frame)", w: 36.0, h: 24.0 }, { nome: "ASI 183MC/MM (1\")", w: 13.2, h: 8.8 }, { nome: "SONY IMX585", w: 11.14, h: 6.26 }, { nome: "ASI 1600MM (4/3\")", w: 17.7, h: 13.4 }, { nome: "Reflex APS-C (Canon/Nikon)", w: 22.3, h: 14.9 }];
 
@@ -684,7 +734,6 @@
             const selCam = document.getElementById('preset-sensor'); dbCamere.forEach(c => { let opt = document.createElement('option'); opt.value = `${c.w},${c.h}`; opt.textContent = c.nome; selCam.appendChild(opt); });
         }
 
-        // CORE LOGIC E MAPPA
         let latCorrente = 46.062, lonCorrente = 13.235, datiMeteo = null, indicePartenza = 0, chartAltezza = null, targetSelezionato = null, aladinSkyMap = null, vistaPrecedente = 'dashboard-view';
         let mappaScura = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { maxZoom: 19 });
         let map = L.map('map', { center: [latCorrente, lonCorrente], zoom: 8, layers: [mappaScura], zoomControl: false });
@@ -693,7 +742,6 @@
         let marker = L.marker([latCorrente, lonCorrente]).addTo(map).bindPopup("<b>Udine</b>").openPopup();
         let timerRicerca;
 
-        // I pianeti ora usano nomi "chiave" che il dizionario traduce automaticamente
         const planetsDatabase = [ { id: "jupiter", name: "jupiter", icon: "🪐", ra: 7.15, dec: 22.8 }, { id: "mars", name: "mars", icon: "🔴", ra: 18.50, dec: -23.5 }, { id: "venus", name: "venus", icon: "✨", ra: 23.50, dec: -3.5 } ];
 
         function getJulianDate(date) { return (date.getTime() / 86400000) + 2440587.5; }
@@ -734,8 +782,7 @@
             marker = L.marker([latCorrente, lonCorrente]).addTo(map).bindPopup(`<b>${nome.split(',')[0]}</b>`).openPopup();
             aggiornaEffemeridi(new Date()); scaricaDatiPrevisionali();
         }
-
-        function aggiornaEffemeridi(data) {
+function aggiornaEffemeridi(data) {
             let orariSole = SunCalc.getTimes(data, latCorrente, lonCorrente), orariLuna = SunCalc.getMoonTimes(data, latCorrente, lonCorrente), faseLuna = SunCalc.getMoonIllumination(data);
             let formattaOra = (d) => d && !isNaN(d) ? d.toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'}) : '--:--';
             document.getElementById('alba-sole').innerText = formattaOra(orariSole.sunrise); document.getElementById('tramonto-sole').innerText = formattaOra(orariSole.sunset);
@@ -744,8 +791,6 @@
             if(f>0.03&&f<=0.22){i='🌒';n='waxing_crescent';}else if(f>0.22&&f<=0.28){i='🌓';n='first_quarter';}else if(f>0.28&&f<=0.47){i='🌔';n='waxing_gibbous';}else if(f>0.47&&f<=0.53){i='🌕';n='full_moon';}else if(f>0.53&&f<=0.72){i='🌖';n='waning_gibbous';}else if(f>0.72&&f<=0.78){i='🌗';n='last_quarter';}else if(f>0.78&&f<=0.97){i='🌘';n='waning_crescent';}
             document.getElementById('moon-emoji').innerText = i; document.getElementById('moon-phase-name').innerText = t(n);
         }
-
-        function syncSliders(val) { document.getElementById('timeSlider').value = val; document.getElementById('astroSlider').value = val; cambiaOraMeteo(); cambiaOraAstro(); }
 
         function scaricaDatiPrevisionali() {
             fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latCorrente}&longitude=${lonCorrente}&hourly=cloud_cover_low,cloud_cover_mid,cloud_cover_high,wind_speed_250hPa,wind_speed_10m,temperature_2m,relative_humidity_2m&forecast_days=3&timezone=auto`)
@@ -771,7 +816,7 @@
             if (maxC < 15) { icM = "☀️"; dsM = "clear"; } else if (maxC < 40) { icM = "🌤️"; dsM = "partly_cloudy"; } else if (maxC < 75) { icM = "⛅"; dsM = "mostly_cloudy"; }
             if (altS < -6) { if (maxC < 15) icM = "✨"; else if (maxC < 40) icM = "🌙"; }
 
-            document.getElementById('time-display').innerHTML = `<span style="font-size: 1.5em; vertical-align: middle; margin-right: 5px;">${icM}</span> ${tOra} <br><span style="font-size: 0.75em; color: #aaa; text-transform: uppercase;">Meteo: <b style="color: #fff;">${t(dsM)}</b></span>`;
+            document.getElementById('time-display').innerHTML = `<span style="font-size: 1.5em; vertical-align: middle; margin-right: 5px;">${icM}</span> ${tOra} <br><span style="font-size: 0.75em; color: #aaa; text-transform: uppercase;">${t("weather")}: <b style="color: #fff;">${t(dsM)}</b></span>`;
             document.getElementById('meteo-temp').innerText = Math.round(temp) + "°C";
             document.getElementById('meteo-umidita').innerText = t("humidity")+": " + um + "%"; document.getElementById('meteo-umidita').style.color = um > 85 ? "#ff4444" : "#44ff44";
             document.getElementById('val-umidita-layer').innerText = um + "%";
@@ -816,16 +861,11 @@
 
         function mapTypeTrans(type) { let m = {"Galassia": "galaxy", "Nebulosa": "nebula", "Ammasso": "cluster", "Stella": "star"}; return t(m[type] || "unknown"); }
 
-        // --- NUOVO ESTRATTORE NOMI INTELLIGENTE ---
         function getLocalizedName(obj) {
             if (!obj) return "";
-            // 1. Se è un pianeta o la luna, prende il nome dal dizionario i18n
             if (['jupiter', 'mars', 'venus', 'moon'].includes(obj.id)) return t(obj.id);
-            // 2. Se è un DSO e ha il campo specifico per la lingua selezionata (es. obj.en = "Cigar Galaxy")
             if (obj[lang]) return `${obj.name} - ${obj[lang]}`;
-            // 3. Fallback: Se la lingua manca, prova in inglese
             if (obj['en']) return `${obj.name} - ${obj['en']}`;
-            // 4. Se arriva da SIMBAD o non ha traduzioni, restituisce il nome originale (es. NGC 2841)
             return obj.name; 
         }
 
@@ -842,7 +882,6 @@
                 if (typeof dsoDatabase === 'undefined') return;
                 let v = inp.value.trim().toLowerCase().replace(/\s+/g, ''); box.innerHTML = '';
                 if (!v) { box.style.display = 'none'; return; }
-                // Cerca sia nell'ID, sia nel nome base, sia nelle traduzioni!
                 let m = dsoDatabase.filter(d => d.id.toLowerCase().includes(v) || d.name.toLowerCase().replace(/\s+/g, '').includes(v) || (d[lang] && d[lang].toLowerCase().replace(/\s+/g, '').includes(v)));
                 if (m.length > 0) { box.style.display = 'block'; m.forEach(x => { let li = document.createElement('li'); li.innerHTML = `${x.icon} ${getLocalizedName(x)}`; li.onclick = () => { inp.value = getLocalizedName(x); box.style.display = 'none'; apriPianificazione(x); }; box.appendChild(li); }); } else box.style.display = 'none';
             });
@@ -887,7 +926,7 @@
 
         function apriPianificazione(tObj) {
             targetSelezionato = tObj; document.getElementById('dashboard-view').style.display = 'none'; document.getElementById('planning-view').style.display = 'block';
-            document.getElementById('plan-target-name').innerText = translateDSO(targetSelezionato.name);
+            document.getElementById('plan-target-name').innerText = getLocalizedName(targetSelezionato);
             document.getElementById('stat-type').innerText = mapTypeTrans(targetSelezionato.type) || "--"; document.getElementById('stat-mag').innerText = targetSelezionato.mag || "--"; document.getElementById('stat-dist').innerText = targetSelezionato.dist || "--";
             document.getElementById('target-description').innerText = targetSelezionato.desc || "--"; document.getElementById('target-tips').innerText = targetSelezionato.tips || "--";
             let wl = document.getElementById('target-wiki'); if(targetSelezionato.link) { wl.href = targetSelezionato.link; wl.style.display = 'inline-block'; } else wl.style.display = 'none';
@@ -896,7 +935,7 @@
             document.getElementById('info-sunset').innerText = ft(at.sunset); document.getElementById('info-nightstart').innerText = ft(at.night); document.getElementById('info-nightend').innerText = ft(at.nightEnd); document.getElementById('info-sunrise').innerText = ft(at.sunrise);
             if (ft(at.night) !== '--:--') document.getElementById('time-start').value = ft(at.night); if (ft(at.nightEnd) !== '--:--') document.getElementById('time-end').value = ft(at.nightEnd);
 
-            if (!aladinSkyMap) { aladinSkyMap = A.aladin('#aladin-lite-div', { survey: "P/DSS2/color", fov: 2, target: (targetSelezionato.ra * 15) + " " + targetSelezionato.dec, showReticle: false, showZoomControl: false, showFullscreenControl: false, showLayersControl: false, showGotoControl: false }); setTimeout(() => aggiornaFOV(), 300); } else { setTimeout(() => { aladinSkyMap.gotoRaDec(targetSelezionato.ra * 15, targetSelezionato.dec); aggiornaFOV(); }, 100); }
+            if (!aladinSkyMap) { aladinSkyMap = A.aladin('#aladin-lite-div', { survey: "P/DSS2/color", fov: 2, target: (targetSelezionato.ra * 15) + " " + targetSelezionato.dec, showReticle: false, showZoomControl: false, showFullscreenControl: false, showLayersControl: false, showGotoControl: false }); setTimeout(() => { aggiornaFOV(); toggleMosaic(); }, 300); } else { setTimeout(() => { aladinSkyMap.gotoRaDec(targetSelezionato.ra * 15, targetSelezionato.dec); aggiornaFOV(); toggleMosaic(); }, 100); }
             disegnaGraficoAltezza(); toggleSensorMode(); calcolaTempi(); window.scrollTo(0,0);
         }
 
@@ -904,13 +943,102 @@
         function applicaPresetTelescopio() { let v = document.getElementById('preset-telescope').value; if(v){document.getElementById('focal-length').value=v; aggiornaFOV();} }
         function applicaPresetSensore() { let v = document.getElementById('preset-sensor').value; if(v){let p=v.split(',');document.getElementById('sensor-width').value=p[0];document.getElementById('sensor-height').value=p[1];aggiornaFOV();} }
 
+        // --- MOTORE MOSAICO ---
+        function toggleMosaic() {
+            let isMosaic = document.getElementById('capture-mode').value === 'mosaic';
+            document.getElementById('mosaic-settings').style.display = isMosaic ? 'flex' : 'none';
+            document.getElementById('mosaic-fov-result').style.display = isMosaic ? 'block' : 'none';
+            document.getElementById('btn-export-nina').style.display = isMosaic ? 'none' : 'inline-block';
+            document.getElementById('btn-report-mosaic').style.display = isMosaic ? 'inline-block' : 'none';
+            document.getElementById('nina-mosaic-msg').style.display = isMosaic ? 'block' : 'none';
+            document.getElementById('mosaic-total-badge').style.display = isMosaic ? 'inline-block' : 'none';
+            aggiornaFOV(); 
+            calcolaTempi(); 
+        }
+
         function aggiornaFOV() {
-            let fl = parseFloat(document.getElementById('focal-length').value) || 1000, sw = parseFloat(document.getElementById('sensor-width').value) || 23.5, sh = parseFloat(document.getElementById('sensor-height').value) || 15.6;
-            let fW = (2 * Math.atan(sw / (2 * fl)) * (180 / Math.PI)), fH = (2 * Math.atan(sh / (2 * fl)) * (180 / Math.PI));
+            let fl = parseFloat(document.getElementById('focal-length').value) || 1000;
+            let sw = parseFloat(document.getElementById('sensor-width').value) || 23.5;
+            let sh = parseFloat(document.getElementById('sensor-height').value) || 15.6;
+            
+            let fW = (2 * Math.atan(sw / (2 * fl)) * (180 / Math.PI));
+            let fH = (2 * Math.atan(sh / (2 * fl)) * (180 / Math.PI));
             document.getElementById('fov-result').innerText = `${fW.toFixed(2)}° x ${fH.toFixed(2)}°`;
-            let cw = document.getElementById('fov-simulator-container').clientWidth, cm = 2.5 / (parseFloat(document.getElementById('fov-zoom').value) / 100);
-            if (aladinSkyMap) aladinSkyMap.setFoV(Math.max(0.01, fW * cm));
-            let rw = cw / cm, rh = rw * (fH / fW), rect = document.getElementById('fov-rectangle'); rect.style.width = rw + "px"; rect.style.height = rh + "px";
+
+            let isMosaic = document.getElementById('capture-mode').value === 'mosaic';
+            let mx = 1, my = 1, overlap = 0;
+            let totFovW = fW, totFovH = fH;
+
+            if (isMosaic) {
+                mx = parseInt(document.getElementById('mosaic-x').value) || 1;
+                my = parseInt(document.getElementById('mosaic-y').value) || 1;
+                overlap = (parseFloat(document.getElementById('mosaic-overlap').value) || 20) / 100;
+                
+                totFovW = fW * mx - fW * (mx - 1) * overlap;
+                totFovH = fH * my - fH * (my - 1) * overlap;
+                document.getElementById('mosaic-fov-result').innerText = `Totale: ${totFovW.toFixed(2)}° x ${totFovH.toFixed(2)}°`;
+            }
+
+            let maxFov = Math.max(totFovW, totFovH);
+            let cw = document.getElementById('fov-simulator-container').clientWidth;
+            let cm = 2.5 / (parseFloat(document.getElementById('fov-zoom').value) / 100); 
+            if (aladinSkyMap) { aladinSkyMap.setFoV(Math.max(0.01, maxFov * cm)); }
+
+            let fovContainer = document.getElementById('fov-rectangle');
+            fovContainer.innerHTML = ''; 
+            fovContainer.style.border = "none";
+            
+            let aladinCurrentFov = Math.max(0.01, maxFov * cm);
+            let pxPerDegree = cw / aladinCurrentFov;
+            
+            let rw = fW * pxPerDegree;
+            let rh = fH * pxPerDegree;
+            let stepPxX = rw * (1 - overlap);
+            let stepPxY = rh * (1 - overlap);
+            let totalW_px = rw + (mx - 1) * stepPxX;
+            let totalH_px = rh + (my - 1) * stepPxY;
+
+            fovContainer.style.width = totalW_px + "px";
+            fovContainer.style.height = totalH_px + "px";
+            fovContainer.style.left = `calc(50% - ${totalW_px/2}px)`;
+            fovContainer.style.top = `calc(50% - ${totalH_px/2}px)`;
+
+            for (let i = 0; i < mx; i++) {
+                for (let j = 0; j < my; j++) {
+                    let panel = document.createElement('div');
+                    panel.style.position = "absolute";
+                    panel.style.width = rw + "px";
+                    panel.style.height = rh + "px";
+                    panel.style.left = (i * stepPxX) + "px";
+                    panel.style.top = (j * stepPxY) + "px";
+                    panel.style.border = "2px solid #ff4444";
+                    panel.style.boxSizing = "border-box";
+                    panel.style.boxShadow = "inset 0 0 10px rgba(255, 68, 68, 0.3)";
+                    
+                    let pNum = document.createElement('span');
+                    pNum.innerText = (j * mx + i + 1);
+                    pNum.style.position = "absolute";
+                    pNum.style.top = "2px";
+                    pNum.style.left = "4px";
+                    pNum.style.color = "#ff4444";
+                    pNum.style.fontWeight = "bold";
+                    pNum.style.fontSize = "12px";
+                    
+                    panel.appendChild(pNum);
+                    fovContainer.appendChild(panel);
+                }
+            }
+
+            if (targetSelezionato && targetSelezionato.size) {
+                let currentTotalArcmin = Math.min(totFovW, totFovH) * 60; 
+                if (targetSelezionato.size > (currentTotalArcmin * 0.9)) { 
+                    document.getElementById('fov-warning-msg').style.display = 'block'; 
+                } else { 
+                    document.getElementById('fov-warning-msg').style.display = 'none'; 
+                }
+            } else { 
+                document.getElementById('fov-warning-msg').style.display = 'none'; 
+            }
         }
 
         function disegnaGraficoAltezza() {
@@ -936,7 +1064,20 @@
         function calcolaTempi() {
             let tS = document.getElementById('time-start').value, tE = document.getElementById('time-end').value; if(!tS || !tE) return;
             let dS = new Date(`1970-01-01T${tS}:00`), dE = new Date(`1970-01-01T${tE}:00`); if (dE <= dS) dE.setDate(dE.getDate() + 1);
-            let aS = (dE - dS) / 1000; document.getElementById('calc-available').innerText = `${Math.floor(aS/3600)}h ${Math.floor((aS%3600)/60)}m`;
+            let aS = (dE - dS) / 1000; 
+            let totalSeconds = aS; // Salva il tempo globale
+            
+            let isMosaic = document.getElementById('capture-mode').value === 'mosaic';
+            let panels = 1;
+            if (isMosaic) {
+                let mx = parseInt(document.getElementById('mosaic-x').value) || 1;
+                let my = parseInt(document.getElementById('mosaic-y').value) || 1;
+                panels = mx * my;
+                document.getElementById('mosaic-total-badge').innerText = `Target: ${panels} Pannelli`;
+                aS = aS / panels;
+            }
+            document.getElementById('calc-available').innerHTML = isMosaic ? `<span style="font-size:0.6em; color:#ffaa00;">${t("time_per_panel")}<br></span>${Math.floor(aS/3600)}h ${Math.floor((aS%3600)/60)}m` : `${Math.floor(aS/3600)}h ${Math.floor((aS%3600)/60)}m`;
+
             let fL = document.getElementById('sensor-type').value === 'mono' ? framesMono : framesColor, tSec = 0, tLF = 0;
             
             fL.forEach(f => {
@@ -962,7 +1103,16 @@
             if (!targetSelezionato) { alert(t("alert_planetarium")); return; }
             let tS = document.getElementById('time-start').value, tE = document.getElementById('time-end').value; if(!tS || !tE) { alert(t("alert_times")); return; }
             let dS = new Date(`1970-01-01T${tS}:00`), dE = new Date(`1970-01-01T${tE}:00`); if (dE <= dS) dE.setDate(dE.getDate() + 1);
-            let aS = (dE - dS) / 1000, isM = document.getElementById('sensor-type').value === 'mono', fL = isM ? framesMono : framesColor, cS = 0;
+            let aS = (dE - dS) / 1000;
+            
+            let isMosaic = document.getElementById('capture-mode').value === 'mosaic';
+            if (isMosaic) {
+                let mx = parseInt(document.getElementById('mosaic-x').value) || 1;
+                let my = parseInt(document.getElementById('mosaic-y').value) || 1;
+                aS = aS / (mx * my);
+            }
+
+            let isM = document.getElementById('sensor-type').value === 'mono', fL = isM ? framesMono : framesColor, cS = 0;
             
             fL.forEach(f => { if (f.id.includes('dark') || f.id.includes('bias')) cS += (parseInt(document.getElementById(`${f.id}-count`).value)||0) * (parseInt(document.getElementById(`${f.id}-exp`).value)||0); });
             let rS = aS - cS; if (rS <= 0) { alert(t("alert_calib")); return; }
@@ -1056,6 +1206,87 @@
 
             let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(ninaJSON, null, 2));
             let dlAnchorElem = document.createElement('a'); dlAnchorElem.setAttribute("href", dataStr); dlAnchorElem.setAttribute("download", `AD_Seq_${targetSelezionato.name.replace(/\s+/g, '_')}.json`); document.body.appendChild(dlAnchorElem); dlAnchorElem.click(); dlAnchorElem.remove();
+        }
+
+        // --- MOTORE REPORT MOSAICO ---
+        function apriReport() {
+            if (!targetSelezionato) { alert(t("alert_planetarium")); return; }
+            let isM = document.getElementById('sensor-type').value === 'mono';
+            let frameList = isM ? framesMono : framesColor;
+            
+            let mx = parseInt(document.getElementById('mosaic-x').value) || 1;
+            let my = parseInt(document.getElementById('mosaic-y').value) || 1;
+            let overlap = parseInt(document.getElementById('mosaic-overlap').value) || 20;
+            let panels = mx * my;
+
+            let tS = document.getElementById('time-start').value;
+            let tE = document.getElementById('time-end').value;
+            if(!tS || !tE) { alert(t("alert_times")); return; }
+            let dS = new Date(`1970-01-01T${tS}:00`); let dE = new Date(`1970-01-01T${tE}:00`); 
+            if (dE <= dS) dE.setDate(dE.getDate() + 1);
+            let aS = (dE - dS) / 1000;
+            
+            let formatTime = (secs) => `${Math.floor(secs/3600)}h ${Math.floor((secs%3600)/60)}m`;
+            let totalTimeStr = formatTime(aS);
+            let panelTimeStr = formatTime(aS / panels);
+            
+            let dC = document.getElementById('dither-check').checked;
+            let dFreq = document.getElementById('dither-freq').value;
+
+            let planHtml = '';
+            let rawText = `=== DOSSIER MOSAICO ===\nTARGET: ${getLocalizedName(targetSelezionato)}\n`;
+            rawText += `PANNELLI: ${mx}x${my} (${panels} totali)\nSOVRAPPOSIZIONE: ${overlap}%\nTEMPO TOTALE: ${totalTimeStr}\n\n`;
+            rawText += `--- STRATEGIA SINGOLO PANNELLO ---\nTempo max a pannello: ${panelTimeStr}\nDithering: ${dC ? 'Ogni '+dFreq+' scatti' : 'Disattivato'}\n\n--- PIANO DI SCATTO ---\n`;
+
+            let hasPoses = false;
+            frameList.forEach(f => {
+                let count = parseInt(document.getElementById(`${f.id}-count`).value) || 0;
+                let exp = parseInt(document.getElementById(`${f.id}-exp`).value) || 0;
+                if(count > 0 && exp > 0) {
+                    hasPoses = true;
+                    let filterName = (isM && (!f.id.includes('dark') && !f.id.includes('bias'))) ? document.getElementById(`nina-name-${f.id}`).value : f.name;
+                    planHtml += `<div class="report-line"><span>${filterName}</span><b>${count}x ${exp}s</b></div>`;
+                    rawText += `${filterName}: ${count}x ${exp}s\n`;
+                }
+            });
+
+            if (!hasPoses) { alert(t("alert_noseq")); return; }
+
+            let html = `
+                <div class="report-section">
+                    <h4>${t("report_general")}</h4>
+                    <div class="report-line"><span>Target:</span><b>${getLocalizedName(targetSelezionato)}</b></div>
+                    <div class="report-line"><span>Griglia:</span><b>${mx}x${my} (${panels})</b></div>
+                    <div class="report-line"><span>${t("overlap").replace(':','')} :</span><b>${overlap}%</b></div>
+                    <div class="report-line"><span>Tempo Totale:</span><b>${totalTimeStr}</b></div>
+                </div>
+                <div class="report-section">
+                    <h4>${t("report_strategy")}</h4>
+                    <div class="report-line"><span style="color:#44ff44;">Tempo a Pannello:</span><b style="color:#44ff44;">${panelTimeStr}</b></div>
+                    <div class="report-line"><span>Dithering:</span><b>${dC ? dFreq+' frames' : 'Off'}</b></div>
+                </div>
+                <div class="report-section">
+                    <h4>${t("report_plan")}</h4>
+                    ${planHtml}
+                </div>
+            `;
+            
+            document.getElementById('report-content').innerHTML = html;
+            document.getElementById('btn-copy-report').setAttribute('data-raw', rawText);
+            document.getElementById('btn-copy-report').innerHTML = `📋 ${t("copy_report")}`;
+            document.getElementById('report-modal').style.display = 'block';
+        }
+
+        function chiudiReport() {
+            document.getElementById('report-modal').style.display = 'none';
+        }
+
+        function copiaReport() {
+            let txt = document.getElementById('btn-copy-report').getAttribute('data-raw');
+            navigator.clipboard.writeText(txt).then(() => {
+                document.getElementById('btn-copy-report').innerHTML = `✅ ${t("copied")}`;
+                setTimeout(() => { document.getElementById('btn-copy-report').innerHTML = `📋 ${t("copy_report")}`; }, 2000);
+            });
         }
 
         window.addEventListener('resize', () => { if(document.getElementById('planning-view').style.display === 'block') aggiornaFOV(); });
