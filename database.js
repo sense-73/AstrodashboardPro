@@ -152,7 +152,7 @@ const dsoDatabase = [
         id: "m104", name: "M104", size: 8.6, icon: "🛸", ra: 12.66, dec: -11.62, 
         it: "Galassia Sombrero", en: "Sombrero Galaxy", es: "Galaxia del Sombrero", zh: "草帽星系",
         type: "Galassia a Spirale", mag: "+8.0", dist: "31 Milioni a.l.", link: "https://it.wikipedia.org/wiki/Galassia_Sombrero", 
-        desc: "Divisa da un netto anello di polveri scure.", tips: "Oggetto piccolo. Focale generosa e attenzione a non sovraesporre il nucleo per mantenere leggibile la banda oscura." 
+        desc: "Divisa da un netto anello di polveri scure.", tips: "Oggetto piccolo. Focale generosa e attenzione a non sovraesporre il nucleo per mantener leggibile la banda oscura." 
     },
     { 
         id: "m106", name: "M106", size: 18, icon: "🌀", ra: 12.31, dec: 47.30, 
@@ -184,7 +184,7 @@ const dsoDatabase = [
         id: "ic5070", name: "IC 5070", size: 80, icon: "🦤", ra: 20.85, dec: 44.35, 
         it: "Nebulosa Pellicano", en: "Pelican Nebula", es: "Nebulosa del Pelícano", zh: "鹈鹕星云",
         type: "Nebulosa a Emissione", mag: "+8.0", dist: "1.800 a.l.", link: "https://it.wikipedia.org/wiki/Nebulosa_Pellicano", 
-        desc: "Situata proprio accanto alla Nebulosa Nord America (NGC 7000), separata da una banda di polveri oscure.", tips: "Perfetta per la palette SHO. Presenta incredibili pilastri di polvere (proboscidi) simili ai Pilastri della Creazione, che richiedono buona risoluzione e molta integrazione." 
+        desc: "Situata proprio accanto alla Nebulosa Nord America (NGC 7000), separata da una banda di polveri oscure.", tips: "Perfetta per la palette SHO. Presenta incredibili pilastri di polvere (proboscidi) simili ai Pilastri della Creazione, che richiedono buena risoluzione e molta integrazione." 
     },
     { 
         id: "ngc7000", name: "NGC 7000", size: 120, icon: "🌎", ra: 20.98, dec: 44.33, 
@@ -244,7 +244,7 @@ const dsoDatabase = [
         id: "ngc5907", name: "NGC 5907", size: 12, icon: "🌌", ra: 15.26, dec: 56.33, 
         it: "Galassia Scheggia", en: "Splinter Galaxy", es: "Galaxia Astilla", zh: "碎片星系",
         type: "Galassia a Spirale", mag: "+10.3", dist: "50 Milioni a.l.", link: "https://it.wikipedia.org/wiki/NGC_5907", 
-        desc: "La Galassia Scheggia (Splinter Galaxy) è una galassia a spirale vista perfettamente di taglio (edge-on) nella costellazione del Dragone. È nota per la sua sottile e lunga striscia di polveri scure.", tips: "Essendo una galassia vista di taglio, il contrasto con il fondo cielo è vitale. Usa esclusivamente filtri a banda larga (L-RGB). Richiede un cielo molto buio per evidenziare la delicata banda di polveri centrale che la taglia a metà." 
+        desc: "La Galassia Scheggia (Splinter Galaxy) è una galassia a spirale vista perfectamente di taglio (edge-on) nella costellazione del Dragone. È nota per la sua sottile e lunga striscia di polveri scure.", tips: "Essendo una galassia vista di taglio, el contrasto con el fondo cielo è vitale. Usa exclusivamente filtri a banda larga (L-RGB). Richiede un cielo molto buio per evidenziare la delicata banda di polveri centrale che la taglia a metà." 
     },
     { 
         id: "ngc5092", name: "NGC 5092", size: 2, icon: "🌌", ra: 13.33, dec: -23.00, 
@@ -274,7 +274,7 @@ const dsoDatabase = [
         id: "ngc253", name: "NGC 253", size: 27, icon: "🌪️", ra: 0.79, dec: -25.28, 
         it: "Galassia dello Scultore", en: "Sculptor Galaxy", es: "Galaxia del Escultor", zh: "玉夫座星系",
         type: "Galassia Starburst", mag: "+7.2", dist: "11 Milioni a.l.", link: "https://it.wikipedia.org/wiki/Galassia_dello_Scultore", 
-        desc: "Galassia con un altissimo tasso di formazione stellare (starburst) e dalle dimensioni apparenti notevoli.", tips: "A causa della sua declinazione molto bassa dall'Italia, sfrutta solo le notti con ottimo seeing e senza inquinamento luminoso verso l'orizzonte sud." 
+        desc: "Galassia con un altissimo tasso di formación stellare (starburst) e dalle dimensioni apparenti notevoli.", tips: "A causa della sua declinazione molto bassa dall'Italia, sfrutta solo le notti con ottimo seeing e senza inquinamento luminoso verso l'orizzonte sud." 
     },
     { 
         id: "ic434", name: "IC 434", size: 90, icon: "🐴", ra: 5.68, dec: -2.46, 
@@ -299,5 +299,51 @@ const dsoDatabase = [
         it: "Nebulosa Grotta", en: "Cave Nebula", es: "Nebulosa de la Cueva", zh: "洞穴星云",
         type: "Nebulosa a Emissione", mag: "+7.7", dist: "2.400 a.l.", link: "https://it.wikipedia.org/wiki/Sh2-155", 
         desc: "Complessa regione di gas a emissione, riflessione e polveri scure nel Cefeo che forma una figura che ricorda l'ingresso di una caverna profonda.", tips: "Target molto ostico. La luminosità superficiale è bassissima, richiede una pazienza infinita in integrazione, specialmente usando filtri a banda stretta." 
+    },
+
+    // ==============================================================
+    // --- GIOIELLI DELL'EMISFERO AUSTRALE (Nuove aggiunte!) ---
+    // ==============================================================
+    { 
+        id: "ngc3372", name: "NGC 3372", size: 120, icon: "🔥", ra: 10.73, dec: -59.86, 
+        it: "Nebulosa della Carena", en: "Carina Nebula", es: "Nebulosa de la Quilla", zh: "船底座星云",
+        type: "Nebulosa a Emissione", mag: "+1.0", dist: "8.500 a.l.", link: "https://it.wikipedia.org/wiki/Nebulosa_della_Carena", 
+        desc: "Una delle nebulose più grandi e luminose di tutta la volta celeste, visibile solo dall'emisfero australe. Contiene la stella ipergigante Eta Carinae.", tips: "Emette fortemente in tutta la banda stretta (SHO). Un target immenso, perfetto per mosaici ad altissima risoluzione." 
+    },
+    { 
+        id: "ngc2070", name: "NGC 2070", size: 40, icon: "🕷️", ra: 5.64, dec: -69.10, 
+        it: "Nebulosa Tarantola", en: "Tarantula Nebula", es: "Nebulosa de la Tarántula", zh: "蜘蛛星云",
+        type: "Regione H II", mag: "+8.0", dist: "160.000 a.l.", link: "https://it.wikipedia.org/wiki/Nebulosa_Tarantola", 
+        desc: "Situata nella Grande Nube di Magellano, è la regione di formazione stellare più attiva di tutto il Gruppo Locale.", tips: "Nonostante sia in un'altra galassia, è luminosissima. Ottima sia in LRGB che in banda stretta (HOO)." 
+    },
+    { 
+        id: "ngc5139", name: "Omega Centauri", size: 36, icon: "🎆", ra: 13.44, dec: -47.47, 
+        it: "Omega Centauri", en: "Omega Centauri", es: "Omega Centauri", zh: "半人马座ω",
+        type: "Ammasso Globulare", mag: "+3.9", dist: "15.800 a.l.", link: "https://it.wikipedia.org/wiki/Omega_Centauri", 
+        desc: "Il più grande ammasso globulare della Via Lattea, contenente circa 10 milioni di stelle. Forse il nucleo di una galassia nana assorbita.", tips: "Target puramente visivo/LRGB. Pose molto brevi per non saturare il densissimo e brillante nucleo." 
+    },
+    { 
+        id: "ngc5128", name: "Centaurus A", size: 25, icon: "🍔", ra: 13.42, dec: -43.01, 
+        it: "Galassia Centaurus A", en: "Centaurus A", es: "Centaurus A", zh: "半人马座A",
+        type: "Galassia Lenticolare", mag: "+6.8", dist: "13 Milioni a.l.", link: "https://it.wikipedia.org/wiki/Centaurus_A", 
+        desc: "Galassia squarciata da una colossale banda di polveri oscure, sede di un buco nero supermassiccio estremamente attivo.", tips: "La banda di polvere è ricca di regioni di formazione stellare rossa: un'integrazione di H-Alpha è altamente raccomandata." 
+    },
+    { 
+        id: "lmc", name: "LMC", size: 600, icon: "☁️", ra: 5.39, dec: -69.75, 
+        it: "Grande Nube di Magellano", en: "Large Magellanic Cloud", es: "Gran Nube de Magallanes", zh: "大麦哲伦星系",
+        type: "Galassia Irregolare", mag: "+0.9", dist: "163.000 a.l.", link: "https://it.wikipedia.org/wiki/Grande_Nube_di_Magellano", 
+        desc: "Galassia satellite della Via Lattea, visibile come una nuvola luminosa ad occhio nudo nel cielo australe.", tips: "Oggetto titanico. Adatto solo a lenti grandangolari (es. 50mm - 135mm) o a enormi progetti di mosaico." 
+    },
+    { 
+        id: "smc", name: "SMC", size: 300, icon: "☁️", ra: 0.88, dec: -72.83, 
+        it: "Piccola Nube di Magellano", en: "Small Magellanic Cloud", es: "Pequeña Nube de Magallanes", zh: "小麦哲伦星系",
+        type: "Galassia Irregolare", mag: "+2.7", dist: "200.000 a.l.", link: "https://it.wikipedia.org/wiki/Piccola_Nube_di_Magellano", 
+        desc: "La compagna più piccola della LMC. Un'altra vicina galassia satellite visibile a occhio nudo.", tips: "Anch'essa richiede campi molto ampi. Ottima resa con fotocamere a colori (OSC) per catturare la varietà stellare." 
+    },
+    { 
+        id: "m83", name: "M83", size: 12, icon: "🌀", ra: 13.60, dec: -29.86, 
+        it: "Girandola del Sud", en: "Southern Pinwheel", es: "Molinete del Sur", zh: "南风车星系",
+        type: "Galassia a Spirale", mag: "+7.5", dist: "15 Milioni a.l.", link: "https://it.wikipedia.org/wiki/M83_(astronomia)", 
+        desc: "Magnifica galassia a spirale barrata, famosa per i suoi bracci ricchissimi di giovani ammassi blu e rossi.", tips: "Splendido target per focali oltre i 600mm. Riprendi in L-RGB e spingi i colori in post-produzione." 
     }
 ];
