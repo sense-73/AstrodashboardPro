@@ -23,7 +23,6 @@
     <script src="database.js"></script>
 
     <style>
-        * { box-sizing: border-box; }
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #121212; color: #e0e0e0; text-align: center; margin: 0; padding: 20px; }
         h2 { color: #bb86fc; border-bottom: 1px solid #333; padding-bottom: 10px; margin-top: 0; display: flex; align-items: center; justify-content: center; gap: 10px;}
         h3 { margin-top: 0; color: #fff; display: flex; align-items: center; gap: 8px;}
@@ -33,7 +32,7 @@
         .info-icon { font-size: 0.9em; cursor: pointer; opacity: 0.6; transition: 0.2s; filter: grayscale(100%); margin-left: 5px; }
         .info-icon:hover { opacity: 1; filter: grayscale(0) drop-shadow(0 0 5px rgba(187, 134, 252, 0.8)); transform: scale(1.1);}
         
-        .main-header { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; max-width: 1200px; margin: 0 auto 20px auto; background: #1a1a1a; padding: 15px 25px; border-radius: 12px; border: 1px solid #333; box-shadow: 0 5px 15px rgba(0,0,0,0.5); width: 100%;}
+        .main-header { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; max-width: 1200px; margin: 0 auto 20px auto; background: #1a1a1a; padding: 15px 25px; border-radius: 12px; border: 1px solid #333; box-shadow: 0 5px 15px rgba(0,0,0,0.5); box-sizing: border-box; width: 100%;}
         .logo-container { justify-self: center; }
         .center-logo { height: 100px; object-fit: contain; filter: drop-shadow(0 0 8px rgba(187, 134, 252, 0.2));}
         .author-section { display: flex; align-items: center; gap: 15px; justify-self: end; text-align: right;}
@@ -59,14 +58,14 @@
         .input-group { margin-bottom: 12px; position: relative; }
         label { display: inline-block; width: 100px; color: #aaa; font-size: 0.9em;}
         input[type="text"]:not(.search-local-input), input[type="number"], select { width: calc(100% - 125px); cursor: pointer; }
-        input[type="text"], input[type="number"], select, input[type="time"] { padding: 8px; border-radius: 4px; border: 1px solid #333; background-color: #2c2c2c; color: #fff; font-family: inherit;}
+        input[type="text"], input[type="number"], select, input[type="time"] { padding: 8px; border-radius: 4px; border: 1px solid #333; background-color: #2c2c2c; color: #fff; font-family: inherit; box-sizing: border-box;}
         input[type="time"] { width: 130px !important; text-align: center; } 
         #dropdown-risultati { list-style: none; padding: 0; margin: 0; position: absolute; width: calc(100% - 125px); background-color: #2c2c2c; border: 1px solid #444; border-radius: 4px; max-height: 200px; overflow-y: auto; z-index: 1000; left: 105px; display: none; text-align: left;}
         #dropdown-risultati li { padding: 10px; cursor: pointer; border-bottom: 1px solid #444; font-size: 0.9em; }
         #dropdown-risultati li:hover { background-color: #bb86fc; color: #121212; font-weight: bold; }
         #map { height: 500px; width: 100%; border: 2px solid #333; border-radius: 8px; z-index: 1; }
         
-        .timeline-container { margin-top: 20px; padding: 15px; background-color: #2a2a2a; border-radius: 8px; text-align: center; width: 100%;}
+        .timeline-container { margin-top: 20px; padding: 15px; background-color: #2a2a2a; border-radius: 8px; text-align: center; width: 100%; box-sizing: border-box;}
         input[type="range"] { width: 100%; cursor: pointer; margin-top: 10px;}
         .time-display { font-size: 1.3em; color: #bb86fc; font-weight: bold; margin-bottom: 5px; text-transform: capitalize;}
         
@@ -175,14 +174,43 @@
         .btn-copy { background: #333; color: #fff; border: 1px solid #bb86fc; padding: 12px 15px; border-radius: 5px; cursor: pointer; margin-top: 10px; width: 100%; font-weight: bold; transition: 0.3s; font-size: 1em; }
         .btn-copy:hover { background: #bb86fc; color: #121212; }
 
-        .floating-tooltip { position: absolute; background: rgba(20, 20, 20, 0.95); border: 1px solid #bb86fc; border-left: 4px solid #bb86fc; color: #ddd; padding: 12px 15px; border-radius: 6px; font-size: 0.95em; max-width: 280px; box-shadow: 0 5px 20px rgba(0,0,0,0.9); pointer-events: none; opacity: 0; transition: opacity 0.2s ease-in-out; z-index: 10000; display: none; text-align: left; line-height: 1.5; }
+        .floating-tooltip {
+            position: absolute;
+            background: rgba(20, 20, 20, 0.95);
+            border: 1px solid #bb86fc;
+            border-left: 4px solid #bb86fc;
+            color: #ddd;
+            padding: 12px 15px;
+            border-radius: 6px;
+            font-size: 0.95em;
+            max-width: 280px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.9);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s ease-in-out;
+            z-index: 10000;
+            display: none;
+            text-align: left;
+            line-height: 1.5;
+        }
 
+        #guide-view { display: none; text-align: left; max-width: 1000px; margin: 0 auto; background-color: #1e1e1e; padding: 40px; border-radius: 12px; box-shadow: 0 4px 25px rgba(0,0,0,0.8); line-height: 1.7; color: #ddd; }
+        .guide-section { margin-bottom: 35px; padding-bottom: 25px; border-bottom: 1px solid #333;}
+        .guide-section h3 { color: #bb86fc; margin-top: 0; font-size: 1.5em; border-bottom: none;}
+        .guide-section ul { margin-left: 20px; color: #bbb; }
+        .guide-section li { margin-bottom: 12px; }
+        .guide-section strong { color: #fff; }
+        .filosofia-box { background: rgba(187,134,252,0.1); padding: 20px; border-left: 4px solid #bb86fc; border-radius: 4px; margin-bottom: 30px;}
+        
         @media (max-width: 768px) {
-            .main-header { display: flex !important; flex-direction: column; gap: 15px; align-items: center; justify-content: center; text-align: center; padding: 20px 15px; width: 100%; }
+            .main-header { display: flex !important; flex-direction: column; gap: 15px; align-items: center; justify-content: center; text-align: center; padding: 20px 15px; width: 100%; box-sizing: border-box; }
+            .main-header > div { justify-self: center !important; width: 100%; display: flex; flex-direction: column; align-items: center; }
             .lang-container { align-items: center; text-align: center; }
             .author-section { flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+            .author-section > div { align-items: center; text-align: center; }
             .center-logo { height: 80px; }
-            .search-local-input { width: 100% !important; }
+            .search-local-input { width: 100% !important; box-sizing: border-box; }
+            .search-suggestions { width: 100%; }
             .ephemeris-box { flex-direction: column; gap: 15px; text-align: center; }
             .weather-container { border: none; border-top: 1px solid #444; border-bottom: 1px solid #444; padding: 10px 0; width: 100%; }
             .times-grid { grid-template-columns: 1fr 1fr; padding-left: 0; }
@@ -191,6 +219,7 @@
             input[type="text"]:not(.search-local-input), input[type="number"], select, input[type="time"] { width: 100% !important; max-width: 100%; }
             .calc-row { flex-direction: column; align-items: flex-start; gap: 10px; padding-bottom: 15px; }
             .calc-total { text-align: left; width: 100%; padding-left: 10px; font-weight: bold; border-top: 1px dashed #444; padding-top: 5px; }
+            .twilight-grid { grid-template-columns: 1fr 1fr; }
         }
     </style>
 </head>
@@ -200,10 +229,18 @@
         <div class="lang-container">
             <span style="font-size: 0.75em; color: #aaa; font-weight: bold; letter-spacing: 1px; padding-left: 5px;">LANGUAGE</span>
             <div class="lang-toggle">
-                <button class="lang-btn active" id="btn-lang-it" onclick="changeLanguage('it')">ITA</button>
-                <button class="lang-btn" id="btn-lang-en" onclick="changeLanguage('en')">ENG</button>
-                <button class="lang-btn" id="btn-lang-es" onclick="changeLanguage('es')">ESP</button>
-                <button class="lang-btn" id="btn-lang-zh" onclick="changeLanguage('zh')">CHN</button>
+                <button class="lang-btn active" id="btn-lang-it" onclick="changeLanguage('it')">
+                    <svg viewBox="0 0 3 2" style="width: 18px; height: 12px; border-radius: 2px; margin-right: 6px;"><rect width="1" height="2" fill="#009246"/><rect x="1" width="1" height="2" fill="#F1F2F1"/><rect x="2" width="1" height="2" fill="#CE2B37"/></svg>ITA
+                </button>
+                <button class="lang-btn" id="btn-lang-en" onclick="changeLanguage('en')">
+                    <svg viewBox="0 0 60 30" style="width: 18px; height: 12px; border-radius: 2px; margin-right: 6px;"><clipPath id="t"><path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z"/></clipPath><path d="M0,0 v30 h60 v-30 z" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" clip-path="url(#t)" stroke="#C8102E" stroke-width="4"/><path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/><path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/></svg>ENG
+                </button>
+                <button class="lang-btn" id="btn-lang-es" onclick="changeLanguage('es')">
+                    <svg viewBox="0 0 750 500" style="width: 18px; height: 12px; border-radius: 2px; margin-right: 6px;"><rect width="750" height="500" fill="#c60b1e"/><rect y="125" width="750" height="250" fill="#ffc400"/></svg>ESP
+                </button>
+                <button class="lang-btn" id="btn-lang-zh" onclick="changeLanguage('zh')">
+                    <svg viewBox="0 0 30 20" style="width: 18px; height: 12px; border-radius: 2px; margin-right: 6px;"><rect width="30" height="20" fill="#de2910"/><path d="M5,5 l-1,3.07 2.61,-1.9 -2.61,-1.9 1,3.07z" fill="#ffde00"/></svg>CHN
+                </button>
             </div>
         </div>
         <div class="logo-container">
@@ -241,7 +278,7 @@
 
         <div class="container">
             <div class="panel">
-                <h3><span data-i18n="pos_title">📍 Posizione</span></h3>
+                <h3><span data-i18n="pos_title">📍 Posizione</span> <span class="info-icon" onmouseenter="mostraTooltip(this, 'info_pos')" onmouseleave="nascondiTooltip()">ℹ️</span></h3>
                 <div class="input-group">
                     <label for="ricerca" data-i18n="find_place">Trova Luogo:</label>
                     <input type="text" id="ricerca" placeholder="..." data-i18n="search_place" oninput="cercaIndirizzo()">
@@ -252,7 +289,7 @@
             </div>
 
             <div class="panel">
-                <h3><span data-i18n="env_data">🎛️ Dati Ambientali</span></h3>
+                <h3><span data-i18n="env_data">🎛️ Dati Ambientali</span> <span class="info-icon" onmouseenter="mostraTooltip(this, 'info_env')" onmouseleave="nascondiTooltip()">ℹ️</span></h3>
                 <div class="meteo-grid">
                     <div class="meteo-item m-bassa active" id="btn-basse" onclick="toggleLayer('basse')"><h4 data-i18n="low_clouds">Nuvole Basse</h4><span id="val-basse">--%</span></div>
                     <div class="meteo-item m-media disabled" id="btn-medie" onclick="toggleLayer('medie')"><h4 data-i18n="mid_clouds">Nuvole Medie</h4><span id="val-medie">--%</span></div>
@@ -267,35 +304,42 @@
 
         <div class="container" style="flex-direction: column;">
             <div class="timeline-container" style="position: relative;">
+                <span class="info-icon" style="position: absolute; right: 15px; top: 15px; font-size: 1.2em;" onmouseenter="mostraTooltip(this, 'info_map')" onmouseleave="nascondiTooltip()">ℹ️</span>
                 <div id="time-display" class="time-display">Caricamento Timeline Meteo...</div>
                 <input type="range" id="timeSlider" min="0" max="23" value="0" oninput="syncSliders(this.value)" disabled>
+                <div style="display:flex; justify-content: space-between; font-size:0.8em; color:#aaa; padding-top: 5px;">
+                    <span data-i18n="now">Adesso</span><span>+12h</span><span>+24h</span>
+                </div>
             </div>
             <div id="map"></div>
         </div>
 
         <div class="container dso-container" style="flex-direction: column;">
-            <h3><span data-i18n="hybrid_planetarium">🔭 Planetario Predittivo Ibrido</span></h3>
+            <h3><span data-i18n="hybrid_planetarium">🔭 Planetario Predittivo Ibrido</span> <span class="info-icon" onmouseenter="mostraTooltip(this, 'info_planetarium')" onmouseleave="nascondiTooltip()">ℹ️</span></h3>
+            
             <div class="timeline-container" style="margin-top: 10px; margin-bottom: 20px; padding: 10px; background-color: #222;">
                 <div id="astro-time-display" class="time-display" style="color: #44ff44;">Caricamento Timeline Astro...</div>
                 <input type="range" id="astroSlider" min="0" max="23" value="0" oninput="syncSliders(this.value)" disabled>
             </div>
+
             <div class="astro-section">
-                <h4 style="color: #ffaa00; margin-bottom: 0; border-bottom: 1px solid #333; padding-bottom: 5px;" data-i18n="solar_system">🪐 Sistema Solare</h4>
+                <h4 style="color: #ffaa00; margin-bottom: 0; margin-top: 10px; border-bottom: 1px solid #333; padding-bottom: 5px;" data-i18n="solar_system">🪐 Sistema Solare</h4>
                 <div class="horizontal-scroll" id="planets-list"></div>
             </div>
+
             <div class="astro-section" style="margin-top: 15px; margin-bottom: 25px;">
-                <h4 style="color: #bb86fc; margin-bottom: 0; border-bottom: 1px solid #333; padding-bottom: 5px;" data-i18n="rec_targets">🌌 Oggetti Consigliati</h4>
+                <h4 style="color: #bb86fc; margin-bottom: 0; margin-top: 10px; border-bottom: 1px solid #333; padding-bottom: 5px;" data-i18n="rec_targets">🌌 Oggetti Consigliati</h4>
                 <div class="horizontal-scroll" id="dso-list"></div>
             </div>
 
             <div class="search-local-box">
-                <h4><span data-i18n="free_search">🔍 Ricerca Libera Oggetto</span></h4>
+                <h4><span data-i18n="free_search">🔍 Ricerca Libera Oggetto</span> <span class="info-icon" onmouseenter="mostraTooltip(this, 'info_search')" onmouseleave="nascondiTooltip()">ℹ️</span></h4>
                 <div style="display: flex; justify-content: center; align-items: flex-start; flex-wrap: wrap; gap: 10px; margin-top: 15px;">
                     <div class="search-wrapper">
-                        <input type="text" id="search-dash-input" class="search-local-input" placeholder="..." autocomplete="off">
+                        <input type="text" id="search-dash-input" class="search-local-input" placeholder="..." data-i18n="search_target" autocomplete="off">
                         <ul id="sugg-dash" class="search-suggestions"></ul>
                     </div>
-                    <button class="btn-search" onclick="eseguiRicerca('search-dash-input')">Pianifica 🚀</button>
+                    <button class="btn-search" onclick="eseguiRicerca('search-dash-input')" data-i18n="plan_target_btn">Pianifica 🚀</button>
                 </div>
                 <p id="status-search-dash-input" class="search-status"></p>
             </div>
@@ -308,9 +352,10 @@
             <div class="search-wrapper" style="margin-bottom: 30px;">
                 <div style="display: flex; align-items: center;">
                     <input type="text" id="search-plan-input" class="search-local-input" placeholder="..." autocomplete="off">
-                    <button class="btn-search" onclick="eseguiRicerca('search-plan-input')">Cambia</button>
+                    <button class="btn-search" onclick="eseguiRicerca('search-plan-input')" data-i18n="change_target">Cambia</button>
                 </div>
                 <ul id="sugg-plan" class="search-suggestions"></ul>
+                <p id="status-search-plan-input" class="search-status" style="position:absolute; top:100%; left:0; text-align: left;"></p>
             </div>
         </div>
         
@@ -323,36 +368,32 @@
                 <div class="stat-box t-mag"><span data-i18n="app_mag">Magnitudine App.</span><b id="stat-mag">--</b></div>
                 <div class="stat-box t-dist"><span data-i18n="distance">Distanza</span><b id="stat-dist">--</b></div>
             </div>
-            <div class="info-box"><span id="target-description">Caricamento...</span><br><a href="#" id="target-wiki" class="wiki-link" target="_blank">🔗 Wikipedia</a></div>
+            <div class="info-box"><span id="target-description">Caricamento...</span><br><a href="#" id="target-wiki" class="wiki-link" target="_blank" data-i18n="wiki_link">🔗 Wikipedia</a></div>
             <div class="tip-box"><b data-i18n="tactical_tip">💡 Consiglio Tattico:</b> <span id="target-tips">--</span></div>
         </div>
 
         <div class="planning-grid">
             <div class="panel">
-                <h3><span data-i18n="optical_setup">📸 Setup Ottico</span></h3>
+                <h3><span data-i18n="optical_setup">📸 Setup Ottico</span> <span class="info-icon" onmouseenter="mostraTooltip(this, 'info_setup')" onmouseleave="nascondiTooltip()">ℹ️</span></h3>
                 <div class="input-group">
                     <label data-i18n="telescope">Telescopio:</label>
                     <select id="preset-telescope" onchange="applicaPresetTelescopio()">
-                        <option value="">-- Seleziona --</option>
+                        <option value="" data-i18n="select_opt">-- Seleziona --</option>
                     </select>
                 </div>
                 <div class="input-group">
                     <label data-i18n="focal_len">Focale (mm):</label>
                     <input type="number" id="focal-length" value="400" oninput="aggiornaFOV()">
                 </div>
-                <div class="input-group">
-                    <label style="color: #ffaa00;">Diametro (mm):</label>
-                    <input type="number" id="aperture" value="72" oninput="aggiornaFOV()">
-                </div>
                 <hr style="border: 1px solid #333; margin: 15px 0;">
                 <div class="input-group">
                     <label data-i18n="sensor">Sensore:</label>
                     <select id="preset-sensor" onchange="applicaPresetSensore()">
-                        <option value="">-- Seleziona --</option>
+                        <option value="" data-i18n="select_opt">-- Seleziona --</option>
                     </select>
                 </div>
                 <div class="input-group"><label data-i18n="width">Larg. W (mm):</label><input type="number" id="sensor-width" value="23.5" step="0.1" oninput="aggiornaFOV()"></div>
-                <div class="input-group"><label data-i18n="height">Alt. H (mm):</label><input type="number" id="sensor-height" value="15.7" step="0.1" oninput="aggiornaFOV()"></div>
+                <div class="input-group"><label data-i18n="height">Alet. H (mm):</label><input type="number" id="sensor-height" value="15.7" step="0.1" oninput="aggiornaFOV()"></div>
                 
                 <div style="margin-top: 15px; padding: 15px; background-color: #222; border-radius: 8px; border: 1px solid #444;">
                     <div class="input-group" style="margin-bottom: 5px; display: flex; align-items: center;">
@@ -383,7 +424,7 @@
                     <h4 style="margin:0 0 5px 0; color:#aaa;" data-i18n="fov_calc">Campo Inquadrato Calcolato</h4>
                     <p id="fov-result" style="font-weight: bold; color: #44ff44; font-size: 1.4em; margin: 0;">--° x --°</p>
                     <p id="mosaic-fov-result" style="margin: 5px 0 0 0; font-size: 1em; color: #bb86fc; font-weight: bold; display: none;">Totale: --° x --°</p>
-                    <p id="fov-warning-msg" style="color: #ffaa00; font-size: 0.85em; margin-top: 10px; display: none; font-weight: bold;">⚠️ Valuta un mosaico.</p>
+                    <p id="fov-warning-msg" style="color: #ffaa00; font-size: 0.85em; margin-top: 10px; display: none; font-weight: bold;" data-i18n="fov_warning">⚠️ L'oggetto è più grande del tuo campo inquadrato! Valuta un mosaico.</p>
                 </div>
             </div>
             
@@ -405,7 +446,7 @@
             </div>
         </div>
 
-        <h2 id="calc-title" style="margin-top: 30px; border-top: 1px solid #333; padding-top: 20px;"><span data-i18n="smart_calc">⏱️ Calcolatore Sessione Smart AI</span></h2>
+        <h2 id="calc-title" style="margin-top: 30px; border-top: 1px solid #333; padding-top: 20px;"><span data-i18n="smart_calc">⏱️ Calcolatore Sessione Smart AI</span> <span class="info-icon" onmouseenter="mostraTooltip(this, 'info_smart')" onmouseleave="nascondiTooltip()">ℹ️</span></h2>
         
         <div class="twilight-grid">
             <div class="twilight-item"><span class="icon">🌇</span><span class="label" data-i18n="sunset">Tramonto</span><b id="info-sunset">--:--</b></div>
@@ -432,9 +473,11 @@
                     <h3 style="margin: 0;"><span data-i18n="seq_setup">Impostazione Sequenza</span></h3>
                     <span id="mosaic-total-badge" style="display:none; background: #bb86fc; color: #121212; padding: 4px 10px; border-radius: 4px; font-size: 0.9em; font-weight: bold;"></span>
                 </div>
+                
                 <div class="smart-button-container">
                     <button class="btn-smart" onclick="generaSequenzaOttimale()" data-i18n="gen_seq_btn">✨ Genera Sequenza Ottimale</button>
                 </div>
+
                 <div style="display:flex; justify-content: space-between; margin-bottom: 10px; padding:0 10px; font-size:0.8em; color:#aaa;">
                     <span style="width:140px;" data-i18n="use_frame">Usa | Frame</span>
                     <span data-i18n="poses_sec">Pose x Sec.</span>
@@ -447,6 +490,7 @@
                     <div style="display:flex; align-items:center; width: 140px;">
                         <input type="checkbox" id="dither-check" checked style="margin-right:10px; transform: scale(1.2); cursor: pointer;" onchange="calcolaTempi()">
                         <label style="cursor: pointer; color: #ffaa00;" onclick="document.getElementById('dither-check').click()">Dither</label>
+                        <span class="info-icon" style="margin-left: 8px; color: #ffaa00; font-size: 1.1em;" onmouseenter="mostraTooltip(this, 'info_dither')" onmouseleave="nascondiTooltip()">ℹ️</span>
                     </div>
                     <div class="calc-inputs" style="font-size: 0.85em; color: #aaa; display: flex; align-items: center; gap: 6px;">
                         <span data-i18n="every">Ogni</span> <input type="number" id="dither-freq" value="3" min="1" oninput="calcolaTempi()" style="width: 45px !important; padding: 5px !important; text-align: center;">
@@ -463,12 +507,12 @@
                     <h4 data-i18n="res_time">Tempo Residuo</h4><span id="calc-residual" class="text-green">--h --m</span>
                     <p id="calc-warning" style="margin: 5px 0 0 0; font-size: 0.85em; display: none;" class="text-red" data-i18n="time_overflow">⚠️ Sforamento tempo!</p>
                 </div>
-                <div id="ai-advisor-panel" style="display:none; text-align:left; background:#1a1a1a; padding:15px; border-radius:5px; border:1px solid #333; margin-top:10px;"></div>
             </div>
         </div>
 
         <div class="panel" style="margin-top: 20px; border: 1px solid #bb86fc; background: linear-gradient(180deg, #1a1a1a 0%, #121212 100%);">
-            <h3><span style="color: #bb86fc;" data-i18n="nina_export_title">🚀 Esportazione N.I.N.A. Advanced Sequencer</span></h3>
+            <h3><span style="color: #bb86fc;" data-i18n="nina_export_title">🚀 Esportazione N.I.N.A. Advanced Sequencer</span> <span class="info-icon" onmouseenter="mostraTooltip(this, 'info_nina')" onmouseleave="nascondiTooltip()">ℹ️</span></h3>
+            
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px;">
                 <div style="background: #222; padding: 15px; border-radius: 8px;">
                     <h4 style="margin: 0 0 10px 0; color: #fff;" data-i18n="seq_start">Avvio Sequenza</h4>
@@ -476,7 +520,7 @@
                         <input type="checkbox" id="nina-cool" checked style="transform: scale(1.2);"> <span data-i18n="cool_cam">Raffredda Camera a</span> <input type="number" id="nina-temp" value="-10" style="width: 60px!important; padding: 4px!important;"> °C
                     </label>
                     <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; width: 100%; cursor: pointer; color: #aaa; font-size: 0.9em;">
-                        <input type="checkbox" id="nina-slew" checked style="transform: scale(1.2);"> <span data-i18n="slew_center">Slew & Center</span>
+                        <input type="checkbox" id="nina-slew" checked style="transform: scale(1.2);"> <span data-i18n="slew_center">Slew & Center (Plate Solve)</span>
                     </label>
                     <label style="display: flex; align-items: center; gap: 8px; width: 100%; cursor: pointer; color: #aaa; font-size: 0.9em;">
                         <input type="checkbox" id="nina-guide" checked style="transform: scale(1.2);"> <span data-i18n="start_guide">Avvia Autoguida</span>
@@ -485,7 +529,7 @@
                 <div style="background: #222; padding: 15px; border-radius: 8px;">
                     <h4 style="margin: 0 0 10px 0; color: #fff;" data-i18n="end_sec">Fine / Sicurezza</h4>
                     <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; width: 100%; cursor: pointer; color: #aaa; font-size: 0.9em;">
-                        <input type="checkbox" id="nina-warm" checked style="transform: scale(1.2);"> <span data-i18n="warm_cam">Riscalda Camera</span>
+                        <input type="checkbox" id="nina-warm" checked style="transform: scale(1.2);"> <span data-i18n="warm_cam">Riscalda Camera (Warm Up)</span>
                     </label>
                     <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; width: 100%; cursor: pointer; color: #aaa; font-size: 0.9em;">
                         <input type="checkbox" id="nina-park" checked style="transform: scale(1.2);"> <span data-i18n="park_mount">Parcheggia Montatura</span>
@@ -500,14 +544,16 @@
                     </div>
                 </div>
             </div>
+
             <div style="text-align: center; margin-top: 25px;">
                 <button id="btn-export-nina" class="btn-smart" style="background: linear-gradient(135deg, #ff4444 0%, #aa0000 100%); box-shadow: 0 4px 15px rgba(255, 68, 68, 0.3);" onclick="esportaNINA()" data-i18n="gen_nina_btn">💾 Genera File per N.I.N.A.</button>
                 <button id="btn-report-mosaic" class="btn-smart" style="display: none; background: linear-gradient(135deg, #7c4dff 0%, #3f51b5 100%); box-shadow: 0 4px 15px rgba(124, 77, 255, 0.3);" onclick="apriReport()" data-i18n="gen_report_btn">📝 Genera Report Strategico</button>
-                <p id="nina-mosaic-msg" style="display: none; color: #ffaa00; font-size: 0.9em; margin-top: 15px; padding: 15px; background: rgba(255, 170, 0, 0.1); border-left: 3px solid #ffaa00;">📌 Modalità Mosaico attiva. Usa il Framing Assistant di N.I.N.A.</p>
+                <p id="nina-mosaic-msg" style="display: none; color: #ffaa00; font-size: 0.9em; text-align: justify; line-height: 1.5; margin-top: 15px; padding: 15px; background: rgba(255, 170, 0, 0.1); border-left: 3px solid #ffaa00; border-radius: 4px;" data-i18n="nina_mosaic_msg">📌 Modalità Mosaico attiva. Usa il Framing Assistant di N.I.N.A. per le coordinate.</p>
             </div>
         </div>
     </div>
-<div id="floating-tooltip" class="floating-tooltip"></div>
+
+    <div id="floating-tooltip" class="floating-tooltip"></div>
 
     <div id="report-modal" class="modal">
         <div class="modal-content">
@@ -518,37 +564,51 @@
         </div>
     </div>
 
-    <div id="multinight-modal" class="modal">
-        <div class="modal-content" style="max-width: 700px;">
-            <span class="close-btn" onclick="chiudiMultiNight()">&times;</span>
-            <h2 style="color: #ffaa00; margin-top:0; border-bottom: 1px solid #333; padding-bottom: 15px;">📅 Multi-Night Project Manager</h2>
-            <div style="background: rgba(255, 68, 68, 0.1); border-left: 3px solid #ff4444; padding: 10px; margin-bottom: 15px; border-radius: 4px;">
-                <span style="font-size: 0.85em; color: #ffaaaa; display: block; line-height: 1.4;"><b>⚠️ ATTENZIONE N.I.N.A.:</b> Assicurati che i nomi dei filtri nella "Mappatura Nomi" (nel pannello principale in basso) corrispondano <b>esattamente</b> a quelli scritti nella tua ruota portafiltri, altrimenti il file darà errore!</span>
-            </div>            
-            <div style="display: flex; justify-content: space-between; align-items: center; background: #2a2a2a; padding: 15px; border-radius: 8px; border-left: 4px solid #bb86fc; margin-bottom: 20px;">
-                <div>
-                    <h4 style="margin: 0 0 5px 0; color: #aaa;">Target Consigliato (AI)</h4>
-                    <b id="mn-target-hours" style="font-size: 1.4em; color: #fff;">-- Ore</b>
-                </div>
-                <div style="text-align: right;">
-                    <h4 style="margin: 0 0 5px 0; color: #aaa;">Tempo Pianificato</h4>
-                    <b id="mn-assigned-hours" style="font-size: 1.4em; color: #44ff44;">0 Ore</b>
-                </div>
-            </div>
-            <div id="mn-nights-container" style="display: flex; flex-direction: column; gap: 15px;"></div>
-            <button class="btn-smart" style="margin-top: 20px; width: 100%; background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%); box-shadow: none;" onclick="aggiungiNotte()">➕ Aggiungi Sessione (Notte)</button>
-        </div>
-    </div>
-
     <div id="guide-view">
         <button class="btn-back" style="margin-bottom: 40px;" onclick="chiudiGuida()" data-i18n="back_dash">Torna Indietro</button>
+        
         <div id="guide-it">
             <h2 style="font-size: 2.4em; border-bottom: 2px solid #bb86fc; padding-bottom: 15px; margin-bottom: 30px;">📖 Manuale AstroDashboard PRO</h2>
-            <div class="filosofia-box"><h3 style="color: #fff; margin-top:0;">La Filosofia del Software</h3><p>AstroDashboard è progettata per essere il "Direttore d'Orchestra" della tua strumentazione.</p></div>
+            <div class="filosofia-box"><h3 style="color: #fff; margin-top:0;">La Filosofia del Software</h3><p>AstroDashboard è progettata per essere il "Direttore d'Orchestra" della tua strumentazione. Fonde dati ambientali, calcoli trigonometrici e intelligenza artificiale per eliminare i tempi morti e ottimizzare ogni singolo secondo della tua notte sotto le stelle.</p></div>
+            <div class="guide-section"><h3>🌍 1. Dati Ambientali e Meteo Tattico</h3><ul><li><strong>Mappa a Raggio (50 Km):</strong> Pensata per gli astrofotografi itineranti. Il cerchio ti permette di valutare rapidamente dove spostarti per trovare "buchi di sereno" se la tua zona è coperta.</li><li><strong>Jet Stream:</strong> Il vero nemico del Seeing. Un valore inferiore a 50 km/h garantisce cieli stabili. Oltre i 100 km/h la turbolenza devasterà i dettagli.</li><li><strong>Allarme Umidità:</strong> Se supera l'85% (rosso), accendi le fasce anticondensa al massimo della potenza prima che l'ottica si appanni.</li></ul></div>
+            <div class="guide-section"><h3>🔭 2. Planetario Ibrido e Motore SIMBAD</h3><ul><li><strong>Database Locale (Consigliati):</strong> Memoria di target celebri. Cliccandoli riceverai "Consigli Tattici" specifici (es. filtri raccomandati).</li><li><strong>Ricerca Universale (SIMBAD):</strong> Inserendo il nome di un oggetto esotico (es. NGC o IC rari), l'AI si collegherà in tempo reale all'Università di Strasburgo per estrarne le coordinate assolute.</li></ul></div>
+            <div class="guide-section"><h3>📸 3. Setup Ottico e Pianificazione Mosaici</h3><ul><li><strong>Simulatore FOV:</strong> Inserisci i parametri del tuo telescopio e sensore. La mappa si adatterà istantaneamente per mostrarti l'inquadratura millimetrica.</li><li><strong>Motore Mosaici:</strong> Se il target scelto è più grande del tuo sensore, scatta un allarme visivo (⚠️). Attivando la modalità <strong>Mosaico</strong> e impostando la griglia (es. 2x2), vedrai i pannelli sovrapposti direttamente sulla mappa stellare.</li></ul></div>
+            <div class="guide-section"><h3>✨ 4. Calcolatore Sessione Smart AI</h3><ul><li><strong>Ripartizione Intelligente:</strong> L'AI analizza la tua "finestra di buio" e la riempie con esposizioni ottimali in base al tipo di oggetto e al sensore.</li><li><strong>Calcolo Mosaici:</strong> In modalità mosaico, l'AI è istruita per dividere il tempo notturno totale per il numero di pannelli.</li><li><strong>Dithering:</strong> Inserendo la frequenza di dithering e i secondi di riassestamento, l'AI sottrae questo "tempo fantasma" dal totale, garantendo calcoli precisi.</li></ul></div>
+            <div class="guide-section"><h3>🤖 5. Esportazione N.I.N.A. e Dossier</h3><ul><li><strong>Export JSON (Scatto Singolo):</strong> Genera un file di sequenza perfetto. Trascinalo nell' "Advanced Sequencer" di N.I.N.A. per avviare la sessione in totale autonomia. <em>⚠️ I nomi dei filtri nella Dashboard devono essere identici a quelli impostati su N.I.N.A.</em></li><li><strong>Report Strategico (Mosaici):</strong> In modalità Mosaico, la Dashboard disabilita l'export JSON e genera un <strong>Dossier Strategico</strong>. Copialo, usa il Framing di N.I.N.A. per le coordinate rotazionali, e applica i tempi di posa che l'AI ha calcolato per te.</li></ul></div>
+        </div>
+
+        <div id="guide-en" style="display:none;">
+            <h2 style="font-size: 2.4em; border-bottom: 2px solid #bb86fc; padding-bottom: 15px; margin-bottom: 30px;">📖 AstroDashboard PRO Manual</h2>
+            <div class="filosofia-box"><h3 style="color: #fff; margin-top:0;">Project Philosophy</h3><p>AstroDashboard is designed to be the "Conductor" of your astrophotography setup. It merges environmental data, math, and AI to optimize your night.</p></div>
+            <div class="guide-section"><h3>🌍 1. Tactical Weather Data</h3><ul><li><strong>50km Radius Map:</strong> Crucial for mobile astrophotographers to spot "clear sky holes" in real-time.</li><li><strong>Jet Stream:</strong> The true enemy of Seeing. Below 50 km/h means stable skies. Above 100 km/h: avoid long focal lengths.</li><li><strong>Humidity Alarm:</strong> If it turns red (>85%), max out your dew heaters immediately to prevent fogging.</li></ul></div>
+            <div class="guide-section"><h3>🔭 2. Planetarium & SIMBAD Engine</h3><ul><li><strong>Local DB:</strong> Famous targets come with specific "Tactical Tips" (e.g., core saturation warnings).</li><li><strong>SIMBAD Engine:</strong> Search for exotic objects and the AI fetches absolute coordinates from the University of Strasbourg.</li></ul></div>
+            <div class="guide-section"><h3>📸 3. FOV Simulator & Mosaics</h3><ul><li><strong>Field of View:</strong> Real-time DSS2 framing based on your specific optical tube and sensor geometry.</li><li><strong>Mosaic Engine:</strong> If the target is too large, a warning (⚠️) triggers. Switch to "Mosaic" mode to visualize overlapping panels directly on the star map.</li></ul></div>
+            <div class="guide-section"><h3>✨ 4. Smart AI & Dithering</h3><ul><li><strong>Smart Allocation:</strong> AI calculates your dark window and fills it with optimal subs. For Mono cameras, it automatically balances LRGB times.</li><li><strong>Mosaic Math:</strong> The AI intelligently splits your total night time by the number of panels.</li><li><strong>Dithering:</strong> Input settling seconds. The AI subtracts this "ghost time" from your available night window for frame-perfect calculations.</li></ul></div>
+            <div class="guide-section"><h3>🤖 5. N.I.N.A. Export & Strategic Dossier</h3><ul><li><strong>JSON Export (Single Panel):</strong> Generates a fully automated sequence. Drag it into N.I.N.A.'s Advanced Sequencer. <em>⚠️ Filter names must match your N.I.N.A. config exactly.</em></li><li><strong>Strategic Report (Mosaics):</strong> The Dashboard generates a text <strong>Dossier</strong>: use it to manually input the AI-calculated exposures for each N.I.N.A. panel.</li></ul></div>
+        </div>
+
+        <div id="guide-es" style="display:none;">
+            <h2 style="font-size: 2.4em; border-bottom: 2px solid #bb86fc; padding-bottom: 15px; margin-bottom: 30px;">📖 Manual AstroDashboard PRO</h2>
+            <div class="filosofia-box"><h3 style="color: #fff; margin-top:0;">Filosofía</h3><p>Una plataforma diseñada para ser el "Director de Orquesta" de tu equipo, fusionando datos y matemáticas para optimizar cada segundo de tu noche bajo las estrellas.</p></div>
+            <div class="guide-section"><h3>🌍 1. Clima Táctico</h3><ul><li><strong>Mapa 50km:</strong> Ideal para fotógrafos itinerantes para encontrar "claros en las nubes".</li><li><strong>Jet Stream:</strong> < 50 km/h indica cielos estables. > 100 km/h: turbulencia extrema, evita focales largas.</li><li><strong>Humedad:</strong> Si se pone rojo (>85%), enciende las cintas calentadoras al máximo.</li></ul></div>
+            <div class="guide-section"><h3>🔭 2. Planetario y SIMBAD</h3><ul><li><strong>Motor SIMBAD:</strong> Busca objetos raros y la IA descargará las coordenadas precisas de la Universidad de Estrasburgo.</li></ul></div>
+            <div class="guide-section"><h3>📸 3. FOV y Mosaicos</h3><ul><li><strong>Alarma FOV:</strong> Si el objeto no cabe en tu sensor, sonará una alarma. Usa el Modo Mosaico para ver la cuadrícula de paneles superpuestos.</li></ul></div>
+            <div class="guide-section"><h3>✨ 4. IA Smart y Dithering</h3><ul><li><strong>Tiempo Dividido:</strong> La IA divide tus horas de oscuridad entre el número de paneles del mosaico y resta el tiempo de estabilización de la montura.</li></ul></div>
+            <div class="guide-section"><h3>🤖 5. Exportación a N.I.N.A.</h3><ul><li><strong>JSON (Panel Único):</strong> Arrástralo al Secuenciador Avanzado para automatizar toda la sesión.</li><li><strong>Dosier Estratégico (Mosaicos):</strong> La app genera un reporte para que copies los tiempos de exposición perfectos en el software NINA.</li></ul></div>
+        </div>
+
+        <div id="guide-zh" style="display:none;">
+            <h2 style="font-size: 2.4em; border-bottom: 2px solid #bb86fc; padding-bottom: 15px; margin-bottom: 30px;">📖 AstroDashboard PRO 用户手册</h2>
+            <div class="filosofia-box"><h3 style="color: #fff; margin-top:0;">设计理念</h3><p>将多种规划工具融合为一个智能平台，充当您天文设备的“指挥家”，优化您在星空下的每一秒。</p></div>
+            <div class="guide-section"><h3>🌍 1. 战术天气与环境数据</h3><ul><li><strong>50公里雷达地图:</strong> 帮助移动摄影师在云层下寻找“晴空洞”。</li><li><strong>急流 (Jet Stream):</strong> 视宁度的敌人。低于 50 km/h 意味着天空稳定。高于 100 km/h 请避免使用长焦段。</li><li><strong>湿度警报:</strong> 数值变红 (>85%) 时，请立即将除露带开到最大。</li></ul></div>
+            <div class="guide-section"><h3>🔭 2. 混合星图与 SIMBAD</h3><ul><li><strong>SIMBAD 引擎:</strong> 搜索冷门目标时，AI 会自动连接斯特拉斯堡大学获取绝对坐标。</li></ul></div>
+            <div class="guide-section"><h3>📸 3. 视场 (FOV) 与 拼接</h3><ul><li><strong>拼接规划:</strong> 如果目标大于您的传感器，系统会发出警告。开启拼接模式，地图将实时绘制重叠的面板网格。</li></ul></div>
+            <div class="guide-section"><h3>✨ 4. 智能 AI 与 抖动</h3><ul><li><strong>时间分配:</strong> AI 自动将黑夜时间除以面板数量，并扣除赤道仪抖动稳定的“隐形耗时”。</li></ul></div>
+            <div class="guide-section"><h3>🤖 5. N.I.N.A. 导出与战术报告</h3><ul><li><strong>JSON 导出 (单目标):</strong> 拖入高级序列器实现全自动拍摄 (需确保滤镜名称匹配)。</li><li><strong>战术报告 (拼接模式):</strong> 系统会生成策略报告，供您复制 AI 计算出的完美曝光时间到构图助手中。</li></ul></div>
         </div>
     </div>
-
 <script>
+        // --- MOTORE MULTI-LINGUA (i18n) ---
         const i18n = {
             it: {
                 "manual_btn": "📖 Apri Manuale", "pos_title": "📍 Posizione", "find_place": "Trova Luogo:", "search_place": "Es. Monte Lussari...",
@@ -560,7 +620,7 @@
                 "plan_target_btn": "Pianifica 🚀", "back_dash": "Torna alla Dashboard", "change_target": "Cambia",
                 "dossier": "📖 Dossier Astrofotografico", "type": "Tipologia", "app_mag": "Magnitudine App.", "distance": "Distanza", "wiki_link": "🔗 Wikipedia",
                 "tactical_tip": "💡 Consiglio Tattico:", "optical_setup": "📸 Setup Ottico", "telescope": "Telescopio:", "focal_len": "Focale (mm):",
-                "sensor": "Sensore:", "width": "Larg. W (mm):", "height": "Alt. H (mm):", "fov_calc": "Campo Inquadrato Calcolato",
+                "sensor": "Sensore:", "width": "Larg. W (mm):", "height": "Alet. H (mm):", "fov_calc": "Campo Inquadrato Calcolato",
                 "fov_sim": "📐 Simulatore FOV Realistico (DSS2)", "smart_calc": "⏱️ Calcolatore Sessione Smart AI",
                 "sunset": "Tramonto", "night_start": "Inizio Notte Astr.", "night_end": "Fine Notte Astr.", "sunrise": "Alba",
                 "session_start": "Inizio Sessione:", "session_end": "Fine Sessione:", "sensor_type": "Tipo Sensore:",
@@ -575,42 +635,192 @@
                 "alert_planetarium": "Scegli prima un bersaglio dal Planetario 🔭!", "alert_noseq": "Nessuna posa calcolata! Clicca prima su 'Genera Sequenza Ottimale'.",
                 "alert_calib": "I frame di calibrazione occupano tutto il tempo!", "alert_nolight": "Seleziona almeno un filtro Light.", "alert_times": "Imposta prima gli orari di Inizio e Fine.", "no_target": "Nessun oggetto visibile.", "too_bright": "☀️ Cielo troppo luminoso.", "dso_too_bright": "☀️ Cielo troppo luminoso per il Deep Sky.", "select_opt": "-- Seleziona --",
                 "jupiter": "Giove", "mars": "Marte", "venus": "Venere", "moon": "Luna", "sun": "Sole", "weather": "Meteo",
-                "mode": "Modalità:", "single_panel": "Scatto Singolo", "mosaic": "Mosaico", "panels": "Pannelli (X, Y):", "overlap": "Sovrapposizione:", "time_per_panel": "Tempo per Pannello",
-                "gen_report_btn": "📝 Genera Report Strategico", "report_title": "Dossier Mosaico", "copy_report": "Copia negli Appunti", "copied": "Copiato!", "report_general": "Info Generali Mosaico", "report_strategy": "Strategia Singolo Pannello", "report_plan": "Piano di Scatto"
+                "mode": "Modalità:", "single_panel": "Scatto Singolo", "mosaic": "Mosaico", "panels": "Pannelli (X, Y):", "overlap": "Sovrapposizione:", "time_per_panel": "Tempo per Pannello", "fov_warning": "⚠️ L'oggetto è più grande del campo! Valuta un mosaico.", "nina_mosaic_msg": "📌 Modalità Mosaico attiva. Usa il Framing Assistant di N.I.N.A. per le coordinate.",
+                "gen_report_btn": "📝 Genera Report Strategico", "report_title": "Dossier Mosaico", "copy_report": "Copia negli Appunti", "copied": "Copiato!", "report_general": "Info Generali Mosaico", "report_strategy": "Strategia Singolo Pannello", "report_plan": "Piano di Scatto (Per Pannello)",
+                
+                "info_pos": "Cerca un luogo o inserisci coordinate. La mappa mostra un raggio di 50km utile per trovare 'buchi di sereno' spostandoti.",
+                "info_env": "Dati meteo professionali estratti dal satellite in tempo reale.",
+                "info_planetarium": "Mostra i target visibili calcolando l'altezza sull'orizzonte. Sposta lo slider per simulare la volta celeste stanotte.",
+                "info_search": "Cerca un oggetto non in lista. L'AI interrogherà l'università di Strasburgo (SIMBAD) per scaricare le coordinate assolute.",
+                "info_setup": "Inquadra il bersaglio sulla mappa. Se è troppo grande, attiva la modalità 'Mosaico' per far dividere automaticamente all'AI i tempi notturni.",
+                "info_smart": "L'AI riempie il tuo buio notturno generando pose ottimali per cluster, galassie o nebulose, calcolando anche le calibrazioni per sensori Mono.",
+                "info_dither": "Muove leggermente la montatura tra uno scatto e l'altro per ridurre il rumore. L'AI sottrarrà i secondi persi dal totale disponibile.",
+                "info_nina": "Salva un file JSON perfetto. Trascinalo dentro N.I.N.A. (Advanced Sequencer) e la sessione partirà in autonomia totale."
+            },
+            en: {
+                "manual_btn": "📖 Open Manual", "pos_title": "📍 Location", "find_place": "Find Place:", "search_place": "E.g. Yellowstone...",
+                "lat": "Latitude:", "lon": "Longitude:", "env_data": "🎛️ Env Data",
+                "low_clouds": "Low Clouds", "mid_clouds": "Mid Clouds", "high_clouds": "High Clouds", "moon_poll": "Moon Poll.",
+                "humidity": "Humidity", "seeing_est": "Seeing Est.", "now": "Now",
+                "hybrid_planetarium": "🔭 Hybrid Predictive Planetarium", "solar_system": "🪐 Solar System",
+                "rec_targets": "🌌 Recommended Targets", "free_search": "🔍 Free Target Search", "search_target": "E.g. M31, Pleiades...",
+                "plan_target_btn": "Plan Target 🚀", "back_dash": "Back to Dashboard", "change_target": "Change",
+                "dossier": "📖 Astrophotography Dossier", "type": "Type", "app_mag": "App. Magnitude", "distance": "Distance", "wiki_link": "🔗 Wikipedia",
+                "tactical_tip": "💡 Tactical Tip:", "optical_setup": "📸 Optical Setup", "telescope": "Telescope:", "focal_len": "Focal (mm):",
+                "sensor": "Sensor:", "width": "Width (mm):", "height": "Height (mm):", "fov_calc": "Calculated Field of View",
+                "fov_sim": "📐 Realistic FOV Simulator (DSS2)", "smart_calc": "⏱️ Smart AI Session Calculator",
+                "sunset": "Sunset", "night_start": "Astr. Night Starts", "night_end": "Astr. Night Ends", "sunrise": "Sunrise",
+                "session_start": "Session Start:", "session_end": "Session End:", "sensor_type": "Sensor Type:",
+                "seq_setup": "Sequence Setup", "gen_seq_btn": "✨ Generate Optimal Sequence", "use_frame": "Use | Frame", "poses_sec": "Exposures x Sec",
+                "total": "Total", "every": "Every", "avail_window": "Available Window", "acq_time": "Acquisition Time", "res_time": "Residual Time", "time_overflow": "⚠️ Time Overflow!",
+                "nina_export_title": "🚀 N.I.N.A. Advanced Sequencer Export", "seq_start": "Sequence Start", "cool_cam": "Cool Camera to",
+                "slew_center": "Slew & Center (Plate Solve)", "start_guide": "Start Autoguiding", "end_sec": "End / Safety", "warm_cam": "Warm Up Camera",
+                "park_mount": "Park Mount", "meridian_flip": "Enable Meridian Flip", "filter_map": "Filter Name Mapping", "gen_nina_btn": "💾 Generate N.I.N.A. File",
+                "clear": "Clear", "partly_cloudy": "Partly Cloudy", "mostly_cloudy": "Mostly Cloudy", "overcast": "Overcast", "daytime": "Daytime",
+                "new_moon": "New Moon", "waxing_crescent": "Waxing Crescent", "first_quarter": "First Quarter", "waxing_gibbous": "Waxing Gibbous", "full_moon": "Full Moon", "waning_gibbous": "Waning Gibbous", "last_quarter": "Last Quarter", "waning_crescent": "Waning Crescent",
+                "galaxy": "Galaxy", "nebula": "Nebula", "cluster": "Cluster", "star": "Star", "unknown": "Unknown",
+                "alert_planetarium": "Choose a target from the Planetarium first 🔭!", "alert_noseq": "No exposures calculated! Click 'Generate Optimal Sequence' first.",
+                "alert_calib": "Calibration frames take up all the time!", "alert_nolight": "Select at least one Light filter.", "alert_times": "Please set Start and End times.", "no_target": "No visible objects.", "too_bright": "☀️ Sky is too bright.", "dso_too_bright": "☀️ Sky is too bright for Deep Sky.", "select_opt": "-- Select --",
+                "jupiter": "Jupiter", "mars": "Mars", "venus": "Venus", "moon": "Moon", "sun": "Sun", "weather": "Weather",
+                "mode": "Mode:", "single_panel": "Single Panel", "mosaic": "Mosaic", "panels": "Panels (X, Y):", "overlap": "Overlap:", "time_per_panel": "Time per Panel", "fov_warning": "⚠️ Target is larger than your FOV! Consider a mosaic.", "nina_mosaic_msg": "📌 Mosaic Mode active. Use N.I.N.A.'s Framing Assistant to generate panel coordinates.",
+                "gen_report_btn": "📝 Generate Strategic Report", "report_title": "Mosaic Dossier", "copy_report": "Copy to Clipboard", "copied": "Copied!", "report_general": "General Info", "report_strategy": "Per-Panel Strategy", "report_plan": "Exposure Plan (Per Panel)",
+
+                "info_pos": "Search a location. The map shows a 50km radius to help you find 'clear sky holes' while moving under the clouds.",
+                "info_env": "Professional real-time satellite weather data.",
+                "info_planetarium": "Shows visible targets based on altitude. Use the slider to simulate the night sky hours.",
+                "info_search": "Search any custom object. The AI will connect to SIMBAD Strasbourg to download absolute coordinates.",
+                "info_setup": "Calculate your FOV. If the target is too big, use 'Mosaic' mode: the AI will automatically split your available darkness time.",
+                "info_smart": "The AI generates optimal exposures based on darkness, target type, and sensor type (Mono or Color).",
+                "info_dither": "Shifts the mount slightly between shots to reduce noise. The AI subtracts the lost time from your available night window.",
+                "info_nina": "Export a perfect JSON file. Drag & drop it into N.I.N.A. Advanced Sequencer for a fully autonomous night."
+            },
+            es: {
+                "manual_btn": "📖 Abrir Manual", "pos_title": "📍 Ubicación", "find_place": "Buscar Lugar:", "search_place": "Ej. Atacama...",
+                "lat": "Latitud:", "lon": "Longitud:", "env_data": "🎛️ Datos Ambientales",
+                "low_clouds": "Nubes Bajas", "mid_clouds": "Nubes Medias", "high_clouds": "Nubes Altas", "moon_poll": "Ilum. Lunar",
+                "humidity": "Humedad", "seeing_est": "Est. Seeing", "now": "Ahora",
+                "hybrid_planetarium": "🔭 Planetario Híbrido", "solar_system": "🪐 Sistema Solar",
+                "rec_targets": "🌌 Objetivos Recomendados", "free_search": "🔍 Búsqueda Libre", "search_target": "Ej. M31, Pléyades...",
+                "plan_target_btn": "Planificar 🚀", "back_dash": "Volver al Panel", "change_target": "Cambiar",
+                "dossier": "📖 Dosier Fotográfico", "type": "Tipo", "app_mag": "Magnitud", "distance": "Distancia", "wiki_link": "🔗 Wikipedia",
+                "tactical_tip": "💡 Consejo Táctico:", "optical_setup": "📸 Equipo Óptico", "telescope": "Telescopio:", "focal_len": "Focal (mm):",
+                "sensor": "Sensor:", "width": "Ancho (mm):", "height": "Alto (mm):", "fov_calc": "Campo de Visión (FOV)",
+                "fov_sim": "📐 Simulador FOV Realista (DSS2)", "smart_calc": "⏱️ Calculadora de Sesión IA",
+                "sunset": "Atardecer", "night_start": "Inicio Noche Oscura", "night_end": "Fin Noche Oscura", "sunrise": "Amanecer",
+                "session_start": "Inicio Sesión:", "session_end": "Fin Sesión:", "sensor_type": "Tipo de Sensor:",
+                "seq_setup": "Configuración de Secuencia", "gen_seq_btn": "✨ Generar Secuencia Óptima", "use_frame": "Usar | Frame", "poses_sec": "Tomas x Seg",
+                "total": "Total", "every": "Cada", "avail_window": "Tiempo Disponible", "acq_time": "Tiempo de Captura", "res_time": "Tiempo Restante", "time_overflow": "⚠️ ¡Tiempo excedido!",
+                "nina_export_title": "🚀 Exportar Secuencia a N.I.N.A.", "seq_start": "Inicio Secuencia", "cool_cam": "Enfriar Cámara a",
+                "slew_center": "Apuntar y Centrar (Plate Solve)", "start_guide": "Iniciar Guiado", "end_sec": "Fin / Seguridad", "warm_cam": "Calentar Cámara",
+                "park_mount": "Aparcar Montura", "meridian_flip": "Activar Meridian Flip", "filter_map": "Mapeo Nombres de Filtros", "gen_nina_btn": "💾 Generar Archivo N.I.N.A.",
+                "clear": "Despejado", "partly_cloudy": "Poco Nublado", "mostly_cloudy": "Nublado", "overcast": "Cubierto", "daytime": "Día",
+                "new_moon": "Luna Nueva", "waxing_crescent": "Luna Creciente", "first_quarter": "Cuarto Creciente", "waxing_gibbous": "Gibosa Creciente", "full_moon": "Luna Llena", "waning_gibbous": "Gibosa Menguante", "last_quarter": "Cuarto Menguante", "waning_crescent": "Luna Menguante",
+                "galaxy": "Galaxia", "nebula": "Nebulosa", "cluster": "Cúmulo", "star": "Estrella", "unknown": "Desconocido",
+                "alert_planetarium": "¡Elige primero un objetivo en el Planetario 🔭!", "alert_noseq": "¡No se han calculado tomas! Haz clic en 'Generar Secuencia Óptima'.",
+                "alert_calib": "¡Las tomas de calibración ocupan todo el tiempo!", "alert_nolight": "Selecciona al menos un filtro Light.", "alert_times": "Configura las horas de Inicio y Fin.", "no_target": "No hay objetos visibles.", "too_bright": "☀️ Cielo demasiado brillante.", "dso_too_bright": "☀️ Cielo demasiado brillante para cielo profundo.", "select_opt": "-- Seleccionar --",
+                "jupiter": "Júpiter", "mars": "Marte", "venus": "Venus", "moon": "Luna", "sun": "Sol", "weather": "Clima",
+                "mode": "Modo:", "single_panel": "Panel Único", "mosaic": "Mosaico", "panels": "Paneles (X, Y):", "overlap": "Solapamiento:", "time_per_panel": "Tiempo por Panel", "fov_warning": "⚠️ ¡El objeto es más grande que tu campo visual! Considera un mosaico.", "nina_mosaic_msg": "📌 Modo Mosaico activo. Utiliza el Framing Assistant de N.I.N.A. para crear las coordenadas de los paneles.",
+                "gen_report_btn": "📝 Generar Informe Estratégico", "report_title": "Dosier Mosaico", "copy_report": "Copiar al Portapapeles", "copied": "¡Copiado!", "report_general": "Info General", "report_strategy": "Estrategia por Panel", "report_plan": "Plan de Captura",
+
+                "info_pos": "El mapa muestra un radio de 50km para encontrar claros en las nubes si te desplazas.",
+                "info_env": "Datos meteorológicos satelitales en tiempo real.",
+                "info_planetarium": "Muestra objetivos visibles. Desliza la barra temporal para simular el cielo.",
+                "info_search": "Busca cualquier objeto. La IA conectará con SIMBAD para descargar las coordenadas.",
+                "info_setup": "Si el objeto es más grande que tu sensor, usa Mosaico. La IA dividirá el tiempo nocturno.",
+                "info_smart": "La IA asigna tiempos ideales basados en tus horas de oscuridad y tu tipo de cámara.",
+                "info_dither": "El Dithering reduce el ruido. La IA restará los segundos perdidos de tu tiempo total.",
+                "info_nina": "Genera un archivo JSON. Arrástralo a N.I.N.A. Advanced Sequencer para automatizar toda tu noche."
+            },
+            zh: {
+                "manual_btn": "📖 打开手册", "pos_title": "📍 位置", "find_place": "查找地点:", "search_place": "例如: 丽江...",
+                "lat": "纬度:", "lon": "经度:", "env_data": "🎛️ 环境数据",
+                "low_clouds": "低云", "mid_clouds": "中云", "high_clouds": "高云", "moon_poll": "月光影响",
+                "humidity": "湿度", "seeing_est": "视宁度预估", "now": "现在",
+                "hybrid_planetarium": "🔭 混合预测星图", "solar_system": "🪐 太阳系",
+                "rec_targets": "🌌 推荐深空目标", "free_search": "🔍 自由搜索目标", "search_target": "如: M31...",
+                "plan_target_btn": "计划拍摄 🚀", "back_dash": "返回仪表板", "change_target": "更改",
+                "dossier": "📖 天文目标档案", "type": "类型", "app_mag": "视星等", "distance": "距离", "wiki_link": "🔗 维基百科",
+                "tactical_tip": "💡 拍摄建议:", "optical_setup": "📸 光学设置", "telescope": "望远镜:", "focal_len": "焦距 (mm):",
+                "sensor": "传感器:", "width": "宽度 (mm):", "height": "高度 (mm):", "fov_calc": "视场 (FOV) 计算",
+                "fov_sim": "📐 真实视场模拟器 (DSS2)", "smart_calc": "⏱️ AI 智能序列计算",
+                "sunset": "日落", "night_start": "天文黑夜开始", "night_end": "天文黑夜结束", "sunrise": "日出",
+                "session_start": "拍摄开始:", "session_end": "拍摄结束:", "sensor_type": "相机类型:",
+                "seq_setup": "序列设置", "gen_seq_btn": "✨ 生成最佳曝光序列", "use_frame": "使用 | 帧类型", "poses_sec": "曝光数 x 秒",
+                "total": "总计", "every": "每隔", "avail_window": "可用拍摄窗口", "acq_time": "总曝光时间", "res_time": "剩余时间", "time_overflow": "⚠️ 时间溢出！",
+                "nina_export_title": "🚀 N.I.N.A. 高级序列导出", "seq_start": "序列开始前", "cool_cam": "相机降温至",
+                "slew_center": "指向并居中 (星板解析)", "start_guide": "开始导星", "end_sec": "结束 / 安全", "warm_cam": "相机回温",
+                "park_mount": "赤道仪归位", "meridian_flip": "启用自动中天翻转", "filter_map": "滤镜名称映射", "gen_nina_btn": "💾 生成 N.I.N.A. 文件",
+                "clear": "晴朗", "partly_cloudy": "少云", "mostly_cloudy": "多云", "overcast": "阴天", "daytime": "白天",
+                "new_moon": "新月", "waxing_crescent": "蛾眉月", "first_quarter": "上弦月", "waxing_gibbous": "盈凸月", "full_moon": "满月", "waning_gibbous": "亏凸月", "last_quarter": "下弦月", "waning_crescent": "残月",
+                "galaxy": "星系", "nebula": "星云", "cluster": "星团", "star": "恒星", "unknown": "未知",
+                "alert_planetarium": "请先从星图中选择一个目标 🔭！", "alert_noseq": "没有计算出任何曝光！请先点击 '生成最佳曝光序列'。",
+                "alert_calib": "校准帧占据了所有可用时间！", "alert_nolight": "请至少选择一个亮场 (Light) 滤镜。", "alert_times": "请先设置开始和结束时间。", "no_target": "当前没有可见目标。", "too_bright": "☀️ 天空太亮了。", "dso_too_bright": "☀️ 天空对深空目标来说太亮了。", "select_opt": "-- 请选择 --",
+                "jupiter": "木星", "mars": "火星", "venus": "金星", "moon": "月球", "sun": "太阳", "weather": "天气",
+                "mode": "模式:", "single_panel": "单面板", "mosaic": "拼接", "panels": "面板 (X, Y):", "overlap": "重叠度:", "time_per_panel": "每块面板时间", "fov_warning": "⚠️ 目标比你的视场还要大！考虑使用拼接拍摄。", "nina_mosaic_msg": "📌 拼接模式已激活。请使用 N.I.N.A. 的构图助手生成面板坐标。",
+                "gen_report_btn": "📝 生成策略报告", "report_title": "拼接拍摄档案", "copy_report": "复制到剪贴板", "copied": "已复制!", "report_general": "基本信息", "report_strategy": "单面板策略", "report_plan": "曝光计划",
+
+                "info_pos": "搜索位置。地图显示 50 公里半径，帮助您在云层下寻找晴空区。",
+                "info_env": "专业的实时卫星气象数据。",
+                "info_planetarium": "显示可见目标。滑动时间轴以模拟今晚的星空。",
+                "info_search": "如果本地数据库没有，AI 将连接斯特拉斯堡 (SIMBAD) 获取坐标。",
+                "info_setup": "计算视场。如果目标太大，请选择'拼接'，AI 会将黑夜时间分配给各面板。",
+                "info_smart": "AI 根据可用黑夜时间自动分配最佳曝光参数。",
+                "info_dither": "微调赤道仪位置以减少噪点。AI 会在计算时间时扣除抖动丢失的秒数。",
+                "info_nina": "导出 JSON 文件。将其拖入 N.I.N.A. 高级序列器即可实现全自动拍摄。"
             }
         };
 
         let lang = localStorage.getItem('ad_lang') || 'it';
-        function t(key) { return i18n[lang] && i18n[lang][key] ? i18n[lang][key] : key; }
+        i18n.it.mosaic_active_msg = "✅ Modalità Mosaico attiva.";
+        i18n.en.mosaic_active_msg = "✅ Mosaic Mode active.";
+        i18n.es.mosaic_active_msg = "✅ Modo Mosaico activo.";
+        i18n.zh.mosaic_active_msg = "✅ 拼接模式已激活。";
+	i18n.it.info_map = "Mappa Empirica di Visibilità. Visualizza un raggio simbolico di 50 km per mostrarti a colpo d'occhio le reali condizioni del cielo. La sovrapposizione dei vari strati ti farà capire subito se la serata sarà limpida o compromessa. Usa i bottoni superiori per attivare i filtri meteo (Nuvole, Jet Stream, Umidità) e scorri la linea temporale per prevedere la loro evoluzione nelle prossime ore.";
+        i18n.en.info_map = "Empirical Visibility Map. Shows a symbolic 50 km radius to give you at-a-glance real sky conditions. The overlay of different layers will let you know immediately if the night will be clear or compromised. Use the top buttons to toggle weather filters (Clouds, Jet Stream, Humidity) and slide the timeline to forecast their evolution.";
+        i18n.es.info_map = "Mapa Empírico de Visibilidad. Muestra un radio simbólico de 50 km para indicarte de un vistazo las condiciones reales del cielo. La superposición de capas te hará entender de inmediato si la noche será despejada o comprometida. Usa los botones superiores para activar filtros (Nubes, Jet Stream, Humedad) y desliza la línea temporal para prever su evolución.";
+        i18n.zh.info_map = "经验能见度地图。显示象征性的 50 公里半径，让您一目了然地了解真实的天空状况。不同图层的叠加将立即让您知道今晚是晴朗还是恶劣。使用顶部按钮激活天气滤镜（云层、急流、湿度），并滑动时间轴以预测它们在未来几小时内的演变。";
+        
+        function t(key) { return i18n[lang][key] || key; }
 
         function changeLanguage(l) {
             lang = l; localStorage.setItem('ad_lang', l);
+            
             document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
             let actBtn = document.getElementById('btn-lang-' + l);
             if(actBtn) actBtn.classList.add('active');
+
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 let k = el.getAttribute('data-i18n');
                 if (el.tagName === 'INPUT') el.placeholder = t(k); else el.innerHTML = t(k);
             });
-        }
 
-        const dbTelescopi = [{ nome: "Askar FRA 400", focale: 400, diametro: 72 }, { nome: "SW Explorer 150P", focale: 750, diametro: 150 }, { nome: "Celestron C8 SCT", focale: 2032, diametro: 203 }];
-        const dbCamere = [{ nome: "ASI 533MC/MM (Square)", w: 11.31, h: 11.31 }, { nome: "SONY IMX571 ", w: 23.5, h: 15.7 }, { nome: "ASI 6200MC/MM (Full Frame)", w: 36.0, h: 24.0 }];
+            ['it','en','es','zh'].forEach(lg => {
+                let guide = document.getElementById('guide-'+lg);
+                if(guide) guide.style.display = (lang===lg ? 'block' : 'none');
+            });
+            
+            aggiornaEffemeridi(new Date()); 
+            if(datiMeteo){cambiaOraMeteo(); cambiaOraAstro();}
+	// Aggiorna in tempo reale i dati dinamici del Dossier se è aperto
+            if (targetSelezionato && document.getElementById('planning-view').style.display === 'block') {
+                document.getElementById('plan-target-name').innerText = getLocalizedName(targetSelezionato);
+                document.getElementById('stat-type').innerText = mapTypeTrans(targetSelezionato.type) || "--";
+                document.getElementById('target-description').innerText = getLocalizedText(targetSelezionato, 'desc');
+                document.getElementById('target-tips').innerText = getLocalizedText(targetSelezionato, 'tips');
+            }
+        // Aggiorna in tempo reale i dati dinamici del Dossier se è aperto
+            if (targetSelezionato && document.getElementById('planning-view').style.display === 'block') {
+                document.getElementById('plan-target-name').innerText = getLocalizedName(targetSelezionato);
+                document.getElementById('stat-type').innerText = mapTypeTrans(targetSelezionato.type) || "--";
+            }
+}
+
+        const dbTelescopi = [{ nome: "Askar FRA 400 (400mm)", focale: 400 }, { nome: "Explore Scienific Comethunter (731mm)", focale: 731 }, { nome: "SW Explorer 130 PDS (650mm)", focale: 650 }, { nome: "SW Explorer 150P (750mm)", focale: 750 }, { nome: "SW Explorer 200P (1000mm)", focale: 1000 }, { nome: "SW Quattro 150P (600mm)", focale: 600 }, { nome: "SW Quattro 200P (800mm)", focale: 800 }, { nome: "SW Quattro 250P (1000mm)", focale: 1000 }, { nome: "SW 72ED Evostar (420mm)", focale: 420 }, { nome: "SW 80ED Evostar (600mm)", focale: 600 }, { nome: "SW Esprit 80ED (400mm)", focale: 400 }, { nome: "SW Esprit 100ED (550mm)", focale: 550 }, { nome: "Celestron C8 SCT (2032mm)", focale: 2032 }, { nome: "Celestron C8 @ f/6.3 (1280mm)", focale: 1280 }, { nome: "ZWO Seestar S50 (250mm)", focale: 250 }, { nome: "Samyang 135mm f/2", focale: 135 }];
+        const dbCamere = [{ nome: "ASI 533MC/MM (Square)", w: 11.31, h: 11.31 }, { nome: "ASI 294MC/MM (4/3\")", w: 19.1, h: 13.0 }, { nome: "SONY IMX571 ", w: 23.5, h: 15.7 }, { nome: "ASI 6200MC/MM (Full Frame)", w: 36.0, h: 24.0 }, { nome: "ASI 183MC/MM (1\")", w: 13.2, h: 8.8 }, { nome: "SONY IMX585", w: 11.14, h: 6.26 }, { nome: "ASI 1600MM (4/3\")", w: 17.7, h: 13.4 }, { nome: "Reflex APS-C (Canon/Nikon)", w: 22.3, h: 14.9 }];
 
         function popolaMenuAttrezzatura() {
-            const selTel = document.getElementById('preset-telescope'); dbTelescopi.forEach(t => { let opt = document.createElement('option'); opt.value = t.focale + ',' + t.diametro; opt.textContent = t.nome; selTel.appendChild(opt); });
+            const selTel = document.getElementById('preset-telescope'); dbTelescopi.forEach(t => { let opt = document.createElement('option'); opt.value = t.focale; opt.textContent = t.nome; selTel.appendChild(opt); });
             const selCam = document.getElementById('preset-sensor'); dbCamere.forEach(c => { let opt = document.createElement('option'); opt.value = `${c.w},${c.h}`; opt.textContent = c.nome; selCam.appendChild(opt); });
         }
-        
-        let latCorrente = 46.062, lonCorrente = 13.235, datiMeteo = null, indicePartenza = 0, chartAltezza = null, targetSelezionato = null, aladinSkyMap = null, vistaPrecedente = 'dashboard-view';
-        let mappaScura = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { maxZoom: 19 });
+let latCorrente = 46.062, lonCorrente = 13.235, datiMeteo = null, indicePartenza = 0, chartAltezza = null, targetSelezionato = null, aladinSkyMap = null, vistaPrecedente = 'dashboard-view';
+        let mappaScura = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { maxZoom: 19, attribution: 'Meteo Data &copy; <a href="https://open-meteo.com/" target="_blank" style="color:#bb86fc;">Open-Meteo</a> | Map &copy; <a href="https://carto.com/" target="_blank">CartoDB</a>' });
         let map = L.map('map', { center: [latCorrente, lonCorrente], zoom: 8, layers: [mappaScura], zoomControl: false });
         L.control.zoom({ position: 'bottomright' }).addTo(map);
         let layers = { basse: L.layerGroup().addTo(map), medie: L.layerGroup(), alte: L.layerGroup(), jet: L.layerGroup(), luna: L.layerGroup(), umidita: L.layerGroup() };
-        let marker = L.marker([latCorrente, lonCorrente]).addTo(map);
+        let marker = L.marker([latCorrente, lonCorrente]).addTo(map).bindPopup("<b>Udine</b>").openPopup();
         let timerRicerca;
 
-        const planetsDatabase = [ { id: "jupiter", name: "Giove", icon: "🪐", ra: 7.15, dec: 22.8 }, { id: "mars", name: "Marte", icon: "🔴", ra: 18.50, dec: -23.5 } ];
+        const planetsDatabase = [ { id: "jupiter", name: "jupiter", icon: "🪐", ra: 7.15, dec: 22.8 }, { id: "mars", name: "mars", icon: "🔴", ra: 18.50, dec: -23.5 }, { id: "venus", name: "venus", icon: "✨", ra: 23.50, dec: -3.5 } ];
 
         function getJulianDate(date) { return (date.getTime() / 86400000) + 2440587.5; }
         function calcolaAltAz(ra, dec, lat, lon, date) {
@@ -646,16 +856,19 @@
             document.getElementById('lat').value = latCorrente.toFixed(5); document.getElementById('lon').value = lonCorrente.toFixed(5);
             document.getElementById('dropdown-risultati').style.display = 'none';
             map.flyTo([latCorrente, lonCorrente], 9);
+            if (marker) map.removeLayer(marker);
+            marker = L.marker([latCorrente, lonCorrente]).addTo(map).bindPopup(`<b>${nome.split(',')[0]}</b>`).openPopup();
             aggiornaEffemeridi(new Date()); scaricaDatiPrevisionali();
         }
-function aggiornaEffemeridi(data) {
+
+        function aggiornaEffemeridi(data) {
             let orariSole = SunCalc.getTimes(data, latCorrente, lonCorrente), orariLuna = SunCalc.getMoonTimes(data, latCorrente, lonCorrente), faseLuna = SunCalc.getMoonIllumination(data);
             let formattaOra = (d) => d && !isNaN(d) ? d.toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'}) : '--:--';
             document.getElementById('alba-sole').innerText = formattaOra(orariSole.sunrise); document.getElementById('tramonto-sole').innerText = formattaOra(orariSole.sunset);
             document.getElementById('alba-luna').innerText = orariLuna.rise ? formattaOra(orariLuna.rise) : '--:--'; document.getElementById('tramonto-luna').innerText = orariLuna.set ? formattaOra(orariLuna.set) : '--:--';
-            let f = faseLuna.phase, i = '🌑';
-            if(f>0.03&&f<=0.22) i='🌒'; else if(f>0.22&&f<=0.28) i='🌓'; else if(f>0.28&&f<=0.47) i='🌔'; else if(f>0.47&&f<=0.53) i='🌕'; else if(f>0.53&&f<=0.72) i='🌖'; else if(f>0.72&&f<=0.78) i='🌗'; else if(f>0.78&&f<=0.97) i='🌘';
-            document.getElementById('moon-emoji').innerText = i;
+            let f = faseLuna.phase, i = '🌑', n = 'new_moon';
+            if(f>0.03&&f<=0.22){i='🌒';n='waxing_crescent';}else if(f>0.22&&f<=0.28){i='🌓';n='first_quarter';}else if(f>0.28&&f<=0.47){i='🌔';n='waxing_gibbous';}else if(f>0.47&&f<=0.53){i='🌕';n='full_moon';}else if(f>0.53&&f<=0.72){i='🌖';n='waning_gibbous';}else if(f>0.72&&f<=0.78){i='🌗';n='last_quarter';}else if(f>0.78&&f<=0.97){i='🌘';n='waning_crescent';}
+            document.getElementById('moon-emoji').innerText = i; document.getElementById('moon-phase-name').innerText = t(n);
         }
 
         function scaricaDatiPrevisionali() {
@@ -669,7 +882,12 @@ function aggiornaEffemeridi(data) {
             });
         }
 
-        function syncSliders(val) { document.getElementById('timeSlider').value = val; document.getElementById('astroSlider').value = val; cambiaOraMeteo(); cambiaOraAstro(); }
+        function syncSliders(val) { 
+            document.getElementById('timeSlider').value = val; 
+            document.getElementById('astroSlider').value = val; 
+            cambiaOraMeteo(); 
+            cambiaOraAstro(); 
+        }
 
         function cambiaOraMeteo() {
             if (!datiMeteo) return;
@@ -727,146 +945,364 @@ function aggiornaEffemeridi(data) {
             if (dL.innerHTML === '') dL.innerHTML = `<p style="color:#777; padding:10px;">${t("no_target")}</p>`;
         }
 
-        function mapTypeTrans(type) { return type; }
-        function getLocalizedName(obj) { return obj.name; }
-        function getLocalizedText(obj, key) { return obj[key] || "--"; }
+        function mapTypeTrans(type) { 
+            if (!type) return t("unknown");
+            let l = type.toLowerCase();
+            
+            let dict = {
+                it: { "spi": "Galassia a Spirale", "ell": "Galassia Ellittica", "len": "Galassia Lenticolare", "irr": "Galassia Irregolare", "starb": "Galassia Starburst", "ammg": "Ammasso di Galassie", "grup": "Gruppo di Galassie", "emi": "Nebulosa a Emissione", "rif": "Nebulosa a Riflessione", "osc": "Nebulosa Oscura", "pla": "Nebulosa Planetaria", "sup": "Resto di Supernova", "hii": "Regione H II", "mis": "Nebulosa Mista", "glo": "Ammasso Globulare", "ape": "Ammasso Aperto" },
+                en: { "spi": "Spiral Galaxy", "ell": "Elliptical Galaxy", "len": "Lenticular Galaxy", "irr": "Irregular Galaxy", "starb": "Starburst Galaxy", "ammg": "Galaxy Cluster", "grup": "Galaxy Group", "emi": "Emission Nebula", "rif": "Reflection Nebula", "osc": "Dark Nebula", "pla": "Planetary Nebula", "sup": "Supernova Remnant", "hii": "H II Region", "mis": "Mixed Nebula", "glo": "Globular Cluster", "ape": "Open Cluster" },
+                es: { "spi": "Galaxia Espiral", "ell": "Galaxia Elíptica", "len": "Galaxia Lenticular", "irr": "Galaxia Irregular", "starb": "Galaxia Starburst", "ammg": "Cúmulo de Galaxias", "grup": "Grupo de Galaxias", "emi": "Nebulosa de Emisión", "rif": "Nebulosa de Reflexión", "osc": "Nebulosa Oscura", "pla": "Nebulosa Planetaria", "sup": "Remanente de Supernova", "hii": "Región H II", "mis": "Nebulosa Mixta", "glo": "Cúmulo Globular", "ape": "Cúmulo Abierto" },
+                zh: { "spi": "螺旋星系", "ell": "椭圆星系", "len": "透镜状星系", "irr": "不规则星系", "starb": "星暴星系", "ammg": "星系团", "grup": "星系群", "emi": "发射星云", "rif": "反射星云", "osc": "暗星云", "pla": "行星状星云", "sup": "超新星遗迹", "hii": "H II 区", "mis": "混合星云", "glo": "球状星团", "ape": "疏散星团" }
+            };
+
+            let m = dict[lang] || dict['en'];
+            if(l.includes("spirale")) return m["spi"];
+            if(l.includes("ellittica")) return m["ell"];
+            if(l.includes("lenticolare")) return m["len"];
+            if(l.includes("irregolare")) return m["irr"];
+            if(l.includes("starburst")) return m["starb"];
+            if(l.includes("ammasso di galassie")) return m["ammg"];
+            if(l.includes("gruppo")) return m["grup"];
+            if(l.includes("emissione")) return m["emi"];
+            if(l.includes("riflessione")) return m["rif"];
+            if(l.includes("oscura")) return m["osc"];
+            if(l.includes("planetaria")) return m["pla"];
+            if(l.includes("supernova")) return m["sup"];
+            if(l.includes("h ii")) return m["hii"];
+            if(l.includes("mista")) return m["mis"];
+            if(l.includes("globulare")) return m["glo"];
+            if(l.includes("aperto")) return m["ape"];
+            
+            if(l.includes("galassi") || l.includes("galaxy")) return t("galaxy");
+            if(l.includes("nebulos") || l.includes("nebula")) return t("nebula");
+            if(l.includes("ammasso") || l.includes("cluster")) return t("cluster");
+            if(l.includes("stella") || l.includes("star")) return t("star");
+            return type; 
+        }
+
+        function getLocalizedName(obj) {
+            if (!obj) return "";
+            let checkName = obj.id || obj.name;
+            if (checkName === "jupiter" || checkName === "mars" || checkName === "venus" || checkName === "moon") {
+                return t(checkName);
+            }
+            if (obj[lang]) return `${obj.name} - ${obj[lang]}`;
+            if (obj['en']) return `${obj.name} - ${obj['en']}`;
+            return obj.name; 
+        }
+
+        // Funzione per pescare il testo giusto (Descrizione o Tips)
+        function getLocalizedText(obj, key) {
+            if (!obj) return "--";
+            if (obj[key + '_' + lang]) return obj[key + '_' + lang];
+            return obj[key] || "--"; // Fallback di sicurezza per la Ricerca Libera
+        }
 
         function creaCardHTML(tObj, alt, az, c) {
             let div = document.createElement('div'); div.className = c ? 'dso-card card-clickable' : 'dso-card card-static';
             let finalName = getLocalizedName(tObj);
-            div.innerHTML = `<div class="dso-icon">${tObj.icon||'🌌'}</div><div class="dso-info"><h4>${finalName}</h4><p>Alt: <b>${Math.round(alt)}°</b></p><span class="dso-direction">${getPuntoCardinale(az)}</span></div>`;
+            div.innerHTML = `<div class="dso-icon">${tObj.icon}</div><div class="dso-info"><h4>${finalName}</h4><p>Alt: <b>${Math.round(alt)}°</b></p><span class="dso-direction">${getPuntoCardinale(az)}</span></div>`;
             if(c) div.onclick = () => apriPianificazione(tObj); return div;
         }
 
+        function setupSearch(iId, sId) {
+            let inp = document.getElementById(iId), box = document.getElementById(sId); if(!inp || !box) return;
+            inp.addEventListener('input', () => {
+                if (typeof dsoDatabase === 'undefined') return;
+                let v = inp.value.trim().toLowerCase().replace(/\s+/g, ''); box.innerHTML = '';
+                if (!v) { box.style.display = 'none'; return; }
+                let m = dsoDatabase.filter(d => d.id.toLowerCase().includes(v) || d.name.toLowerCase().replace(/\s+/g, '').includes(v) || (d[lang] && d[lang].toLowerCase().replace(/\s+/g, '').includes(v)));
+                if (m.length > 0) { box.style.display = 'block'; m.forEach(x => { let li = document.createElement('li'); li.innerHTML = `${x.icon} ${getLocalizedName(x)}`; li.onclick = () => { inp.value = getLocalizedName(x); box.style.display = 'none'; apriPianificazione(x); }; box.appendChild(li); }); } else box.style.display = 'none';
+            });
+            inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); box.style.display = 'none'; eseguiRicerca(iId); } });
+            document.addEventListener('click', e => { if (e.target !== inp) box.style.display = 'none'; });
+        }
+        setupSearch('search-dash-input', 'sugg-dash'); setupSearch('search-plan-input', 'sugg-plan');
+
         function eseguiRicerca(iId) {
-            let q = document.getElementById(iId).value.trim(); if (!q) return;
-            let mockRes = { name: q.toUpperCase(), ra: 10, dec: 40, type: "Galassia", mag: "8.0", dist: "N/D", link: "#", desc: "Dati estratti dal server SIMBAD.", tips: "Pianifica la sessione." };
-            apriPianificazione(mockRes);
+            if (typeof dsoDatabase === 'undefined') return;
+            let inp = document.getElementById(iId), q = inp.value.trim(); if (!q) return;
+            let qn = q.toLowerCase().replace(/\s+/g, ''), st = document.getElementById('status-' + iId);
+            if(st) st.style.display = 'none';
+
+            let ex = dsoDatabase.find(d => d.id.toLowerCase() === qn || (d[lang] && d[lang].toLowerCase().replace(/\s+/g, '') === qn));
+            let pt = dsoDatabase.find(d => d.name.toLowerCase().replace(/\s+/g, '').includes(qn) || (d[lang] && d[lang].toLowerCase().replace(/\s+/g, '').includes(qn)));
+            
+            if (ex) { inp.value = getLocalizedName(ex); apriPianificazione(ex); return; } if (pt) { inp.value = getLocalizedName(pt); apriPianificazione(pt); return; }
+
+            if(st) { st.style.display = 'block'; st.style.color = '#ffaa00'; st.innerText = "SIMBAD Search... 🛰️"; }
+            fetch(`https://cds.unistra.fr/cgi-bin/nph-sesame/-oI/A?${encodeURIComponent(q)}`).then(r => r.text()).then(d => {
+                let lines = d.split('\n'), fc = false, ra, dec, ty = "Sconosciuta", mg = "N/D";
+                for(let i=0; i<lines.length; i++) {
+                    let line = lines[i].trim();
+                    if(line.startsWith('%J') && !fc) { let p = line.split(/\s+/); if(p.length >= 3) { ra = parseFloat(p[1]); dec = parseFloat(p[2]); fc = true; } }
+                    
+                    if(line.startsWith('%T')) { 
+                        let rt = line.substring(2).trim();
+                        if (/Gal|Seyfert|LINER|IG|SB|SA|S0|Ellip|Irreg/i.test(rt)) ty = "Galassia a Spirale";
+                        else if (/GlCl|Globular/i.test(rt)) ty = "Ammasso Globulare";
+                        else if (/OpCl|Cl|Cluster/i.test(rt)) ty = "Ammasso Aperto";
+                        else if (/PN|Planetary/i.test(rt)) ty = "Nebulosa Planetaria";
+                        else if (/SNR|Supernova/i.test(rt)) ty = "Resto di Supernova";
+                        else if (/HII|H2/i.test(rt)) ty = "Regione H II";
+                        else if (/Neb|Mol|Cloud|Dark|RefNe/i.test(rt)) ty = "Nebulosa a Emissione";
+                        else if (/\*|Star|V\*/i.test(rt)) ty = "Stella";
+                    }
+                    
+                    if(line.startsWith('%M')) { 
+                        let m = line.match(/([VBR])\s*=\s*([+\-]?\d+\.?\d*)/i);
+                        if (m) { mg = `${m[2]} (${m[1].toUpperCase()})`; }
+                        else { 
+                            let num = line.substring(2).match(/[+\-]?\d+\.\d+/); 
+                            if (num) mg = `~ ${num[0]}`; 
+                        }
+                    }
+                }
+                if (!fc) { if(st) { st.style.color = '#ff4444'; st.innerText = "Not Found."; } } 
+                else {
+                    if(st) st.innerText = "Wikipedia... 📚";
+                    
+                    // Lingua corrente
+                    let wLang = (lang === 'it' || lang === 'es' || lang === 'zh') ? lang : 'en';
+                    // Aggiungiamo un suffisso astronomico "forzato" per evitare fucili o giocatori di hockey!
+                    let suffix = wLang === 'it' ? " astronomia" : wLang === 'es' ? " astronomía" : wLang === 'zh' ? " 天文学" : " astronomy";
+                    let wikiQ = q.trim() + suffix;
+                    
+                    let wikiApi = `https://${wLang}.wikipedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrsearch=${encodeURIComponent(wikiQ)}&prop=extracts&exintro=1&explaintext=1&exchars=600&gsrlimit=1`;
+
+                    fetch(wikiApi).then(w => w.json()).then(wd => {
+                        if(st) st.style.display = 'none'; 
+                        let sn = `Dati scaricati da server SIMBAD.\nTipologia: ${ty}.\nMagnitudine: ${mg}.`; 
+                        // Link di fallback pulito (senza la parola "astronomia")
+                        let wl = `https://${wLang}.wikipedia.org/w/index.php?search=${encodeURIComponent(q.trim())}`;
+                        
+                        if (wd.query && wd.query.pages) { 
+                            let pid = Object.keys(wd.query.pages)[0]; 
+                            if (wd.query.pages[pid].extract) { 
+                                sn = wd.query.pages[pid].extract; 
+                                wl = `https://${wLang}.wikipedia.org/?curid=${pid}`; 
+                            } 
+                        }
+                        inp.value = ''; apriPianificazione({ name: q.toUpperCase(), ra: ra/15, dec: dec, type: ty, mag: mg, dist: "N/D", link: wl, desc: sn, tips: "Dati estratti dal server. Algoritmo Multi-Nottata in fase di sviluppo..." });
+                    }).catch(e => { 
+                        if(st) st.style.display = 'none'; inp.value = ''; 
+                        apriPianificazione({ name: q.toUpperCase(), ra: ra/15, dec: dec, type: ty, mag: mg, dist: "N/D", link: `https://en.wikipedia.org/w/index.php?search=${encodeURIComponent(q.trim())}`, desc: `Dati SIMBAD: ${ty}, Mag: ${mg}. Errore Wikipedia.`, tips: "Algoritmo Multi-Nottata in fase di sviluppo..." }); 
+                    });
+                }
+            }).catch(e => { if(st) { st.style.color = '#ff4444'; st.innerText = "Network Error."; } });
+        }
+
+        // --- GESTIONE TOOLTIP FLUTTUANTE ---
+        function mostraTooltip(el, key) {
+            let tooltip = document.getElementById('floating-tooltip');
+            tooltip.innerHTML = t(key);
+            tooltip.style.display = 'block';
+            
+            let rect = el.getBoundingClientRect();
+            let top = rect.top + window.scrollY - tooltip.offsetHeight - 15;
+            let left = rect.left + window.scrollX - (tooltip.offsetWidth / 2) + (rect.width / 2);
+            
+            if (left < 10) left = 10;
+            if ((left + tooltip.offsetWidth) > window.innerWidth) left = window.innerWidth - tooltip.offsetWidth - 10;
+            if (top < window.scrollY) top = rect.bottom + window.scrollY + 15; 
+
+            tooltip.style.top = top + 'px';
+            tooltip.style.left = left + 'px';
+            
+            setTimeout(() => { tooltip.style.opacity = '1'; }, 10);
+        }
+
+        function nascondiTooltip() {
+            let tooltip = document.getElementById('floating-tooltip');
+            tooltip.style.opacity = '0';
+            setTimeout(() => { tooltip.style.display = 'none'; }, 200);
+        }
+
+        function apriGuida() { vistaPrecedente = document.getElementById('planning-view').style.display === 'block' ? 'planning-view' : 'dashboard-view'; document.getElementById('dashboard-view').style.display = 'none'; document.getElementById('planning-view').style.display = 'none'; document.getElementById('guide-view').style.display = 'block'; window.scrollTo(0,0); }
+        function chiudiGuida() { document.getElementById('guide-view').style.display = 'none'; document.getElementById(vistaPrecedente).style.display = 'block'; if(vistaPrecedente==='planning-view') aggiornaFOV(); window.scrollTo(0,0); }
+
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('report-modal')) { chiudiReport(); }
         }
 
         function apriPianificazione(tObj) {
             targetSelezionato = tObj; document.getElementById('dashboard-view').style.display = 'none'; document.getElementById('planning-view').style.display = 'block';
             document.getElementById('plan-target-name').innerText = getLocalizedName(targetSelezionato);
-            document.getElementById('stat-type').innerText = targetSelezionato.type || "--";
+            document.getElementById('stat-type').innerText = mapTypeTrans(targetSelezionato.type) || "--";
             document.getElementById('stat-mag').innerText = targetSelezionato.mag || "--";
+            document.getElementById('stat-dist').innerText = targetSelezionato.dist || "--";
+            document.getElementById('target-description').innerText = getLocalizedText(targetSelezionato, 'desc');
+            document.getElementById('target-tips').innerText = getLocalizedText(targetSelezionato, 'tips');
+            let wl = document.getElementById('target-wiki'); if(targetSelezionato.link) { wl.href = targetSelezionato.link; wl.style.display = 'inline-block'; } else wl.style.display = 'none';
             
-            let dOggi = new Date(); if (dOggi.getHours() < 12) dOggi.setDate(dOggi.getDate() - 1); 
-            let atStart = SunCalc.getTimes(dOggi, latCorrente, lonCorrente);
-            let dDomani = new Date(dOggi.getTime() + 86400000); let atEnd = SunCalc.getTimes(dDomani, latCorrente, lonCorrente);
-            let ft = (x) => x && !isNaN(x) ? x.toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'}) : '--:--';
-            
-            document.getElementById('info-sunset').innerText = ft(atStart.sunset); 
-            document.getElementById('info-nightstart').innerText = ft(atStart.night); 
-            document.getElementById('info-nightend').innerText = ft(atEnd.nightEnd); 
-            document.getElementById('info-sunrise').innerText = ft(atEnd.sunrise);
-            
-            let nS = atStart.night || atStart.sunset; let nE = atEnd.nightEnd || atEnd.sunrise;
-            let cur = new Date(nS.getTime()); let maxA = -90; let currentBlock = { start: null, end: null }; let bestBlock = { start: null, end: null, duration: 0 }; let isAbove = false;
-            
-            while(cur <= nE) {
-                let a = calcolaAltAz(targetSelezionato.ra, targetSelezionato.dec, latCorrente, lonCorrente, cur).alt;
-                if(a > maxA) maxA = a;
-                if(a >= 30) { if(!isAbove) { currentBlock.start = new Date(cur); isAbove = true; } currentBlock.end = new Date(cur); } 
-                else { if(isAbove) { let dur = currentBlock.end.getTime() - currentBlock.start.getTime(); if(dur > bestBlock.duration) { bestBlock = { start: currentBlock.start, end: currentBlock.end, duration: dur }; } isAbove = false; } }
-                cur.setMinutes(cur.getMinutes() + 10);
-            }
-            if(isAbove) { let dur = currentBlock.end.getTime() - currentBlock.start.getTime(); if(dur > bestBlock.duration) { bestBlock = { start: currentBlock.start, end: currentBlock.end, duration: dur }; } }
-            
-            if(bestBlock.duration > 0) { document.getElementById('time-start').value = ft(bestBlock.start); document.getElementById('time-end').value = ft(bestBlock.end); } 
-            else { document.getElementById('time-start').value = ft(nS); document.getElementById('time-end').value = ft(nE); }
+            let d = new Date(), at = SunCalc.getTimes(d, latCorrente, lonCorrente), ft = (x) => x && !isNaN(x) ? x.toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'}) : '--:--';
+            document.getElementById('info-sunset').innerText = ft(at.sunset); document.getElementById('info-nightstart').innerText = ft(at.night); document.getElementById('info-nightend').innerText = ft(at.nightEnd); document.getElementById('info-sunrise').innerText = ft(at.sunrise);
+            if (ft(at.night) !== '--:--') document.getElementById('time-start').value = ft(at.night); if (ft(at.nightEnd) !== '--:--') document.getElementById('time-end').value = ft(at.nightEnd);
 
-            if (!aladinSkyMap) { aladinSkyMap = A.aladin('#aladin-lite-div', { survey: "P/DSS2/color", fov: 2, target: (targetSelezionato.ra * 15) + " " + targetSelezionato.dec, showReticle: false, showZoomControl: false, showFullscreenControl: false, showLayersControl: false, showGotoControl: false }); setTimeout(() => { toggleMosaic(); }, 300); } 
-            else { setTimeout(() => { aladinSkyMap.gotoRaDec(targetSelezionato.ra * 15, targetSelezionato.dec); toggleMosaic(); }, 100); }
+            if (!aladinSkyMap) { 
+                aladinSkyMap = A.aladin('#aladin-lite-div', { survey: "P/DSS2/color", fov: 2, target: (targetSelezionato.ra * 15) + " " + targetSelezionato.dec, showReticle: false, showZoomControl: false, showFullscreenControl: false, showLayersControl: false, showGotoControl: false }); 
+                setTimeout(() => { toggleMosaic(); }, 300); 
+            } else { 
+                setTimeout(() => { aladinSkyMap.gotoRaDec(targetSelezionato.ra * 15, targetSelezionato.dec); toggleMosaic(); }, 100); 
+            }
             disegnaGraficoAltezza(); toggleSensorMode(); calcolaTempi(); window.scrollTo(0,0);
         }
 
-        function tornaDashboard() { document.getElementById('planning-view').style.display = 'none'; document.getElementById('dashboard-view').style.display = 'block'; }
-        
-        function applicaPresetTelescopio() { let v = document.getElementById('preset-telescope').value; if(v){ let p = v.split(','); document.getElementById('focal-length').value = p[0]; document.getElementById('aperture').value = p[1] || 100; aggiornaFOV(); } }
+        function tornaDashboard() { document.getElementById('planning-view').style.display = 'none'; document.getElementById('dashboard-view').style.display = 'block'; document.getElementById('search-dash-input').value = ''; document.getElementById('search-plan-input').value = ''; }
+        function applicaPresetTelescopio() { let v = document.getElementById('preset-telescope').value; if(v){document.getElementById('focal-length').value=v; aggiornaFOV();} }
         function applicaPresetSensore() { let v = document.getElementById('preset-sensor').value; if(v){let p=v.split(',');document.getElementById('sensor-width').value=p[0];document.getElementById('sensor-height').value=p[1];aggiornaFOV();} }
 
+        // --- MOTORE MOSAICO ---
         function toggleMosaic() {
             let isMosaic = document.getElementById('capture-mode').value === 'mosaic';
             document.getElementById('mosaic-settings').style.display = isMosaic ? 'flex' : 'none';
+            document.getElementById('mosaic-fov-result').style.display = isMosaic ? 'block' : 'none';
             document.getElementById('btn-export-nina').style.display = isMosaic ? 'none' : 'inline-block';
-            aggiornaFOV(); calcolaTempi(); 
+            document.getElementById('btn-report-mosaic').style.display = isMosaic ? 'inline-block' : 'none';
+            document.getElementById('nina-mosaic-msg').style.display = isMosaic ? 'block' : 'none';
+            document.getElementById('mosaic-total-badge').style.display = isMosaic ? 'inline-block' : 'none';
+            aggiornaFOV(); 
+            calcolaTempi(); 
         }
 
         function aggiornaFOV() {
-            let fl = parseFloat(document.getElementById('focal-length').value) || 1000, sw = parseFloat(document.getElementById('sensor-width').value) || 23.5, sh = parseFloat(document.getElementById('sensor-height').value) || 15.6;
-            let fW = (2 * Math.atan(sw / (2 * fl)) * (180 / Math.PI)), fH = (2 * Math.atan(sh / (2 * fl)) * (180 / Math.PI));
+            let fl = parseFloat(document.getElementById('focal-length').value) || 1000;
+            let sw = parseFloat(document.getElementById('sensor-width').value) || 23.5;
+            let sh = parseFloat(document.getElementById('sensor-height').value) || 15.6;
+            
+            let fW = (2 * Math.atan(sw / (2 * fl)) * (180 / Math.PI));
+            let fH = (2 * Math.atan(sh / (2 * fl)) * (180 / Math.PI));
             document.getElementById('fov-result').innerText = `${fW.toFixed(2)}° x ${fH.toFixed(2)}°`;
-            aggiornaAI();
+
+            let isMosaic = document.getElementById('capture-mode').value === 'mosaic';
+            let mx = 1, my = 1, overlap = 0;
+            let totFovW = fW, totFovH = fH;
+
+            if (isMosaic) {
+                mx = parseInt(document.getElementById('mosaic-x').value) || 1;
+                my = parseInt(document.getElementById('mosaic-y').value) || 1;
+                overlap = (parseFloat(document.getElementById('mosaic-overlap').value) || 20) / 100;
+                
+                totFovW = fW * mx - fW * (mx - 1) * overlap;
+                totFovH = fH * my - fH * (my - 1) * overlap;
+                document.getElementById('mosaic-fov-result').innerText = `Totale: ${totFovW.toFixed(2)}° x ${totFovH.toFixed(2)}°`;
+            }
+
+            let maxFov = Math.max(totFovW, totFovH);
+            let cw = document.getElementById('fov-simulator-container').clientWidth;
+            let cm = 2.5 / (parseFloat(document.getElementById('fov-zoom').value) / 100); 
+            if (aladinSkyMap) { aladinSkyMap.setFoV(Math.max(0.01, maxFov * cm)); }
+
+            let fovContainer = document.getElementById('fov-rectangle');
+            fovContainer.innerHTML = ''; 
+            fovContainer.style.border = "none";
+            
+            let aladinCurrentFov = Math.max(0.01, maxFov * cm);
+            let pxPerDegree = cw / aladinCurrentFov;
+            
+            let rw = fW * pxPerDegree;
+            let rh = fH * pxPerDegree;
+            let stepPxX = rw * (1 - overlap);
+            let stepPxY = rh * (1 - overlap);
+            let totalW_px = rw + (mx - 1) * stepPxX;
+            let totalH_px = rh + (my - 1) * stepPxY;
+
+            fovContainer.style.width = totalW_px + "px";
+            fovContainer.style.height = totalH_px + "px";
+            fovContainer.style.left = `calc(50% - ${totalW_px/2}px)`;
+            fovContainer.style.top = `calc(50% - ${totalH_px/2}px)`;
+
+            for (let i = 0; i < mx; i++) {
+                for (let j = 0; j < my; j++) {
+                    let panel = document.createElement('div');
+                    panel.style.position = "absolute";
+                    panel.style.width = rw + "px";
+                    panel.style.height = rh + "px";
+                    panel.style.left = (i * stepPxX) + "px";
+                    panel.style.top = (j * stepPxY) + "px";
+                    panel.style.border = "2px solid #ff4444";
+                    panel.style.boxSizing = "border-box";
+                    panel.style.boxShadow = "inset 0 0 10px rgba(255, 68, 68, 0.3)";
+                    
+                    let pNum = document.createElement('span');
+                    pNum.innerText = (j * mx + i + 1);
+                    pNum.style.position = "absolute";
+                    pNum.style.top = "2px";
+                    pNum.style.left = "4px";
+                    pNum.style.color = "#ff4444";
+                    pNum.style.fontWeight = "bold";
+                    pNum.style.fontSize = "12px";
+                    
+                    panel.appendChild(pNum);
+                    fovContainer.appendChild(panel);
+                }
+            }
+
+            let fovWarning = document.getElementById('fov-warning-msg');
+            if (targetSelezionato && targetSelezionato.size) {
+                let currentTotalArcmin = Math.min(totFovW, totFovH) * 60; 
+                if (targetSelezionato.size > (currentTotalArcmin * 0.9)) { 
+                    fovWarning.setAttribute('data-i18n', 'fov_warning');
+                    fovWarning.style.display = 'block'; 
+                    fovWarning.style.color = '#ffaa00';
+                    fovWarning.innerHTML = t('fov_warning');
+                } else { 
+                    if (isMosaic) {
+                        fovWarning.setAttribute('data-i18n', 'mosaic_active_msg');
+                        fovWarning.style.display = 'block';
+                        fovWarning.style.color = '#bb86fc';
+                        fovWarning.innerHTML = t('mosaic_active_msg');
+                    } else {
+                        fovWarning.style.display = 'none'; 
+                    }
+                }
+            } else { 
+                if (isMosaic) {
+                    fovWarning.setAttribute('data-i18n', 'mosaic_active_msg');
+                    fovWarning.style.display = 'block';
+                    fovWarning.style.color = '#bb86fc';
+                    fovWarning.innerHTML = t('mosaic_active_msg');
+                } else {
+                    fovWarning.style.display = 'none'; 
+                }
+            }
         }
 
         function disegnaGraficoAltezza() {
             if (!targetSelezionato) return; if (chartAltezza) chartAltezza.destroy();
             let lbl = [], dat = [], d = new Date(), sd = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 18, 0, 0);
             for (let i = 0; i <= 12; i++) { let fd = new Date(sd.getTime() + i*3600000); lbl.push(fd.getHours() + "h"); dat.push(Math.max(0, calcolaAltAz(targetSelezionato.ra, targetSelezionato.dec, latCorrente, lonCorrente, fd).alt)); }
-            chartAltezza = new Chart(document.getElementById('altitudeChart').getContext('2d'), { type: 'line', data: { labels: lbl, datasets: [{ label: 'Alt (°)', data: dat, borderColor: '#bb86fc', backgroundColor: 'rgba(187, 134, 252, 0.3)', tension: 0.4, fill: true, pointRadius: 2, borderWidth: 2 }] } });
+            chartAltezza = new Chart(document.getElementById('altitudeChart').getContext('2d'), { type: 'line', data: { labels: lbl, datasets: [{ label: 'Alt (°)', data: dat, borderColor: '#bb86fc', backgroundColor: 'rgba(187, 134, 252, 0.3)', tension: 0.4, fill: true, pointRadius: 2, borderWidth: 2 }] }, options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 90, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#aaa', font: { size: 10 }, stepSize: 30 } }, x: { grid: { display: false }, ticks: { color: '#aaa', font: { size: 10 }, maxRotation: 0 } } }, plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false } }, layout: { padding: 0 } } });
         }
 
-        const framesColor = [{ id: "c-light", name: "Light", class: "f-l", dC: 0, dE: 180 }, { id: "c-dark", name: "Dark", class: "f-dark", dC: 0, dE: 180 }, { id: "c-bias", name: "Bias", class: "f-bias", dC: 0, dE: 0 }];
-        const framesMono = [{ id: "m-l", name: "L", class: "f-l", dC: 0, dE: 30 }, { id: "m-r", name: "R", class: "f-r", dC: 0, dE: 120 }, { id: "m-g", name: "G", class: "f-g", dC: 0, dE: 120 }, { id: "m-b", name: "B", class: "f-b", dC: 0, dE: 120 }, { id: "m-ha", name: "Ha", class: "f-ha", dC: 0, dE: 300 }, { id: "m-oiii", name: "O3", class: "f-oiii", dC: 0, dE: 300 }, { id: "m-sii", name: "S2", class: "f-sii", dC: 0, dE: 300 }];
+        const framesColor = [{ id: "c-light", name: "Light", class: "f-l", dC: 0, dE: 180 }, { id: "c-dark", name: "Dark", class: "f-dark", dC: 0, dE: 180 }, { id: "c-bias", name: "Bias/Flat", class: "f-bias", dC: 0, dE: 0 }];
+        const framesMono = [{ id: "m-l", name: "Lum (L)", class: "f-l", dC: 0, dE: 30 }, { id: "m-r", name: "Red (R)", class: "f-r", dC: 0, dE: 120 }, { id: "m-g", name: "Green (G)", class: "f-g", dC: 0, dE: 120 }, { id: "m-b", name: "Blue (B)", class: "f-b", dC: 0, dE: 120 }, { id: "m-ha", name: "H-Alpha", class: "f-ha", dC: 0, dE: 300 }, { id: "m-oiii", name: "O-III", class: "f-oiii", dC: 0, dE: 300 }, { id: "m-sii", name: "S-II", class: "f-sii", dC: 0, dE: 300 }, { id: "m-dark", name: "Dark", class: "f-dark", dC: 0, dE: 300 }, { id: "m-bias", name: "Bias/Flat", class: "f-bias", dC: 0, dE: 0 }];
 
-        function toggleLock(id) { let el = document.getElementById(id + '-lock'); if (!el) return; if (el.innerText === '🔓') { el.innerText = '🔒'; el.style.opacity = '1'; el.classList.add('locked'); } else { el.innerText = '🔓'; el.style.opacity = '0.5'; el.classList.remove('locked'); } }
+        function toggleLock(id) {
+            let el = document.getElementById(id + '-lock');
+            if (!el) return;
+            if (el.innerText === '🔓') {
+                el.innerText = '🔒';
+                el.style.opacity = '1';
+                el.classList.add('locked');
+            } else {
+                el.innerText = '🔓';
+                el.style.opacity = '0.5';
+                el.classList.remove('locked');
+            }
+        }
 
         function toggleSensorMode() {
             let isM = document.getElementById('sensor-type').value === 'mono', c = document.getElementById('frames-container'); c.innerHTML = '';
             (isM ? framesMono : framesColor).forEach(f => {
                 let isL = !f.id.includes('dark') && !f.id.includes('bias'), r = document.createElement('div'); r.className = `calc-row ${f.class}`;
-                let lockHTML = isL ? `<span id="${f.id}-lock" style="cursor:pointer; font-size:1.1em; margin-left:5px; opacity:0.5;" onclick="toggleLock('${f.id}')">🔓</span>` : `<span style="display:inline-block; width:22px; margin-left:5px;"></span>`;
-                r.innerHTML = `<div style="display:flex; align-items:center; width: 140px;">${isL ? `<input type="checkbox" id="${f.id}-check" checked style="margin-right:10px; transform: scale(1.2);" onchange="calcolaTempi()">` : ''}<label>${f.name}</label></div><div class="calc-inputs"><input type="number" id="${f.id}-count" value="${f.dC}" min="0" oninput="calcolaTempi()"> x <input type="number" id="${f.id}-exp" value="${f.dE}" min="0" oninput="calcolaTempi()"> s ${lockHTML}</div><div class="calc-total" id="${f.id}-tot">0m</div>`;
+                // Creazione del Lucchetto solo per i Light frames
+                let lockHTML = isL ? `<span id="${f.id}-lock" style="cursor:pointer; font-size:1.1em; margin-left:5px; opacity:0.5; user-select:none;" onclick="toggleLock('${f.id}')">🔓</span>` : `<span style="display:inline-block; width:22px; margin-left:5px;"></span>`;
+                r.innerHTML = `<div style="display:flex; align-items:center; width: 140px;">${isL ? `<input type="checkbox" id="${f.id}-check" checked style="margin-right:10px; transform: scale(1.2); cursor: pointer;" onchange="calcolaTempi()">` : `<span style="display:inline-block; width: 23px; margin-right:10px;"></span>`}<label style="width:auto; cursor: ${isL?'pointer':'default'};" ${isL?`onclick="document.getElementById('${f.id}-check').click()"`:''}>${f.name}</label></div><div class="calc-inputs"><input type="number" id="${f.id}-count" value="${f.dC}" min="0" oninput="calcolaTempi()"> <span>x</span> <input type="number" id="${f.id}-exp" value="${f.dE}" min="0" oninput="calcolaTempi()"> <span>s</span> ${lockHTML}</div><div class="calc-total" id="${f.id}-tot">0h 0m</div>`;
                 c.appendChild(r);
             });
             aggiornaFiltriNina();
-        }
-
-        const dsoVIP = { "M31": { hours: 4, tips: "Nucleo estremo. HDR necessario." }, "M42": { hours: 3, tips: "Il Trapezio brucia." }, "M81": { hours: 12, tips: "Bode e IFN. Cieli scuri." }, "Ou4": { hours: 35, tips: "Segnale OIII debolissimo." } };
-        let oreNecessarieGlobali = 0; 
-
-        function aggiornaAI() {
-            if(!targetSelezionato) return;
-            let panel = document.getElementById('ai-advisor-panel'); if(!panel) return;
-            panel.style.display = 'block';
-
-            let ty = targetSelezionato.type ? targetSelezionato.type.toLowerCase() : "", nameID = targetSelezionato.id || targetSelezionato.name;
-            let bH = dsoVIP[nameID] ? dsoVIP[nameID].hours : (ty.includes('galassi') ? 2 : 4);
-            let tacticalMsg = dsoVIP[nameID] ? dsoVIP[nameID].tips : "Calcolo AI Standard.";
-
-            let mMatch = targetSelezionato.mag ? targetSelezionato.mag.toString().match(/[\d.]+/) : null;
-            let mVal = mMatch ? parseFloat(mMatch[0]) : 6.0;
-            let subT = Math.max(0.5, bH + (mVal - 6.0));
-
-            let fL = parseFloat(document.getElementById('focal-length').value)||400, ap = parseFloat(document.getElementById('aperture').value)||72;
-            let fFact = Math.pow((fL / ap) / 4.0, 2);
-
-            let isM = document.getElementById('sensor-type').value === 'mono', doingN = false;
-            (isM ? framesMono : framesColor).forEach(f => { let c = document.getElementById(`${f.id}-check`); if(c && c.checked && (parseInt(document.getElementById(`${f.id}-count`).value)||0)>0 && (f.id.includes('ha')||f.id.includes('oiii')||f.id.includes('sii'))) doingN = true; });
-            let sFact = (doingN && !ty.includes('emission')) ? 2.0 : 1.0;
-
-            let mIll = SunCalc.getMoonIllumination(new Date()).fraction, mFact = (!doingN && mIll>0.75) ? 2.0 : (!doingN && mIll>0.3 ? 1.5 : 1.0);
-            
-            let totId = subT * sFact * mFact * fFact;
-            let isMosaic = document.getElementById('capture-mode').value === 'mosaic';
-            if (isMosaic) totId *= (parseInt(document.getElementById('mosaic-x').value)||1) * (parseInt(document.getElementById('mosaic-y').value)||1);
-
-            oreNecessarieGlobali = totId;
-
-            let tS = document.getElementById('time-start').value, tE = document.getElementById('time-end').value, aS = 0;
-            if(tS && tE) { let dS = new Date(`1970-01-01T${tS}:00`), dE = new Date(`1970-01-01T${tE}:00`); if (dE <= dS) dE.setDate(dE.getDate() + 1); aS = (dE - dS) / 3600000; }
-            
-            let perc = totId > 0 ? Math.min(100, Math.round((aS / totId) * 100)) : 100;
-
-            let html = `<h4 style="margin:0 0 10px 0; color:#ffaa00; border-bottom:1px solid #333; padding-bottom:5px;">🧠 Criteri di Valutazione AI</h4>`;
-            html += `<p style="font-size:0.95em; margin:0 0 5px 0;">Obiettivo Totale: <b style="color:#fff;">${totId.toFixed(1)} Ore</b></p><p style="font-size:0.8em; color:#aaa; margin-bottom:10px;"><i>${tacticalMsg}</i></p>`;
-            
-            if (aS < totId * 0.9) {
-                html += `<div style="margin-top:10px; padding:10px; background:rgba(255,170,0,0.1); border-left:3px solid #ffaa00; border-radius:4px; font-size:0.85em; color:#fff;">⏳ <b>Avviso:</b> Stasera integri solo il <b>${perc}%</b> del segnale necessario.<button class="btn-guide" style="width:100%; margin-top:8px; border-color:#ffaa00; color:#ffaa00;" onclick="apriMultiNight()">📅 Crea Progetto Multi-Notte</button></div>`;
-            } else {
-                html += `<div style="margin-top:10px; padding:10px; background:rgba(68,255,68,0.1); border-left:3px solid #44ff44; border-radius:4px; font-size:0.85em; color:#fff;">✅ <b>Segnale Ottimale:</b> La sessione di stasera è sufficiente.</div>`;
-            }
-            panel.innerHTML = html;
         }
 
         function calcolaTempi() {
@@ -875,10 +1311,18 @@ function aggiornaEffemeridi(data) {
             let aS = (dE - dS) / 1000; 
             
             let isMosaic = document.getElementById('capture-mode').value === 'mosaic';
-            if (isMosaic) aS = aS / ((parseInt(document.getElementById('mosaic-x').value)||1) * (parseInt(document.getElementById('mosaic-y').value)||1));
-            document.getElementById('calc-available').innerHTML = `${Math.floor(aS/3600)}h ${Math.floor((aS%3600)/60)}m`;
+            let panels = 1;
+            if (isMosaic) {
+                let mx = parseInt(document.getElementById('mosaic-x').value) || 1;
+                let my = parseInt(document.getElementById('mosaic-y').value) || 1;
+                panels = mx * my;
+                document.getElementById('mosaic-total-badge').innerText = `Target: ${panels} Pannelli`;
+                aS = aS / panels;
+            }
+            document.getElementById('calc-available').innerHTML = isMosaic ? `<span style="font-size:0.6em; color:#ffaa00;">${t("time_per_panel")}<br></span>${Math.floor(aS/3600)}h ${Math.floor((aS%3600)/60)}m` : `${Math.floor(aS/3600)}h ${Math.floor((aS%3600)/60)}m`;
 
             let fL = document.getElementById('sensor-type').value === 'mono' ? framesMono : framesColor, tSec = 0, tLF = 0;
+            
             fL.forEach(f => {
                 let c = parseInt(document.getElementById(`${f.id}-count`).value)||0, e = parseInt(document.getElementById(`${f.id}-exp`).value)||0, rs = c * e;
                 tSec += rs; if (!f.id.includes('dark') && !f.id.includes('bias')) tLF += c;
@@ -895,48 +1339,79 @@ function aggiornaEffemeridi(data) {
             document.getElementById('calc-total').innerText = `${Math.floor(tSec/3600)}h ${Math.floor((tSec%3600)/60)}m`;
             let rS = aS - tSec, rD = document.getElementById('calc-residual'), wD = document.getElementById('calc-warning');
             if (rS >= 0) { rD.innerText = `${Math.floor(rS/3600)}h ${Math.floor((rS%3600)/60)}m`; rD.className = "text-green"; wD.style.display = "none"; } 
-            else { rD.innerText = `- ${Math.floor(Math.abs(rS)/3600)}h ${Math.floor((Math.abs(rS)%3600)/60)}m`; rD.className = "text-red"; wD.style.display = "block"; }
-            aggiornaAI();
+            else { let oS = Math.abs(rS); rD.innerText = `- ${Math.floor(oS/3600)}h ${Math.floor((oS%3600)/60)}m`; rD.className = "text-red"; wD.style.display = "block"; }
         }
 
         function generaSequenzaOttimale() {
-            if (!targetSelezionato) { alert("Scegli prima un bersaglio!"); return; }
-            let tS = document.getElementById('time-start').value, tE = document.getElementById('time-end').value; if(!tS || !tE) return;
+            if (!targetSelezionato) { alert(t("alert_planetarium")); return; }
+            let tS = document.getElementById('time-start').value, tE = document.getElementById('time-end').value; if(!tS || !tE) { alert(t("alert_times")); return; }
             let dS = new Date(`1970-01-01T${tS}:00`), dE = new Date(`1970-01-01T${tE}:00`); if (dE <= dS) dE.setDate(dE.getDate() + 1);
             let aS = (dE - dS) / 1000;
             
-            if (document.getElementById('capture-mode').value === 'mosaic') aS = aS / ((parseInt(document.getElementById('mosaic-x').value)||1) * (parseInt(document.getElementById('mosaic-y').value)||1));
+            let isMosaic = document.getElementById('capture-mode').value === 'mosaic';
+            if (isMosaic) {
+                let mx = parseInt(document.getElementById('mosaic-x').value) || 1;
+                let my = parseInt(document.getElementById('mosaic-y').value) || 1;
+                aS = aS / (mx * my);
+            }
+
             let isM = document.getElementById('sensor-type').value === 'mono', fL = isM ? framesMono : framesColor, cS = 0;
+            
             fL.forEach(f => { if (f.id.includes('dark') || f.id.includes('bias')) cS += (parseInt(document.getElementById(`${f.id}-count`).value)||0) * (parseInt(document.getElementById(`${f.id}-exp`).value)||0); });
-            let rS = aS - cS; if (rS <= 0) return;
+            let rS = aS - cS; if (rS <= 0) { alert(t("alert_calib")); return; }
             
             let aL = []; fL.forEach(f => { if (!f.id.includes('dark') && !f.id.includes('bias')) { let c = document.getElementById(`${f.id}-check`); if (c && c.checked) aL.push(f); } });
-            if (aL.length === 0) return;
+            if (aL.length === 0) { alert(t("alert_nolight")); return; }
 
             let w = {};
             if (!isM) w[aL[0].id] = 1.0;
-            else { let eq = 1.0 / aL.length; aL.forEach(f => w[f.id] = eq); }
+            else {
+                let hL = aL.some(f=>f.id==='m-l'), hRGB = aL.some(f=>f.id==='m-r')&&aL.some(f=>f.id==='m-g')&&aL.some(f=>f.id==='m-b');
+                if (hL && hRGB && aL.length === 4) { w['m-l']=0.5; w['m-r']=0.1666; w['m-g']=0.1666; w['m-b']=0.1666; } 
+                else { let eq = 1.0 / aL.length; aL.forEach(f => w[f.id] = eq); }
+            }
 
-            let ty = targetSelezionato.type ? targetSelezionato.type.toLowerCase() : "", isG = ty.includes('galassia');
-            let uD = document.getElementById('dither-check') && document.getElementById('dither-check').checked, dF = parseInt(document.getElementById('dither-freq').value)||1, dD = parseInt(document.getElementById('dither-duration').value)||0;
+            let ty = targetSelezionato.type ? targetSelezionato.type.toLowerCase() : "", isA = ty.includes('ammasso')||ty.includes('cluster'), isG = ty.includes('galassia')||ty.includes('galaxy')||ty.includes('riflessione')||ty.includes('stella')||ty.includes('star');
+            let dC = document.getElementById('dither-check'), uD = dC && dC.checked, dF = parseInt(document.getElementById('dither-freq').value)||1, dD = parseInt(document.getElementById('dither-duration').value)||0;
 
             aL.forEach(f => {
-                let eS = f.id === 'm-l' ? 60 : (f.id.includes('ha')||f.id.includes('oiii') ? 300 : (isG ? 120 : 180));
-                let lockEl = document.getElementById(`${f.id}-lock`); if (lockEl && lockEl.classList.contains('locked')) eS = parseInt(document.getElementById(`${f.id}-exp`).value) || eS; 
+                let eS = 180;
+                if (f.id === 'm-l') eS = 30; else if (f.id.includes('ha')||f.id.includes('oiii')||f.id.includes('sii')) eS = 300; else if (isA) eS = 60; else if (isG) eS = 120;
+                
+                // --- LOGICA DEL LUCCHETTO ---
+                let lockEl = document.getElementById(`${f.id}-lock`);
+                if (lockEl && lockEl.classList.contains('locked')) {
+                    eS = parseInt(document.getElementById(`${f.id}-exp`).value) || eS; // Forza il valore scelto dall'utente!
+                }
+                
                 let eeS = eS + (uD && dF > 0 ? dD / dF : 0);
                 document.getElementById(`${f.id}-exp`).value = eS; document.getElementById(`${f.id}-count`).value = Math.floor((rS * w[f.id]) / eeS);
+            });
+
+            fL.forEach(f => { 
+                if (!f.id.includes('dark') && !f.id.includes('bias')) { 
+                    let c = document.getElementById(`${f.id}-check`); 
+                    if (c && !c.checked) { 
+                        document.getElementById(`${f.id}-count`).value = 0; 
+                        let lockEl = document.getElementById(`${f.id}-lock`);
+                        if (!lockEl || !lockEl.classList.contains('locked')) {
+                            document.getElementById(`${f.id}-exp`).value = f.dE; 
+                        }
+                    } 
+                } 
             });
             calcolaTempi();
         }
 
         function aggiornaFiltriNina() {
-            let isM = document.getElementById('sensor-type').value === 'mono', c = document.getElementById('nina-filters-container'); if (!c) return; c.innerHTML = '';
+            let isM = document.getElementById('sensor-type').value === 'mono', c = document.getElementById('nina-filters-container'); if (!c) return;
+            c.innerHTML = '';
             if (!isM) { c.innerHTML = `<span style="color:#aaa; font-size:0.9em;">OSC Camera.</span>`; return; }
             framesMono.forEach(f => {
                 if (!f.id.includes('dark') && !f.id.includes('bias')) {
                     let savedName = localStorage.getItem('nina_filter_' + f.id) || f.name;
                     let d = document.createElement('div'); d.style = "display: flex; align-items: center; justify-content: space-between; font-size: 0.85em; background: #1a1a1a; padding: 5px 10px; border-radius: 4px; border: 1px solid #444;";
-                    d.innerHTML = `<label style="color:#aaa; font-weight:bold;">${f.name}</label><input type="text" id="nina-name-${f.id}" value="${savedName}" onchange="salvaFiltroNina('${f.id}')" style="width: 80px!important; padding: 4px!important; background: #222; border: 1px solid #555; color: #fff;">`;
+                    d.innerHTML = `<label style="color:#aaa; width:auto; margin:0; font-weight:bold;">${f.name}</label><input type="text" id="nina-name-${f.id}" value="${savedName}" onchange="salvaFiltroNina('${f.id}')" style="width: 80px!important; padding: 4px!important; font-size: 0.9em; background: #222; border-color: #555;">`;
                     c.appendChild(d);
                 }
             });
@@ -944,170 +1419,42 @@ function aggiornaEffemeridi(data) {
         function salvaFiltroNina(id) { localStorage.setItem('nina_filter_' + id, document.getElementById(`nina-name-${id}`).value.trim()); }
 
         function esportaNINA() {
-            if (!targetSelezionato) { alert("Scegli un target"); return; }
-            alert("File JSON Singola Nottata Generato.");
-        }
-
-        /* --- MULTI NIGHT MANAGER --- */
-        let contatoreNotti = 0;
-        function apriMultiNight() {
-            document.getElementById('mn-target-hours').innerText = oreNecessarieGlobali.toFixed(1) + " Ore";
-            document.getElementById('mn-assigned-hours').innerText = "0.0 Ore";
-            document.getElementById('mn-nights-container').innerHTML = ""; 
-            contatoreNotti = 0;
-            document.getElementById('multinight-modal').style.display = 'block';
-            aggiungiNotte(); 
-        }
-
-        function chiudiMultiNight() { document.getElementById('multinight-modal').style.display = 'none'; }
-
-        function aggiungiNotte() {
-            contatoreNotti++;
-            let isM = document.getElementById('sensor-type').value === 'mono';
-            let tS_def = document.getElementById('time-start').value || "21:00";
-            let tE_def = document.getElementById('time-end').value || "05:00";
-            
-            let filtri = isM ? ['L', 'R', 'G', 'B', 'Ha', 'O3', 'S2'] : ['Light'];
-            let grigliaFiltri = `<div style="display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px;">`;
-            
-            filtri.forEach(f => {
-                let intId = 'c-light'; 
-                if(isM) { if(f==='L') intId='m-l'; else if(f==='R') intId='m-r'; else if(f==='G') intId='m-g'; else if(f==='B') intId='m-b'; else if(f==='Ha') intId='m-ha'; else if(f==='O3') intId='m-oiii'; else if(f==='S2') intId='m-sii'; }
-                grigliaFiltri += `
-                <label style="background: #222; border: 1px solid #444; padding: 4px 8px; border-radius: 4px; cursor: pointer; display: flex; align-items: center; gap: 5px;">
-                    <input type="checkbox" id="chk-mn-${contatoreNotti}-${intId}" value="${f}" checked style="transform: scale(0.9);">
-                    <span style="font-size: 0.75em; color: #fff; font-weight: bold;">${f}</span>
-                </label>`;
-            });
-            grigliaFiltri += `</div>`;
-
-            let html = `
-            <div style="background: #1a1a1a; padding: 15px; border-radius: 8px; border: 1px solid #444; position: relative; margin-bottom: 12px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                    <span style="color: #ffaa00; font-weight: bold; font-size: 0.9em;">🌙 SESSIONE #${contatoreNotti}</span>
-                    <div style="display: flex; align-items: center; gap: 5px;">
-                        <span style="color:#777; font-size:0.7em;">ORE REALI:</span>
-                        <input type="text" id="ore-mn-${contatoreNotti}" style="width:60px!important; text-align:center; background:#000; border: 1px solid #555; color: #44ff44; font-weight: bold;" readonly>
-                    </div>
-                </div>
-
-                <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-                    <div style="flex:1;">
-                        <label style="display:block; color:#aaa; font-size:0.65em; margin-bottom:3px;">INIZIO (Default > 30°):</label>
-                        <input type="time" id="start-mn-${contatoreNotti}" value="${tS_def}" style="width:100%!important; background:#000; border:1px solid #333; color:#fff;" onchange="ricalcolaOreNotte(${contatoreNotti})">
-                    </div>
-                    <div style="flex:1;">
-                        <label style="display:block; color:#aaa; font-size:0.65em; margin-bottom:3px;">FINE (Tramonto/Alba):</label>
-                        <input type="time" id="end-mn-${contatoreNotti}" value="${tE_def}" style="width:100%!important; background:#000; border:1px solid #333; color:#fff;" onchange="ricalcolaOreNotte(${contatoreNotti})">
-                    </div>
-                </div>
-
-                <span style="display:block; color:#bb86fc; font-size:0.65em; text-transform: uppercase;">Filtri da riprendere in questa notte:</span>
-                ${grigliaFiltri}
-
-                <div style="margin-top: 15px; display: flex; gap: 10px;">
-                    <button class="btn-guide" style="flex: 1; border-color: #555; color: #aaa; padding: 4px;" onclick="this.parentElement.parentElement.remove(); calcolaTotaleNotti();">🗑️ Elimina</button>
-                    <button class="btn-search" style="flex: 2; font-size: 0.8em; padding: 4px; background: transparent; color: #ffaa00; border: 1px solid #ffaa00;" onclick="esportaNINAMultiNotte(${contatoreNotti})">🚀 Export N.I.N.A.</button>
-                </div>
-            </div>`;
-            
-            document.getElementById('mn-nights-container').insertAdjacentHTML('beforeend', html);
-            ricalcolaOreNotte(contatoreNotti);
-        }
-
-        function ricalcolaOreNotte(id) {
-            let tS = document.getElementById(`start-mn-${id}`).value;
-            let tE = document.getElementById(`end-mn-${id}`).value;
-            if(!tS || !tE) return;
-            let dS = new Date(`1970-01-01T${tS}:00`); 
-            let dE = new Date(`1970-01-01T${tE}:00`); 
-            if (dE <= dS) dE.setDate(dE.getDate() + 1); 
-            let h = ((dE - dS) / 3600000).toFixed(1);
-            document.getElementById(`ore-mn-${id}`).value = h;
-            calcolaTotaleNotti();
-        }
-
-        function calcolaTotaleNotti() {
-            let container = document.getElementById('mn-nights-container');
-            let inputs = container.querySelectorAll('input[type="text"][id^="ore-mn-"]');
-            let tot = 0;
-            inputs.forEach(i => tot += parseFloat(i.value) || 0);
-            let el = document.getElementById('mn-assigned-hours');
-            el.innerText = tot.toFixed(1) + " Ore";
-            if (tot >= oreNecessarieGlobali && oreNecessarieGlobali > 0) el.style.color = "#44ff44"; 
-            else el.style.color = "#ffaa00"; 
-        }
-
-        function esportaNINAMultiNotte(notteId) {
             if (!targetSelezionato) { alert(t("alert_planetarium")); return; }
-            let isMono = document.getElementById('sensor-type').value === 'mono';
-            if (isMono) { let conf = confirm("⚠️ ULTIMO CONTROLLO:\nHai verificato che la 'Mappatura Nomi Filtri' coincida con la ruota di N.I.N.A.?"); if (!conf) return; }
-            
-            let totaleOre = parseFloat(document.getElementById(`ore-mn-${notteId}`).value) || 0;
-            let totaleSecondi = totaleOre * 3600;
-            if (totaleSecondi <= 0) { alert("Imposta orari validi."); return; }
+            let doCool = document.getElementById('nina-cool').checked, tempTarget = parseFloat(document.getElementById('nina-temp').value) || -10;
+            let doSlew = document.getElementById('nina-slew').checked, doGuide = document.getElementById('nina-guide').checked, doWarm = document.getElementById('nina-warm').checked, doPark = document.getElementById('nina-park').checked, doFlip = document.getElementById('nina-flip').checked, doDither = document.getElementById('dither-check') && document.getElementById('dither-check').checked, ditherFreq = parseInt(document.getElementById('dither-freq').value) || 1;
+            let isMono = document.getElementById('sensor-type').value === 'mono', frameList = isMono ? framesMono : framesColor, esposizioni = [];
 
-            let filtriAttivi = [];
-            let possibili = isMono ? ['m-l','m-r','m-g','m-b','m-ha','m-oiii','m-sii'] : ['c-light'];
-            possibili.forEach(pid => {
-                let chk = document.getElementById(`chk-mn-${notteId}-${pid}`);
-                if (chk && chk.checked) {
-                    let expTempo = parseInt(document.getElementById(`${pid}-exp`).value) || (pid.includes('ha') ? 300 : 180);
-                    let ninaName = (isMono) ? document.getElementById(`nina-name-${pid}`).value.trim() : null;
-                    filtriAttivi.push({ id: pid, exp: expTempo, name: ninaName });
-                }
+            frameList.forEach(f => {
+                let count = parseInt(document.getElementById(`${f.id}-count`).value) || 0, exp = parseInt(document.getElementById(`${f.id}-exp`).value) || 0;
+                if (count > 0 && exp > 0) { let isLight = !f.id.includes('dark') && !f.id.includes('bias'); esposizioni.push({ count: count, exp: exp, filter: (isMono && isLight) ? document.getElementById(`nina-name-${f.id}`).value.trim() : null, type: f.id.includes('dark') ? "DARK" : f.id.includes('bias') ? "FLAT" : "LIGHT" }); }
             });
+            if (esposizioni.length === 0) { alert(t("alert_noseq")); return; }
 
-            if (filtriAttivi.length === 0) { alert("Devi selezionare almeno un filtro."); return; }
-
-            let secPerFiltro = totaleSecondi / filtriAttivi.length;
-            let esposizioni = [];
-            filtriAttivi.forEach(f => {
-                let count = Math.floor(secPerFiltro / f.exp);
-                if (count > 0) esposizioni.push({ count: count, exp: f.exp, filter: f.name, type: "LIGHT" });
-            });
-
-            if (esposizioni.length === 0) { alert("Finestra temporale troppo breve."); return; }
-
-            // Costruzione rigorosa JSON NINA (senza compressioni)
             let idCounter = 1; function nextId() { return (idCounter++).toString(); }
             function makeObs(type, values) { return { "$id": nextId(), "$type": `System.Collections.ObjectModel.ObservableCollection\`1[[${type}, NINA.Sequencer]], System.ObjectModel`, "$values": values }; }
-            
             let ra = targetSelezionato.ra, rh = Math.floor(ra), rm = Math.floor((ra - rh) * 60), rs = ((ra - rh) * 60 - rm) * 60;
             let dec = targetSelezionato.dec, negD = dec < 0, aD = Math.abs(dec), dd = Math.floor(aD), dm = Math.floor((aD - dd) * 60), ds = ((aD - dd) * 60 - dm) * 60;
-            
             let rootId = nextId(), startAreaId = nextId(), targetAreaId = nextId(), endAreaId = nextId(), startItems = [];
-            let doCool = document.getElementById('nina-cool').checked, tempTarget = parseFloat(document.getElementById('nina-temp').value) || -10;
-            let doSlew = document.getElementById('nina-slew').checked, doGuide = document.getElementById('nina-guide').checked;
-            let doWarm = document.getElementById('nina-warm').checked, doPark = document.getElementById('nina-park').checked, doFlip = document.getElementById('nina-flip').checked;
-            let doDither = document.getElementById('dither-check') && document.getElementById('dither-check').checked, ditherFreq = parseInt(document.getElementById('dither-freq').value) || 1;
-
             if (doCool) startItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Camera.CoolCamera, NINA.Sequencer", "Temperature": tempTarget, "Duration": 0.0, "Parent": {"$ref": startAreaId}, "ErrorBehavior": 0, "Attempts": 1 });
-            
             let dsoContainerId = nextId(), imagingContainerId = nextId(), dsoItems = [];
             if (doSlew) dsoItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Platesolving.Center, NINA.Sequencer", "Inherited": true, "Coordinates": { "$id": nextId(), "$type": "NINA.Astrometry.InputCoordinates, NINA.Astrometry", "RAHours": rh, "RAMinutes": rm, "RASeconds": rs, "NegativeDec": negD, "DecDegrees": dd, "DecMinutes": dm, "DecSeconds": ds }, "Parent": {"$ref": dsoContainerId}, "ErrorBehavior": 0, "Attempts": 1 });
             if (doGuide) dsoItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Guider.StartGuiding, NINA.Sequencer", "ForceCalibration": false, "Parent": {"$ref": dsoContainerId}, "ErrorBehavior": 0, "Attempts": 1 });
 
-            let imagingItemsList = [];
+            let imagingItems = [];
             esposizioni.forEach(expo => {
                 let blockId = nextId(), blockItems = [];
                 if (expo.filter) blockItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.FilterWheel.SwitchFilter, NINA.Sequencer", "Filter": { "$id": nextId(), "$type": "NINA.Core.Model.Equipment.FilterInfo, NINA.Core", "_name": expo.filter, "_focusOffset": 0, "_position": 0, "_autoFocusExposureTime": -1.0, "_autoFocusFilter": false }, "Parent": {"$ref": blockId}, "ErrorBehavior": 0, "Attempts": 1 });
                 blockItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Imaging.TakeExposure, NINA.Sequencer", "ExposureTime": expo.exp, "Gain": -1, "Offset": -1, "Binning": { "$id": nextId(), "$type": "NINA.Core.Model.Equipment.BinningMode, NINA.Core", "X": 1, "Y": 1 }, "ImageType": expo.type, "ExposureCount": expo.count, "Parent": {"$ref": blockId}, "ErrorBehavior": 0, "Attempts": 1 });
-                
                 let blockTriggers = [];
-                if (doDither && ditherFreq > 0) {
-                    let trigRunnerId = nextId(); 
-                    blockTriggers.push({ "$id": nextId(), "$type": "NINA.Sequencer.Trigger.Guider.DitherAfterExposures, NINA.Sequencer", "AfterExposures": ditherFreq, "Parent": {"$ref": blockId}, "TriggerRunner": { "$id": trigRunnerId, "$type": "NINA.Sequencer.Container.SequentialContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", [{ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Guider.Dither, NINA.Sequencer", "Parent": {"$ref": trigRunnerId}, "ErrorBehavior": 0, "Attempts": 1 }]), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", []), "Parent": null, "ErrorBehavior": 0, "Attempts": 1 } });
+                if (doDither && expo.type === "LIGHT" && ditherFreq > 0) {
+                    let trigRunnerId = nextId(); blockTriggers.push({ "$id": nextId(), "$type": "NINA.Sequencer.Trigger.Guider.DitherAfterExposures, NINA.Sequencer", "AfterExposures": ditherFreq, "Parent": {"$ref": blockId}, "TriggerRunner": { "$id": trigRunnerId, "$type": "NINA.Sequencer.Container.SequentialContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", [{ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Guider.Dither, NINA.Sequencer", "Parent": {"$ref": trigRunnerId}, "ErrorBehavior": 0, "Attempts": 1 }]), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", []), "Parent": null, "ErrorBehavior": 0, "Attempts": 1 } });
                 }
-                imagingItemsList.push({ "$id": blockId, "$type": "NINA.Sequencer.Container.SequentialContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Name": expo.filter ? `Ripresa ${expo.filter}` : `Ripresa ${expo.type}`, "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", blockItems), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", blockTriggers), "Parent": {"$ref": imagingContainerId}, "ErrorBehavior": 0, "Attempts": 1 });
+                imagingItems.push({ "$id": blockId, "$type": "NINA.Sequencer.Container.SequentialContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Name": expo.filter ? `Ripresa ${expo.filter}` : `Ripresa ${expo.type}`, "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", blockItems), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", blockTriggers), "Parent": {"$ref": imagingContainerId}, "ErrorBehavior": 0, "Attempts": 1 });
             });
 
             let imagingTriggers = [];
-            if (doFlip) { 
-                let trigRunnerId = nextId(); 
-                imagingTriggers.push({ "$id": nextId(), "$type": "NINA.Sequencer.Trigger.MeridianFlip.MeridianFlipTrigger, NINA.Sequencer", "Parent": {"$ref": imagingContainerId}, "TriggerRunner": { "$id": trigRunnerId, "$type": "NINA.Sequencer.Container.SequentialContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", []), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", []), "Parent": null, "ErrorBehavior": 0, "Attempts": 1 } }); 
-            }
-            dsoItems.push({ "$id": imagingContainerId, "$type": "NINA.Sequencer.Container.SequentialContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Name": "Target Imaging", "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", imagingItemsList), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", imagingTriggers), "Parent": {"$ref": dsoContainerId}, "ErrorBehavior": 0, "Attempts": 1 });
+            if (doFlip) { let trigRunnerId = nextId(); imagingTriggers.push({ "$id": nextId(), "$type": "NINA.Sequencer.Trigger.MeridianFlip.MeridianFlipTrigger, NINA.Sequencer", "Parent": {"$ref": imagingContainerId}, "TriggerRunner": { "$id": trigRunnerId, "$type": "NINA.Sequencer.Container.SequentialContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", []), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", []), "Parent": null, "ErrorBehavior": 0, "Attempts": 1 } }); }
+            dsoItems.push({ "$id": imagingContainerId, "$type": "NINA.Sequencer.Container.SequentialContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Name": "Target Imaging", "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", imagingItems), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", imagingTriggers), "Parent": {"$ref": dsoContainerId}, "ErrorBehavior": 0, "Attempts": 1 });
 
             let targetItems = [{ "$id": dsoContainerId, "$type": "NINA.Sequencer.Container.DeepSkyObjectContainer, NINA.Sequencer", "Target": { "$id": nextId(), "$type": "NINA.Astrometry.InputTarget, NINA.Astrometry", "Expanded": true, "TargetName": targetSelezionato.name, "PositionAngle": 0.0, "InputCoordinates": { "$id": nextId(), "$type": "NINA.Astrometry.InputCoordinates, NINA.Astrometry", "RAHours": rh, "RAMinutes": rm, "RASeconds": rs, "NegativeDec": negD, "DecDegrees": dd, "DecMinutes": dm, "DecSeconds": ds } }, "ExposureInfoListExpanded": false, "ExposureInfoList": null, "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Name": targetSelezionato.name, "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", dsoItems), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", []), "Parent": {"$ref": targetAreaId}, "ErrorBehavior": 0, "Attempts": 1 }];
 
@@ -1115,26 +1462,90 @@ function aggiornaEffemeridi(data) {
             if (doWarm) endItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Camera.WarmCamera, NINA.Sequencer", "Duration": 0.0, "Parent": {"$ref": endAreaId}, "ErrorBehavior": 0, "Attempts": 1 });
             if (doPark) endItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Telescope.ParkScope, NINA.Sequencer", "Parent": {"$ref": endAreaId}, "ErrorBehavior": 0, "Attempts": 1 });
 
-            let ninaJSON = { 
-                "$id": rootId, 
-                "$type": "NINA.Sequencer.Container.SequenceRootContainer, NINA.Sequencer", 
-                "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, 
-                "Name": `AstroDashboard - ${targetSelezionato.name} (Notte ${notteId})`, 
-                "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), 
-                "IsExpanded": true, 
-                "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", [ 
-                    { "$id": startAreaId, "$type": "NINA.Sequencer.Container.StartAreaContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Name": "Start", "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", startItems), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", []), "Parent": {"$ref": rootId}, "ErrorBehavior": 0, "Attempts": 1 }, 
-                    { "$id": targetAreaId, "$type": "NINA.Sequencer.Container.TargetAreaContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Name": "Target", "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", targetItems), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", []), "Parent": {"$ref": rootId}, "ErrorBehavior": 0, "Attempts": 1 }, 
-                    { "$id": endAreaId, "$type": "NINA.Sequencer.Container.EndAreaContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Name": "End", "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", endItems), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", []), "Parent": {"$ref": rootId}, "ErrorBehavior": 0, "Attempts": 1 } 
-                ]), 
-                "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", []), 
-                "Parent": null, 
-                "ErrorBehavior": 0, 
-                "Attempts": 1 
-            };
+            let ninaJSON = { "$id": rootId, "$type": "NINA.Sequencer.Container.SequenceRootContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Name": `AstroDashboard - ${targetSelezionato.name}`, "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", [ { "$id": startAreaId, "$type": "NINA.Sequencer.Container.StartAreaContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Name": "Start", "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", startItems), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", []), "Parent": {"$ref": rootId}, "ErrorBehavior": 0, "Attempts": 1 }, { "$id": targetAreaId, "$type": "NINA.Sequencer.Container.TargetAreaContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Name": "Target", "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", targetItems), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", []), "Parent": {"$ref": rootId}, "ErrorBehavior": 0, "Attempts": 1 }, { "$id": endAreaId, "$type": "NINA.Sequencer.Container.EndAreaContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Name": "End", "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", endItems), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", []), "Parent": {"$ref": rootId}, "ErrorBehavior": 0, "Attempts": 1 } ]), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", []), "Parent": null, "ErrorBehavior": 0, "Attempts": 1 };
 
             let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(ninaJSON, null, 2));
-            let dlAnchorElem = document.createElement('a'); dlAnchorElem.setAttribute("href", dataStr); dlAnchorElem.setAttribute("download", `AD_Seq_${targetSelezionato.name.replace(/\s+/g, '_')}_Notte${notteId}.json`); document.body.appendChild(dlAnchorElem); dlAnchorElem.click(); dlAnchorElem.remove();
+            let dlAnchorElem = document.createElement('a'); dlAnchorElem.setAttribute("href", dataStr); dlAnchorElem.setAttribute("download", `AD_Seq_${targetSelezionato.name.replace(/\s+/g, '_')}.json`); document.body.appendChild(dlAnchorElem); dlAnchorElem.click(); dlAnchorElem.remove();
+        }
+
+        function apriReport() {
+            if (!targetSelezionato) { alert(t("alert_planetarium")); return; }
+            let isM = document.getElementById('sensor-type').value === 'mono';
+            let frameList = isM ? framesMono : framesColor;
+            
+            let mx = parseInt(document.getElementById('mosaic-x').value) || 1;
+            let my = parseInt(document.getElementById('mosaic-y').value) || 1;
+            let overlap = parseInt(document.getElementById('mosaic-overlap').value) || 20;
+            let panels = mx * my;
+
+            let tS = document.getElementById('time-start').value;
+            let tE = document.getElementById('time-end').value;
+            if(!tS || !tE) { alert(t("alert_times")); return; }
+            let dS = new Date(`1970-01-01T${tS}:00`); let dE = new Date(`1970-01-01T${tE}:00`); 
+            if (dE <= dS) dE.setDate(dE.getDate() + 1);
+            let aS = (dE - dS) / 1000;
+            
+            let formatTime = (secs) => `${Math.floor(secs/3600)}h ${Math.floor((secs%3600)/60)}m`;
+            let totalTimeStr = formatTime(aS);
+            let panelTimeStr = formatTime(aS / panels);
+            
+            let dC = document.getElementById('dither-check').checked;
+            let dFreq = document.getElementById('dither-freq').value;
+
+            let planHtml = '';
+            let rawText = `=== DOSSIER MOSAICO ===\nTARGET: ${getLocalizedName(targetSelezionato)}\n`;
+            rawText += `PANNELLI: ${mx}x${my} (${panels} totali)\nSOVRAPPOSIZIONE: ${overlap}%\nTEMPO TOTALE: ${totalTimeStr}\n\n`;
+            rawText += `--- STRATEGIA SINGOLO PANNELLO ---\nTempo max a pannello: ${panelTimeStr}\nDithering: ${dC ? 'Ogni '+dFreq+' scatti' : 'Disattivato'}\n\n--- PIANO DI SCATTO ---\n`;
+
+            let hasPoses = false;
+            frameList.forEach(f => {
+                let count = parseInt(document.getElementById(`${f.id}-count`).value) || 0;
+                let exp = parseInt(document.getElementById(`${f.id}-exp`).value) || 0;
+                if(count > 0 && exp > 0) {
+                    hasPoses = true;
+                    let filterName = (isM && (!f.id.includes('dark') && !f.id.includes('bias'))) ? document.getElementById(`nina-name-${f.id}`).value : f.name;
+                    planHtml += `<div class="report-line"><span>${filterName}</span><b>${count}x ${exp}s</b></div>`;
+                    rawText += `${filterName}: ${count}x ${exp}s\n`;
+                }
+            });
+
+            if (!hasPoses) { alert(t("alert_noseq")); return; }
+
+            let html = `
+                <div class="report-section">
+                    <h4>${t("report_general")}</h4>
+                    <div class="report-line"><span>Target:</span><b>${getLocalizedName(targetSelezionato)}</b></div>
+                    <div class="report-line"><span>Griglia:</span><b>${mx}x${my} (${panels})</b></div>
+                    <div class="report-line"><span>${t("overlap").replace(':','')} :</span><b>${overlap}%</b></div>
+                    <div class="report-line"><span>Tempo Totale:</span><b>${totalTimeStr}</b></div>
+                </div>
+                <div class="report-section">
+                    <h4>${t("report_strategy")}</h4>
+                    <div class="report-line"><span style="color:#44ff44;">Tempo a Pannello:</span><b style="color:#44ff44;">${panelTimeStr}</b></div>
+                    <div class="report-line"><span>Dithering:</span><b>${dC ? dFreq+' frames' : 'Off'}</b></div>
+                </div>
+                <div class="report-section">
+                    <h4>${t("report_plan")}</h4>
+                    ${planHtml}
+                </div>
+            `;
+            
+            document.getElementById('report-content').innerHTML = html;
+            document.getElementById('btn-copy-report').setAttribute('data-raw', rawText);
+            document.getElementById('btn-copy-report').innerHTML = `📋 ${t("copy_report")}`;
+            document.getElementById('report-modal').style.display = 'block';
+        }
+
+        function chiudiReport() {
+            document.getElementById('report-modal').style.display = 'none';
+        }
+
+        function copiaReport() {
+            let txt = document.getElementById('btn-copy-report').getAttribute('data-raw');
+            navigator.clipboard.writeText(txt).then(() => {
+                document.getElementById('btn-copy-report').innerHTML = `✅ ${t("copied")}`;
+                setTimeout(() => { document.getElementById('btn-copy-report').innerHTML = `📋 ${t("copy_report")}`; }, 2000);
+            });
         }
 
         window.addEventListener('resize', () => { if(document.getElementById('planning-view').style.display === 'block') aggiornaFOV(); });
@@ -1144,7 +1555,37 @@ function aggiornaEffemeridi(data) {
             popolaMenuAttrezzatura();
             aggiornaEffemeridi(new Date()); 
             scaricaDatiPrevisionali();
+
+            // "Rubiamo" la rotellina del mouse nel simulatore FOV
+            let fovContainer = document.getElementById('fov-simulator-container');
+            if (fovContainer) {
+                fovContainer.addEventListener('wheel', function(e) {
+                    e.preventDefault(); // Blocca lo scroll della pagina
+                    e.stopPropagation(); // Blocca lo zoom nativo sfasato di Aladin
+                    
+                    let zoomSlider = document.getElementById('fov-zoom');
+                    let currentVal = parseInt(zoomSlider.value);
+                    
+                    // Rotellina su (zoom in) = +15, giù (zoom out) = -15
+                    if (e.deltaY < 0) { currentVal += 15; } else { currentVal -= 15; }
+                    
+                    // Rispettiamo i limiti minimi e massimi dello slider
+                    if (currentVal < 20) currentVal = 20;
+                    if (currentVal > 500) currentVal = 500;
+                    
+                    zoomSlider.value = currentVal;
+                    aggiornaFOV(); // Sincronizza lo sfondo e il rettangolo contemporaneamente!
+                }, { passive: false, capture: true });
+            }
         });
-</script>
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').then(reg => {
+                    console.log('App in background attivata!', reg.scope);
+                }).catch(err => console.error('Errore App:', err));
+            });
+        }
+    </script>
 </body>
 </html>
