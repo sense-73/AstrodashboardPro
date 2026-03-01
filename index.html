@@ -1114,8 +1114,16 @@ let latCorrente = 46.062, lonCorrente = 13.235, datiMeteo = null, indicePartenza
 
         function eseguiRicerca(iId) {
             if (typeof dsoDatabase === 'undefined') return;
-            let inp = document.getElementById(iId), q = inp.value.trim(); if (!q) return;
-            let qn = q.toLowerCase().replace(/\s+/g, ''), st = document.getElementById('status-' + iId);
+            let inp = document.getElementById(iId), rawQ = inp.value.trim(); if (!rawQ) return;
+            
+            // --- NORMALIZZATORE CATALOGHI (AIUTA SIMBAD A CAPIRE I FORMATI) ---
+            let q = rawQ;
+            if (/^sh\s*2[-\s]*(\d+)$/i.test(q)) q = q.replace(/^sh\s*2[-\s]*(\d+)$/i, "Sh2-$1");
+            else if (/^vdb[-\s]*(\d+)$/i.test(q)) q = q.replace(/^vdb[-\s]*(\d+)$/i, "VdB $1");
+            else if (/^(lbn|ldn)[-\s]*(\d+)$/i.test(q)) q = q.replace(/^(lbn|ldn)[-\s]*(\d+)$/i, (m, p1, p2) => p1.toUpperCase() + " " + p2);
+            else if (/^(ngc|ic)[-\s]*(\d+)$/i.test(q)) q = q.replace(/^(ngc|ic)[-\s]*(\d+)$/i, (m, p1, p2) => p1.toUpperCase() + " " + p2);
+
+            let qn = q.toLowerCase().replace(/\s+/g, '').replace(/-/g, ''), st = document.getElementById('status-' + iId);
             if(st) st.style.display = 'none';
 
             let ex = dsoDatabase.find(d => d.id.toLowerCase() === qn || (d[lang] && d[lang].toLowerCase().replace(/\s+/g, '') === qn));
