@@ -474,7 +474,7 @@
         <div class="session-grid">
             <div class="panel">
                 <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
-                    <h3 style="margin: 0;"><span data-i18n="seq_setup">Impostazione Sequenza</span></h3>
+                    <h3 style="margin: 0;"><span data-i18n="seq_setup">Impostazione Sequenza</span> <span class="info-icon" onmouseenter="mostraTooltip(this, 'info_seq_opt')" onmouseleave="nascondiTooltip()">ℹ️</span></h3>
                     <span id="mosaic-total-badge" style="display:none; background: #bb86fc; color: #121212; padding: 4px 10px; border-radius: 4px; font-size: 0.9em; font-weight: bold;"></span>
                 </div>
                 
@@ -861,6 +861,10 @@
         i18n.en.info_map = "Empirical Visibility Map. Shows a symbolic 50 km radius to give you at-a-glance real sky conditions. The overlay of different layers will let you know immediately if the night will be clear or compromised. Use the top buttons to toggle weather filters (Clouds, Jet Stream, Humidity) and slide the timeline to forecast their evolution.";
         i18n.es.info_map = "Mapa Empírico de Visibilidad. Muestra un radio simbólico de 50 km para indicarte de un vistazo las condiciones reales del cielo. La superposición de capas te hará entender de inmediato si la noche será despejada o comprometida. Usa los botones superiores para activar filtros (Nubes, Jet Stream, Humedad) y desliza la línea temporal para prever su evolución.";
         i18n.zh.info_map = "经验能见度地图。显示象征性的 50 公里半径，让您一目了然地了解真实的天空状况。不同图层的叠加将立即让您知道今晚是晴朗还是恶劣。使用顶部按钮激活天气滤镜（云层、急流、湿度），并滑动时间轴以预测它们在未来几小时内的演变。";
+        i18n.it.info_seq_opt = "Se clicchi sul pulsante <b>'Genera Sequenza Ottimale'</b> il sistema calcola i tempi e il numero di pose in base alle tempistiche di integrazione impostate, con un algoritmo ragionato su tipologia di subframe (Luminanza, banda larga o banda stretta...).<br><br>Se la modalità mosaico è attiva, il sistema dividerà ulteriormente l'integrazione totale per il numero di pannelli.";
+        i18n.en.info_seq_opt = "If you click the <b>'Generate Optimal Sequence'</b> button, the system calculates times and exposure counts based on the integration timeframe, using an algorithm tailored to the subframe type (Luminance, broadband, or narrowband...).<br><br>If mosaic mode is active, the system will further divide the total integration by the number of panels.";
+        i18n.es.info_seq_opt = "Si haces clic en el botón <b>'Generar Secuencia Óptima'</b>, el sistema calcula los tiempos y el número de tomas en función del tiempo de integración, con un algoritmo adaptado al tipo de subframe (Luminancia, banda ancha o banda estrecha...).<br><br>Si el modo mosaico está activo, el sistema dividirá aún más la integración total por el número de paneles.";
+        i18n.zh.info_seq_opt = "如果点击 <b>“生成最佳曝光序列”</b> 按钮，系统将根据设置的拍摄时间，结合子帧类型（明度、宽带或窄带等）的算法，自动计算理想的曝光时间和帧数。<br><br>如果激活了拼接模式，系统会将总时间进一步除以面板的数量。";
         
         function t(key) { return i18n[lang][key] || key; }
 
