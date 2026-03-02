@@ -399,6 +399,7 @@
                 </div>
                 <div class="input-group"><label data-i18n="width">Larg. W (mm):</label><input type="number" id="sensor-width" value="23.5" step="0.1" oninput="aggiornaFOV()"></div>
                 <div class="input-group"><label data-i18n="height">Alet. H (mm):</label><input type="number" id="sensor-height" value="15.7" step="0.1" oninput="aggiornaFOV()"></div>
+                <div class="input-group"><label data-i18n="pixel_size">Pixel (µm):</label><input type="number" id="pixel-size" value="3.76" step="0.01" oninput="aggiornaFOV()"></div>
                 
                 <div style="margin-top: 15px; padding: 15px; background-color: #222; border-radius: 8px; border: 1px solid #444;">
                     <div class="input-group" style="margin-bottom: 5px; display: flex; align-items: center;">
@@ -425,6 +426,19 @@
                     </div>
                 </div>
 
+                <div style="margin-top: 15px; padding-top: 15px; border-top: 1px dashed #444; text-align: left;">
+                    <h4 style="margin:0 0 10px 0; color:#aaa; font-size: 0.85em;" data-i18n="sampling_scale">Scala di Campionamento</h4>
+                    <div style="position: relative; width: 100%; height: 10px; background: linear-gradient(90deg, #ff4444 0%, #ff4444 15%, #ffaa00 20%, #44ff44 25%, #44ff44 50%, #ffaa00 60%, #ff4444 75%, #ff4444 100%); border-radius: 5px; margin-bottom: 5px;">
+                        <div id="sampling-marker" style="position: absolute; top: -4px; left: 50%; width: 4px; height: 18px; background: #fff; border: 1px solid #000; border-radius: 2px; transition: left 0.3s; transform: translateX(-50%); box-shadow: 0 0 5px rgba(0,0,0,0.8);"></div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.7em; color: #777; margin-bottom: 5px;">
+                        <span>0.0"</span><span>1.0"</span><span>2.0"</span><span>3.0"</span><span>4.0"+</span>
+                    </div>
+                    <p id="sampling-result" style="margin: 0; font-weight: bold; font-size: 1.1em; color: #fff;">-- "/px</p>
+                    <p id="sampling-msg" style="margin: 2px 0 0 0; font-size: 0.85em; font-weight: bold;"></p>
+                </div>
+
+                
                 <div style="margin-top: 25px; padding: 15px; background-color: #2a2a2a; border-radius: 8px; text-align: center;">
                     <h4 style="margin:0 0 5px 0; color:#aaa;" data-i18n="fov_calc">Campo Inquadrato Calcolato</h4>
                     <p id="fov-result" style="font-weight: bold; color: #44ff44; font-size: 1.4em; margin: 0;">--° x --°</p>
@@ -959,22 +973,21 @@
         ];
         
         const dbCamereBase = [
-            { nome: "ASI 533MC/MM (Square)", w: 11.31, h: 11.31 }, 
-            { nome: "ASI 294MC/MM (4/3\")", w: 19.1, h: 13.0 }, 
-            { nome: "ASI 2600MC/MM (APS-C)", w: 23.5, h: 15.7 }, 
-            { nome: "SONY IMX571 (APS-C Gen)", w: 23.5, h: 15.7 }, 
-            { nome: "ASI 6200MC/MM (Full Frame)", w: 36.0, h: 24.0 }, 
-            { nome: "ASI 183MC/MM (1\")", w: 13.2, h: 8.8 }, 
-            { nome: "SONY IMX585", w: 11.14, h: 6.26 }, 
-            { nome: "ASI 1600MM (4/3\")", w: 17.7, h: 13.4 }, 
-            { nome: "Reflex APS-C (Canon/Nikon)", w: 22.3, h: 14.9 }
+            { nome: "ASI 533MC/MM (Square)", w: 11.31, h: 11.31, p: 3.76 }, 
+            { nome: "ASI 294MC/MM (4/3\")", w: 19.1, h: 13.0, p: 4.63 }, 
+            { nome: "ASI 2600MC/MM (APS-C)", w: 23.5, h: 15.7, p: 3.76 }, 
+            { nome: "SONY IMX571 (APS-C Gen)", w: 23.5, h: 15.7, p: 3.76 }, 
+            { nome: "ASI 6200MC/MM (Full Frame)", w: 36.0, h: 24.0, p: 3.76 }, 
+            { nome: "ASI 183MC/MM (1\")", w: 13.2, h: 8.8, p: 2.4 }, 
+            { nome: "SONY IMX585", w: 11.14, h: 6.26, p: 2.9 }, 
+            { nome: "ASI 1600MM (4/3\")", w: 17.7, h: 13.4, p: 3.8 }, 
+            { nome: "Reflex APS-C (Canon/Nikon)", w: 22.3, h: 14.9, p: 4.3 }
         ];
 
         function popolaMenuAttrezzatura() {
             const selTel = document.getElementById('preset-telescope'); 
             selTel.innerHTML = '<option value="" data-i18n="select_opt">-- Seleziona --</option>';
             
-            // Carica telescopi personalizzati dell'utente
             let customTels = JSON.parse(localStorage.getItem('ad_custom_telescopes')) || [];
             
             let allTels = [...customTels, ...dbTelescopiBase];
@@ -989,7 +1002,7 @@
             selCam.innerHTML = '<option value="" data-i18n="select_opt">-- Seleziona --</option>';
             dbCamereBase.forEach(c => { 
                 let opt = document.createElement('option'); 
-                opt.value = `${c.w},${c.h}`; 
+                opt.value = `${c.w},${c.h},${c.p}`; 
                 opt.textContent = c.nome; 
                 selCam.appendChild(opt); 
             });
@@ -1005,6 +1018,19 @@
                 calcolaTempi();
             } 
         }
+
+        function applicaPresetSensore() { 
+            let v = document.getElementById('preset-sensor').value; 
+            if(v){
+                let p=v.split(',');
+                document.getElementById('sensor-width').value=p[0];
+                document.getElementById('sensor-height').value=p[1];
+                if(p[2]) document.getElementById('pixel-size').value=p[2];
+                aggiornaFOV();
+            } 
+        }
+
+        
 
         // Iniezione traduzioni per il bottone Salva
         i18n.it.save_btn = "💾 Salva";
@@ -1032,6 +1058,30 @@
         i18n.en.rotation = "Rotation (PA):";
         i18n.es.rotation = "Rotación (PA):";
         i18n.zh.rotation = "相机旋转 (PA):";
+        i18n.it.pixel_size = "Pixel (µm):";
+        i18n.en.pixel_size = "Pixel (µm):";
+        i18n.es.pixel_size = "Pixel (µm):";
+        i18n.zh.pixel_size = "像素 (µm):";
+
+        i18n.it.sampling_scale = "Scala di Campionamento";
+        i18n.en.sampling_scale = "Image Scale (Sampling)";
+        i18n.es.sampling_scale = "Escala de Muestreo";
+        i18n.zh.sampling_scale = "采样率 (Image Scale)";
+
+        i18n.it.oversampled = "⚠️ Sovracampionato (Luce dispersa, minor SNR)";
+        i18n.en.oversampled = "⚠️ Oversampled (Light spread, lower SNR)";
+        i18n.es.oversampled = "⚠️ Sobremuestreado (Pérdida de luz/SNR)";
+        i18n.zh.oversampled = "⚠️ 过采样 (星点模糊, 信噪比低)";
+
+        i18n.it.ideal_sampling = "✅ Campionamento Ideale";
+        i18n.en.ideal_sampling = "✅ Ideal Sampling";
+        i18n.es.ideal_sampling = "✅ Muestreo Ideal";
+        i18n.zh.ideal_sampling = "✅ 理想采样";
+
+        i18n.it.undersampled = "⚠️ Sottocampionato (Stelle squadrate)";
+        i18n.en.undersampled = "⚠️ Undersampled (Blocky stars)";
+        i18n.es.undersampled = "⚠️ Submuestreado (Estrellas cuadradas)";
+        i18n.zh.undersampled = "⚠️ 欠采样 (星点呈方形)";
 
         function salvaTelescopioCustom() {
             let f = document.getElementById('focal-length').value;
@@ -1062,7 +1112,7 @@
             document.getElementById('preset-telescope').value = `${f},${d}`;
         }
 
-        function applicaPresetSensore() { let v = document.getElementById('preset-sensor').value; if(v){let p=v.split(',');document.getElementById('sensor-width').value=p[0];document.getElementById('sensor-height').value=p[1];aggiornaFOV();} }
+        
 let latCorrente = 46.062, lonCorrente = 13.235, datiMeteo = null, indicePartenza = 0, chartAltezza = null, targetSelezionato = null, aladinSkyMap = null, vistaPrecedente = 'dashboard-view';
         let mappaScura = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { maxZoom: 19, attribution: 'Meteo Data &copy; <a href="https://open-meteo.com/" target="_blank" style="color:#bb86fc;">Open-Meteo</a> | Map &copy; <a href="https://carto.com/" target="_blank">CartoDB</a>' });
         let map = L.map('map', { center: [latCorrente, lonCorrente], zoom: 8, layers: [mappaScura], zoomControl: false });
@@ -1455,7 +1505,7 @@ let latCorrente = 46.062, lonCorrente = 13.235, datiMeteo = null, indicePartenza
 
         function tornaDashboard() { document.getElementById('planning-view').style.display = 'none'; document.getElementById('dashboard-view').style.display = 'block'; document.getElementById('search-dash-input').value = ''; document.getElementById('search-plan-input').value = ''; sessionStorage.removeItem('ad_current_target'); }
         function applicaPresetTelescopio() { let v = document.getElementById('preset-telescope').value; if(v){ let p = v.split(','); document.getElementById('focal-length').value = p[0]; document.getElementById('aperture').value = p[1] || 100; aggiornaFOV(); } }
-        function applicaPresetSensore() { let v = document.getElementById('preset-sensor').value; if(v){let p=v.split(',');document.getElementById('sensor-width').value=p[0];document.getElementById('sensor-height').value=p[1];aggiornaFOV();} }
+        
 
         // --- MOTORE MOSAICO ---
         function toggleMosaic() {
@@ -1476,6 +1526,18 @@ let latCorrente = 46.062, lonCorrente = 13.235, datiMeteo = null, indicePartenza
             let sw = parseFloat(document.getElementById('sensor-width').value) || 23.5;
             let sh = parseFloat(document.getElementById('sensor-height').value) || 15.6;
             
+            let pixelSize = parseFloat(document.getElementById('pixel-size').value) || 3.76;
+            let sampling = (pixelSize / fl) * 206.265;
+            
+            document.getElementById('sampling-result').innerText = sampling.toFixed(2) + ' "/px';
+            let posPct = (sampling / 4.0) * 100; if(posPct > 100) posPct = 100;
+            document.getElementById('sampling-marker').style.left = posPct + '%';
+            
+            let sMsg = document.getElementById('sampling-msg');
+            if (sampling < 0.67) { sMsg.innerText = t("oversampled"); sMsg.style.color = "#ff4444"; } 
+            else if (sampling >= 0.67 && sampling <= 2.0) { sMsg.innerText = t("ideal_sampling"); sMsg.style.color = "#44ff44"; } 
+            else { sMsg.innerText = t("undersampled"); sMsg.style.color = "#ffaa00"; }
+
             let fW = (2 * Math.atan(sw / (2 * fl)) * (180 / Math.PI));
             let fH = (2 * Math.atan(sh / (2 * fl)) * (180 / Math.PI));
             document.getElementById('fov-result').innerText = `${fW.toFixed(2)}° x ${fH.toFixed(2)}°`;
