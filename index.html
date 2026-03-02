@@ -384,11 +384,11 @@
                 </div>
                 <div class="input-group">
                     <label data-i18n="focal_len">Focale (mm):</label>
-                    <input type="number" id="focal-length" value="400" oninput="aggiornaFOV()">
+                    <input type="number" id="focal-length" value="400" oninput="aggiornaFOV(); calcolaTempi();">
                 </div>
                 <div class="input-group">
-                    <label style="color: #ffaa00;">Diametro (mm):</label>
-                    <input type="number" id="aperture" value="72" oninput="aggiornaFOV()">
+                    <label style="color: #ffaa00;" data-i18n="aperture">Diametro (mm):</label>
+                    <input type="number" id="aperture" value="72" oninput="aggiornaFOV(); calcolaTempi();">
                 </div>
                 <hr style="border: 1px solid #333; margin: 15px 0;">
                 <div class="input-group">
@@ -553,7 +553,7 @@
 
             <div style="text-align: center; margin-top: 25px;">
                 <button id="btn-export-nina" class="btn-smart" style="background: linear-gradient(135deg, #ff4444 0%, #aa0000 100%); box-shadow: 0 4px 15px rgba(255, 68, 68, 0.3); margin-bottom: 10px;" onclick="esportaNINA()" data-i18n="gen_nina_btn">💾 Genera File per N.I.N.A.</button>
-                <button id="btn-export-asiair" class="btn-smart" style="background: linear-gradient(135deg, #D32F2F 0%, #B71C1C 100%); box-shadow: 0 4px 15px rgba(211, 47, 47, 0.3); margin-bottom: 10px; margin-left: 10px;" onclick="esportaASIAIR()">🔴 Export ZWO ASIAIR</button>
+                <button id="btn-export-asiair" class="btn-smart" style="background: linear-gradient(135deg, #D32F2F 0%, #B71C1C 100%); box-shadow: 0 4px 15px rgba(211, 47, 47, 0.3); margin-bottom: 10px; margin-left: 10px;" onclick="esportaASIAIR()" data-i18n="export_asiair">🔴 Export ZWO ASIAIR</button>
                 <button id="btn-report-mosaic" class="btn-smart" style="display: none; background: linear-gradient(135deg, #7c4dff 0%, #3f51b5 100%); box-shadow: 0 4px 15px rgba(124, 77, 255, 0.3);" onclick="apriReport()" data-i18n="gen_report_btn">📝 Genera Report Strategico</button>
                 <p id="nina-mosaic-msg" style="display: none; color: #ffaa00; font-size: 0.9em; text-align: justify; line-height: 1.5; margin-top: 15px; padding: 15px; background: rgba(255, 170, 0, 0.1); border-left: 3px solid #ffaa00; border-radius: 4px;" data-i18n="nina_mosaic_msg">📌 Modalità Mosaico attiva. Usa il Framing Assistant di N.I.N.A. per le coordinate.</p>
             </div>
@@ -604,7 +604,7 @@
                 <span style="background: #D32F2F; color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 0.7em; font-weight: bold; letter-spacing: 1px;">ZWO</span> ASIAIR Plan
             </h2>
             <div id="asiair-report-content"></div>
-            <button class="btn-copy" style="border-color: #D32F2F; margin-top: 20px;" onclick="chiudiAsiairReport()">✅ Chiudi e Vai al Telescopio</button>
+            <button class="btn-copy" style="border-color: #D32F2F; margin-top: 20px;" onclick="chiudiAsiairReport()" data-i18n="asiair_close">✅ Chiudi e Vai al Telescopio</button>
         </div>
     </div>
 
@@ -992,7 +992,8 @@
                 let p = v.split(','); 
                 document.getElementById('focal-length').value = p[0]; 
                 document.getElementById('aperture').value = p[1] || 100; 
-                aggiornaFOV(); 
+                aggiornaFOV();
+                calcolaTempi();
             } 
         }
 
@@ -1001,6 +1002,19 @@
         i18n.en.save_btn = "💾 Save";
         i18n.es.save_btn = "💾 Guardar";
         i18n.zh.save_btn = "💾 保存";
+        i18n.it.aperture = "Diametro (mm):";
+        i18n.en.aperture = "Aperture (mm):";
+        i18n.es.aperture = "Diámetro (mm):";
+        i18n.zh.aperture = "口径 (mm):";
+
+        i18n.it.asiair_close = "✅ Chiudi e Vai al Telescopio";
+        i18n.en.asiair_close = "✅ Close and Go to Mount";
+        i18n.es.asiair_close = "✅ Cerrar e Ir al Telescopio";
+        i18n.zh.asiair_close = "✅ 关闭并开始拍摄";
+        i18n.it.export_asiair = "🔴 Export ZWO ASIAIR";
+        i18n.en.export_asiair = "🔴 Export ZWO ASIAIR";
+        i18n.es.export_asiair = "🔴 Exportar ZWO ASIAIR";
+        i18n.zh.export_asiair = "🔴 导出 ZWO ASIAIR";
 
         function salvaTelescopioCustom() {
             let f = document.getElementById('focal-length').value;
@@ -2053,7 +2067,9 @@ let latCorrente = 46.062, lonCorrente = 13.235, datiMeteo = null, indicePartenza
             
             let totaleOre = parseFloat(document.getElementById(`ore-mn-${notteId}`).value) || 0;
             let tSec = totaleOre * 3600;
-            if (tSec <= 0) { alert("Imposta orari validi per questa notte."); return; }
+            
+            let errTime = lang === 'it' ? "Imposta orari validi per questa notte." : lang === 'en' ? "Please set valid times for this night." : lang === 'es' ? "Establece horarios válidos para esta noche." : "请为今晚设置有效的时间。";
+            if (tSec <= 0) { alert(errTime); return; }
 
             let possibili = isMono ? ['m-l','m-r','m-g','m-b','m-ha','m-oiii','m-sii'] : ['c-light'];
             let filtriAttivi = [];
@@ -2067,7 +2083,8 @@ let latCorrente = 46.062, lonCorrente = 13.235, datiMeteo = null, indicePartenza
                 }
             });
 
-            if (filtriAttivi.length === 0) { alert("Devi selezionare almeno un filtro da riprendere per questa specifica sessione!"); return; }
+            let errFilter = lang === 'it' ? "Devi selezionare almeno un filtro per questa sessione!" : lang === 'en' ? "You must select at least one filter for this session!" : lang === 'es' ? "¡Debes seleccionar al menos un filtro para esta sesión!" : "您必须为本次拍摄选择至少一个滤镜！";
+            if (filtriAttivi.length === 0) { alert(errFilter); return; }
 
             let doDither = document.getElementById('dither-check') && document.getElementById('dither-check').checked;
             let dFreq = parseInt(document.getElementById('dither-freq').value) || 1;
