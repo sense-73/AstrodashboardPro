@@ -273,10 +273,9 @@
                     <div id="moon-emoji" class="moon-icon">🌕</div>
                     <div id="moon-phase-name" class="moon-phase-name">Caricamento...</div>
                 </div>
-                <div class="weather-container">
-                    <span style="font-size: 2em; margin-bottom: 5px;">🌡️</span>
-                    <span id="meteo-temp" style="font-size: 1.4em; font-weight: bold; color: #fff;">--°C</span>
-                    <span id="meteo-umidita" style="font-size: 0.9em; color: #44ff44;"><span data-i18n="humidity">Umidità</span>: --%</span>
+                <div class="weather-container" style="min-width: 120px;">
+                    <span id="current-weather-icon" style="font-size: 3.5em; text-shadow: 0 0 15px rgba(255, 255, 255, 0.2); margin-bottom: 5px;">☁️</span>
+                    <span id="current-weather-desc" style="font-size: 1em; font-weight: bold; color: #fff; text-transform: uppercase; text-align: center;">Meteo...</span>
                 </div>
                 <div class="times-grid">
                     <div class="time-item"><span class="icon-normal">🌅</span> <span data-i18n="sunrise">Alba</span> <span data-i18n="sun">Sole</span><br><span id="alba-sole">--:--</span></div>
@@ -1256,8 +1255,18 @@ let latCorrente = 46.062, lonCorrente = 13.235, datiMeteo = null, indicePartenza
             if (altS < -6) { if (maxC < 15) icM = "✨"; else if (maxC < 40) icM = "🌙"; }
 
             document.getElementById('time-display').innerHTML = `<span style="font-size: 1.5em; vertical-align: middle; margin-right: 5px;">${icM}</span> ${tOra} <br><span style="font-size: 0.75em; color: #aaa; text-transform: uppercase;">${t("weather")}: <b style="color: #fff;">${t(dsM)}</b></span>`;
-            document.getElementById('meteo-temp').innerText = Math.round(temp) + "°C";
-            document.getElementById('meteo-umidita').innerText = t("humidity")+": " + um + "%"; document.getElementById('meteo-umidita').style.color = um > 85 ? "#ff4444" : "#44ff44";
+            
+            // Calcolo Meteo Attuale (fisso, non influenzato dallo slider)
+            let dOra0 = new Date(datiMeteo.time[indicePartenza]);
+            let b0 = datiMeteo.cloud_cover_low[indicePartenza], m0 = datiMeteo.cloud_cover_mid[indicePartenza], a0 = datiMeteo.cloud_cover_high[indicePartenza];
+            let altS0 = SunCalc.getPosition(dOra0, latCorrente, lonCorrente).altitude * (180/Math.PI);
+            let maxC0 = Math.max(b0, m0, a0), icM0 = "☁️", dsM0 = "overcast";
+            if (maxC0 < 15) { icM0 = "☀️"; dsM0 = "clear"; } else if (maxC0 < 40) { icM0 = "🌤️"; dsM0 = "partly_cloudy"; } else if (maxC0 < 75) { icM0 = "⛅"; dsM0 = "mostly_cloudy"; }
+            if (altS0 < -6) { if (maxC0 < 15) icM0 = "✨"; else if (maxC0 < 40) icM0 = "🌙"; }
+            
+            let iconEl = document.getElementById('current-weather-icon'); if (iconEl) iconEl.innerText = icM0;
+            let descEl = document.getElementById('current-weather-desc'); if (descEl) descEl.innerText = t(dsM0);
+            
             document.getElementById('val-umidita-layer').innerText = um + "%";
             
             let inqL = (altS < -6 && mP.altitude > 0) ? Math.max(0, Math.round((SunCalc.getMoonIllumination(dOra).fraction * Math.sin(mP.altitude)) * 100)) : 0;
