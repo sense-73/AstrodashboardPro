@@ -67,7 +67,13 @@
         #map { height: 500px; width: 100%; border: 2px solid #333; border-radius: 8px; z-index: 1; }
         
         .timeline-container { margin-top: 20px; padding: 15px; background-color: #2a2a2a; border-radius: 8px; text-align: center; width: 100%; box-sizing: border-box;}
-        input[type="range"] { width: 100%; cursor: pointer; margin-top: 10px;}
+        .range-wrapper { position: relative; width: 100%; margin-top: 10px; height: 24px; display: flex; align-items: center; }
+        .gradient-bar { position: absolute; left: 0; width: 100%; height: 8px; border-radius: 4px; background: #333; z-index: 1; pointer-events: none; opacity: 0.9; box-shadow: inset 0 0 5px rgba(0,0,0,0.8); }
+        input[type="range"] { position: relative; z-index: 2; width: 100%; cursor: pointer; -webkit-appearance: none; background: transparent; margin: 0; }
+        input[type="range"]::-webkit-slider-runnable-track { background: transparent; border: none; }
+        input[type="range"]::-moz-range-track { background: transparent; border: none; }
+        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; height: 18px; width: 18px; border-radius: 50%; background: #bb86fc; margin-top: -5px; border: 2px solid #fff; box-shadow: 0 0 5px rgba(0,0,0,0.8); }
+        input[type="range"]::-moz-range-thumb { height: 18px; width: 18px; border-radius: 50%; background: #bb86fc; border: 2px solid #fff; box-shadow: 0 0 5px rgba(0,0,0,0.8); }
         .time-display { font-size: 1.3em; color: #bb86fc; font-weight: bold; margin-bottom: 5px; text-transform: capitalize;}
         
         .meteo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; margin-top: 15px; }
@@ -311,7 +317,10 @@
             <div class="timeline-container" style="position: relative;">
                 <span class="info-icon" style="position: absolute; right: 15px; top: 15px; font-size: 1.2em;" onmouseenter="mostraTooltip(this, 'info_map')" onmouseleave="nascondiTooltip()">ℹ️</span>
                 <div id="time-display" class="time-display">Caricamento Timeline Meteo...</div>
-                <input type="range" id="timeSlider" min="0" max="23" value="0" oninput="syncSliders(this.value)" disabled>
+                <div class="range-wrapper">
+                    <div id="meteo-gradient" class="gradient-bar"></div>
+                    <input type="range" id="timeSlider" min="0" max="23" value="0" oninput="syncSliders(this.value)" disabled>
+                </div>
                 <div style="display:flex; justify-content: space-between; font-size:0.8em; color:#aaa; padding-top: 5px;">
                     <span data-i18n="now">Adesso</span><span>+12h</span><span>+24h</span>
                 </div>
@@ -324,7 +333,10 @@
             
             <div class="timeline-container" style="margin-top: 10px; margin-bottom: 20px; padding: 10px; background-color: #222;">
                 <div id="astro-time-display" class="time-display" style="color: #44ff44;">Caricamento Timeline Astro...</div>
-                <input type="range" id="astroSlider" min="0" max="23" value="0" oninput="syncSliders(this.value)" disabled>
+                <div class="range-wrapper">
+                    <div id="astro-gradient" class="gradient-bar"></div>
+                    <input type="range" id="astroSlider" min="0" max="23" value="0" oninput="syncSliders(this.value)" disabled>
+                </div>
             </div>
 
             <div class="astro-section">
@@ -555,6 +567,9 @@
                     </label>
                     <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; width: 100%; cursor: pointer; color: #aaa; font-size: 0.9em;">
                         <input type="checkbox" id="nina-slew" checked style="transform: scale(1.2);"> <span data-i18n="slew_center">Slew & Center (Plate Solve)</span>
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; width: 100%; cursor: pointer; color: #aaa; font-size: 0.9em;">
+                        <input type="checkbox" id="nina-rotate" style="transform: scale(1.2);"> <span data-i18n="rotate_target">Ruota Camera (Rotatore Auto)</span>
                     </label>
                     <label style="display: flex; align-items: center; gap: 8px; width: 100%; cursor: pointer; color: #aaa; font-size: 0.9em;">
                         <input type="checkbox" id="nina-guide" checked style="transform: scale(1.2);"> <span data-i18n="start_guide">Avvia Autoguida</span>
@@ -1091,6 +1106,10 @@
         i18n.en.undersampled = "⚠️ Undersampled (Blocky stars)";
         i18n.es.undersampled = "⚠️ Submuestreado (Estrellas cuadradas)";
         i18n.zh.undersampled = "⚠️ 欠采样 (星点呈方形)";
+        i18n.it.rotate_target = "Ruota Camera (Rotatore Auto)";
+        i18n.en.rotate_target = "Rotate Camera (Auto Rotator)";
+        i18n.es.rotate_target = "Rotar Cámara (Rotador Auto)";
+        i18n.zh.rotate_target = "旋转相机 (自动旋转器)";
 
         function salvaTelescopioCustom() {
             let f = document.getElementById('focal-length').value;
@@ -1188,8 +1207,32 @@ let latCorrente = 46.062, lonCorrente = 13.235, datiMeteo = null, indicePartenza
                 indicePartenza = Math.max(0, datiMeteo.time.findIndex(x => new Date(x).getTime() >= adesso.getTime() - 3600000));
                 document.getElementById('timeSlider').disabled = false; document.getElementById('timeSlider').value = 0; 
                 document.getElementById('astroSlider').disabled = false; document.getElementById('astroSlider').value = 0; 
+                applicaGradienteGiornoNotte();
                 cambiaOraMeteo(); cambiaOraAstro();
             });
+        }
+
+        function applicaGradienteGiornoNotte() {
+            if (!datiMeteo) return;
+            let maxSteps = 23; // Il range del nostro slider
+            let stops = [];
+            for(let i=0; i<=maxSteps; i++) {
+                let d = new Date(datiMeteo.time[indicePartenza + i]);
+                let times = SunCalc.getTimes(d, latCorrente, lonCorrente);
+                let pct = (i / maxSteps) * 100;
+                
+                // Colori: Giorno (Azzurro), Crepuscolo (Arancione scuro), Notte profonda (Blu notte/Nero)
+                let color = "#0a0f1d"; 
+                if (d > times.sunrise && d < times.sunset) color = "#5c9fb8"; 
+                else if ((d > times.dawn && d <= times.sunrise) || (d >= times.sunset && d < times.dusk)) color = "#d97b2b"; 
+                
+                stops.push(`${color} ${pct}%`);
+            }
+            let grad = `linear-gradient(to right, ${stops.join(', ')})`;
+            let gMeteo = document.getElementById('meteo-gradient');
+            let gAstro = document.getElementById('astro-gradient');
+            if (gMeteo) gMeteo.style.background = grad;
+            if (gAstro) gAstro.style.background = grad;
         }
 
         function syncSliders(val) { 
@@ -1957,6 +2000,7 @@ let latCorrente = 46.062, lonCorrente = 13.235, datiMeteo = null, indicePartenza
             if (doCool) startItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Camera.CoolCamera, NINA.Sequencer", "Temperature": tempTarget, "Duration": 0.0, "Parent": {"$ref": startAreaId}, "ErrorBehavior": 0, "Attempts": 1 });
             let dsoContainerId = nextId(), imagingContainerId = nextId(), dsoItems = [];
             if (doSlew) dsoItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Platesolving.Center, NINA.Sequencer", "Inherited": true, "Coordinates": { "$id": nextId(), "$type": "NINA.Astrometry.InputCoordinates, NINA.Astrometry", "RAHours": rh, "RAMinutes": rm, "RASeconds": rs, "NegativeDec": negD, "DecDegrees": dd, "DecMinutes": dm, "DecSeconds": ds }, "Parent": {"$ref": dsoContainerId}, "ErrorBehavior": 0, "Attempts": 1 });
+            if (document.getElementById('nina-rotate') && document.getElementById('nina-rotate').checked) dsoItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Rotator.RotateTarget, NINA.Sequencer", "Tolerance": 1.0, "Inherited": true, "Parent": {"$ref": dsoContainerId}, "ErrorBehavior": 0, "Attempts": 1 });
             if (doGuide) dsoItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Guider.StartGuiding, NINA.Sequencer", "ForceCalibration": false, "Parent": {"$ref": dsoContainerId}, "ErrorBehavior": 0, "Attempts": 1 });
 
             let imagingItems = [];
@@ -2209,6 +2253,7 @@ let latCorrente = 46.062, lonCorrente = 13.235, datiMeteo = null, indicePartenza
             let startItems = [], dsoItems = [], endItems = [];
             if (document.getElementById('nina-cool').checked) startItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Camera.CoolCamera, NINA.Sequencer", "Temperature": parseFloat(document.getElementById('nina-temp').value) || -10, "Duration": 0.0, "Parent": null, "ErrorBehavior": 0, "Attempts": 1 });
             if (document.getElementById('nina-slew').checked) dsoItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Platesolving.Center, NINA.Sequencer", "Inherited": true, "Coordinates": { "$id": nextId(), "$type": "NINA.Astrometry.InputCoordinates, NINA.Astrometry", "RAHours": rh, "RAMinutes": rm, "RASeconds": rs, "NegativeDec": negD, "DecDegrees": dd, "DecMinutes": dm, "DecSeconds": ds }, "Parent": null, "ErrorBehavior": 0, "Attempts": 1 });
+            if (document.getElementById('nina-rotate') && document.getElementById('nina-rotate').checked) dsoItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Rotator.RotateTarget, NINA.Sequencer", "Tolerance": 1.0, "Inherited": true, "Parent": null, "ErrorBehavior": 0, "Attempts": 1 });
             if (document.getElementById('nina-guide').checked) dsoItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Guider.StartGuiding, NINA.Sequencer", "ForceCalibration": false, "Parent": null, "ErrorBehavior": 0, "Attempts": 1 });
             if (document.getElementById('nina-warm').checked) endItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Camera.WarmCamera, NINA.Sequencer", "Duration": 0.0, "Parent": null, "ErrorBehavior": 0, "Attempts": 1 });
             if (document.getElementById('nina-park').checked) endItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Telescope.ParkScope, NINA.Sequencer", "Parent": null, "ErrorBehavior": 0, "Attempts": 1 });
