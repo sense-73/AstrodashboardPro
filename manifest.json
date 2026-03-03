@@ -1,0 +1,22 @@
+{
+  "name": "AstroDashboard PRO",
+  "short_name": "AstroDash",
+  "description": "Advanced Astronomy Control & Imaging Suite",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#121212",
+  "theme_color": "#121212",
+  "icons": [
+    {
+      "src": "adp_ico.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "adp_ico.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
