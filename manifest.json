@@ -8,13 +8,13 @@
   "theme_color": "#121212",
   "icons": [
     {
-      "src": "adp_ico.png?v=2",
+      "src": "adp_ico.png?v=3",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "adp_ico.png?v=2",
+      "src": "adp_ico.png?v=3",
       "sizes": "512x512",
       "type": "image/png"
     }
