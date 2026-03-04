@@ -232,6 +232,31 @@
             .nav-fab-btn:first-child { border-bottom: 1px solid #333; }
             .nav-fab-btn:active { background: rgba(187, 134, 252, 0.2); color: #bb86fc; }
         }
+
+        .btn-pro-header {
+            background: linear-gradient(135deg, #1a1a1a 0%, #121212 100%);
+            color: #00c6ff;
+            border: 1px solid #00c6ff;
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(0, 198, 255, 0.2);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-pro-header:hover {
+            background: #00c6ff;
+            color: #121212;
+            box-shadow: 0 0 20px rgba(0, 198, 255, 0.6);
+            transform: scale(1.05);
+        }
+
     </style>
 </head>
 <body>
@@ -484,13 +509,36 @@
                                 <span style="margin-left: 5px; color: #aaa; font-weight: bold;">°</span>
                             </div>
                         </div>
+
+                        <!-- COORDINATE CENTRO FOV: si aggiornano live durante il drag -->
+                        <div style="display:flex; align-items:center; justify-content:space-between; padding: 8px 10px; background:#1a1a1a; border-radius:6px; border:1px solid #333; margin-top:4px; gap:10px;">
+                            <div>
+                                <div style="font-size:0.68em; color:#666; text-transform:uppercase; letter-spacing:1px; margin-bottom:3px;">📍 Centro FOV</div>
+                                <div style="display:flex; gap:14px; flex-wrap:wrap;">
+                                    <span style="font-size:0.82em; color:#aaa;">AR: <b id="fov-ra-display" style="color:#44ff44; font-family:monospace; letter-spacing:0.5px;">--h --m --s</b></span>
+                                    <span style="font-size:0.82em; color:#aaa;">Dec: <b id="fov-dec-display" style="color:#44ff44; font-family:monospace; letter-spacing:0.5px;">--° --′ --″</b></span>
+                                </div>
+                            </div>
+                            <div style="display:flex; align-items:center; gap:8px;">
+                                <span id="fov-offset-badge" style="display:none; font-size:0.7em; background:rgba(255,170,0,0.12); color:#ffaa00; border:1px solid rgba(255,170,0,0.4); padding:2px 8px; border-radius:10px; white-space:nowrap;">⚠ offset</span>
+                                <button onclick="resetFovCenter()" title="Riporta FOV al centro del target" style="background:transparent; border:1px solid #444; color:#888; padding:2px 9px; border-radius:4px; cursor:pointer; font-size:0.75em; transition:all 0.2s;" onmouseover="this.style.borderColor='#bb86fc';this.style.color='#bb86fc'" onmouseout="this.style.borderColor='#444';this.style.color='#888'">⌖ Reset</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="chart-container"><canvas id="altitudeChart"></canvas></div>
             </div>
         </div>
 
-        <h2 id="calc-title" style="margin-top: 30px; border-top: 1px solid #333; padding-top: 20px;"><span data-i18n="smart_calc">⏱️ Calcolatore Sessione Smart AI</span> <span class="info-icon" onmouseenter="mostraTooltip(this, 'info_smart')" onmouseleave="nascondiTooltip()">ℹ️</span></h2>
+        <div style="margin-top: 30px; border-top: 1px solid #333; padding-top: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+            <h2 id="calc-title" style="margin: 0; border: none; padding: 0;">
+                <span data-i18n="smart_calc">⏱️ Calcolatore Sessione Smart AI</span> 
+                <span class="info-icon" onmouseenter="mostraTooltip(this, 'info_smart')" onmouseleave="nascondiTooltip()">ℹ️</span>
+            </h2>
+            <button id="btn-open-pro" class="btn-pro-header" onclick="apriProView()">
+                <span style="font-size: 1.2em;">🛠️</span> <span data-i18n="go_to_pro">Vai al Calcolatore PRO</span>
+            </button>
+        </div>
         
         <div class="twilight-grid">
             <div class="twilight-item"><span class="icon">🌇</span><span class="label" data-i18n="sunset">Tramonto</span><b id="info-sunset">--:--</b></div>
@@ -602,6 +650,92 @@
         </div>
     </div>
 
+    <div id="pro-view" style="display: none; text-align: left; max-width: 1200px; margin: 0 auto;">
+    <div class="planning-header-row">
+        <button class="btn-back" onclick="chiudiProView()" data-i18n="pro_back">Torna alla Dashboard Smart</button>
+        <h2 style="margin: 0; color: #00c6ff;">🚀 N.I.N.A. Advanced Builder PRO</h2>
+    </div>
+
+    <div class="panel" style="margin-bottom: 20px; display: flex; flex-direction: column; gap: 15px;">
+        <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 10px;">
+            <div class="input-group" style="margin: 0;">
+                <label style="width: auto; margin-right: 10px; color:#fff;" data-i18n="pro_session_start">Inizio Sessione:</label>
+                <input type="time" id="pro-time-start" onchange="calcolaNightFillBar()">
+            </div>
+            <div class="input-group" style="margin: 0;">
+                <label style="width: auto; margin-right: 10px; color:#fff;" data-i18n="pro_session_end">Fine Sessione:</label>
+                <input type="time" id="pro-time-end" onchange="calcolaNightFillBar()">
+            </div>
+        </div>
+        
+        <div style="width: 100%; background: #1a1a1a; border: 1px solid #444; border-radius: 8px; height: 30px; position: relative; overflow: hidden; margin-top: 10px;">
+            <div id="pro-fill-bar" style="height: 100%; width: 0%; background: #44ff44; transition: width 0.3s, background 0.3s;"></div>
+            <span id="pro-fill-text" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-weight: bold; color: #fff; text-shadow: 1px 1px 2px #000; font-size: 0.9em; white-space: nowrap;">0h 0m / 0h 0m (0%)</span>
+        </div>
+        <button id="btn-pro-multinight" class="btn-smart" style="display: none; background: linear-gradient(135deg, #ff4444 0%, #aa0000 100%); padding: 8px 15px; font-size: 0.9em; margin-top: 10px;" onclick="apriMultiNight('pro');"><span data-i18n="pro_overflow">⚠️ Sforamento! Dividi in Multi-Notte</span></button>
+    </div>
+
+    <div class="planning-grid">
+        <div class="panel" style="display: flex; flex-direction: column; gap: 15px; min-width: 300px;">
+                <h3 style="margin-top:0; border-bottom: 1px solid #333; padding-bottom: 5px;" data-i18n="pro_triggers">⚙️ Triggers & Hardware</h3>
+                
+                <div style="background: #222; padding: 12px; border-radius: 5px;">
+                    <h4 style="margin: 0 0 10px 0; color: #bb86fc;" data-i18n="pro_preflight">Pre-Flight</h4>
+                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: #aaa; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="pro-cool" checked style="transform: scale(1.2);"> <span data-i18n="pro_cool_cam">Raffredda a</span> <input type="number" id="pro-temp" value="-10" style="width: 45px!important; padding:4px!important;"> °C</label>
+                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: #aaa; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="pro-slew" checked style="transform: scale(1.2);"> Slew & Center (Solve)</label>
+                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: #aaa; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="pro-rotate" style="transform: scale(1.2);"> <span data-i18n="pro_auto_rotator">Rotatore Automatico</span></label>
+                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: #aaa; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="pro-guide" checked style="transform: scale(1.2);"> <span data-i18n="pro_start_guide">Avvia Autoguida</span></label>
+                    <label style="display: flex; align-items: center; gap: 8px; color: #aaa; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="pro-flip" checked style="transform: scale(1.2);"> Meridian Flip</label>
+                </div>
+
+                <div style="background: #222; padding: 12px; border-radius: 5px;">
+                    <h4 style="margin: 0 0 10px 0; color: #00ffff;">Autofocus</h4>
+                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: #aaa; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="pro-af-start" checked style="transform: scale(1.2);"> <span data-i18n="pro_af_start">All'avvio sequenza</span></label>
+                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: #aaa; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="pro-af-filter" checked style="transform: scale(1.2);"> <span data-i18n="pro_af_filter">Al cambio filtro</span></label>
+                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: #aaa; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="pro-af-time" style="transform: scale(1.2);"> <span data-i18n="pro_af_every">Ogni</span> <input type="number" id="pro-af-time-val" value="60" style="width: 45px!important; padding:4px!important;"> <span data-i18n="pro_af_min">min</span></label>
+                    <label style="display: flex; align-items: center; gap: 8px; color: #aaa; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="pro-af-temp" style="transform: scale(1.2);"> <span data-i18n="pro_af_temp_lbl">Variazione</span> <input type="number" id="pro-af-temp-val" value="2" style="width: 40px!important; padding:4px!important;"> °C</label>
+                </div>
+
+                <div style="background: #222; padding: 12px; border-radius: 5px;">
+                    <h4 style="margin: 0 0 10px 0; color: #ffaa00;" data-i18n="pro_postflight">Post-Flight</h4>
+                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: #aaa; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="pro-warm" checked style="transform: scale(1.2);"> <span data-i18n="pro_warm_up">Warm Up Camera</span></label>
+                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: #aaa; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="pro-park" checked style="transform: scale(1.2);"> <span data-i18n="pro_park">Park Montatura</span></label>
+                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: #aaa; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="pro-cover" style="transform: scale(1.2);"> <span data-i18n="pro_cover">Chiudi Cover/Cap</span></label>
+                    <label style="display: flex; align-items: center; gap: 8px; color: #aaa; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="pro-flat" style="transform: scale(1.2);"> <span data-i18n="pro_flat">Accendi Flat Panel</span></label>
+                </div>
+            </div>
+
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+            <div class="panel">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <h4 style="margin: 0; color: #fff;">
+                        <span data-i18n="filter_map">Mappatura Nomi Filtri</span> 
+                        <span style="color: #00c6ff; font-size: 0.8em; margin-left: 10px;">(Sincronizzazione N.I.N.A.)</span>
+                    </h4>
+                    <select id="pro-sensor-type" onchange="disegnaGrigliaPro()" style="background: #1a1a1a; color: #00c6ff; font-weight: bold; border-color: #00c6ff; cursor: pointer; width: auto !important;">
+                        <option value="color" data-i18n="pro_sensor_osc">Sensore OSC (Color)</option>
+                        <option value="mono" data-i18n="pro_sensor_mono">Sensore Mono</option>
+                    </select>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px;" id="pro-nina-filters-container">
+                </div>
+            </div>
+
+            <div class="panel">
+                <div style="border-bottom: 1px solid #333; padding-bottom: 15px; margin-bottom: 15px;">
+                    <h3 style="margin: 0; color: #fff;"><span data-i18n="pro_seq_builder">📸 Calcolatore di Sequenze</span> <span class="info-icon" onmouseenter="mostraTooltip(this, 'info_pro_seq')" onmouseleave="nascondiTooltip()">ℹ️</span></h3>
+                </div>
+                
+                <div id="pro-sequence-grid" style="display: flex; flex-direction: column; gap: 10px;"></div>
+                
+                <div style="text-align: center; margin-top: 25px;">
+                    <button class="btn-smart" style="background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%); width: 100%; font-size: 1.1em;" onclick="esportaNinaPRO()" data-i18n="pro_export_btn">💾 Esporta Advanced Sequence (.json)</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    
     <div id="floating-tooltip" class="floating-tooltip"></div>
 
     <div id="report-modal" class="modal">
@@ -614,29 +748,43 @@
     </div>
 
     <div id="multinight-modal" class="modal">
-        <div class="modal-content" style="max-width: 700px;">
-            <span class="close-btn" onclick="chiudiMultiNight()">&times;</span>
-            <h2 style="color: #ffaa00; margin-top:0; border-bottom: 1px solid #333; padding-bottom: 15px;" data-i18n="mn_title">📅 Multi-Night Project Manager</h2>
+        <div class="modal-content" style="max-width: 700px; padding: 0; display: flex; flex-direction: column; max-height: 85vh; overflow: hidden;">
             
-            <div style="background: rgba(255, 68, 68, 0.1); border-left: 3px solid #ff4444; padding: 10px; margin-bottom: 15px; border-radius: 4px;">
-                <span style="font-size: 0.85em; color: #ffaaaa; display: block; line-height: 1.4;" data-i18n="mn_warning"><b>⚠️ ATTENZIONE N.I.N.A.:</b> Assicurati che i nomi dei filtri nella "Mappatura Nomi" (nel pannello principale in basso) corrispondano <b>esattamente</b> a quelli scritti nella tua ruota portafiltri, altrimenti il file darà errore!</span>
-            </div>            
+            <div style="padding: 25px 25px 15px 25px; background: #1e1e1e; border-bottom: 2px solid #333; z-index: 10; box-shadow: 0 5px 15px rgba(0,0,0,0.6);">
+                <span class="close-btn" style="top: 20px; right: 25px;" onclick="chiudiMultiNight()">&times;</span>
+                <h2 style="color: #ffaa00; margin-top:0; border-bottom: 1px solid #333; padding-bottom: 15px;"><span data-i18n="mn_title">📅 Progettazione Multinotte</span> <span class="info-icon" onmouseenter="mostraTooltip(this, 'info_multinight')" onmouseleave="nascondiTooltip()">ℹ️</span></h2>
+                
+                <div style="background: rgba(255, 68, 68, 0.1); border-left: 3px solid #ff4444; padding: 10px; margin-bottom: 15px; border-radius: 4px;">
+                    <span style="font-size: 0.85em; color: #ffaaaa; display: block; line-height: 1.4;" data-i18n="mn_warning"><b>⚠️ ATTENZIONE N.I.N.A.:</b> Assicurati che i nomi dei filtri nella "Mappatura Nomi" corrispondano <b>esattamente</b> a quelli scritti nella tua ruota portafiltri!</span>
+                </div>            
 
-            <div style="display: flex; justify-content: space-between; align-items: center; background: #2a2a2a; padding: 15px; border-radius: 8px; border-left: 4px solid #bb86fc; margin-bottom: 20px;">
-                <div>
-                    <h4 style="margin: 0 0 5px 0; color: #aaa;" data-i18n="mn_target_ai">Target Consigliato (AI)</h4>
-                    <b id="mn-target-hours" style="font-size: 1.4em; color: #fff;">-- Ore</b>
-                </div>
-                <div style="text-align: right;">
-                    <h4 style="margin: 0 0 5px 0; color: #aaa;" data-i18n="mn_planned">Tempo Pianificato</h4>
-                    <b id="mn-assigned-hours" style="font-size: 1.4em; color: #44ff44;">0 Ore</b>
+                <div style="background: #2a2a2a; padding: 15px; border-radius: 8px; border-left: 4px solid #bb86fc; margin: 0;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <div>
+                            <h4 id="mn-target-label" style="margin: 0 0 4px 0; color: #aaa; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px;">🎯 Obiettivo</h4>
+                            <b id="mn-target-hours" style="font-size: 1.4em; color: #fff;">--h --m</b>
+                        </div>
+                        <div style="text-align: right;">
+                            <h4 style="margin: 0 0 4px 0; color: #aaa; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px;" data-i18n="mn_planned_time">📅 Tempo Pianificato</h4>
+                            <b id="mn-assigned-hours" style="font-size: 1.4em; color: #ff4444;">0h 0m</b>
+                        </div>
+                    </div>
+                    <div style="background: #111; border-radius: 4px; height: 6px; overflow: hidden;">
+                        <div id="mn-progress-bar" style="height:100%; width:0%; background:#ff4444; transition:all 0.4s; border-radius:4px;"></div>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; margin-top:4px;">
+                        <span style="font-size:0.7em; color:#555;">0%</span>
+                        <span id="mn-progress-pct" style="font-size:0.7em; color:#888;">0% completato</span>
+                        <span style="font-size:0.7em; color:#555;">100%</span>
+                    </div>
                 </div>
             </div>
 
-            <div id="mn-nights-container" style="display: flex; flex-direction: column; gap: 15px;">
+            <div style="padding: 20px 25px; overflow-y: auto; flex: 1;">
+                <div id="mn-nights-container" style="display: flex; flex-direction: column; gap: 15px;"></div>
+                <button class="btn-smart" style="margin-top: 20px; width: 100%; background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%); box-shadow: none;" onclick="aggiungiNotte()" data-i18n="mn_add_night">➕ Aggiungi Sessione (Notte)</button>
             </div>
-
-            <button class="btn-smart" style="margin-top: 20px; width: 100%; background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%); box-shadow: none;" onclick="aggiungiNotte()" data-i18n="mn_add_night">➕ Aggiungi Sessione (Notte)</button>
+            
         </div>
     </div>
     <div id="asiair-modal" class="modal">
@@ -655,42 +803,350 @@
         
         <div id="guide-it">
             <h2 style="font-size: 2.4em; border-bottom: 2px solid #bb86fc; padding-bottom: 15px; margin-bottom: 30px;">📖 Manuale AstroDashboard PRO</h2>
-            <div class="filosofia-box"><h3 style="color: #fff; margin-top:0;">La Filosofia del Software</h3><p>AstroDashboard è progettata per essere il "Direttore d'Orchestra" della tua strumentazione. Fonde dati ambientali, calcoli trigonometrici e un algoritmo predittivo avanzato per eliminare i tempi morti e ottimizzare ogni singolo secondo della tua notte sotto le stelle.</p></div>
-            <div class="guide-section"><h3>🌍 1. Dati Ambientali e Meteo Tattico</h3><ul><li><strong>Mappa a Raggio (50 Km):</strong> Pensata per gli astrofotografi itineranti. Il cerchio ti permette di valutare rapidamente dove spostarti per trovare "buchi di sereno" se la tua zona è coperta.</li><li><strong>Jet Stream:</strong> Il vero nemico del Seeing. Un valore inferiore a 50 km/h garantisce cieli stabili. Oltre i 100 km/h la turbolenza devasterà i dettagli.</li><li><strong>Allarme Umidità:</strong> Se supera l'85% (rosso), accendi le fasce anticondensa al massimo della potenza prima che l'ottica si appanni.</li></ul></div>
-            <div class="guide-section"><h3>🔭 2. Planetario Ibrido e Motore SIMBAD</h3><ul><li><strong>Database Locale (Consigliati):</strong> Memoria di target celebri. Cliccandoli riceverai "Consigli Tattici" specifici (es. filtri raccomandati).</li><li><strong>Ricerca Universale (SIMBAD):</strong> Inserendo il nome di un oggetto esotico, il motore interrogherà in tempo reale l'Università di Strasburgo per estrarne le coordinate assolute.</li></ul></div>
-            <div class="guide-section"><h3>📸 3. Setup Ottico, Campionamento e Framing</h3><ul><li><strong>Scala di Campionamento:</strong> Inserendo la focale e i micron del pixel, il sistema calcola la risoluzione (arcsec/pixel), avvisandoti visivamente se il setup è ideale, in sovracampionamento (perdita di luce) o sottocampionamento (stelle squadrate).</li><li><strong>Simulatore FOV e Rotazione (PA):</strong> Mostra l'inquadratura reale. Usa lo slider della rotazione per impostare l'angolo esatto (Position Angle) che verrà comunicato al telescopio.</li><li><strong>Motore Mosaici:</strong> Se il target è troppo grande, attiva la modalità Mosaico per dividere la griglia in sovrapposizioni matematiche.</li></ul></div>
-            <div class="guide-section"><h3>✨ 4. Calcolatore Sessione Smart</h3><ul><li><strong>L'Algoritmo Predittivo:</strong> Il sistema analizza il bersaglio e calcola il tempo di integrazione ideale basandosi rigorosamente sui parametri fisici del tuo setup (rapporto focale, sensore, filtri) e sulle condizioni ambientali (inquinamento lunare, magnitudine).</li><li><strong>Progetti Multi-Notte:</strong> Se l'integrazione richiede più tempo della singola nottata, puoi frammentare la ripresa su più sessioni, assegnando orari e filtri specifici per ogni notte (es. LRGB la prima notte, Narrowband la seconda).</li><li><strong>Dithering:</strong> Il sistema sottrae in automatico i secondi persi per l'assestamento della montatura dal totale disponibile.</li></ul></div>
-            <div class="guide-section"><h3>🤖 5. Esportazione Automatica</h3><ul><li><strong>Export N.I.N.A. (Singolo/Multi-Notte):</strong> Genera un file .json perfetto. Trascinalo nell'Advanced Sequencer e la sessione partirà in autonomia, rotatore e centratura inclusi.</li><li><strong>Export ASIAIR:</strong> Scarica un file CSV con le coordinate di precisione millimetrica e mostra a schermo il piano di scatto riassuntivo da ricopiare sul tablet, indicando l'angolo di rotazione della camera.</li></ul></div>
+
+            <div class="filosofia-box">
+                <h3 style="color: #fff; margin-top:0;">La Filosofia del Software</h3>
+                <p>AstroDashboard nasce da una domanda semplice: <em>perché devo usare quattro programmi diversi per pianificare una notte?</em> La risposta è questa piattaforma — un unico ambiente che fonde meteo in tempo reale, planetario predittivo, calcolo ottico, generazione di sequenze e automazione hardware.</p>
+                <p style="margin-top:10px;">Il software ha due anime distinte. Nella modalità <strong>Smart</strong> sei un astronauta in cabina automatica: descrivi il tuo setup e il sistema calcola per te tempi, pose e bilanciamento filtri. Nella modalità <strong>PRO</strong> sei il comandante manuale: tu decidi ogni singolo parametro e il software si occupa solo di tradurre le tue scelte in una sequenza perfetta per N.I.N.A.</p>
+            </div>
+
+            <div class="guide-section">
+                <h3>🌍 1. Dati Ambientali e Meteo Tattico</h3>
+                <p>Prima di puntare il telescopio, devi sapere cosa ti aspetta sopra la testa. Questa sezione aggrega dati satellitari professionali in tempo reale direttamente nel tuo browser.</p>
+                <ul>
+                    <li><strong>Mappa a Raggio (50 Km):</strong> Progettata per gli astrofotografi itineranti. Il cerchio simbolico di 50 km ti permette di valutare a colpo d'occhio dove spostarti per trovare "buchi di sereno". Attiva i layer sovrapposti (Nuvole Basse, Medie, Alte, Jet Stream, Umidità, Luna) e scorri la timeline per vedere l'evoluzione nelle prossime ore.</li>
+                    <li><strong>Jet Stream:</strong> Il vero nemico del Seeing. Un valore sotto i 50 km/h sopra la tua posizione garantisce cieli stabili e stelle puntiformi. Oltre i 100 km/h la turbolenza atmosferica devasterà i dettagli fini — inutile usare focali lunghe.</li>
+                    <li><strong>Allarme Umidità:</strong> Se il dato supera l'85% (indicatore rosso), attiva le fasce riscaldanti anticondensa al massimo della potenza <em>prima</em> che la temperatura scenda al punto di rugiada. Una volta che l'ottica è appannata, la serata è compromessa.</li>
+                    <li><strong>Inquinamento Lunare:</strong> Mostra la percentuale di cielo "bruciato" dalla luce della Luna in base alla sua fase e posizione. Un valore alto scoraggia le riprese a banda larga — considera filtri narrowband (Ha, OIII, SII) che tagliano il continuo lunare.</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
+                <h3>🔭 2. Planetario Ibrido e Motore SIMBAD</h3>
+                <p>Il planetario non mostra semplicemente le stelle: calcola in tempo reale l'altitudine sull'orizzonte di ogni oggetto e ti presenta solo i target fotografi camente utili per la tua nottata.</p>
+                <ul>
+                    <li><strong>Database Locale (Oggetti Consigliati):</strong> Contiene i target più celebri con metadati completi: tipo, magnitudine, distanza e "Consiglio Tattico" specifico. Il consiglio non è generico — suggerisce filtri, avverte di saturazioni al nucleo, indica la stagionalità ottimale.</li>
+                    <li><strong>Slider Temporale:</strong> Trascina la barra dell'orario per simulare la volta celeste a qualsiasi ora della notte. Gli oggetti scompaiono quando scendono sotto i 20° di altitudine (zona di turbolenza e bassa trasparenza), in modo da non mostrarti mai target inutilizzabili.</li>
+                    <li><strong>Ricerca Universale SIMBAD:</strong> Se l'oggetto che cerchi non è nel database locale, inserisci il nome (es. "Sh2-132", "Abell 85", "IC 1871") e il motore interroga in tempo reale l'Università di Strasburgo. Riceverai le coordinate assolute J2000 e potrai pianificare immediatamente la ripresa.</li>
+                    <li><strong>Sistema Solare:</strong> Pianeti e Luna sono sempre visibili in lista separata. Utile per pianificare sessioni planetarie o verificare l'interferenza lunare sul tuo target Deep Sky.</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
+                <h3>📸 3. Setup Ottico, Campionamento e Simulatore FOV</h3>
+                <p>Questa sezione trasforma i dati fisici del tuo strumento in informazioni operative: quanti arcsec copre il tuo sensore? L'oggetto entra nel campo? A che angolo devi orientare la camera?</p>
+                <ul>
+                    <li><strong>Scala di Campionamento (arcsec/pixel):</strong> Inserisci focale (mm) e dimensione pixel (µm): il sistema calcola il campionamento e lo classifica in tre zone. <em>Verde</em>: campionamento ideale (1–2 arcsec/px). <em>Giallo</em>: sottocampionamento lieve (stelle leggermente squadrate). <em>Rosso</em>: sovracampionamento eccessivo — stai sprecando fotoni e risoluzione.</li>
+                    <li><strong>Simulatore FOV Realistico (DSS2):</strong> Carica l'immagine reale del cielo profondo dall'archivio DSS2 e vi sovrappone il rettangolo del tuo sensore in scala e orientamento corretti. Quello che vedi è esattamente quello che otterrai nella tua immagine finale.</li>
+                    <li><strong>Rotazione FOV e Position Angle (PA):</strong> Lo slider di rotazione (0–360°) ruota il rettangolo del sensore sulla mappa. L'angolo scelto viene salvato nella sequenza e comunicato al rotatore automatico di N.I.N.A. durante l'export. Se trascini la mappa per spostare il centro del FOV rispetto al target originale, le coordinate aggiornate vengono mostrate in tempo reale nel box "Centro FOV" con indicatore di offset attivo — e puoi sempre tornare al centro esatto con il bottone ⌖ Reset.</li>
+                    <li><strong>Modalità Mosaico:</strong> Quando il target è più grande del tuo campo inquadrato, attiva il mosaico e imposta la griglia (es. 2×2, 3×2) con la percentuale di sovrapposizione desiderata. Il sistema calcola automaticamente il tempo disponibile per pannello e genera il report strategico. Per N.I.N.A. usa il Framing Assistant con le coordinate del centro: il software divide automaticamente i pannelli.</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
+                <h3>✨ 4. Calcolatore Sessione Smart</h3>
+                <p>In modalità Smart il sistema è il tuo assistente esperto. Analizzi il target, comunichi le caratteristiche del tuo setup e lasci che l'algoritmo generi una sequenza bilanciata e ottimizzata per le condizioni di quella specifica notte.</p>
+                <ul>
+                    <li><strong>L'Algoritmo Predittivo:</strong> Il calcolo non è una media generica. Considera il rapporto focale del tuo ottico (f/4 vs f/8 cambia radicalmente i tempi), il tipo di sensore (OSC o Mono), i filtri attivi, l'inquinamento lunare attuale e la magnitudine superficiale del target. Un oggetto debole con Luna al 70% richiede esposizioni molto più lunghe per affogare il fondo cielo.</li>
+                    <li><strong>Generazione Sequenza Ottimale:</strong> Clicca "Genera Sequenza Ottimale" e il sistema distribuisce le pose sulla finestra notturna disponibile (orario inizio–fine che hai impostato), bilanciando il tempo tra i filtri e riservando le calibrazioni. Per i sensori Mono calcola separatamente L, R, G, B e narrowband.</li>
+                    <li><strong>Dithering Smart:</strong> Se attivi il dithering, specifica la frequenza (ogni N pose) e il tempo di assestamento. Il sistema li sottrae automaticamente dal tempo totale disponibile: quello che vedi in "Tempo Acquisizione" è il tempo reale di integrazione netta, già al netto degli overhead.</li>
+                    <li><strong>Mappatura Nomi Filtri N.I.N.A.:</strong> Per i sensori Mono, ogni filtro ha un campo dove inserire il nome esatto come lo riconosce la tua ruota portafiltri in N.I.N.A. (es. "Hα 3nm" invece di "Ha"). Se i nomi non corrispondono esattamente, N.I.N.A. darà errore durante la sequenza.</li>
+                    <li><strong>Multinotte Smart:</strong> Se l'integrazione calcolata supera la finestra notturna disponibile, il sistema mostra il pulsante "Pianifica Progetto Multi-Notte". Qui il riferimento è l'obiettivo suggerito dall'AI. Aggiungi quante sessioni servono, assegna le pose per notte e scarica un file N.I.N.A. separato per ciascuna.</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
+                <h3>🚀 5. Calcolatore PRO — Sei Tu il Direttore</h3>
+                <p>Il modulo PRO ribalta la logica: non chiede al sistema cosa fare, ma esegue esattamente quello che decidi tu. È lo strumento per chi ha già un piano preciso in testa e vuole tradurlo in una sequenza N.I.N.A. professionale senza compromessi.</p>
+                <ul>
+                    <li><strong>Calcolatore di Sequenze:</strong> La griglia mostra tutti i filtri del tuo setup (Light per OSC, oppure L/R/G/B/Ha/OIII/SII per Mono). Per ogni filtro imposti: numero di pose, secondi di esposizione, Gain, Offset, Binning e frequenza di Dithering (con checkbox indipendente per filtro). La <strong>barra di riempimento</strong> confronta il tuo TPT (Tempo Totale Pianificato) con la finestra notturna: 🟢 verde se tutto entra, 🟡 arancione se il margine è stretto, 🔴 rossa se sfori — in quel caso appare automaticamente il pulsante "Progettazione Multinotte".</li>
+                    <li><strong>Triggers Pre-Flight:</strong> Prima dell'imaging configuri: <em>Raffredda Camera</em> (imposti la temperatura target), <em>Slew &amp; Center</em> con Plate Solving (N.I.N.A. punta e risolve la posizione), <em>Rotatore Automatico</em> (ruota la camera all'angolo impostato nel simulatore FOV), <em>Avvia Autoguida</em> e <em>Meridian Flip</em> automatico.</li>
+                    <li><strong>Autofocus Avanzato:</strong> Quattro modalità indipendenti: all'avvio della sequenza, al cambio di filtro (ideale per filtri con offset di fuoco diversi), ogni N minuti (utile per notti con variazioni termiche), e a variazione di N°C (il metodo più preciso per sistemi con backfocus sensibile alla temperatura).</li>
+                    <li><strong>Triggers Post-Flight:</strong> Warm Up Camera, Park Montatura, Chiudi Cover/Cap motorizzato, Accendi Flat Panel — tutto automatico al termine della sequenza.</li>
+                    <li><strong>Mappatura Filtri PRO:</strong> Come nella sezione Smart, ogni filtro ha il suo campo nome N.I.N.A. La modifica in un pannello si sincronizza automaticamente nell'altro.</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
+                <h3>🌙 6. Progettazione Multinotte</h3>
+                <p>Quando un progetto richiede più ore di quante ne offre una singola notte, la Progettazione Multinotte ti permette di distribuire il lavoro su più sessioni mantenendo sempre il controllo sul progresso complessivo.</p>
+                <ul>
+                    <li><strong>TPT — Tempo Totale Pianificato:</strong> È l'obiettivo fisso del tuo progetto. In modalità Smart corrisponde alle ore consigliate dall'AI; in modalità PRO è calcolato dalla tua griglia di pose. Non cambia mai: è il traguardo che devi raggiungere sommando tutte le notti.</li>
+                    <li><strong>Barra di Avanzamento:</strong> Parte rossa a 0% e diventa verde solo quando la somma del "Tempo Pianificato" nelle varie sessioni raggiunge o supera il TPT. È il tuo indicatore visivo di completamento progetto.</li>
+                    <li><strong>Gestione Sessioni:</strong> Per ogni notte aggiungi una scheda con: orario inizio e fine (la finestra utile di quella specifica notte), numero di pose per filtro in quella sessione, e verifica automatica se le pose entrano nella finestra — con avviso di sforamento se necessario.</li>
+                    <li><strong>Export per Notte:</strong> Ogni sessione genera il suo file N.I.N.A. indipendente, completo di tutti i trigger configurati (AF, guida, flip, ecc.) e delle coordinate FOV aggiornate. La notte 1 potrebbe contenere solo L e R, la notte 2 solo G, B e Ha — tu decidi la strategia.</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
+                <h3>🤖 7. Esportazione e Automazione</h3>
+                <ul>
+                    <li><strong>Export N.I.N.A. Smart:</strong> Genera un file JSON per N.I.N.A. Advanced Sequencer con la sequenza calcolata dall'AI. Include Slew &amp; Center, autoguida, dithering configurato e meridian flip. Trascina il file dentro N.I.N.A. e la notte parte da sola.</li>
+                    <li><strong>Export N.I.N.A. PRO (Advanced Sequence):</strong> Il JSON PRO è una sequenza nativa N.I.N.A. di livello avanzato: ogni filtro ha la sua struttura con LoopCondition (loop nativo, non ExposureCount), trigger di dithering per-filtro, gain/offset/binning individuali, tutti i trigger hardware configurati nell'ordine corretto (Cool → Slew → AF → Rotate → Guide → Imaging → Warm → Park).</li>
+                    <li><strong>Export ASIAIR:</strong> Genera un file CSV con le coordinate di precisione e mostra a schermo il riepilogo del piano di scatto ottimizzato per l'interfaccia tablet di ASIAIR/ASIAIR+/ASIAIR Pro. Include l'angolo di rotazione camera suggerito per l'inquadratura ottimale.</li>
+                    <li><strong>Coordinate FOV Personalizzate:</strong> Se hai spostato la mappa durante la simulazione FOV, le coordinate del centro aggiornato vengono usate in tutti gli export (N.I.N.A. Smart, PRO e Multinotte). Il badge "⚠ Offset attivo" ti avvisa quando le coordinate di export differiscono dal centro nominale del target.</li>
+                </ul>
+            </div>
         </div>
 
         <div id="guide-en" style="display:none;">
             <h2 style="font-size: 2.4em; border-bottom: 2px solid #bb86fc; padding-bottom: 15px; margin-bottom: 30px;">📖 AstroDashboard PRO Manual</h2>
-            <div class="filosofia-box"><h3 style="color: #fff; margin-top:0;">Project Philosophy</h3><p>AstroDashboard is designed to be the "Conductor" of your astrophotography setup. It merges environmental data, mathematics, and an advanced predictive algorithm to optimize your night.</p></div>
-            <div class="guide-section"><h3>🌍 1. Tactical Weather Data</h3><ul><li><strong>50km Radius Map:</strong> Crucial for mobile astrophotographers to spot "clear sky holes" in real-time.</li><li><strong>Jet Stream:</strong> The true enemy of Seeing. Below 50 km/h means stable skies. Above 100 km/h: avoid long focal lengths.</li><li><strong>Humidity Alarm:</strong> If it turns red (>85%), max out your dew heaters immediately to prevent fogging.</li></ul></div>
-            <div class="guide-section"><h3>🔭 2. Planetarium & SIMBAD Engine</h3><ul><li><strong>Local DB:</strong> Famous targets come with specific "Tactical Tips" (e.g., core saturation warnings).</li><li><strong>SIMBAD Engine:</strong> Search for exotic objects and the engine fetches absolute coordinates from the University of Strasbourg.</li></ul></div>
-            <div class="guide-section"><h3>📸 3. Optics, Sampling & Framing</h3><ul><li><strong>Sampling Scale:</strong> By inputting your focal length and pixel size, the system calculates your image scale (arcsec/pixel), warning you if you are oversampled (light loss) or undersampled (blocky stars).</li><li><strong>FOV Simulator & Rotation (PA):</strong> Real-time DSS2 framing. Use the rotation slider to set the exact Position Angle for your auto-rotator.</li><li><strong>Mosaic Engine:</strong> If the target is too large, switch to "Mosaic" mode to automatically generate overlapping panels.</li></ul></div>
-            <div class="guide-section"><h3>✨ 4. Smart Session Calculator</h3><ul><li><strong>Predictive Algorithm:</strong> The system calculates the ideal integration time based strictly on your physical setup parameters (focal ratio, sensor, filters) and environmental conditions (moonlight, magnitude).</li><li><strong>Multi-Night Projects:</strong> Split long integrations across multiple sessions, assigning specific filters and custom times for each individual night.</li><li><strong>Dithering:</strong> The algorithm automatically subtracts the "ghost time" lost during mount settling from the available night window.</li></ul></div>
-            <div class="guide-section"><h3>🤖 5. Automation Export</h3><ul><li><strong>N.I.N.A. Export:</strong> Generates a flawless JSON sequence file. Drag it into the Advanced Sequencer to start your session autonomously, complete with auto-rotation.</li><li><strong>ASIAIR Export:</strong> Downloads a pinpoint CSV coordinate file and displays a visual exposure plan for your tablet, including camera rotation guidelines.</li></ul></div>
+
+            <div class="filosofia-box">
+                <h3 style="color: #fff; margin-top:0;">Project Philosophy</h3>
+                <p>AstroDashboard was born from a simple question: <em>why do I need four different apps to plan a single night?</em> The answer is this platform — one unified environment combining real-time weather, a predictive planetarium, optical calculations, sequence generation and hardware automation.</p>
+                <p style="margin-top:10px;">The software has two distinct modes. In <strong>Smart</strong> mode, you are a pilot on autopilot: describe your setup and the system calculates times, frames and filter balance for you. In <strong>PRO</strong> mode, you are the manual commander: you decide every parameter and the software translates your choices into a perfect N.I.N.A. sequence.</p>
+            </div>
+
+            <div class="guide-section">
+                <h3>🌍 1. Tactical Weather &amp; Environmental Data</h3>
+                <p>Before pointing your telescope, you need to know what's above your head. This section aggregates professional satellite data in real time directly in your browser.</p>
+                <ul>
+                    <li><strong>50km Radius Map:</strong> Designed for mobile astrophotographers. The symbolic 50km circle lets you instantly evaluate where to relocate to find "clear sky holes". Activate overlapping layers (Low/Mid/High Clouds, Jet Stream, Humidity, Moon) and scroll the timeline to forecast conditions over the next hours.</li>
+                    <li><strong>Jet Stream:</strong> The true enemy of Seeing. Values below 50 km/h guarantee stable skies and pinpoint stars. Above 100 km/h, atmospheric turbulence will destroy fine detail — avoid long focal lengths.</li>
+                    <li><strong>Humidity Alarm:</strong> If the reading exceeds 85% (red indicator), activate your dew heaters at full power <em>before</em> the temperature drops to the dew point. Once optics fog up, the session is ruined.</li>
+                    <li><strong>Moon Pollution:</strong> Shows the percentage of sky "burned" by moonlight based on current phase and position. High values discourage broadband imaging — consider narrowband filters (Ha, OIII, SII) which cut lunar continuum.</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
+                <h3>🔭 2. Hybrid Planetarium &amp; SIMBAD Engine</h3>
+                <p>The planetarium doesn't just show stars: it calculates altitude above the horizon for every object in real time and presents only the targets that are photographically useful for your night.</p>
+                <ul>
+                    <li><strong>Local Database (Recommended Targets):</strong> Contains the most celebrated targets with full metadata: type, magnitude, distance and specific "Tactical Tip". Tips are not generic — they suggest filters, warn of core saturation, indicate optimal seasons.</li>
+                    <li><strong>Time Slider:</strong> Drag the time bar to simulate the sky at any hour of the night. Objects disappear when they drop below 20° altitude (turbulence and low transparency zone), so you never see unusable targets.</li>
+                    <li><strong>Universal SIMBAD Search:</strong> If your target isn't in the local database, type its name (e.g. "Sh2-132", "Abell 85", "IC 1871") and the engine queries the University of Strasbourg in real time. You'll receive J2000 absolute coordinates and can immediately plan your session.</li>
+                    <li><strong>Solar System:</strong> Planets and the Moon are always available in a separate list. Useful for planning planetary sessions or checking lunar interference on your Deep Sky target.</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
+                <h3>📸 3. Optical Setup, Sampling &amp; FOV Simulator</h3>
+                <p>This section transforms your instrument's physical data into operational information: how many arcseconds does your sensor cover? Does the object fit the frame? What angle should you orient the camera?</p>
+                <ul>
+                    <li><strong>Sampling Scale (arcsec/pixel):</strong> Enter focal length (mm) and pixel size (µm): the system calculates your image scale and classifies it into three zones. <em>Green</em>: ideal sampling (1–2 arcsec/px). <em>Yellow</em>: slight undersampling (slightly blocky stars). <em>Red</em>: excessive oversampling — you are wasting photons and resolution.</li>
+                    <li><strong>Realistic FOV Simulator (DSS2):</strong> Loads the real deep sky image from the DSS2 archive and overlays your sensor rectangle at the correct scale and orientation. What you see is exactly what you'll get in your final image.</li>
+                    <li><strong>FOV Rotation &amp; Position Angle (PA):</strong> The rotation slider (0–360°) rotates the sensor rectangle on the map. The chosen angle is saved in the sequence and sent to N.I.N.A.'s auto-rotator during export. If you drag the map to offset the FOV center from the original target, updated coordinates are shown in real time in the "FOV Center" box with an active offset indicator — and you can always return to the exact center with the ⌖ Reset button.</li>
+                    <li><strong>Mosaic Mode:</strong> When the target is larger than your field of view, enable mosaic and set the grid (e.g. 2×2, 3×2) with the desired overlap percentage. The system automatically calculates the time per panel and generates the strategic report. For N.I.N.A. use the Framing Assistant with the center coordinates.</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
+                <h3>✨ 4. Smart Session Calculator</h3>
+                <p>In Smart mode the system is your expert assistant. You analyze the target, share your setup specs and let the algorithm generate a balanced sequence optimized for the conditions of that specific night.</p>
+                <ul>
+                    <li><strong>Predictive Algorithm:</strong> The calculation is not a generic average. It factors in your optical focal ratio (f/4 vs f/8 radically changes integration times), sensor type (OSC or Mono), active filters, current moon pollution and target surface brightness. A faint object with 70% moon requires much longer exposures to drown the sky background.</li>
+                    <li><strong>Generate Optimal Sequence:</strong> Click "Generate Optimal Sequence" and the system distributes frames across the available night window (start–end times you set), balancing time between filters and reserving time for calibration frames. For Mono sensors it calculates L, R, G, B and narrowband independently.</li>
+                    <li><strong>Smart Dithering:</strong> Enable dithering, specify frequency (every N frames) and settling time. The system automatically subtracts them from the total available time — the "Acquisition Time" you see is real net integration time, already accounting for all overhead.</li>
+                    <li><strong>N.I.N.A. Filter Name Mapping:</strong> For Mono sensors, each filter has a field where you enter its exact name as N.I.N.A. recognizes it from your filter wheel (e.g. "Hα 3nm" instead of "Ha"). If names don't match exactly, N.I.N.A. will throw an error during the sequence.</li>
+                    <li><strong>Smart Multi-Night:</strong> If the calculated integration exceeds the available night window, the "Plan Multi-Night Project" button appears. The reference here is the AI's suggested goal. Add as many sessions as needed, assign frames per night and download a separate N.I.N.A. file for each.</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
+                <h3>🚀 5. PRO Builder — You Are the Commander</h3>
+                <p>The PRO module flips the logic: it doesn't ask the system what to do, it executes exactly what you decide. This is the tool for those who already have a precise plan and want to translate it into a professional N.I.N.A. sequence without compromise.</p>
+                <ul>
+                    <li><strong>Sequence Builder:</strong> The grid shows all filters for your setup (Light for OSC, or L/R/G/B/Ha/OIII/SII for Mono). For each filter you set: frame count, exposure time, Gain, Offset, Binning and Dithering frequency (with independent per-filter checkbox). The <strong>fill bar</strong> compares your TPT (Total Planned Time) against the night window: 🟢 green if everything fits, 🟡 orange if the margin is tight, 🔴 red if you overflow — the "Multi-Night Planning" button then appears automatically.</li>
+                    <li><strong>Pre-Flight Triggers:</strong> Before imaging you configure: <em>Cool Camera</em> (set target temperature), <em>Slew &amp; Center</em> with Plate Solving, <em>Auto Rotator</em> (rotates to the angle set in the FOV simulator), <em>Start Autoguiding</em> and automatic <em>Meridian Flip</em>.</li>
+                    <li><strong>Advanced Autofocus:</strong> Four independent modes: at sequence start, on filter change (ideal for filters with different focus offsets), every N minutes (useful for nights with thermal drift), and at N°C temperature change (most precise method for backfocus-sensitive systems).</li>
+                    <li><strong>Post-Flight Triggers:</strong> Warm Up Camera, Park Mount, Close motorized Cover/Cap, Turn On Flat Panel — all automatic at sequence end.</li>
+                    <li><strong>PRO Filter Mapping:</strong> As in the Smart section, each filter has its N.I.N.A. name field. Changes in one panel sync automatically to the other.</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
+                <h3>🌙 6. Multi-Night Planning</h3>
+                <p>When a project requires more hours than a single night offers, Multi-Night Planning lets you distribute the work across multiple sessions while always keeping track of overall progress.</p>
+                <ul>
+                    <li><strong>TPT — Total Planned Time:</strong> The fixed goal of your project. In Smart mode it corresponds to the AI's recommended hours; in PRO mode it's calculated from your frame grid. It never changes: it's the milestone you must reach by summing all nights.</li>
+                    <li><strong>Progress Bar:</strong> Starts red at 0% and turns green only when the sum of "Planned Time" across all sessions reaches or exceeds the TPT. Your visual project completion indicator.</li>
+                    <li><strong>Session Management:</strong> For each night add a card with: start and end time (the useful window for that specific night), frames per filter for that session, and automatic check whether frames fit in the window — with overflow warning if needed.</li>
+                    <li><strong>Per-Night Export:</strong> Each session generates its own independent N.I.N.A. file, complete with all configured triggers (AF, guiding, flip, etc.) and updated FOV coordinates. Night 1 might contain only L and R, night 2 only G, B and Ha — you decide the strategy.</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
+                <h3>🤖 7. Export &amp; Automation</h3>
+                <ul>
+                    <li><strong>N.I.N.A. Smart Export:</strong> Generates a JSON file for N.I.N.A. Advanced Sequencer with the AI-calculated sequence. Includes Slew &amp; Center, autoguiding, configured dithering and meridian flip. Drag the file into N.I.N.A. and the night runs itself.</li>
+                    <li><strong>N.I.N.A. PRO Export (Advanced Sequence):</strong> The PRO JSON is a native N.I.N.A. advanced-level sequence: each filter has its own structure with LoopCondition (native loop, not ExposureCount), per-filter dithering triggers, individual gain/offset/binning, all hardware triggers in the correct order (Cool → Slew → AF → Rotate → Guide → Imaging → Warm → Park).</li>
+                    <li><strong>ASIAIR Export:</strong> Generates a CSV file with precision coordinates and displays a visual shooting plan optimized for the ASIAIR/ASIAIR+/ASIAIR Pro tablet interface. Includes the suggested camera rotation angle for optimal framing.</li>
+                    <li><strong>Custom FOV Coordinates:</strong> If you moved the map during FOV simulation, the updated center coordinates are used in all exports (N.I.N.A. Smart, PRO and Multi-Night). The "⚠ Offset active" badge warns you when export coordinates differ from the target's nominal center.</li>
+                </ul>
+            </div>
         </div>
 
         <div id="guide-es" style="display:none;">
             <h2 style="font-size: 2.4em; border-bottom: 2px solid #bb86fc; padding-bottom: 15px; margin-bottom: 30px;">📖 Manual AstroDashboard PRO</h2>
-            <div class="filosofia-box"><h3 style="color: #fff; margin-top:0;">Filosofía</h3><p>Una plataforma diseñada para ser el "Director de Orquesta" de tu equipo, fusionando datos, matemáticas y un algoritmo predictivo para optimizar cada segundo de tu noche bajo las estrellas.</p></div>
-            <div class="guide-section"><h3>🌍 1. Clima Táctico</h3><ul><li><strong>Mapa 50km:</strong> Ideal para fotógrafos itinerantes para encontrar "claros en las nubes".</li><li><strong>Jet Stream:</strong> < 50 km/h indica cielos estables. > 100 km/h: turbulencia extrema, evita focales largas.</li><li><strong>Humedad:</strong> Si se pone rojo (>85%), enciende las cintas calentadoras al máximo.</li></ul></div>
-            <div class="guide-section"><h3>🔭 2. Planetario y SIMBAD</h3><ul><li><strong>Motor SIMBAD:</strong> Busca objetos raros y el motor conectará con la Universidad de Estrasburgo para descargar las coordenadas precisas.</li></ul></div>
-            <div class="guide-section"><h3>📸 3. Óptica, Muestreo y Encuadre</h3><ul><li><strong>Escala de Muestreo:</strong> El sistema calcula la resolución en segundos de arco por píxel, alertándote si tu equipo está sobremuestreado (pérdida de señal) o submuestreado (estrellas cuadradas).</li><li><strong>Simulador FOV y Rotación:</strong> Gira el sensor en el mapa; el Ángulo de Posición (PA) se guardará en la secuencia.</li><li><strong>Mosaicos:</strong> Si el objeto no cabe, la calculadora dividirá el área en paneles superpuestos.</li></ul></div>
-            <div class="guide-section"><h3>✨ 4. Calculadora de Sesión Smart</h3><ul><li><strong>Algoritmo Predictivo:</strong> El sistema analiza tu objetivo y calcula el tiempo de integración ideal basándose en la relación focal, cámara, filtros, luz lunar y magnitud.</li><li><strong>Proyectos Multi-Noche:</strong> Divide la captura en varias sesiones, asignando filtros específicos para cada noche (ej. LRGB la noche 1, Narrowband la noche 2).</li><li><strong>Dithering:</strong> El algoritmo resta el tiempo perdido en la estabilización de la montura.</li></ul></div>
-            <div class="guide-section"><h3>🤖 5. Exportación y Automatización</h3><ul><li><strong>Exportación N.I.N.A.:</strong> Genera un archivo de secuencia JSON. Arrástralo al Secuenciador Avanzado para iniciar tu noche, incluyendo la rotación automática.</li><li><strong>Exportación ASIAIR:</strong> Descarga un CSV con las coordenadas exactas y muestra el plan de tomas en pantalla para configurarlo en la tablet.</li></ul></div>
+
+            <div class="filosofia-box">
+                <h3 style="color: #fff; margin-top:0;">Filosofía del Software</h3>
+                <p>AstroDashboard nació de una pregunta simple: <em>¿por qué necesito cuatro aplicaciones distintas para planificar una noche?</em> La respuesta es esta plataforma — un entorno unificado que combina meteorología en tiempo real, planetario predictivo, cálculos ópticos, generación de secuencias y automatización de hardware.</p>
+                <p style="margin-top:10px;">El software tiene dos modos distintos. En modo <strong>Smart</strong> eres un piloto en piloto automático: describes tu equipo y el sistema calcula por ti tiempos, tomas y balance de filtros. En modo <strong>PRO</strong> eres el comandante manual: tú decides cada parámetro y el software traduce tus decisiones en una secuencia N.I.N.A. profesional.</p>
+            </div>
+
+            <div class="guide-section">
+                <h3>🌍 1. Clima Táctico y Datos Ambientales</h3>
+                <p>Antes de apuntar el telescopio, necesitas saber qué hay sobre tu cabeza. Esta sección agrega datos satelitales profesionales en tiempo real directamente en tu navegador.</p>
+                <ul>
+                    <li><strong>Mapa de Radio 50km:</strong> Diseñado para astrofotógrafos itinerantes. El círculo de 50 km te permite evaluar de un vistazo dónde desplazarte para encontrar "claros en las nubes". Activa las capas superpuestas y desliza la línea de tiempo para prever las condiciones de las próximas horas.</li>
+                    <li><strong>Jet Stream:</strong> El verdadero enemigo del Seeing. Por debajo de 50 km/h garantiza cielos estables y estrellas puntiformes. Por encima de 100 km/h, la turbulencia atmosférica destruirá los detalles finos — evita focales largas.</li>
+                    <li><strong>Alarma de Humedad:</strong> Si supera el 85% (indicador rojo), activa las cintas calefactoras anticondensación a máxima potencia <em>antes</em> de que la temperatura baje al punto de rocío. Una vez que la óptica se empaña, la sesión está arruinada.</li>
+                    <li><strong>Contaminación Lunar:</strong> Muestra el porcentaje de cielo "quemado" por la luz de la Luna según su fase y posición actual. Valores altos desaconsejan la fotografía de banda ancha — considera filtros narrowband (Ha, OIII, SII).</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
+                <h3>🔭 2. Planetario Híbrido y Motor SIMBAD</h3>
+                <p>El planetario no solo muestra estrellas: calcula en tiempo real la altitud sobre el horizonte de cada objeto y te presenta únicamente los objetivos fotográficamente útiles para tu noche.</p>
+                <ul>
+                    <li><strong>Base de Datos Local (Objetivos Recomendados):</strong> Contiene los objetivos más célebres con metadatos completos: tipo, magnitud, distancia y "Consejo Táctico" específico. Los consejos no son genéricos — sugieren filtros, advierten de saturaciones en el núcleo, indican la estacionalidad óptima.</li>
+                    <li><strong>Control Deslizante de Tiempo:</strong> Arrastra la barra de tiempo para simular el cielo a cualquier hora de la noche. Los objetos desaparecen cuando bajan de los 20° de altitud (zona de turbulencia y baja transparencia).</li>
+                    <li><strong>Búsqueda Universal SIMBAD:</strong> Si tu objetivo no está en la base de datos local, escribe su nombre (ej. "Sh2-132", "Abell 85") y el motor consulta en tiempo real la Universidad de Estrasburgo. Recibirás las coordenadas absolutas J2000 y podrás planificar la sesión inmediatamente.</li>
+                    <li><strong>Sistema Solar:</strong> Planetas y Luna están siempre disponibles en una lista separada. Útil para planificar sesiones planetarias o verificar la interferencia lunar en tu objetivo Deep Sky.</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
+                <h3>📸 3. Óptica, Muestreo y Simulador FOV</h3>
+                <p>Esta sección transforma los datos físicos de tu instrumento en información operativa: ¿cuántos segundos de arco cubre tu sensor? ¿El objeto entra en el campo? ¿A qué ángulo debes orientar la cámara?</p>
+                <ul>
+                    <li><strong>Escala de Muestreo (arcsec/pixel):</strong> Introduce distancia focal (mm) y tamaño de píxel (µm): el sistema calcula tu escala de imagen y la clasifica. <em>Verde</em>: muestreo ideal. <em>Amarillo</em>: ligero submuestreo. <em>Rojo</em>: sobremuestreo excesivo — estás desperdiciando fotones y resolución.</li>
+                    <li><strong>Simulador FOV Realista (DSS2):</strong> Carga la imagen real del cielo profundo del archivo DSS2 y superpone el rectángulo de tu sensor a escala y orientación correctas. Lo que ves es exactamente lo que obtendrás en tu imagen final.</li>
+                    <li><strong>Rotación FOV y Ángulo de Posición (PA):</strong> El control deslizante de rotación (0–360°) gira el rectángulo del sensor en el mapa. El ángulo elegido se guarda en la secuencia y se envía al rotador automático de N.I.N.A. durante la exportación. Si arrastras el mapa para desplazar el centro del FOV, las coordenadas actualizadas se muestran en tiempo real con un indicador de desplazamiento activo — y puedes volver al centro exacto con el botón ⌖ Reset.</li>
+                    <li><strong>Modo Mosaico:</strong> Cuando el objetivo es más grande que tu campo, activa el mosaico y configura la cuadrícula con el porcentaje de solapamiento deseado. El sistema calcula automáticamente el tiempo por panel y genera el informe estratégico.</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
+                <h3>✨ 4. Calculadora de Sesión Smart</h3>
+                <p>En modo Smart el sistema es tu asistente experto. Analizas el objetivo, compartes las características de tu equipo y dejas que el algoritmo genere una secuencia equilibrada y optimizada para las condiciones de esa noche específica.</p>
+                <ul>
+                    <li><strong>Algoritmo Predictivo:</strong> El cálculo no es una media genérica. Considera la relación focal de tu óptica, el tipo de sensor (OSC o Mono), los filtros activos, la contaminación lunar actual y la magnitud superficial del objetivo.</li>
+                    <li><strong>Generar Secuencia Óptima:</strong> Haz clic en "Generar Secuencia Óptima" y el sistema distribuye las tomas en la ventana nocturna disponible, equilibrando el tiempo entre filtros y reservando tiempo para los frames de calibración.</li>
+                    <li><strong>Dithering Smart:</strong> Activa el dithering, especifica la frecuencia y el tiempo de estabilización. El sistema los resta automáticamente del tiempo total disponible.</li>
+                    <li><strong>Mapeo de Nombres de Filtros N.I.N.A.:</strong> Para sensores Mono, cada filtro tiene un campo donde introduces su nombre exacto tal como lo reconoce tu rueda de filtros en N.I.N.A. Si los nombres no coinciden exactamente, N.I.N.A. dará error.</li>
+                    <li><strong>Multi-Noche Smart:</strong> Si la integración calculada supera la ventana nocturna disponible, aparece el botón "Planificar Proyecto Multi-Noche". El referente aquí es el objetivo sugerido por la IA. Añade las sesiones necesarias y descarga un archivo N.I.N.A. separado para cada una.</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
+                <h3>🚀 5. Constructor PRO — Tú Eres el Comandante</h3>
+                <p>El módulo PRO invierte la lógica: no pide al sistema qué hacer, sino que ejecuta exactamente lo que tú decides. Es la herramienta para quienes ya tienen un plan preciso y quieren traducirlo en una secuencia N.I.N.A. profesional sin compromisos.</p>
+                <ul>
+                    <li><strong>Constructor de Secuencias:</strong> La cuadrícula muestra todos los filtros (Light para OSC, o L/R/G/B/Ha/OIII/SII para Mono). Para cada filtro configuras: número de tomas, tiempo de exposición, Gain, Offset, Binning y frecuencia de Dithering (con checkbox independiente por filtro). La <strong>barra de relleno</strong> compara tu TPT con la ventana nocturna: 🟢 verde si todo cabe, 🟡 naranja si el margen es ajustado, 🔴 rojo si hay desbordamiento.</li>
+                    <li><strong>Disparadores Pre-Vuelo:</strong> Antes del imaging configuras: Enfriar Cámara, Slew &amp; Center con Plate Solving, Rotador Automático, Iniciar Autoguiado y Meridian Flip automático.</li>
+                    <li><strong>Autofocus Avanzado:</strong> Cuatro modos independientes: al inicio de la secuencia, al cambiar de filtro, cada N minutos y a variación de N°C de temperatura.</li>
+                    <li><strong>Disparadores Post-Vuelo:</strong> Calentar Cámara, Aparcar Montura, Cerrar Tapa motorizada, Encender Panel Flat — todo automático al terminar la secuencia.</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
+                <h3>🌙 6. Planificación Multi-Noche</h3>
+                <p>Cuando un proyecto requiere más horas de las que ofrece una sola noche, la Planificación Multi-Noche te permite distribuir el trabajo en varias sesiones manteniendo siempre el control del progreso global.</p>
+                <ul>
+                    <li><strong>TPT — Tiempo Total Planificado:</strong> El objetivo fijo de tu proyecto. En modo Smart corresponde a las horas recomendadas por la IA; en modo PRO se calcula desde tu cuadrícula de tomas. La barra de progreso se vuelve verde solo cuando la suma de las sesiones planificadas alcanza el TPT.</li>
+                    <li><strong>Gestión de Sesiones:</strong> Para cada noche añades una tarjeta con: horario de inicio y fin, tomas por filtro en esa sesión, y verificación automática de si las tomas caben en la ventana — con aviso de desbordamiento si es necesario.</li>
+                    <li><strong>Exportación por Noche:</strong> Cada sesión genera su propio archivo N.I.N.A. independiente con todos los disparadores configurados y coordenadas FOV actualizadas.</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
+                <h3>🤖 7. Exportación y Automatización</h3>
+                <ul>
+                    <li><strong>Export N.I.N.A. Smart:</strong> Genera un JSON para N.I.N.A. Advanced Sequencer con la secuencia calculada por la IA. Incluye Slew &amp; Center, autoguiado, dithering configurado y meridian flip. Arrastra el archivo a N.I.N.A. y la noche se conduce sola.</li>
+                    <li><strong>Export N.I.N.A. PRO (Advanced Sequence):</strong> El JSON PRO es una secuencia N.I.N.A. nativa de nivel avanzado: cada filtro tiene su estructura con LoopCondition, disparadores de dithering por filtro, gain/offset/binning individuales y todos los disparadores de hardware en el orden correcto.</li>
+                    <li><strong>Export ASIAIR:</strong> Genera un archivo CSV con coordenadas de precisión y muestra el plan de tomas visual optimizado para la interfaz tablet de ASIAIR. Incluye el ángulo de rotación de cámara sugerido.</li>
+                    <li><strong>Coordenadas FOV Personalizadas:</strong> Si desplazaste el mapa durante la simulación FOV, las coordenadas actualizadas se usan en todas las exportaciones. El badge "⚠ Offset activo" te avisa cuando las coordenadas de exportación difieren del centro nominal del objetivo.</li>
+                </ul>
+            </div>
         </div>
 
-        <div id="guide-zh" style="display:none;">
+                <div id="guide-zh" style="display:none;">
             <h2 style="font-size: 2.4em; border-bottom: 2px solid #bb86fc; padding-bottom: 15px; margin-bottom: 30px;">📖 AstroDashboard PRO 用户手册</h2>
-            <div class="filosofia-box"><h3 style="color: #fff; margin-top:0;">设计理念</h3><p>将多种规划工具融合为一个智能平台，结合环境数据、数学模型和高级预测算法，充当您天文设备的“指挥家”，优化您在星空下的每一秒。</p></div>
-            <div class="guide-section"><h3>🌍 1. 战术天气与环境数据</h3><ul><li><strong>50公里雷达地图:</strong> 帮助移动摄影师在云层下寻找“晴空洞”。</li><li><strong>急流 (Jet Stream):</strong> 视宁度的敌人。低于 50 km/h 意味着天空稳定。高于 100 km/h 请避免使用长焦段。</li><li><strong>湿度警报:</strong> 数值变红 (>85%) 时，请立即将除露带开到最大。</li></ul></div>
-            <div class="guide-section"><h3>🔭 2. 混合星图与 SIMBAD</h3><ul><li><strong>SIMBAD 引擎:</strong> 搜索冷门目标时，检索引擎会自动连接斯特拉斯堡大学获取绝对坐标。</li></ul></div>
-            <div class="guide-section"><h3>📸 3. 光学、采样与构图</h3><ul><li><strong>采样率 (Pixel Scale):</strong> 系统根据焦距和像素大小实时计算角秒/像素，警告您是否存在过采样（光信号损失）或欠采样（星点呈方形）。</li><li><strong>视场与旋转 (PA):</strong> 在星图上旋转您的传感器。旋转角度将自动保存至拍摄序列中。</li><li><strong>拼接模式:</strong> 如果目标太大，系统会自动生成重叠的拍摄面板。</li></ul></div>
-            <div class="guide-section"><h3>✨ 4. 智能序列计算</h3><ul><li><strong>预测算法:</strong> 系统根据您的设备参数（焦比、传感器、滤镜）以及环境条件（月光、星等）自动计算理想的曝光时间。</li><li><strong>多夜拍摄项目:</strong> 将长时间曝光任务分配到多个夜晚，为每晚独立指定滤镜和自定义拍摄时间。</li><li><strong>抖动 (Dithering):</strong> 算法会自动扣除赤道仪抖动稳定的“隐形耗时”。</li></ul></div>
-            <div class="guide-section"><h3>🤖 5. 自动化导出</h3><ul><li><strong>N.I.N.A. 导出:</strong> 生成完美的 JSON 序列文件。将其拖入高级序列器即可实现包含自动旋转的全自动拍摄。</li><li><strong>ASIAIR 导出:</strong> 下载包含精确坐标的 CSV 文件，并生成供平板电脑使用的可视化曝光计划及相机旋转提示。</li></ul></div>
+
+            <div class="filosofia-box">
+                <h3 style="color: #fff; margin-top:0;">设计理念</h3>
+                <p>AstroDashboard 诞生于一个简单的问题：<em>为什么我需要四个不同的软件来规划一个夜晚的拍摄？</em>这个平台就是答案 — 一个集实时气象、预测星图、光学计算、序列生成和硬件自动化于一体的统一环境。</p>
+                <p style="margin-top:10px;">软件拥有两种截然不同的模式。在<strong>智能</strong>模式下，您是自动驾驶的飞行员：描述您的设备，系统为您计算时间、帧数和滤镜平衡。在 <strong>PRO</strong> 模式下，您是手动指挥官：您决定每一个参数，软件将您的决策翻译成完美的 N.I.N.A. 序列。</p>
+            </div>
+
+            <div class="guide-section">
+                <h3>🌍 1. 战术气象与环境数据</h3>
+                <p>在指向望远镜之前，您需要了解头顶上方的情况。本部分直接在您的浏览器中实时汇聚专业的卫星数据。</p>
+                <ul>
+                    <li><strong>50公里半径地图：</strong>专为移动天文摄影师设计。象征性的50公里圆圈让您一眼就能评估应移动到哪里寻找"晴空洞"。激活叠加图层（低云、中云、高云、急流、湿度、月光），滑动时间轴预测未来数小时的天气变化。</li>
+                    <li><strong>急流 (Jet Stream)：</strong>视宁度的真正敌人。您所在位置上方低于50 km/h保证天空稳定、星点清晰。超过100 km/h，大气湍流将摧毁精细细节 — 避免使用长焦段。</li>
+                    <li><strong>湿度警报：</strong>若读数超过85%（红色指示），请在温度降到露点之前将除露带调到最大功率。一旦光学元件起雾，拍摄会话就毁了。</li>
+                    <li><strong>月光污染：</strong>根据当前月相和位置显示被月光"烧毁"的天空百分比。数值高时不建议宽带拍摄 — 考虑使用能截断月光连续谱的窄带滤镜（Ha、OIII、SII）。</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
+                <h3>🔭 2. 混合星图与 SIMBAD 引擎</h3>
+                <p>星图不只是显示星星：它实时计算每个天体在地平线上的高度，只向您展示今晚摄影上有用的目标。</p>
+                <ul>
+                    <li><strong>本地数据库（推荐目标）：</strong>包含最著名的目标及完整元数据：类型、星等、距离和专属"拍摄建议"。建议并非泛泛而谈 — 它们推荐滤镜、警告核心过曝、指示最佳拍摄季节。</li>
+                    <li><strong>时间滑块：</strong>拖动时间条模拟夜间任意时刻的天空。当天体降至20°高度以下（湍流和低透明度区域）时自动消失，确保您看到的都是可用目标。</li>
+                    <li><strong>通用 SIMBAD 搜索：</strong>如果您的目标不在本地数据库中，输入名称（如"Sh2-132"、"Abell 85"），引擎将实时查询斯特拉斯堡大学。您将获得J2000绝对坐标，可立即规划拍摄会话。</li>
+                    <li><strong>太阳系：</strong>行星和月球始终在单独列表中。适合规划行星拍摄会话或检查月光对深空目标的干扰。</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
+                <h3>📸 3. 光学设置、采样率与视场模拟器</h3>
+                <p>本部分将您仪器的物理数据转化为操作信息：您的传感器覆盖多少角秒？目标能否放入画面？应以什么角度定向相机？</p>
+                <ul>
+                    <li><strong>采样率 (arcsec/pixel)：</strong>输入焦距（mm）和像素大小（µm）：系统计算您的图像比例并分为三个区间。<em>绿色</em>：理想采样（1–2 arcsec/px）。<em>黄色</em>：轻微欠采样（星点略显方形）。<em>红色</em>：过度过采样 — 您在浪费光子和分辨率。</li>
+                    <li><strong>真实视场模拟器 (DSS2)：</strong>从DSS2档案加载真实深空图像，并以正确比例和方向叠加您的传感器矩形。您看到的就是最终图像中将获得的内容。</li>
+                    <li><strong>视场旋转与位置角 (PA)：</strong>旋转滑块（0–360°）在地图上旋转传感器矩形。选定角度保存在序列中，并在导出时发送给 N.I.N.A. 的自动旋转器。如果您拖动地图将视场中心偏离原始目标，更新的坐标将实时显示在"视场中心"框中，并有偏移激活指示 — 您随时可以通过 ⌖ 重置按钮返回精确中心。</li>
+                    <li><strong>拼接模式：</strong>当目标大于您的视场时，启用拼接并设置网格（如2×2、3×2）和所需重叠百分比。系统自动计算每个面板的可用时间并生成策略报告。</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
+                <h3>✨ 4. 智能序列计算</h3>
+                <p>在智能模式下，系统是您的专家助手。您分析目标、提供设备规格，让算法为该特定夜晚的条件生成平衡且优化的序列。</p>
+                <ul>
+                    <li><strong>预测算法：</strong>计算并非通用平均值。它考虑您的光学焦比（f/4 vs f/8 对积分时间影响巨大）、传感器类型（彩色或黑白）、激活的滤镜、当前月光污染和目标表面亮度。月亮70%时，暗弱目标需要更长的曝光才能淹没天空背景。</li>
+                    <li><strong>生成最佳曝光序列：</strong>点击"生成最佳曝光序列"，系统在可用夜间窗口内分配帧数，平衡滤镜间的时间并为校准帧预留时间。黑白传感器独立计算 L、R、G、B 和窄带。</li>
+                    <li><strong>智能抖动：</strong>启用抖动，指定频率和稳定时间。系统自动从总可用时间中扣除 — 您看到的"采集时间"已是扣除所有开销后的真实净积分时间。</li>
+                    <li><strong>N.I.N.A. 滤镜名称映射：</strong>对于黑白传感器，每个滤镜都有一个字段用于输入 N.I.N.A. 从滤镜轮识别的确切名称（如"Hα 3nm"而非"Ha"）。名称不完全匹配时，N.I.N.A. 将报错。</li>
+                    <li><strong>智能多夜规划：</strong>如果计算的积分超过可用夜间窗口，"计划多夜拍摄"按钮出现。参考目标是 AI 建议的目标。添加所需会话并为每个会话下载单独的 N.I.N.A. 文件。</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
+                <h3>🚀 5. PRO 构建器 — 您是指挥官</h3>
+                <p>PRO 模块颠覆逻辑：它不询问系统该做什么，而是精确执行您的决定。这是已有明确计划并希望将其转化为专业 N.I.N.A. 序列的用户的工具。</p>
+                <ul>
+                    <li><strong>序列构建器：</strong>网格显示您设备的所有滤镜（彩色相机显示 Light，黑白显示 L/R/G/B/Ha/OIII/SII）。每个滤镜可设置：帧数、曝光时间、Gain、Offset、Binning 和抖动频率（每个滤镜有独立复选框）。<strong>填充进度条</strong>将您的 TPT 与夜间窗口比较：🟢 绿色表示一夜可完成，🟡 橙色表示时间紧张，🔴 红色表示超出。</li>
+                    <li><strong>拍摄前触发器：</strong>拍摄前配置：相机降温（设置目标温度）、指向并居中（星板解析）、自动旋转器（旋转至视场模拟器中设定的角度）、开始自动导星和自动中天翻转。</li>
+                    <li><strong>高级自动对焦：</strong>四种独立模式：序列开始时、切换滤镜时（适合焦点偏移不同的滤镜）、每N分钟（适合热漂移明显的夜晚）和温度变化N°C时（对焦点敏感的系统最精确的方法）。</li>
+                    <li><strong>拍摄后触发器：</strong>相机回温、赤道仪归位、关闭电动镜头盖、开启平场灯 — 序列结束时全部自动执行。</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
+                <h3>🌙 6. 多夜拍摄规划</h3>
+                <p>当项目所需时间超过单夜可用时间时，多夜拍摄规划让您将工作分配到多个会话，同时始终掌控整体进度。</p>
+                <ul>
+                    <li><strong>TPT — 总计划时间：</strong>您项目的固定目标。智能模式下对应 AI 推荐的小时数；PRO 模式下从您的帧数网格计算。进度条只有当所有计划夜晚的总和达到或超过 TPT 时才变绿。</li>
+                    <li><strong>会话管理：</strong>每个夜晚添加一张卡片，包含：开始和结束时间（该特定夜晚的有效窗口）、该会话每个滤镜的帧数，以及帧数是否能在窗口内完成的自动检查。</li>
+                    <li><strong>按夜导出：</strong>每个会话生成其独立的 N.I.N.A. 文件，包含所有已配置的触发器和更新的视场坐标。第1夜可能只包含 L 和 R，第2夜只包含 G、B 和 Ha — 由您决定策略。</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
+                <h3>🤖 7. 导出与自动化</h3>
+                <ul>
+                    <li><strong>N.I.N.A. 智能导出：</strong>为 N.I.N.A. 高级序列器生成含 AI 计算序列的 JSON 文件。包括指向并居中、自动导星、已配置的抖动和中天翻转。将文件拖入 N.I.N.A.，整夜自动运行。</li>
+                    <li><strong>N.I.N.A. PRO 导出（高级序列）：</strong>PRO 生成的 JSON 是原生 N.I.N.A. 高级序列：每个滤镜有自己带 LoopCondition 的结构、独立的抖动触发器、各自的 gain/offset/binning，以及所有硬件触发器按正确顺序排列（降温→指向→自动对焦→旋转→导星→拍摄→回温→归位）。</li>
+                    <li><strong>ASIAIR 导出：</strong>生成含精确坐标的 CSV 文件，并显示为 ASIAIR/ASIAIR+/ASIAIR Pro 平板界面优化的可视拍摄计划，包括建议的相机旋转角度。</li>
+                    <li><strong>自定义视场坐标：</strong>如果在视场模拟过程中移动了地图，更新的中心坐标将用于所有导出（N.I.N.A. 智能、PRO 和多夜）。当导出坐标与目标名义中心不同时，"⚠ 偏移激活"徽章会提醒您。</li>
+                </ul>
+            </div>
         </div>
     </div>
     <div class="mobile-nav-fab" style="display: none;">
@@ -735,7 +1191,7 @@
                 "info_smart": "L'AI riempie il tuo buio notturno generando pose ottimali per cluster, galassie o nebulose, calcolando anche le calibrazioni per sensori Mono.",
                 "info_dither": "Muove leggermente la montatura tra uno scatto e l'altro per ridurre il rumore. L'AI sottrarrà i secondi persi dal totale disponibile.",
                 "info_nina": "Salva un file JSON perfetto. Trascinalo dentro N.I.N.A. (Advanced Sequencer) e la sessione partirà in autonomia totale.",
-                "mn_title": "📅 Multi-Night Project Manager",
+                "mn_title": "📅 Progettazione Multinotte",
                 "mn_warning": "⚠️ ATTENZIONE N.I.N.A.: Assicurati che i nomi dei filtri nella 'Mappatura Nomi' (nel pannello principale) corrispondano esattamente a quelli della tua ruota portafiltri, altrimenti il file darà errore!",
                 "mn_target_ai": "Target Consigliato",
                 "mn_planned": "Tempo Pianificato",
@@ -750,7 +1206,34 @@
                 "mn_end": "FINE (Tramonto/Alba):",
                 "mn_filters": "Filtri da riprendere in questa notte:",
                 "mn_delete": "🗑️ Elimina",
-                "mn_export": "🚀 Export N.I.N.A. Sessione"
+                "mn_export": "🚀 Export N.I.N.A. Sessione",
+                "pro_back": "Torna alla Dashboard Smart",
+                "pro_session_start": "Inizio Sessione:",
+                "pro_session_end": "Fine Sessione:",
+                "pro_overflow": "⚠️ Sforamento! Dividi in Multi-Notte",
+                "pro_triggers": "⚙️ Triggers & Hardware",
+                "pro_preflight": "Pre-Flight",
+                "pro_cool_cam": "Raffredda a",
+                "pro_auto_rotator": "Rotatore Automatico",
+                "pro_start_guide": "Avvia Autoguida",
+                "pro_af_start": "All'avvio sequenza",
+                "pro_af_filter": "Al cambio filtro",
+                "pro_af_every": "Ogni",
+                "pro_af_min": "min",
+                "pro_af_temp_lbl": "Variazione",
+                "pro_postflight": "Post-Flight",
+                "pro_warm_up": "Warm Up Camera",
+                "pro_park": "Park Montatura",
+                "pro_cover": "Chiudi Cover/Cap",
+                "pro_flat": "Accendi Flat Panel",
+                "pro_sensor_osc": "Sensore OSC (Color)",
+                "pro_sensor_mono": "Sensore Mono",
+                "pro_seq_builder": "📸 Calcolatore di Sequenze",
+                "pro_export_btn": "💾 Esporta Advanced Sequence (.json)",
+                "mn_target_tpt": "🎯 Obiettivo Progetto (TPT)",
+                "mn_target_ai_label": "🤖 Target AI Consigliato",
+                "mn_planned_time": "📅 Tempo Pianificato",
+                "mn_completed": "% completato"
             },
             en: {
                 "manual_btn": "📖 Open Manual", "pos_title": "📍 Location", "find_place": "Find Place:", "search_place": "E.g. Yellowstone...",
@@ -802,7 +1285,34 @@
                 "mn_end": "END (Dawn/Dusk):",
                 "mn_filters": "Filters to capture this night:",
                 "mn_delete": "🗑️ Delete",
-                "mn_export": "🚀 Export N.I.N.A. Session"
+                "mn_export": "🚀 Export N.I.N.A. Session",
+                "pro_back": "Back to Smart Dashboard",
+                "pro_session_start": "Session Start:",
+                "pro_session_end": "Session End:",
+                "pro_overflow": "⚠️ Overflow! Split into Multi-Night",
+                "pro_triggers": "⚙️ Triggers & Hardware",
+                "pro_preflight": "Pre-Flight",
+                "pro_cool_cam": "Cool Camera to",
+                "pro_auto_rotator": "Auto Rotator",
+                "pro_start_guide": "Start Autoguiding",
+                "pro_af_start": "At sequence start",
+                "pro_af_filter": "On filter change",
+                "pro_af_every": "Every",
+                "pro_af_min": "min",
+                "pro_af_temp_lbl": "Temp. change",
+                "pro_postflight": "Post-Flight",
+                "pro_warm_up": "Warm Up Camera",
+                "pro_park": "Park Mount",
+                "pro_cover": "Close Cover/Cap",
+                "pro_flat": "Turn On Flat Panel",
+                "pro_sensor_osc": "OSC Sensor (Color)",
+                "pro_sensor_mono": "Mono Sensor",
+                "pro_seq_builder": "📸 Sequence Builder",
+                "pro_export_btn": "💾 Export Advanced Sequence (.json)",
+                "mn_target_tpt": "🎯 Project Goal (TPT)",
+                "mn_target_ai_label": "🤖 AI Recommended Target",
+                "mn_planned_time": "📅 Planned Time",
+                "mn_completed": "% completed"
             },
             es: {
                 "manual_btn": "📖 Abrir Manual", "pos_title": "📍 Ubicación", "find_place": "Buscar Lugar:", "search_place": "Ej. Atacama...",
@@ -854,7 +1364,34 @@
                 "mn_end": "FIN (Amanecer):",
                 "mn_filters": "Filtros para esta noche:",
                 "mn_delete": "🗑️ Eliminar",
-                "mn_export": "🚀 Exportar N.I.N.A. Sesión"
+                "mn_export": "🚀 Exportar N.I.N.A. Sesión",
+                "pro_back": "Volver al Dashboard Smart",
+                "pro_session_start": "Inicio de Sesión:",
+                "pro_session_end": "Fin de Sesión:",
+                "pro_overflow": "⚠️ ¡Desbordamiento! Dividir en Multi-Noche",
+                "pro_triggers": "⚙️ Disparadores y Hardware",
+                "pro_preflight": "Pre-Vuelo",
+                "pro_cool_cam": "Enfriar Cámara a",
+                "pro_auto_rotator": "Rotador Automático",
+                "pro_start_guide": "Iniciar Autoguiado",
+                "pro_af_start": "Al inicio de secuencia",
+                "pro_af_filter": "Al cambiar filtro",
+                "pro_af_every": "Cada",
+                "pro_af_min": "min",
+                "pro_af_temp_lbl": "Variación de temp.",
+                "pro_postflight": "Post-Vuelo",
+                "pro_warm_up": "Calentar Cámara",
+                "pro_park": "Aparcar Montura",
+                "pro_cover": "Cerrar Tapa/Cubierta",
+                "pro_flat": "Encender Panel Flat",
+                "pro_sensor_osc": "Sensor OSC (Color)",
+                "pro_sensor_mono": "Sensor Mono",
+                "pro_seq_builder": "📸 Constructor de Secuencia",
+                "pro_export_btn": "💾 Exportar Secuencia Avanzada (.json)",
+                "mn_target_tpt": "🎯 Objetivo del Proyecto (TPT)",
+                "mn_target_ai_label": "🤖 Objetivo Recomendado por IA",
+                "mn_planned_time": "📅 Tiempo Planificado",
+                "mn_completed": "% completado"
             },
             zh: {
                 "manual_btn": "📖 打开手册", "pos_title": "📍 位置", "find_place": "查找地点:", "search_place": "例如: 丽江...",
@@ -906,11 +1443,42 @@
                 "mn_end": "结束 (晨昏)：",
                 "mn_filters": "本夜拍摄滤镜：",
                 "mn_delete": "🗑️ 删除",
-                "mn_export": "🚀 导出 N.I.N.A. 会话"
+                "mn_export": "🚀 导出 N.I.N.A. 会话",
+                "pro_back": "返回智能仪表板",
+                "pro_session_start": "拍摄开始:",
+                "pro_session_end": "拍摄结束:",
+                "pro_overflow": "⚠️ 时间溢出！拆分为多夜拍摄",
+                "pro_triggers": "⚙️ 触发器与硬件",
+                "pro_preflight": "拍摄前准备",
+                "pro_cool_cam": "相机降温至",
+                "pro_auto_rotator": "自动旋转器",
+                "pro_start_guide": "开始自动导星",
+                "pro_af_start": "序列开始时",
+                "pro_af_filter": "切换滤镜时",
+                "pro_af_every": "每隔",
+                "pro_af_min": "分钟",
+                "pro_af_temp_lbl": "温度变化",
+                "pro_postflight": "拍摄后处理",
+                "pro_warm_up": "相机回温",
+                "pro_park": "赤道仪归位",
+                "pro_cover": "关闭镜头盖",
+                "pro_flat": "开启平场灯",
+                "pro_sensor_osc": "彩色相机 (OSC)",
+                "pro_sensor_mono": "黑白相机 (Mono)",
+                "pro_seq_builder": "📸 序列构建器",
+                "pro_export_btn": "💾 导出高级序列 (.json)",
+                "mn_target_tpt": "🎯 项目目标 (TPT)",
+                "mn_target_ai_label": "🤖 AI 推荐目标",
+                "mn_planned_time": "📅 已计划时间",
+                "mn_completed": "% 已完成"
             }
         };
 
         let lang = localStorage.getItem('ad_lang') || 'it';
+        i18n.it.go_to_pro = "Vai al Calcolatore PRO";
+        i18n.en.go_to_pro = "Go to PRO Calculator";
+        i18n.es.go_to_pro = "Ir a la Calculadora PRO";
+        i18n.zh.go_to_pro = "进入 PRO 计算器";
         i18n.it.mosaic_active_msg = "✅ Modalità Mosaico attiva.";
         i18n.en.mosaic_active_msg = "✅ Mosaic Mode active.";
         i18n.es.mosaic_active_msg = "✅ Modo Mosaico activo.";
@@ -924,6 +1492,18 @@
         i18n.es.info_seq_opt = "Si haces clic en el botón <b>'Generar Secuencia Óptima'</b>, el sistema calcula los tiempos y el número de tomas en función del tiempo de integración, con un algoritmo adaptado al tipo de subframe (Luminancia, banda ancha o banda estrecha...).<br><br>Si el modo mosaico está activo, el sistema dividirá aún más la integración total por el número de paneles.";
         i18n.zh.info_seq_opt = "如果点击 <b>“生成最佳曝光序列”</b> 按钮，系统将根据设置的拍摄时间，结合子帧类型（明度、宽带或窄带等）的算法，自动计算理想的曝光时间和帧数。<br><br>如果激活了拼接模式，系统会将总时间进一步除以面板的数量。";
         
+        // ── TOOLTIP PRO: Calcolatore di Sequenze ─────────────────────────────
+        i18n.it.info_pro_seq = "<b>Calcolatore di Sequenze PRO</b><br><br>Qui sei tu a decidere. Inserisci per ogni filtro il numero esatto di pose e il tempo di esposizione che vuoi ottenere nel progetto finale.<br><br>La <b>barra di riempimento</b> confronta il tempo totale delle pose con la finestra notturna disponibile:<br>🟢 Verde: tutto entra in una notte<br>🟡 Arancione: margine stretto<br>🔴 Rosso: sforamento → si attiva il pulsante <b>Progettazione Multinotte</b><br><br>Per ogni filtro puoi impostare <b>Gain, Offset, Binning</b> e frequenza di <b>Dithering</b> in modo indipendente. Il file JSON generato è pronto per N.I.N.A. Advanced Sequencer.";
+        i18n.en.info_pro_seq = "<b>PRO Sequence Builder</b><br><br>Here you are in full control. Enter for each filter the exact number of frames and exposure time for your final project.<br><br>The <b>fill bar</b> compares total pose time against the available night window:<br>🟢 Green: everything fits in one night<br>🟡 Orange: tight margin<br>🔴 Red: overflow → the <b>Multi-Night</b> button activates<br><br>Each filter has independent <b>Gain, Offset, Binning</b> and <b>Dithering</b> frequency settings. The JSON file is ready to import into N.I.N.A. Advanced Sequencer.";
+        i18n.es.info_pro_seq = "<b>Constructor de Secuencia PRO</b><br><br>Aquí decides tú. Introduce para cada filtro el número exacto de poses y el tiempo de exposición de tu proyecto final.<br><br>La <b>barra de relleno</b> compara el tiempo total con la ventana nocturna disponible:<br>🟢 Verde: todo cabe en una noche<br>🟡 Naranja: margen ajustado<br>🔴 Rojo: desbordamiento → se activa el botón <b>Multi-Noche</b><br><br>Cada filtro tiene <b>Gain, Offset, Binning</b> y frecuencia de <b>Dithering</b> independientes. El JSON se importa directamente en N.I.N.A. Advanced Sequencer.";
+        i18n.zh.info_pro_seq = "<b>PRO 序列构建器</b><br><br>这里由您全权决定。为每个滤镜输入最终项目所需的精确帧数和曝光时间。<br><br><b>填充进度条</b>将总曝光时间与可用夜间窗口比较：<br>🟢 绿色：一夜内可完成<br>🟡 橙色：时间紧张<br>🔴 红色：超出 → 激活<b>多夜拍摄</b>按钮<br><br>每个滤镜可独立设置 <b>Gain、Offset、Binning</b> 和 <b>Dithering</b> 频率。生成的 JSON 可直接导入 N.I.N.A. 高级序列器。";
+
+        // ── TOOLTIP: Progettazione Multinotte ────────────────────────────────
+        i18n.it.info_multinight = "<b>Progettazione Multinotte</b><br><br>Quando le pose decise superano il tempo disponibile in una singola notte, questo strumento le distribuisce su più sessioni.<br><br>In cima trovi il <b>TPT</b> (Tempo Totale Pianificato): l'obiettivo fisso del tuo progetto, calcolato dalla griglia PRO. La barra di progresso diventa verde solo quando la somma delle notti raggiunge il TPT.<br><br>Per ogni notte puoi:<br>• Impostare orario di inizio e fine<br>• Decidere quante pose fare per filtro<br>• Verificare che le pose entrino nella finestra notturna<br>• Esportare un file N.I.N.A. dedicato a quella singola notte<br><br>Aggiungi notti finché il <b>Tempo Pianificato</b> raggiunge il TPT.";
+        i18n.en.info_multinight = "<b>Multi-Night Planning</b><br><br>When your planned frames exceed a single night's time, this tool distributes them across multiple sessions.<br><br>At the top you find the <b>TPT</b> (Total Planned Time): the fixed goal of your project, calculated from the PRO grid. The progress bar turns green only when the sum of all nights reaches the TPT.<br><br>For each night you can:<br>• Set start and end times<br>• Decide how many frames per filter<br>• Check if frames fit in the night window<br>• Export a dedicated N.I.N.A. file for that night<br><br>Add nights until <b>Planned Time</b> reaches the TPT.";
+        i18n.es.info_multinight = "<b>Planificación Multi-Noche</b><br><br>Cuando las poses superan el tiempo disponible en una sola noche, esta herramienta las distribuye en varias sesiones.<br><br>En la parte superior está el <b>TPT</b> (Tiempo Total Planificado): el objetivo fijo de tu proyecto, calculado desde la cuadrícula PRO. La barra de progreso se vuelve verde solo cuando la suma de las noches alcanza el TPT.<br><br>Para cada noche puedes:<br>• Establecer hora de inicio y fin<br>• Decidir cuántas poses por filtro<br>• Verificar si las poses caben en la ventana nocturna<br>• Exportar un archivo N.I.N.A. dedicado a esa noche<br><br>Añade noches hasta que el <b>Tiempo Planificado</b> alcance el TPT.";
+        i18n.zh.info_multinight = "<b>多夜拍摄规划</b><br><br>当计划帧数超出单夜时间时，此工具将其分配到多个拍摄夜晚。<br><br>顶部显示 <b>TPT</b>（总计划时间）：您项目的固定目标，由 PRO 网格计算得出。只有当所有夜晚总和达到 TPT 时，进度条才变绿。<br><br>每个夜晚可以：<br>• 设置开始和结束时间<br>• 决定每个滤镜的拍摄帧数<br>• 检查帧数是否能在夜间窗口内完成<br>• 导出该夜专属的 N.I.N.A. 文件<br><br>持续添加夜晚直到<b>已计划时间</b>达到 TPT。";
+
         function t(key) { return i18n[lang][key] || key; }
 
         function changeLanguage(l) {
@@ -1141,6 +1721,8 @@
 
         
 let latCorrente = 46.062, lonCorrente = 13.235, datiMeteo = null, indicePartenza = 0, chartAltezza = null, targetSelezionato = null, aladinSkyMap = null, vistaPrecedente = 'dashboard-view';
+        let fovCenterOverride = null; // {ra: gradi_decimali, dec: gradi_decimali} — null = usa coordinate target
+        // Coordinate centro FOV: null = usa quelle originali del target, altrimenti override da drag
         let mappaScura = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { maxZoom: 19, attribution: 'Meteo Data &copy; <a href="https://open-meteo.com/" target="_blank" style="color:#bb86fc;">Open-Meteo</a> | Map &copy; <a href="https://carto.com/" target="_blank">CartoDB</a>' });
         let map = L.map('map', { center: [latCorrente, lonCorrente], zoom: 8, layers: [mappaScura], zoomControl: false });
         L.control.zoom({ position: 'bottomright' }).addTo(map);
@@ -1556,9 +2138,18 @@ let latCorrente = 46.062, lonCorrente = 13.235, datiMeteo = null, indicePartenza
             // Generazione Mappa Stellare
             if (!aladinSkyMap) { 
                 aladinSkyMap = A.aladin('#aladin-lite-div', { survey: "P/DSS2/color", fov: 2, target: (targetSelezionato.ra * 15) + " " + targetSelezionato.dec, showReticle: false, showZoomControl: false, showFullscreenControl: false, showLayersControl: false, showGotoControl: false }); 
+                // Listener drag: aggiorna coordinate centro FOV in tempo reale
+                aladinSkyMap.on('positionChanged', function(pos) {
+                    aggiornaCoorditateFOV(pos.ra, pos.dec);
+                });
                 setTimeout(() => { toggleMosaic(); }, 300); 
             } else { 
-                setTimeout(() => { aladinSkyMap.gotoRaDec(targetSelezionato.ra * 15, targetSelezionato.dec); toggleMosaic(); }, 100); 
+                setTimeout(() => {
+                    fovCenterOverride = null;
+                    aladinSkyMap.gotoRaDec(targetSelezionato.ra * 15, targetSelezionato.dec);
+                    aggiornaCoordinateFOVdaTarget();
+                    toggleMosaic();
+                }, 100); 
             }
             
             disegnaGraficoAltezza(); toggleSensorMode(); calcolaTempi(); window.scrollTo(0,0);
@@ -1700,6 +2291,69 @@ let latCorrente = 46.062, lonCorrente = 13.235, datiMeteo = null, indicePartenza
                 }
             }
         }
+
+        // ── COORDINATE CENTRO FOV ──────────────────────────────────────────────
+        function _raGradiToSex(raDeg) {
+            // Aladin restituisce RA in gradi (0-360); convertiamo in ore:min:sec
+            let raH = raDeg / 15;
+            let h = Math.floor(raH);
+            let mRaw = (raH - h) * 60;
+            let m = Math.floor(mRaw);
+            let s = ((mRaw - m) * 60).toFixed(1);
+            return `${String(h).padStart(2,'0')}h ${String(m).padStart(2,'0')}m ${String(s).padStart(4,'0')}s`;
+        }
+        function _decGradiToSex(decDeg) {
+            let neg = decDeg < 0;
+            let a = Math.abs(decDeg);
+            let d = Math.floor(a);
+            let mRaw = (a - d) * 60;
+            let m = Math.floor(mRaw);
+            let s = ((mRaw - m) * 60).toFixed(0);
+            return `${neg ? '-' : '+'}${String(d).padStart(2,'0')}° ${String(m).padStart(2,'0')}′ ${String(s).padStart(2,'0')}″`;
+        }
+
+        function aggiornaCoorditateFOV(raDeg, decDeg) {
+            // raDeg e decDeg in gradi decimali (come restituisce Aladin positionChanged)
+            let raEl  = document.getElementById('fov-ra-display');
+            let decEl = document.getElementById('fov-dec-display');
+            let badge = document.getElementById('fov-offset-badge');
+            if (!raEl) return;
+
+            raEl.textContent  = _raGradiToSex(raDeg);
+            decEl.textContent = _decGradiToSex(decDeg);
+
+            // Salva override (RA in gradi decimali, Dec in gradi decimali)
+            fovCenterOverride = { raDeg: raDeg, decDeg: decDeg };
+
+            // Badge offset: confronta con coordinate originali target (tolleranza 0.01°)
+            if (targetSelezionato) {
+                let origRaDeg = targetSelezionato.ra * 15; // ra è in ore nel target
+                let origDecDeg = targetSelezionato.dec;
+                let distRa  = Math.abs(raDeg  - origRaDeg);
+                let distDec = Math.abs(decDeg - origDecDeg);
+                let isOffset = (distRa > 0.01 || distDec > 0.01);
+                if (badge) badge.style.display = isOffset ? 'inline-block' : 'none';
+            }
+        }
+
+        function aggiornaCoordinateFOVdaTarget() {
+            // Resetta il display alle coordinate originali del target
+            if (!targetSelezionato) return;
+            fovCenterOverride = null;
+            let raEl  = document.getElementById('fov-ra-display');
+            let decEl = document.getElementById('fov-dec-display');
+            let badge = document.getElementById('fov-offset-badge');
+            if (raEl) raEl.textContent  = _raGradiToSex(targetSelezionato.ra * 15);
+            if (decEl) decEl.textContent = _decGradiToSex(targetSelezionato.dec);
+            if (badge) badge.style.display = 'none';
+        }
+
+        function resetFovCenter() {
+            if (!targetSelezionato || !aladinSkyMap) return;
+            aladinSkyMap.gotoRaDec(targetSelezionato.ra * 15, targetSelezionato.dec);
+            aggiornaCoordinateFOVdaTarget();
+        }
+        // ─────────────────────────────────────────────────────────────────────────
 
         function disegnaGraficoAltezza() {
             if (!targetSelezionato) return; if (chartAltezza) chartAltezza.destroy();
@@ -1865,7 +2519,7 @@ let latCorrente = 46.062, lonCorrente = 13.235, datiMeteo = null, indicePartenza
                 }
 
                 html += `<div style="font-size:0.9em; line-height:1.5; color:#ddd; margin-bottom:15px;">${reason}</div>`;
-                html += `<button class="btn-guide" style="width:100%; padding:10px; font-size:1.1em; background: linear-gradient(135deg, #ffaa00 0%, #d48800 100%); color:#121212; border:none; box-shadow: 0 4px 15px rgba(255, 170, 0, 0.3);" onclick="apriMultiNight()">${t("ai_plan_btn")}</button>`;
+                html += `<button class="btn-guide" style="width:100%; padding:10px; font-size:1.1em; background: linear-gradient(135deg, #ffaa00 0%, #d48800 100%); color:#121212; border:none; box-shadow: 0 4px 15px rgba(255, 170, 0, 0.3);" onclick="apriMultiNight('smart')">${t("ai_plan_btn")}</button>`;
             } else {
                 let msgOk = lang === 'it' ? "Il tempo a disposizione stanotte sopra i 30° è sufficiente a completare l'integrazione consigliata." : 
                             lang === 'en' ? "Tonight's available time above 30° is enough to complete the recommended integration." :
@@ -1989,6 +2643,576 @@ let latCorrente = 46.062, lonCorrente = 13.235, datiMeteo = null, indicePartenza
         }
         function salvaFiltroNina(id) { localStorage.setItem('nina_filter_' + id, document.getElementById(`nina-name-${id}`).value.trim()); }
 
+/* --- LOGICA PLANCIA PRO --- */
+        /* --- LOGICA PLANCIA PRO --- */
+        function aggiornaFiltriNinaPro() {
+            let isM = document.getElementById('pro-sensor-type').value === 'mono';
+            let c = document.getElementById('pro-nina-filters-container'); 
+            if (!c) return;
+            c.innerHTML = '';
+            
+            if (!isM) { 
+                c.innerHTML = `<span style="color:#aaa; font-size:0.9em;">Sensore OSC Color. Mappatura non necessaria.</span>`; 
+                return; 
+            }
+            
+            framesMono.forEach(f => {
+                if (!f.id.includes('dark') && !f.id.includes('bias')) {
+                    let savedName = localStorage.getItem('nina_filter_' + f.id) || f.name;
+                    let d = document.createElement('div'); 
+                    d.style = "display: flex; align-items: center; justify-content: space-between; font-size: 0.85em; background: #1a1a1a; padding: 5px 10px; border-radius: 4px; border: 1px solid #444;";
+                    d.innerHTML = `<label style="color:#aaa; width:auto; margin:0; font-weight:bold;">${f.name}</label><input type="text" id="pro-nina-name-${f.id}" value="${savedName}" onchange="salvaFiltroNinaPro('${f.id}')" style="width: 80px!important; padding: 4px!important; font-size: 0.9em; background: #222; border-color: #555; color: #fff;">`;
+                    c.appendChild(d);
+                }
+            });
+        }
+
+        function salvaFiltroNinaPro(id) {
+            let nuovoNome = document.getElementById(`pro-nina-name-${id}`).value.trim();
+            localStorage.setItem('nina_filter_' + id, nuovoNome);
+            let smartInput = document.getElementById(`nina-name-${id}`);
+            if (smartInput) smartInput.value = nuovoNome;
+            disegnaGrigliaPro();
+        }
+        function apriProView() {
+            if (!targetSelezionato) { alert(t("alert_planetarium")); return; }
+            document.getElementById('planning-view').style.display = 'none';
+            document.getElementById('dashboard-view').style.display = 'none';
+            document.getElementById('pro-view').style.display = 'block';
+
+            // Salva lo stato in memoria per resistere al Refresh (F5)
+            sessionStorage.setItem('ad_current_view', 'pro');
+
+            document.getElementById('pro-time-start').value = document.getElementById('time-start').value;
+            document.getElementById('pro-time-end').value = document.getElementById('time-end').value;
+            document.getElementById('pro-sensor-type').value = document.getElementById('sensor-type').value;
+
+            disegnaGrigliaPro();
+            window.scrollTo(0,0);
+        }
+
+        function chiudiProView() {
+            document.getElementById('pro-view').style.display = 'none';
+            document.getElementById('planning-view').style.display = 'block';
+            window.scrollTo(0,0);
+            
+            // Ripristina lo stato "Smart" in memoria
+            sessionStorage.setItem('ad_current_view', 'smart');
+        }
+
+        function disegnaGrigliaPro() {
+            let isMono = document.getElementById('pro-sensor-type').value === 'mono';
+            document.getElementById('sensor-type').value = isMono ? 'mono' : 'color'; 
+            
+            aggiornaFiltriNinaPro(); // Richiama i filtri appena creati!
+            
+            let frameList = isMono ? framesMono : framesColor;
+            let container = document.getElementById('pro-sequence-grid');
+            container.innerHTML = '';
+
+            container.innerHTML = `
+                <div style="display: grid; grid-template-columns: 1fr 0.8fr 0.8fr 0.8fr 0.8fr 0.8fr 1fr; gap: 5px; font-size: 0.8em; color: #aaa; text-align: center; border-bottom: 1px solid #444; padding-bottom: 5px;">
+                    <div style="text-align: left;">Filtro</div>
+                    <div>Pose</div>
+                    <div>Secs</div>
+                    <div>Gain</div>
+                    <div>Offset</div>
+                    <div>Bin</div>
+                    <div>Dither (Freq.)</div>
+                </div>
+            `;
+
+            frameList.forEach(f => {
+                if(f.id.includes('dark') || f.id.includes('bias')) return;
+
+                // Recuperiamo i valori già calcolati dall'AI Smart per comodità
+                let defaultCount = document.getElementById(`${f.id}-count`) ? document.getElementById(`${f.id}-count`).value : 0;
+                let defaultExp = document.getElementById(`${f.id}-exp`) ? document.getElementById(`${f.id}-exp`).value : f.dE;
+                let defaultName = (isMono) ? (localStorage.getItem('nina_filter_' + f.id) || f.name) : f.name;
+
+                let row = document.createElement('div');
+                row.style.cssText = "display: grid; grid-template-columns: 1fr 0.8fr 0.8fr 0.8fr 0.8fr 0.8fr 1fr; gap: 5px; align-items: center; background: #1a1a1a; padding: 10px; border-radius: 4px; border-left: 3px solid #00c6ff;";
+                
+                row.innerHTML = `
+                    <div style="font-weight: bold; color: #fff; font-size: 0.9em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${defaultName}">${defaultName}</div>
+                    <input type="number" id="pro-${f.id}-count" value="${defaultCount}" min="0" oninput="calcolaNightFillBar()" style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box;">
+                    <input type="number" id="pro-${f.id}-exp" value="${defaultExp}" min="1" oninput="calcolaNightFillBar()" style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box;">
+                    <input type="text" id="pro-${f.id}-gain" value="Auto" style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box;">
+                    <input type="text" id="pro-${f.id}-offset" value="Auto" style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box;">
+                    <select id="pro-${f.id}-bin" style="width: 100%!important; padding: 4px!important; text-align: center; box-sizing: border-box;">
+                        <option value="1">1x1</option><option value="2">2x2</option><option value="3">3x3</option>
+                    </select>
+                    <div style="display: flex; align-items: center; gap: 5px; justify-content: center;">
+                        <input type="checkbox" id="pro-${f.id}-dither" checked style="transform: scale(1.2); cursor: pointer;" onchange="calcolaNightFillBar()">
+                        <input type="number" id="pro-${f.id}-dfreq" value="3" min="1" style="width: 45px!important; padding: 4px!important; text-align: center;" oninput="calcolaNightFillBar()">
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+            calcolaNightFillBar();
+        }
+
+        function calcolaNightFillBar() {
+            let tS = document.getElementById('pro-time-start').value;
+            let tE = document.getElementById('pro-time-end').value;
+            if(!tS || !tE) return;
+
+            let dS = new Date(`1970-01-01T${tS}:00`);
+            let dE = new Date(`1970-01-01T${tE}:00`);
+            if (dE <= dS) dE.setDate(dE.getDate() + 1);
+            let secDisponibili = (dE - dS) / 1000;
+
+            let secUsati = 0;
+            let ditherOverheadSecs = 15; // 15 secondi persi per il movimento del dither
+            let isMono = document.getElementById('pro-sensor-type').value === 'mono';
+            let frameList = isMono ? framesMono : framesColor;
+
+            frameList.forEach(f => {
+                if(f.id.includes('dark') || f.id.includes('bias')) return;
+                let countEl = document.getElementById(`pro-${f.id}-count`);
+                if(!countEl) return;
+                
+                let count = parseInt(countEl.value) || 0;
+                let exp = parseInt(document.getElementById(`pro-${f.id}-exp`).value) || 0;
+                let usaDither = document.getElementById(`pro-${f.id}-dither`).checked;
+                let dFreq = parseInt(document.getElementById(`pro-${f.id}-dfreq`).value) || 1;
+
+                if (count > 0 && exp > 0) {
+                    let tempoPose = count * exp;
+                    let tempoDither = 0;
+                    if (usaDither && dFreq > 0) {
+                        tempoDither = Math.floor(count / dFreq) * ditherOverheadSecs;
+                    }
+                    secUsati += (tempoPose + tempoDither);
+                }
+            });
+
+            mnTptSecondi = secUsati; // aggiorna TPT PRO (usato se multinotte aperto da PRO)
+            let pct = (secUsati / Math.max(1, secDisponibili)) * 100;
+            let bar = document.getElementById('pro-fill-bar');
+            let text = document.getElementById('pro-fill-text');
+            let btnMn = document.getElementById('btn-pro-multinight');
+
+            bar.style.width = Math.min(100, pct) + '%';
+            
+            let strUsati = `${Math.floor(secUsati/3600)}h ${Math.floor((secUsati%3600)/60)}m`;
+            let strTot = `${Math.floor(secDisponibili/3600)}h ${Math.floor((secDisponibili%3600)/60)}m`;
+            text.innerText = `${strUsati} / ${strTot} (${Math.round(pct)}%)`;
+
+            if (pct < 90) {
+                bar.style.background = '#44ff44';
+                btnMn.style.display = 'none';
+            } else if (pct <= 100) {
+                bar.style.background = '#ffaa00';
+                btnMn.style.display = 'none';
+            } else {
+                bar.style.background = '#ff4444';
+                btnMn.style.display = 'inline-block'; // Appare il bottone d'emergenza Multi-Night!
+            }
+        }
+        function esportaNinaPRO() {
+            if (!targetSelezionato) { alert(t("alert_planetarium")); return; }
+
+            // --- LETTURA PARAMETRI DALLA GRIGLIA PRO ---
+            let isMono = document.getElementById('pro-sensor-type').value === 'mono';
+            let frameList = isMono ? framesMono : framesColor;
+
+            // Raccoglie solo le righe con pose > 0
+            let esposizioni = [];
+            frameList.forEach(f => {
+                if (f.id.includes('dark') || f.id.includes('bias')) return;
+                let countEl = document.getElementById(`pro-${f.id}-count`);
+                let expEl   = document.getElementById(`pro-${f.id}-exp`);
+                let gainEl  = document.getElementById(`pro-${f.id}-gain`);
+                let offEl   = document.getElementById(`pro-${f.id}-offset`);
+                let binEl   = document.getElementById(`pro-${f.id}-bin`);
+                let dithChk = document.getElementById(`pro-${f.id}-dither`);
+                let dithFrq = document.getElementById(`pro-${f.id}-dfreq`);
+                if (!countEl) return;
+                let count = parseInt(countEl.value) || 0;
+                if (count <= 0) return;
+                let gainRaw = gainEl ? gainEl.value.trim() : 'Auto';
+                let offRaw  = offEl  ? offEl.value.trim()  : 'Auto';
+                esposizioni.push({
+                    count:     count,
+                    exp:       parseFloat(expEl ? expEl.value : 180) || 180,
+                    gain:      (gainRaw === 'Auto' || gainRaw === '') ? -1 : parseInt(gainRaw),
+                    offset:    (offRaw  === 'Auto' || offRaw  === '') ? -1 : parseInt(offRaw),
+                    bin:       parseInt(binEl ? binEl.value : 1) || 1,
+                    dither:    dithChk ? dithChk.checked : false,
+                    ditherFreq: parseInt(dithFrq ? dithFrq.value : 3) || 3,
+                    filterName: isMono ? (localStorage.getItem('nina_filter_' + f.id) || f.name) : null,
+                    frameId:   f.id
+                });
+            });
+
+            if (esposizioni.length === 0) { alert(t("alert_noseq")); return; }
+
+            // --- LETTURA TRIGGERS PRO ---
+            let doCool   = document.getElementById('pro-cool')   ? document.getElementById('pro-cool').checked   : false;
+            let tempCool = parseFloat(document.getElementById('pro-temp') ? document.getElementById('pro-temp').value : -10) || -10;
+            let doSlew   = document.getElementById('pro-slew')   ? document.getElementById('pro-slew').checked   : false;
+            let doRotate = document.getElementById('pro-rotate') ? document.getElementById('pro-rotate').checked : false;
+            let doGuide  = document.getElementById('pro-guide')  ? document.getElementById('pro-guide').checked  : false;
+            let doFlip   = document.getElementById('pro-flip')   ? document.getElementById('pro-flip').checked   : false;
+            let doAfStart  = document.getElementById('pro-af-start')  ? document.getElementById('pro-af-start').checked  : false;
+            let doAfFilter = document.getElementById('pro-af-filter') ? document.getElementById('pro-af-filter').checked : false;
+            let doWarm   = document.getElementById('pro-warm')   ? document.getElementById('pro-warm').checked   : false;
+            let doPark   = document.getElementById('pro-park')   ? document.getElementById('pro-park').checked   : false;
+            let doCover  = document.getElementById('pro-cover')  ? document.getElementById('pro-cover').checked  : false;
+
+            // --- GENERATORE ID PROGRESSIVI (come fa NINA nativamente) ---
+            let _id = 0;
+            const nid = () => String(++_id);
+
+            // --- HELPER: ObservableCollection ---
+            const makeCol = (type, values) => ({
+                "$id": nid(),
+                "$type": `System.Collections.ObjectModel.ObservableCollection\`1[[${type}, NINA.Sequencer]], System.ObjectModel`,
+                "$values": values
+            });
+            const condCol  = (v=[]) => makeCol("NINA.Sequencer.Conditions.ISequenceCondition", v);
+            const itemCol  = (v=[]) => makeCol("NINA.Sequencer.SequenceItem.ISequenceItem", v);
+            const trigCol  = (v=[]) => makeCol("NINA.Sequencer.Trigger.ISequenceTrigger", v);
+            const seqStrat = () => ({ "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" });
+
+            // --- COORDINATE TARGET ---
+            // Usa coordinate centro FOV se l'utente ha spostato la mappa
+            let _fovRaDeg2  = fovCenterOverride ? fovCenterOverride.raDeg  : targetSelezionato.ra * 15;
+            let _fovDecDeg2 = fovCenterOverride ? fovCenterOverride.decDeg : targetSelezionato.dec;
+            let ra   = _fovRaDeg2 / 15;  // in ore decimali
+            let dec  = _fovDecDeg2;
+            let rh   = Math.floor(ra);
+            let rm   = Math.floor((ra - rh) * 60);
+            let rs   = ((ra - rh) * 60 - rm) * 60;
+            let negD = dec < 0;
+            let aD   = Math.abs(dec);
+            let dd   = Math.floor(aD);
+            let dm   = Math.floor((aD - dd) * 60);
+            let ds   = ((aD - dd) * 60 - dm) * 60;
+            let posAngle = parseFloat(document.getElementById('fov-rotation') ? document.getElementById('fov-rotation').value : 0) || 0;
+
+            const makeCoords = () => ({
+                "$id": nid(),
+                "$type": "NINA.Astrometry.InputCoordinates, NINA.Astrometry",
+                "RAHours": rh, "RAMinutes": rm, "RASeconds": rs,
+                "NegativeDec": negD, "DecDegrees": dd, "DecMinutes": dm, "DecSeconds": ds
+            });
+
+            // --- HELPER: FilterInfo minimale (come nel file reale) ---
+            const makeFilter = (name) => ({
+                "$id": nid(),
+                "$type": "NINA.Core.Model.Equipment.FilterInfo, NINA.Core",
+                "_name": name,
+                "_focusOffset": 0,
+                "_position": 0,
+                "_autoFocusExposureTime": -1.0,
+                "_autoFocusFilter": false
+            });
+
+            // --- HELPER: Dither trigger ---
+            const makeDitherTrigger = (parentRef, freq) => {
+                let runnerId = nid();
+                let ditherId = nid();
+                return {
+                    "$id": nid(),
+                    "$type": "NINA.Sequencer.Trigger.Guider.DitherAfterExposures, NINA.Sequencer",
+                    "AfterExposures": freq,
+                    "Parent": { "$ref": parentRef },
+                    "TriggerRunner": {
+                        "$id": runnerId,
+                        "$type": "NINA.Sequencer.Container.SequentialContainer, NINA.Sequencer",
+                        "Strategy": seqStrat(),
+                        "Name": null,
+                        "Conditions": condCol(),
+                        "IsExpanded": true,
+                        "Items": itemCol([{
+                            "$id": ditherId,
+                            "$type": "NINA.Sequencer.SequenceItem.Guider.Dither, NINA.Sequencer",
+                            "Parent": { "$ref": runnerId },
+                            "ErrorBehavior": 0, "Attempts": 1
+                        }]),
+                        "Triggers": trigCol(),
+                        "Parent": null,
+                        "ErrorBehavior": 0, "Attempts": 1
+                    }
+                };
+            };
+
+            // --- SEZIONE START ---
+            let startItems = [];
+            if (doCool) startItems.push({
+                "$id": nid(),
+                "$type": "NINA.Sequencer.SequenceItem.Camera.CoolCamera, NINA.Sequencer",
+                "Temperature": tempCool, "Duration": 0.0,
+                "Parent": { "$ref": "START_REF" }, "ErrorBehavior": 0, "Attempts": 1
+            });
+
+            // --- SEZIONE END ---
+            let endItems = [];
+            if (doWarm) endItems.push({
+                "$id": nid(),
+                "$type": "NINA.Sequencer.SequenceItem.Camera.WarmCamera, NINA.Sequencer",
+                "Duration": 0.0,
+                "Parent": { "$ref": "END_REF" }, "ErrorBehavior": 0, "Attempts": 1
+            });
+            if (doCover) endItems.push({
+                "$id": nid(),
+                "$type": "NINA.Sequencer.SequenceItem.FlatDevice.CloseCover, NINA.Sequencer",
+                "Parent": { "$ref": "END_REF" }, "ErrorBehavior": 0, "Attempts": 1
+            });
+            if (doPark) endItems.push({
+                "$id": nid(),
+                "$type": "NINA.Sequencer.SequenceItem.Telescope.ParkScope, NINA.Sequencer",
+                "Parent": { "$ref": "END_REF" }, "ErrorBehavior": 0, "Attempts": 1
+            });
+
+            // --- SEZIONE TARGET: items pre-imaging (pre-flight) ---
+            let dsoPreItems = [];
+            if (doSlew) dsoPreItems.push({
+                "$id": nid(),
+                "$type": "NINA.Sequencer.SequenceItem.Platesolving.Center, NINA.Sequencer",
+                "Inherited": true, "Coordinates": makeCoords(),
+                "Parent": { "$ref": "DSO_REF" }, "ErrorBehavior": 0, "Attempts": 1
+            });
+            if (doAfStart) dsoPreItems.push({
+                "$id": nid(),
+                "$type": "NINA.Sequencer.SequenceItem.Autofocus.RunAutofocus, NINA.Sequencer",
+                "Parent": { "$ref": "DSO_REF" }, "ErrorBehavior": 0, "Attempts": 1
+            });
+            if (doRotate) dsoPreItems.push({
+                "$id": nid(),
+                "$type": "NINA.Sequencer.SequenceItem.Platesolving.SolveAndRotate, NINA.Sequencer",
+                "Inherited": true, "PositionAngle": posAngle,
+                "Parent": { "$ref": "DSO_REF" }, "ErrorBehavior": 0, "Attempts": 1
+            });
+            if (doGuide) dsoPreItems.push({
+                "$id": nid(),
+                "$type": "NINA.Sequencer.SequenceItem.Guider.StartGuiding, NINA.Sequencer",
+                "ForceCalibration": false,
+                "Parent": { "$ref": "DSO_REF" }, "ErrorBehavior": 0, "Attempts": 1
+            });
+
+            // --- BLOCCHI FILTRO (LoopCondition + SwitchFilter + TakeExposure + Dither) ---
+            let imagingContId = nid(); // id del SequentialContainer "Target Imaging Instructions"
+            let filterBlocks = [];
+
+            esposizioni.forEach(expo => {
+                let blockId = nid();
+                let items = [];
+
+                // SwitchFilter (solo sensori mono)
+                if (expo.filterName) {
+                    items.push({
+                        "$id": nid(),
+                        "$type": "NINA.Sequencer.SequenceItem.FilterWheel.SwitchFilter, NINA.Sequencer",
+                        "Filter": makeFilter(expo.filterName),
+                        "Parent": { "$ref": blockId }, "ErrorBehavior": 0, "Attempts": 1
+                    });
+                }
+                // Autofocus al cambio filtro
+                if (doAfFilter && expo.filterName) {
+                    items.push({
+                        "$id": nid(),
+                        "$type": "NINA.Sequencer.SequenceItem.Autofocus.RunAutofocus, NINA.Sequencer",
+                        "Parent": { "$ref": blockId }, "ErrorBehavior": 0, "Attempts": 1
+                    });
+                }
+                // TakeExposure (singola — il loop è gestito da LoopCondition)
+                items.push({
+                    "$id": nid(),
+                    "$type": "NINA.Sequencer.SequenceItem.Imaging.TakeExposure, NINA.Sequencer",
+                    "ExposureTime": expo.exp,
+                    "Gain": expo.gain,
+                    "Offset": expo.offset,
+                    "Binning": {
+                        "$id": nid(),
+                        "$type": "NINA.Core.Model.Equipment.BinningMode, NINA.Core",
+                        "X": expo.bin, "Y": expo.bin
+                    },
+                    "ImageType": "LIGHT",
+                    "ExposureCount": 1,   // sempre 1: il loop è LoopCondition
+                    "Parent": { "$ref": blockId }, "ErrorBehavior": 0, "Attempts": 1
+                });
+
+                // Dither trigger
+                let triggers = [];
+                if (expo.dither) triggers.push(makeDitherTrigger(blockId, expo.ditherFreq));
+
+                filterBlocks.push({
+                    "$id": blockId,
+                    "$type": "NINA.Sequencer.Container.SequentialContainer, NINA.Sequencer",
+                    "Strategy": seqStrat(),
+                    "Name": expo.filterName || "Light",
+                    "Conditions": condCol([{
+                        "$id": nid(),
+                        "$type": "NINA.Sequencer.Conditions.LoopCondition, NINA.Sequencer",
+                        "CompletedIterations": 0,
+                        "Iterations": expo.count,
+                        "Parent": { "$ref": blockId }
+                    }]),
+                    "IsExpanded": true,
+                    "Items": itemCol(items),
+                    "Triggers": trigCol(triggers),
+                    "Parent": { "$ref": imagingContId },
+                    "ErrorBehavior": 0, "Attempts": 1
+                });
+            });
+
+            // Trigger Meridian Flip sul container imaging
+            let imagingTriggers = [];
+            if (doFlip) {
+                let mfRunnerId = nid();
+                imagingTriggers.push({
+                    "$id": nid(),
+                    "$type": "NINA.Sequencer.Trigger.MeridianFlip.MeridianFlipTrigger, NINA.Sequencer",
+                    "Parent": { "$ref": imagingContId },
+                    "TriggerRunner": {
+                        "$id": mfRunnerId,
+                        "$type": "NINA.Sequencer.Container.SequentialContainer, NINA.Sequencer",
+                        "Strategy": seqStrat(), "Name": null,
+                        "Conditions": condCol(), "IsExpanded": true,
+                        "Items": itemCol(), "Triggers": trigCol(),
+                        "Parent": null, "ErrorBehavior": 0, "Attempts": 1
+                    }
+                });
+            }
+
+            // Container "Target Imaging Instructions"
+            let imagingContainer = {
+                "$id": imagingContId,
+                "$type": "NINA.Sequencer.Container.SequentialContainer, NINA.Sequencer",
+                "Strategy": seqStrat(),
+                "Name": "Target Imaging Instructions",
+                "Conditions": condCol(),
+                "IsExpanded": true,
+                "Items": itemCol(filterBlocks),
+                "Triggers": trigCol(imagingTriggers),
+                "Parent": { "$ref": "DSO_REF" },
+                "ErrorBehavior": 0, "Attempts": 1
+            };
+
+            // --- ExposureInfoList (lista display nell'UI di NINA) ---
+            let expInfoValues = esposizioni.map(e => ({
+                "$id": nid(),
+                "$type": "NINA.Sequencer.Utility.ExposureInfo, NINA.Sequencer",
+                "Count": e.count,
+                "Filter": e.filterName || "",
+                "ExposureTime": e.exp,
+                "Gain": e.gain === -1 ? 80 : e.gain,
+                "Offset": e.offset === -1 ? 15 : e.offset,
+                "ImageType": "LIGHT",
+                "BinningX": e.bin, "BinningY": e.bin, "ROI": 1.0
+            }));
+
+            // --- DeepSkyObjectContainer ---
+            let dsoId = nid();
+            let dsoContainer = {
+                "$id": dsoId,
+                "$type": "NINA.Sequencer.Container.DeepSkyObjectContainer, NINA.Sequencer",
+                "Target": {
+                    "$id": nid(),
+                    "$type": "NINA.Astrometry.InputTarget, NINA.Astrometry",
+                    "Expanded": true,
+                    "TargetName": targetSelezionato.name,
+                    "PositionAngle": posAngle,
+                    "InputCoordinates": makeCoords()
+                },
+                "ExposureInfoListExpanded": true,
+                "ExposureInfoList": {
+                    "$id": nid(),
+                    "$type": "NINA.Core.Utility.AsyncObservableCollection`1[[NINA.Sequencer.Utility.ExposureInfo, NINA.Sequencer]], NINA.Core",
+                    "$values": expInfoValues
+                },
+                "Strategy": seqStrat(),
+                "Name": targetSelezionato.name,
+                "Conditions": condCol(),
+                "IsExpanded": true,
+                "Items": itemCol([...dsoPreItems, imagingContainer]),
+                "Triggers": trigCol(),
+                "Parent": { "$ref": "TARGET_REF" },
+                "ErrorBehavior": 0, "Attempts": 1
+            };
+
+            // --- ASSEMBLAGGIO ROOT con $ref reali ---
+            let rootId    = nid();
+            let startId   = nid();
+            let targetId  = nid();
+            let endId     = nid();
+
+            // Patch $ref placeholder con id reali
+            const patchRefs = (obj, map) => {
+                let str = JSON.stringify(obj);
+                Object.entries(map).forEach(([k, v]) => {
+                    str = str.replaceAll(`"$ref": "${k}"`, `"$ref": "${v}"`);
+                });
+                return JSON.parse(str);
+            };
+
+            let refMap = {
+                "START_REF":  startId,
+                "TARGET_REF": targetId,
+                "END_REF":    endId,
+                "DSO_REF":    dsoId
+            };
+
+            startItems    = patchRefs(startItems,    refMap);
+            endItems      = patchRefs(endItems,      refMap);
+            dsoContainer  = patchRefs(dsoContainer,  refMap);
+
+            let ninaJSON = {
+                "$id": rootId,
+                "$type": "NINA.Sequencer.Container.SequenceRootContainer, NINA.Sequencer",
+                "Strategy": seqStrat(),
+                "Name": `AstroDashboard PRO - ${targetSelezionato.name}`,
+                "Conditions": condCol(),
+                "IsExpanded": true,
+                "Items": itemCol([
+                    {
+                        "$id": startId,
+                        "$type": "NINA.Sequencer.Container.StartAreaContainer, NINA.Sequencer",
+                        "Strategy": seqStrat(), "Name": "Inizia",
+                        "Conditions": condCol(), "IsExpanded": true,
+                        "Items": itemCol(startItems),
+                        "Triggers": trigCol(),
+                        "Parent": { "$ref": rootId }, "ErrorBehavior": 0, "Attempts": 1
+                    },
+                    {
+                        "$id": targetId,
+                        "$type": "NINA.Sequencer.Container.TargetAreaContainer, NINA.Sequencer",
+                        "Strategy": seqStrat(), "Name": "Targets",
+                        "Conditions": condCol(), "IsExpanded": true,
+                        "Items": itemCol([dsoContainer]),
+                        "Triggers": trigCol(),
+                        "Parent": { "$ref": rootId }, "ErrorBehavior": 0, "Attempts": 1
+                    },
+                    {
+                        "$id": endId,
+                        "$type": "NINA.Sequencer.Container.EndAreaContainer, NINA.Sequencer",
+                        "Strategy": seqStrat(), "Name": "Fine",
+                        "Conditions": condCol(), "IsExpanded": true,
+                        "Items": itemCol(endItems),
+                        "Triggers": trigCol(),
+                        "Parent": { "$ref": rootId }, "ErrorBehavior": 0, "Attempts": 1
+                    }
+                ]),
+                "Triggers": trigCol(),
+                "Parent": null, "ErrorBehavior": 0, "Attempts": 1
+            };
+
+            // Download
+            let blob = new Blob([JSON.stringify(ninaJSON, null, 2)], { type: 'application/json' });
+            let url  = URL.createObjectURL(blob);
+            let a    = document.createElement('a');
+            a.href = url;
+            a.download = `AD_PRO_${targetSelezionato.name.replace(/\s+/g,'_')}.json`;
+            document.body.appendChild(a); a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        /* --- FINE LOGICA PLANCIA PRO --- */
+
         function esportaNINA() {
             if (!targetSelezionato) { alert(t("alert_planetarium")); return; }
             let doCool = document.getElementById('nina-cool').checked, tempTarget = parseFloat(document.getElementById('nina-temp').value) || -10;
@@ -2003,13 +3227,16 @@ let latCorrente = 46.062, lonCorrente = 13.235, datiMeteo = null, indicePartenza
 
             let idCounter = 1; function nextId() { return (idCounter++).toString(); }
             function makeObs(type, values) { return { "$id": nextId(), "$type": `System.Collections.ObjectModel.ObservableCollection\`1[[${type}, NINA.Sequencer]], System.ObjectModel`, "$values": values }; }
-            let ra = targetSelezionato.ra, rh = Math.floor(ra), rm = Math.floor((ra - rh) * 60), rs = ((ra - rh) * 60 - rm) * 60;
-            let dec = targetSelezionato.dec, negD = dec < 0, aD = Math.abs(dec), dd = Math.floor(aD), dm = Math.floor((aD - dd) * 60), ds = ((aD - dd) * 60 - dm) * 60;
+            // Usa coordinate centro FOV se l'utente ha spostato la mappa, altrimenti quelle del target
+            let _fovRaDeg  = fovCenterOverride ? fovCenterOverride.raDeg  : targetSelezionato.ra * 15;
+            let _fovDecDeg = fovCenterOverride ? fovCenterOverride.decDeg : targetSelezionato.dec;
+            let ra = _fovRaDeg / 15, rh = Math.floor(ra), rm = Math.floor((ra - rh) * 60), rs = ((ra - rh) * 60 - rm) * 60;
+            let dec = _fovDecDeg, negD = dec < 0, aD = Math.abs(dec), dd = Math.floor(aD), dm = Math.floor((aD - dd) * 60), ds = ((aD - dd) * 60 - dm) * 60;
             let rootId = nextId(), startAreaId = nextId(), targetAreaId = nextId(), endAreaId = nextId(), startItems = [];
             if (doCool) startItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Camera.CoolCamera, NINA.Sequencer", "Temperature": tempTarget, "Duration": 0.0, "Parent": {"$ref": startAreaId}, "ErrorBehavior": 0, "Attempts": 1 });
             let dsoContainerId = nextId(), imagingContainerId = nextId(), dsoItems = [];
             if (doSlew) dsoItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Platesolving.Center, NINA.Sequencer", "Inherited": true, "Coordinates": { "$id": nextId(), "$type": "NINA.Astrometry.InputCoordinates, NINA.Astrometry", "RAHours": rh, "RAMinutes": rm, "RASeconds": rs, "NegativeDec": negD, "DecDegrees": dd, "DecMinutes": dm, "DecSeconds": ds }, "Parent": {"$ref": dsoContainerId}, "ErrorBehavior": 0, "Attempts": 1 });
-            if (document.getElementById('nina-rotate') && document.getElementById('nina-rotate').checked) dsoItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Rotator.RotateTarget, NINA.Sequencer", "Tolerance": 1.0, "Inherited": true, "Parent": {"$ref": dsoContainerId}, "ErrorBehavior": 0, "Attempts": 1 });
+            if (document.getElementById('nina-rotate') && document.getElementById('nina-rotate').checked) dsoItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Platesolving.SolveAndRotate, NINA.Sequencer", "Inherited": true, "PositionAngle": parseFloat(document.getElementById('fov-rotation').value) || 0, "Parent": {"$ref": dsoContainerId}, "ErrorBehavior": 0, "Attempts": 1 });
             if (doGuide) dsoItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Guider.StartGuiding, NINA.Sequencer", "ForceCalibration": false, "Parent": {"$ref": dsoContainerId}, "ErrorBehavior": 0, "Attempts": 1 });
 
             let imagingItems = [];
@@ -2115,11 +3342,40 @@ let latCorrente = 46.062, lonCorrente = 13.235, datiMeteo = null, indicePartenza
         function chiudiAsiairReport() { document.getElementById('asiair-modal').style.display = 'none'; }
         /* --- MULTI NIGHT MANAGER E EXPORT JSON --- */
         let contatoreNotti = 0;
+        let mnContesto = 'pro'; // 'smart' | 'pro' — determina il comportamento del multinotte
+        let mnTptSecondi = 0;  // TPT del contesto corrente (secondi)
 
-        function apriMultiNight() {
-            document.getElementById('mn-target-hours').innerText = oreNecessarieGlobali.toFixed(1) + " " + t("ai_hours");
-            document.getElementById('mn-assigned-hours').innerText = "0.0 " + t("ai_hours");
-            document.getElementById('mn-nights-container').innerHTML = ""; 
+        function apriMultiNight(contesto) {
+            mnContesto = contesto || 'pro';
+
+            // Calcola e mostra il TPT corretto in base al contesto
+            if (mnContesto === 'pro') {
+                // TPT PRO: pose × exp dalla griglia PRO (già calcolato in calcolaNightFillBar)
+                let tptH = Math.floor(mnTptSecondi / 3600);
+                let tptM = Math.floor((mnTptSecondi % 3600) / 60);
+                document.getElementById('mn-target-label').innerText = t('mn_target_tpt');
+                document.getElementById('mn-target-hours').innerText = `${tptH}h ${tptM}m`;
+            } else {
+                // TPT SMART: ore raccomandate dall'AI
+                let tptH = Math.floor(oreNecessarieGlobali);
+                let tptM = Math.round((oreNecessarieGlobali - tptH) * 60);
+                document.getElementById('mn-target-label').innerText = t('mn_target_ai_label');
+                document.getElementById('mn-target-hours').innerText = `${tptH}h ${tptM}m`;
+                mnTptSecondi = oreNecessarieGlobali * 3600;
+            }
+
+            // Pianificato parte da 0, rosso
+            let assEl = document.getElementById('mn-assigned-hours');
+            assEl.innerText = '0h 0m';
+            assEl.style.color = '#ff4444';
+
+            // Reset barra
+            let bar = document.getElementById('mn-progress-bar');
+            if (bar) { bar.style.width = '0%'; bar.style.background = '#ff4444'; }
+            let pctEl = document.getElementById('mn-progress-pct');
+            if (pctEl) { pctEl.innerText = '0' + t('mn_completed'); pctEl.style.color = '#888'; }
+
+            document.getElementById('mn-nights-container').innerHTML = ''; 
             contatoreNotti = 0;
             document.getElementById('multinight-modal').style.display = 'block';
             aggiungiNotte(); 
@@ -2127,65 +3383,88 @@ let latCorrente = 46.062, lonCorrente = 13.235, datiMeteo = null, indicePartenza
 
         function chiudiMultiNight() { document.getElementById('multinight-modal').style.display = 'none'; }
 
-        function aggiungiNotte() {
+function aggiungiNotte() {
             contatoreNotti++;
             let isM = document.getElementById('sensor-type').value === 'mono';
             
-            // Pesca l'orario dei 30 gradi calcolato nel pannello principale
             let tS_def = document.getElementById('time-start').value || "21:00";
             let tE_def = document.getElementById('time-end').value || "05:00";
             
             let filtri = isM ? ['L', 'R', 'G', 'B', 'Ha', 'OIII', 'SII'] : ['Light'];
-            let grigliaFiltri = `<div style="display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px;">`;
+            let grigliaFiltri = `<div style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">`;
             
             filtri.forEach(f => {
                 let intId = 'c-light'; 
                 if(isM) { if(f==='L') intId='m-l'; else if(f==='R') intId='m-r'; else if(f==='G') intId='m-g'; else if(f==='B') intId='m-b'; else if(f==='Ha') intId='m-ha'; else if(f==='OIII') intId='m-oiii'; else if(f==='SII') intId='m-sii'; }
                 
-                // Mantiene spuntati di default solo i filtri in uso nel pannello principale
-                let chkMain = document.getElementById(`${intId}-check`);
-                let isChecked = (chkMain && chkMain.checked) ? 'checked' : '';
+                // PRO: legge dalla griglia PRO; SMART: legge dalla griglia Smart
+                let defCount = 0, defExp = 180;
+                if (mnContesto === 'pro') {
+                    let proCountEl = document.getElementById(`pro-${intId}-count`);
+                    let proExpEl   = document.getElementById(`pro-${intId}-exp`);
+                    defCount = (proCountEl && parseInt(proCountEl.value) > 0) ? parseInt(proCountEl.value) : 0;
+                    defExp   = proExpEl ? (parseInt(proExpEl.value) || 180) : 180;
+                } else {
+                    // SMART: legge dalla griglia Smart (count e exp per filtro)
+                    let smCountEl = document.getElementById(`${intId}-count`);
+                    let smExpEl   = document.getElementById(`${intId}-exp`);
+                    defCount = (smCountEl && parseInt(smCountEl.value) > 0) ? parseInt(smCountEl.value) : 0;
+                    defExp   = smExpEl ? (parseInt(smExpEl.value) || 180) : 180;
+                }
+                let isChecked = defCount > 0 ? 'checked' : '';
 
-                grigliaFiltri += `<label style="background: #222; border: 1px solid #444; padding: 4px 8px; border-radius: 4px; cursor: pointer; display: flex; align-items: center; gap: 5px;"><input type="checkbox" id="chk-mn-${contatoreNotti}-${intId}" value="${f}" ${isChecked} style="transform: scale(0.9);"><span style="font-size: 0.75em; color: #fff; font-weight: bold;">${f}</span></label>`;
+                grigliaFiltri += `
+                <div style="display: flex; align-items: center; justify-content: space-between; background: #222; border: 1px solid #444; padding: 8px 12px; border-radius: 4px;">
+                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; width: 100px;">
+                        <input type="checkbox" id="chk-mn-${contatoreNotti}-${intId}" value="${f}" ${isChecked} style="transform: scale(1.1);" onchange="ricalcolaOreNotte(${contatoreNotti})">
+                        <span style="font-size: 0.9em; color: #fff; font-weight: bold;">${f}</span>
+                    </label>
+                    <div style="display: flex; align-items: center; gap: 5px;">
+                        <input type="number" id="count-mn-${contatoreNotti}-${intId}" value="${defCount}" min="0" style="width: 55px!important; padding: 4px!important; text-align: center; background: #111; border: 1px solid #555; color: #fff; border-radius: 3px;" oninput="ricalcolaOreNotte(${contatoreNotti})">
+                        <span style="color: #aaa; font-size: 0.85em;">pose x</span>
+                        <input type="number" id="exp-mn-${contatoreNotti}-${intId}" value="${defExp}" min="1" style="width: 55px!important; padding: 4px!important; text-align: center; background: #111; border: 1px solid #555; color: #fff; border-radius: 3px;" oninput="ricalcolaOreNotte(${contatoreNotti})">
+                        <span style="color: #aaa; font-size: 0.85em;">s</span>
+                    </div>
+                </div>`;
             });
             grigliaFiltri += `</div>`;
 
-            // INIEZIONE DINAMICA TRADUZIONI TOOLTIP NINA (Senza toccare il dizionario in alto!)
-            i18n['it']['info_mn_nina'] = "L'algoritmo utilizza questi orari per calcolare il budget temporale totale e derivare matematicamente il numero di frame per filtro.<br><br>N.I.N.A. Advanced Sequencer <b>NON possiede un timer nativo</b>, ma eseguirà il file JSON in modo sequenziale. Se hai necessità di sincronizzare rigorosamente l'inizio degli scatti, utilizza i trigger <i>'Wait for Time'</i> o <i>'Loop Until Time'</i> all'interno del sequenziatore.";
-            i18n['en']['info_mn_nina'] = "The algorithm uses these times exclusively to calculate the total time budget and mathematically derive the number of frames for each filter.<br><br>N.I.N.A. Advanced Sequencer <b>DOES NOT have a native timer</b>, but will execute the JSON file sequentially. If you need to strictly synchronize the start of the shots, use the <i>'Wait for Time'</i> or <i>'Loop Until Time'</i> triggers within the sequencer.";
-            i18n['es']['info_mn_nina'] = "El algoritmo utiliza estos horarios para calcular el presupuesto de tiempo total y derivar matemáticamente el número de tomas para cada filtro.<br><br>N.I.N.A. Advanced Sequencer <b>NO tiene un temporizador nativo</b>, ejecutará el archivo JSON de forma secuencial. Si necesitas sincronizar estrictamente el inicio de las tomas, utiliza los disparadores <i>'Wait for Time'</i> o <i>'Loop Until Time'</i> dentro del secuenciador.";
-            i18n['zh']['info_mn_nina'] = "算法仅使用这些时间来计算总时间预算，并从数学上得出每个滤镜的帧数。<br><br>N.I.N.A. 高级序列器<b>没有原生计时器</b>，而是按顺序执行 JSON 文件。如果需要严格同步拍摄开始时间，请在序列器内使用 <i>'Wait for Time'</i> 或 <i>'Loop Until Time'</i> 触发器。";
-
+            // NUOVA STRUTTURA CON ACCORDION
             let html = `
-            <div style="background: #1a1a1a; padding: 15px; border-radius: 8px; border: 1px solid #444; margin-bottom: 12px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                    <span style="color: #ffaa00; font-weight: bold; font-size: 0.9em;">🌙 ${t("mn_sess")} #${contatoreNotti}</span>
-                    <div style="display: flex; align-items: center; gap: 5px;">
-                        <span style="color:#777; font-size:0.7em;">${t("mn_real_h")}</span>
-                        <input type="text" id="ore-mn-${contatoreNotti}" style="width:60px!important; text-align:center; background:#000; border: 1px solid #555; color: #44ff44; font-weight: bold;" readonly>
+            <div style="background: #1a1a1a; border-radius: 8px; border: 1px solid #444; margin-bottom: 15px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
+                
+                <div onclick="toggleNotteBody(${contatoreNotti})" style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: #222; cursor: pointer; transition: background 0.2s;">
+                    <span style="color: #ffaa00; font-weight: bold; font-size: 1.1em;">🌙 ${t("mn_sess")} #${contatoreNotti}</span>
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <input type="text" id="ore-mn-${contatoreNotti}" style="width:65px!important; text-align:center; background:#000; border: 1px solid #555; color: #44ff44; font-weight: bold; font-size: 0.9em; pointer-events: none;" readonly>
+                        <span id="icon-mn-${contatoreNotti}" style="font-size: 1.2em; color: #aaa; width: 15px; text-align: center;">▼</span>
                     </div>
                 </div>
                 
-                <div style="display: flex; gap: 10px; margin-bottom: 15px; align-items: flex-end;">
-                    <div style="flex:1;">
-                        <label style="display:block; color:#aaa; font-size:0.65em; margin-bottom:5px;">${t("mn_start")}</label>
-                        <input type="time" id="start-mn-${contatoreNotti}" value="${tS_def}" style="width:100%!important; background:#000; border:1px solid #333; color:#fff; padding:6px; border-radius:4px;" onchange="ricalcolaOreNotte(${contatoreNotti})">
+                <div id="body-mn-${contatoreNotti}" style="padding: 15px; border-top: 1px solid #333; display: block;">
+                    <div style="display: flex; gap: 10px; align-items: flex-end; background: #000; padding: 10px; border-radius: 5px; border: 1px solid #333;">
+                        <div style="flex:1;">
+                            <label style="display:block; color:#aaa; font-size:0.7em; margin-bottom:5px;">${t("mn_start")}</label>
+                            <input type="time" id="start-mn-${contatoreNotti}" value="${tS_def}" style="width:100%!important; background:#1a1a1a; border:1px solid #444; color:#fff; padding:6px; border-radius:4px;" onchange="ricalcolaOreNotte(${contatoreNotti})">
+                        </div>
+                        <div style="flex:1;">
+                            <label style="display:block; color:#aaa; font-size:0.7em; margin-bottom:5px;">${t("mn_end")}</label>
+                            <input type="time" id="end-mn-${contatoreNotti}" value="${tE_def}" style="width:100%!important; background:#1a1a1a; border:1px solid #444; color:#fff; padding:6px; border-radius:4px;" onchange="ricalcolaOreNotte(${contatoreNotti})">
+                        </div>
+                        <div style="padding-bottom: 5px; padding-left: 5px;">
+                            <span class="info-icon" style="font-size:1.5em; vertical-align: middle;" onmouseenter="mostraTooltip(this, 'info_mn_nina')" onmouseleave="nascondiTooltip()">ℹ️</span>
+                        </div>
                     </div>
-                    <div style="flex:1;">
-                        <label style="display:block; color:#aaa; font-size:0.65em; margin-bottom:5px;">${t("mn_end")}</label>
-                        <input type="time" id="end-mn-${contatoreNotti}" value="${tE_def}" style="width:100%!important; background:#000; border:1px solid #333; color:#fff; padding:6px; border-radius:4px;" onchange="ricalcolaOreNotte(${contatoreNotti})">
-                    </div>
-                    <div style="padding-bottom: 5px; padding-left: 5px;">
-                        <span class="info-icon" style="font-size:1.5em; vertical-align: middle;" onmouseenter="mostraTooltip(this, 'info_mn_nina')" onmouseleave="nascondiTooltip()">ℹ️</span>
-                    </div>
-                </div>
+                    
+                    <div id="warn-mn-${contatoreNotti}" style="display:none; color:#ff4444; font-size:0.85em; margin-top:10px; font-weight:bold; background: rgba(255,68,68,0.1); padding: 8px; border-left: 3px solid #ff4444; border-radius: 4px;"></div>
 
-                <span style="display:block; color:#bb86fc; font-size:0.65em; text-transform: uppercase; margin-bottom:5px;">${t("mn_filters")}</span>
-                ${grigliaFiltri}
-                
-                <div style="margin-top: 15px; display: flex; gap: 10px;">
-                    <button class="btn-guide" style="flex: 1; border-color: #555; color: #aaa; padding: 6px;" onclick="this.parentElement.parentElement.remove(); calcolaTotaleNotti();">${t("mn_delete")}</button>
-                    <button class="btn-search" style="flex: 2; font-size: 0.85em; padding: 6px; background: transparent; color: #ffaa00; border: 1px solid #ffaa00;" onclick="esportaNINAMultiNotte(${contatoreNotti})">${t("mn_export")} ${contatoreNotti}</button>
+                    <span style="display:block; color:#bb86fc; font-size:0.7em; text-transform: uppercase; margin-top:15px; margin-bottom:5px; font-weight: bold;">Configurazione Pose:</span>
+                    ${grigliaFiltri}
+                    
+                    <div style="margin-top: 15px; display: flex; gap: 10px;">
+                        <button class="btn-guide" style="flex: 1; border-color: #555; color: #aaa; padding: 8px;" onclick="this.parentElement.parentElement.parentElement.remove(); calcolaTotaleNotti();">${t("mn_delete")}</button>
+                        <button class="btn-search" style="flex: 2; font-size: 0.9em; padding: 8px; background: transparent; color: #ffaa00; border: 1px solid #ffaa00;" onclick="esportaNINAMultiNotte(${contatoreNotti})">${t("mn_export")} ${contatoreNotti}</button>
+                    </div>
                 </div>
             </div>`;
             
@@ -2193,94 +3472,222 @@ let latCorrente = 46.062, lonCorrente = 13.235, datiMeteo = null, indicePartenza
             ricalcolaOreNotte(contatoreNotti);
         }
 
+        // Funzioncina extra per gestire apertura/chiusura tendina
+        function toggleNotteBody(id) {
+            let body = document.getElementById(`body-mn-${id}`);
+            let icon = document.getElementById(`icon-mn-${id}`);
+            if (body.style.display === 'none') {
+                body.style.display = 'block';
+                icon.innerText = '▼';
+            } else {
+                body.style.display = 'none';
+                icon.innerText = '◀';
+            }
+        }
+
         function ricalcolaOreNotte(id) {
-            let tS = document.getElementById(`start-mn-${id}`).value, tE = document.getElementById(`end-mn-${id}`).value; if(!tS || !tE) return;
-            let dS = new Date(`1970-01-01T${tS}:00`), dE = new Date(`1970-01-01T${tE}:00`); if (dE <= dS) dE.setDate(dE.getDate() + 1); 
-            let h = ((dE - dS) / 3600000).toFixed(1);
-            document.getElementById(`ore-mn-${id}`).value = h;
+            let isM = document.getElementById('sensor-type').value === 'mono';
+            let possibili = isM ? ['m-l','m-r','m-g','m-b','m-ha','m-oiii','m-sii'] : ['c-light'];
+            
+            let ditherOverheadSecs = 15; // Stimiamo 15 sec per il dither
+            let usaDither = document.getElementById('dither-check') && document.getElementById('dither-check').checked;
+            let dFreq = parseInt(document.getElementById('dither-freq').value) || 1;
+
+            let totalSecs = 0;
+
+            // Calcola il tempo in base alle pose inserite NELLA TABELLA DELLA NOTTE
+            possibili.forEach(pid => {
+                let chk = document.getElementById(`chk-mn-${id}-${pid}`);
+                if (chk && chk.checked) {
+                    let count = parseInt(document.getElementById(`count-mn-${id}-${pid}`).value) || 0;
+                    let exp = parseInt(document.getElementById(`exp-mn-${id}-${pid}`).value) || 0;
+                    
+                    if (count > 0 && exp > 0) {
+                        let tempoPose = count * exp;
+                        let tempoDither = (usaDither && dFreq > 0) ? Math.floor(count / dFreq) * ditherOverheadSecs : 0;
+                        totalSecs += (tempoPose + tempoDither);
+                    }
+                }
+            });
+
+            let orePose = (totalSecs / 3600).toFixed(1);
+            document.getElementById(`ore-mn-${id}`).value = orePose + "h";
+            
+            // Controlliamo se le pose inserite superano il tempo fisico (Inizio - Fine Notte)
+            let tS = document.getElementById(`start-mn-${id}`).value;
+            let tE = document.getElementById(`end-mn-${id}`).value;
+            if(tS && tE) {
+                let dS = new Date(`1970-01-01T${tS}:00`);
+                let dE = new Date(`1970-01-01T${tE}:00`);
+                if (dE <= dS) dE.setDate(dE.getDate() + 1); 
+                let windowH = ((dE - dS) / 3600000).toFixed(1);
+                
+                let warnEl = document.getElementById(`warn-mn-${id}`);
+                if(parseFloat(orePose) > parseFloat(windowH)) {
+                    warnEl.style.display = 'block';
+                    warnEl.innerHTML = `⚠️ <b>Sforamento!</b> Hai programmato ${orePose}h di pose, ma la finestra utile (da ${tS} a ${tE}) dura solo ${windowH}h.`;
+                } else {
+                    warnEl.style.display = 'none';
+                }
+            }
+
             calcolaTotaleNotti();
         }
 
         function calcolaTotaleNotti() {
             let container = document.getElementById('mn-nights-container'); if(!container) return;
-            let inputs = container.querySelectorAll('input[type="text"][id^="ore-mn-"]'), tot = 0;
-            inputs.forEach(i => tot += parseFloat(i.value) || 0);
-            let el = document.getElementById('mn-assigned-hours'); 
-            if(el) {
-                el.innerText = tot.toFixed(1) + " " + t("ai_hours");
-                if (tot >= oreNecessarieGlobali && oreNecessarieGlobali > 0) el.style.color = "#44ff44"; else el.style.color = "#ffaa00"; 
+            let inputs = container.querySelectorAll('input[type="text"][id^="ore-mn-"]');
+            let totSec = 0;
+            inputs.forEach(i => { totSec += (parseFloat(i.value.replace('h','')) || 0) * 3600; });
+
+            let totH = Math.floor(totSec / 3600);
+            let totM = Math.floor((totSec % 3600) / 60);
+
+            let el = document.getElementById('mn-assigned-hours');
+            if (el) {
+                el.innerText = `${totH}h ${totM}m`;
+                // Verde = TPT raggiunto, Rosso = ancora sotto
+                el.style.color = (mnTptSecondi > 0 && totSec >= mnTptSecondi) ? '#44ff44' : '#ff4444';
+            }
+
+            // Barra progresso
+            let pct = mnTptSecondi > 0 ? Math.min(100, Math.round((totSec / mnTptSecondi) * 100)) : 0;
+            let bar = document.getElementById('mn-progress-bar');
+            let pctEl = document.getElementById('mn-progress-pct');
+            if (bar) {
+                bar.style.width = pct + '%';
+                bar.style.background = pct >= 100 ? '#44ff44' : pct >= 60 ? '#ffaa00' : '#ff4444';
+            }
+            if (pctEl) {
+                pctEl.innerText = pct + t('mn_completed');
+                pctEl.style.color = pct >= 100 ? '#44ff44' : '#888';
             }
         }
 
         function esportaNINAMultiNotte(notteId) {
             if (!targetSelezionato) return;
-            let isMono = document.getElementById('sensor-type').value === 'mono';
-            
-            let totaleOre = parseFloat(document.getElementById(`ore-mn-${notteId}`).value) || 0;
-            let tSec = totaleOre * 3600;
-            
-            let errTime = lang === 'it' ? "Imposta orari validi per questa notte." : lang === 'en' ? "Please set valid times for this night." : lang === 'es' ? "Establece horarios válidos para esta noche." : "请为今晚设置有效的时间。";
-            if (tSec <= 0) { alert(errTime); return; }
+
+            // Contesto PRO o SMART determina da dove leggere i dati
+            let isPro = (mnContesto === 'pro');
+            // Il tipo sensore: PRO usa il suo select, SMART usa quello principale
+            let isMono = isPro
+                ? document.getElementById('pro-sensor-type').value === 'mono'
+                : document.getElementById('sensor-type').value === 'mono';
 
             let possibili = isMono ? ['m-l','m-r','m-g','m-b','m-ha','m-oiii','m-sii'] : ['c-light'];
-            let filtriAttivi = [];
-            
+            let esposizioni = [];
+
             possibili.forEach(pid => {
                 let chk = document.getElementById(`chk-mn-${notteId}-${pid}`);
-                if (chk && chk.checked) {
-                    let expTempo = parseInt(document.getElementById(`${pid}-exp`).value) || (pid.includes('ha')||pid.includes('oiii')||pid.includes('sii') ? 300 : 180);
-                    let ninaName = isMono ? document.getElementById(`nina-name-${pid}`).value.trim() : null;
-                    filtriAttivi.push({ id: pid, exp: expTempo, name: ninaName });
+                if (!chk || !chk.checked) return;
+
+                // Count ed exp: sempre dalla griglia della notte (già inseriti dall'utente)
+                let count = parseInt(document.getElementById(`count-mn-${notteId}-${pid}`).value) || 0;
+                let exp   = parseInt(document.getElementById(`exp-mn-${notteId}-${pid}`).value) || 0;
+                if (count <= 0 || exp <= 0) return;
+
+                // Nome filtro NINA: PRO usa pro-nina-name, SMART usa nina-name
+                let ninaName = null;
+                if (isMono) {
+                    let nameEl = isPro
+                        ? document.getElementById(`pro-nina-name-${pid}`)
+                        : document.getElementById(`nina-name-${pid}`);
+                    ninaName = nameEl ? nameEl.value.trim() : pid;
+                    if (!ninaName) ninaName = pid; // fallback
                 }
+
+                // Gain/Offset: PRO legge dalla griglia PRO, SMART usa default -1
+                let gain = -1, offset = -1, bin = 1;
+                if (isPro) {
+                    let gainEl   = document.getElementById(`pro-${pid}-gain`);
+                    let offsetEl = document.getElementById(`pro-${pid}-offset`);
+                    let binEl    = document.getElementById(`pro-${pid}-bin`);
+                    let gainRaw   = gainEl   ? gainEl.value.trim()   : 'Auto';
+                    let offsetRaw = offsetEl ? offsetEl.value.trim() : 'Auto';
+                    gain   = (gainRaw   === 'Auto' || gainRaw   === '') ? -1 : parseInt(gainRaw);
+                    offset = (offsetRaw === 'Auto' || offsetRaw === '') ? -1 : parseInt(offsetRaw);
+                    bin    = binEl ? (parseInt(binEl.value) || 1) : 1;
+                }
+
+                // Dither: PRO usa il suo checkbox per filtro, SMART usa quello globale
+                let doDither = false, dFreq = 3;
+                if (isPro) {
+                    let dChk = document.getElementById(`pro-${pid}-dither`);
+                    doDither = dChk ? dChk.checked : false;
+                    dFreq    = parseInt((document.getElementById(`pro-${pid}-dfreq`) || {}).value) || 3;
+                } else {
+                    let dChk = document.getElementById('dither-check');
+                    doDither = dChk ? dChk.checked : false;
+                    dFreq    = parseInt(document.getElementById('dither-freq').value) || 1;
+                }
+
+                esposizioni.push({ count, exp, filter: ninaName, type: "LIGHT", gain, offset, bin, doDither, dFreq });
             });
 
             let errFilter = lang === 'it' ? "Devi selezionare almeno un filtro per questa sessione!" : lang === 'en' ? "You must select at least one filter for this session!" : lang === 'es' ? "¡Debes seleccionar al menos un filtro para esta sesión!" : "您必须为本次拍摄选择至少一个滤镜！";
-            if (filtriAttivi.length === 0) { alert(errFilter); return; }
-
-            let doDither = document.getElementById('dither-check') && document.getElementById('dither-check').checked;
-            let dFreq = parseInt(document.getElementById('dither-freq').value) || 1;
-            let dDur = parseInt(document.getElementById('dither-duration').value) || 0;
-
-            let secPerFiltro = tSec / filtriAttivi.length;
-            let esposizioni = [];
-
-            filtriAttivi.forEach(f => {
-                let expWithDither = f.exp + (doDither && dFreq > 0 ? (dDur / dFreq) : 0);
-                let count = Math.floor(secPerFiltro / expWithDither);
-                if (count > 0) esposizioni.push({ count: count, exp: f.exp, filter: f.name, type: "LIGHT" });
-            });
-
-            if (esposizioni.length === 0) { alert("La finestra temporale che hai impostato è troppo breve per calcolare esposizioni utili."); return; }
+            if (esposizioni.length === 0) { alert(errFilter); return; }
 
             // GENERAZIONE JSON NINA SPECIFICO PER LA NOTTE
             let idCounter = 2000; function nextId() { return (idCounter++).toString(); }
             function makeObs(type, values) { return { "$id": nextId(), "$type": `System.Collections.ObjectModel.ObservableCollection\`1[[${type}, NINA.Sequencer]], System.ObjectModel`, "$values": values }; }
             
-            let ra = targetSelezionato.ra, rh = Math.floor(ra), rm = Math.floor((ra - rh) * 60), rs = ((ra - rh) * 60 - rm) * 60;
-            let dec = targetSelezionato.dec, negD = dec < 0, aD = Math.abs(dec), dd = Math.floor(aD), dm = Math.floor((aD - dd) * 60), ds = ((aD - dd) * 60 - dm) * 60;
+            // Usa coordinate centro FOV se l'utente ha spostato la mappa, altrimenti quelle del target
+            let _fovRaDeg  = fovCenterOverride ? fovCenterOverride.raDeg  : targetSelezionato.ra * 15;
+            let _fovDecDeg = fovCenterOverride ? fovCenterOverride.decDeg : targetSelezionato.dec;
+            let ra = _fovRaDeg / 15, rh = Math.floor(ra), rm = Math.floor((ra - rh) * 60), rs = ((ra - rh) * 60 - rm) * 60;
+            let dec = _fovDecDeg, negD = dec < 0, aD = Math.abs(dec), dd = Math.floor(aD), dm = Math.floor((aD - dd) * 60), ds = ((aD - dd) * 60 - dm) * 60;
             
+            // Legge i trigger dal pannello corretto in base al contesto
             let startItems = [], dsoItems = [], endItems = [];
-            if (document.getElementById('nina-cool').checked) startItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Camera.CoolCamera, NINA.Sequencer", "Temperature": parseFloat(document.getElementById('nina-temp').value) || -10, "Duration": 0.0, "Parent": null, "ErrorBehavior": 0, "Attempts": 1 });
-            if (document.getElementById('nina-slew').checked) dsoItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Platesolving.Center, NINA.Sequencer", "Inherited": true, "Coordinates": { "$id": nextId(), "$type": "NINA.Astrometry.InputCoordinates, NINA.Astrometry", "RAHours": rh, "RAMinutes": rm, "RASeconds": rs, "NegativeDec": negD, "DecDegrees": dd, "DecMinutes": dm, "DecSeconds": ds }, "Parent": null, "ErrorBehavior": 0, "Attempts": 1 });
-            if (document.getElementById('nina-rotate') && document.getElementById('nina-rotate').checked) dsoItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Rotator.RotateTarget, NINA.Sequencer", "Tolerance": 1.0, "Inherited": true, "Parent": null, "ErrorBehavior": 0, "Attempts": 1 });
-            if (document.getElementById('nina-guide').checked) dsoItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Guider.StartGuiding, NINA.Sequencer", "ForceCalibration": false, "Parent": null, "ErrorBehavior": 0, "Attempts": 1 });
-            if (document.getElementById('nina-warm').checked) endItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Camera.WarmCamera, NINA.Sequencer", "Duration": 0.0, "Parent": null, "ErrorBehavior": 0, "Attempts": 1 });
-            if (document.getElementById('nina-park').checked) endItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Telescope.ParkScope, NINA.Sequencer", "Parent": null, "ErrorBehavior": 0, "Attempts": 1 });
+            let coolEl    = isPro ? document.getElementById('pro-cool')     : document.getElementById('nina-cool');
+            let tempEl    = isPro ? document.getElementById('pro-temp')     : document.getElementById('nina-temp');
+            let slewEl    = isPro ? document.getElementById('pro-slew')     : document.getElementById('nina-slew');
+            let rotEl     = isPro ? document.getElementById('pro-rotate')   : document.getElementById('nina-rotate');
+            let guideEl   = isPro ? document.getElementById('pro-guide')    : document.getElementById('nina-guide');
+            let warmEl    = isPro ? document.getElementById('pro-warm')     : document.getElementById('nina-warm');
+            let parkEl    = isPro ? document.getElementById('pro-park')     : document.getElementById('nina-park');
+            let flipEl    = isPro ? document.getElementById('pro-flip')     : document.getElementById('nina-flip');
+            // Autofocus: solo PRO ha questi checkbox
+            let afStartEl  = document.getElementById('pro-af-start');
+            let afFilterEl = document.getElementById('pro-af-filter');
+            let afTimeEl   = document.getElementById('pro-af-time');
+            let afTimeVal  = parseFloat((document.getElementById('pro-af-time-val')||{}).value) || 60;
+            let afTempEl   = document.getElementById('pro-af-temp');
+            let afTempVal  = parseFloat((document.getElementById('pro-af-temp-val')||{}).value) || 2;
+            let doAfStart  = isPro && afStartEl  && afStartEl.checked;
+            let doAfFilter = isPro && afFilterEl && afFilterEl.checked;
+            let doAfTime   = isPro && afTimeEl   && afTimeEl.checked;
+            let doAfTemp   = isPro && afTempEl   && afTempEl.checked;
+
+            if (coolEl  && coolEl.checked)  startItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Camera.CoolCamera, NINA.Sequencer", "Temperature": parseFloat((tempEl||{}).value) || -10, "Duration": 0.0, "Parent": null, "ErrorBehavior": 0, "Attempts": 1 });
+            if (slewEl  && slewEl.checked)  dsoItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Platesolving.Center, NINA.Sequencer", "Inherited": true, "Coordinates": { "$id": nextId(), "$type": "NINA.Astrometry.InputCoordinates, NINA.Astrometry", "RAHours": rh, "RAMinutes": rm, "RASeconds": rs, "NegativeDec": negD, "DecDegrees": dd, "DecMinutes": dm, "DecSeconds": ds }, "Parent": null, "ErrorBehavior": 0, "Attempts": 1 });
+            if (doAfStart) dsoItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Autofocus.RunAutofocus, NINA.Sequencer", "Parent": null, "ErrorBehavior": 0, "Attempts": 1 });
+            if (rotEl   && rotEl.checked)   dsoItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Platesolving.SolveAndRotate, NINA.Sequencer", "Inherited": true, "PositionAngle": parseFloat(document.getElementById('fov-rotation').value)||0, "Parent": null, "ErrorBehavior": 0, "Attempts": 1 });
+            if (guideEl && guideEl.checked) dsoItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Guider.StartGuiding, NINA.Sequencer", "ForceCalibration": false, "Parent": null, "ErrorBehavior": 0, "Attempts": 1 });
+            if (warmEl  && warmEl.checked)  endItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Camera.WarmCamera, NINA.Sequencer", "Duration": 0.0, "Parent": null, "ErrorBehavior": 0, "Attempts": 1 });
+            if (parkEl  && parkEl.checked)  endItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Telescope.ParkScope, NINA.Sequencer", "Parent": null, "ErrorBehavior": 0, "Attempts": 1 });
 
             let imagingItemsList = [];
             esposizioni.forEach(expo => {
                 let blockId = nextId(), blockItems = [];
                 if (expo.filter) blockItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.FilterWheel.SwitchFilter, NINA.Sequencer", "Filter": { "$id": nextId(), "$type": "NINA.Core.Model.Equipment.FilterInfo, NINA.Core", "_name": expo.filter, "_focusOffset": 0, "_position": 0, "_autoFocusExposureTime": -1.0, "_autoFocusFilter": false }, "Parent": {"$ref": blockId}, "ErrorBehavior": 0, "Attempts": 1 });
-                blockItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Imaging.TakeExposure, NINA.Sequencer", "ExposureTime": expo.exp, "Gain": -1, "Offset": -1, "Binning": { "$id": nextId(), "$type": "NINA.Core.Model.Equipment.BinningMode, NINA.Core", "X": 1, "Y": 1 }, "ImageType": expo.type, "ExposureCount": expo.count, "Parent": {"$ref": blockId}, "ErrorBehavior": 0, "Attempts": 1 });
+                // Autofocus al cambio filtro (solo PRO)
+                if (doAfFilter && expo.filter) blockItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Autofocus.RunAutofocus, NINA.Sequencer", "Parent": {"$ref": blockId}, "ErrorBehavior": 0, "Attempts": 1 });
+                // Usa LoopCondition (struttura nativa NINA) con gain/offset/bin dal contesto
+                blockItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Imaging.TakeExposure, NINA.Sequencer", "ExposureTime": expo.exp, "Gain": expo.gain, "Offset": expo.offset, "Binning": { "$id": nextId(), "$type": "NINA.Core.Model.Equipment.BinningMode, NINA.Core", "X": expo.bin, "Y": expo.bin }, "ImageType": expo.type, "ExposureCount": 1, "Parent": {"$ref": blockId}, "ErrorBehavior": 0, "Attempts": 1 });
                 let blockTriggers = [];
-                if (doDither && dFreq > 0) {
-                    let trigRunnerId = nextId(); blockTriggers.push({ "$id": nextId(), "$type": "NINA.Sequencer.Trigger.Guider.DitherAfterExposures, NINA.Sequencer", "AfterExposures": dFreq, "Parent": {"$ref": blockId}, "TriggerRunner": { "$id": trigRunnerId, "$type": "NINA.Sequencer.Container.SequentialContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", [{ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Guider.Dither, NINA.Sequencer", "Parent": {"$ref": trigRunnerId}, "ErrorBehavior": 0, "Attempts": 1 }]), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", []), "Parent": null, "ErrorBehavior": 0, "Attempts": 1 } });
+                if (expo.doDither && expo.dFreq > 0) {
+                    let trigRunnerId = nextId(); blockTriggers.push({ "$id": nextId(), "$type": "NINA.Sequencer.Trigger.Guider.DitherAfterExposures, NINA.Sequencer", "AfterExposures": expo.dFreq, "Parent": {"$ref": blockId}, "TriggerRunner": { "$id": trigRunnerId, "$type": "NINA.Sequencer.Container.SequentialContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", [{ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Guider.Dither, NINA.Sequencer", "Parent": {"$ref": trigRunnerId}, "ErrorBehavior": 0, "Attempts": 1 }]), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", []), "Parent": null, "ErrorBehavior": 0, "Attempts": 1 } });
                 }
-                imagingItemsList.push({ "$id": blockId, "$type": "NINA.Sequencer.Container.SequentialContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Name": expo.filter ? `Ripresa ${expo.filter}` : `Ripresa LIGHT`, "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", blockItems), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", blockTriggers), "Parent": null, "ErrorBehavior": 0, "Attempts": 1 });
+                imagingItemsList.push({ "$id": blockId, "$type": "NINA.Sequencer.Container.SequentialContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Name": expo.filter || "Light", "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", [{ "$id": nextId(), "$type": "NINA.Sequencer.Conditions.LoopCondition, NINA.Sequencer", "CompletedIterations": 0, "Iterations": expo.count, "Parent": {"$ref": blockId} }]), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", blockItems), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", blockTriggers), "Parent": null, "ErrorBehavior": 0, "Attempts": 1 });
             });
 
             let imagingTriggers = [];
-            if (document.getElementById('nina-flip').checked) { let trigRunnerId = nextId(); imagingTriggers.push({ "$id": nextId(), "$type": "NINA.Sequencer.Trigger.MeridianFlip.MeridianFlipTrigger, NINA.Sequencer", "Parent": null, "TriggerRunner": { "$id": trigRunnerId, "$type": "NINA.Sequencer.Container.SequentialContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", []), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", []), "Parent": null, "ErrorBehavior": 0, "Attempts": 1 } }); }
+            if (flipEl && flipEl.checked) { let trigRunnerId = nextId(); imagingTriggers.push({ "$id": nextId(), "$type": "NINA.Sequencer.Trigger.MeridianFlip.MeridianFlipTrigger, NINA.Sequencer", "Parent": null, "TriggerRunner": { "$id": trigRunnerId, "$type": "NINA.Sequencer.Container.SequentialContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", []), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", []), "Parent": null, "ErrorBehavior": 0, "Attempts": 1 } }); }
+            // AF ogni N minuti
+            if (doAfTime) { let afTRid = nextId(); imagingTriggers.push({ "$id": nextId(), "$type": "NINA.Sequencer.Trigger.Autofocus.AutofocusAfterTimeTrigger, NINA.Sequencer", "Amount": afTimeVal, "Parent": null, "TriggerRunner": { "$id": afTRid, "$type": "NINA.Sequencer.Container.SequentialContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", [{ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Autofocus.RunAutofocus, NINA.Sequencer", "Parent": {"$ref": afTRid}, "ErrorBehavior": 0, "Attempts": 1 }]), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", []), "Parent": null, "ErrorBehavior": 0, "Attempts": 1 } }); }
+            // AF a variazione di temperatura
+            if (doAfTemp) { let afTRid2 = nextId(); imagingTriggers.push({ "$id": nextId(), "$type": "NINA.Sequencer.Trigger.Autofocus.AutofocusAfterTemperatureChangeTrigger, NINA.Sequencer", "Amount": afTempVal, "Parent": null, "TriggerRunner": { "$id": afTRid2, "$type": "NINA.Sequencer.Container.SequentialContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", [{ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Autofocus.RunAutofocus, NINA.Sequencer", "Parent": {"$ref": afTRid2}, "ErrorBehavior": 0, "Attempts": 1 }]), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", []), "Parent": null, "ErrorBehavior": 0, "Attempts": 1 } }); }
             dsoItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.Container.SequentialContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Name": "Imaging", "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", imagingItemsList), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", imagingTriggers), "Parent": null, "ErrorBehavior": 0, "Attempts": 1 });
 
             let targetItems = [{ "$id": nextId(), "$type": "NINA.Sequencer.Container.DeepSkyObjectContainer, NINA.Sequencer", "Target": { "$id": nextId(), "$type": "NINA.Astrometry.InputTarget, NINA.Astrometry", "Expanded": true, "TargetName": targetSelezionato.name, "PositionAngle": parseFloat(document.getElementById('fov-rotation').value) || 0.0, "InputCoordinates": { "$id": nextId(), "$type": "NINA.Astrometry.InputCoordinates, NINA.Astrometry", "RAHours": rh, "RAMinutes": rm, "RASeconds": rs, "NegativeDec": negD, "DecDegrees": dd, "DecMinutes": dm, "DecSeconds": ds } }, "ExposureInfoListExpanded": false, "ExposureInfoList": null, "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Name": targetSelezionato.name, "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", dsoItems), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", []), "Parent": null, "ErrorBehavior": 0, "Attempts": 1 }];
@@ -2414,9 +3821,16 @@ let latCorrente = 46.062, lonCorrente = 13.235, datiMeteo = null, indicePartenza
 
             // Ripristina l'ultima schermata visitata dopo un F5 (Refresh)
             let savedTarget = sessionStorage.getItem('ad_current_target');
+            let savedView = sessionStorage.getItem('ad_current_view'); // Controlla se eravamo nella PRO
+            
             if (savedTarget) {
                 try { 
                     apriPianificazione(JSON.parse(savedTarget)); 
+                    
+                    // Se l'utente era nella Plancia PRO, riportalo lì automaticamente
+                    if (savedView === 'pro') {
+                        setTimeout(() => { apriProView(); }, 150); // Piccolo ritardo per permettere all'AI di caricare i dati
+                    }
                 } catch(e) { 
                     sessionStorage.removeItem('ad_current_target'); 
                 }
