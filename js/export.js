@@ -129,7 +129,4 @@
 
         function chiudiAsiairReport() { document.getElementById('asiair-modal').style.display = 'none'; }
         /* --- MULTI NIGHT MANAGER E EXPORT JSON --- */
-        let contatoreNotti = 0;
-        let mnContesto = 'pro'; // 'smart' | 'pro' — determina il comportamento del multinotte
-        let mnTptSecondi = 0;  // TPT del contesto corrente (secondi)
 

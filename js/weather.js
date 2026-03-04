@@ -1,18 +1,14 @@
 // weather.js — Mappa Leaflet, meteo Open-Meteo, effemeridi, layer
 // ============================================================
 
+
         
-let latCorrente = 46.062, lonCorrente = 13.235, datiMeteo = null, indicePartenza = 0, chartAltezza = null, targetSelezionato = null, aladinSkyMap = null, vistaPrecedente = 'dashboard-view';
-        let fovCenterOverride = null; // {ra: gradi_decimali, dec: gradi_decimali} — null = usa coordinate target
-        // Coordinate centro FOV: null = usa quelle originali del target, altrimenti override da drag
         let mappaScura = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { maxZoom: 19, attribution: 'Meteo Data &copy; <a href="https://open-meteo.com/" target="_blank" style="color:#bb86fc;">Open-Meteo</a> | Map &copy; <a href="https://carto.com/" target="_blank">CartoDB</a>' });
         let map = L.map('map', { center: [latCorrente, lonCorrente], zoom: 8, layers: [mappaScura], zoomControl: false });
         L.control.zoom({ position: 'bottomright' }).addTo(map);
         let layers = { basse: L.layerGroup().addTo(map), medie: L.layerGroup(), alte: L.layerGroup(), jet: L.layerGroup(), luna: L.layerGroup(), umidita: L.layerGroup() };
         let marker = L.marker([latCorrente, lonCorrente]).addTo(map).bindPopup("<b>Udine</b>").openPopup();
-        let timerRicerca;
 
-        const planetsDatabase = [ { id: "jupiter", name: "jupiter", icon: "🪐", ra: 7.15, dec: 22.8 }, { id: "mars", name: "mars", icon: "🔴", ra: 18.50, dec: -23.5 }, { id: "venus", name: "venus", icon: "✨", ra: 23.50, dec: -3.5 } ];
 
         function getJulianDate(date) { return (date.getTime() / 86400000) + 2440587.5; }
         function calcolaAltAz(ra, dec, lat, lon, date) {

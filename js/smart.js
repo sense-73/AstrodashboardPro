@@ -1,10 +1,6 @@
 // smart.js — Calcolatore Smart: AI predittivo, sequenza ottimale, filtri NINA
 // ============================================================
-
-        const framesColor = [{ id: "c-light", name: "Light", class: "f-l", dC: 0, dE: 180 }, { id: "c-dark", name: "Dark", class: "f-dark", dC: 0, dE: 180 }, { id: "c-bias", name: "Bias/Flat", class: "f-bias", dC: 0, dE: 0 }];
-        const framesMono = [{ id: "m-l", name: "Lum (L)", class: "f-l", dC: 0, dE: 30 }, { id: "m-r", name: "Red (R)", class: "f-r", dC: 0, dE: 120 }, { id: "m-g", name: "Green (G)", class: "f-g", dC: 0, dE: 120 }, { id: "m-b", name: "Blue (B)", class: "f-b", dC: 0, dE: 120 }, { id: "m-ha", name: "H-Alpha", class: "f-ha", dC: 0, dE: 300 }, { id: "m-oiii", name: "O-III", class: "f-oiii", dC: 0, dE: 300 }, { id: "m-sii", name: "S-II", class: "f-sii", dC: 0, dE: 300 }, { id: "m-dark", name: "Dark", class: "f-dark", dC: 0, dE: 300 }, { id: "m-bias", name: "Bias/Flat", class: "f-bias", dC: 0, dE: 0 }];
-
-        function toggleLock(id) {
+function toggleLock(id) {
             let el = document.getElementById(id + '-lock');
             if (!el) return;
             if (el.innerText === '🔓') {
@@ -28,18 +24,7 @@
                 c.appendChild(r);
             });
             aggiornaFiltriNina();
-        }
-
-        // --- DATABASE VIP E REGOLE AI ---
-        const dsoVIP = {
-            "M31": { hours: 4, tips: "Nucleo estremo. Fai esposizioni miste (es. 30s e 180s) per salvare il centro con un HDR." },
-            "M42": { hours: 3, tips: "Il Trapezio brucia istantaneamente. Fai scatti da 5 secondi per il core e 300s per le periferiche." },
-            "M81": { hours: 12, tips: "Bode è circondata dall'IFN. Scatta da cieli perfetti per staccarla dal fondo cielo." },
-            "M45": { hours: 6, tips: "Pleiadi: le stelle blu creano riflessi enormi. Controlla gli aloni dei filtri." },
-            "IC434": { hours: 8, tips: "Testa di Cavallo: dedica l'80% del tempo al canale H-Alpha per un contrasto brutale." },
-            "Ou4": { hours: 35, tips: "Calamaro Gigante (Flying Bat). Segnale OIII debolissimo. Obbligatoria pianificazione estrema." }
-        };
-        let oreNecessarieGlobali = 0; 
+        } 
 
         function aggiornaAI() {
             if(!targetSelezionato) return;
