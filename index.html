@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AstroDashboard v5.5 - Global Edition</title>
+    
+    <link rel="manifest" href="manifest.json?v=3">
+    <meta name="theme-color" content="#121212">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="AstroDash">
+    <link rel="icon" type="image/png" href="adp_ico.png?v=3">
+    <link rel="apple-touch-icon" href="adp_ico.png?v=3">
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/suncalc/1.9.0/suncalc.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://aladin.cds.unistra.fr/AladinLite/api/v2/latest/aladin.min.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://aladin.cds.unistra.fr/AladinLite/api/v2/latest/aladin.min.js"></script>
+
+    <script src="database.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <div class="main-header">
+        <div class="lang-container">
+            <span style="font-size: 0.75em; color: #aaa; font-weight: bold; letter-spacing: 1px; padding-left: 5px;">LANGUAGE</span>
+            <div class="lang-toggle">
+                <button class="lang-btn active" id="btn-lang-it" onclick="changeLanguage('it')">
+                    <svg viewBox="0 0 3 2" style="width: 18px; height: 12px; border-radius: 2px; margin-right: 6px;"><rect width="1" height="2" fill="#009246"/><rect x="1" width="1" height="2" fill="#F1F2F1"/><rect x="2" width="1" height="2" fill="#CE2B37"/></svg>ITA
+                </button>
+                <button class="lang-btn" id="btn-lang-en" onclick="changeLanguage('en')">
+                    <svg viewBox="0 0 60 30" style="width: 18px; height: 12px; border-radius: 2px; margin-right: 6px;"><clipPath id="t"><path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z"/></clipPath><path d="M0,0 v30 h60 v-30 z" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" clip-path="url(#t)" stroke="#C8102E" stroke-width="4"/><path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/><path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/></svg>ENG
+                </button>
+                <button class="lang-btn" id="btn-lang-es" onclick="changeLanguage('es')">
+                    <svg viewBox="0 0 750 500" style="width: 18px; height: 12px; border-radius: 2px; margin-right: 6px;"><rect width="750" height="500" fill="#c60b1e"/><rect y="125" width="750" height="250" fill="#ffc400"/></svg>ESP
+                </button>
+                <button class="lang-btn" id="btn-lang-zh" onclick="changeLanguage('zh')">
+                    <svg viewBox="0 0 30 20" style="width: 18px; height: 12px; border-radius: 2px; margin-right: 6px;"><rect width="30" height="20" fill="#de2910"/><path d="M5,5 l-1,3.07 2.61,-1.9 -2.61,-1.9 1,3.07z" fill="#ffde00"/></svg>CHN
+                </button>
+            </div>
+        </div>
+        <div class="logo-container">
+            <img src="astro_logo.png" alt="AstroDashboard Pro" class="center-logo">
+        </div>
+        <div class="author-section">
+            <div>
+                <p style="margin: 0 0 6px 0; font-size: 0.9em; color: #fff; font-weight: bold;">v5.5.0-Global</p>
+                <button class="btn-guide" onclick="apriGuida()" style="margin: 0;"><span data-i18n="manual_btn">📖 Apri Manuale</span></button>
+            </div>
+            <img src="logo astro enrico sfondo.png" alt="Enrico Salis Logo" style="height: 60px; object-fit: contain; border-radius: 5px;">
+        </div>
+    </div>
+
+    <div id="dashboard-view">
+        <div class="container" style="margin-bottom: 0;">
+            <div class="ephemeris-box">
+                <div class="moon-container">
+                    <div id="moon-emoji" class="moon-icon">🌕</div>
+                    <div id="moon-phase-name" class="moon-phase-name">Caricamento...</div>
+                </div>
+                <div class="weather-container" style="min-width: 120px;">
+                    <span id="current-weather-icon" style="font-size: 3.5em; text-shadow: 0 0 15px rgba(255, 255, 255, 0.2); margin-bottom: 5px;">☁️</span>
+                    <span id="current-weather-desc" style="font-size: 1em; font-weight: bold; color: #fff; text-transform: uppercase; text-align: center;">Meteo...</span>
+                </div>
+                <div class="times-grid">
+                    <div class="time-item"><span class="icon-normal">🌅</span> <span data-i18n="sunrise">Alba</span> <span data-i18n="sun">Sole</span><br><span id="alba-sole">--:--</span></div>
+                    <div class="time-item"><span class="icon-normal">🌇</span> <span data-i18n="sunset">Tramonto</span> <span data-i18n="sun">Sole</span><br><span id="tramonto-sole">--:--</span></div>
+                    <div class="time-item"><span class="icon-normal">🌒</span> <span data-i18n="sunrise">Alba</span> <span data-i18n="moon">Luna</span><br><span id="alba-luna">--:--</span></div>
+                    <div class="time-item"><span class="icon-normal">🌘</span> <span data-i18n="sunset">Tramonto</span> <span data-i18n="moon">Luna</span><br><span id="tramonto-luna">--:--</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="panel">
+                <h3><span data-i18n="pos_title">📍 Posizione</span> <span class="info-icon" onmouseenter="mostraTooltip(this, 'info_pos')" onmouseleave="nascondiTooltip()">ℹ️</span></h3>
+                <div class="input-group">
+                    <label for="ricerca" data-i18n="find_place">Trova Luogo:</label>
+                    <input type="text" id="ricerca" placeholder="..." data-i18n="search_place" oninput="cercaIndirizzo()">
+                    <ul id="dropdown-risultati"></ul>
+                </div>
+                <div class="input-group"><label for="lat" data-i18n="lat">Latitudine:</label><input type="text" id="lat" readonly value="46.06200"></div>
+                <div class="input-group"><label for="lon" data-i18n="lon">Longitudine:</label><input type="text" id="lon" readonly value="13.23500"></div>
+            </div>
+
+            <div class="panel">
+                <h3><span data-i18n="env_data">🎛️ Dati Ambientali</span> <span class="info-icon" onmouseenter="mostraTooltip(this, 'info_env')" onmouseleave="nascondiTooltip()">ℹ️</span></h3>
+                <div class="meteo-grid">
+                    <div class="meteo-item m-bassa active" id="btn-basse" onclick="toggleLayer('basse')"><h4 data-i18n="low_clouds">Nuvole Basse</h4><span id="val-basse">--%</span></div>
+                    <div class="meteo-item m-media disabled" id="btn-medie" onclick="toggleLayer('medie')"><h4 data-i18n="mid_clouds">Nuvole Medie</h4><span id="val-medie">--%</span></div>
+                    <div class="meteo-item m-alta disabled" id="btn-alte" onclick="toggleLayer('alte')"><h4 data-i18n="high_clouds">Nuvole Alte</h4><span id="val-alte">--%</span></div>
+                    <div class="meteo-item m-jet disabled" id="btn-jet" onclick="toggleLayer('jet')"><h4>Jet Stream</h4><span id="val-jet">--<span class="jet-unit">km/h</span></span></div>
+                    <div class="meteo-item m-luna disabled" id="btn-luna" onclick="toggleLayer('luna')"><h4 data-i18n="moon_poll">Inq. Lunare</h4><span id="val-luna">--%</span></div>
+                    <div class="meteo-item m-umidita disabled" id="btn-umidita" onclick="toggleLayer('umidita')"><h4 data-i18n="humidity">Umidità</h4><span id="val-umidita-layer" style="color:#00ffff;">--%</span></div>
+                    <div class="meteo-item m-seeing active" id="btn-seeing"><h4 data-i18n="seeing_est">Stima Seeing</h4><span id="val-seeing" style="color:#bb86fc;">--/5</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container" style="flex-direction: column;">
+            <div class="timeline-container" style="position: relative;">
+                <span class="info-icon" style="position: absolute; right: 15px; top: 15px; font-size: 1.2em;" onmouseenter="mostraTooltip(this, 'info_map')" onmouseleave="nascondiTooltip()">ℹ️</span>
+                <div id="time-display" class="time-display">Caricamento Timeline Meteo...</div>
+                <div class="range-wrapper">
+                    <div id="meteo-gradient" class="gradient-bar"></div>
+                    <input type="range" id="timeSlider" min="0" max="23" value="0" oninput="syncSliders(this.value)" disabled>
+                </div>
+                <div style="display:flex; justify-content: space-between; font-size:0.8em; color:#aaa; padding-top: 5px;">
+                    <span data-i18n="now">Adesso</span><span>+12h</span><span>+24h</span>
+                </div>
+            </div>
+            <div id="map"></div>
+        </div>
+
+        <div class="container dso-container" style="flex-direction: column;">
+            <h3><span data-i18n="hybrid_planetarium">🔭 Planetario Predittivo Ibrido</span> <span class="info-icon" onmouseenter="mostraTooltip(this, 'info_planetarium')" onmouseleave="nascondiTooltip()">ℹ️</span></h3>
+            
+            <div class="timeline-container" style="margin-top: 10px; margin-bottom: 20px; padding: 10px; background-color: #222;">
+                <div id="astro-time-display" class="time-display" style="color: #44ff44;">Caricamento Timeline Astro...</div>
+                <div class="range-wrapper">
+                    <div id="astro-gradient" class="gradient-bar"></div>
+                    <input type="range" id="astroSlider" min="0" max="23" value="0" oninput="syncSliders(this.value)" disabled>
+                </div>
+            </div>
+
+            <div class="astro-section">
+                <h4 style="color: #ffaa00; margin-bottom: 0; margin-top: 10px; border-bottom: 1px solid #333; padding-bottom: 5px;" data-i18n="solar_system">🪐 Sistema Solare</h4>
+                <div class="horizontal-scroll" id="planets-list"></div>
+            </div>
+
+            <div class="astro-section" style="margin-top: 15px; margin-bottom: 25px;">
+                <h4 style="color: #bb86fc; margin-bottom: 0; margin-top: 10px; border-bottom: 1px solid #333; padding-bottom: 5px;" data-i18n="rec_targets">🌌 Oggetti Consigliati</h4>
+                <div class="horizontal-scroll" id="dso-list"></div>
+            </div>
+
+            <div class="search-local-box">
+                <h4><span data-i18n="free_search">🔍 Ricerca Libera Oggetto</span> <span class="info-icon" onmouseenter="mostraTooltip(this, 'info_search')" onmouseleave="nascondiTooltip()">ℹ️</span></h4>
+                <div style="display: flex; justify-content: center; align-items: flex-start; flex-wrap: wrap; gap: 10px; margin-top: 15px;">
+                    <div class="search-wrapper">
+                        <input type="text" id="search-dash-input" class="search-local-input" placeholder="..." data-i18n="search_target" autocomplete="off">
+                        <ul id="sugg-dash" class="search-suggestions"></ul>
+                    </div>
+                    <button class="btn-search" onclick="eseguiRicerca('search-dash-input')" data-i18n="plan_target_btn">Pianifica 🚀</button>
+                </div>
+                <p id="status-search-dash-input" class="search-status"></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="planning-view">
+        <div class="planning-header-row">
+            <button class="btn-back" onclick="tornaDashboard()" data-i18n="back_dash">Torna alla Dashboard</button>
+            <div class="search-wrapper" style="margin-bottom: 30px;">
+                <div style="display: flex; align-items: center;">
+                    <input type="text" id="search-plan-input" class="search-local-input" placeholder="..." autocomplete="off">
+                    <button class="btn-search" onclick="eseguiRicerca('search-plan-input')" data-i18n="change_target">Cambia</button>
+                </div>
+                <ul id="sugg-plan" class="search-suggestions"></ul>
+                <p id="status-search-plan-input" class="search-status" style="position:absolute; top:100%; left:0; text-align: left;"></p>
+            </div>
+        </div>
+        
+        <h2 id="plan-target-name">Nome Oggetto</h2>
+        
+        <div class="panel" style="margin-bottom: 20px;">
+            <h3 style="margin-top:0;" data-i18n="dossier">📖 Dossier Astrofotografico</h3>
+            <div class="stat-grid">
+                <div class="stat-box t-type"><span data-i18n="type">Tipologia</span><b id="stat-type">--</b></div>
+                <div class="stat-box t-mag"><span data-i18n="app_mag">Magnitudine App.</span><b id="stat-mag">--</b></div>
+                <div class="stat-box t-dist"><span data-i18n="distance">Distanza</span><b id="stat-dist">--</b></div>
+            </div>
+            <div class="info-box"><span id="target-description">Caricamento...</span><br><a href="#" id="target-wiki" class="wiki-link" target="_blank" data-i18n="wiki_link">🔗 Wikipedia</a></div>
+            <div class="tip-box"><b data-i18n="tactical_tip">💡 Consiglio Tattico:</b> <span id="target-tips">--</span></div>
+        </div>
+
+        <div class="planning-grid">
+            <div class="panel">
+                <h3><span data-i18n="optical_setup">📸 Setup Ottico</span> <span class="info-icon" onmouseenter="mostraTooltip(this, 'info_setup')" onmouseleave="nascondiTooltip()">ℹ️</span></h3>
+                <div class="input-group" style="display: flex; align-items: center; gap: 5px;">
+                    <label data-i18n="telescope">Telescopio:</label>
+                    <select id="preset-telescope" onchange="applicaPresetTelescopio()" style="flex: 1;">
+                        <option value="" data-i18n="select_opt">-- Seleziona --</option>
+                    </select>
+                    <button class="btn-guide" style="margin:0; padding: 6px 10px; border-color: #ffaa00; color: #ffaa00;" onclick="salvaTelescopioCustom()" data-i18n="save_btn">💾 Salva</button>
+                </div>
+                <div class="input-group">
+                    <label data-i18n="focal_len">Focale (mm):</label>
+                    <input type="number" id="focal-length" value="400" oninput="aggiornaFOV(); calcolaTempi();">
+                </div>
+                <div class="input-group">
+                    <label style="color: #ffaa00;" data-i18n="aperture">Diametro (mm):</label>
+                    <input type="number" id="aperture" value="72" oninput="aggiornaFOV(); calcolaTempi();">
+                </div>
+                <hr style="border: 1px solid #333; margin: 15px 0;">
+                <div class="input-group">
+                    <label data-i18n="sensor">Sensore:</label>
+                    <select id="preset-sensor" onchange="applicaPresetSensore()">
+                        <option value="" data-i18n="select_opt">-- Seleziona --</option>
+                    </select>
+                </div>
+                <div class="input-group"><label data-i18n="width">Larg. W (mm):</label><input type="number" id="sensor-width" value="23.5" step="0.1" oninput="aggiornaFOV()"></div>
+                <div class="input-group"><label data-i18n="height">Alet. H (mm):</label><input type="number" id="sensor-height" value="15.7" step="0.1" oninput="aggiornaFOV()"></div>
+                <div class="input-group"><label data-i18n="pixel_size">Pixel (µm):</label><input type="number" id="pixel-size" value="3.76" step="0.01" oninput="aggiornaFOV()"></div>
+                
+                <div style="margin-top: 15px; padding: 15px; background-color: #222; border-radius: 8px; border: 1px solid #444;">
+                    <div class="input-group" style="margin-bottom: 5px; display: flex; align-items: center;">
+                        <label data-i18n="mode" style="width: auto; margin-right:10px; font-weight: bold; color: #bb86fc;">Modalità:</label>
+                        <select id="capture-mode" onchange="toggleMosaic()" style="flex: 1; padding: 6px; font-size: 0.95em; background: #1a1a1a; cursor: pointer;">
+                            <option value="single" data-i18n="single_panel">Scatto Singolo</option>
+                            <option value="mosaic" data-i18n="mosaic">Mosaico</option>
+                        </select>
+                    </div>
+                    <div id="mosaic-settings" style="display: none; flex-direction: column; gap: 10px; margin-top: 15px;">
+                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                            <label data-i18n="panels" style="width: auto; margin:0;">Pannelli (X, Y):</label>
+                            <div style="display: flex; align-items: center; gap: 5px;">
+                                <input type="number" id="mosaic-x" value="2" min="1" max="10" oninput="aggiornaFOV(); calcolaTempi();" style="width: 50px !important; padding: 4px !important; text-align: center;"> x 
+                                <input type="number" id="mosaic-y" value="2" min="1" max="10" oninput="aggiornaFOV(); calcolaTempi();" style="width: 50px !important; padding: 4px !important; text-align: center;">
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                            <label data-i18n="overlap" style="width: auto; margin:0;">Sovrapposizione:</label>
+                            <div style="display: flex; align-items: center; gap: 5px;">
+                                <input type="number" id="mosaic-overlap" value="20" min="5" max="50" step="5" oninput="aggiornaFOV()" style="width: 60px !important; padding: 4px !important; text-align: center;"> %
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 15px; padding-top: 15px; border-top: 1px dashed #444; text-align: left;">
+                    <h4 style="margin:0 0 10px 0; color:#aaa; font-size: 0.85em;" data-i18n="sampling_scale">Scala di Campionamento</h4>
+                    <div style="position: relative; width: 100%; height: 10px; background: linear-gradient(90deg, #ff4444 0%, #ff4444 15%, #ffaa00 20%, #44ff44 25%, #44ff44 50%, #ffaa00 60%, #ff4444 75%, #ff4444 100%); border-radius: 5px; margin-bottom: 5px;">
+                        <div id="sampling-marker" style="position: absolute; top: -4px; left: 50%; width: 4px; height: 18px; background: #fff; border: 1px solid #000; border-radius: 2px; transition: left 0.3s; transform: translateX(-50%); box-shadow: 0 0 5px rgba(0,0,0,0.8);"></div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.7em; color: #777; margin-bottom: 5px;">
+                        <span>0.0"</span><span>1.0"</span><span>2.0"</span><span>3.0"</span><span>4.0"+</span>
+                    </div>
+                    <p id="sampling-result" style="margin: 0; font-weight: bold; font-size: 1.1em; color: #fff;">-- "/px</p>
+                    <p id="sampling-msg" style="margin: 2px 0 0 0; font-size: 0.85em; font-weight: bold;"></p>
+                </div>
+
+                
+                <div style="margin-top: 25px; padding: 15px; background-color: #2a2a2a; border-radius: 8px; text-align: center;">
+                    <h4 style="margin:0 0 5px 0; color:#aaa;" data-i18n="fov_calc">Campo Inquadrato Calcolato</h4>
+                    <p id="fov-result" style="font-weight: bold; color: #44ff44; font-size: 1.4em; margin: 0;">--° x --°</p>
+                    <p id="mosaic-fov-result" style="margin: 5px 0 0 0; font-size: 1em; color: #bb86fc; font-weight: bold; display: none;">Totale: --° x --°</p>
+                    <p id="fov-warning-msg" style="color: #ffaa00; font-size: 0.85em; margin-top: 10px; display: none; font-weight: bold;" data-i18n="fov_warning">⚠️ L'oggetto è più grande del tuo campo inquadrato! Valuta un mosaico.</p>
+                </div>
+            </div>
+            
+            <div style="display: flex; flex-direction: column;">
+                <div class="panel" style="padding:0; overflow:hidden;">
+                    <h3 style="padding: 15px 20px 0 20px;" data-i18n="fov_sim">📐 Simulatore FOV Realistico (DSS2)</h3>
+                    <div class="fov-simulator-container" id="fov-simulator-container">
+                        <div id="aladin-lite-div"></div>
+                        <div class="center-cross">+</div>
+                        <div id="fov-rectangle"></div>
+                    </div>
+                    <div class="zoom-control" style="display: flex; flex-direction: column; gap: 10px; padding: 15px; background: #2a2a2a; border-radius: 0 0 8px 8px;">
+                        <div style="display: flex; align-items: center; width: 100%;">
+                            <label style="min-width: 100px; margin: 0; color: #aaa; font-weight: bold; text-align: left;">🔍 Zoom:</label>
+                            <input type="range" id="fov-zoom" min="20" max="500" value="100" style="flex: 1; margin: 0 10px; cursor: pointer;" oninput="aggiornaFOV()">
+                            <div style="width: 65px;"></div> </div>
+                        <div style="display: flex; align-items: center; width: 100%;">
+                            <label style="min-width: 100px; margin: 0; color: #bb86fc; font-weight: bold; text-align: left;" data-i18n="rotation">Rotazione:</label>
+                            <input type="range" id="fov-rotation" min="0" max="360" value="0" style="flex: 1; margin: 0 10px; cursor: pointer;" oninput="document.getElementById('fov-rotation-val').value = this.value; aggiornaFOV();">
+                            <div style="width: 65px; display: flex; align-items: center; justify-content: flex-end;">
+                                <input type="number" id="fov-rotation-val" value="0" min="0" max="360" style="width: 50px !important; padding: 4px !important; text-align: center; border: 1px solid #555; background: #111; color: #fff; border-radius: 4px;" oninput="document.getElementById('fov-rotation').value = this.value; aggiornaFOV();">
+                                <span style="margin-left: 5px; color: #aaa; font-weight: bold;">°</span>
+                            </div>
+                        </div>
+
+                        <!-- COORDINATE CENTRO FOV: si aggiornano live durante il drag -->
+                        <div style="display:flex; align-items:center; justify-content:space-between; padding: 8px 10px; background:#1a1a1a; border-radius:6px; border:1px solid #333; margin-top:4px; gap:10px;">
+                            <div>
+                                <div style="font-size:0.68em; color:#666; text-transform:uppercase; letter-spacing:1px; margin-bottom:3px;">📍 Centro FOV</div>
+                                <div style="display:flex; gap:14px; flex-wrap:wrap;">
+                                    <span style="font-size:0.82em; color:#aaa;">AR: <b id="fov-ra-display" style="color:#44ff44; font-family:monospace; letter-spacing:0.5px;">--h --m --s</b></span>
+                                    <span style="font-size:0.82em; color:#aaa;">Dec: <b id="fov-dec-display" style="color:#44ff44; font-family:monospace; letter-spacing:0.5px;">--° --′ --″</b></span>
+                                </div>
+                            </div>
+                            <div style="display:flex; align-items:center; gap:8px;">
+                                <span id="fov-offset-badge" style="display:none; font-size:0.7em; background:rgba(255,170,0,0.12); color:#ffaa00; border:1px solid rgba(255,170,0,0.4); padding:2px 8px; border-radius:10px; white-space:nowrap;">⚠ offset</span>
+                                <button onclick="resetFovCenter()" title="Riporta FOV al centro del target" style="background:transparent; border:1px solid #444; color:#888; padding:2px 9px; border-radius:4px; cursor:pointer; font-size:0.75em; transition:all 0.2s;" onmouseover="this.style.borderColor='#bb86fc';this.style.color='#bb86fc'" onmouseout="this.style.borderColor='#444';this.style.color='#888'">⌖ Reset</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="chart-container"><canvas id="altitudeChart"></canvas></div>
+            </div>
+        </div>
+
+        <div style="margin-top: 30px; border-top: 1px solid #333; padding-top: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+            <h2 id="calc-title" style="margin: 0; border: none; padding: 0;">
+                <span data-i18n="smart_calc">⏱️ Calcolatore Sessione Smart AI</span> 
+                <span class="info-icon" onmouseenter="mostraTooltip(this, 'info_smart')" onmouseleave="nascondiTooltip()">ℹ️</span>
+            </h2>
+            <button id="btn-open-pro" class="btn-pro-header" onclick="apriProView()">
+                <span style="font-size: 1.2em;">🛠️</span> <span data-i18n="go_to_pro">Vai al Calcolatore PRO</span>
+            </button>
+        </div>
+        
+        <div class="twilight-grid">
+            <div class="twilight-item"><span class="icon">🌇</span><span class="label" data-i18n="sunset">Tramonto</span><b id="info-sunset">--:--</b></div>
+            <div class="twilight-item"><span class="icon">✨</span><span class="label" data-i18n="night_start">Inizio Notte Astr.</span><b id="info-nightstart" class="twilight-night">--:--</b></div>
+            <div class="twilight-item"><span class="icon">🔭</span><span class="label" data-i18n="night_end">Fine Notte Astr.</span><b id="info-nightend" class="twilight-night">--:--</b></div>
+            <div class="twilight-item"><span class="icon">🌅</span><span class="label" data-i18n="sunrise">Alba</span><b id="info-sunrise">--:--</b></div>
+        </div>
+        
+        <div class="panel" style="margin-bottom: 20px; text-align: center; display: flex; justify-content: space-around; flex-wrap: wrap;">
+            <div class="input-group" style="margin: 0;"><label style="width: auto; margin-right: 10px; color:#fff;" data-i18n="session_start">Inizio Sessione:</label><input type="time" id="time-start" onchange="calcolaTempi()"></div>
+            <div class="input-group" style="margin: 0;"><label style="width: auto; margin-right: 10px; color:#fff;" data-i18n="session_end">Fine Sessione:</label><input type="time" id="time-end" onchange="calcolaTempi()"></div>
+            <div class="input-group" style="margin: 0;">
+                <label style="width: auto; margin-right: 10px; color:#bb86fc;" data-i18n="sensor_type">Tipo Sensore:</label>
+                <select id="sensor-type" onchange="toggleSensorMode(); calcolaTempi();" style="border-color: #bb86fc; width: auto !important;">
+                    <option value="color">OSC (Color)</option>
+                    <option value="mono">Mono</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="session-grid">
+            <div class="panel">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                    <h3 style="margin: 0;"><span data-i18n="seq_setup">Impostazione Sequenza</span> <span class="info-icon" onmouseenter="mostraTooltip(this, 'info_seq_opt')" onmouseleave="nascondiTooltip()">ℹ️</span></h3>
+                    <span id="mosaic-total-badge" style="display:none; background: #bb86fc; color: #121212; padding: 4px 10px; border-radius: 4px; font-size: 0.9em; font-weight: bold;"></span>
+                </div>
+                
+                <div class="smart-button-container">
+                    <button class="btn-smart" onclick="generaSequenzaOttimale()" data-i18n="gen_seq_btn">✨ Genera Sequenza Ottimale</button>
+                </div>
+
+                <div style="display:flex; justify-content: space-between; margin-bottom: 10px; padding:0 10px; font-size:0.8em; color:#aaa;">
+                    <span style="width:140px;" data-i18n="use_frame">Usa | Frame</span>
+                    <span data-i18n="poses_sec">Pose x Sec.</span>
+                    <span style="width:80px; text-align:right;" data-i18n="total">Totale</span>
+                </div>
+                
+                <div id="frames-container"></div>
+
+                <div class="calc-row" style="border-left-color: #ffaa00; margin-top: 10px; background: #2a2a2a;">
+                    <div style="display:flex; align-items:center; width: 140px;">
+                        <input type="checkbox" id="dither-check" checked style="margin-right:10px; transform: scale(1.2); cursor: pointer;" onchange="calcolaTempi()">
+                        <label style="cursor: pointer; color: #ffaa00;" onclick="document.getElementById('dither-check').click()">Dither</label>
+                        <span class="info-icon" style="margin-left: 8px; color: #ffaa00; font-size: 1.1em;" onmouseenter="mostraTooltip(this, 'info_dither')" onmouseleave="nascondiTooltip()">ℹ️</span>
+                    </div>
+                    <div class="calc-inputs" style="font-size: 0.85em; color: #aaa; display: flex; align-items: center; gap: 6px;">
+                        <span data-i18n="every">Ogni</span> <input type="number" id="dither-freq" value="3" min="1" oninput="calcolaTempi()" style="width: 45px !important; padding: 5px !important; text-align: center;">
+                        t <input type="number" id="dither-duration" value="15" min="0" oninput="calcolaTempi()" style="width: 45px !important; padding: 5px !important; text-align: center;"> s
+                    </div>
+                    <div class="calc-total" id="dither-tot" style="color: #ffaa00;">0m</div>
+                </div>
+            </div>
+
+            <div class="time-summary">
+                <div class="summary-box"><h4 data-i18n="avail_window">Finestra Disponibile</h4><span id="calc-available">--h --m</span></div>
+                <div class="summary-box"><h4 data-i18n="acq_time">Tempo Acquisizione</h4><span id="calc-total" style="color: #bb86fc;">--h --m</span></div>
+                <div class="summary-box" style="border-color: #444; background-color: #222;">
+                    <h4 data-i18n="res_time">Tempo Residuo</h4><span id="calc-residual" class="text-green">--h --m</span>
+                    <p id="calc-warning" style="margin: 5px 0 0 0; font-size: 0.85em; display: none;" class="text-red" data-i18n="time_overflow">⚠️ Sforamento tempo!</p>
+                </div>
+                <div id="ai-advisor-panel" style="display:none; text-align:left; background:#1a1a1a; padding:15px; border-radius:5px; border:1px solid #333; margin-top:10px;"></div>
+            </div>
+        </div>
+
+        <div class="panel" style="margin-top: 20px; border: 1px solid #bb86fc; background: linear-gradient(180deg, #1a1a1a 0%, #121212 100%);">
+            <h3><span style="color: #bb86fc;" data-i18n="nina_export_title">🚀 Esportazione N.I.N.A. Advanced Sequencer</span> <span class="info-icon" onmouseenter="mostraTooltip(this, 'info_nina')" onmouseleave="nascondiTooltip()">ℹ️</span></h3>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px;">
+                <div style="background: #222; padding: 15px; border-radius: 8px;">
+                    <h4 style="margin: 0 0 10px 0; color: #fff;" data-i18n="seq_start">Avvio Sequenza</h4>
+                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; width: 100%; cursor: pointer; color: #aaa; font-size: 0.9em;">
+                        <input type="checkbox" id="nina-cool" checked style="transform: scale(1.2);"> <span data-i18n="cool_cam">Raffredda Camera a</span> <input type="number" id="nina-temp" value="-10" style="width: 60px!important; padding: 4px!important;"> °C
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; width: 100%; cursor: pointer; color: #aaa; font-size: 0.9em;">
+                        <input type="checkbox" id="nina-slew" checked style="transform: scale(1.2);"> <span data-i18n="slew_center">Slew & Center (Plate Solve)</span>
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; width: 100%; cursor: pointer; color: #aaa; font-size: 0.9em;">
+                        <input type="checkbox" id="nina-rotate" style="transform: scale(1.2);"> <span data-i18n="rotate_target">Ruota Camera (Rotatore Auto)</span>
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 8px; width: 100%; cursor: pointer; color: #aaa; font-size: 0.9em;">
+                        <input type="checkbox" id="nina-guide" checked style="transform: scale(1.2);"> <span data-i18n="start_guide">Avvia Autoguida</span>
+                    </label>
+                </div>
+                <div style="background: #222; padding: 15px; border-radius: 8px;">
+                    <h4 style="margin: 0 0 10px 0; color: #fff;" data-i18n="end_sec">Fine / Sicurezza</h4>
+                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; width: 100%; cursor: pointer; color: #aaa; font-size: 0.9em;">
+                        <input type="checkbox" id="nina-warm" checked style="transform: scale(1.2);"> <span data-i18n="warm_cam">Riscalda Camera (Warm Up)</span>
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; width: 100%; cursor: pointer; color: #aaa; font-size: 0.9em;">
+                        <input type="checkbox" id="nina-park" checked style="transform: scale(1.2);"> <span data-i18n="park_mount">Parcheggia Montatura</span>
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 8px; width: 100%; cursor: pointer; color: #aaa; font-size: 0.9em;">
+                        <input type="checkbox" id="nina-flip" checked style="transform: scale(1.2);"> <span data-i18n="meridian_flip">Attiva Meridian Flip</span>
+                    </label>
+                </div>
+                <div style="background: #222; padding: 15px; border-radius: 8px; grid-column: 1 / -1;">
+                    <h4 style="margin: 0 0 5px 0; color: #fff;"><span data-i18n="filter_map">Mappatura Nomi Filtri</span></h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px;" id="nina-filters-container">
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 25px;">
+                <button id="btn-export-nina" class="btn-smart" style="background: linear-gradient(135deg, #ff4444 0%, #aa0000 100%); box-shadow: 0 4px 15px rgba(255, 68, 68, 0.3); margin-bottom: 10px;" onclick="esportaNINA()" data-i18n="gen_nina_btn">💾 Genera File per N.I.N.A.</button>
+                <button id="btn-export-asiair" class="btn-smart" style="background: linear-gradient(135deg, #D32F2F 0%, #B71C1C 100%); box-shadow: 0 4px 15px rgba(211, 47, 47, 0.3); margin-bottom: 10px; margin-left: 10px;" onclick="esportaASIAIR()" data-i18n="export_asiair">🔴 Export ZWO ASIAIR</button>
+                <button id="btn-report-mosaic" class="btn-smart" style="display: none; background: linear-gradient(135deg, #7c4dff 0%, #3f51b5 100%); box-shadow: 0 4px 15px rgba(124, 77, 255, 0.3);" onclick="apriReport()" data-i18n="gen_report_btn">📝 Genera Report Strategico</button>
+                <p id="nina-mosaic-msg" style="display: none; color: #ffaa00; font-size: 0.9em; text-align: justify; line-height: 1.5; margin-top: 15px; padding: 15px; background: rgba(255, 170, 0, 0.1); border-left: 3px solid #ffaa00; border-radius: 4px;" data-i18n="nina_mosaic_msg">📌 Modalità Mosaico attiva. Usa il Framing Assistant di N.I.N.A. per le coordinate.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="pro-view" style="display: none; text-align: left; max-width: 1200px; margin: 0 auto;">
+    <div class="planning-header-row">
+        <button class="btn-back" onclick="chiudiProView()" data-i18n="pro_back">Torna alla Dashboard Smart</button>
+        <h2 style="margin: 0; color: #00c6ff;">🚀 N.I.N.A. Advanced Builder PRO</h2>
+    </div>
+
+    <div class="panel" style="margin-bottom: 20px; display: flex; flex-direction: column; gap: 15px;">
+        <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 10px;">
+            <div class="input-group" style="margin: 0;">
+                <label style="width: auto; margin-right: 10px; color:#fff;" data-i18n="pro_session_start">Inizio Sessione:</label>
+                <input type="time" id="pro-time-start" onchange="calcolaNightFillBar()">
+            </div>
+            <div class="input-group" style="margin: 0;">
+                <label style="width: auto; margin-right: 10px; color:#fff;" data-i18n="pro_session_end">Fine Sessione:</label>
+                <input type="time" id="pro-time-end" onchange="calcolaNightFillBar()">
+            </div>
+        </div>
+        
+        <div style="width: 100%; background: #1a1a1a; border: 1px solid #444; border-radius: 8px; height: 30px; position: relative; overflow: hidden; margin-top: 10px;">
+            <div id="pro-fill-bar" style="height: 100%; width: 0%; background: #44ff44; transition: width 0.3s, background 0.3s;"></div>
+            <span id="pro-fill-text" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-weight: bold; color: #fff; text-shadow: 1px 1px 2px #000; font-size: 0.9em; white-space: nowrap;">0h 0m / 0h 0m (0%)</span>
+        </div>
+        <button id="btn-pro-multinight" class="btn-smart" style="display: none; background: linear-gradient(135deg, #ff4444 0%, #aa0000 100%); padding: 8px 15px; font-size: 0.9em; margin-top: 10px;" onclick="apriMultiNight('pro');"><span data-i18n="pro_overflow">⚠️ Sforamento! Dividi in Multi-Notte</span></button>
+    </div>
+
+    <div class="planning-grid">
+        <div class="panel" style="display: flex; flex-direction: column; gap: 15px; min-width: 300px;">
+                <h3 style="margin-top:0; border-bottom: 1px solid #333; padding-bottom: 5px;" data-i18n="pro_triggers">⚙️ Triggers & Hardware</h3>
+                
+                <div style="background: #222; padding: 12px; border-radius: 5px;">
+                    <h4 style="margin: 0 0 10px 0; color: #bb86fc;" data-i18n="pro_preflight">Pre-Flight</h4>
+                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: #aaa; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="pro-cool" checked style="transform: scale(1.2);"> <span data-i18n="pro_cool_cam">Raffredda a</span> <input type="number" id="pro-temp" value="-10" style="width: 45px!important; padding:4px!important;"> °C</label>
+                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: #aaa; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="pro-slew" checked style="transform: scale(1.2);"> Slew & Center (Solve)</label>
+                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: #aaa; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="pro-rotate" style="transform: scale(1.2);"> <span data-i18n="pro_auto_rotator">Rotatore Automatico</span></label>
+                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: #aaa; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="pro-guide" checked style="transform: scale(1.2);"> <span data-i18n="pro_start_guide">Avvia Autoguida</span></label>
+                    <label style="display: flex; align-items: center; gap: 8px; color: #aaa; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="pro-flip" checked style="transform: scale(1.2);"> Meridian Flip</label>
+                </div>
+
+                <div style="background: #222; padding: 12px; border-radius: 5px;">
+                    <h4 style="margin: 0 0 10px 0; color: #00ffff;">Autofocus</h4>
+                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: #aaa; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="pro-af-start" checked style="transform: scale(1.2);"> <span data-i18n="pro_af_start">All'avvio sequenza</span></label>
+                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: #aaa; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="pro-af-filter" checked style="transform: scale(1.2);"> <span data-i18n="pro_af_filter">Al cambio filtro</span></label>
+                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: #aaa; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="pro-af-time" style="transform: scale(1.2);"> <span data-i18n="pro_af_every">Ogni</span> <input type="number" id="pro-af-time-val" value="60" style="width: 45px!important; padding:4px!important;"> <span data-i18n="pro_af_min">min</span></label>
+                    <label style="display: flex; align-items: center; gap: 8px; color: #aaa; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="pro-af-temp" style="transform: scale(1.2);"> <span data-i18n="pro_af_temp_lbl">Variazione</span> <input type="number" id="pro-af-temp-val" value="2" style="width: 40px!important; padding:4px!important;"> °C</label>
+                </div>
+
+                <div style="background: #222; padding: 12px; border-radius: 5px;">
+                    <h4 style="margin: 0 0 10px 0; color: #ffaa00;" data-i18n="pro_postflight">Post-Flight</h4>
+                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: #aaa; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="pro-warm" checked style="transform: scale(1.2);"> <span data-i18n="pro_warm_up">Warm Up Camera</span></label>
+                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: #aaa; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="pro-park" checked style="transform: scale(1.2);"> <span data-i18n="pro_park">Park Montatura</span></label>
+                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: #aaa; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="pro-cover" style="transform: scale(1.2);"> <span data-i18n="pro_cover">Chiudi Cover/Cap</span></label>
+                    <label style="display: flex; align-items: center; gap: 8px; color: #aaa; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="pro-flat" style="transform: scale(1.2);"> <span data-i18n="pro_flat">Accendi Flat Panel</span></label>
+                </div>
+            </div>
+
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+            <div class="panel">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <h4 style="margin: 0; color: #fff;">
+                        <span data-i18n="filter_map">Mappatura Nomi Filtri</span> 
+                        <span style="color: #00c6ff; font-size: 0.8em; margin-left: 10px;">(Sincronizzazione N.I.N.A.)</span>
+                    </h4>
+                    <select id="pro-sensor-type" onchange="disegnaGrigliaPro()" style="background: #1a1a1a; color: #00c6ff; font-weight: bold; border-color: #00c6ff; cursor: pointer; width: auto !important;">
+                        <option value="color" data-i18n="pro_sensor_osc">Sensore OSC (Color)</option>
+                        <option value="mono" data-i18n="pro_sensor_mono">Sensore Mono</option>
+                    </select>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px;" id="pro-nina-filters-container">
+                </div>
+            </div>
+
+            <div class="panel">
+                <div style="border-bottom: 1px solid #333; padding-bottom: 15px; margin-bottom: 15px;">
+                    <h3 style="margin: 0; color: #fff;"><span data-i18n="pro_seq_builder">📸 Calcolatore di Sequenze</span> <span class="info-icon" onmouseenter="mostraTooltip(this, 'info_pro_seq')" onmouseleave="nascondiTooltip()">ℹ️</span></h3>
+                </div>
+                
+                <div id="pro-sequence-grid" style="display: flex; flex-direction: column; gap: 10px;"></div>
+                
+                <div style="text-align: center; margin-top: 25px;">
+                    <button class="btn-smart" style="background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%); width: 100%; font-size: 1.1em;" onclick="esportaNinaPRO()" data-i18n="pro_export_btn">💾 Esporta Advanced Sequence (.json)</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    
+    <div id="floating-tooltip" class="floating-tooltip"></div>
+
+    <div id="report-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="chiudiReport()">&times;</span>
+            <h2 style="color: #bb86fc; margin-top:0; border-bottom: none; display: flex; align-items: center; gap: 10px;"><span data-i18n="report_title">Dossier Mosaico</span></h2>
+            <div id="report-content"></div>
+            <button class="btn-copy" onclick="copiaReport()" id="btn-copy-report"><span data-i18n="copy_report">📋 Copia negli Appunti</span></button>
+        </div>
+    </div>
+
+    <div id="multinight-modal" class="modal">
+        <div class="modal-content" style="max-width: 700px; padding: 0; display: flex; flex-direction: column; max-height: 85vh; overflow: hidden;">
+            
+            <div style="padding: 25px 25px 15px 25px; background: #1e1e1e; border-bottom: 2px solid #333; z-index: 10; box-shadow: 0 5px 15px rgba(0,0,0,0.6);">
+                <span class="close-btn" style="top: 20px; right: 25px;" onclick="chiudiMultiNight()">&times;</span>
+                <h2 style="color: #ffaa00; margin-top:0; border-bottom: 1px solid #333; padding-bottom: 15px;"><span data-i18n="mn_title">📅 Progettazione Multinotte</span> <span class="info-icon" onmouseenter="mostraTooltip(this, 'info_multinight')" onmouseleave="nascondiTooltip()">ℹ️</span></h2>
+                
+                <div style="background: rgba(255, 68, 68, 0.1); border-left: 3px solid #ff4444; padding: 10px; margin-bottom: 15px; border-radius: 4px;">
+                    <span style="font-size: 0.85em; color: #ffaaaa; display: block; line-height: 1.4;" data-i18n="mn_warning"><b>⚠️ ATTENZIONE N.I.N.A.:</b> Assicurati che i nomi dei filtri nella "Mappatura Nomi" corrispondano <b>esattamente</b> a quelli scritti nella tua ruota portafiltri!</span>
+                </div>            
+
+                <div style="background: #2a2a2a; padding: 15px; border-radius: 8px; border-left: 4px solid #bb86fc; margin: 0;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <div>
+                            <h4 id="mn-target-label" style="margin: 0 0 4px 0; color: #aaa; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px;">🎯 Obiettivo</h4>
+                            <b id="mn-target-hours" style="font-size: 1.4em; color: #fff;">--h --m</b>
+                        </div>
+                        <div style="text-align: right;">
+                            <h4 style="margin: 0 0 4px 0; color: #aaa; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px;" data-i18n="mn_planned_time">📅 Tempo Pianificato</h4>
+                            <b id="mn-assigned-hours" style="font-size: 1.4em; color: #ff4444;">0h 0m</b>
+                        </div>
+                    </div>
+                    <div style="background: #111; border-radius: 4px; height: 6px; overflow: hidden;">
+                        <div id="mn-progress-bar" style="height:100%; width:0%; background:#ff4444; transition:all 0.4s; border-radius:4px;"></div>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; margin-top:4px;">
+                        <span style="font-size:0.7em; color:#555;">0%</span>
+                        <span id="mn-progress-pct" style="font-size:0.7em; color:#888;">0% completato</span>
+                        <span style="font-size:0.7em; color:#555;">100%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div style="padding: 20px 25px; overflow-y: auto; flex: 1;">
+                <div id="mn-nights-container" style="display: flex; flex-direction: column; gap: 15px;"></div>
+                <button class="btn-smart" style="margin-top: 20px; width: 100%; background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%); box-shadow: none;" onclick="aggiungiNotte()" data-i18n="mn_add_night">➕ Aggiungi Sessione (Notte)</button>
+            </div>
+            
+        </div>
+    </div>
+    <div id="asiair-modal" class="modal">
+        <div class="modal-content" style="max-width: 500px; border-color: #D32F2F; box-shadow: 0 0 25px rgba(211, 47, 47, 0.4);">
+            <span class="close-btn" style="color: #D32F2F;" onclick="chiudiAsiairReport()">&times;</span>
+            <h2 style="color: #D32F2F; margin-top:0; border-bottom: 1px solid #333; padding-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                <span style="background: #D32F2F; color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 0.7em; font-weight: bold; letter-spacing: 1px;">ZWO</span> ASIAIR Plan
+            </h2>
+            <div id="asiair-report-content"></div>
+            <button class="btn-copy" style="border-color: #D32F2F; margin-top: 20px;" onclick="chiudiAsiairReport()" data-i18n="asiair_close">✅ Chiudi e Vai al Telescopio</button>
+        </div>
+    </div>
+
+    <div id="guide-view">
+        <button class="btn-back" style="margin-bottom: 40px;" onclick="chiudiGuida()" data-i18n="back_dash">Torna Indietro</button>
+        
+        <div id="guide-it">
+            <h2 style="font-size: 2.4em; border-bottom: 2px solid #bb86fc; padding-bottom: 15px; margin-bottom: 30px;">📖 Manuale AstroDashboard PRO</h2>
+
+            <div class="filosofia-box">
+                <h3 style="color: #fff; margin-top:0;">La Filosofia del Software</h3>
+                <p>AstroDashboard nasce da una domanda semplice: <em>perché devo usare quattro programmi diversi per pianificare una notte?</em> La risposta è questa piattaforma — un unico ambiente che fonde meteo in tempo reale, planetario predittivo, calcolo ottico, generazione di sequenze e automazione hardware.</p>
+                <p style="margin-top:10px;">Il software ha due anime distinte. Nella modalità <strong>Smart</strong> sei un astronauta in cabina automatica: descrivi il tuo setup e il sistema calcola per te tempi, pose e bilanciamento filtri. Nella modalità <strong>PRO</strong> sei il comandante manuale: tu decidi ogni singolo parametro e il software si occupa solo di tradurre le tue scelte in una sequenza perfetta per N.I.N.A.</p>
+            </div>
+
+            <div class="guide-section">
+                <h3>🌍 1. Dati Ambientali e Meteo Tattico</h3>
+                <p>Prima di puntare il telescopio, devi sapere cosa ti aspetta sopra la testa. Questa sezione aggrega dati satellitari professionali in tempo reale direttamente nel tuo browser.</p>
+                <ul>
+                    <li><strong>Mappa a Raggio (50 Km):</strong> Progettata per gli astrofotografi itineranti. Il cerchio simbolico di 50 km ti permette di valutare a colpo d'occhio dove spostarti per trovare "buchi di sereno". Attiva i layer sovrapposti (Nuvole Basse, Medie, Alte, Jet Stream, Umidità, Luna) e scorri la timeline per vedere l'evoluzione nelle prossime ore.</li>
+                    <li><strong>Jet Stream:</strong> Il vero nemico del Seeing. Un valore sotto i 50 km/h sopra la tua posizione garantisce cieli stabili e stelle puntiformi. Oltre i 100 km/h la turbolenza atmosferica devasterà i dettagli fini — inutile usare focali lunghe.</li>
+                    <li><strong>Allarme Umidità:</strong> Se il dato supera l'85% (indicatore rosso), attiva le fasce riscaldanti anticondensa al massimo della potenza <em>prima</em> che la temperatura scenda al punto di rugiada. Una volta che l'ottica è appannata, la serata è compromessa.</li>
+                    <li><strong>Inquinamento Lunare:</strong> Mostra la percentuale di cielo "bruciato" dalla luce della Luna in base alla sua fase e posizione. Un valore alto scoraggia le riprese a banda larga — considera filtri narrowband (Ha, OIII, SII) che tagliano il continuo lunare.</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
+                <h3>🔭 2. Planetario Ibrido e Motore SIMBAD</h3>
+                <p>Il planetario non mostra semplicemente le stelle: calcola in tempo reale l'altitudine sull'orizzonte di ogni oggetto e ti presenta solo i target fotografi camente utili per la tua nottata.</p>
+                <ul>
+                    <li><strong>Database Locale (Oggetti Consigliati):</strong> Contiene i target più celebri con metadati completi: tipo, magnitudine, distanza e "Consiglio Tattico" specifico. Il consiglio non è generico — suggerisce filtri, avverte di saturazioni al nucleo, indica la stagionalità ottimale.</li>
+                    <li><strong>Slider Temporale:</strong> Trascina la barra dell'orario per simulare la volta celeste a qualsiasi ora della notte. Gli oggetti scompaiono quando scendono sotto i 20° di altitudine (zona di turbolenza e bassa trasparenza), in modo da non mostrarti mai target inutilizzabili.</li>
+                    <li><strong>Ricerca Universale SIMBAD:</strong> Se l'oggetto che cerchi non è nel database locale, inserisci il nome (es. "Sh2-132", "Abell 85", "IC 1871") e il motore interroga in tempo reale l'Università di Strasburgo. Riceverai le coordinate assolute J2000 e potrai pianificare immediatamente la ripresa.</li>
+                    <li><strong>Sistema Solare:</strong> Pianeti e Luna sono sempre visibili in lista separata. Utile per pianificare sessioni planetarie o verificare l'interferenza lunare sul tuo target Deep Sky.</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
+                <h3>📸 3. Setup Ottico, Campionamento e Simulatore FOV</h3>
+                <p>Questa sezione trasforma i dati fisici del tuo strumento in informazioni operative: quanti arcsec copre il tuo sensore? L'oggetto entra nel campo? A che angolo devi orientare la camera?</p>
+                <ul>
+                    <li><strong>Scala di Campionamento (arcsec/pixel):</strong> Inserisci focale (mm) e dimensione pixel (µm): il sistema calcola il campionamento e lo classifica in tre zone. <em>Verde</em>: campionamento ideale (1–2 arcsec/px). <em>Giallo</em>: sottocampionamento lieve (stelle leggermente squadrate). <em>Rosso</em>: sovracampionamento eccessivo — stai sprecando fotoni e risoluzione.</li>
+                    <li><strong>Simulatore FOV Realistico (DSS2):</strong> Carica l'immagine reale del cielo profondo dall'archivio DSS2 e vi sovrappone il rettangolo del tuo sensore in scala e orientamento corretti. Quello che vedi è esattamente quello che otterrai nella tua immagine finale.</li>
+                    <li><strong>Rotazione FOV e Position Angle (PA):</strong> Lo slider di rotazione (0–360°) ruota il rettangolo del sensore sulla mappa. L'angolo scelto viene salvato nella sequenza e comunicato al rotatore automatico di N.I.N.A. durante l'export. Se trascini la mappa per spostare il centro del FOV rispetto al target originale, le coordinate aggiornate vengono mostrate in tempo reale nel box "Centro FOV" con indicatore di offset attivo — e puoi sempre tornare al centro esatto con il bottone ⌖ Reset.</li>
+                    <li><strong>Modalità Mosaico:</strong> Quando il target è più grande del tuo campo inquadrato, attiva il mosaico e imposta la griglia (es. 2×2, 3×2) con la percentuale di sovrapposizione desiderata. Il sistema calcola automaticamente il tempo disponibile per pannello e genera il report strategico. Per N.I.N.A. usa il Framing Assistant con le coordinate del centro: il software divide automaticamente i pannelli.</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
+                <h3>✨ 4. Calcolatore Sessione Smart</h3>
+                <p>In modalità Smart il sistema è il tuo assistente esperto. Analizzi il target, comunichi le caratteristiche del tuo setup e lasci che l'algoritmo generi una sequenza bilanciata e ottimizzata per le condizioni di quella specifica notte.</p>
+                <ul>
+                    <li><strong>L'Algoritmo Predittivo:</strong> Il calcolo non è una media generica. Considera il rapporto focale del tuo ottico (f/4 vs f/8 cambia radicalmente i tempi), il tipo di sensore (OSC o Mono), i filtri attivi, l'inquinamento lunare attuale e la magnitudine superficiale del target. Un oggetto debole con Luna al 70% richiede esposizioni molto più lunghe per affogare il fondo cielo.</li>
+                    <li><strong>Generazione Sequenza Ottimale:</strong> Clicca "Genera Sequenza Ottimale" e il sistema distribuisce le pose sulla finestra notturna disponibile (orario inizio–fine che hai impostato), bilanciando il tempo tra i filtri e riservando le calibrazioni. Per i sensori Mono calcola separatamente L, R, G, B e narrowband.</li>
+                    <li><strong>Dithering Smart:</strong> Se attivi il dithering, specifica la frequenza (ogni N pose) e il tempo di assestamento. Il sistema li sottrae automaticamente dal tempo totale disponibile: quello che vedi in "Tempo Acquisizione" è il tempo reale di integrazione netta, già al netto degli overhead.</li>
+                    <li><strong>Mappatura Nomi Filtri N.I.N.A.:</strong> Per i sensori Mono, ogni filtro ha un campo dove inserire il nome esatto come lo riconosce la tua ruota portafiltri in N.I.N.A. (es. "Hα 3nm" invece di "Ha"). Se i nomi non corrispondono esattamente, N.I.N.A. darà errore durante la sequenza.</li>
+                    <li><strong>Multinotte Smart:</strong> Se l'integrazione calcolata supera la finestra notturna disponibile, il sistema mostra il pulsante "Pianifica Progetto Multi-Notte". Qui il riferimento è l'obiettivo suggerito dall'AI. Aggiungi quante sessioni servono, assegna le pose per notte e scarica un file N.I.N.A. separato per ciascuna.</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
+                <h3>🚀 5. Calcolatore PRO — Sei Tu il Direttore</h3>
+                <p>Il modulo PRO ribalta la logica: non chiede al sistema cosa fare, ma esegue esattamente quello che decidi tu. È lo strumento per chi ha già un piano preciso in testa e vuole tradurlo in una sequenza N.I.N.A. professionale senza compromessi.</p>
+                <ul>
+                    <li><strong>Calcolatore di Sequenze:</strong> La griglia mostra tutti i filtri del tuo setup (Light per OSC, oppure L/R/G/B/Ha/OIII/SII per Mono). Per ogni filtro imposti: numero di pose, secondi di esposizione, Gain, Offset, Binning e frequenza di Dithering (con checkbox indipendente per filtro). La <strong>barra di riempimento</strong> confronta il tuo TPT (Tempo Totale Pianificato) con la finestra notturna: 🟢 verde se tutto entra, 🟡 arancione se il margine è stretto, 🔴 rossa se sfori — in quel caso appare automaticamente il pulsante "Progettazione Multinotte".</li>
+                    <li><strong>Triggers Pre-Flight:</strong> Prima dell'imaging configuri: <em>Raffredda Camera</em> (imposti la temperatura target), <em>Slew &amp; Center</em> con Plate Solving (N.I.N.A. punta e risolve la posizione), <em>Rotatore Automatico</em> (ruota la camera all'angolo impostato nel simulatore FOV), <em>Avvia Autoguida</em> e <em>Meridian Flip</em> automatico.</li>
+                    <li><strong>Autofocus Avanzato:</strong> Quattro modalità indipendenti: all'avvio della sequenza, al cambio di filtro (ideale per filtri con offset di fuoco diversi), ogni N minuti (utile per notti con variazioni termiche), e a variazione di N°C (il metodo più preciso per sistemi con backfocus sensibile alla temperatura).</li>
+                    <li><strong>Triggers Post-Flight:</strong> Warm Up Camera, Park Montatura, Chiudi Cover/Cap motorizzato, Accendi Flat Panel — tutto automatico al termine della sequenza.</li>
+                    <li><strong>Mappatura Filtri PRO:</strong> Come nella sezione Smart, ogni filtro ha il suo campo nome N.I.N.A. La modifica in un pannello si sincronizza automaticamente nell'altro.</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
+                <h3>🌙 6. Progettazione Multinotte</h3>
+                <p>Quando un progetto richiede più ore di quante ne offre una singola notte, la Progettazione Multinotte ti permette di distribuire il lavoro su più sessioni mantenendo sempre il controllo sul progresso complessivo.</p>
+                <ul>
+                    <li><strong>TPT — Tempo Totale Pianificato:</strong> È l'obiettivo fisso del tuo progetto. In modalità Smart corrisponde alle ore consigliate dall'AI; in modalità PRO è calcolato dalla tua griglia di pose. Non cambia mai: è il traguardo che devi raggiungere sommando tutte le notti.</li>
+                    <li><strong>Barra di Avanzamento:</strong> Parte rossa a 0% e diventa verde solo quando la somma del "Tempo Pianificato" nelle varie sessioni raggiunge o supera il TPT. È il tuo indicatore visivo di completamento progetto.</li>
+                    <li><strong>Gestione Sessioni:</strong> Per ogni notte aggiungi una scheda con: orario inizio e fine (la finestra utile di quella specifica notte), numero di pose per filtro in quella sessione, e verifica automatica se le pose entrano nella finestra — con avviso di sforamento se necessario.</li>
+                    <li><strong>Export per Notte:</strong> Ogni sessione genera il suo file N.I.N.A. indipendente, completo di tutti i trigger configurati (AF, guida, flip, ecc.) e delle coordinate FOV aggiornate. La notte 1 potrebbe contenere solo L e R, la notte 2 solo G, B e Ha — tu decidi la strategia.</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
+                <h3>🤖 7. Esportazione e Automazione</h3>
+                <ul>
+                    <li><strong>Export N.I.N.A. Smart:</strong> Genera un file JSON per N.I.N.A. Advanced Sequencer con la sequenza calcolata dall'AI. Include Slew &amp; Center, autoguida, dithering configurato e meridian flip. Trascina il file dentro N.I.N.A. e la notte parte da sola.</li>
+                    <li><strong>Export N.I.N.A. PRO (Advanced Sequence):</strong> Il JSON PRO è una sequenza nativa N.I.N.A. di livello avanzato: ogni filtro ha la sua struttura con LoopCondition (loop nativo, non ExposureCount), trigger di dithering per-filtro, gain/offset/binning individuali, tutti i trigger hardware configurati nell'ordine corretto (Cool → Slew → AF → Rotate → Guide → Imaging → Warm → Park).</li>
+                    <li><strong>Export ASIAIR:</strong> Genera un file CSV con le coordinate di precisione e mostra a schermo il riepilogo del piano di scatto ottimizzato per l'interfaccia tablet di ASIAIR/ASIAIR+/ASIAIR Pro. Include l'angolo di rotazione camera suggerito per l'inquadratura ottimale.</li>
+                    <li><strong>Coordinate FOV Personalizzate:</strong> Se hai spostato la mappa durante la simulazione FOV, le coordinate del centro aggiornato vengono usate in tutti gli export (N.I.N.A. Smart, PRO e Multinotte). Il badge "⚠ Offset attivo" ti avvisa quando le coordinate di export differiscono dal centro nominale del target.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="guide-en" style="display:none;">
+            <h2 style="font-size: 2.4em; border-bottom: 2px solid #bb86fc; padding-bottom: 15px; margin-bottom: 30px;">📖 AstroDashboard PRO Manual</h2>
+
+            <div class="filosofia-box">
+                <h3 style="color: #fff; margin-top:0;">Project Philosophy</h3>
+                <p>AstroDashboard was born from a simple question: <em>why do I need four different apps to plan a single night?</em> The answer is this platform — one unified environment combining real-time weather, a predictive planetarium, optical calculations, sequence generation and hardware automation.</p>
+                <p style="margin-top:10px;">The software has two distinct modes. In <strong>Smart</strong> mode, you are a pilot on autopilot: describe your setup and the system calculates times, frames and filter balance for you. In <strong>PRO</strong> mode, you are the manual commander: you decide every parameter and the software translates your choices into a perfect N.I.N.A. sequence.</p>
+            </div>
+
+            <div class="guide-section">
+                <h3>🌍 1. Tactical Weather &amp; Environmental Data</h3>
+                <p>Before pointing your telescope, you need to know what's above your head. This section aggregates professional satellite data in real time directly in your browser.</p>
+                <ul>
+                    <li><strong>50km Radius Map:</strong> Designed for mobile astrophotographers. The symbolic 50km circle lets you instantly evaluate where to relocate to find "clear sky holes". Activate overlapping layers (Low/Mid/High Clouds, Jet Stream, Humidity, Moon) and scroll the timeline to forecast conditions over the next hours.</li>
+                    <li><strong>Jet Stream:</strong> The true enemy of Seeing. Values below 50 km/h guarantee stable skies and pinpoint stars. Above 100 km/h, atmospheric turbulence will destroy fine detail — avoid long focal lengths.</li>
+                    <li><strong>Humidity Alarm:</strong> If the reading exceeds 85% (red indicator), activate your dew heaters at full power <em>before</em> the temperature drops to the dew point. Once optics fog up, the session is ruined.</li>
+                    <li><strong>Moon Pollution:</strong> Shows the percentage of sky "burned" by moonlight based on current phase and position. High values discourage broadband imaging — consider narrowband filters (Ha, OIII, SII) which cut lunar continuum.</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
+                <h3>🔭 2. Hybrid Planetarium &amp; SIMBAD Engine</h3>
+                <p>The planetarium doesn't just show stars: it calculates altitude above the horizon for every object in real time and presents only the targets that are photographically useful for your night.</p>
+                <ul>
+                    <li><strong>Local Database (Recommended Targets):</strong> Contains the most celebrated targets with full metadata: type, magnitude, distance and specific "Tactical Tip". Tips are not generic — they suggest filters, warn of core saturation, indicate optimal seasons.</li>
+                    <li><strong>Time Slider:</strong> Drag the time bar to simulate the sky at any hour of the night. Objects disappear when they drop below 20° altitude (turbulence and low transparency zone), so you never see unusable targets.</li>
+                    <li><strong>Universal SIMBAD Search:</strong> If your target isn't in the local database, type its name (e.g. "Sh2-132", "Abell 85", "IC 1871") and the engine queries the University of Strasbourg in real time. You'll receive J2000 absolute coordinates and can immediately plan your session.</li>
+                    <li><strong>Solar System:</strong> Planets and the Moon are always available in a separate list. Useful for planning planetary sessions or checking lunar interference on your Deep Sky target.</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
+                <h3>📸 3. Optical Setup, Sampling &amp; FOV Simulator</h3>
+                <p>This section transforms your instrument's physical data into operational information: how many arcseconds does your sensor cover? Does the object fit the frame? What angle should you orient the camera?</p>
+                <ul>
+                    <li><strong>Sampling Scale (arcsec/pixel):</strong> Enter focal length (mm) and pixel size (µm): the system calculates your image scale and classifies it into three zones. <em>Green</em>: ideal sampling (1–2 arcsec/px). <em>Yellow</em>: slight undersampling (slightly blocky stars). <em>Red</em>: excessive oversampling — you are wasting photons and resolution.</li>
+                    <li><strong>Realistic FOV Simulator (DSS2):</strong> Loads the real deep sky image from the DSS2 archive and overlays your sensor rectangle at the correct scale and orientation. What you see is exactly what you'll get in your final image.</li>
+                    <li><strong>FOV Rotation &amp; Position Angle (PA):</strong> The rotation slider (0–360°) rotates the sensor rectangle on the map. The chosen angle is saved in the sequence and sent to N.I.N.A.'s auto-rotator during export. If you drag the map to offset the FOV center from the original target, updated coordinates are shown in real time in the "FOV Center" box with an active offset indicator — and you can always return to the exact center with the ⌖ Reset button.</li>
+                    <li><strong>Mosaic Mode:</strong> When the target is larger than your field of view, enable mosaic and set the grid (e.g. 2×2, 3×2) with the desired overlap percentage. The system automatically calculates the time per panel and generates the strategic report. For N.I.N.A. use the Framing Assistant with the center coordinates.</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
+                <h3>✨ 4. Smart Session Calculator</h3>
+                <p>In Smart mode the system is your expert assistant. You analyze the target, share your setup specs and let the algorithm generate a balanced sequence optimized for the conditions of that specific night.</p>
+                <ul>
+                    <li><strong>Predictive Algorithm:</strong> The calculation is not a generic average. It factors in your optical focal ratio (f/4 vs f/8 radically changes integration times), sensor type (OSC or Mono), active filters, current moon pollution and target surface brightness. A faint object with 70% moon requires much longer exposures to drown the sky background.</li>
+                    <li><strong>Generate Optimal Sequence:</strong> Click "Generate Optimal Sequence" and the system distributes frames across the available night window (start–end times you set), balancing time between filters and reserving time for calibration frames. For Mono sensors it calculates L, R, G, B and narrowband independently.</li>
+                    <li><strong>Smart Dithering:</strong> Enable dithering, specify frequency (every N frames) and settling time. The system automatically subtracts them from the total available time — the "Acquisition Time" you see is real net integration time, already accounting for all overhead.</li>
+                    <li><strong>N.I.N.A. Filter Name Mapping:</strong> For Mono sensors, each filter has a field where you enter its exact name as N.I.N.A. recognizes it from your filter wheel (e.g. "Hα 3nm" instead of "Ha"). If names don't match exactly, N.I.N.A. will throw an error during the sequence.</li>
+                    <li><strong>Smart Multi-Night:</strong> If the calculated integration exceeds the available night window, the "Plan Multi-Night Project" button appears. The reference here is the AI's suggested goal. Add as many sessions as needed, assign frames per night and download a separate N.I.N.A. file for each.</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
+                <h3>🚀 5. PRO Builder — You Are the Commander</h3>
+                <p>The PRO module flips the logic: it doesn't ask the system what to do, it executes exactly what you decide. This is the tool for those who already have a precise plan and want to translate it into a professional N.I.N.A. sequence without compromise.</p>
+                <ul>
+                    <li><strong>Sequence Builder:</strong> The grid shows all filters for your setup (Light for OSC, or L/R/G/B/Ha/OIII/SII for Mono). For each filter you set: frame count, exposure time, Gain, Offset, Binning and Dithering frequency (with independent per-filter checkbox). The <strong>fill bar</strong> compares your TPT (Total Planned Time) against the night window: 🟢 green if everything fits, 🟡 orange if the margin is tight, 🔴 red if you overflow — the "Multi-Night Planning" button then appears automatically.</li>
+                    <li><strong>Pre-Flight Triggers:</strong> Before imaging you configure: <em>Cool Camera</em> (set target temperature), <em>Slew &amp; Center</em> with Plate Solving, <em>Auto Rotator</em> (rotates to the angle set in the FOV simulator), <em>Start Autoguiding</em> and automatic <em>Meridian Flip</em>.</li>
+                    <li><strong>Advanced Autofocus:</strong> Four independent modes: at sequence start, on filter change (ideal for filters with different focus offsets), every N minutes (useful for nights with thermal drift), and at N°C temperature change (most precise method for backfocus-sensitive systems).</li>
+                    <li><strong>Post-Flight Triggers:</strong> Warm Up Camera, Park Mount, Close motorized Cover/Cap, Turn On Flat Panel — all automatic at sequence end.</li>
+                    <li><strong>PRO Filter Mapping:</strong> As in the Smart section, each filter has its N.I.N.A. name field. Changes in one panel sync automatically to the other.</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
+                <h3>🌙 6. Multi-Night Planning</h3>
+                <p>When a project requires more hours than a single night offers, Multi-Night Planning lets you distribute the work across multiple sessions while always keeping track of overall progress.</p>
+                <ul>
+                    <li><strong>TPT — Total Planned Time:</strong> The fixed goal of your project. In Smart mode it corresponds to the AI's recommended hours; in PRO mode it's calculated from your frame grid. It never changes: it's the milestone you must reach by summing all nights.</li>
+                    <li><strong>Progress Bar:</strong> Starts red at 0% and turns green only when the sum of "Planned Time" across all sessions reaches or exceeds the TPT. Your visual project completion indicator.</li>
+                    <li><strong>Session Management:</strong> For each night add a card with: start and end time (the useful window for that specific night), frames per filter for that session, and automatic check whether frames fit in the window — with overflow warning if needed.</li>
+                    <li><strong>Per-Night Export:</strong> Each session generates its own independent N.I.N.A. file, complete with all configured triggers (AF, guiding, flip, etc.) and updated FOV coordinates. Night 1 might contain only L and R, night 2 only G, B and Ha — you decide the strategy.</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
+                <h3>🤖 7. Export &amp; Automation</h3>
+                <ul>
+                    <li><strong>N.I.N.A. Smart Export:</strong> Generates a JSON file for N.I.N.A. Advanced Sequencer with the AI-calculated sequence. Includes Slew &amp; Center, autoguiding, configured dithering and meridian flip. Drag the file into N.I.N.A. and the night runs itself.</li>
+                    <li><strong>N.I.N.A. PRO Export (Advanced Sequence):</strong> The PRO JSON is a native N.I.N.A. advanced-level sequence: each filter has its own structure with LoopCondition (native loop, not ExposureCount), per-filter dithering triggers, individual gain/offset/binning, all hardware triggers in the correct order (Cool → Slew → AF → Rotate → Guide → Imaging → Warm → Park).</li>
+                    <li><strong>ASIAIR Export:</strong> Generates a CSV file with precision coordinates and displays a visual shooting plan optimized for the ASIAIR/ASIAIR+/ASIAIR Pro tablet interface. Includes the suggested camera rotation angle for optimal framing.</li>
+                    <li><strong>Custom FOV Coordinates:</strong> If you moved the map during FOV simulation, the updated center coordinates are used in all exports (N.I.N.A. Smart, PRO and Multi-Night). The "⚠ Offset active" badge warns you when export coordinates differ from the target's nominal center.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="guide-es" style="display:none;">
+            <h2 style="font-size: 2.4em; border-bottom: 2px solid #bb86fc; padding-bottom: 15px; margin-bottom: 30px;">📖 Manual AstroDashboard PRO</h2>
+
+            <div class="filosofia-box">
+                <h3 style="color: #fff; margin-top:0;">Filosofía del Software</h3>
+                <p>AstroDashboard nació de una pregunta simple: <em>¿por qué necesito cuatro aplicaciones distintas para planificar una noche?</em> La respuesta es esta plataforma — un entorno unificado que combina meteorología en tiempo real, planetario predictivo, cálculos ópticos, generación de secuencias y automatización de hardware.</p>
+                <p style="margin-top:10px;">El software tiene dos modos distintos. En modo <strong>Smart</strong> eres un piloto en piloto automático: describes tu equipo y el sistema calcula por ti tiempos, tomas y balance de filtros. En modo <strong>PRO</strong> eres el comandante manual: tú decides cada parámetro y el software traduce tus decisiones en una secuencia N.I.N.A. profesional.</p>
+            </div>
+
+            <div class="guide-section">
+                <h3>🌍 1. Clima Táctico y Datos Ambientales</h3>
+                <p>Antes de apuntar el telescopio, necesitas saber qué hay sobre tu cabeza. Esta sección agrega datos satelitales profesionales en tiempo real directamente en tu navegador.</p>
+                <ul>
+                    <li><strong>Mapa de Radio 50km:</strong> Diseñado para astrofotógrafos itinerantes. El círculo de 50 km te permite evaluar de un vistazo dónde desplazarte para encontrar "claros en las nubes". Activa las capas superpuestas y desliza la línea de tiempo para prever las condiciones de las próximas horas.</li>
+                    <li><strong>Jet Stream:</strong> El verdadero enemigo del Seeing. Por debajo de 50 km/h garantiza cielos estables y estrellas puntiformes. Por encima de 100 km/h, la turbulencia atmosférica destruirá los detalles finos — evita focales largas.</li>
+                    <li><strong>Alarma de Humedad:</strong> Si supera el 85% (indicador rojo), activa las cintas calefactoras anticondensación a máxima potencia <em>antes</em> de que la temperatura baje al punto de rocío. Una vez que la óptica se empaña, la sesión está arruinada.</li>
+                    <li><strong>Contaminación Lunar:</strong> Muestra el porcentaje de cielo "quemado" por la luz de la Luna según su fase y posición actual. Valores altos desaconsejan la fotografía de banda ancha — considera filtros narrowband (Ha, OIII, SII).</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
+                <h3>🔭 2. Planetario Híbrido y Motor SIMBAD</h3>
+                <p>El planetario no solo muestra estrellas: calcula en tiempo real la altitud sobre el horizonte de cada objeto y te presenta únicamente los objetivos fotográficamente útiles para tu noche.</p>
+                <ul>
+                    <li><strong>Base de Datos Local (Objetivos Recomendados):</strong> Contiene los objetivos más célebres con metadatos completos: tipo, magnitud, distancia y "Consejo Táctico" específico. Los consejos no son genéricos — sugieren filtros, advierten de saturaciones en el núcleo, indican la estacionalidad óptima.</li>
+                    <li><strong>Control Deslizante de Tiempo:</strong> Arrastra la barra de tiempo para simular el cielo a cualquier hora de la noche. Los objetos desaparecen cuando bajan de los 20° de altitud (zona de turbulencia y baja transparencia).</li>
+                    <li><strong>Búsqueda Universal SIMBAD:</strong> Si tu objetivo no está en la base de datos local, escribe su nombre (ej. "Sh2-132", "Abell 85") y el motor consulta en tiempo real la Universidad de Estrasburgo. Recibirás las coordenadas absolutas J2000 y podrás planificar la sesión inmediatamente.</li>
+                    <li><strong>Sistema Solar:</strong> Planetas y Luna están siempre disponibles en una lista separada. Útil para planificar sesiones planetarias o verificar la interferencia lunar en tu objetivo Deep Sky.</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
+                <h3>📸 3. Óptica, Muestreo y Simulador FOV</h3>
+                <p>Esta sección transforma los datos físicos de tu instrumento en información operativa: ¿cuántos segundos de arco cubre tu sensor? ¿El objeto entra en el campo? ¿A qué ángulo debes orientar la cámara?</p>
+                <ul>
+                    <li><strong>Escala de Muestreo (arcsec/pixel):</strong> Introduce distancia focal (mm) y tamaño de píxel (µm): el sistema calcula tu escala de imagen y la clasifica. <em>Verde</em>: muestreo ideal. <em>Amarillo</em>: ligero submuestreo. <em>Rojo</em>: sobremuestreo excesivo — estás desperdiciando fotones y resolución.</li>
+                    <li><strong>Simulador FOV Realista (DSS2):</strong> Carga la imagen real del cielo profundo del archivo DSS2 y superpone el rectángulo de tu sensor a escala y orientación correctas. Lo que ves es exactamente lo que obtendrás en tu imagen final.</li>
+                    <li><strong>Rotación FOV y Ángulo de Posición (PA):</strong> El control deslizante de rotación (0–360°) gira el rectángulo del sensor en el mapa. El ángulo elegido se guarda en la secuencia y se envía al rotador automático de N.I.N.A. durante la exportación. Si arrastras el mapa para desplazar el centro del FOV, las coordenadas actualizadas se muestran en tiempo real con un indicador de desplazamiento activo — y puedes volver al centro exacto con el botón ⌖ Reset.</li>
+                    <li><strong>Modo Mosaico:</strong> Cuando el objetivo es más grande que tu campo, activa el mosaico y configura la cuadrícula con el porcentaje de solapamiento deseado. El sistema calcula automáticamente el tiempo por panel y genera el informe estratégico.</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
+                <h3>✨ 4. Calculadora de Sesión Smart</h3>
+                <p>En modo Smart el sistema es tu asistente experto. Analizas el objetivo, compartes las características de tu equipo y dejas que el algoritmo genere una secuencia equilibrada y optimizada para las condiciones de esa noche específica.</p>
+                <ul>
+                    <li><strong>Algoritmo Predictivo:</strong> El cálculo no es una media genérica. Considera la relación focal de tu óptica, el tipo de sensor (OSC o Mono), los filtros activos, la contaminación lunar actual y la magnitud superficial del objetivo.</li>
+                    <li><strong>Generar Secuencia Óptima:</strong> Haz clic en "Generar Secuencia Óptima" y el sistema distribuye las tomas en la ventana nocturna disponible, equilibrando el tiempo entre filtros y reservando tiempo para los frames de calibración.</li>
+                    <li><strong>Dithering Smart:</strong> Activa el dithering, especifica la frecuencia y el tiempo de estabilización. El sistema los resta automáticamente del tiempo total disponible.</li>
+                    <li><strong>Mapeo de Nombres de Filtros N.I.N.A.:</strong> Para sensores Mono, cada filtro tiene un campo donde introduces su nombre exacto tal como lo reconoce tu rueda de filtros en N.I.N.A. Si los nombres no coinciden exactamente, N.I.N.A. dará error.</li>
+                    <li><strong>Multi-Noche Smart:</strong> Si la integración calculada supera la ventana nocturna disponible, aparece el botón "Planificar Proyecto Multi-Noche". El referente aquí es el objetivo sugerido por la IA. Añade las sesiones necesarias y descarga un archivo N.I.N.A. separado para cada una.</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
+                <h3>🚀 5. Constructor PRO — Tú Eres el Comandante</h3>
+                <p>El módulo PRO invierte la lógica: no pide al sistema qué hacer, sino que ejecuta exactamente lo que tú decides. Es la herramienta para quienes ya tienen un plan preciso y quieren traducirlo en una secuencia N.I.N.A. profesional sin compromisos.</p>
+                <ul>
+                    <li><strong>Constructor de Secuencias:</strong> La cuadrícula muestra todos los filtros (Light para OSC, o L/R/G/B/Ha/OIII/SII para Mono). Para cada filtro configuras: número de tomas, tiempo de exposición, Gain, Offset, Binning y frecuencia de Dithering (con checkbox independiente por filtro). La <strong>barra de relleno</strong> compara tu TPT con la ventana nocturna: 🟢 verde si todo cabe, 🟡 naranja si el margen es ajustado, 🔴 rojo si hay desbordamiento.</li>
+                    <li><strong>Disparadores Pre-Vuelo:</strong> Antes del imaging configuras: Enfriar Cámara, Slew &amp; Center con Plate Solving, Rotador Automático, Iniciar Autoguiado y Meridian Flip automático.</li>
+                    <li><strong>Autofocus Avanzado:</strong> Cuatro modos independientes: al inicio de la secuencia, al cambiar de filtro, cada N minutos y a variación de N°C de temperatura.</li>
+                    <li><strong>Disparadores Post-Vuelo:</strong> Calentar Cámara, Aparcar Montura, Cerrar Tapa motorizada, Encender Panel Flat — todo automático al terminar la secuencia.</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
+                <h3>🌙 6. Planificación Multi-Noche</h3>
+                <p>Cuando un proyecto requiere más horas de las que ofrece una sola noche, la Planificación Multi-Noche te permite distribuir el trabajo en varias sesiones manteniendo siempre el control del progreso global.</p>
+                <ul>
+                    <li><strong>TPT — Tiempo Total Planificado:</strong> El objetivo fijo de tu proyecto. En modo Smart corresponde a las horas recomendadas por la IA; en modo PRO se calcula desde tu cuadrícula de tomas. La barra de progreso se vuelve verde solo cuando la suma de las sesiones planificadas alcanza el TPT.</li>
+                    <li><strong>Gestión de Sesiones:</strong> Para cada noche añades una tarjeta con: horario de inicio y fin, tomas por filtro en esa sesión, y verificación automática de si las tomas caben en la ventana — con aviso de desbordamiento si es necesario.</li>
+                    <li><strong>Exportación por Noche:</strong> Cada sesión genera su propio archivo N.I.N.A. independiente con todos los disparadores configurados y coordenadas FOV actualizadas.</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
+                <h3>🤖 7. Exportación y Automatización</h3>
+                <ul>
+                    <li><strong>Export N.I.N.A. Smart:</strong> Genera un JSON para N.I.N.A. Advanced Sequencer con la secuencia calculada por la IA. Incluye Slew &amp; Center, autoguiado, dithering configurado y meridian flip. Arrastra el archivo a N.I.N.A. y la noche se conduce sola.</li>
+                    <li><strong>Export N.I.N.A. PRO (Advanced Sequence):</strong> El JSON PRO es una secuencia N.I.N.A. nativa de nivel avanzado: cada filtro tiene su estructura con LoopCondition, disparadores de dithering por filtro, gain/offset/binning individuales y todos los disparadores de hardware en el orden correcto.</li>
+                    <li><strong>Export ASIAIR:</strong> Genera un archivo CSV con coordenadas de precisión y muestra el plan de tomas visual optimizado para la interfaz tablet de ASIAIR. Incluye el ángulo de rotación de cámara sugerido.</li>
+                    <li><strong>Coordenadas FOV Personalizadas:</strong> Si desplazaste el mapa durante la simulación FOV, las coordenadas actualizadas se usan en todas las exportaciones. El badge "⚠ Offset activo" te avisa cuando las coordenadas de exportación difieren del centro nominal del objetivo.</li>
+                </ul>
+            </div>
+        </div>
+
+                <div id="guide-zh" style="display:none;">
+            <h2 style="font-size: 2.4em; border-bottom: 2px solid #bb86fc; padding-bottom: 15px; margin-bottom: 30px;">📖 AstroDashboard PRO 用户手册</h2>
+
+            <div class="filosofia-box">
+                <h3 style="color: #fff; margin-top:0;">设计理念</h3>
+                <p>AstroDashboard 诞生于一个简单的问题：<em>为什么我需要四个不同的软件来规划一个夜晚的拍摄？</em>这个平台就是答案 — 一个集实时气象、预测星图、光学计算、序列生成和硬件自动化于一体的统一环境。</p>
+                <p style="margin-top:10px;">软件拥有两种截然不同的模式。在<strong>智能</strong>模式下，您是自动驾驶的飞行员：描述您的设备，系统为您计算时间、帧数和滤镜平衡。在 <strong>PRO</strong> 模式下，您是手动指挥官：您决定每一个参数，软件将您的决策翻译成完美的 N.I.N.A. 序列。</p>
+            </div>
+
+            <div class="guide-section">
+                <h3>🌍 1. 战术气象与环境数据</h3>
+                <p>在指向望远镜之前，您需要了解头顶上方的情况。本部分直接在您的浏览器中实时汇聚专业的卫星数据。</p>
+                <ul>
+                    <li><strong>50公里半径地图：</strong>专为移动天文摄影师设计。象征性的50公里圆圈让您一眼就能评估应移动到哪里寻找"晴空洞"。激活叠加图层（低云、中云、高云、急流、湿度、月光），滑动时间轴预测未来数小时的天气变化。</li>
+                    <li><strong>急流 (Jet Stream)：</strong>视宁度的真正敌人。您所在位置上方低于50 km/h保证天空稳定、星点清晰。超过100 km/h，大气湍流将摧毁精细细节 — 避免使用长焦段。</li>
+                    <li><strong>湿度警报：</strong>若读数超过85%（红色指示），请在温度降到露点之前将除露带调到最大功率。一旦光学元件起雾，拍摄会话就毁了。</li>
+                    <li><strong>月光污染：</strong>根据当前月相和位置显示被月光"烧毁"的天空百分比。数值高时不建议宽带拍摄 — 考虑使用能截断月光连续谱的窄带滤镜（Ha、OIII、SII）。</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
+                <h3>🔭 2. 混合星图与 SIMBAD 引擎</h3>
+                <p>星图不只是显示星星：它实时计算每个天体在地平线上的高度，只向您展示今晚摄影上有用的目标。</p>
+                <ul>
+                    <li><strong>本地数据库（推荐目标）：</strong>包含最著名的目标及完整元数据：类型、星等、距离和专属"拍摄建议"。建议并非泛泛而谈 — 它们推荐滤镜、警告核心过曝、指示最佳拍摄季节。</li>
+                    <li><strong>时间滑块：</strong>拖动时间条模拟夜间任意时刻的天空。当天体降至20°高度以下（湍流和低透明度区域）时自动消失，确保您看到的都是可用目标。</li>
+                    <li><strong>通用 SIMBAD 搜索：</strong>如果您的目标不在本地数据库中，输入名称（如"Sh2-132"、"Abell 85"），引擎将实时查询斯特拉斯堡大学。您将获得J2000绝对坐标，可立即规划拍摄会话。</li>
+                    <li><strong>太阳系：</strong>行星和月球始终在单独列表中。适合规划行星拍摄会话或检查月光对深空目标的干扰。</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
+                <h3>📸 3. 光学设置、采样率与视场模拟器</h3>
+                <p>本部分将您仪器的物理数据转化为操作信息：您的传感器覆盖多少角秒？目标能否放入画面？应以什么角度定向相机？</p>
+                <ul>
+                    <li><strong>采样率 (arcsec/pixel)：</strong>输入焦距（mm）和像素大小（µm）：系统计算您的图像比例并分为三个区间。<em>绿色</em>：理想采样（1–2 arcsec/px）。<em>黄色</em>：轻微欠采样（星点略显方形）。<em>红色</em>：过度过采样 — 您在浪费光子和分辨率。</li>
+                    <li><strong>真实视场模拟器 (DSS2)：</strong>从DSS2档案加载真实深空图像，并以正确比例和方向叠加您的传感器矩形。您看到的就是最终图像中将获得的内容。</li>
+                    <li><strong>视场旋转与位置角 (PA)：</strong>旋转滑块（0–360°）在地图上旋转传感器矩形。选定角度保存在序列中，并在导出时发送给 N.I.N.A. 的自动旋转器。如果您拖动地图将视场中心偏离原始目标，更新的坐标将实时显示在"视场中心"框中，并有偏移激活指示 — 您随时可以通过 ⌖ 重置按钮返回精确中心。</li>
+                    <li><strong>拼接模式：</strong>当目标大于您的视场时，启用拼接并设置网格（如2×2、3×2）和所需重叠百分比。系统自动计算每个面板的可用时间并生成策略报告。</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
+                <h3>✨ 4. 智能序列计算</h3>
+                <p>在智能模式下，系统是您的专家助手。您分析目标、提供设备规格，让算法为该特定夜晚的条件生成平衡且优化的序列。</p>
+                <ul>
+                    <li><strong>预测算法：</strong>计算并非通用平均值。它考虑您的光学焦比（f/4 vs f/8 对积分时间影响巨大）、传感器类型（彩色或黑白）、激活的滤镜、当前月光污染和目标表面亮度。月亮70%时，暗弱目标需要更长的曝光才能淹没天空背景。</li>
+                    <li><strong>生成最佳曝光序列：</strong>点击"生成最佳曝光序列"，系统在可用夜间窗口内分配帧数，平衡滤镜间的时间并为校准帧预留时间。黑白传感器独立计算 L、R、G、B 和窄带。</li>
+                    <li><strong>智能抖动：</strong>启用抖动，指定频率和稳定时间。系统自动从总可用时间中扣除 — 您看到的"采集时间"已是扣除所有开销后的真实净积分时间。</li>
+                    <li><strong>N.I.N.A. 滤镜名称映射：</strong>对于黑白传感器，每个滤镜都有一个字段用于输入 N.I.N.A. 从滤镜轮识别的确切名称（如"Hα 3nm"而非"Ha"）。名称不完全匹配时，N.I.N.A. 将报错。</li>
+                    <li><strong>智能多夜规划：</strong>如果计算的积分超过可用夜间窗口，"计划多夜拍摄"按钮出现。参考目标是 AI 建议的目标。添加所需会话并为每个会话下载单独的 N.I.N.A. 文件。</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
+                <h3>🚀 5. PRO 构建器 — 您是指挥官</h3>
+                <p>PRO 模块颠覆逻辑：它不询问系统该做什么，而是精确执行您的决定。这是已有明确计划并希望将其转化为专业 N.I.N.A. 序列的用户的工具。</p>
+                <ul>
+                    <li><strong>序列构建器：</strong>网格显示您设备的所有滤镜（彩色相机显示 Light，黑白显示 L/R/G/B/Ha/OIII/SII）。每个滤镜可设置：帧数、曝光时间、Gain、Offset、Binning 和抖动频率（每个滤镜有独立复选框）。<strong>填充进度条</strong>将您的 TPT 与夜间窗口比较：🟢 绿色表示一夜可完成，🟡 橙色表示时间紧张，🔴 红色表示超出。</li>
+                    <li><strong>拍摄前触发器：</strong>拍摄前配置：相机降温（设置目标温度）、指向并居中（星板解析）、自动旋转器（旋转至视场模拟器中设定的角度）、开始自动导星和自动中天翻转。</li>
+                    <li><strong>高级自动对焦：</strong>四种独立模式：序列开始时、切换滤镜时（适合焦点偏移不同的滤镜）、每N分钟（适合热漂移明显的夜晚）和温度变化N°C时（对焦点敏感的系统最精确的方法）。</li>
+                    <li><strong>拍摄后触发器：</strong>相机回温、赤道仪归位、关闭电动镜头盖、开启平场灯 — 序列结束时全部自动执行。</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
+                <h3>🌙 6. 多夜拍摄规划</h3>
+                <p>当项目所需时间超过单夜可用时间时，多夜拍摄规划让您将工作分配到多个会话，同时始终掌控整体进度。</p>
+                <ul>
+                    <li><strong>TPT — 总计划时间：</strong>您项目的固定目标。智能模式下对应 AI 推荐的小时数；PRO 模式下从您的帧数网格计算。进度条只有当所有计划夜晚的总和达到或超过 TPT 时才变绿。</li>
+                    <li><strong>会话管理：</strong>每个夜晚添加一张卡片，包含：开始和结束时间（该特定夜晚的有效窗口）、该会话每个滤镜的帧数，以及帧数是否能在窗口内完成的自动检查。</li>
+                    <li><strong>按夜导出：</strong>每个会话生成其独立的 N.I.N.A. 文件，包含所有已配置的触发器和更新的视场坐标。第1夜可能只包含 L 和 R，第2夜只包含 G、B 和 Ha — 由您决定策略。</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
+                <h3>🤖 7. 导出与自动化</h3>
+                <ul>
+                    <li><strong>N.I.N.A. 智能导出：</strong>为 N.I.N.A. 高级序列器生成含 AI 计算序列的 JSON 文件。包括指向并居中、自动导星、已配置的抖动和中天翻转。将文件拖入 N.I.N.A.，整夜自动运行。</li>
+                    <li><strong>N.I.N.A. PRO 导出（高级序列）：</strong>PRO 生成的 JSON 是原生 N.I.N.A. 高级序列：每个滤镜有自己带 LoopCondition 的结构、独立的抖动触发器、各自的 gain/offset/binning，以及所有硬件触发器按正确顺序排列（降温→指向→自动对焦→旋转→导星→拍摄→回温→归位）。</li>
+                    <li><strong>ASIAIR 导出：</strong>生成含精确坐标的 CSV 文件，并显示为 ASIAIR/ASIAIR+/ASIAIR Pro 平板界面优化的可视拍摄计划，包括建议的相机旋转角度。</li>
+                    <li><strong>自定义视场坐标：</strong>如果在视场模拟过程中移动了地图，更新的中心坐标将用于所有导出（N.I.N.A. 智能、PRO 和多夜）。当导出坐标与目标名义中心不同时，"⚠ 偏移激活"徽章会提醒您。</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="mobile-nav-fab" style="display: none;">
+        <div class="nav-fab-btn" onclick="scorriSu()">▲</div>
+        <div class="nav-fab-btn" onclick="scorriGiu()">▼</div>
+    </div>
+
+    <!-- ═══ AstroDashboard JS Modules ═══ -->
+    <script src="js/i18n.js"></script>
+    <script src="js/core.js"></script>
+    <script src="js/equipment.js"></script>
+    <script src="js/weather.js"></script>
+    <script src="js/planetarium.js"></script>
+    <script src="js/fov.js"></script>
+    <script src="js/smart.js"></script>
+    <script src="js/pro.js"></script>
+    <script src="js/export.js"></script>
+    <script src="js/multinight.js"></script>
+</body>
+</html>
