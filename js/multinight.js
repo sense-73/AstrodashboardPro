@@ -496,22 +496,55 @@ function aggiungiNotte() {
             let fovContainer = document.getElementById('fov-simulator-container');
             if (fovContainer) {
                 fovContainer.addEventListener('wheel', function(e) {
-                    e.preventDefault(); // Blocca lo scroll della pagina
-                    e.stopPropagation(); // Blocca lo zoom nativo sfasato di Aladin
-                    
+                    e.preventDefault();
+                    e.stopPropagation();
                     let zoomSlider = document.getElementById('fov-zoom');
                     let currentVal = parseInt(zoomSlider.value);
-                    
-                    // Rotellina su (zoom in) = +15, giù (zoom out) = -15
                     if (e.deltaY < 0) { currentVal += 15; } else { currentVal -= 15; }
-                    
-                    // Rispettiamo i limiti minimi e massimi dello slider
                     if (currentVal < 20) currentVal = 20;
                     if (currentVal > 500) currentVal = 500;
-                    
                     zoomSlider.value = currentVal;
-                    aggiornaFOV(); // Sincronizza lo sfondo e il rettangolo contemporaneamente!
+                    aggiornaFOV();
                 }, { passive: false, capture: true });
+
+                // Pinch-to-zoom su mobile (due dita)
+                let pinchStartDist = null;
+                let pinchStartVal = null;
+
+                fovContainer.addEventListener('touchstart', function(e) {
+                    if (e.touches.length === 2) {
+                        e.preventDefault();
+                        let dx = e.touches[0].clientX - e.touches[1].clientX;
+                        let dy = e.touches[0].clientY - e.touches[1].clientY;
+                        pinchStartDist = Math.sqrt(dx*dx + dy*dy);
+                        pinchStartVal = parseInt(document.getElementById('fov-zoom').value);
+                    }
+                }, { passive: false });
+
+                fovContainer.addEventListener('touchmove', function(e) {
+                    if (e.touches.length === 2 && pinchStartDist !== null) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        let dx = e.touches[0].clientX - e.touches[1].clientX;
+                        let dy = e.touches[0].clientY - e.touches[1].clientY;
+                        let currentDist = Math.sqrt(dx*dx + dy*dy);
+                        // Pinch out (dita che si allontanano) = zoom in = slider aumenta
+                        let ratio = currentDist / pinchStartDist;
+                        let newVal = Math.round(pinchStartVal * ratio);
+                        if (newVal < 20) newVal = 20;
+                        if (newVal > 500) newVal = 500;
+                        let zoomSlider = document.getElementById('fov-zoom');
+                        zoomSlider.value = newVal;
+                        aggiornaFOV();
+                    }
+                }, { passive: false });
+
+                fovContainer.addEventListener('touchend', function(e) {
+                    if (e.touches.length < 2) {
+                        pinchStartDist = null;
+                        pinchStartVal = null;
+                    }
+                });
             }
         });
 
