@@ -324,7 +324,7 @@ let lang = localStorage.getItem('ad_lang') || 'it';
             }
         };
 
-        let lang = localStorage.getItem('ad_lang') || 'it';
+        // lang già dichiarato in i18n.js
         i18n.it.go_to_pro = "Vai al Calcolatore PRO";
         i18n.en.go_to_pro = "Go to PRO Calculator";
         i18n.es.go_to_pro = "Ir a la Calculadora PRO";
