@@ -16,6 +16,8 @@ function toggleLock(id) {
 
         function toggleSensorMode() {
             let isM = document.getElementById('sensor-type').value === 'mono', c = document.getElementById('frames-container'); c.innerHTML = '';
+            let filterWarning = document.getElementById('nina-filter-warning');
+            if (filterWarning) filterWarning.style.display = isM ? 'block' : 'none';
             (isM ? framesMono : framesColor).forEach(f => {
                 let isL = !f.id.includes('dark') && !f.id.includes('bias'), r = document.createElement('div'); r.className = `calc-row ${f.class}`;
                 // Creazione del Lucchetto solo per i Light frames
