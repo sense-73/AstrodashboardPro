@@ -182,7 +182,9 @@
         .guide-section li { margin-bottom: 12px; }
         .guide-section strong { color: #fff; }
         .filosofia-box { background: rgba(187,134,252,0.1); padding: 20px; border-left: 4px solid #bb86fc; border-radius: 4px; margin-bottom: 30px;}
-        
+        .mobile-nav-fab { display: none; }
+        input[type="range"] { touch-action: none; }
+
         @media (max-width: 768px) {
             .main-header { display: flex !important; flex-direction: column; gap: 15px; align-items: center; justify-content: center; text-align: center; padding: 20px 15px; width: 100%; box-sizing: border-box; }
             .main-header > div { justify-self: center !important; width: 100%; display: flex; flex-direction: column; align-items: center; }
