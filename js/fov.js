@@ -106,7 +106,7 @@
 
             // Generazione Mappa Stellare
             if (!aladinSkyMap) {
-                A.aladin('#aladin-lite-div', {
+                aladinSkyMap = A.aladin('#aladin-lite-div', {
                     survey: "P/DSS2/color",
                     fov: 2,
                     target: (targetSelezionato.ra * 15) + " " + targetSelezionato.dec,
@@ -115,14 +115,12 @@
                     showFullscreenControl: false,
                     showLayersControl: false,
                     showGotoControl: false
-                }).then(aladin => {
-                    aladinSkyMap = aladin;
-                    // Listener drag: aggiorna coordinate centro FOV in tempo reale
-                    aladinSkyMap.on('positionChanged', function(pos) {
-                        aggiornaCoorditateFOV(pos.ra, pos.dec);
-                    });
-                    setTimeout(() => { toggleMosaic(); }, 300);
                 });
+                // Listener drag: aggiorna coordinate centro FOV in tempo reale
+                aladinSkyMap.on('positionChanged', function(pos) {
+                    aggiornaCoorditateFOV(pos.ra, pos.dec);
+                });
+                setTimeout(() => { toggleMosaic(); }, 300);
             } else {
                 setTimeout(() => {
                     fovCenterOverride = null;
