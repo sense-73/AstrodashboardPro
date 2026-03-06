@@ -297,7 +297,7 @@
 
         <div style="margin-top: 30px; border-top: 1px solid #333; padding-top: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
             <h2 id="calc-title" style="margin: 0; border: none; padding: 0;">
-                <span data-i18n="smart_calc">⏱️ Calcolatore Sessione Smart AI</span> 
+                <span data-i18n="smart_calc">⏱️ Calcolatore Sessione Smart</span> 
                 <span class="info-icon" onmouseenter="mostraTooltip(this, 'info_smart')" onmouseleave="nascondiTooltip()">ℹ️</span>
             </h2>
             <button id="btn-open-pro" class="btn-pro-header" onclick="apriProView()">
@@ -617,7 +617,7 @@
                     <li><strong>Generazione Sequenza Ottimale:</strong> Clicca "Genera Sequenza Ottimale" e il sistema distribuisce le pose sulla finestra notturna disponibile (orario inizio–fine che hai impostato), bilanciando il tempo tra i filtri e riservando le calibrazioni. Per i sensori Mono calcola separatamente L, R, G, B e narrowband.</li>
                     <li><strong>Dithering Smart:</strong> Se attivi il dithering, specifica la frequenza (ogni N pose) e il tempo di assestamento. Il sistema li sottrae automaticamente dal tempo totale disponibile: quello che vedi in "Tempo Acquisizione" è il tempo reale di integrazione netta, già al netto degli overhead.</li>
                     <li><strong>Mappatura Nomi Filtri N.I.N.A.:</strong> Per i sensori Mono, ogni filtro ha un campo dove inserire il nome esatto come lo riconosce la tua ruota portafiltri in N.I.N.A. (es. "Hα 3nm" invece di "Ha"). Se i nomi non corrispondono esattamente, N.I.N.A. darà errore durante la sequenza.</li>
-                    <li><strong>Multinotte Smart:</strong> Se l'integrazione calcolata supera la finestra notturna disponibile, il sistema mostra il pulsante "Pianifica Progetto Multi-Notte". Qui il riferimento è l'obiettivo suggerito dall'AI. Aggiungi quante sessioni servono, assegna le pose per notte e scarica un file N.I.N.A. separato per ciascuna.</li>
+                    <li><strong>Multinotte Smart:</strong> Se l'integrazione calcolata supera la finestra notturna disponibile, il sistema mostra il pulsante "Pianifica Progetto Multi-Notte". Qui il riferimento è l'obiettivo calcolato dall'assistente smart. Aggiungi quante sessioni servono, assegna le pose per notte e scarica un file N.I.N.A. separato per ciascuna.</li>
                 </ul>
             </div>
 
@@ -637,7 +637,7 @@
                 <h3>🌙 6. Progettazione Multinotte</h3>
                 <p>Quando un progetto richiede più ore di quante ne offre una singola notte, la Progettazione Multinotte ti permette di distribuire il lavoro su più sessioni mantenendo sempre il controllo sul progresso complessivo.</p>
                 <ul>
-                    <li><strong>TPT — Tempo Totale Pianificato:</strong> È l'obiettivo fisso del tuo progetto. In modalità Smart corrisponde alle ore consigliate dall'AI; in modalità PRO è calcolato dalla tua griglia di pose. Non cambia mai: è il traguardo che devi raggiungere sommando tutte le notti.</li>
+                    <li><strong>TPT — Tempo Totale Pianificato:</strong> È l'obiettivo fisso del tuo progetto. In modalità Smart corrisponde alle ore calcolate dall'assistente smart; in modalità PRO è calcolato dalla tua griglia di pose. Non cambia mai: è il traguardo che devi raggiungere sommando tutte le notti.</li>
                     <li><strong>Barra di Avanzamento:</strong> Parte rossa a 0% e diventa verde solo quando la somma del "Tempo Pianificato" nelle varie sessioni raggiunge o supera il TPT. È il tuo indicatore visivo di completamento progetto.</li>
                     <li><strong>Gestione Sessioni:</strong> Per ogni notte aggiungi una scheda con: orario inizio e fine (la finestra utile di quella specifica notte), numero di pose per filtro in quella sessione, e verifica automatica se le pose entrano nella finestra — con avviso di sforamento se necessario.</li>
                     <li><strong>Export per Notte:</strong> Ogni sessione genera il suo file N.I.N.A. indipendente, completo di tutti i trigger configurati (AF, guida, flip, ecc.) e delle coordinate FOV aggiornate. La notte 1 potrebbe contenere solo L e R, la notte 2 solo G, B e Ha — tu decidi la strategia.</li>
@@ -647,7 +647,7 @@
             <div class="guide-section">
                 <h3>🤖 7. Esportazione e Automazione</h3>
                 <ul>
-                    <li><strong>Export N.I.N.A. Smart:</strong> Genera un file JSON per N.I.N.A. Advanced Sequencer con la sequenza calcolata dall'AI. Include Slew &amp; Center, autoguida, dithering configurato e meridian flip. Trascina il file dentro N.I.N.A. e la notte parte da sola.</li>
+                    <li><strong>Export N.I.N.A. Smart:</strong> Genera un file JSON per N.I.N.A. Advanced Sequencer con la sequenza calcolata dall'assistente smart. Include Slew &amp; Center, autoguida, dithering configurato e meridian flip. Trascina il file dentro N.I.N.A. e la notte parte da sola.</li>
                     <li><strong>Export N.I.N.A. PRO (Advanced Sequence):</strong> Il JSON PRO è una sequenza nativa N.I.N.A. di livello avanzato: ogni filtro ha la sua struttura con LoopCondition (loop nativo, non ExposureCount), trigger di dithering per-filtro, gain/offset/binning individuali, tutti i trigger hardware configurati nell'ordine corretto (Cool → Slew → AF → Rotate → Guide → Imaging → Warm → Park).</li>
                     <li><strong>Export ASIAIR:</strong> Genera un file CSV con le coordinate di precisione e mostra a schermo il riepilogo del piano di scatto ottimizzato per l'interfaccia tablet di ASIAIR/ASIAIR+/ASIAIR Pro. Include l'angolo di rotazione camera suggerito per l'inquadratura ottimale.</li>
                     <li><strong>Coordinate FOV Personalizzate:</strong> Se hai spostato la mappa durante la simulazione FOV, le coordinate del centro aggiornato vengono usate in tutti gli export (N.I.N.A. Smart, PRO e Multinotte). Il badge "⚠ Offset attivo" ti avvisa quando le coordinate di export differiscono dal centro nominale del target.</li>
@@ -705,7 +705,7 @@
                     <li><strong>Generate Optimal Sequence:</strong> Click "Generate Optimal Sequence" and the system distributes frames across the available night window (start–end times you set), balancing time between filters and reserving time for calibration frames. For Mono sensors it calculates L, R, G, B and narrowband independently.</li>
                     <li><strong>Smart Dithering:</strong> Enable dithering, specify frequency (every N frames) and settling time. The system automatically subtracts them from the total available time — the "Acquisition Time" you see is real net integration time, already accounting for all overhead.</li>
                     <li><strong>N.I.N.A. Filter Name Mapping:</strong> For Mono sensors, each filter has a field where you enter its exact name as N.I.N.A. recognizes it from your filter wheel (e.g. "Hα 3nm" instead of "Ha"). If names don't match exactly, N.I.N.A. will throw an error during the sequence.</li>
-                    <li><strong>Smart Multi-Night:</strong> If the calculated integration exceeds the available night window, the "Plan Multi-Night Project" button appears. The reference here is the AI's suggested goal. Add as many sessions as needed, assign frames per night and download a separate N.I.N.A. file for each.</li>
+                    <li><strong>Smart Multi-Night:</strong> If the calculated integration exceeds the available night window, the "Plan Multi-Night Project" button appears. The reference here is the smart assistant's calculated goal. Add as many sessions as needed, assign frames per night and download a separate N.I.N.A. file for each.</li>
                 </ul>
             </div>
 
@@ -725,7 +725,7 @@
                 <h3>🌙 6. Multi-Night Planning</h3>
                 <p>When a project requires more hours than a single night offers, Multi-Night Planning lets you distribute the work across multiple sessions while always keeping track of overall progress.</p>
                 <ul>
-                    <li><strong>TPT — Total Planned Time:</strong> The fixed goal of your project. In Smart mode it corresponds to the AI's recommended hours; in PRO mode it's calculated from your frame grid. It never changes: it's the milestone you must reach by summing all nights.</li>
+                    <li><strong>TPT — Total Planned Time:</strong> The fixed goal of your project. In Smart mode it corresponds to the smart assistant's calculated hours; in PRO mode it's calculated from your frame grid. It never changes: it's the milestone you must reach by summing all nights.</li>
                     <li><strong>Progress Bar:</strong> Starts red at 0% and turns green only when the sum of "Planned Time" across all sessions reaches or exceeds the TPT. Your visual project completion indicator.</li>
                     <li><strong>Session Management:</strong> For each night add a card with: start and end time (the useful window for that specific night), frames per filter for that session, and automatic check whether frames fit in the window — with overflow warning if needed.</li>
                     <li><strong>Per-Night Export:</strong> Each session generates its own independent N.I.N.A. file, complete with all configured triggers (AF, guiding, flip, etc.) and updated FOV coordinates. Night 1 might contain only L and R, night 2 only G, B and Ha — you decide the strategy.</li>
@@ -735,7 +735,7 @@
             <div class="guide-section">
                 <h3>🤖 7. Export &amp; Automation</h3>
                 <ul>
-                    <li><strong>N.I.N.A. Smart Export:</strong> Generates a JSON file for N.I.N.A. Advanced Sequencer with the AI-calculated sequence. Includes Slew &amp; Center, autoguiding, configured dithering and meridian flip. Drag the file into N.I.N.A. and the night runs itself.</li>
+                    <li><strong>N.I.N.A. Smart Export:</strong> Generates a JSON file for N.I.N.A. Advanced Sequencer with the smart assistant-calculated sequence. Includes Slew &amp; Center, autoguiding, configured dithering and meridian flip. Drag the file into N.I.N.A. and the night runs itself.</li>
                     <li><strong>N.I.N.A. PRO Export (Advanced Sequence):</strong> The PRO JSON is a native N.I.N.A. advanced-level sequence: each filter has its own structure with LoopCondition (native loop, not ExposureCount), per-filter dithering triggers, individual gain/offset/binning, all hardware triggers in the correct order (Cool → Slew → AF → Rotate → Guide → Imaging → Warm → Park).</li>
                     <li><strong>ASIAIR Export:</strong> Generates a CSV file with precision coordinates and displays a visual shooting plan optimized for the ASIAIR/ASIAIR+/ASIAIR Pro tablet interface. Includes the suggested camera rotation angle for optimal framing.</li>
                     <li><strong>Custom FOV Coordinates:</strong> If you moved the map during FOV simulation, the updated center coordinates are used in all exports (N.I.N.A. Smart, PRO and Multi-Night). The "⚠ Offset active" badge warns you when export coordinates differ from the target's nominal center.</li>
@@ -879,7 +879,7 @@
                     <li><strong>生成最佳曝光序列：</strong>点击"生成最佳曝光序列"，系统在可用夜间窗口内分配帧数，平衡滤镜间的时间并为校准帧预留时间。黑白传感器独立计算 L、R、G、B 和窄带。</li>
                     <li><strong>智能抖动：</strong>启用抖动，指定频率和稳定时间。系统自动从总可用时间中扣除 — 您看到的"采集时间"已是扣除所有开销后的真实净积分时间。</li>
                     <li><strong>N.I.N.A. 滤镜名称映射：</strong>对于黑白传感器，每个滤镜都有一个字段用于输入 N.I.N.A. 从滤镜轮识别的确切名称（如"Hα 3nm"而非"Ha"）。名称不完全匹配时，N.I.N.A. 将报错。</li>
-                    <li><strong>智能多夜规划：</strong>如果计算的积分超过可用夜间窗口，"计划多夜拍摄"按钮出现。参考目标是 AI 建议的目标。添加所需会话并为每个会话下载单独的 N.I.N.A. 文件。</li>
+                    <li><strong>智能多夜规划：</strong>如果计算的积分超过可用夜间窗口，"计划多夜拍摄"按钮出现。参考目标是智能助手计算的目标。添加所需会话并为每个会话下载单独的 N.I.N.A. 文件。</li>
                 </ul>
             </div>
 
@@ -898,7 +898,7 @@
                 <h3>🌙 6. 多夜拍摄规划</h3>
                 <p>当项目所需时间超过单夜可用时间时，多夜拍摄规划让您将工作分配到多个会话，同时始终掌控整体进度。</p>
                 <ul>
-                    <li><strong>TPT — 总计划时间：</strong>您项目的固定目标。智能模式下对应 AI 推荐的小时数；PRO 模式下从您的帧数网格计算。进度条只有当所有计划夜晚的总和达到或超过 TPT 时才变绿。</li>
+                    <li><strong>TPT — 总计划时间：</strong>您项目的固定目标。智能模式下对应智能助手计算的小时数；PRO 模式下从您的帧数网格计算。进度条只有当所有计划夜晚的总和达到或超过 TPT 时才变绿。</li>
                     <li><strong>会话管理：</strong>每个夜晚添加一张卡片，包含：开始和结束时间（该特定夜晚的有效窗口）、该会话每个滤镜的帧数，以及帧数是否能在窗口内完成的自动检查。</li>
                     <li><strong>按夜导出：</strong>每个会话生成其独立的 N.I.N.A. 文件，包含所有已配置的触发器和更新的视场坐标。第1夜可能只包含 L 和 R，第2夜只包含 G、B 和 Ha — 由您决定策略。</li>
                 </ul>
@@ -907,7 +907,7 @@
             <div class="guide-section">
                 <h3>🤖 7. 导出与自动化</h3>
                 <ul>
-                    <li><strong>N.I.N.A. 智能导出：</strong>为 N.I.N.A. 高级序列器生成含 AI 计算序列的 JSON 文件。包括指向并居中、自动导星、已配置的抖动和中天翻转。将文件拖入 N.I.N.A.，整夜自动运行。</li>
+                    <li><strong>N.I.N.A. 智能导出：</strong>为 N.I.N.A. 高级序列器生成含智能助手计算序列的 JSON 文件。包括指向并居中、自动导星、已配置的抖动和中天翻转。将文件拖入 N.I.N.A.，整夜自动运行。</li>
                     <li><strong>N.I.N.A. PRO 导出（高级序列）：</strong>PRO 生成的 JSON 是原生 N.I.N.A. 高级序列：每个滤镜有自己带 LoopCondition 的结构、独立的抖动触发器、各自的 gain/offset/binning，以及所有硬件触发器按正确顺序排列（降温→指向→自动对焦→旋转→导星→拍摄→回温→归位）。</li>
                     <li><strong>ASIAIR 导出：</strong>生成含精确坐标的 CSV 文件，并显示为 ASIAIR/ASIAIR+/ASIAIR Pro 平板界面优化的可视拍摄计划，包括建议的相机旋转角度。</li>
                     <li><strong>自定义视场坐标：</strong>如果在视场模拟过程中移动了地图，更新的中心坐标将用于所有导出（N.I.N.A. 智能、PRO 和多夜）。当导出坐标与目标名义中心不同时，"⚠ 偏移激活"徽章会提醒您。</li>
