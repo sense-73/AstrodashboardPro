@@ -27,7 +27,7 @@ const planetsDatabase = [
 const framesColor = [
     { id: "c-light", name: "Light",     class: "f-l",    dC: 0, dE: 180 },
     { id: "c-dark",  name: "Dark",      class: "f-dark", dC: 0, dE: 180 },
-    { id: "c-bias",  name: "Bias/Flat", class: "f-bias", dC: 0, dE: 0   }
+    { id: "c-bias",  name: "Bias",      class: "f-bias", dC: 0, dE: 0,  dG: 0 }
 ];
 const framesMono = [
     { id: "m-l",    name: "Lum (L)",  class: "f-l",    dC: 0, dE: 30  },
@@ -37,8 +37,8 @@ const framesMono = [
     { id: "m-ha",   name: "H-Alpha",  class: "f-ha",   dC: 0, dE: 300 },
     { id: "m-oiii", name: "O-III",    class: "f-oiii", dC: 0, dE: 300 },
     { id: "m-sii",  name: "S-II",     class: "f-sii",  dC: 0, dE: 300 },
-    { id: "m-dark", name: "Dark",     class: "f-dark", dC: 0, dE: 300 },
-    { id: "m-bias", name: "Bias/Flat",class: "f-bias", dC: 0, dE: 0   }
+    { id: "m-dark", name: "Dark",     class: "f-dark", dC: 0, dE: 30  },
+    { id: "m-bias", name: "Bias",     class: "f-bias", dC: 0, dE: 0,  dG: 0 }
 ];
 
 // ── Database VIP target (usato da smart.js) ────────────────────

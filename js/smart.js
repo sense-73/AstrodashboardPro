@@ -15,17 +15,73 @@ function toggleLock(id) {
         }
 
         function toggleSensorMode() {
-            let isM = document.getElementById('sensor-type').value === 'mono', c = document.getElementById('frames-container'); c.innerHTML = '';
+            let isM = document.getElementById('sensor-type').value === 'mono';
+            let c = document.getElementById('frames-container'); c.innerHTML = '';
             let filterWarning = document.getElementById('nina-filter-warning');
             if (filterWarning) filterWarning.style.display = isM ? 'block' : 'none';
+
+            // Header colonne
+            let header = document.createElement('div');
+            header.style.cssText = 'display:grid; grid-template-columns: 130px 60px 70px 60px 60px 60px 80px 70px; gap:5px; font-size:0.75em; color:#aaa; text-align:center; border-bottom:1px solid #444; padding-bottom:5px; margin-bottom:6px;';
+            header.innerHTML = '<div style="text-align:left;">Filtro</div><div>Pose</div><div>Secs</div><div>Gain</div><div>Offset</div><div>Bin</div><div>Dither</div><div style="text-align:right;">Totale</div>';
+            c.appendChild(header);
+
             (isM ? framesMono : framesColor).forEach(f => {
-                let isL = !f.id.includes('dark') && !f.id.includes('bias'), r = document.createElement('div'); r.className = `calc-row ${f.class}`;
-                // Creazione del Lucchetto solo per i Light frames
-                let lockHTML = isL ? `<span id="${f.id}-lock" style="cursor:pointer; font-size:1.1em; margin-left:5px; opacity:0.5; user-select:none;" onclick="toggleLock('${f.id}')">🔓</span>` : `<span style="display:inline-block; width:22px; margin-left:5px;"></span>`;
-                r.innerHTML = `<div style="display:flex; align-items:center; width: 140px;">${isL ? `<input type="checkbox" id="${f.id}-check" checked style="margin-right:10px; transform: scale(1.2); cursor: pointer;" onchange="calcolaTempi()">` : `<span style="display:inline-block; width: 23px; margin-right:10px;"></span>`}<label style="width:auto; cursor: ${isL?'pointer':'default'};" ${isL?`onclick="document.getElementById('${f.id}-check').click()"`:''}>${f.name}</label></div><div class="calc-inputs"><input type="number" id="${f.id}-count" value="${f.dC}" min="0" oninput="calcolaTempi()"> <span>x</span> <input type="number" id="${f.id}-exp" value="${f.dE}" min="0" oninput="calcolaTempi()"> <span>s</span> ${lockHTML}</div><div class="calc-total" id="${f.id}-tot">0h 0m</div>`;
+                let isL  = !f.id.includes('dark') && !f.id.includes('bias');
+                let isDk = f.id.includes('dark');
+                let isBs = f.id.includes('bias');
+
+                let r = document.createElement('div');
+                r.style.cssText = `display:grid; grid-template-columns: 130px 60px 70px 60px 60px 60px 80px 70px; gap:5px; align-items:center; background:#222; padding:7px 8px; border-radius:5px; border-left:3px solid #555; margin-bottom:6px;`;
+                r.className = f.class;
+
+                // Checkbox + nome filtro
+                let nameCell = isL
+                    ? `<div style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="${f.id}-check" checked style="transform:scale(1.2);cursor:pointer;" onchange="calcolaTempi()"><label style="color:#fff;font-weight:bold;font-size:0.9em;cursor:pointer;" onclick="document.getElementById('${f.id}-check').click()">${f.name}</label></div>`
+                    : `<div style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:18px;"></span><label style="color:#aaa;font-size:0.9em;">${f.name}</label></div>`;
+
+                // Valore default exp: Dark = segue il primo Light, Bias = 0
+                let defExp = isDk ? `" id="${f.id}-exp" data-is-dark="1` : (isBs ? '0' : f.dE);
+                let defGain = isBs ? '0' : 'Auto';
+                let expInput = isDk
+                    ? `<input type="number" id="${f.id}-exp" data-is-dark="1" value="${f.dE}" min="0" oninput="calcolaTempi()" style="width:100%!important;text-align:center;padding:3px!important;">`
+                    : `<input type="number" id="${f.id}-exp" value="${isBs?0:f.dE}" min="0" ${isDk?'':''}oninput="calcolaTempi()" style="width:100%!important;text-align:center;padding:3px!important;">`;
+
+                // Dither: solo sui Light
+                let ditherCell = isL
+                    ? `<div style="display:flex;align-items:center;gap:3px;justify-content:center;"><input type="checkbox" id="${f.id}-dither" checked style="transform:scale(1.1);cursor:pointer;"><input type="number" id="${f.id}-dfreq" value="3" min="1" style="width:32px!important;padding:2px!important;text-align:center;" oninput="calcolaTempi()"></div>`
+                    : `<div style="color:#555;text-align:center;">—</div>`;
+
+                r.innerHTML = `
+                    ${nameCell}
+                    <input type="number" id="${f.id}-count" value="${f.dC}" min="0" oninput="calcolaTempi()" style="width:100%!important;text-align:center;padding:3px!important;">
+                    ${expInput}
+                    <input type="text" id="${f.id}-gain" value="${defGain}" style="width:100%!important;text-align:center;padding:3px!important;">
+                    <input type="text" id="${f.id}-offset" value="Auto" style="width:100%!important;text-align:center;padding:3px!important;">
+                    <select id="${f.id}-bin" style="width:100%!important;padding:3px!important;">
+                        <option value="1">1x1</option><option value="2">2x2</option><option value="3">3x3</option>
+                    </select>
+                    ${ditherCell}
+                    <div class="calc-total" id="${f.id}-tot" style="text-align:right;">0h 0m</div>
+                `;
                 c.appendChild(r);
             });
+
+            // Sincronizza Dark exp = primo Light exp (dinamico)
+            sincronizzaDarkExp();
             aggiornaFiltriNina();
+        }
+
+        function sincronizzaDarkExp() {
+            let isM = document.getElementById('sensor-type').value === 'mono';
+            let firstLightId = isM ? 'm-l' : 'c-light';
+            let darkId = isM ? 'm-dark' : 'c-dark';
+            let lightExp = document.getElementById(`${firstLightId}-exp`);
+            let darkExp  = document.getElementById(`${darkId}-exp`);
+            if (!lightExp || !darkExp) return;
+            darkExp.value = lightExp.value;
+            // Aggancia evento: quando Light cambia, aggiorna Dark
+            lightExp.addEventListener('input', () => { darkExp.value = lightExp.value; calcolaTempi(); });
         } 
 
         function aggiornaAI() {
@@ -177,12 +233,27 @@ function toggleLock(id) {
                 document.getElementById(`${f.id}-tot`).innerText = Math.floor(rs/3600)>0 ? `${Math.floor(rs/3600)}h ${Math.floor((rs%3600)/60)}m` : `${Math.floor((rs%3600)/60)}m`;
             });
 
-            let dC = document.getElementById('dither-check'), dSec = 0;
-            if (dC && dC.checked) {
-                let dF = parseInt(document.getElementById('dither-freq').value)||1, dD = parseInt(document.getElementById('dither-duration').value)||0;
-                dSec = Math.floor(tLF / dF) * dD; tSec += dSec;
-                document.getElementById('dither-tot').innerText = Math.floor(dSec/3600)>0 ? `${Math.floor(dSec/3600)}h ${Math.floor((dSec%3600)/60)}m` : `${Math.floor((dSec%3600)/60)}m`;
-            } else document.getElementById('dither-tot').innerText = `0m`;
+            // Dither per-filtro (ogni filtro ha checkbox + freq propria)
+            let dSec = 0;
+            let dD = parseInt(document.getElementById('dither-duration') ? document.getElementById('dither-duration').value : 15)||15;
+            fL.forEach(f => {
+                if (f.id.includes('dark') || f.id.includes('bias')) return;
+                let dChk = document.getElementById(`${f.id}-dither`);
+                if (dChk && dChk.checked) {
+                    let cnt = parseInt(document.getElementById(`${f.id}-count`).value)||0;
+                    let dFreq = parseInt(document.getElementById(`${f.id}-dfreq`) ? document.getElementById(`${f.id}-dfreq`).value : 3)||3;
+                    dSec += Math.floor(cnt / dFreq) * dD;
+                }
+            });
+            // Fallback: usa ancora il checkbox globale se esiste (compatibilità)
+            let dC = document.getElementById('dither-check');
+            if (dC && dC.checked && dSec === 0) {
+                let dF = parseInt(document.getElementById('dither-freq').value)||1;
+                dSec = Math.floor(tLF / dF) * dD;
+            }
+            tSec += dSec;
+            let ditherTotEl = document.getElementById('dither-tot');
+            if (ditherTotEl) ditherTotEl.innerText = Math.floor(dSec/3600)>0 ? `${Math.floor(dSec/3600)}h ${Math.floor((dSec%3600)/60)}m` : `${Math.floor((dSec%3600)/60)}m`;
 
             document.getElementById('calc-total').innerText = `${Math.floor(tSec/3600)}h ${Math.floor((tSec%3600)/60)}m`;
             let rS = aS - tSec, rD = document.getElementById('calc-residual'), wD = document.getElementById('calc-warning');
