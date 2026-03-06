@@ -4,12 +4,19 @@
         function esportaNINA() {
             if (!targetSelezionato) { alert(t("alert_planetarium")); return; }
             let doCool = document.getElementById('nina-cool').checked, tempTarget = parseFloat(document.getElementById('nina-temp').value) || -10;
-            let doSlew = document.getElementById('nina-slew').checked, doGuide = document.getElementById('nina-guide').checked, doWarm = document.getElementById('nina-warm').checked, doPark = document.getElementById('nina-park').checked, doFlip = document.getElementById('nina-flip').checked, doDither = document.getElementById('dither-check') && document.getElementById('dither-check').checked, ditherFreq = parseInt(document.getElementById('dither-freq').value) || 1;
+            let doSlew = document.getElementById('nina-slew').checked, doGuide = document.getElementById('nina-guide').checked, doWarm = document.getElementById('nina-warm').checked, doPark = document.getElementById('nina-park').checked, doFlip = document.getElementById('nina-flip').checked;
             let isMono = document.getElementById('sensor-type').value === 'mono', frameList = isMono ? framesMono : framesColor, esposizioni = [];
 
             frameList.forEach(f => {
                 let count = parseInt(document.getElementById(`${f.id}-count`).value) || 0, exp = parseInt(document.getElementById(`${f.id}-exp`).value) || 0;
-                if (count > 0 && exp > 0) { let isLight = !f.id.includes('dark') && !f.id.includes('bias'); esposizioni.push({ count: count, exp: exp, filter: (isMono && isLight) ? document.getElementById(`nina-name-${f.id}`).value.trim() : null, type: f.id.includes('dark') ? "DARK" : f.id.includes('bias') ? "FLAT" : "LIGHT" }); }
+                if (count > 0 && exp > 0) {
+                    let isLight = !f.id.includes('dark') && !f.id.includes('bias');
+                    let dithChk = document.getElementById(`${f.id}-dither`);
+                    let dithFrq = document.getElementById(`${f.id}-dfreq`);
+                    let doDither = isLight && dithChk ? dithChk.checked : false;
+                    let ditherFreq = parseInt(dithFrq ? dithFrq.value : 3) || 3;
+                    esposizioni.push({ count: count, exp: exp, filter: (isMono && isLight) ? document.getElementById(`nina-name-${f.id}`).value.trim() : null, type: f.id.includes('dark') ? "DARK" : f.id.includes('bias') ? "FLAT" : "LIGHT", doDither: doDither, ditherFreq: ditherFreq });
+                }
             });
             if (esposizioni.length === 0) { alert(t("alert_noseq")); return; }
 
@@ -33,8 +40,8 @@
                 if (expo.filter) blockItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.FilterWheel.SwitchFilter, NINA.Sequencer", "Filter": { "$id": nextId(), "$type": "NINA.Core.Model.Equipment.FilterInfo, NINA.Core", "_name": expo.filter, "_focusOffset": 0, "_position": 0, "_autoFocusExposureTime": -1.0, "_autoFocusFilter": false }, "Parent": {"$ref": blockId}, "ErrorBehavior": 0, "Attempts": 1 });
                 blockItems.push({ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Imaging.TakeExposure, NINA.Sequencer", "ExposureTime": expo.exp, "Gain": -1, "Offset": -1, "Binning": { "$id": nextId(), "$type": "NINA.Core.Model.Equipment.BinningMode, NINA.Core", "X": 1, "Y": 1 }, "ImageType": expo.type, "ExposureCount": expo.count, "Parent": {"$ref": blockId}, "ErrorBehavior": 0, "Attempts": 1 });
                 let blockTriggers = [];
-                if (doDither && expo.type === "LIGHT" && ditherFreq > 0) {
-                    let trigRunnerId = nextId(); blockTriggers.push({ "$id": nextId(), "$type": "NINA.Sequencer.Trigger.Guider.DitherAfterExposures, NINA.Sequencer", "AfterExposures": ditherFreq, "Parent": {"$ref": blockId}, "TriggerRunner": { "$id": trigRunnerId, "$type": "NINA.Sequencer.Container.SequentialContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", [{ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Guider.Dither, NINA.Sequencer", "Parent": {"$ref": trigRunnerId}, "ErrorBehavior": 0, "Attempts": 1 }]), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", []), "Parent": null, "ErrorBehavior": 0, "Attempts": 1 } });
+                if (expo.doDither && expo.type === "LIGHT" && expo.ditherFreq > 0) {
+                    let trigRunnerId = nextId(); blockTriggers.push({ "$id": nextId(), "$type": "NINA.Sequencer.Trigger.Guider.DitherAfterExposures, NINA.Sequencer", "AfterExposures": expo.ditherFreq, "Parent": {"$ref": blockId}, "TriggerRunner": { "$id": trigRunnerId, "$type": "NINA.Sequencer.Container.SequentialContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", [{ "$id": nextId(), "$type": "NINA.Sequencer.SequenceItem.Guider.Dither, NINA.Sequencer", "Parent": {"$ref": trigRunnerId}, "ErrorBehavior": 0, "Attempts": 1 }]), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", []), "Parent": null, "ErrorBehavior": 0, "Attempts": 1 } });
                 }
                 imagingItems.push({ "$id": blockId, "$type": "NINA.Sequencer.Container.SequentialContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Name": expo.filter ? `Ripresa ${expo.filter}` : `Ripresa ${expo.type}`, "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition", []), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem", blockItems), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger", blockTriggers), "Parent": {"$ref": imagingContainerId}, "ErrorBehavior": 0, "Attempts": 1 });
             });
@@ -95,8 +102,8 @@
 
             if (!hasPoses) { alert(t("alert_noseq")); return; }
 
-            let dC = document.getElementById('dither-check').checked;
-            let dFreq = document.getElementById('dither-freq').value;
+            let anyDither = frameList.some(f => { let chk = document.getElementById(`${f.id}-dither`); return chk && chk.checked; });
+            let dFreq = (() => { let frqs = frameList.map(f => { let el = document.getElementById(`${f.id}-dfreq`); return el ? parseInt(el.value)||3 : null; }).filter(v => v !== null); return frqs.length ? Math.min(...frqs) : 3; })();
 
             // Traduzioni integrate al volo senza toccare il dizionario in alto
             let introTxt = lang === 'it' ? "Il file <b>.csv</b> con le coordinate millimetriche è stato scaricato.<br>Importalo sul tablet e ricopia <b>manualmente</b> questo piano di scatto calcolato dall'AI nel Plan Mode di ASIAIR:" :
@@ -105,7 +112,7 @@
                                            "具有精确坐标的 <b>.csv</b> 文件已下载。<br>将其导入平板电脑，然后在 ASIAIR 的计划模式下<b>手动</b>复制此 AI 计算的曝光计划：";
 
             let dithTxt = lang === 'it' ? "Dithering" : lang === 'en' ? "Dithering" : lang === 'es' ? "Dithering" : "抖动";
-            let dithVal = dC ? (lang === 'it' ? `Ogni ${dFreq} scatti` : lang === 'en' ? `Every ${dFreq} frames` : lang === 'es' ? `Cada ${dFreq} tomas` : `每 ${dFreq} 帧`) : "OFF";
+            let dithVal = anyDither ? (lang === 'it' ? `Ogni ${dFreq} scatti` : lang === 'en' ? `Every ${dFreq} frames` : lang === 'es' ? `Cada ${dFreq} tomas` : `每 ${dFreq} 帧`) : "OFF";
             let rotVal = document.getElementById('fov-rotation').value || "0";
 
             let html = `

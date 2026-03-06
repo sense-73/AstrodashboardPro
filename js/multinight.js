@@ -145,9 +145,7 @@ function aggiungiNotte() {
             let isM = document.getElementById('sensor-type').value === 'mono';
             let possibili = isM ? ['m-l','m-r','m-g','m-b','m-ha','m-oiii','m-sii'] : ['c-light'];
             
-            let ditherOverheadSecs = 15; // Stimiamo 15 sec per il dither
-            let usaDither = document.getElementById('dither-check') && document.getElementById('dither-check').checked;
-            let dFreq = parseInt(document.getElementById('dither-freq').value) || 1;
+            let ditherOverheadSecs = parseInt(document.getElementById('dither-duration') ? document.getElementById('dither-duration').value : 15) || 15;
 
             let totalSecs = 0;
 
@@ -160,7 +158,10 @@ function aggiungiNotte() {
                     
                     if (count > 0 && exp > 0) {
                         let tempoPose = count * exp;
-                        let tempoDither = (usaDither && dFreq > 0) ? Math.floor(count / dFreq) * ditherOverheadSecs : 0;
+                        let dChkF = document.getElementById(`${pid}-dither`);
+                        let usaDitherF = dChkF ? dChkF.checked : false;
+                        let dFreqF = parseInt((document.getElementById(`${pid}-dfreq`) || {}).value) || 3;
+                        let tempoDither = (usaDitherF && dFreqF > 0) ? Math.floor(count / dFreqF) * ditherOverheadSecs : 0;
                         totalSecs += (tempoPose + tempoDither);
                     }
                 }
@@ -272,9 +273,9 @@ function aggiungiNotte() {
                     doDither = dChk ? dChk.checked : false;
                     dFreq    = parseInt((document.getElementById(`pro-${pid}-dfreq`) || {}).value) || 3;
                 } else {
-                    let dChk = document.getElementById('dither-check');
+                    let dChk = document.getElementById(`${pid}-dither`);
                     doDither = dChk ? dChk.checked : false;
-                    dFreq    = parseInt(document.getElementById('dither-freq').value) || 1;
+                    dFreq    = parseInt((document.getElementById(`${pid}-dfreq`) || {}).value) || 3;
                 }
 
                 esposizioni.push({ count, exp, filter: ninaName, type: "LIGHT", gain, offset, bin, doDither, dFreq });
@@ -374,13 +375,13 @@ function aggiungiNotte() {
             let totalTimeStr = formatTime(aS);
             let panelTimeStr = formatTime(aS / panels);
             
-            let dC = document.getElementById('dither-check').checked;
-            let dFreq = document.getElementById('dither-freq').value;
+            let anyDitherMn = frameList.some(f => { let chk = document.getElementById(`${f.id}-dither`); return chk && chk.checked; });
+            let dFreqMn = (() => { let frqs = frameList.map(f => { let el = document.getElementById(`${f.id}-dfreq`); return el ? parseInt(el.value)||3 : null; }).filter(v => v !== null); return frqs.length ? Math.min(...frqs) : 3; })();
 
             let planHtml = '';
             let rawText = `=== DOSSIER MOSAICO ===\nTARGET: ${getLocalizedName(targetSelezionato)}\n`;
             rawText += `PANNELLI: ${mx}x${my} (${panels} totali)\nSOVRAPPOSIZIONE: ${overlap}%\nTEMPO TOTALE: ${totalTimeStr}\n\n`;
-            rawText += `--- STRATEGIA SINGOLO PANNELLO ---\nTempo max a pannello: ${panelTimeStr}\nDithering: ${dC ? 'Ogni '+dFreq+' scatti' : 'Disattivato'}\n\n--- PIANO DI SCATTO ---\n`;
+            rawText += `--- STRATEGIA SINGOLO PANNELLO ---\nTempo max a pannello: ${panelTimeStr}\nDithering: ${anyDitherMn ? 'Ogni '+dFreqMn+' scatti' : 'Disattivato'}\n\n--- PIANO DI SCATTO ---\n`;
 
             let hasPoses = false;
             frameList.forEach(f => {
@@ -407,7 +408,7 @@ function aggiungiNotte() {
                 <div class="report-section">
                     <h4>${t("report_strategy")}</h4>
                     <div class="report-line"><span style="color:#44ff44;">Tempo a Pannello:</span><b style="color:#44ff44;">${panelTimeStr}</b></div>
-                    <div class="report-line"><span>Dithering:</span><b>${dC ? dFreq+' frames' : 'Off'}</b></div>
+                    <div class="report-line"><span>Dithering:</span><b>${anyDitherMn ? dFreqMn+' frames' : 'Off'}</b></div>
                 </div>
                 <div class="report-section">
                     <h4>${t("report_plan")}</h4>

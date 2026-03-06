@@ -41,11 +41,15 @@ function toggleLock(id) {
                     : `<div style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:18px;"></span><label style="color:#aaa;font-size:0.9em;">${f.name}</label></div>`;
 
                 // Valore default exp: Dark = segue il primo Light, Bias = 0
-                let defExp = isDk ? `" id="${f.id}-exp" data-is-dark="1` : (isBs ? '0' : f.dE);
                 let defGain = isBs ? '0' : 'Auto';
                 let expInput = isDk
                     ? `<input type="number" id="${f.id}-exp" data-is-dark="1" value="${f.dE}" min="0" oninput="calcolaTempi()" style="width:100%!important;text-align:center;padding:3px!important;">`
-                    : `<input type="number" id="${f.id}-exp" value="${isBs?0:f.dE}" min="0" ${isDk?'':''}oninput="calcolaTempi()" style="width:100%!important;text-align:center;padding:3px!important;">`;
+                    : isBs
+                    ? `<input type="number" id="${f.id}-exp" value="0" min="0" oninput="calcolaTempi()" style="width:100%!important;text-align:center;padding:3px!important;">`
+                    : `<div style="display:flex;align-items:center;gap:3px;">
+                           <input type="number" id="${f.id}-exp" value="${f.dE}" min="0" oninput="sincronizzaDarkDaLight();calcolaTempi()" style="width:48px!important;text-align:center;padding:3px!important;flex:1;">
+                           <span id="${f.id}-lock" onclick="toggleLock('${f.id}')" title="Blocca secondi" style="cursor:pointer;font-size:1.1em;opacity:0.4;user-select:none;line-height:1;">🔓</span>
+                       </div>`;
 
                 // Dither: solo sui Light
                 let ditherCell = isL
@@ -82,7 +86,16 @@ function toggleLock(id) {
             darkExp.value = lightExp.value;
             // Aggancia evento: quando Light cambia, aggiorna Dark
             lightExp.addEventListener('input', () => { darkExp.value = lightExp.value; calcolaTempi(); });
-        } 
+        }
+
+        function sincronizzaDarkDaLight() {
+            let isM = document.getElementById('sensor-type').value === 'mono';
+            let firstLightId = isM ? 'm-l' : 'c-light';
+            let darkId = isM ? 'm-dark' : 'c-dark';
+            let lightExp = document.getElementById(`${firstLightId}-exp`);
+            let darkExp  = document.getElementById(`${darkId}-exp`);
+            if (lightExp && darkExp) darkExp.value = lightExp.value;
+        }
 
         function aggiornaAI() {
             if(!targetSelezionato) return;
@@ -245,12 +258,6 @@ function toggleLock(id) {
                     dSec += Math.floor(cnt / dFreq) * dD;
                 }
             });
-            // Fallback: usa ancora il checkbox globale se esiste (compatibilità)
-            let dC = document.getElementById('dither-check');
-            if (dC && dC.checked && dSec === 0) {
-                let dF = parseInt(document.getElementById('dither-freq').value)||1;
-                dSec = Math.floor(tLF / dF) * dD;
-            }
             tSec += dSec;
             let ditherTotEl = document.getElementById('dither-tot');
             if (ditherTotEl) ditherTotEl.innerText = Math.floor(dSec/3600)>0 ? `${Math.floor(dSec/3600)}h ${Math.floor((dSec%3600)/60)}m` : `${Math.floor((dSec%3600)/60)}m`;
@@ -294,7 +301,7 @@ function toggleLock(id) {
             }
 
             let ty = targetSelezionato.type ? targetSelezionato.type.toLowerCase() : "", isA = ty.includes('ammasso')||ty.includes('cluster'), isG = ty.includes('galassia')||ty.includes('galaxy')||ty.includes('riflessione')||ty.includes('stella')||ty.includes('star');
-            let dC = document.getElementById('dither-check'), uD = dC && dC.checked, dF = parseInt(document.getElementById('dither-freq').value)||1, dD = parseInt(document.getElementById('dither-duration').value)||0;
+            let dD = parseInt(document.getElementById('dither-duration').value)||0;
 
             aL.forEach(f => {
                 let eS = 180;
@@ -303,12 +310,18 @@ function toggleLock(id) {
                 // --- LOGICA DEL LUCCHETTO ---
                 let lockEl = document.getElementById(`${f.id}-lock`);
                 if (lockEl && lockEl.classList.contains('locked')) {
-                    eS = parseInt(document.getElementById(`${f.id}-exp`).value) || eS; // Forza il valore scelto dall'utente!
+                    eS = parseInt(document.getElementById(`${f.id}-exp`).value) || eS;
                 }
-                
+
+                // Dither per-filtro: usa checkbox e freq individuali
+                let dChkF = document.getElementById(`${f.id}-dither`);
+                let uD = dChkF && dChkF.checked;
+                let dFrqEl = document.getElementById(`${f.id}-dfreq`);
+                let dF = parseInt(dFrqEl ? dFrqEl.value : 3)||3;
                 let eeS = eS + (uD && dF > 0 ? dD / dF : 0);
                 document.getElementById(`${f.id}-exp`).value = eS; document.getElementById(`${f.id}-count`).value = Math.floor((rS * w[f.id]) / eeS);
             });
+            sincronizzaDarkDaLight();
 
             fL.forEach(f => { 
                 if (!f.id.includes('dark') && !f.id.includes('bias')) { 

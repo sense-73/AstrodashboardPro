@@ -324,49 +324,56 @@
             </div>
         </div>
 
-        <div class="session-grid">
-            <div class="panel">
-                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
-                    <h3 style="margin: 0;"><span data-i18n="seq_setup">Impostazione Sequenza</span> <span class="info-icon" onmouseenter="mostraTooltip(this, 'info_seq_opt')" onmouseleave="nascondiTooltip()">ℹ️</span></h3>
-                    <span id="mosaic-total-badge" style="display:none; background: #bb86fc; color: #121212; padding: 4px 10px; border-radius: 4px; font-size: 0.9em; font-weight: bold;"></span>
-                </div>
-                
-                <div class="smart-button-container">
-                    <button class="btn-smart" onclick="generaSequenzaOttimale()" data-i18n="gen_seq_btn">✨ Genera Sequenza Ottimale</button>
-                </div>
-
-                <div style="display:flex; justify-content: space-between; margin-bottom: 10px; padding:0 10px; font-size:0.8em; color:#aaa;">
-                    <span style="width:140px;" data-i18n="use_frame">Usa | Frame</span>
-                    <span data-i18n="poses_sec">Pose x Sec.</span>
-                    <span style="width:80px; text-align:right;" data-i18n="total">Totale</span>
-                </div>
-                
-                <div id="frames-container"></div>
-
-                <div class="calc-row" style="border-left-color: #ffaa00; margin-top: 10px; background: #2a2a2a;">
-                    <div style="display:flex; align-items:center; width: 140px;">
-                        <input type="checkbox" id="dither-check" checked style="margin-right:10px; transform: scale(1.2); cursor: pointer;" onchange="calcolaTempi()">
-                        <label style="cursor: pointer; color: #ffaa00;" onclick="document.getElementById('dither-check').click()">Dither</label>
-                        <span class="info-icon" style="margin-left: 8px; color: #ffaa00; font-size: 1.1em;" onmouseenter="mostraTooltip(this, 'info_dither')" onmouseleave="nascondiTooltip()">ℹ️</span>
-                    </div>
-                    <div class="calc-inputs" style="font-size: 0.85em; color: #aaa; display: flex; align-items: center; gap: 6px;">
-                        <span data-i18n="every">Ogni</span> <input type="number" id="dither-freq" value="3" min="1" oninput="calcolaTempi()" style="width: 45px !important; padding: 5px !important; text-align: center;">
-                        t <input type="number" id="dither-duration" value="15" min="0" oninput="calcolaTempi()" style="width: 45px !important; padding: 5px !important; text-align: center;"> s
-                    </div>
-                    <div class="calc-total" id="dither-tot" style="color: #ffaa00;">0m</div>
-                </div>
+        <!-- ═══ RIGA TEMPI (unica riga orizzontale) ═══ -->
+        <div style="display: flex; gap: 15px; margin-top: 20px; flex-wrap: wrap;">
+            <div class="summary-box" style="flex: 1; min-width: 150px; text-align: center; margin-bottom: 0;">
+                <h4 data-i18n="avail_window">Finestra Disponibile</h4>
+                <span id="calc-available">--h --m</span>
             </div>
-
-            <div class="time-summary">
-                <div class="summary-box"><h4 data-i18n="avail_window">Finestra Disponibile</h4><span id="calc-available">--h --m</span></div>
-                <div class="summary-box"><h4 data-i18n="acq_time">Tempo Acquisizione</h4><span id="calc-total" style="color: #bb86fc;">--h --m</span></div>
-                <div class="summary-box" style="border-color: #444; background-color: #222;">
-                    <h4 data-i18n="res_time">Tempo Residuo</h4><span id="calc-residual" class="text-green">--h --m</span>
-                    <p id="calc-warning" style="margin: 5px 0 0 0; font-size: 0.85em; display: none;" class="text-red" data-i18n="time_overflow">⚠️ Sforamento tempo!</p>
-                </div>
-                <div id="ai-advisor-panel" style="display:none; text-align:left; background:#1a1a1a; padding:15px; border-radius:5px; border:1px solid #333; margin-top:10px;"></div>
+            <div class="summary-box" style="flex: 1; min-width: 150px; text-align: center; margin-bottom: 0;">
+                <h4 data-i18n="acq_time">Tempo Acquisizione</h4>
+                <span id="calc-total" style="color: #bb86fc;">--h --m</span>
+            </div>
+            <div class="summary-box" style="flex: 1; min-width: 150px; text-align: center; border-color: #444; background-color: #222; margin-bottom: 0;">
+                <h4 data-i18n="res_time">Tempo Residuo</h4>
+                <span id="calc-residual" class="text-green">--h --m</span>
+                <p id="calc-warning" style="margin: 5px 0 0 0; font-size: 0.85em; display: none;" class="text-red" data-i18n="time_overflow">⚠️ Sforamento tempo!</p>
             </div>
         </div>
+
+        <!-- ═══ IMPOSTAZIONE SEQUENZA ═══ -->
+        <div class="panel" style="margin-top: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                <h3 style="margin: 0;"><span data-i18n="seq_setup">Impostazione Sequenza</span> <span class="info-icon" onmouseenter="mostraTooltip(this, 'info_seq_opt')" onmouseleave="nascondiTooltip()">ℹ️</span></h3>
+                <span id="mosaic-total-badge" style="display:none; background: #bb86fc; color: #121212; padding: 4px 10px; border-radius: 4px; font-size: 0.9em; font-weight: bold;"></span>
+            </div>
+            
+            <div class="smart-button-container">
+                <button class="btn-smart" onclick="generaSequenzaOttimale()" data-i18n="gen_seq_btn">✨ Genera Sequenza Ottimale</button>
+            </div>
+
+            <div style="display:flex; justify-content: space-between; margin-bottom: 10px; padding:0 10px; font-size:0.8em; color:#aaa;">
+                <span style="width:140px;" data-i18n="use_frame">Usa | Frame</span>
+                <span data-i18n="poses_sec">Pose x Sec.</span>
+                <span style="width:80px; text-align:right;" data-i18n="total">Totale</span>
+            </div>
+            
+            <div id="frames-container"></div>
+
+            <div class="calc-row" style="border-left-color: #ffaa00; margin-top: 10px; background: #2a2a2a;">
+                <div style="display:flex; align-items:center; width: 140px;">
+                    <label style="color: #ffaa00;">Impostazione tempo dither</label>
+                    <span class="info-icon" style="margin-left: 8px; color: #ffaa00; font-size: 1.1em;" onmouseenter="mostraTooltip(this, 'info_dither')" onmouseleave="nascondiTooltip()">ℹ️</span>
+                </div>
+                <div class="calc-inputs" style="font-size: 0.85em; color: #aaa; display: flex; align-items: center; gap: 6px;">
+                    <input type="number" id="dither-duration" value="15" min="0" oninput="calcolaTempi()" style="width: 45px !important; padding: 5px !important; text-align: center;"> s
+                </div>
+                <div class="calc-total" id="dither-tot" style="color: #ffaa00;">0m</div>
+            </div>
+        </div>
+
+        <!-- ═══ ANALISI STRATEGICA ═══ -->
+        <div id="ai-advisor-panel" style="display:none; text-align:left; background:#1a1a1a; padding:15px; border-radius:5px; border:1px solid #333; margin-top: 15px;"></div>
 
         <div class="panel" style="margin-top: 20px; border: 1px solid #bb86fc; background: linear-gradient(180deg, #1a1a1a 0%, #121212 100%);">
             <h3><span style="color: #bb86fc;" data-i18n="nina_export_title">🚀 Esportazione N.I.N.A. Advanced Sequencer</span> <span class="info-icon" onmouseenter="mostraTooltip(this, 'info_nina')" onmouseleave="nascondiTooltip()">ℹ️</span></h3>
