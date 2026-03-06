@@ -262,11 +262,11 @@
                     <div class="zoom-control" style="display: flex; flex-direction: column; gap: 10px; padding: 15px; background: #2a2a2a; border-radius: 0 0 8px 8px;">
                         <div style="display: flex; align-items: center; width: 100%;">
                             <label style="min-width: 100px; margin: 0; color: #aaa; font-weight: bold; text-align: left;">🔍 Zoom:</label>
-                            <input type="range" id="fov-zoom" min="20" max="500" value="100" style="flex: 1; margin: 0 10px; cursor: pointer;" oninput="aggiornaFOV()">
+                            <input type="range" id="fov-zoom" min="20" max="500" value="100" style="flex: 1; margin: 0 10px; cursor: pointer; touch-action: none;" oninput="aggiornaFOV()">
                             <div style="width: 65px;"></div> </div>
                         <div style="display: flex; align-items: center; width: 100%;">
                             <label style="min-width: 100px; margin: 0; color: #bb86fc; font-weight: bold; text-align: left;" data-i18n="rotation">Rotazione:</label>
-                            <input type="range" id="fov-rotation" min="0" max="360" value="0" style="flex: 1; margin: 0 10px; cursor: pointer;" oninput="document.getElementById('fov-rotation-val').value = this.value; aggiornaFOV();">
+                            <input type="range" id="fov-rotation" min="0" max="360" value="0" style="flex: 1; margin: 0 10px; cursor: pointer; touch-action: none;" oninput="document.getElementById('fov-rotation-val').value = this.value; aggiornaFOV();">
                             <div style="width: 65px; display: flex; align-items: center; justify-content: flex-end;">
                                 <input type="number" id="fov-rotation-val" value="0" min="0" max="360" style="width: 50px !important; padding: 4px !important; text-align: center; border: 1px solid #555; background: #111; color: #fff; border-radius: 4px;" oninput="document.getElementById('fov-rotation').value = this.value; aggiornaFOV();">
                                 <span style="margin-left: 5px; color: #aaa; font-weight: bold;">°</span>
@@ -920,7 +920,7 @@
             </div>
         </div>
     </div>
-    <div class="mobile-nav-fab" style="display: none;">
+    <div class="mobile-nav-fab">
         <div class="nav-fab-btn" onclick="scorriSu()">▲</div>
         <div class="nav-fab-btn" onclick="scorriGiu()">▼</div>
     </div>
