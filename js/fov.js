@@ -105,22 +105,26 @@
             else { document.getElementById('time-start').value = ft(nS); document.getElementById('time-end').value = ft(nE); }
 
             // Generazione Mappa Stellare
+            // setTimeout necessario: AladinLite v3 richiede che il div abbia
+            // dimensioni reali prima dell'init. Il delay lascia al browser
+            // il tempo di renderizzare planning-view prima di procedere.
             if (!aladinSkyMap) {
-                aladinSkyMap = A.aladin('#aladin-lite-div', {
-                    survey: "P/DSS2/color",
-                    fov: 2,
-                    target: (targetSelezionato.ra * 15) + " " + targetSelezionato.dec,
-                    showReticle: false,
-                    showZoomControl: false,
-                    showFullscreenControl: false,
-                    showLayersControl: false,
-                    showGotoControl: false
-                });
-                // Listener drag: aggiorna coordinate centro FOV in tempo reale
-                aladinSkyMap.on('positionChanged', function(pos) {
-                    aggiornaCoorditateFOV(pos.ra, pos.dec);
-                });
-                setTimeout(() => { toggleMosaic(); }, 300);
+                setTimeout(() => {
+                    aladinSkyMap = A.aladin('#aladin-lite-div', {
+                        survey: "P/DSS2/color",
+                        fov: 2,
+                        target: (targetSelezionato.ra * 15) + " " + targetSelezionato.dec,
+                        showReticle: false,
+                        showZoomControl: false,
+                        showFullscreenControl: false,
+                        showLayersControl: false,
+                        showGotoControl: false
+                    });
+                    aladinSkyMap.on('positionChanged', function(pos) {
+                        aggiornaCoorditateFOV(pos.ra, pos.dec);
+                    });
+                    setTimeout(() => { toggleMosaic(); }, 300);
+                }, 50);
             } else {
                 setTimeout(() => {
                     fovCenterOverride = null;

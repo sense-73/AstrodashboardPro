@@ -2,7 +2,7 @@
 // Strategia: Cache First per file statici, Network First per API live
 // ============================================================
 
-const CACHE_NAME = 'astrodash-v5-7';
+const CACHE_NAME = 'astrodash-v5-8';
 
 // File statici dell'app da salvare in cache al primo avvio
 const FILES_TO_CACHE = [
