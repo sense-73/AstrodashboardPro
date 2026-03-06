@@ -105,26 +105,23 @@
             else { document.getElementById('time-start').value = ft(nS); document.getElementById('time-end').value = ft(nE); }
 
             // Generazione Mappa Stellare
-            // setTimeout necessario: AladinLite v3 richiede che il div abbia
-            // dimensioni reali prima dell'init. Il delay lascia al browser
-            // il tempo di renderizzare planning-view prima di procedere.
             if (!aladinSkyMap) {
-                setTimeout(() => {
-                    aladinSkyMap = A.aladin('#aladin-lite-div', {
-                        survey: "P/DSS2/color",
-                        fov: 2,
-                        target: (targetSelezionato.ra * 15) + " " + targetSelezionato.dec,
-                        showReticle: false,
-                        showZoomControl: false,
-                        showFullscreenControl: false,
-                        showLayersControl: false,
-                        showGotoControl: false
-                    });
-                    aladinSkyMap.on('positionChanged', function(pos) {
-                        aggiornaCoorditateFOV(pos.ra, pos.dec);
-                    });
-                    setTimeout(() => { toggleMosaic(); }, 300);
-                }, 50);
+                aladinSkyMap = A.aladin('#aladin-lite-div', {
+                    survey: "P/DSS2/color",
+                    fov: 2,
+                    target: (targetSelezionato.ra * 15) + " " + targetSelezionato.dec,
+                    showReticle: false,
+                    showZoomControl: false,
+                    showFullscreenControl: false,
+                    showLayersControl: false,
+                    showGotoControl: false,
+                    showFrame: false,
+                    showCoordinatesGrid: false
+                });
+                aladinSkyMap.on('positionChanged', function(pos) {
+                    aggiornaCoordinateFOV(pos.ra, pos.dec);
+                });
+                setTimeout(() => { toggleMosaic(); }, 300);
             } else {
                 setTimeout(() => {
                     fovCenterOverride = null;
@@ -193,7 +190,7 @@
             let maxFov = Math.max(totFovW, totFovH);
             let cw = document.getElementById('fov-simulator-container').clientWidth;
             let cm = 2.5 / (parseFloat(document.getElementById('fov-zoom').value) / 100); 
-            if (aladinSkyMap) { aladinSkyMap.setFov(Math.max(0.01, maxFov * cm)); }
+            if (aladinSkyMap) { aladinSkyMap.setFoV(Math.max(0.01, maxFov * cm)); }
 
             let fovContainer = document.getElementById('fov-rectangle');
             fovContainer.innerHTML = ''; 
@@ -294,7 +291,7 @@
             return `${neg ? '-' : '+'}${String(d).padStart(2,'0')}° ${String(m).padStart(2,'0')}′ ${String(s).padStart(2,'0')}″`;
         }
 
-        function aggiornaCoorditateFOV(raDeg, decDeg) {
+        function aggiornaCoordinateFOV(raDeg, decDeg) {
             // raDeg e decDeg in gradi decimali (come restituisce Aladin positionChanged)
             let raEl  = document.getElementById('fov-ra-display');
             let decEl = document.getElementById('fov-dec-display');

@@ -110,6 +110,10 @@
         @media (max-width: 768px) { .planning-grid { grid-template-columns: 1fr; } }
         .fov-simulator-container { background-color: #000; height: 400px; border-radius: 8px; border: 2px solid #444; position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center;}
         #aladin-lite-div { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;}
+        #aladin-lite-div .aladin-frame-choice,
+        #aladin-lite-div .aladin-current-position,
+        #aladin-lite-div .aladin-fov-box,
+        #aladin-lite-div .aladin-location { display: none !important; }
         #fov-rectangle { position: absolute; pointer-events: none; transition: width 0.1s, height 0.1s; z-index: 1000;}
         .center-cross { position: absolute; color: rgba(68, 255, 68, 0.7); font-size: 1.5em; pointer-events: none; z-index: 1000;}
         .chart-container { background-color: #1e1e1e; padding: 15px; border-radius: 8px; height: 160px; margin-top: 15px; box-shadow: inset 0 0 10px rgba(0,0,0,0.5);}
@@ -182,7 +186,9 @@
         .guide-section li { margin-bottom: 12px; }
         .guide-section strong { color: #fff; }
         .filosofia-box { background: rgba(187,134,252,0.1); padding: 20px; border-left: 4px solid #bb86fc; border-radius: 4px; margin-bottom: 30px;}
-        
+        .mobile-nav-fab { display: none; }
+        input[type="range"] { touch-action: none; }
+
         @media (max-width: 768px) {
             .main-header { display: flex !important; flex-direction: column; gap: 15px; align-items: center; justify-content: center; text-align: center; padding: 20px 15px; width: 100%; box-sizing: border-box; }
             .main-header > div { justify-self: center !important; width: 100%; display: flex; flex-direction: column; align-items: center; }
