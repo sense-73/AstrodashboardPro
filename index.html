@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AstroDashboard v5.5 - Global Edition</title>
+    <title>AstroDashboard v5.6 - Global Edition</title>
     
     <link rel="manifest" href="manifest.json?v=3">
     <meta name="theme-color" content="#121212">
@@ -17,9 +17,7 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/suncalc/1.9.0/suncalc.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="https://aladin.cds.unistra.fr/AladinLite/api/v2/latest/aladin.min.css" />
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://aladin.cds.unistra.fr/AladinLite/api/v2/latest/aladin.min.js"></script>
+    <script src="https://aladin.cds.unistra.fr/AladinLite/api/v3/latest/aladin.js" charset="utf-8"></script>
 
     <script src="database.js"></script>
     <link rel="stylesheet" href="css/style.css">
@@ -49,7 +47,7 @@
         </div>
         <div class="author-section">
             <div>
-                <p style="margin: 0 0 6px 0; font-size: 0.9em; color: #fff; font-weight: bold;">v5.5.0-Global</p>
+                <p style="margin: 0 0 6px 0; font-size: 0.9em; color: #fff; font-weight: bold;">v5.6.0-Global</p>
                 <button class="btn-guide" onclick="apriGuida()" style="margin: 0;"><span data-i18n="manual_btn">📖 Apri Manuale</span></button>
             </div>
             <img src="logo astro enrico sfondo.png" alt="Enrico Salis Logo" style="height: 60px; object-fit: contain; border-radius: 5px;">
@@ -278,15 +276,15 @@
                         <!-- COORDINATE CENTRO FOV: si aggiornano live durante il drag -->
                         <div style="display:flex; align-items:center; justify-content:space-between; padding: 8px 10px; background:#1a1a1a; border-radius:6px; border:1px solid #333; margin-top:4px; gap:10px;">
                             <div>
-                                <div style="font-size:0.68em; color:#666; text-transform:uppercase; letter-spacing:1px; margin-bottom:3px;">📍 Centro FOV</div>
+                                <div data-i18n="fov_center_title" style="font-size:0.68em; color:#666; text-transform:uppercase; letter-spacing:1px; margin-bottom:3px;">📍 Centro FOV</div>
                                 <div style="display:flex; gap:14px; flex-wrap:wrap;">
-                                    <span style="font-size:0.82em; color:#aaa;">AR: <b id="fov-ra-display" style="color:#44ff44; font-family:monospace; letter-spacing:0.5px;">--h --m --s</b></span>
-                                    <span style="font-size:0.82em; color:#aaa;">Dec: <b id="fov-dec-display" style="color:#44ff44; font-family:monospace; letter-spacing:0.5px;">--° --′ --″</b></span>
+                                    <span style="font-size:0.82em; color:#aaa;"><span data-i18n="fov_ra_label">AR:</span> <b id="fov-ra-display" style="color:#44ff44; font-family:monospace; letter-spacing:0.5px;">--h --m --s</b></span>
+                                    <span style="font-size:0.82em; color:#aaa;"><span data-i18n="fov_dec_label">Dec:</span> <b id="fov-dec-display" style="color:#44ff44; font-family:monospace; letter-spacing:0.5px;">--° --′ --″</b></span>
                                 </div>
                             </div>
                             <div style="display:flex; align-items:center; gap:8px;">
                                 <span id="fov-offset-badge" style="display:none; font-size:0.7em; background:rgba(255,170,0,0.12); color:#ffaa00; border:1px solid rgba(255,170,0,0.4); padding:2px 8px; border-radius:10px; white-space:nowrap;">⚠ offset</span>
-                                <button onclick="resetFovCenter()" title="Riporta FOV al centro del target" style="background:transparent; border:1px solid #444; color:#888; padding:2px 9px; border-radius:4px; cursor:pointer; font-size:0.75em; transition:all 0.2s;" onmouseover="this.style.borderColor='#bb86fc';this.style.color='#bb86fc'" onmouseout="this.style.borderColor='#444';this.style.color='#888'">⌖ Reset</button>
+                                <button onclick="resetFovCenter()" data-i18n="fov_reset_btn" data-i18n-title="fov_reset_title" title="Riporta FOV al centro del target" style="background:transparent; border:1px solid #444; color:#888; padding:2px 9px; border-radius:4px; cursor:pointer; font-size:0.75em; transition:all 0.2s;" onmouseover="this.style.borderColor='#bb86fc';this.style.color='#bb86fc'" onmouseout="this.style.borderColor='#444';this.style.color='#888'">⌖ Reset</button>
                             </div>
                         </div>
                     </div>

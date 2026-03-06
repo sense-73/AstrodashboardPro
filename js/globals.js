@@ -2,7 +2,8 @@
 // ============================================================
 
 // ── Stato applicazione ────────────────────────────────────────
-let latCorrente = 46.062, lonCorrente = 13.235;
+let _savedLat = parseFloat(localStorage.getItem('ad_lat')), _savedLon = parseFloat(localStorage.getItem('ad_lon'));
+let latCorrente = (!isNaN(_savedLat) ? _savedLat : 46.062), lonCorrente = (!isNaN(_savedLon) ? _savedLon : 13.235);
 let datiMeteo = null;
 let indicePartenza = 0;
 let chartAltezza = null;

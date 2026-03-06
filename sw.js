@@ -1,18 +1,87 @@
-const CACHE_NAME = 'astrodash-v5-5';
+// sw.js — Service Worker AstroDashboard PRO
+// Strategia: Cache First per file statici, Network First per API live
+// ============================================================
 
-// Installa il service worker
+const CACHE_NAME = 'astrodash-v5-6';
+
+// File statici dell'app da salvare in cache al primo avvio
+const FILES_TO_CACHE = [
+    './',
+    './index.html',
+    './css/style.css',
+    './database.js',
+    './js/i18n.js',
+    './js/globals.js',
+    './js/core.js',
+    './js/equipment.js',
+    './js/weather.js',
+    './js/planetarium.js',
+    './js/fov.js',
+    './js/smart.js',
+    './js/pro.js',
+    './js/export.js',
+    './js/multinight.js',
+    './manifest.json'
+];
+
+// Domini API live: NON vanno mai in cache (dati sempre freschi)
+const NETWORK_ONLY_DOMAINS = [
+    'open-meteo.com',              // Meteo
+    'nominatim.openstreetmap.org', // Geocoding
+    'cds.unistra.fr',              // SIMBAD
+    'wikipedia.org',               // Wikipedia
+    'aladin.cds.unistra.fr'        // AladinLite
+];
+
+// ── INSTALL: scarica e salva tutti i file statici ──────────────
 self.addEventListener('install', event => {
+    event.waitUntil(
+        caches.open(CACHE_NAME).then(cache => {
+            return cache.addAll(FILES_TO_CACHE);
+        })
+    );
     self.skipWaiting();
 });
 
-// Attiva e pulisci cache vecchie
+// ── ACTIVATE: elimina cache vecchie di versioni precedenti ─────
 self.addEventListener('activate', event => {
-    event.waitUntil(clients.claim());
+    event.waitUntil(
+        caches.keys().then(cacheNames => {
+            return Promise.all(
+                cacheNames
+                    .filter(name => name !== CACHE_NAME)
+                    .map(name => caches.delete(name))
+            );
+        })
+    );
+    clients.claim();
 });
 
-// Ascolta le richieste di rete (Necessario per PWA)
+// ── FETCH: smista le richieste tra cache e rete ────────────────
 self.addEventListener('fetch', event => {
-    // Per ora non facciamo caching offline complesso per non bloccare i dati meteo live.
-    // Lasciamo che la rete faccia il suo corso normale.
-    event.respondWith(fetch(event.request));
+    const url = new URL(event.request.url);
+
+    // API live → sempre dalla rete, mai dalla cache
+    if (NETWORK_ONLY_DOMAINS.some(domain => url.hostname.includes(domain))) {
+        event.respondWith(fetch(event.request));
+        return;
+    }
+
+    // File statici → Cache First (prendi dalla cache, altrimenti dalla rete)
+    event.respondWith(
+        caches.match(event.request).then(cached => {
+            if (cached) return cached;
+            // Non in cache: scarica dalla rete e salvalo per la prossima volta
+            return fetch(event.request).then(response => {
+                if (!response || response.status !== 200) return response;
+                let responseClone = response.clone();
+                caches.open(CACHE_NAME).then(cache => {
+                    cache.put(event.request, responseClone);
+                });
+                return response;
+            }).catch(() => {
+                console.warn('[SW] Risorsa non disponibile offline:', event.request.url);
+            });
+        })
+    );
 });

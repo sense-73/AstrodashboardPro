@@ -411,4 +411,29 @@ let lang = localStorage.getItem('ad_lang') || 'it';
 
         
 
+        i18n.it.fov_center_title = "📍 Centro FOV";
+        i18n.en.fov_center_title = "📍 FOV Center";
+        i18n.es.fov_center_title = "📍 Centro FOV";
+        i18n.zh.fov_center_title = "📍 视场中心";
+
+        i18n.it.fov_ra_label = "AR:";
+        i18n.en.fov_ra_label = "RA:";
+        i18n.es.fov_ra_label = "AR:";
+        i18n.zh.fov_ra_label = "赤经:";
+
+        i18n.it.fov_dec_label = "Dec:";
+        i18n.en.fov_dec_label = "Dec:";
+        i18n.es.fov_dec_label = "Dec:";
+        i18n.zh.fov_dec_label = "赤纬:";
+
+        i18n.it.fov_reset_btn = "⌖ Reset";
+        i18n.en.fov_reset_btn = "⌖ Reset";
+        i18n.es.fov_reset_btn = "⌖ Restablecer";
+        i18n.zh.fov_reset_btn = "⌖ 重置";
+
+        i18n.it.fov_reset_title = "Riporta FOV al centro del target";
+        i18n.en.fov_reset_title = "Reset FOV to target center";
+        i18n.es.fov_reset_title = "Restablecer FOV al centro del objetivo";
+        i18n.zh.fov_reset_title = "将视场重置为目标中心";
+
         function t(key) { return i18n[lang][key] || key; }

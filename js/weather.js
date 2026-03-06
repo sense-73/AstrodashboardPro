@@ -4,10 +4,11 @@
 
         
         let mappaScura = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { maxZoom: 19, attribution: 'Meteo Data &copy; <a href="https://open-meteo.com/" target="_blank" style="color:#bb86fc;">Open-Meteo</a> | Map &copy; <a href="https://carto.com/" target="_blank">CartoDB</a>' });
+        let _savedName = localStorage.getItem('ad_location_name') || 'Udine';
         let map = L.map('map', { center: [latCorrente, lonCorrente], zoom: 8, layers: [mappaScura], zoomControl: false });
         L.control.zoom({ position: 'bottomright' }).addTo(map);
         let layers = { basse: L.layerGroup().addTo(map), medie: L.layerGroup(), alte: L.layerGroup(), jet: L.layerGroup(), luna: L.layerGroup(), umidita: L.layerGroup() };
-        let marker = L.marker([latCorrente, lonCorrente]).addTo(map).bindPopup("<b>Udine</b>").openPopup();
+        let marker = L.marker([latCorrente, lonCorrente]).addTo(map).bindPopup(`<b>${_savedName}</b>`).openPopup();
 
 
         function getJulianDate(date) { return (date.getTime() / 86400000) + 2440587.5; }
@@ -40,6 +41,9 @@
 
         function selezionaLuogo(lat, lon, nome) {
             latCorrente = parseFloat(lat); lonCorrente = parseFloat(lon);
+            localStorage.setItem('ad_lat', latCorrente);
+            localStorage.setItem('ad_lon', lonCorrente);
+            localStorage.setItem('ad_location_name', nome.split(',')[0]);
             document.getElementById('ricerca').value = nome.split(',')[0];
             document.getElementById('lat').value = latCorrente.toFixed(5); document.getElementById('lon').value = lonCorrente.toFixed(5);
             document.getElementById('dropdown-risultati').style.display = 'none';

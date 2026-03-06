@@ -105,14 +105,25 @@
             else { document.getElementById('time-start').value = ft(nS); document.getElementById('time-end').value = ft(nE); }
 
             // Generazione Mappa Stellare
-            if (!aladinSkyMap) { 
-                aladinSkyMap = A.aladin('#aladin-lite-div', { survey: "P/DSS2/color", fov: 2, target: (targetSelezionato.ra * 15) + " " + targetSelezionato.dec, showReticle: false, showZoomControl: false, showFullscreenControl: false, showLayersControl: false, showGotoControl: false }); 
-                // Listener drag: aggiorna coordinate centro FOV in tempo reale
-                aladinSkyMap.on('positionChanged', function(pos) {
-                    aggiornaCoorditateFOV(pos.ra, pos.dec);
+            if (!aladinSkyMap) {
+                A.aladin('#aladin-lite-div', {
+                    survey: "P/DSS2/color",
+                    fov: 2,
+                    target: (targetSelezionato.ra * 15) + " " + targetSelezionato.dec,
+                    showReticle: false,
+                    showZoomControl: false,
+                    showFullscreenControl: false,
+                    showLayersControl: false,
+                    showGotoControl: false
+                }).then(aladin => {
+                    aladinSkyMap = aladin;
+                    // Listener drag: aggiorna coordinate centro FOV in tempo reale
+                    aladinSkyMap.on('positionChanged', function(pos) {
+                        aggiornaCoorditateFOV(pos.ra, pos.dec);
+                    });
+                    setTimeout(() => { toggleMosaic(); }, 300);
                 });
-                setTimeout(() => { toggleMosaic(); }, 300); 
-            } else { 
+            } else {
                 setTimeout(() => {
                     fovCenterOverride = null;
                     aladinSkyMap.gotoRaDec(targetSelezionato.ra * 15, targetSelezionato.dec);
@@ -180,7 +191,7 @@
             let maxFov = Math.max(totFovW, totFovH);
             let cw = document.getElementById('fov-simulator-container').clientWidth;
             let cm = 2.5 / (parseFloat(document.getElementById('fov-zoom').value) / 100); 
-            if (aladinSkyMap) { aladinSkyMap.setFoV(Math.max(0.01, maxFov * cm)); }
+            if (aladinSkyMap) { aladinSkyMap.setFov(Math.max(0.01, maxFov * cm)); }
 
             let fovContainer = document.getElementById('fov-rectangle');
             fovContainer.innerHTML = ''; 
