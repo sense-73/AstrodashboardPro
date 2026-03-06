@@ -36,9 +36,10 @@ function toggleLock(id) {
                 r.className = f.class;
 
                 // Checkbox + nome filtro
+                let savedLabelName = localStorage.getItem('nina_filter_' + f.id) || f.name;
                 let nameCell = isL
-                    ? `<div style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="${f.id}-check" checked style="transform:scale(1.2);cursor:pointer;" onchange="calcolaTempi()"><label style="color:#fff;font-weight:bold;font-size:0.9em;cursor:pointer;" onclick="document.getElementById('${f.id}-check').click()">${f.name}</label></div>`
-                    : `<div style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:18px;"></span><label style="color:#aaa;font-size:0.9em;">${f.name}</label></div>`;
+                    ? `<div style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="${f.id}-check" checked style="transform:scale(1.2);cursor:pointer;" onchange="calcolaTempi()"><label id="${f.id}-label" style="color:#fff;font-weight:bold;font-size:0.9em;cursor:pointer;" onclick="document.getElementById('${f.id}-check').click()">${savedLabelName}</label></div>`
+                    : `<div style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:18px;"></span><label id="${f.id}-label" style="color:#aaa;font-size:0.9em;">${savedLabelName}</label></div>`;
 
                 // Valore default exp: Dark = segue il primo Light, Bias = 0
                 let defGain = isBs ? '0' : 'Auto';
@@ -351,7 +352,16 @@ function toggleLock(id) {
                 }
             });
         }
-        function salvaFiltroNina(id) { localStorage.setItem('nina_filter_' + id, document.getElementById(`nina-name-${id}`).value.trim()); }
+        function salvaFiltroNina(id) {
+            let nuovoNome = document.getElementById(`nina-name-${id}`).value.trim();
+            localStorage.setItem('nina_filter_' + id, nuovoNome);
+            // Aggiorna il label nella griglia Smart
+            let lbl = document.getElementById(id + '-label');
+            if (lbl) lbl.innerText = nuovoNome;
+            // Aggiorna il campo nella sezione PRO se visibile
+            let proInput = document.getElementById(`pro-nina-name-${id}`);
+            if (proInput) proInput.value = nuovoNome;
+        }
 
 /* --- LOGICA PLANCIA PRO --- */
         /* --- LOGICA PLANCIA PRO --- */
