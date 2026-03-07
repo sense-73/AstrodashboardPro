@@ -102,7 +102,6 @@
             let f = document.getElementById('focal-length').value;
             let d = document.getElementById('aperture').value;
             
-            // Traduzione dinamica dell'errore
             let errTxt = lang === 'it' ? "Inserisci prima una Focale e un Diametro validi nei campi sottostanti." : 
                          lang === 'en' ? "Please enter a valid Focal Length and Aperture in the fields below." : 
                          lang === 'es' ? "Ingresa primero una Focal y Diámetro válidos en los campos de abajo." : 
@@ -110,7 +109,6 @@
             
             if(!f || !d || isNaN(f) || isNaN(d)) { alert(errTxt); return; }
             
-            // Traduzione dinamica della richiesta del nome
             let pTxt = lang === 'it' ? `Setup: Focale ${f}mm, Diametro ${d}mm.\nInserisci il NOME del Telescopio/Obiettivo:` : 
                        lang === 'en' ? `Setup: Focal ${f}mm, Aperture ${d}mm.\nEnter the NAME of your Telescope/Lens:` : 
                        lang === 'es' ? `Equipo: Focal ${f}mm, Diámetro ${d}mm.\nIngresa el NOMBRE del Telescopio/Lente:` : 
@@ -125,5 +123,45 @@
             
             popolaMenuAttrezzatura();
             document.getElementById('preset-telescope').value = `${f},${d}`;
+        }
+
+        // ── PERSISTENZA IMPOSTAZIONI STRUMENTO ───────────────────────────
+        // Campi salvati: focale, diametro, sensore W/H/pixel, tipo sensore
+        const AD_INSTRUMENT_FIELDS = [
+            'focal-length', 'aperture',
+            'sensor-width', 'sensor-height', 'pixel-size',
+            'sensor-type'
+        ];
+
+        function salvaImpostazioniStrumento() {
+            let data = {};
+            AD_INSTRUMENT_FIELDS.forEach(id => {
+                let el = document.getElementById(id);
+                if (el) data[id] = el.value;
+            });
+            localStorage.setItem('ad_instrument', JSON.stringify(data));
+        }
+
+        function ripristinaImpostazioniStrumento() {
+            let saved = localStorage.getItem('ad_instrument');
+            if (!saved) return;
+            try {
+                let data = JSON.parse(saved);
+                AD_INSTRUMENT_FIELDS.forEach(id => {
+                    let el = document.getElementById(id);
+                    if (el && data[id] !== undefined) el.value = data[id];
+                });
+            } catch(e) { localStorage.removeItem('ad_instrument'); }
+        }
+
+        // Aggancia il salvataggio automatico a tutti i campi strumento
+        // (chiamato dopo il DOM ready dal DOMContentLoaded in multinight.js)
+        function inizializzaPersistenzaStrumento() {
+            ripristinaImpostazioniStrumento();
+            AD_INSTRUMENT_FIELDS.forEach(id => {
+                let el = document.getElementById(id);
+                if (el) el.addEventListener('change', salvaImpostazioniStrumento);
+                if (el) el.addEventListener('input', salvaImpostazioniStrumento);
+            });
         }
 

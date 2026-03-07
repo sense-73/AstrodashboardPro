@@ -473,6 +473,22 @@ function aggiungiNotte() {
         document.addEventListener('DOMContentLoaded', () => {
             changeLanguage(lang);
             popolaMenuAttrezzatura();
+
+            // ── Ripristina impostazioni strumento e orari sessione ────────
+            inizializzaPersistenzaStrumento();
+
+            // Orari sessione Smart
+            const AD_SESSION_FIELDS = ['time-start', 'time-end', 'dither-duration', 'pro-time-start', 'pro-time-end'];
+            AD_SESSION_FIELDS.forEach(id => {
+                let el = document.getElementById(id);
+                if (!el) return;
+                let saved = localStorage.getItem('ad_session_' + id);
+                if (saved) el.value = saved;
+                el.addEventListener('change', () => localStorage.setItem('ad_session_' + id, el.value));
+                el.addEventListener('input',  () => localStorage.setItem('ad_session_' + id, el.value));
+            });
+            // ──────────────────────────────────────────────────────────────
+
             aggiornaEffemeridi(new Date()); 
             scaricaDatiPrevisionali();
 
@@ -547,20 +563,6 @@ function aggiungiNotte() {
                     }
                 }, { capture: true });
             }
-
-            // ── NAVIGAZIONE MOBILE: mostra i pulsanti ▲▼ su touch device ──
-            // Non ci affidiamo solo a media query CSS (il breakpoint è inaffidabile su
-            // Chrome Android dove il viewport può superare 768px): usiamo rilevamento
-            // touch diretto che funziona su qualsiasi viewport.
-            function aggiornaNavFab() {
-                let fab = document.querySelector('.mobile-nav-fab');
-                if (!fab) return;
-                let isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
-                let isSmallScreen = window.innerWidth <= 900;
-                fab.style.display = (isTouchDevice || isSmallScreen) ? 'flex' : 'none';
-            }
-            aggiornaNavFab();
-            window.addEventListener('resize', aggiornaNavFab);
         });
 
         if ('serviceWorker' in navigator) {
