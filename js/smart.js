@@ -322,9 +322,35 @@ function toggleLock(id) {
             let w = {};
             if (!isM) w[aL[0].id] = 1.0;
             else {
-                let hL = aL.some(f=>f.id==='m-l'), hRGB = aL.some(f=>f.id==='m-r')&&aL.some(f=>f.id==='m-g')&&aL.some(f=>f.id==='m-b');
-                if (hL && hRGB && aL.length === 4) { w['m-l']=0.5; w['m-r']=0.1666; w['m-g']=0.1666; w['m-b']=0.1666; } 
-                else { let eq = 1.0 / aL.length; aL.forEach(f => w[f.id] = eq); }
+                let hL      = aL.some(f=>f.id==='m-l');
+                let hRGB    = aL.some(f=>f.id==='m-r') && aL.some(f=>f.id==='m-g') && aL.some(f=>f.id==='m-b');
+                let narrowL = aL.filter(f=>f.id.includes('ha')||f.id.includes('oiii')||f.id.includes('sii'));
+                let hNarrow = narrowL.length > 0;
+
+                if (hL && hRGB && !hNarrow) {
+                    // Solo LRGB: L=100%, R=G=B=33%
+                    w['m-l']=0.50; w['m-r']=0.1666; w['m-g']=0.1666; w['m-b']=0.1666;
+
+                } else if (hNarrow && !hL && !hRGB) {
+                    // Solo Narrowband: pesi uguali
+                    let eq = 1.0 / aL.length; aL.forEach(f => w[f.id] = eq);
+
+                } else {
+                    // Mix LRGB + Narrow: L=X, R=G=B=X/3, Ha=OIII=SII=X
+                    // Calcolo: se ci sono N narrow + L + R+G+B → parti totali = 1 + 1/3 + 1/3 + 1/3 + N = 2 + N
+                    let nNarrow = narrowL.length;
+                    let totalParts = 2 + nNarrow; // L=1, RGB=1/3 ciascuno (tot 1), narrow=1 ciascuno
+                    if (hL)  w['m-l'] = 1 / totalParts;
+                    if (hRGB){ w['m-r'] = (1/3) / totalParts; w['m-g'] = (1/3) / totalParts; w['m-b'] = (1/3) / totalParts; }
+                    narrowL.forEach(f => w[f.id] = 1 / totalParts);
+                    // Se manca L o RGB completo, fallback pesi uguali
+                    if (!hL || !hRGB) { let eq=1.0/aL.length; aL.forEach(f => w[f.id]=eq); }
+
+                    // Mostra popup warning
+                    let modal = document.getElementById('mixed-filter-modal');
+                    let body  = document.getElementById('mixed-filter-body');
+                    if (modal && body) { body.innerHTML = t('mixed_filter_warn'); modal.style.display = 'block'; }
+                }
             }
 
             let ty = targetSelezionato.type ? targetSelezionato.type.toLowerCase() : "", isA = ty.includes('ammasso')||ty.includes('cluster'), isG = ty.includes('galassia')||ty.includes('galaxy')||ty.includes('riflessione')||ty.includes('stella')||ty.includes('star');

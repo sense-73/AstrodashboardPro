@@ -456,4 +456,19 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.es.meridian_flip_ok = "El Meridian Flip no interfiere con la sesión planificada.";
         i18n.zh.meridian_flip_ok = "子午翻转不影响计划的拍摄时间段。";
 
+        i18n.it.mixed_filter_title = "Mix LRGB + Banda Stretta";
+        i18n.en.mixed_filter_title = "LRGB + Narrowband Mix";
+        i18n.es.mixed_filter_title = "Mezcla LRGB + Banda Estrecha";
+        i18n.zh.mixed_filter_title = "LRGB + 窄带混合";
+
+        i18n.it.mixed_filter_warn = "Hai selezionato filtri broadband <strong>(L, R, G, B)</strong> e narrowband <strong>(Ha, OIII, SII)</strong> nella stessa sessione.<br><br>Combinare le due modalità in una sola notte non è ottimale: i filtri broadband richiedono esposizioni brevi e cieli non necessariamente bui, mentre i narrowband richiedono esposizioni molto più lunghe e condizioni di seeing stabili.<br><br>La sequenza è stata comunque calcolata con rapporto <strong>L = Ha = OIII = SII</strong> e <strong>R = G = B = L/3</strong>.<br><br>💡 Per un risultato professionale valuta di usare il <strong>Pianificatore Multi-Notte</strong> o il <strong>Calcolatore PRO</strong> per dedicare notti separate alle due modalità.";
+        i18n.en.mixed_filter_warn = "You selected both broadband <strong>(L, R, G, B)</strong> and narrowband <strong>(Ha, OIII, SII)</strong> filters in the same session.<br><br>Mixing the two modes in a single night is not ideal: broadband filters require shorter exposures and don't need perfectly dark skies, while narrowband filters need much longer exposures and stable seeing.<br><br>The sequence was calculated with ratio <strong>L = Ha = OIII = SII</strong> and <strong>R = G = B = L/3</strong>.<br><br>💡 For best results, consider the <strong>Multi-Night Planner</strong> or <strong>PRO Calculator</strong> to dedicate separate nights to each mode.";
+        i18n.es.mixed_filter_warn = "Has seleccionado filtros de banda ancha <strong>(L, R, G, B)</strong> y banda estrecha <strong>(Ha, OIII, SII)</strong> en la misma sesión.<br><br>Combinar ambos modos en una sola noche no es óptimo. La secuencia fue calculada con ratio <strong>L = Ha = OIII = SII</strong> y <strong>R = G = B = L/3</strong>.<br><br>💡 Considera usar el <strong>Planificador Multi-Noche</strong> o la <strong>Calculadora PRO</strong> para noches separadas.";
+        i18n.zh.mixed_filter_warn = "你同时选择了宽带滤镜 <strong>(L, R, G, B)</strong> 和窄带滤镜 <strong>(Ha, OIII, SII)</strong>。<br><br>在同一晚上混合使用两种模式并不理想。序列按 <strong>L = Ha = OIII = SII</strong>，<strong>R = G = B = L/3</strong> 的比例计算。<br><br>💡 建议使用<strong>多夜计划器</strong>或 <strong>PRO计算器</strong>分别安排不同夜晚。";
+
+        i18n.it.mixed_filter_close = "OK, prosegui comunque";
+        i18n.en.mixed_filter_close = "OK, proceed anyway";
+        i18n.es.mixed_filter_close = "OK, continuar de todas formas";
+        i18n.zh.mixed_filter_close = "好的，继续";
+
         function t(key) { return i18n[lang][key] || key; }
