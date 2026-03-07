@@ -49,13 +49,13 @@
                 </div>
             `;
 
+            // ── Righe Light/colore (con dither) ──────────────────────────
             frameList.forEach(f => {
                 if(f.id.includes('dark') || f.id.includes('bias')) return;
 
-                // Recuperiamo i valori già calcolati dall'AI Smart per comodità
                 let defaultCount = document.getElementById(`${f.id}-count`) ? document.getElementById(`${f.id}-count`).value : 0;
                 let defaultExp = document.getElementById(`${f.id}-exp`) ? document.getElementById(`${f.id}-exp`).value : f.dE;
-                let defaultName = (isMono) ? (localStorage.getItem('nina_filter_' + f.id) || f.name) : f.name;
+                let defaultName = localStorage.getItem('nina_filter_' + f.id) || f.name;
 
                 let row = document.createElement('div');
                 row.style.cssText = "display: grid; grid-template-columns: 1fr 0.8fr 0.8fr 0.8fr 0.8fr 0.8fr 1fr; gap: 5px; align-items: center; background: #1a1a1a; padding: 10px; border-radius: 4px; border-left: 3px solid #00c6ff;";
@@ -76,6 +76,57 @@
                 `;
                 container.appendChild(row);
             });
+
+            // ── Separatore Dark/Bias ──────────────────────────────────────
+            let sep = document.createElement('div');
+            sep.style.cssText = "border-top: 1px dashed #444; margin: 8px 0 4px 0; grid-column: 1/-1;";
+            sep.innerHTML = `<span style="font-size:0.75em; color:#666; text-transform:uppercase; letter-spacing:1px;">⬛ Calibration Frames</span>`;
+            container.appendChild(sep);
+
+            // ── Righe Dark e Bias (senza dither) ─────────────────────────
+            // Calcolo overhead bias basato su sensore
+            let sw = parseFloat(document.getElementById('sensor-width').value) || 23.5;
+            let sh = parseFloat(document.getElementById('sensor-height').value) || 15.7;
+            let px = parseFloat(document.getElementById('pixel-size').value) || 3.76;
+            let mp = (sw / (px / 1000)) * (sh / (px / 1000)) / 1e6;
+            let biasOverhead = Math.max(0.5, 0.1 + mp * 0.012 + mp * 0.025);
+
+            frameList.forEach(f => {
+                if(!f.id.includes('dark') && !f.id.includes('bias')) return;
+
+                let isDark = f.id.includes('dark');
+                // Dark: default exp = primo Light disponibile; Bias: mostra overhead stimato
+                let defaultCount = document.getElementById(`${f.id}-count`) ? document.getElementById(`${f.id}-count`).value : 0;
+                let firstLightExp = 0;
+                frameList.forEach(lf => { if (!lf.id.includes('dark') && !lf.id.includes('bias') && firstLightExp === 0) { let el = document.getElementById(`${lf.id}-exp`); if (el) firstLightExp = parseInt(el.value)||0; } });
+                let defaultExp = isDark ? firstLightExp : 0;
+                let defaultName = f.name;
+                let borderColor = isDark ? '#555' : '#888';
+
+                let row = document.createElement('div');
+                row.style.cssText = `display: grid; grid-template-columns: 1fr 0.8fr 0.8fr 0.8fr 0.8fr 0.8fr 1fr; gap: 5px; align-items: center; background: #141414; padding: 10px; border-radius: 4px; border-left: 3px solid ${borderColor};`;
+
+                let expCell = isDark
+                    ? `<input type="number" id="pro-${f.id}-exp" value="${defaultExp}" min="0" oninput="calcolaNightFillBar()" style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box;">`
+                    : `<div style="text-align:center; color:#666; font-size:0.85em;">
+                           0 <span onmouseenter="mostraTooltip(this,'bias_overhead_tip')" onmouseleave="nascondiTooltip()" style="cursor:help; color:#888;">⚙️</span>
+                           <span style="display:none" id="pro-${f.id}-exp">${biasOverhead}</span>
+                       </div>`;
+
+                row.innerHTML = `
+                    <div style="font-weight: bold; color: #aaa; font-size: 0.9em;">${defaultName}</div>
+                    <input type="number" id="pro-${f.id}-count" value="${defaultCount}" min="0" oninput="calcolaNightFillBar()" style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box;">
+                    ${expCell}
+                    <input type="text" id="pro-${f.id}-gain" value="${f.id.includes('bias') ? '0' : 'Auto'}" style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box;">
+                    <input type="text" id="pro-${f.id}-offset" value="Auto" style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box;">
+                    <select id="pro-${f.id}-bin" style="width: 100%!important; padding: 4px!important; box-sizing: border-box;">
+                        <option value="1">1x1</option><option value="2">2x2</option><option value="3">3x3</option>
+                    </select>
+                    <div style="color:#555; text-align:center; font-size:0.85em;">—</div>
+                `;
+                container.appendChild(row);
+            });
+
             calcolaNightFillBar();
         }
 
@@ -90,19 +141,42 @@
             let secDisponibili = (dE - dS) / 1000;
 
             let secUsati = 0;
-            let ditherOverheadSecs = 15; // 15 secondi persi per il movimento del dither
+            let ditherOverheadSecs = 15;
             let isMono = document.getElementById('pro-sensor-type').value === 'mono';
             let frameList = isMono ? framesMono : framesColor;
 
+            // Ricalcola bias overhead con valori sensore attuali
+            let sw = parseFloat(document.getElementById('sensor-width').value) || 23.5;
+            let sh = parseFloat(document.getElementById('sensor-height').value) || 15.7;
+            let px = parseFloat(document.getElementById('pixel-size').value) || 3.76;
+            let mp = (sw / (px / 1000)) * (sh / (px / 1000)) / 1e6;
+            let biasOverhead = Math.max(0.5, 0.1 + mp * 0.012 + mp * 0.025);
+
             frameList.forEach(f => {
-                if(f.id.includes('dark') || f.id.includes('bias')) return;
                 let countEl = document.getElementById(`pro-${f.id}-count`);
                 if(!countEl) return;
-                
                 let count = parseInt(countEl.value) || 0;
-                let exp = parseInt(document.getElementById(`pro-${f.id}-exp`).value) || 0;
-                let usaDither = document.getElementById(`pro-${f.id}-dither`).checked;
-                let dFreq = parseInt(document.getElementById(`pro-${f.id}-dfreq`).value) || 1;
+
+                if (f.id.includes('bias')) {
+                    // Bias: usa overhead stimato come durata effettiva
+                    if (count > 0) secUsati += count * biasOverhead;
+                    return;
+                }
+
+                let expEl = document.getElementById(`pro-${f.id}-exp`);
+                if (!expEl) return;
+                let exp = parseFloat(expEl.value) || 0;
+
+                // Dark: nessun dither
+                if (f.id.includes('dark')) {
+                    if (count > 0 && exp > 0) secUsati += count * exp;
+                    return;
+                }
+
+                let ditherEl = document.getElementById(`pro-${f.id}-dither`);
+                let usaDither = ditherEl ? ditherEl.checked : false;
+                let dFreqEl = document.getElementById(`pro-${f.id}-dfreq`);
+                let dFreq = dFreqEl ? (parseInt(dFreqEl.value) || 1) : 1;
 
                 if (count > 0 && exp > 0) {
                     let tempoPose = count * exp;

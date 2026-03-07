@@ -436,4 +436,9 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.es.fov_reset_title = "Restablecer FOV al centro del objetivo";
         i18n.zh.fov_reset_title = "将视场重置为目标中心";
 
+        i18n.it.bias_overhead_tip = "Tempo tecnico stimato (readout sensore + salvataggio FITS). I Bias hanno exp=0 ma richiedono comunque questo overhead per file.";
+        i18n.en.bias_overhead_tip = "Estimated technical overhead (sensor readout + FITS save). Bias frames have exp=0 but still require this per-frame overhead.";
+        i18n.es.bias_overhead_tip = "Sobrecarga técnica estimada (lectura del sensor + guardado FITS). Los Bias tienen exp=0 pero requieren este tiempo por fotograma.";
+        i18n.zh.bias_overhead_tip = "预估技术开销（传感器读出 + FITS保存）。偏置帧曝光=0，但每帧仍需此时间开销。";
+
         function t(key) { return i18n[lang][key] || key; }

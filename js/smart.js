@@ -226,10 +226,28 @@ function toggleLock(id) {
             panel.innerHTML = html;
         }
 
+        // Formatta secondi in modo leggibile: mostra secondi se < 60s
+        function formatSeconds(s) {
+            s = Math.round(s);
+            if (s <= 0) return '0s';
+            if (s < 60) return `${s}s`;
+            if (s < 3600) return `${Math.floor(s/60)}m ${s%60 > 0 ? (s%60)+'s' : ''}`.trim();
+            return `${Math.floor(s/3600)}h ${Math.floor((s%3600)/60)}m`;
+        }
+
         function calcolaTempi() {
             let tS = document.getElementById('time-start').value, tE = document.getElementById('time-end').value; if(!tS || !tE) return;
             let dS = new Date(`1970-01-01T${tS}:00`), dE = new Date(`1970-01-01T${tE}:00`); if (dE <= dS) dE.setDate(dE.getDate() + 1);
             let aS = (dE - dS) / 1000; 
+
+            // ── Overhead Bias: stima tempo tecnico per frame con exp=0 ──────
+            let sw = parseFloat(document.getElementById('sensor-width').value) || 23.5;
+            let sh = parseFloat(document.getElementById('sensor-height').value) || 15.7;
+            let px = parseFloat(document.getElementById('pixel-size').value) || 3.76;
+            let mp = (sw / (px / 1000)) * (sh / (px / 1000)) / 1e6;
+            // Readout ADC: ~0.1s base + 0.012s/MP | Save FITS ~2MB/MP @ 80MB/s → 0.025s/MP
+            let biasOverhead = Math.max(0.5, 0.1 + mp * 0.012 + mp * 0.025);
+            // ────────────────────────────────────────────────────────────────
             
             let isMosaic = document.getElementById('capture-mode').value === 'mosaic';
             let panels = 1;
@@ -238,13 +256,21 @@ function toggleLock(id) {
                 document.getElementById('mosaic-total-badge').innerText = `Target: ${panels} Pannelli`;
                 aS = aS / panels;
             }
-            document.getElementById('calc-available').innerHTML = isMosaic ? `<span style="font-size:0.6em; color:#ffaa00;">${t("time_per_panel")}<br></span>${Math.floor(aS/3600)}h ${Math.floor((aS%3600)/60)}m` : `${Math.floor(aS/3600)}h ${Math.floor((aS%3600)/60)}m`;
+            document.getElementById('calc-available').innerHTML = isMosaic ? `<span style="font-size:0.6em; color:#ffaa00;">${t("time_per_panel")}<br></span>${formatSeconds(aS)}` : formatSeconds(aS);
 
             let fL = document.getElementById('sensor-type').value === 'mono' ? framesMono : framesColor, tSec = 0, tLF = 0;
             fL.forEach(f => {
-                let c = parseInt(document.getElementById(`${f.id}-count`).value)||0, e = parseInt(document.getElementById(`${f.id}-exp`).value)||0, rs = c * e;
-                tSec += rs; if (!f.id.includes('dark') && !f.id.includes('bias')) tLF += c;
-                document.getElementById(`${f.id}-tot`).innerText = Math.floor(rs/3600)>0 ? `${Math.floor(rs/3600)}h ${Math.floor((rs%3600)/60)}m` : `${Math.floor((rs%3600)/60)}m`;
+                let c = parseInt(document.getElementById(`${f.id}-count`).value)||0;
+                let e = parseInt(document.getElementById(`${f.id}-exp`).value)||0;
+                let eEff = f.id.includes('bias') ? (c > 0 ? biasOverhead : 0) : e;
+                let rs = c * eEff;
+                tSec += rs;
+                if (!f.id.includes('dark') && !f.id.includes('bias')) tLF += c;
+                let rsLabel = formatSeconds(rs);
+                if (f.id.includes('bias') && c > 0 && e === 0) {
+                    rsLabel += ` <span onmouseenter="mostraTooltip(this,'bias_overhead_tip')" onmouseleave="nascondiTooltip()" style="font-size:0.85em;color:#888;cursor:help;">⚙️</span>`;
+                }
+                document.getElementById(`${f.id}-tot`).innerHTML = rsLabel;
             });
 
             // Dither per-filtro (ogni filtro ha checkbox + freq propria)
@@ -261,12 +287,12 @@ function toggleLock(id) {
             });
             tSec += dSec;
             let ditherTotEl = document.getElementById('dither-tot');
-            if (ditherTotEl) ditherTotEl.innerText = Math.floor(dSec/3600)>0 ? `${Math.floor(dSec/3600)}h ${Math.floor((dSec%3600)/60)}m` : `${Math.floor((dSec%3600)/60)}m`;
+            if (ditherTotEl) ditherTotEl.innerText = formatSeconds(dSec);
 
-            document.getElementById('calc-total').innerText = `${Math.floor(tSec/3600)}h ${Math.floor((tSec%3600)/60)}m`;
+            document.getElementById('calc-total').innerText = formatSeconds(tSec);
             let rS = aS - tSec, rD = document.getElementById('calc-residual'), wD = document.getElementById('calc-warning');
-            if (rS >= 0) { rD.innerText = `${Math.floor(rS/3600)}h ${Math.floor((rS%3600)/60)}m`; rD.className = "text-green"; wD.style.display = "none"; } 
-            else { rD.innerText = `- ${Math.floor(Math.abs(rS)/3600)}h ${Math.floor((Math.abs(rS)%3600)/60)}m`; rD.className = "text-red"; wD.style.display = "block"; }
+            if (rS >= 0) { rD.innerText = formatSeconds(rS); rD.className = "text-green"; wD.style.display = "none"; } 
+            else { rD.innerText = `- ${formatSeconds(Math.abs(rS))}`; rD.className = "text-red"; wD.style.display = "block"; }
             
             // Richiama l'AI ogni volta che si cambiano i tempi!
             if (typeof aggiornaAI === "function") aggiornaAI();
@@ -355,10 +381,8 @@ function toggleLock(id) {
         function salvaFiltroNina(id) {
             let nuovoNome = document.getElementById(`nina-name-${id}`).value.trim();
             localStorage.setItem('nina_filter_' + id, nuovoNome);
-            // Aggiorna il label nella griglia Smart
             let lbl = document.getElementById(id + '-label');
             if (lbl) lbl.innerText = nuovoNome;
-            // Aggiorna il campo nella sezione PRO se visibile
             let proInput = document.getElementById(`pro-nina-name-${id}`);
             if (proInput) proInput.value = nuovoNome;
         }
