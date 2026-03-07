@@ -473,24 +473,9 @@ function aggiungiNotte() {
         document.addEventListener('DOMContentLoaded', () => {
             changeLanguage(lang);
             popolaMenuAttrezzatura();
-
-            // ── Ripristina impostazioni strumento e orari sessione ────────
-            inizializzaPersistenzaStrumento();
-
-            // Orari sessione Smart
-            const AD_SESSION_FIELDS = ['time-start', 'time-end', 'dither-duration', 'pro-time-start', 'pro-time-end'];
-            AD_SESSION_FIELDS.forEach(id => {
-                let el = document.getElementById(id);
-                if (!el) return;
-                let saved = localStorage.getItem('ad_session_' + id);
-                if (saved) el.value = saved;
-                el.addEventListener('change', () => localStorage.setItem('ad_session_' + id, el.value));
-                el.addEventListener('input',  () => localStorage.setItem('ad_session_' + id, el.value));
-            });
-            // ──────────────────────────────────────────────────────────────
-
             aggiornaEffemeridi(new Date()); 
             scaricaDatiPrevisionali();
+            if (typeof toggleSensorMode === 'function') toggleSensorMode();
 
             // Ripristina l'ultima schermata visitata dopo un F5 (Refresh)
             let savedTarget = sessionStorage.getItem('ad_current_target');
@@ -570,13 +555,5 @@ function aggiungiNotte() {
                 navigator.serviceWorker.register('sw.js').then(reg => {
                     console.log('App in background attivata!', reg.scope);
                 }).catch(err => console.error('Errore App:', err));
-            });
-
-            // Quando il nuovo SW è attivo, ricarica automaticamente
-            // così l'utente riceve sempre la versione aggiornata senza pulire la cache
-            navigator.serviceWorker.addEventListener('message', event => {
-                if (event.data && event.data.type === 'SW_UPDATED') {
-                    window.location.reload();
-                }
             });
         }

@@ -471,4 +471,9 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.es.mixed_filter_close = "OK, continuar de todas formas";
         i18n.zh.mixed_filter_close = "好的，继续";
 
+        i18n.it.bias_overhead_tip = "Tempo tecnico stimato per frame (readout sensore + salvataggio FITS). I Bias hanno exp=0 ma richiedono comunque questo overhead per file.";
+        i18n.en.bias_overhead_tip = "Estimated technical overhead per frame (sensor readout + FITS save). Bias frames have exp=0 but still require this per-frame overhead.";
+        i18n.es.bias_overhead_tip = "Sobrecarga técnica estimada por fotograma (lectura del sensor + guardado FITS). Los Bias tienen exp=0 pero requieren este tiempo.";
+        i18n.zh.bias_overhead_tip = "每帧预估技术开销（传感器读出 + FITS保存）。偏置帧曝光=0，但每帧仍需此时间开销。";
+
         function t(key) { return i18n[lang][key] || key; }
