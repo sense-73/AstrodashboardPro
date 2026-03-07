@@ -2,10 +2,10 @@
 // Strategia: Network First per index.html, Cache First per statici, Network Only per API
 // ============================================================
 
-const CACHE_NAME = 'astrodash-v5-15';
+const CACHE_NAME = 'astrodash-v5-16';
 
 // IMPORTANTE: ad ogni deploy incrementare APP_VERSION qui e ?v=X in index.html
-const APP_VERSION = '5';
+const APP_VERSION = '6';
 
 const FILES_TO_CACHE = [
     './',

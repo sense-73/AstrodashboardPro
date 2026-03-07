@@ -86,6 +86,69 @@
             document.getElementById('info-nightstart').innerText = ft(atStart.night); 
             document.getElementById('info-nightend').innerText = ft(atEnd.nightEnd); 
             document.getElementById('info-sunrise').innerText = ft(atEnd.sunrise);
+
+            // ── CALCOLO MERIDIAN FLIP (analitico) ─────────────────────────
+            (function() {
+                let mfEl = document.getElementById('info-meridianflip');
+                if (!mfEl || targetSelezionato.ra == null) { if(mfEl) mfEl.innerText = '--:--'; return; }
+                try {
+                    // Midnight UTC della data di osservazione
+                    let obsDate = new Date(dOggi);
+                    let midnightUTC = Date.UTC(obsDate.getFullYear(), obsDate.getMonth(), obsDate.getDate(), 0, 0, 0);
+
+                    // GMST a mezzanotte UTC (gradi)
+                    let jd0   = midnightUTC / 86400000 + 2440587.5;
+                    let d0    = jd0 - 2451545.0;
+                    let gmst0 = ((280.46061837 + 360.98564736629 * d0) % 360 + 360) % 360;
+                    let lst0  = ((gmst0 + lonCorrente) % 360 + 360) % 360;
+
+                    // RA target in gradi; diff = quanti gradi mancano al transito da mezzanotte UTC
+                    let raDeg = targetSelezionato.ra * 15;
+                    let diff  = ((raDeg - lst0) % 360 + 360) % 360;
+
+                    // Ore siderali → ore solari (sidereal rate 15.04107°/h)
+                    let transitHoursUTC = diff / 15.04107;
+                    let flipTime = new Date(midnightUTC + transitHoursUTC * 3600000);
+
+                    // Se cade prima del tramonto, sposta al giorno dopo
+                    let sunsetMs  = (atStart.sunset  || atStart.dusk).getTime();
+                    let sunriseMs = (atEnd.sunrise   || atEnd.dawn  ).getTime();
+                    if (flipTime.getTime() < sunsetMs - 3600000)
+                        flipTime = new Date(flipTime.getTime() + 86400000);
+
+                    // Se il transito è fuori dalla notte mostra avviso
+                    if (flipTime.getTime() > sunriseMs + 3600000) {
+                        mfEl.innerText = t('meridian_flip_outside');
+                        mfEl.style.color = '#666'; mfEl.title = ''; return;
+                    }
+
+                    mfEl.innerText = ft(flipTime);
+
+                    // Colore: rosso se cade dentro la sessione pianificata
+                    let tS = document.getElementById('time-start').value;
+                    let tE = document.getElementById('time-end').value;
+                    if (tS && tE) {
+                        let base  = '1970-01-01T';
+                        let sDate = new Date(base + tS + ':00');
+                        let eDate = new Date(base + tE + ':00');
+                        let hhmm  = flipTime.toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'});
+                        let fDate = new Date(base + hhmm + ':00');
+                        if (eDate <= sDate) eDate.setDate(eDate.getDate() + 1);
+                        if (fDate < sDate)  fDate.setDate(fDate.getDate() + 1);
+                        if (fDate >= sDate && fDate <= eDate) {
+                            mfEl.style.color = '#ff4444';
+                            mfEl.title = t('meridian_flip_warn');
+                        } else {
+                            mfEl.style.color = '#ffaa00';
+                            mfEl.title = t('meridian_flip_ok');
+                        }
+                    }
+                } catch(e) {
+                    console.warn('[MF] Errore:', e);
+                    mfEl.innerText = '--:--';
+                }
+            })();
+            // ──────────────────────────────────────────────────────────────
             
             let nS = atStart.night || atStart.sunset; let nE = atEnd.nightEnd || atEnd.sunrise;
             let cur = new Date(nS.getTime()); let maxA = -90; let currentBlock = { start: null, end: null }; let bestBlock = { start: null, end: null, duration: 0 }; let isAbove = false;
@@ -121,7 +184,10 @@
                 aladinSkyMap.on('positionChanged', function(pos) {
                     aggiornaCoordinateFOV(pos.ra, pos.dec);
                 });
-                setTimeout(() => { toggleMosaic(); }, 300);
+                setTimeout(() => {
+                    aggiornaCoordinateFOVdaTarget();
+                    toggleMosaic();
+                }, 300);
             } else {
                 setTimeout(() => {
                     fovCenterOverride = null;

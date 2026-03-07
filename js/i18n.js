@@ -436,23 +436,24 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.es.fov_reset_title = "Restablecer FOV al centro del objetivo";
         i18n.zh.fov_reset_title = "将视场重置为目标中心";
 
-        i18n.it.bias_overhead_tip = "Tempo tecnico stimato (readout sensore + salvataggio FITS). I Bias hanno exp=0 ma richiedono comunque questo overhead per file.";
-        i18n.en.bias_overhead_tip = "Estimated technical overhead (sensor readout + FITS save). Bias frames have exp=0 but still require this per-frame overhead.";
-        i18n.es.bias_overhead_tip = "Sobrecarga técnica estimada (lectura del sensor + guardado FITS). Los Bias tienen exp=0 pero requieren este tiempo por fotograma.";
-        i18n.zh.bias_overhead_tip = "预估技术开销（传感器读出 + FITS保存）。偏置帧曝光=0，但每帧仍需此时间开销。";
+        i18n.it.meridian_flip_time = "Meridian Flip";
+        i18n.en.meridian_flip_time = "Meridian Flip";
+        i18n.es.meridian_flip_time = "Meridian Flip";
+        i18n.zh.meridian_flip_time = "子午翻转";
 
-        i18n.it.contact_btn = "✉️ Contatto";          i18n.en.contact_btn = "✉️ Contact";           i18n.es.contact_btn = "✉️ Contacto";         i18n.zh.contact_btn = "✉️ 联系";
-        i18n.it.contact_title = "Contatta lo Sviluppatore"; i18n.en.contact_title = "Contact the Developer"; i18n.es.contact_title = "Contactar al Desarrollador"; i18n.zh.contact_title = "联系开发者";
-        i18n.it.contact_welcome = "Ciao! Sono felice che tu voglia scrivermi. Che si tratti di un suggerimento, una segnalazione o semplicemente un saluto dalla tua postazione di osservazione — ogni messaggio è il benvenuto. Rispondo appena possibile, di solito tra una sessione e l'altra ☁️🔭";
-        i18n.en.contact_welcome = "Hello! I'm glad you'd like to reach out. Whether it's a suggestion, a bug report, or simply a greeting from your observation site — every message is welcome. I reply as soon as I can, usually between sessions ☁️🔭";
-        i18n.es.contact_welcome = "¡Hola! Me alegra que quieras escribirme. Ya sea una sugerencia, un reporte o simplemente un saludo desde tu lugar de observación — cada mensaje es bienvenido. Respondo lo antes posible, normalmente entre sesiones ☁️🔭";
-        i18n.zh.contact_welcome = "你好！很高兴你想联系我。无论是建议、问题反馈，还是来自你观测点的问候——每条消息都欢迎。我会尽快回复，通常在两次观测之间 ☁️🔭";
-        i18n.it.contact_from = "La tua email (mittente):"; i18n.en.contact_from = "Your email (sender):"; i18n.es.contact_from = "Tu email (remitente):"; i18n.zh.contact_from = "你的邮箱（发件人）：";
-        i18n.it.contact_subject = "Soggetto:";         i18n.en.contact_subject = "Subject:";           i18n.es.contact_subject = "Asunto:";           i18n.zh.contact_subject = "主题：";
-        i18n.it.contact_subject_ph = "Es. Suggerimento per AstroDashboard"; i18n.en.contact_subject_ph = "E.g. Suggestion for AstroDashboard"; i18n.es.contact_subject_ph = "Ej. Sugerencia para AstroDashboard"; i18n.zh.contact_subject_ph = "例：对 AstroDashboard 的建议";
-        i18n.it.contact_message = "Messaggio:";        i18n.en.contact_message = "Message:";            i18n.es.contact_message = "Mensaje:";           i18n.zh.contact_message = "消息：";
-        i18n.it.contact_send = "📨 Invia Messaggio";   i18n.en.contact_send = "📨 Send Message";        i18n.es.contact_send = "📨 Enviar Mensaje";     i18n.zh.contact_send = "📨 发送消息";
-        i18n.it.contact_err_email = "Inserisci un indirizzo email valido."; i18n.en.contact_err_email = "Please enter a valid email address."; i18n.es.contact_err_email = "Por favor ingresa un email válido."; i18n.zh.contact_err_email = "请输入有效的邮箱地址。";
-        i18n.it.contact_err_msg = "Scrivi almeno qualche parola nel messaggio 😊"; i18n.en.contact_err_msg = "Please write at least a few words in the message 😊"; i18n.es.contact_err_msg = "Por favor escribe al menos algunas palabras en el mensaje 😊"; i18n.zh.contact_err_msg = "请在消息中至少写几个字 😊";
+        i18n.it.meridian_flip_outside = "Fuori notte";
+        i18n.en.meridian_flip_outside = "Outside night";
+        i18n.es.meridian_flip_outside = "Fuera de noche";
+        i18n.zh.meridian_flip_outside = "夜外";
+
+        i18n.it.meridian_flip_warn = "⚠️ Il Meridian Flip cade dentro la sessione pianificata! Considera di spezzare la sequenza in due blocchi.";
+        i18n.en.meridian_flip_warn = "⚠️ Meridian Flip falls within the planned session! Consider splitting the sequence into two blocks.";
+        i18n.es.meridian_flip_warn = "⚠️ El Meridian Flip ocurre durante la sesión planificada. Considera dividir la secuencia en dos bloques.";
+        i18n.zh.meridian_flip_warn = "⚠️ 子午翻转发生在计划拍摄时间段内！建议将序列分为两段。";
+
+        i18n.it.meridian_flip_ok = "Il Meridian Flip non interferisce con la sessione pianificata.";
+        i18n.en.meridian_flip_ok = "Meridian Flip does not interfere with the planned session.";
+        i18n.es.meridian_flip_ok = "El Meridian Flip no interfiere con la sesión planificada.";
+        i18n.zh.meridian_flip_ok = "子午翻转不影响计划的拍摄时间段。";
 
         function t(key) { return i18n[lang][key] || key; }
