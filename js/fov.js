@@ -184,10 +184,22 @@
                 aladinSkyMap.on('positionChanged', function(pos) {
                     aggiornaCoordinateFOV(pos.ra, pos.dec);
                 });
-                setTimeout(() => {
-                    aggiornaCoordinateFOVdaTarget();
-                    toggleMosaic();
-                }, 300);
+                // Attende che Aladin abbia caricato il primo tile prima di aggiornare
+                // le coordinate — online può richiedere più di 300ms
+                (function aspettaAladin(tentativi) {
+                    let ra = null;
+                    try { ra = aladinSkyMap.getRaDec()[0]; } catch(e) {}
+                    if (ra !== null && ra !== undefined) {
+                        aggiornaCoordinateFOVdaTarget();
+                        toggleMosaic();
+                    } else if (tentativi > 0) {
+                        setTimeout(() => aspettaAladin(tentativi - 1), 200);
+                    } else {
+                        // Fallback: prova comunque dopo 2 secondi
+                        aggiornaCoordinateFOVdaTarget();
+                        toggleMosaic();
+                    }
+                })(15); // max 15 tentativi × 200ms = 3 secondi
             } else {
                 setTimeout(() => {
                     fovCenterOverride = null;
