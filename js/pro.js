@@ -89,7 +89,7 @@
             let sh = parseFloat(document.getElementById('sensor-height').value) || 15.7;
             let px = parseFloat(document.getElementById('pixel-size').value) || 3.76;
             let mp = (sw / (px / 1000)) * (sh / (px / 1000)) / 1e6;
-            let biasOverhead = Math.max(0.5, 0.1 + mp * 0.012 + mp * 0.025);
+            let biasOverhead = Math.max(1.0, 0.8 + mp * 0.05);
 
             frameList.forEach(f => {
                 if(!f.id.includes('dark') && !f.id.includes('bias')) return;
@@ -150,7 +150,7 @@
             let sh = parseFloat(document.getElementById('sensor-height').value) || 15.7;
             let px = parseFloat(document.getElementById('pixel-size').value) || 3.76;
             let mp = (sw / (px / 1000)) * (sh / (px / 1000)) / 1e6;
-            let biasOverhead = Math.max(0.5, 0.1 + mp * 0.012 + mp * 0.025);
+            let biasOverhead = Math.max(1.0, 0.8 + mp * 0.05);
 
             frameList.forEach(f => {
                 let countEl = document.getElementById(`pro-${f.id}-count`);

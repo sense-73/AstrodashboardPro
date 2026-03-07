@@ -246,7 +246,7 @@ function toggleLock(id) {
             let px = parseFloat(document.getElementById('pixel-size').value) || 3.76;
             let mp = (sw / (px / 1000)) * (sh / (px / 1000)) / 1e6;
             // Readout ADC: ~0.1s base + 0.012s/MP | Save FITS ~2MB/MP @ 80MB/s → 0.025s/MP
-            let biasOverhead = Math.max(0.5, 0.1 + mp * 0.012 + mp * 0.025);
+            let biasOverhead = Math.max(1.0, 0.8 + mp * 0.05);
             // ────────────────────────────────────────────────────────────────
             
             let isMosaic = document.getElementById('capture-mode').value === 'mosaic';
