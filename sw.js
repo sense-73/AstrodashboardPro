@@ -1,13 +1,12 @@
 // sw.js — Service Worker AstroDashboard PRO
-// Strategia: Cache First per file statici, Network First per API live
+// Strategia: Network First per index.html, Cache First per statici, Network Only per API
 // ============================================================
 
-const CACHE_NAME = 'astrodash-v5-14';
+const CACHE_NAME = 'astrodash-v5-15';
 
 // IMPORTANTE: ad ogni deploy incrementare APP_VERSION qui e ?v=X in index.html
 const APP_VERSION = '5';
 
-// File statici dell'app da salvare in cache al primo avvio
 const FILES_TO_CACHE = [
     './',
     './index.html',
@@ -27,60 +26,78 @@ const FILES_TO_CACHE = [
     './manifest.json'
 ];
 
-// Domini API live: NON vanno mai in cache (dati sempre freschi)
 const NETWORK_ONLY_DOMAINS = [
-    'open-meteo.com',              // Meteo
-    'nominatim.openstreetmap.org', // Geocoding
-    'cds.unistra.fr',              // SIMBAD
-    'wikipedia.org',               // Wikipedia
-    'aladin.cds.unistra.fr'        // AladinLite
+    'open-meteo.com',
+    'nominatim.openstreetmap.org',
+    'cds.unistra.fr',
+    'wikipedia.org',
+    'aladin.cds.unistra.fr'
 ];
 
-// ── INSTALL: scarica e salva tutti i file statici ──────────────
+// ── INSTALL ────────────────────────────────────────────────────
 self.addEventListener('install', event => {
     event.waitUntil(
-        caches.open(CACHE_NAME).then(cache => {
-            return cache.addAll(FILES_TO_CACHE);
-        })
+        caches.open(CACHE_NAME).then(cache => cache.addAll(FILES_TO_CACHE))
     );
     self.skipWaiting();
 });
 
-// ── ACTIVATE: elimina cache vecchie di versioni precedenti ─────
+// ── ACTIVATE: pulisce cache vecchie e notifica le tab aperte ───
 self.addEventListener('activate', event => {
     event.waitUntil(
-        caches.keys().then(cacheNames => {
-            return Promise.all(
+        caches.keys().then(cacheNames =>
+            Promise.all(
                 cacheNames
                     .filter(name => name !== CACHE_NAME)
                     .map(name => caches.delete(name))
-            );
+            )
+        ).then(() => {
+            return self.clients.matchAll({ type: 'window' }).then(clients => {
+                clients.forEach(client => client.postMessage({ type: 'SW_UPDATED' }));
+            });
         })
     );
-    clients.claim();
+    self.clients.claim();
 });
 
-// ── FETCH: smista le richieste tra cache e rete ────────────────
+// ── FETCH ──────────────────────────────────────────────────────
 self.addEventListener('fetch', event => {
     const url = new URL(event.request.url);
 
-    // API live → sempre dalla rete, mai dalla cache
+    // 1. API live → sempre dalla rete
     if (NETWORK_ONLY_DOMAINS.some(domain => url.hostname.includes(domain))) {
         event.respondWith(fetch(event.request));
         return;
     }
 
-    // File statici → Cache First (prendi dalla cache, altrimenti dalla rete)
+    // 2. index.html → Network First
+    //    L'HTML viene sempre scaricato dalla rete (con i nuovi ?v=).
+    //    Solo offline usa la cache come fallback.
+    const isHtml = url.pathname === '/'
+        || url.pathname.endsWith('/')
+        || url.pathname.endsWith('/index.html');
+
+    if (isHtml) {
+        event.respondWith(
+            fetch(event.request)
+                .then(response => {
+                    let clone = response.clone();
+                    caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
+                    return response;
+                })
+                .catch(() => caches.match(event.request))
+        );
+        return;
+    }
+
+    // 3. File statici (JS, CSS, img) → Cache First
     event.respondWith(
         caches.match(event.request).then(cached => {
             if (cached) return cached;
-            // Non in cache: scarica dalla rete e salvalo per la prossima volta
             return fetch(event.request).then(response => {
                 if (!response || response.status !== 200) return response;
-                let responseClone = response.clone();
-                caches.open(CACHE_NAME).then(cache => {
-                    cache.put(event.request, responseClone);
-                });
+                let clone = response.clone();
+                caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
                 return response;
             }).catch(() => {
                 console.warn('[SW] Risorsa non disponibile offline:', event.request.url);

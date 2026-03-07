@@ -17,11 +17,9 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/suncalc/1.9.0/suncalc.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="https://aladin.cds.unistra.fr/AladinLite/api/v2/latest/aladin.min.css" />
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://aladin.cds.unistra.fr/AladinLite/api/v2/latest/aladin.min.js"></script>
+    <script src="https://aladin.cds.unistra.fr/AladinLite/api/v3/latest/aladin.js" charset="utf-8"></script>
 
-    <script src="database.js?v=5"></script>
+    <script src="database.js"></script>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -50,7 +48,10 @@
         <div class="author-section">
             <div>
                 <p style="margin: 0 0 6px 0; font-size: 0.9em; color: #fff; font-weight: bold;">v5.6.0-Global</p>
-                <button class="btn-guide" onclick="apriGuida()" style="margin: 0;"><span data-i18n="manual_btn">📖 Apri Manuale</span></button>
+                <div style="display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end;">
+                    <button class="btn-guide" onclick="apriGuida()" style="margin: 0;"><span data-i18n="manual_btn">📖 Apri Manuale</span></button>
+                    <button class="btn-guide" onclick="apriContatto()" style="margin: 0; border-color: #44ff44; color: #44ff44;"><span data-i18n="contact_btn">✉️ Contatto</span></button>
+                </div>
             </div>
             <img src="logo astro enrico sfondo.png" alt="Enrico Salis Logo" style="height: 60px; object-fit: contain; border-radius: 5px;">
         </div>
@@ -509,6 +510,44 @@
     </div>
 </div>
     
+    <!-- ═══ MODAL CONTATTO ═══ -->
+    <div id="contact-modal" class="modal">
+        <div class="modal-content" style="max-width: 520px;">
+            <span class="close-btn" onclick="chiudiContatto()">&times;</span>
+            <h2 style="border-bottom: 1px solid #333; padding-bottom: 12px; margin-bottom: 6px;">
+                ✉️ <span data-i18n="contact_title">Contatta lo Sviluppatore</span>
+            </h2>
+
+            <!-- Messaggio di benvenuto -->
+            <div style="background: rgba(187,134,252,0.08); border-left: 4px solid #bb86fc; border-radius: 4px; padding: 14px 16px; margin-bottom: 20px; font-size: 0.92em; line-height: 1.6; color: #ccc;">
+                <span data-i18n="contact_welcome">Ciao! Sono felice che tu voglia scrivermi. Che si tratti di un suggerimento, una segnalazione o semplicemente un saluto dalla tua postazione di osservazione — ogni messaggio è il benvenuto. Rispondo appena possibile, di solito tra una sessione e l'altra ☁️🔭</span>
+            </div>
+
+            <div class="input-group" style="margin-bottom:14px;">
+                <label style="width:100%; margin-bottom:5px; color:#aaa;" data-i18n="contact_from">La tua email (mittente):</label>
+                <input type="email" id="contact-from" placeholder="tuamail@esempio.com"
+                    style="width:100%!important; padding:10px; background:#2c2c2c; border:1px solid #444; border-radius:4px; color:#fff; font-size:0.95em;">
+            </div>
+            <div class="input-group" style="margin-bottom:14px;">
+                <label style="width:100%; margin-bottom:5px; color:#aaa;" data-i18n="contact_subject">Soggetto:</label>
+                <input type="text" id="contact-subject" data-i18n-placeholder="contact_subject_ph"
+                    placeholder="Es. Suggerimento per AstroDashboard"
+                    style="width:100%!important; padding:10px; background:#2c2c2c; border:1px solid #444; border-radius:4px; color:#fff; font-size:0.95em;">
+            </div>
+            <div class="input-group" style="margin-bottom:20px;">
+                <label style="width:100%; margin-bottom:5px; color:#aaa;" data-i18n="contact_message">Messaggio:</label>
+                <textarea id="contact-message" rows="6"
+                    style="width:100%!important; padding:10px; background:#2c2c2c; border:1px solid #444; border-radius:4px; color:#fff; font-size:0.95em; resize:vertical; font-family:inherit; box-sizing:border-box;"></textarea>
+            </div>
+            <button onclick="inviaContatto()"
+                style="width:100%; padding:13px; background:linear-gradient(135deg,#bb86fc,#7c4dff); color:#fff; border:none; border-radius:50px; font-size:1em; font-weight:bold; cursor:pointer; transition:0.3s; letter-spacing:0.5px;"
+                onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+                <span data-i18n="contact_send">📨 Invia Messaggio</span>
+            </button>
+            <p id="contact-error" style="display:none; color:#ff4444; font-size:0.88em; margin-top:10px; text-align:center;"></p>
+        </div>
+    </div>
+
     <div id="floating-tooltip" class="floating-tooltip"></div>
 
     <div id="report-modal" class="modal">
@@ -928,16 +967,16 @@
     </div>
 
     <!-- ═══ AstroDashboard JS Modules ═══ -->
-    <script src="js/i18n.js?v=5"></script>
-    <script src="js/globals.js?v=5"></script>
-    <script src="js/core.js?v=5"></script>
-    <script src="js/equipment.js?v=5"></script>
-    <script src="js/weather.js?v=5"></script>
-    <script src="js/planetarium.js?v=5"></script>
-    <script src="js/fov.js?v=5"></script>
-    <script src="js/smart.js?v=5"></script>
-    <script src="js/pro.js?v=5"></script>
-    <script src="js/export.js?v=5"></script>
-    <script src="js/multinight.js?v=5"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/globals.js"></script>
+    <script src="js/core.js"></script>
+    <script src="js/equipment.js"></script>
+    <script src="js/weather.js"></script>
+    <script src="js/planetarium.js"></script>
+    <script src="js/fov.js"></script>
+    <script src="js/smart.js"></script>
+    <script src="js/pro.js"></script>
+    <script src="js/export.js"></script>
+    <script src="js/multinight.js"></script>
 </body>
 </html>

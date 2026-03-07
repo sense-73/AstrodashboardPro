@@ -130,7 +130,8 @@
         const AD_INSTRUMENT_FIELDS = [
             'focal-length', 'aperture',
             'sensor-width', 'sensor-height', 'pixel-size',
-            'sensor-type'
+            'sensor-type',
+            'preset-telescope', 'preset-sensor'
         ];
 
         function salvaImpostazioniStrumento() {
@@ -151,6 +152,9 @@
                     let el = document.getElementById(id);
                     if (el && data[id] !== undefined) el.value = data[id];
                 });
+                // Ricalcola FOV e tempi con i valori ripristinati
+                if (typeof aggiornaFOV === 'function') aggiornaFOV();
+                if (typeof calcolaTempi === 'function') calcolaTempi();
             } catch(e) { localStorage.removeItem('ad_instrument'); }
         }
 

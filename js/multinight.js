@@ -571,4 +571,12 @@ function aggiungiNotte() {
                     console.log('App in background attivata!', reg.scope);
                 }).catch(err => console.error('Errore App:', err));
             });
+
+            // Quando il nuovo SW è attivo, ricarica automaticamente
+            // così l'utente riceve sempre la versione aggiornata senza pulire la cache
+            navigator.serviceWorker.addEventListener('message', event => {
+                if (event.data && event.data.type === 'SW_UPDATED') {
+                    window.location.reload();
+                }
+            });
         }
