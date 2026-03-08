@@ -475,19 +475,6 @@ function aggiungiNotte() {
             popolaMenuAttrezzatura();
             aggiornaEffemeridi(new Date()); 
             scaricaDatiPrevisionali();
-            if (typeof toggleSensorMode === 'function') toggleSensorMode();
-
-            // Banner rotazione: visibile solo su mobile in portrait
-            function aggiornaRotateHint() {
-                let hint = document.getElementById('rotate-hint');
-                if (!hint) return;
-                let isMobile = window.innerWidth <= 768 || ('ontouchstart' in window);
-                let isPortrait = window.innerHeight > window.innerWidth;
-                hint.style.display = (isMobile && isPortrait) ? 'flex' : 'none';
-            }
-            aggiornaRotateHint();
-            window.addEventListener('resize', aggiornaRotateHint);
-            window.addEventListener('orientationchange', () => setTimeout(aggiornaRotateHint, 300));
 
             // Ripristina l'ultima schermata visitata dopo un F5 (Refresh)
             let savedTarget = sessionStorage.getItem('ad_current_target');
@@ -567,5 +554,21 @@ function aggiungiNotte() {
                 navigator.serviceWorker.register('sw.js').then(reg => {
                     console.log('App in background attivata!', reg.scope);
                 }).catch(err => console.error('Errore App:', err));
+
+                // Ascolta messaggio SW_UPDATED → mostra banner
+                navigator.serviceWorker.addEventListener('message', event => {
+                    if (event.data && event.data.type === 'SW_UPDATED') {
+                        const banner = document.getElementById('sw-update-banner');
+                        const msg    = document.getElementById('sw-update-msg');
+                        const btn    = document.getElementById('sw-update-btn');
+                        if (!banner) return;
+                        // Traduzione dinamica se i18n è già caricato
+                        if (typeof t === 'function') {
+                            if (msg) msg.textContent = '🔄 ' + t('sw_update_msg');
+                            if (btn) btn.textContent = t('sw_update_btn');
+                        }
+                        banner.style.display = 'flex';
+                    }
+                });
             });
         }

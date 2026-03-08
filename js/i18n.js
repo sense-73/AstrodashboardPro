@@ -889,6 +889,16 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.es.rpt_frames_unit     = "poses";
         i18n.zh.rpt_frames_unit     = "帧";
 
+        i18n.it.sw_update_msg       = "Aggiornamento disponibile";
+        i18n.en.sw_update_msg       = "Update available";
+        i18n.es.sw_update_msg       = "Actualizacion disponible";
+        i18n.zh.sw_update_msg       = "有可用更新";
+
+        i18n.it.sw_update_btn       = "Ricarica";
+        i18n.en.sw_update_btn       = "Reload";
+        i18n.es.sw_update_btn       = "Recargar";
+        i18n.zh.sw_update_btn       = "刷新";
+
         i18n.it.rpt_alert_no_nights = "Nessuna notte pianificata!";
         i18n.en.rpt_alert_no_nights = "No nights planned!";
         i18n.es.rpt_alert_no_nights = "Ninguna noche planificada!";

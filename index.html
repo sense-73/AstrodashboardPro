@@ -16,6 +16,8 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/suncalc/1.9.0/suncalc.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://aladin.cds.unistra.fr/AladinLite/api/v3/latest/aladin.js" charset="utf-8"></script>
 
@@ -976,5 +978,24 @@
     <script src="js/export.js"></script>
     <script src="js/multinight.js"></script>
     <script src="js/report.js"></script>
+
+    <!-- Banner aggiornamento SW -->
+    <div id="sw-update-banner" style="
+        display:none; position:fixed; bottom:20px; left:50%; transform:translateX(-50%);
+        background:#1e1a38; border:1px solid #7850dc; border-radius:12px;
+        padding:12px 20px; box-shadow:0 4px 24px rgba(0,0,0,0.5);
+        align-items:center; gap:14px; z-index:99999;
+        font-family:sans-serif; max-width:90vw; white-space:nowrap;
+    ">
+        <span id="sw-update-msg" style="color:#e0d8ff; font-size:13px;">🔄 Aggiornamento disponibile</span>
+        <button id="sw-update-btn" onclick="location.reload()" style="
+            background:#7850dc; color:#fff; border:none; border-radius:8px;
+            padding:7px 16px; font-size:13px; font-weight:600; cursor:pointer;
+        ">Ricarica</button>
+        <button onclick="document.getElementById('sw-update-banner').style.display='none'" style="
+            background:transparent; color:#9090b8; border:none;
+            font-size:18px; cursor:pointer; padding:0 2px; line-height:1;
+        ">✕</button>
+    </div>
 </body>
 </html>
