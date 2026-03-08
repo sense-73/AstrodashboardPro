@@ -86,6 +86,47 @@
             document.getElementById('info-nightstart').innerText = ft(atStart.night); 
             document.getElementById('info-nightend').innerText = ft(atEnd.nightEnd); 
             document.getElementById('info-sunrise').innerText = ft(atEnd.sunrise);
+
+            // ── CALCOLO MERIDIAN FLIP (analitico) ────────────────────────────────
+            (function() {
+                let mfEl = document.getElementById('info-meridianflip');
+                if (!mfEl || targetSelezionato.ra == null) { if(mfEl) mfEl.innerText = '--:--'; return; }
+                try {
+                    let midnightUTC = Date.UTC(dOggi.getFullYear(), dOggi.getMonth(), dOggi.getDate(), 0, 0, 0);
+                    let jd0  = midnightUTC / 86400000 + 2440587.5;
+                    let d0   = jd0 - 2451545.0;
+                    let gmst0 = ((280.46061837 + 360.98564736629 * d0) % 360 + 360) % 360;
+                    let lst0  = ((gmst0 + lonCorrente) % 360 + 360) % 360;
+                    let raDeg = targetSelezionato.ra * 15;
+                    let diff  = ((raDeg - lst0) % 360 + 360) % 360;
+                    let transitHoursUTC = diff / 15.04107;
+                    let flipTime = new Date(midnightUTC + transitHoursUTC * 3600000);
+                    let sunsetMs  = (atStart.sunset  || atStart.dusk  || new Date(midnightUTC + 21*3600000)).getTime();
+                    let sunriseMs = (atEnd.sunrise   || atEnd.dawn    || new Date(midnightUTC + 43*3600000)).getTime();
+                    if (flipTime.getTime() < sunsetMs) flipTime = new Date(flipTime.getTime() + 86400000);
+                    if (flipTime.getTime() > sunriseMs + 3600000) {
+                        mfEl.innerText = t('meridian_flip_outside'); mfEl.style.color = '#666'; mfEl.title = ''; return;
+                    }
+                    mfEl.innerText = ft(flipTime);
+                    let tS = document.getElementById('time-start').value;
+                    let tE = document.getElementById('time-end').value;
+                    if (tS && tE) {
+                        let base  = '1970-01-01T';
+                        let sDate = new Date(base + tS + ':00');
+                        let eDate = new Date(base + tE + ':00');
+                        let hhmm  = flipTime.toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'});
+                        let fDate = new Date(base + hhmm + ':00');
+                        if (eDate <= sDate) eDate.setDate(eDate.getDate() + 1);
+                        if (fDate < sDate)  fDate.setDate(fDate.getDate() + 1);
+                        if (fDate >= sDate && fDate <= eDate) {
+                            mfEl.style.color = '#ff4444'; mfEl.title = t('meridian_flip_warn');
+                        } else {
+                            mfEl.style.color = '#ffaa00'; mfEl.title = t('meridian_flip_ok');
+                        }
+                    }
+                } catch(e) { console.warn('[MF]', e); mfEl.innerText = '--:--'; }
+            })();
+            // ─────────────────────────────────────────────────────────────────────
             
             let nS = atStart.night || atStart.sunset; let nE = atEnd.nightEnd || atEnd.sunrise;
             let cur = new Date(nS.getTime()); let maxA = -90; let currentBlock = { start: null, end: null }; let bestBlock = { start: null, end: null, duration: 0 }; let isAbove = false;
