@@ -477,6 +477,18 @@ function aggiungiNotte() {
             scaricaDatiPrevisionali();
             if (typeof toggleSensorMode === 'function') toggleSensorMode();
 
+            // Banner rotazione: visibile solo su mobile in portrait
+            function aggiornaRotateHint() {
+                let hint = document.getElementById('rotate-hint');
+                if (!hint) return;
+                let isMobile = window.innerWidth <= 768 || ('ontouchstart' in window);
+                let isPortrait = window.innerHeight > window.innerWidth;
+                hint.style.display = (isMobile && isPortrait) ? 'flex' : 'none';
+            }
+            aggiornaRotateHint();
+            window.addEventListener('resize', aggiornaRotateHint);
+            window.addEventListener('orientationchange', () => setTimeout(aggiornaRotateHint, 300));
+
             // Ripristina l'ultima schermata visitata dopo un F5 (Refresh)
             let savedTarget = sessionStorage.getItem('ad_current_target');
             let savedView = sessionStorage.getItem('ad_current_view'); // Controlla se eravamo nella PRO

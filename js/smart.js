@@ -22,7 +22,7 @@ function toggleLock(id) {
 
             // Header colonne
             let header = document.createElement('div');
-            header.style.cssText = 'display:grid; grid-template-columns: 130px 60px 70px 60px 60px 60px 80px 70px; gap:5px; font-size:0.75em; color:#aaa; text-align:center; border-bottom:1px solid #444; padding-bottom:5px; margin-bottom:6px;';
+            header.style.cssText = 'display:grid; grid-template-columns: 2fr 0.7fr 0.9fr 0.7fr 0.7fr 0.7fr 1fr 0.9fr; gap:4px; font-size:0.75em; color:#aaa; text-align:center; border-bottom:1px solid #444; padding-bottom:5px; margin-bottom:6px;';
             header.innerHTML = '<div style="text-align:left;">Filtro</div><div>Pose</div><div>Secs</div><div>Gain</div><div>Offset</div><div>Bin</div><div>Dither</div><div style="text-align:right;">Totale</div>';
             c.appendChild(header);
 
@@ -32,7 +32,7 @@ function toggleLock(id) {
                 let isBs = f.id.includes('bias');
 
                 let r = document.createElement('div');
-                r.style.cssText = `display:grid; grid-template-columns: 130px 60px 70px 60px 60px 60px 80px 70px; gap:5px; align-items:center; background:#222; padding:7px 8px; border-radius:5px; border-left:3px solid #555; margin-bottom:6px;`;
+                r.style.cssText = `display:grid; grid-template-columns: 2fr 0.7fr 0.9fr 0.7fr 0.7fr 0.7fr 1fr 0.9fr; gap:4px; align-items:center; background:#222; padding:6px 6px; border-radius:5px; border-left:3px solid #555; margin-bottom:6px;`;
                 r.className = f.class;
 
                 // Checkbox + nome filtro

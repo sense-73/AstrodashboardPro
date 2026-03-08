@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AstroDashboard v5.7 - Global Edition</title>
+    <title>AstroDashboard v5.8 - Global Edition</title>
     
     <link rel="manifest" href="manifest.json?v=3">
     <meta name="theme-color" content="#121212">
@@ -47,7 +47,7 @@
         </div>
         <div class="author-section">
             <div>
-                <p style="margin: 0 0 6px 0; font-size: 0.9em; color: #fff; font-weight: bold;">v5.7.0-Global</p>
+                <p style="margin: 0 0 6px 0; font-size: 0.9em; color: #fff; font-weight: bold;">v5.8.0-Global</p>
                 <button class="btn-guide" onclick="apriGuida()" style="margin: 0;"><span data-i18n="manual_btn">📖 Apri Manuale</span></button>
             </div>
             <img src="logo astro enrico sfondo.png" alt="Enrico Salis Logo" style="height: 60px; object-fit: contain; border-radius: 5px;">
@@ -358,6 +358,12 @@
             </div>
             
             <div id="frames-container"></div>
+
+            <!-- Banner rotazione mobile: visibile solo in portrait su schermi stretti -->
+            <div id="rotate-hint" style="display:none; align-items:center; gap:10px; background:rgba(187,134,252,0.08); border:1px solid rgba(187,134,252,0.3); border-radius:6px; padding:10px 14px; margin:8px 0; font-size:0.82em; color:#bb86fc;">
+                <span style="font-size:1.4em;">📱</span>
+                <span data-i18n="rotate_hint">Per una visualizzazione ottimale della griglia, ruota il telefono in orizzontale.</span>
+            </div>
 
 
             <div class="calc-row" style="border-left-color: #ffaa00; margin-top: 10px; background: #2a2a2a;">

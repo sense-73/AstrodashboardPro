@@ -2,27 +2,28 @@
 // Strategia: Network First per index.html, Cache First per statici, Network Only per API
 // ============================================================
 
-const CACHE_NAME = 'astrodash-v5-17';
-
-// IMPORTANTE: ad ogni deploy incrementare APP_VERSION qui e ?v=X in index.html
-const APP_VERSION = '7';
+// CACHE_NAME usa un timestamp fisso aggiornato ad ogni deploy
+// Non serve più incrementare manualmente — basta cambiare questa data
+const CACHE_TIMESTAMP = '20260308-003';
+const CACHE_NAME = 'astrodash-' + CACHE_TIMESTAMP;
+const APP_VERSION = CACHE_TIMESTAMP;
 
 const FILES_TO_CACHE = [
     './',
     './index.html',
     './css/style.css',
-    `./database.js?v=${APP_VERSION}`,
-    `./js/i18n.js?v=${APP_VERSION}`,
-    `./js/globals.js?v=${APP_VERSION}`,
-    `./js/core.js?v=${APP_VERSION}`,
-    `./js/equipment.js?v=${APP_VERSION}`,
-    `./js/weather.js?v=${APP_VERSION}`,
-    `./js/planetarium.js?v=${APP_VERSION}`,
-    `./js/fov.js?v=${APP_VERSION}`,
-    `./js/smart.js?v=${APP_VERSION}`,
-    `./js/pro.js?v=${APP_VERSION}`,
-    `./js/export.js?v=${APP_VERSION}`,
-    `./js/multinight.js?v=${APP_VERSION}`,
+    './database.js',
+    './js/i18n.js',
+    './js/globals.js',
+    './js/core.js',
+    './js/equipment.js',
+    './js/weather.js',
+    './js/planetarium.js',
+    './js/fov.js',
+    './js/smart.js',
+    './js/pro.js',
+    './js/export.js',
+    './js/multinight.js',
     './manifest.json'
 ];
 

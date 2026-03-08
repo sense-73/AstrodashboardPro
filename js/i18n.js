@@ -476,4 +476,9 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.es.bias_overhead_tip = "Sobrecarga técnica estimada por fotograma (lectura del sensor + guardado FITS). Los Bias tienen exp=0 pero requieren este tiempo.";
         i18n.zh.bias_overhead_tip = "每帧预估技术开销（传感器读出 + FITS保存）。偏置帧曝光=0，但每帧仍需此时间开销。";
 
+        i18n.it.rotate_hint = "📱 Per una visualizzazione ottimale della griglia filtri, ruota il telefono in orizzontale.";
+        i18n.en.rotate_hint = "📱 For optimal filter grid display, rotate your phone to landscape.";
+        i18n.es.rotate_hint = "📱 Para una visualización óptima de la cuadrícula, gira el teléfono en horizontal.";
+        i18n.zh.rotate_hint = "📱 为了最佳滤镜网格显示效果，请将手机横向旋转。";
+
         function t(key) { return i18n[lang][key] || key; }
