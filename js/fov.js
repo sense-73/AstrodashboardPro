@@ -107,14 +107,16 @@
                     if (flipTime.getTime() > sunriseMs + 3600000) {
                         mfEl.innerText = t('meridian_flip_outside'); mfEl.style.color = '#666'; mfEl.title = ''; return;
                     }
-                    mfEl.innerText = ft(flipTime);
+                    // formatter manuale: niente toLocaleTimeString per evitare bug con locale sistema
+                    let fmtHHMM = (d) => ('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2);
+                    let hhmm = fmtHHMM(flipTime);
+                    mfEl.innerText = hhmm;
                     let tS = document.getElementById('time-start').value;
                     let tE = document.getElementById('time-end').value;
                     if (tS && tE) {
                         let base  = '1970-01-01T';
                         let sDate = new Date(base + tS + ':00');
                         let eDate = new Date(base + tE + ':00');
-                        let hhmm  = flipTime.toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'});
                         let fDate = new Date(base + hhmm + ':00');
                         if (eDate <= sDate) eDate.setDate(eDate.getDate() + 1);
                         if (fDate < sDate)  fDate.setDate(fDate.getDate() + 1);

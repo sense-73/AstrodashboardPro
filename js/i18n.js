@@ -486,4 +486,412 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.es.bin_label = "BIN:";
         i18n.zh.bin_label = "像素合并:";
 
+        i18n.it.report_pdf_btn    = "📄 Esporta Report HTML";
+        i18n.en.report_pdf_btn    = "📄 Export HTML Report";
+        i18n.es.report_pdf_btn    = "📄 Exportar Informe HTML";
+        i18n.zh.report_pdf_btn    = "📄 导出HTML报告";
+
+        i18n.it.report_mn_pdf_btn = "📄 Esporta Report HTML Progetto";
+        i18n.en.report_mn_pdf_btn = "📄 Export Project HTML Report";
+        i18n.es.report_mn_pdf_btn = "📄 Exportar Informe HTML del Proyecto";
+        i18n.zh.report_mn_pdf_btn = "📄 导出项目HTML报告";
+
+        // ── Traduzioni PDF Report ──────────────────────────────────────────────
+        i18n.it.rpt_session_title   = "Report Sessione di Ripresa";
+        i18n.en.rpt_session_title   = "Imaging Session Report";
+        i18n.es.rpt_session_title   = "Informe de Sesion de Captura";
+        i18n.zh.rpt_session_title   = "拍摄会话报告";
+
+        i18n.it.rpt_mn_title        = "Report Progetto Multinotte";
+        i18n.en.rpt_mn_title        = "Multi-Night Project Report";
+        i18n.es.rpt_mn_title        = "Informe Proyecto Multinoche";
+        i18n.zh.rpt_mn_title        = "多夜项目报告";
+
+        i18n.it.rpt_nights_lbl      = "notti";
+        i18n.en.rpt_nights_lbl      = "nights";
+        i18n.es.rpt_nights_lbl      = "noches";
+        i18n.zh.rpt_nights_lbl      = "夜";
+
+        i18n.it.rpt_generated       = "Generato il";
+        i18n.en.rpt_generated       = "Generated on";
+        i18n.es.rpt_generated       = "Generado el";
+        i18n.zh.rpt_generated       = "生成于";
+
+        i18n.it.rpt_page            = "Pag.";
+        i18n.en.rpt_page            = "Page";
+        i18n.es.rpt_page            = "Pag.";
+        i18n.zh.rpt_page            = "第";
+
+        // Titoli sezioni
+        i18n.it.rpt_sec_target      = "Informazioni Target";
+        i18n.en.rpt_sec_target      = "Target Information";
+        i18n.es.rpt_sec_target      = "Informacion del Objetivo";
+        i18n.zh.rpt_sec_target      = "目标信息";
+
+        i18n.it.rpt_sec_optics      = "Setup Ottico";
+        i18n.en.rpt_sec_optics      = "Optical Setup";
+        i18n.es.rpt_sec_optics      = "Configuracion Optica";
+        i18n.zh.rpt_sec_optics      = "光学设置";
+
+        i18n.it.rpt_sec_ephemeris   = "Effemeridi della Notte";
+        i18n.en.rpt_sec_ephemeris   = "Night Ephemeris";
+        i18n.es.rpt_sec_ephemeris   = "Efemerides Nocturnas";
+        i18n.zh.rpt_sec_ephemeris   = "夜间天文历";
+
+        i18n.it.rpt_sec_program     = "Programmazione Sessione";
+        i18n.en.rpt_sec_program     = "Session Schedule";
+        i18n.es.rpt_sec_program     = "Programacion de Sesion";
+        i18n.zh.rpt_sec_program     = "会话计划";
+
+        i18n.it.rpt_sec_analysis    = "Analisi Strategica";
+        i18n.en.rpt_sec_analysis    = "Strategic Analysis";
+        i18n.es.rpt_sec_analysis    = "Analisis Estrategico";
+        i18n.zh.rpt_sec_analysis    = "策略分析";
+
+        i18n.it.rpt_sec_project     = "Riepilogo Progetto";
+        i18n.en.rpt_sec_project     = "Project Summary";
+        i18n.es.rpt_sec_project     = "Resumen del Proyecto";
+        i18n.zh.rpt_sec_project     = "项目摘要";
+
+        // Label griglia target
+        i18n.it.rpt_label_type      = "Tipologia";
+        i18n.en.rpt_label_type      = "Type";
+        i18n.es.rpt_label_type      = "Tipo";
+        i18n.zh.rpt_label_type      = "类型";
+
+        i18n.it.rpt_label_mag       = "Magnitudine App.";
+        i18n.en.rpt_label_mag       = "App. Magnitude";
+        i18n.es.rpt_label_mag       = "Magnitud Ap.";
+        i18n.zh.rpt_label_mag       = "视星等";
+
+        i18n.it.rpt_label_dist      = "Distanza";
+        i18n.en.rpt_label_dist      = "Distance";
+        i18n.es.rpt_label_dist      = "Distancia";
+        i18n.zh.rpt_label_dist      = "距离";
+
+        i18n.it.rpt_label_size      = "Dimensione";
+        i18n.en.rpt_label_size      = "Size";
+        i18n.es.rpt_label_size      = "Tamano";
+        i18n.zh.rpt_label_size      = "尺寸";
+
+        // Label griglia setup ottico
+        i18n.it.rpt_label_focal     = "Telescopio - Focale";
+        i18n.en.rpt_label_focal     = "Telescope - Focal Length";
+        i18n.es.rpt_label_focal     = "Telescopio - Focal";
+        i18n.zh.rpt_label_focal     = "望远镜 - 焦距";
+
+        i18n.it.rpt_label_focal2    = "Focale";
+        i18n.en.rpt_label_focal2    = "Focal Length";
+        i18n.es.rpt_label_focal2    = "Focal";
+        i18n.zh.rpt_label_focal2    = "焦距";
+
+        i18n.it.rpt_label_diameter  = "Diametro / Rapporto";
+        i18n.en.rpt_label_diameter  = "Diameter / Ratio";
+        i18n.es.rpt_label_diameter  = "Diametro / Relacion";
+        i18n.zh.rpt_label_diameter  = "口径 / 焦比";
+
+        i18n.it.rpt_label_sensorw   = "Sensore Larg. W";
+        i18n.en.rpt_label_sensorw   = "Sensor Width W";
+        i18n.es.rpt_label_sensorw   = "Sensor Ancho W";
+        i18n.zh.rpt_label_sensorw   = "传感器宽度 W";
+
+        i18n.it.rpt_label_sensorh   = "Sensore Alt. H";
+        i18n.en.rpt_label_sensorh   = "Sensor Height H";
+        i18n.es.rpt_label_sensorh   = "Sensor Alto H";
+        i18n.zh.rpt_label_sensorh   = "传感器高度 H";
+
+        i18n.it.rpt_label_sensor_wh = "Sensore W x H";
+        i18n.en.rpt_label_sensor_wh = "Sensor W x H";
+        i18n.es.rpt_label_sensor_wh = "Sensor W x H";
+        i18n.zh.rpt_label_sensor_wh = "传感器 W x H";
+
+        i18n.it.rpt_label_pixel     = "Pixel";
+        i18n.en.rpt_label_pixel     = "Pixel Size";
+        i18n.es.rpt_label_pixel     = "Pixel";
+        i18n.zh.rpt_label_pixel     = "像素尺寸";
+
+        i18n.it.rpt_label_mode      = "Modalita";
+        i18n.en.rpt_label_mode      = "Mode";
+        i18n.es.rpt_label_mode      = "Modo";
+        i18n.zh.rpt_label_mode      = "模式";
+
+        i18n.it.rpt_label_samp_native = "Campionamento nativo";
+        i18n.en.rpt_label_samp_native = "Native Sampling";
+        i18n.es.rpt_label_samp_native = "Muestreo Nativo";
+        i18n.zh.rpt_label_samp_native = "原始采样";
+
+        i18n.it.rpt_label_samp      = "Campionamento";
+        i18n.en.rpt_label_samp      = "Sampling";
+        i18n.es.rpt_label_samp      = "Muestreo";
+        i18n.zh.rpt_label_samp      = "采样率";
+
+        i18n.it.rpt_label_bin       = "BIN sessione";
+        i18n.en.rpt_label_bin       = "Session BIN";
+        i18n.es.rpt_label_bin       = "BIN de sesion";
+        i18n.zh.rpt_label_bin       = "会话像素合并";
+
+        i18n.it.rpt_label_bin_sensor = "BIN / Tipo sensore";
+        i18n.en.rpt_label_bin_sensor = "BIN / Sensor Type";
+        i18n.es.rpt_label_bin_sensor = "BIN / Tipo sensor";
+        i18n.zh.rpt_label_bin_sensor = "像素合并 / 传感器类型";
+
+        i18n.it.rpt_label_fov       = "FOV calcolato";
+        i18n.en.rpt_label_fov       = "Calculated FOV";
+        i18n.es.rpt_label_fov       = "FOV calculado";
+        i18n.zh.rpt_label_fov       = "计算FOV";
+
+        i18n.it.rpt_label_sensor_type = "Tipo sensore";
+        i18n.en.rpt_label_sensor_type = "Sensor Type";
+        i18n.es.rpt_label_sensor_type = "Tipo de sensor";
+        i18n.zh.rpt_label_sensor_type = "传感器类型";
+
+        i18n.it.rpt_label_sensor    = "Sensore";
+        i18n.en.rpt_label_sensor    = "Sensor";
+        i18n.es.rpt_label_sensor    = "Sensor";
+        i18n.zh.rpt_label_sensor    = "传感器";
+
+        // Label griglia effemeridi
+        i18n.it.rpt_label_sunset    = "Tramonto";
+        i18n.en.rpt_label_sunset    = "Sunset";
+        i18n.es.rpt_label_sunset    = "Puesta de sol";
+        i18n.zh.rpt_label_sunset    = "日落";
+
+        i18n.it.rpt_label_nightstart = "Inizio Notte Astr.";
+        i18n.en.rpt_label_nightstart = "Astro Night Start";
+        i18n.es.rpt_label_nightstart = "Inicio Noche Astro.";
+        i18n.zh.rpt_label_nightstart = "天文夜开始";
+
+        i18n.it.rpt_label_flip      = "Meridian Flip";
+        i18n.en.rpt_label_flip      = "Meridian Flip";
+        i18n.es.rpt_label_flip      = "Meridian Flip";
+        i18n.zh.rpt_label_flip      = "子午翻转";
+
+        i18n.it.rpt_label_nightend  = "Fine Notte Astr.";
+        i18n.en.rpt_label_nightend  = "Astro Night End";
+        i18n.es.rpt_label_nightend  = "Fin Noche Astro.";
+        i18n.zh.rpt_label_nightend  = "天文夜结束";
+
+        i18n.it.rpt_label_sunrise   = "Alba";
+        i18n.en.rpt_label_sunrise   = "Sunrise";
+        i18n.es.rpt_label_sunrise   = "Amanecer";
+        i18n.zh.rpt_label_sunrise   = "日出";
+
+        i18n.it.rpt_label_window    = "Finestra ripresa";
+        i18n.en.rpt_label_window    = "Imaging Window";
+        i18n.es.rpt_label_window    = "Ventana de captura";
+        i18n.zh.rpt_label_window    = "拍摄时间窗口";
+
+        // Label griglia programmazione
+        i18n.it.rpt_label_start     = "Inizio";
+        i18n.en.rpt_label_start     = "Start";
+        i18n.es.rpt_label_start     = "Inicio";
+        i18n.zh.rpt_label_start     = "开始";
+
+        i18n.it.rpt_label_end       = "Fine";
+        i18n.en.rpt_label_end       = "End";
+        i18n.es.rpt_label_end       = "Fin";
+        i18n.zh.rpt_label_end       = "结束";
+
+        i18n.it.rpt_label_duration  = "Durata totale";
+        i18n.en.rpt_label_duration  = "Total Duration";
+        i18n.es.rpt_label_duration  = "Duracion total";
+        i18n.zh.rpt_label_duration  = "总时长";
+
+        i18n.it.rpt_label_frames    = "Frame totali";
+        i18n.en.rpt_label_frames    = "Total Frames";
+        i18n.es.rpt_label_frames    = "Fotogramas totales";
+        i18n.zh.rpt_label_frames    = "总帧数";
+
+        i18n.it.rpt_label_int_net   = "Integrazione netta";
+        i18n.en.rpt_label_int_net   = "Net Integration";
+        i18n.es.rpt_label_int_net   = "Integracion neta";
+        i18n.zh.rpt_label_int_net   = "净积分时间";
+
+        i18n.it.rpt_label_int_total = "Integrazione totale";
+        i18n.en.rpt_label_int_total = "Total Integration";
+        i18n.es.rpt_label_int_total = "Integracion total";
+        i18n.zh.rpt_label_int_total = "总积分时间";
+
+        i18n.it.rpt_label_nights    = "Notti pianificate";
+        i18n.en.rpt_label_nights    = "Planned Nights";
+        i18n.es.rpt_label_nights    = "Noches planificadas";
+        i18n.zh.rpt_label_nights    = "计划夜数";
+
+        i18n.it.rpt_label_tpt       = "Obiettivo TPT";
+        i18n.en.rpt_label_tpt       = "TPT Goal";
+        i18n.es.rpt_label_tpt       = "Objetivo TPT";
+        i18n.zh.rpt_label_tpt       = "TPT目标";
+
+        i18n.it.rpt_label_context   = "Modalita ripresa";
+        i18n.en.rpt_label_context   = "Capture Mode";
+        i18n.es.rpt_label_context   = "Modo de captura";
+        i18n.zh.rpt_label_context   = "拍摄模式";
+
+        i18n.it.rpt_label_nights_vs = "Notti completate / pianificate";
+        i18n.en.rpt_label_nights_vs = "Completed / Planned nights";
+        i18n.es.rpt_label_nights_vs = "Noches completadas / planificadas";
+        i18n.zh.rpt_label_nights_vs = "已完成 / 计划夜数";
+
+        i18n.it.rpt_label_night_int = "Integrazione notte:";
+        i18n.en.rpt_label_night_int = "Night integration:";
+        i18n.es.rpt_label_night_int = "Integracion noche:";
+        i18n.zh.rpt_label_night_int = "本夜积分:";
+
+        // Valori fissi
+        i18n.it.rpt_val_mono        = "Monocromatico";
+        i18n.en.rpt_val_mono        = "Monochrome";
+        i18n.es.rpt_val_mono        = "Monocromatico";
+        i18n.zh.rpt_val_mono        = "单色";
+
+        i18n.it.rpt_val_color       = "Colore (OSC)";
+        i18n.en.rpt_val_color       = "Color (OSC)";
+        i18n.es.rpt_val_color       = "Color (OSC)";
+        i18n.zh.rpt_val_color       = "彩色 (OSC)";
+
+        i18n.it.rpt_val_single      = "Scatto Singolo";
+        i18n.en.rpt_val_single      = "Single Frame";
+        i18n.es.rpt_val_single      = "Disparo Unico";
+        i18n.zh.rpt_val_single      = "单次拍摄";
+
+        i18n.it.rpt_val_mosaic      = "Mosaico";
+        i18n.en.rpt_val_mosaic      = "Mosaic";
+        i18n.es.rpt_val_mosaic      = "Mosaico";
+        i18n.zh.rpt_val_mosaic      = "马赛克";
+
+        i18n.it.rpt_val_pro         = "PRO";
+        i18n.en.rpt_val_pro         = "PRO";
+        i18n.es.rpt_val_pro         = "PRO";
+        i18n.zh.rpt_val_pro         = "PRO";
+
+        i18n.it.rpt_val_smart       = "Smart";
+        i18n.en.rpt_val_smart       = "Smart";
+        i18n.es.rpt_val_smart       = "Smart";
+        i18n.zh.rpt_val_smart       = "Smart";
+
+        // Intestazione tabella filtri
+        i18n.it.rpt_th_filter       = "Filtro";
+        i18n.en.rpt_th_filter       = "Filter";
+        i18n.es.rpt_th_filter       = "Filtro";
+        i18n.zh.rpt_th_filter       = "滤镜";
+
+        i18n.it.rpt_th_frames       = "Pose";
+        i18n.en.rpt_th_frames       = "Frames";
+        i18n.es.rpt_th_frames       = "Poses";
+        i18n.zh.rpt_th_frames       = "帧数";
+
+        i18n.it.rpt_th_exp          = "Esposizione";
+        i18n.en.rpt_th_exp          = "Exposure";
+        i18n.es.rpt_th_exp          = "Exposicion";
+        i18n.zh.rpt_th_exp          = "曝光时间";
+
+        i18n.it.rpt_th_gain         = "Gain";
+        i18n.en.rpt_th_gain         = "Gain";
+        i18n.es.rpt_th_gain         = "Ganancia";
+        i18n.zh.rpt_th_gain         = "增益";
+
+        i18n.it.rpt_th_offset       = "Offset";
+        i18n.en.rpt_th_offset       = "Offset";
+        i18n.es.rpt_th_offset       = "Offset";
+        i18n.zh.rpt_th_offset       = "偏置";
+
+        i18n.it.rpt_th_bin          = "BIN";
+        i18n.en.rpt_th_bin          = "BIN";
+        i18n.es.rpt_th_bin          = "BIN";
+        i18n.zh.rpt_th_bin          = "像素合并";
+
+        i18n.it.rpt_th_total        = "Totale";
+        i18n.en.rpt_th_total        = "Total";
+        i18n.es.rpt_th_total        = "Total";
+        i18n.zh.rpt_th_total        = "合计";
+
+        // Consiglio tattico
+        i18n.it.rpt_tip_label       = "Consiglio Tattico:";
+        i18n.en.rpt_tip_label       = "Tactical Tip:";
+        i18n.es.rpt_tip_label       = "Consejo Tactico:";
+        i18n.zh.rpt_tip_label       = "战术建议:";
+
+        // Qualita campionamento (forma lunga singola notte)
+        i18n.it.rpt_q_over          = "Sovracampionamento - stai sprecando fotoni";
+        i18n.en.rpt_q_over          = "Oversampling - you are wasting photons";
+        i18n.es.rpt_q_over          = "Sobremuestreo - estas desperdiciando fotones";
+        i18n.zh.rpt_q_over          = "过采样 - 正在浪费光子";
+
+        i18n.it.rpt_q_ideal         = "Campionamento ideale - configurazione ottimale";
+        i18n.en.rpt_q_ideal         = "Ideal sampling - optimal setup";
+        i18n.es.rpt_q_ideal         = "Muestreo ideal - configuracion optima";
+        i18n.zh.rpt_q_ideal         = "理想采样 - 最优配置";
+
+        i18n.it.rpt_q_under         = "Sottocampionamento - stelle leggermente squadrate";
+        i18n.en.rpt_q_under         = "Undersampling - slightly squared stars";
+        i18n.es.rpt_q_under         = "Submuestreo - estrellas ligeramente cuadradas";
+        i18n.zh.rpt_q_under         = "欠采样 - 星点略呈方形";
+
+        // Qualita campionamento (forma breve multinotte)
+        i18n.it.rpt_q_over_s        = "Sovracampionamento";
+        i18n.en.rpt_q_over_s        = "Oversampling";
+        i18n.es.rpt_q_over_s        = "Sobremuestreo";
+        i18n.zh.rpt_q_over_s        = "过采样";
+
+        i18n.it.rpt_q_ideal_s       = "Campionamento ideale";
+        i18n.en.rpt_q_ideal_s       = "Ideal sampling";
+        i18n.es.rpt_q_ideal_s       = "Muestreo ideal";
+        i18n.zh.rpt_q_ideal_s       = "理想采样";
+
+        i18n.it.rpt_q_under_s       = "Sottocampionamento";
+        i18n.en.rpt_q_under_s       = "Undersampling";
+        i18n.es.rpt_q_under_s       = "Submuestreo";
+        i18n.zh.rpt_q_under_s       = "欠采样";
+
+        // Qualita integrazione
+        i18n.it.rpt_q_int_low       = "Integrazione bassa - aumenta le pose";
+        i18n.en.rpt_q_int_low       = "Low integration - add more frames";
+        i18n.es.rpt_q_int_low       = "Integracion baja - agrega mas poses";
+        i18n.zh.rpt_q_int_low       = "积分不足 - 请增加帧数";
+
+        i18n.it.rpt_q_int_good      = "Integrazione buona - sufficiente per soggetti brillanti";
+        i18n.en.rpt_q_int_good      = "Good integration - sufficient for bright targets";
+        i18n.es.rpt_q_int_good      = "Buena integracion - suficiente para objetos brillantes";
+        i18n.zh.rpt_q_int_good      = "积分良好 - 适合亮目标";
+
+        i18n.it.rpt_q_int_high      = "Integrazione elevata - ottima per soggetti deboli";
+        i18n.en.rpt_q_int_high      = "High integration - excellent for faint targets";
+        i18n.es.rpt_q_int_high      = "Alta integracion - excelente para objetos debiles";
+        i18n.zh.rpt_q_int_high      = "积分充足 - 适合暗弱目标";
+
+        i18n.it.rpt_q_int_low_s     = "Integrazione bassa";
+        i18n.en.rpt_q_int_low_s     = "Low integration";
+        i18n.es.rpt_q_int_low_s     = "Integracion baja";
+        i18n.zh.rpt_q_int_low_s     = "积分不足";
+
+        i18n.it.rpt_q_int_good_s    = "Integrazione buona";
+        i18n.en.rpt_q_int_good_s    = "Good integration";
+        i18n.es.rpt_q_int_good_s    = "Buena integracion";
+        i18n.zh.rpt_q_int_good_s    = "积分良好";
+
+        i18n.it.rpt_q_int_high_s    = "Integrazione elevata";
+        i18n.en.rpt_q_int_high_s    = "High integration";
+        i18n.es.rpt_q_int_high_s    = "Alta integracion";
+        i18n.zh.rpt_q_int_high_s    = "积分充足";
+
+        // Alert
+        i18n.it.rpt_alert_no_target = "Nessun target selezionato!";
+        i18n.en.rpt_alert_no_target = "No target selected!";
+        i18n.es.rpt_alert_no_target = "Ningun objetivo seleccionado!";
+        i18n.zh.rpt_alert_no_target = "未选择目标！";
+
+        i18n.it.rpt_alert_no_lib    = "Libreria PDF non caricata.\nVerifica la connessione internet e ricarica la pagina.";
+        i18n.en.rpt_alert_no_lib    = "PDF library not loaded.\nCheck your internet connection and reload the page.";
+        i18n.es.rpt_alert_no_lib    = "Libreria PDF no cargada.\nVerifica la conexion a internet y recarga la pagina.";
+        i18n.zh.rpt_alert_no_lib    = "PDF库未加载。\n请检查网络连接后重新加载页面。";
+
+        i18n.it.rpt_frames_unit     = "pose";
+        i18n.en.rpt_frames_unit     = "frames";
+        i18n.es.rpt_frames_unit     = "poses";
+        i18n.zh.rpt_frames_unit     = "帧";
+
+        i18n.it.rpt_alert_no_nights = "Nessuna notte pianificata!";
+        i18n.en.rpt_alert_no_nights = "No nights planned!";
+        i18n.es.rpt_alert_no_nights = "Ninguna noche planificada!";
+        i18n.zh.rpt_alert_no_nights = "未规划任何夜晚！";
+
         function t(key) { return i18n[lang][key] || key; }

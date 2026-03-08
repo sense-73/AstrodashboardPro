@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AstroDashboard v5.8.1 - Global Edition</title>
+    <title>AstroDashboard v5.8.2 - Global Edition</title>
     
     <link rel="manifest" href="manifest.json?v=3">
     <meta name="theme-color" content="#121212">
@@ -47,7 +47,7 @@
         </div>
         <div class="author-section">
             <div>
-                <p style="margin: 0 0 6px 0; font-size: 0.9em; color: #fff; font-weight: bold;">v5.8.1-Global</p>
+                <p style="margin: 0 0 6px 0; font-size: 0.9em; color: #fff; font-weight: bold;">v5.8.2-Global</p>
                 <button class="btn-guide" onclick="apriGuida()" style="margin: 0;"><span data-i18n="manual_btn">📖 Apri Manuale</span></button>
             </div>
             <img src="logo astro enrico sfondo.png" alt="Enrico Salis Logo" style="height: 60px; object-fit: contain; border-radius: 5px;">
@@ -436,6 +436,7 @@
                 <button id="btn-export-nina" class="btn-smart" style="background: linear-gradient(135deg, #ff4444 0%, #aa0000 100%); box-shadow: 0 4px 15px rgba(255, 68, 68, 0.3); margin-bottom: 10px;" onclick="esportaNINA()" data-i18n="gen_nina_btn">💾 Genera File per N.I.N.A.</button>
                 <button id="btn-export-asiair" class="btn-smart" style="background: linear-gradient(135deg, #D32F2F 0%, #B71C1C 100%); box-shadow: 0 4px 15px rgba(211, 47, 47, 0.3); margin-bottom: 10px; margin-left: 10px;" onclick="esportaASIAIR()" data-i18n="export_asiair">🔴 Export ZWO ASIAIR</button>
                 <button id="btn-report-mosaic" class="btn-smart" style="display: none; background: linear-gradient(135deg, #7c4dff 0%, #3f51b5 100%); box-shadow: 0 4px 15px rgba(124, 77, 255, 0.3);" onclick="apriReport()" data-i18n="gen_report_btn">📝 Genera Report Strategico</button>
+                <button id="btn-report-pdf" class="btn-smart" style="background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%); box-shadow: 0 4px 15px rgba(46,125,50,0.3); margin-bottom: 10px; margin-left: 10px;" onclick="generaReportNotte()" data-i18n="report_pdf_btn">📄 Esporta Report PDF</button>
                 <p id="nina-mosaic-msg" style="display: none; color: #ffaa00; font-size: 0.9em; text-align: justify; line-height: 1.5; margin-top: 15px; padding: 15px; background: rgba(255, 170, 0, 0.1); border-left: 3px solid #ffaa00; border-radius: 4px;" data-i18n="nina_mosaic_msg">📌 Modalità Mosaico attiva. Usa il Framing Assistant di N.I.N.A. per le coordinate.</p>
             </div>
         </div>
@@ -590,6 +591,7 @@
             <div style="padding: 20px 25px; overflow-y: auto; flex: 1;">
                 <div id="mn-nights-container" style="display: flex; flex-direction: column; gap: 15px;"></div>
                 <button class="btn-smart" style="margin-top: 20px; width: 100%; background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%); box-shadow: none;" onclick="aggiungiNotte()" data-i18n="mn_add_night">➕ Aggiungi Sessione (Notte)</button>
+                <button class="btn-smart" style="margin-top: 10px; width: 100%; background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%); box-shadow: 0 4px 15px rgba(46,125,50,0.3);" onclick="generaReportMultiNotte()" data-i18n="report_mn_pdf_btn">📄 Esporta Report PDF Progetto</button>
             </div>
             
         </div>
@@ -973,5 +975,6 @@
     <script src="js/pro.js"></script>
     <script src="js/export.js"></script>
     <script src="js/multinight.js"></script>
+    <script src="js/report.js"></script>
 </body>
 </html>
