@@ -121,6 +121,8 @@
                 aladinSkyMap.on('positionChanged', function(pos) {
                     aggiornaCoordinateFOV(pos.ra, pos.dec);
                 });
+                // Imposta subito le coordinate del target senza aspettare il primo movimento
+                aggiornaCoordinateFOVdaTarget();
                 setTimeout(() => { toggleMosaic(); }, 300);
             } else {
                 setTimeout(() => {

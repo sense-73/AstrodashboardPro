@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AstroDashboard v5.8 - Global Edition</title>
+    <title>AstroDashboard v5.8.1 - Global Edition</title>
     
     <link rel="manifest" href="manifest.json?v=3">
     <meta name="theme-color" content="#121212">
@@ -47,7 +47,7 @@
         </div>
         <div class="author-section">
             <div>
-                <p style="margin: 0 0 6px 0; font-size: 0.9em; color: #fff; font-weight: bold;">v5.8.0-Global</p>
+                <p style="margin: 0 0 6px 0; font-size: 0.9em; color: #fff; font-weight: bold;">v5.8.1-Global</p>
                 <button class="btn-guide" onclick="apriGuida()" style="margin: 0;"><span data-i18n="manual_btn">📖 Apri Manuale</span></button>
             </div>
             <img src="logo astro enrico sfondo.png" alt="Enrico Salis Logo" style="height: 60px; object-fit: contain; border-radius: 5px;">
@@ -259,13 +259,13 @@
                     <h4 style="margin:0 0 5px 0; color:#aaa;" data-i18n="fov_calc">Campo Inquadrato Calcolato</h4>
                     <p id="fov-result" style="font-weight: bold; color: #44ff44; font-size: 1.4em; margin: 0;">--° x --°</p>
                     <p id="mosaic-fov-result" style="margin: 5px 0 0 0; font-size: 1em; color: #bb86fc; font-weight: bold; display: none;">Totale: --° x --°</p>
-                    <p id="fov-warning-msg" style="color: #ffaa00; font-size: 0.85em; margin-top: 10px; display: none; font-weight: bold;" data-i18n="fov_warning">⚠️ L'oggetto è più grande del tuo campo inquadrato! Valuta un mosaico.</p>
                 </div>
             </div>
             
             <div style="display: flex; flex-direction: column;">
                 <div class="panel" style="padding:0; overflow:hidden;">
                     <h3 style="padding: 15px 20px 0 20px;" data-i18n="fov_sim">📐 Simulatore FOV Realistico (DSS2)</h3>
+                    <p id="fov-warning-msg" style="color: #ffaa00; font-size: 0.85em; margin: 6px 20px 0 20px; display: none; font-weight: bold;" data-i18n="fov_warning">⚠️ L'oggetto è più grande del tuo campo inquadrato! Valuta un mosaico.</p>
                     <div class="fov-simulator-container" id="fov-simulator-container">
                         <div id="aladin-lite-div"></div>
                         <div class="center-cross">+</div>
