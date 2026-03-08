@@ -64,7 +64,7 @@ function toggleLock(id) {
                     <input type="text" id="${f.id}-gain" value="${defGain}" style="width:100%!important;text-align:center;padding:3px!important;">
                     <input type="text" id="${f.id}-offset" value="Auto" style="width:100%!important;text-align:center;padding:3px!important;">
                     <select id="${f.id}-bin" style="width:100%!important;padding:3px!important;">
-                        <option value="1">1x1</option><option value="2">2x2</option><option value="3">3x3</option>
+                        <option value="1">1x1</option><option value="2">2x2</option><option value="3">3x3</option><option value="4">4x4</option>
                     </select>
                     ${ditherCell}
                     <div class="calc-total" id="${f.id}-tot" style="text-align:right;">0h 0m</div>
