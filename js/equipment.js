@@ -101,28 +101,84 @@
         function salvaTelescopioCustom() {
             let f = document.getElementById('focal-length').value;
             let d = document.getElementById('aperture').value;
-            
-            let errTxt = lang === 'it' ? "Inserisci prima una Focale e un Diametro validi nei campi sottostanti." : 
-                         lang === 'en' ? "Please enter a valid Focal Length and Aperture in the fields below." : 
-                         lang === 'es' ? "Ingresa primero una Focal y Diámetro válidos en los campos de abajo." : 
+
+            let errTxt = lang === 'it' ? "Inserisci prima una Focale e un Diametro validi nei campi sottostanti." :
+                         lang === 'en' ? "Please enter a valid Focal Length and Aperture in the fields below." :
+                         lang === 'es' ? "Ingresa primero una Focal y Diámetro válidos en los campos de abajo." :
                                          "请先在下方输入有效的焦距和口径。";
-            
-            if(!f || !d || isNaN(f) || isNaN(d)) { alert(errTxt); return; }
-            
-            let pTxt = lang === 'it' ? `Setup: Focale ${f}mm, Diametro ${d}mm.\nInserisci il NOME del Telescopio/Obiettivo:` : 
-                       lang === 'en' ? `Setup: Focal ${f}mm, Aperture ${d}mm.\nEnter the NAME of your Telescope/Lens:` : 
-                       lang === 'es' ? `Equipo: Focal ${f}mm, Diámetro ${d}mm.\nIngresa el NOMBRE del Telescopio/Lente:` : 
-                                       `当前设置: 焦距 ${f}mm, 口径 ${d}mm.\n请输入望远镜/镜头的名称:`;
-            
-            let nome = prompt(pTxt);
-            if(!nome) return;
-            
+            if (!f || !d || isNaN(f) || isNaN(d)) { alert(errTxt); return; }
+
+            // Popola info nella modal
+            let infoEl = document.getElementById('save-telescope-info');
+            if (infoEl) {
+                let infoTxt = lang === 'it' ? `Focale: <strong>${f} mm</strong> &nbsp;·&nbsp; Diametro: <strong>${d} mm</strong>` :
+                              lang === 'en' ? `Focal: <strong>${f} mm</strong> &nbsp;·&nbsp; Aperture: <strong>${d} mm</strong>` :
+                              lang === 'es' ? `Focal: <strong>${f} mm</strong> &nbsp;·&nbsp; Diámetro: <strong>${d} mm</strong>` :
+                                              `焦距: <strong>${f} mm</strong> &nbsp;·&nbsp; 口径: <strong>${d} mm</strong>`;
+                infoEl.innerHTML = infoTxt;
+            }
+
+            // Pulisci e apri modal
+            let nameEl = document.getElementById('save-telescope-name');
+            if (nameEl) { nameEl.value = ''; }
+            document.getElementById('save-telescope-modal').style.display = 'block';
+            setTimeout(function() { if (nameEl) nameEl.focus(); }, 100);
+        }
+
+        function confermaSalvaTelescopio() {
+            let f = document.getElementById('focal-length').value;
+            let d = document.getElementById('aperture').value;
+            let nome = (document.getElementById('save-telescope-name').value || '').trim();
+            if (!nome) {
+                document.getElementById('save-telescope-name').style.borderColor = '#ff4444';
+                return;
+            }
+            document.getElementById('save-telescope-name').style.borderColor = '#555';
+            document.getElementById('save-telescope-modal').style.display = 'none';
+
             let customTels = JSON.parse(localStorage.getItem('ad_custom_telescopes')) || [];
-            customTels.push({ nome: nome.trim(), focale: parseInt(f), diametro: parseInt(d) });
+            customTels.push({ nome: nome, focale: parseInt(f), diametro: parseInt(d) });
             localStorage.setItem('ad_custom_telescopes', JSON.stringify(customTels));
-            
+
             popolaMenuAttrezzatura();
             document.getElementById('preset-telescope').value = `${f},${d}`;
+        }
+
+        function apriEliminaTelescopio() {
+            let customTels = JSON.parse(localStorage.getItem('ad_custom_telescopes')) || [];
+            let list  = document.getElementById('delete-telescope-list');
+            let empty = document.getElementById('delete-telescope-empty');
+            list.innerHTML = '';
+
+            if (!customTels.length) {
+                list.style.display = 'none';
+                empty.style.display = 'block';
+            } else {
+                list.style.display = 'flex';
+                empty.style.display = 'none';
+                customTels.forEach(function(tel, idx) {
+                    let row = document.createElement('div');
+                    row.style.cssText = 'display:flex; align-items:center; justify-content:space-between; background:#2a2a2a; border-radius:8px; padding:10px 14px; border-left:3px solid #bb86fc;';
+                    row.innerHTML = `
+                        <div>
+                            <div style="color:#fff; font-weight:bold; font-size:0.9em;">⭐ ${tel.nome}</div>
+                            <div style="color:#888; font-size:0.8em; margin-top:2px;">${tel.focale}mm &nbsp;·&nbsp; ⌀${tel.diametro}mm &nbsp;·&nbsp; f/${Math.round(tel.focale/tel.diametro)}</div>
+                        </div>
+                        <button class="btn-guide" style="margin:0; padding:5px 10px; border-color:#ff4444; color:#ff4444; flex-shrink:0;"
+                            onclick="eliminaTelescopioCustom(${idx})">🗑️</button>
+                    `;
+                    list.appendChild(row);
+                });
+            }
+            document.getElementById('delete-telescope-modal').style.display = 'block';
+        }
+
+        function eliminaTelescopioCustom(idx) {
+            let customTels = JSON.parse(localStorage.getItem('ad_custom_telescopes')) || [];
+            customTels.splice(idx, 1);
+            localStorage.setItem('ad_custom_telescopes', JSON.stringify(customTels));
+            popolaMenuAttrezzatura();
+            apriEliminaTelescopio(); // ricarica lista aggiornata
         }
 
         // ── PERSISTENZA IMPOSTAZIONI STRUMENTO ───────────────────────────

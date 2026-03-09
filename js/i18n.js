@@ -914,6 +914,41 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.es.sw_update_msg       = "Actualizacion disponible";
         i18n.zh.sw_update_msg       = "有可用更新";
 
+        i18n.it.save_tel_title      = "Salva Telescopio";
+        i18n.en.save_tel_title      = "Save Telescope";
+        i18n.es.save_tel_title      = "Guardar Telescopio";
+        i18n.zh.save_tel_title      = "保存望远镜";
+
+        i18n.it.save_tel_label      = "Nome telescopio / obiettivo:";
+        i18n.en.save_tel_label      = "Telescope / lens name:";
+        i18n.es.save_tel_label      = "Nombre del telescopio / objetivo:";
+        i18n.zh.save_tel_label      = "望远镜 / 镜头名称:";
+
+        i18n.it.save_tel_confirm    = "💾 Salva";
+        i18n.en.save_tel_confirm    = "💾 Save";
+        i18n.es.save_tel_confirm    = "💾 Guardar";
+        i18n.zh.save_tel_confirm    = "💾 保存";
+
+        i18n.it.save_tel_cancel     = "Annulla";
+        i18n.en.save_tel_cancel     = "Cancel";
+        i18n.es.save_tel_cancel     = "Cancelar";
+        i18n.zh.save_tel_cancel     = "取消";
+
+        i18n.it.del_tel_btn         = "🗑️";
+        i18n.en.del_tel_btn         = "🗑️";
+        i18n.es.del_tel_btn         = "🗑️";
+        i18n.zh.del_tel_btn         = "🗑️";
+
+        i18n.it.del_tel_title       = "Elimina Telescopio";
+        i18n.en.del_tel_title       = "Delete Telescope";
+        i18n.es.del_tel_title       = "Eliminar Telescopio";
+        i18n.zh.del_tel_title       = "删除望远镜";
+
+        i18n.it.del_tel_empty       = "Nessun telescopio salvato.";
+        i18n.en.del_tel_empty       = "No saved telescopes.";
+        i18n.es.del_tel_empty       = "No hay telescopios guardados.";
+        i18n.zh.del_tel_empty       = "没有已保存的望远镜。";
+
         i18n.it.sw_update_btn       = "Ricarica";
         i18n.en.sw_update_btn       = "Reload";
         i18n.es.sw_update_btn       = "Recargar";

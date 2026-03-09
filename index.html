@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AstroDashboard v5.8.7 - Global Edition</title>
+    <title>AstroDashboard v5.8.8 - Global Edition</title>
     
     <link rel="manifest" href="manifest.json?v=3">
     <meta name="theme-color" content="#121212">
@@ -49,7 +49,7 @@
         </div>
         <div class="author-section">
             <div>
-                <p style="margin: 0 0 6px 0; font-size: 0.9em; color: #fff; font-weight: bold;">v5.8.7-Global</p>
+                <p style="margin: 0 0 6px 0; font-size: 0.9em; color: #fff; font-weight: bold;">v5.8.8-Global</p>
                 <button class="btn-guide" onclick="apriGuida()" style="margin: 0;"><span data-i18n="manual_btn">📖 Apri Manuale</span></button>
             </div>
             <img src="logo astro enrico sfondo.png" alt="Enrico Salis Logo" style="height: 60px; object-fit: contain; border-radius: 5px;">
@@ -187,6 +187,7 @@
                         <option value="" data-i18n="select_opt">-- Seleziona --</option>
                     </select>
                     <button class="btn-guide" style="margin:0; padding: 6px 10px; border-color: #ffaa00; color: #ffaa00;" onclick="salvaTelescopioCustom()" data-i18n="save_btn">💾 Salva</button>
+                    <button class="btn-guide" style="margin:0; padding: 6px 10px; border-color: #ff4444; color: #ff4444;" onclick="apriEliminaTelescopio()" data-i18n="del_tel_btn">🗑️</button>
                 </div>
                 <div class="input-group">
                     <label data-i18n="focal_len">Focale (mm):</label>
@@ -997,6 +998,39 @@
             background:transparent; color:#9090b8; border:none;
             font-size:18px; cursor:pointer; padding:0 2px; line-height:1;
         ">✕</button>
+    </div>    <!-- ═══ MODAL SALVA TELESCOPIO CUSTOM ═══ -->
+    <div id="save-telescope-modal" class="modal">
+        <div class="modal-content" style="max-width:420px;">
+            <span class="close-btn" onclick="document.getElementById('save-telescope-modal').style.display='none'">&times;</span>
+            <h2 style="border-bottom:1px solid #333; padding-bottom:12px; margin-bottom:16px; color:#bb86fc;">
+                🔭 <span data-i18n="save_tel_title">Salva Telescopio</span>
+            </h2>
+            <div id="save-telescope-info" style="font-size:0.85em; color:#aaa; margin-bottom:16px; background:#2a2a2a; padding:10px 14px; border-radius:8px; border-left:3px solid #bb86fc;"></div>
+            <label style="display:block; font-size:0.85em; color:#ccc; margin-bottom:6px;" data-i18n="save_tel_label">Nome telescopio / obiettivo:</label>
+            <input type="text" id="save-telescope-name"
+                style="width:100%; background:#2a2a2a; border:1px solid #555; border-radius:8px; color:#fff; font-size:1em; padding:10px 12px; outline:none; box-sizing:border-box;"
+                placeholder="es. Mio Telescopio 8&quot;"
+                onkeydown="if(event.key==='Enter') confermaSalvaTelescopio()">
+            <div style="display:flex; gap:10px; margin-top:18px;">
+                <button class="btn-smart" style="flex:1; background:transparent; border:1px solid #555; color:#aaa;" onclick="document.getElementById('save-telescope-modal').style.display='none'" data-i18n="save_tel_cancel">Annulla</button>
+                <button class="btn-smart" style="flex:2; background:linear-gradient(135deg,#7c4dff,#3f51b5);" onclick="confermaSalvaTelescopio()" data-i18n="save_tel_confirm">💾 Salva</button>
+            </div>
+        </div>
     </div>
+    <!-- ═══ MODAL ELIMINA TELESCOPIO CUSTOM ═══ -->
+    <div id="delete-telescope-modal" class="modal">
+        <div class="modal-content" style="max-width:420px;">
+            <span class="close-btn" onclick="document.getElementById('delete-telescope-modal').style.display='none'">&times;</span>
+            <h2 style="border-bottom:1px solid #333; padding-bottom:12px; margin-bottom:16px; color:#ff4444;">
+                🗑️ <span data-i18n="del_tel_title">Elimina Telescopio</span>
+            </h2>
+            <div id="delete-telescope-list" style="display:flex; flex-direction:column; gap:8px; max-height:300px; overflow-y:auto;"></div>
+            <p id="delete-telescope-empty" style="display:none; color:#888; font-size:0.9em; text-align:center; padding:20px 0;" data-i18n="del_tel_empty">Nessun telescopio salvato.</p>
+            <div style="margin-top:18px; text-align:right;">
+                <button class="btn-smart" style="background:transparent; border:1px solid #555; color:#aaa;" onclick="document.getElementById('delete-telescope-modal').style.display='none'" data-i18n="save_tel_cancel">Chiudi</button>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>
