@@ -75,6 +75,10 @@ function toggleLock(id) {
             // Sincronizza Dark exp = primo Light exp (dinamico)
             sincronizzaDarkExp();
             aggiornaFiltriNina();
+
+            // Propaga il BIN attivo ai nuovi select appena creati
+            let _activeBin = document.querySelector('.bin-btn.bin-active');
+            if (_activeBin) selezionaBIN(parseInt(_activeBin.dataset.bin));
         }
 
         function sincronizzaDarkExp() {
