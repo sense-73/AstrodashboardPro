@@ -217,6 +217,27 @@
                 totalSecs += tot; totalFrames += count;
                 rows.push([name, count, exp+'s', gainVal||'--', offsetVal||'--', (binVal||'1')+'×'+(binVal||'1'), _fmtSecs(tot)]);
             });
+
+            // ── Dark e Bias (calibrazione) ────────────────────────────
+            var calibIds = isM ? ['m-dark','m-bias'] : ['c-dark','c-bias'];
+            calibIds.forEach(function(pid){
+                var prefix = isPro ? 'pro-'+pid : pid;
+                var countEl = document.getElementById(prefix+'-count');
+                if (!countEl) return;
+                var count = parseInt(countEl.value)||0;
+                if (count<=0) return;
+                var isDark = pid.includes('dark');
+                var expEl  = document.getElementById(prefix+'-exp');
+                var exp    = expEl ? (parseFloat(expEl.value)||0) : 0;
+                var binVal = _val(prefix+'-bin');
+                var gainVal= _val(prefix+'-gain');
+                // Bias: exp è overhead calcolato (non aggiunge a integrazione)
+                var expStr = isDark ? Math.round(exp)+'s' : _t('rpt_calib_overhead');
+                var totStr = isDark ? _fmtSecs(count*Math.round(exp)) : '—';
+                var name   = isDark ? _t('rpt_calib_dark') : _t('rpt_calib_bias');
+                rows.push([name, count, expStr, gainVal||'--', '—', (binVal||'1')+'×'+(binVal||'1'), totStr]);
+            });
+
             return {rows:rows, totalSecs:totalSecs, totalFrames:totalFrames};
         }
 

@@ -894,6 +894,21 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.es.rpt_frames_unit     = "poses";
         i18n.zh.rpt_frames_unit     = "帧";
 
+        i18n.it.rpt_calib_dark      = "Dark";
+        i18n.en.rpt_calib_dark      = "Dark";
+        i18n.es.rpt_calib_dark      = "Dark";
+        i18n.zh.rpt_calib_dark      = "暗帧";
+
+        i18n.it.rpt_calib_bias      = "Bias";
+        i18n.en.rpt_calib_bias      = "Bias";
+        i18n.es.rpt_calib_bias      = "Bias";
+        i18n.zh.rpt_calib_bias      = "偏置帧";
+
+        i18n.it.rpt_calib_overhead  = "overhead";
+        i18n.en.rpt_calib_overhead  = "overhead";
+        i18n.es.rpt_calib_overhead  = "overhead";
+        i18n.zh.rpt_calib_overhead  = "开销";
+
         i18n.it.sw_update_msg       = "Aggiornamento disponibile";
         i18n.en.sw_update_msg       = "Update available";
         i18n.es.sw_update_msg       = "Actualizacion disponible";
