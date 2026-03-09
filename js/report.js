@@ -255,6 +255,7 @@
             var binSel = binEl ? binEl.dataset.bin+'×'+binEl.dataset.bin : '1×1';
             var binN  = binEl ? parseInt(binEl.dataset.bin)||1 : 1;
             var fovRes = _el('fov-result');
+            var rotVal = _val('fov-rotation'); var rotStr = (rotVal && rotVal !== '--') ? rotVal + '°' : '0°';
 
             var tS = _val('time-start'), tE = _val('time-end'), durStr = '--';
             try {
@@ -333,6 +334,7 @@
                 {label:_t('rpt_label_samp_native'),  value:sampRaw},
                 {label:_t('rpt_label_bin'),          value:binSel},
                 {label:_t('rpt_label_fov'),          value:fovRes},
+                {label:_t('rpt_label_rotation'),     value:rotStr},
                 {label:_t('rpt_label_sensor_type'),  value:sType},
             ], 2);
             html += '</div>';
@@ -435,6 +437,7 @@
             var sType2 = document.getElementById('sensor-type').value==='mono' ? _t('rpt_val_mono') : _t('rpt_val_color');
             var sampRaw2 = _el('sampling-result');
             var fovRes2  = _el('fov-result');
+            var rotVal2  = _val('fov-rotation'); var rotStr2 = (rotVal2 && rotVal2 !== '--') ? rotVal2 + '°' : '0°';
 
             // Totali progetto
             var totSecsAll=0, totFramesAll=0, filterTotals={};
@@ -512,6 +515,7 @@
                 {label:_t('rpt_label_samp'),         value:sampRaw2},
                 {label:_t('rpt_label_bin_sensor'),   value:binSel2+' | '+sType2},
                 {label:_t('rpt_label_fov'),          value:fovRes2},
+                {label:_t('rpt_label_rotation'),     value:rotStr2},
             ], 2);
             html += '</div>';
 

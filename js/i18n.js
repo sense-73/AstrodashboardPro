@@ -640,6 +640,11 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.es.rpt_label_fov       = "FOV calculado";
         i18n.zh.rpt_label_fov       = "计算FOV";
 
+        i18n.it.rpt_label_rotation  = "Rotazione PA";
+        i18n.en.rpt_label_rotation  = "PA Rotation";
+        i18n.es.rpt_label_rotation  = "Rotacion PA";
+        i18n.zh.rpt_label_rotation  = "位置角旋转";
+
         i18n.it.rpt_label_sensor_type = "Tipo sensore";
         i18n.en.rpt_label_sensor_type = "Sensor Type";
         i18n.es.rpt_label_sensor_type = "Tipo de sensor";
