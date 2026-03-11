@@ -345,5 +345,220 @@ const dsoDatabase = [
         it: "Girandola del Sud", en: "Southern Pinwheel", es: "Molinete del Sur", zh: "南风车星系",
         desc_it: "Galassia a spirale barrata, famosa per i suoi bracci ricchissimi di giovani ammassi blu.", desc_en: "Barred spiral galaxy, famous for its arms rich in young blue star clusters.", desc_es: "Galaxia espiral barrada, famosa por sus brazos ricos en jóvenes cúmulos azules.", desc_zh: "棒旋星系，以其旋臂上富含年轻的蓝色星团而闻名。",
         tips_it: "Splendido target per focali oltre i 600mm. Riprendi in L-RGB e spingi i colori in post-produzione.", tips_en: "Splendid target for focal lengths over 600mm. Shoot L-RGB and boost colors in post.", tips_es: "Espléndido objetivo para focales sobre 600mm. Dispara en L-RGB y potencia el color en post.", tips_zh: "600mm 以上焦距的绝佳目标。拍摄 L-RGB 并在后期处理中加强色彩。"
+    },
+
+    // ==============================================================
+    // --- NEBULOSE A EMISSIONE / H II ---
+    // ==============================================================
+    {
+        id: "ngc2359", name: "NGC 2359", size: 22, icon: "🪖", ra: 7.28, dec: -13.23, type: "Nebulosa a Emissione", mag: "+11.4", dist: "15.000 a.l.", link: "https://it.wikipedia.org/wiki/NGC_2359",
+        it: "Elmo di Thor", en: "Thor's Helmet", es: "Casco de Thor", zh: "托尔头盔星云",
+        desc_it: "Struttura a bolle creata dal vento stellare della stella Wolf-Rayet WR7, nella costellazione del Cane Maggiore.", desc_en: "Bubble structure created by the stellar wind of the Wolf-Rayet star WR7, in Canis Major.", desc_es: "Estructura de burbuja creada por el viento estelar de la estrella Wolf-Rayet WR7, en Can Mayor.", desc_zh: "由大犬座沃尔夫-拉叶星WR7的恒星风吹出的气泡状结构。",
+        tips_it: "Splendido in HOO o SHO. La stella centrale illumina i filamenti in H-Alpha. Posa media 180-300s.", tips_en: "Splendid in HOO or SHO. The central star illuminates filaments in H-Alpha. Medium exposures 180-300s.", tips_es: "Espléndido en HOO o SHO. La estrella central ilumina los filamentos en H-Alfa. Posado medio 180-300s.", tips_zh: "HOO或SHO拍摄效果极佳。中心星照亮H-Alpha丝状结构。建议中等曝光180-300秒。"
+    },
+    {
+        id: "ngc2264", name: "NGC 2264", size: 60, icon: "🌲", ra: 6.68, dec: 9.89, type: "Regione H II", mag: "+3.9", dist: "2.700 a.l.", link: "https://it.wikipedia.org/wiki/Nebulosa_Albero_di_Natale",
+        it: "Nebulosa Albero di Natale", en: "Christmas Tree Nebula", es: "Nebulosa Árbol de Navidad", zh: "圣诞树星云",
+        desc_it: "Regione di formazione stellare che include la famosa Nebulosa Cono e l'ammasso Albero di Natale.", desc_en: "Star-forming region including the famous Cone Nebula and the Christmas Tree cluster.", desc_es: "Región de formación estelar que incluye la famosa Nebulosa Cono y el cúmulo Árbol de Navidad.", desc_zh: "恒星形成区，包含著名的锥形星云和圣诞树星团。",
+        tips_it: "La Nebulosa Cono richiede focali lunghe (>800mm). Campo largo per l'intera regione. Ottima in H-Alpha.", tips_en: "The Cone Nebula needs long focal lengths (>800mm). Wide field for the whole region. Great in H-Alpha.", tips_es: "La Nebulosa Cono requiere largas focales (>800mm). Campo amplio para toda la región. Genial en H-Alfa.", tips_zh: "锥形星云需要长焦距(>800mm)。广角拍摄整个区域。H-Alpha效果很好。"
+    },
+    {
+        id: "ic2177", name: "IC 2177", size: 120, icon: "🐦", ra: 7.05, dec: -10.58, type: "Regione H II", mag: "+7.0", dist: "3.650 a.l.", link: "https://it.wikipedia.org/wiki/Nebulosa_Gabbiano",
+        it: "Nebulosa Gabbiano", en: "Seagull Nebula", es: "Nebulosa Gaviota", zh: "海鸥星云",
+        desc_it: "Vasta regione di emissione al confine tra Monocerote e Cane Maggiore, con forma di gabbiano in volo.", desc_en: "Vast emission region at the border of Monoceros and Canis Major, shaped like a flying seagull.", desc_es: "Vasta región de emisión al límite entre Monoceros y Can Mayor, con forma de gaviota en vuelo.", desc_zh: "位于麒麟座和大犬座边界的广阔发射区，形状酷似飞翔的海鸥。",
+        tips_it: "Oggetto enorme: serve un campo largo o un mosaico. Fortissimo segnale in H-Alpha.", tips_en: "Huge object: needs a wide field or mosaic. Very strong H-Alpha signal.", tips_es: "Objeto enorme: necesita un campo amplio o mosaico. Señal H-Alfa muy fuerte.", tips_zh: "目标巨大：需要广角或拼接拍摄。H-Alpha信号非常强。"
+    },
+    {
+        id: "ngc6334", name: "NGC 6334", size: 40, icon: "🐾", ra: 17.20, dec: -35.78, type: "Regione H II", mag: "+9.0", dist: "5.500 a.l.", link: "https://en.wikipedia.org/wiki/Cat%27s_Paw_Nebula",
+        it: "Nebulosa Zampa di Gatto", en: "Cat's Paw Nebula", es: "Nebulosa Pata de Gato", zh: "猫爪星云",
+        desc_it: "Una delle regioni di formazione stellare più attive della nostra galassia, nello Scorpione.", desc_en: "One of the most active star-forming regions in our galaxy, in Scorpius.", desc_es: "Una de las regiones de formación estelar más activas de nuestra galaxia, en Escorpión.", desc_zh: "银河系中最活跃的恒星形成区之一，位于天蝎座。",
+        tips_it: "Altissimo segnale in H-Alpha e SII. Oggetto australe: massima altezza bassa. Sfrutta le notti di estate.", tips_en: "Very strong H-Alpha and SII signal. Southern object: low altitude. Use summer nights.", tips_es: "Señal H-Alfa y SII muy alta. Objeto austral. Usa noches de verano.", tips_zh: "H-Alpha和SII信号极强。南天目标，高度角较低，利用夏季夜晚拍摄。"
+    },
+    {
+        id: "ngc6357", name: "NGC 6357", size: 40, icon: "🦞", ra: 17.46, dec: -34.20, type: "Regione H II", mag: "+10.0", dist: "8.000 a.l.", link: "https://it.wikipedia.org/wiki/NGC_6357",
+        it: "Nebulosa Aragosta", en: "Lobster Nebula", es: "Nebulosa Langosta", zh: "龙虾星云",
+        desc_it: "Complessa regione di ionizzazione nello Scorpione, vicina alla Cat's Paw. Piena di giovani stelle massive.", desc_en: "Complex ionization region in Scorpius, near Cat's Paw. Full of young, massive stars.", desc_es: "Compleja región de ionización en Escorpión, cercana a Cat's Paw. Llena de estrellas jóvenes masivas.", desc_zh: "天蝎座复杂的电离区，邻近猫爪星云。充满了年轻的大质量恒星。",
+        tips_it: "Forma spettacolare in SHO. Abbinala alla NGC 6334 per un mosaico mozzafiato.", tips_en: "Spectacular in SHO palette. Pair it with NGC 6334 for a stunning mosaic.", tips_es: "Espectacular en paleta SHO. Combínala con NGC 6334 para un mosaico impresionante.", tips_zh: "SHO色调下形态壮观。可与NGC 6334拼接成令人叹为观止的大图。"
+    },
+    {
+        id: "ngc7380", name: "NGC 7380", size: 25, icon: "🧙", ra: 22.78, dec: 58.12, type: "Regione H II", mag: "+7.2", dist: "10.000 a.l.", link: "https://it.wikipedia.org/wiki/NGC_7380",
+        it: "Nebulosa Mago", en: "Wizard Nebula", es: "Nebulosa del Mago", zh: "巫师星云",
+        desc_it: "Regione di formazione stellare in Cefeo contenente l'ammasso aperto NGC 7380.", desc_en: "Star-forming region in Cepheus containing the open cluster NGC 7380.", desc_es: "Región de formación estelar en Cefeo que contiene el cúmulo abierto NGC 7380.", desc_zh: "仙王座中的恒星形成区，包含疏散星团NGC 7380。",
+        tips_it: "Segnale H-Alpha molto buono. SHO o HOO entrambi funzionano bene.", tips_en: "Very good H-Alpha signal. Both SHO and HOO palettes work well.", tips_es: "Señal H-Alfa muy buena. Las paletas SHO y HOO funcionan bien.", tips_zh: "H-Alpha信号非常好。SHO和HOO色调均效果良好。"
+    },
+    {
+        id: "ngc7023", name: "NGC 7023", size: 18, icon: "🌺", ra: 21.02, dec: 68.17, type: "Nebulosa a Riflessione", mag: "+6.8", dist: "1.300 a.l.", link: "https://it.wikipedia.org/wiki/Nebulosa_Iris",
+        it: "Nebulosa Iris", en: "Iris Nebula", es: "Nebulosa Iris", zh: "鸢尾花星云",
+        desc_it: "Splendida nebulosa a riflessione blu nel Cefeo, illuminata dalla stella HD 200775.", desc_en: "Beautiful blue reflection nebula in Cepheus, illuminated by the star HD 200775.", desc_es: "Hermosa nebulosa de reflexión azul en Cefeo, iluminada por la estrella HD 200775.", desc_zh: "仙王座中美丽的蓝色反射星云，由恒星HD 200775照亮。",
+        tips_it: "Riflette luce blu: NO filtri narrowband. LRGB puro da cieli scuri. La polvere intorno è un bonus.", tips_en: "Reflects blue light: NO narrowband filters. Pure LRGB from dark skies. Surrounding dust is a bonus.", tips_es: "Refleja luz azul: NO filtros de banda estrecha. LRGB puro desde cielos oscuros.", tips_zh: "反射蓝光：切勿使用窄带滤镜。在黑暗天空下进行纯LRGB拍摄。周围的尘埃是额外的惊喜。"
+    },
+    {
+        id: "ic410", name: "IC 410", size: 40, icon: "🐸", ra: 5.47, dec: 33.50, type: "Regione H II", mag: "+7.5", dist: "12.000 a.l.", link: "https://it.wikipedia.org/wiki/IC_410",
+        it: "Nebulosa Girini", en: "Tadpole Nebula", es: "Nebulosa Renacuajos", zh: "蝌蚪星云",
+        desc_it: "Regione di formazione stellare nell'Auriga con i famosi 'girini' di gas e polvere.", desc_en: "Star-forming region in Auriga featuring the famous gas and dust 'tadpoles'.", desc_es: "Región de formación estelar en Auriga con los famosos 'renacuajos' de gas y polvo.", desc_zh: "御夫座恒星形成区，以著名的气体和尘埃蝌蚪结构而闻名。",
+        tips_it: "I girini emergono bene in H-Alpha con un filo di OIII. Abbinala alla IC 405 per un campo largo.", tips_en: "The tadpoles emerge well in H-Alpha with a touch of OIII. Pair with IC 405 for a wide field.", tips_es: "Los renacuajos emergen bien en H-Alfa con OIII. Combínala con IC 405 para campo amplio.", tips_zh: "蝌蚪在H-Alpha结合少量OIII时会非常突出。可与IC 405搭配拍摄广角大图。"
+    },
+    {
+        id: "ic5146", name: "IC 5146", size: 12, icon: "🪲", ra: 21.89, dec: 47.26, type: "Nebulosa Mista", mag: "+7.2", dist: "3.300 a.l.", link: "https://it.wikipedia.org/wiki/Nebulosa_Bozzolo",
+        it: "Nebulosa Bozzolo", en: "Cocoon Nebula", es: "Nebulosa Capullo", zh: "茧形星云",
+        desc_it: "Nebulosa mista di emissione e riflessione nel Cigno, circonfusa da una densa nebulosa oscura.", desc_en: "Mixed emission and reflection nebula in Cygnus, surrounded by a dense dark nebula.", desc_es: "Nebulosa mixta de emisión y reflexión en Cygnus, rodeada de una densa nebulosa oscura.", desc_zh: "天鹅座中的混合发射-反射星云，周围环绕着致密的暗星云。",
+        tips_it: "Il contrasto tra la nebulosa luminosa e quella oscura è spettacolare. HOO consigliato.", tips_en: "The contrast between the bright and dark nebula is spectacular. HOO recommended.", tips_es: "El contraste entre la nebulosa brillante y la oscura es espectacular. Se recomienda HOO.", tips_zh: "明亮星云与暗星云之间的对比效果极为壮观。推荐使用HOO模式。"
+    },
+    {
+        id: "ngc2174", name: "NGC 2174", size: 40, icon: "🐒", ra: 6.09, dec: 20.65, type: "Regione H II", mag: "+6.8", dist: "6.400 a.l.", link: "https://it.wikipedia.org/wiki/NGC_2174",
+        it: "Nebulosa Testa di Scimmia", en: "Monkey Head Nebula", es: "Nebulosa Cabeza de Mono", zh: "猴头星云",
+        desc_it: "Regione H II circolare nell'Orione con pilastri di gas simili a quelli della Nebulosa Aquila.", desc_en: "Circular H II region in Orion with gas pillars similar to those of the Eagle Nebula.", desc_es: "Región H II circular en Orión con pilares de gas similares a los del Águila.", desc_zh: "猎户座圆形H II区，拥有与鹰状星云类似的气体柱状结构。",
+        tips_it: "Segnale H-Alpha ottimo. I pilastri emergono bene con alta risoluzione (>1000mm).", tips_en: "Excellent H-Alpha signal. Pillars emerge well at high resolution (>1000mm).", tips_es: "Excelente señal H-Alfa. Los pilares emergen bien con alta resolución (>1000mm).", tips_zh: "H-Alpha信号极佳。在高分辨率下(>1000mm)气柱结构清晰可见。"
+    },
+    {
+        id: "sh2-240", name: "Sh2-240", size: 180, icon: "🍝", ra: 5.13, dec: 27.83, type: "Resto di Supernova", mag: "N/D", dist: "3.000 a.l.", link: "https://en.wikipedia.org/wiki/Simeis_147",
+        it: "Nebulosa Spaghetti (Simeis 147)", en: "Spaghetti Nebula (Simeis 147)", es: "Nebulosa de los Espaguetis", zh: "意面星云",
+        desc_it: "Enorme resto di supernova nel Toro, con delicati filamenti rossi che ricordano spaghetti.", desc_en: "Enormous supernova remnant in Taurus, with delicate red filaments resembling spaghetti.", desc_es: "Enorme remanente de supernova en Tauro, con delicados filamentos rojos que parecen espaguetis.", desc_zh: "金牛座中的巨大超新星遗迹，细腻的红色丝状结构形似意大利面。",
+        tips_it: "Uno dei target più difficili: dimensione enorme (3°!), segnale debolissimo. Solo H-Alpha da cielo NERO.", tips_en: "One of the hardest targets: huge size (3°!), very faint signal. H-Alpha only from perfectly dark skies.", tips_es: "Uno de los objetivos más difíciles: enorme (3°!), señal muy débil. Solo H-Alfa desde cielos perfectamente oscuros.", tips_zh: "最具挑战性的目标之一：覆盖天区极大(3度!)，信号极弱。只能在完全黑暗的天空下使用H-Alpha拍摄。"
+    },
+    {
+        id: "sh2-308", name: "Sh2-308", size: 60, icon: "🐬", ra: 6.89, dec: -23.95, type: "Nebulosa a Emissione", mag: "N/D", dist: "5.000 a.l.", link: "https://en.wikipedia.org/wiki/Sh2-308",
+        it: "Nebulosa Delfino", en: "Dolphin Nebula", es: "Nebulosa Delfín", zh: "海豚星云",
+        desc_it: "Bolla nebulare sferica creata dalla stella Wolf-Rayet EZ CMa nel Cane Maggiore.", desc_en: "Spherical nebular bubble created by the Wolf-Rayet star EZ CMa in Canis Major.", desc_es: "Burbuja nebular esférica creada por la estrella Wolf-Rayet EZ CMa en Can Mayor.", desc_zh: "由大犬座沃尔夫-拉叶星EZ CMa产生的球形星云气泡。",
+        tips_it: "Segnale OIII molto forte. Usa molta integrazione in OIII e H-Alpha per far emergere la struttura sferica.", tips_en: "Very strong OIII signal. Use lots of OIII and H-Alpha integration to reveal the spherical structure.", tips_es: "Señal OIII muy fuerte. Usa mucha integración en OIII y H-Alfa para revelar la estructura esférica.", tips_zh: "OIII信号非常强。大量叠加OIII和H-Alpha以揭示球形结构。"
+    },
+    {
+        id: "sh2-101", name: "Sh2-101", size: 30, icon: "🌷", ra: 20.28, dec: 35.77, type: "Regione H II", mag: "N/D", dist: "6.000 a.l.", link: "https://en.wikipedia.org/wiki/Tulip_Nebula",
+        it: "Nebulosa Tulipano", en: "Tulip Nebula", es: "Nebulosa Tulipán", zh: "郁金香星云",
+        desc_it: "Nebulosa a emissione nel Cigno, famosa per la vicinanza alla sorgente di raggi X Cygnus X-1.", desc_en: "Emission nebula in Cygnus, famous for its proximity to the X-ray source Cygnus X-1.", desc_es: "Nebulosa de emisión en Cygnus, famosa por su proximidad a la fuente de rayos X Cygnus X-1.", desc_zh: "天鹅座发射星云，因紧邻X射线源天鹅座X-1而著名。",
+        tips_it: "Segnale H-Alpha eccellente. Includi il bow-shock di Cygnus X-1 nel campo per un dettaglio unico.", tips_en: "Excellent H-Alpha signal. Include the Cygnus X-1 bow-shock in the frame for a unique detail.", tips_es: "Excelente señal H-Alfa. Incluye el bow-shock de Cygnus X-1 para un detalle único.", tips_zh: "H-Alpha信号极佳。将天鹅座X-1的弓形激波纳入画面，捕捉独特细节。"
+    },
+    {
+        id: "ou4", name: "Ou4", size: 60, icon: "🦑", ra: 21.65, dec: 57.50, type: "Nebulosa a Emissione", mag: "N/D", dist: "2.300 a.l.", link: "https://en.wikipedia.org/wiki/Squid_Nebula",
+        it: "Nebulosa Calamaro Gigante", en: "Giant Squid Nebula", es: "Nebulosa Calamar Gigante", zh: "巨乌贼星云",
+        desc_it: "Scoperta nel 2011 da Nicolas Outters. Segnale OIII estremo e debolissimo, sovrapposta alla IC 1396.", desc_en: "Discovered in 2011 by Nicolas Outters. Extremely faint OIII signal, overlapping IC 1396.", desc_es: "Descubierta en 2011 por Nicolas Outters. Señal OIII extremadamente débil, superpuesta a IC 1396.", desc_zh: "2011年由Nicolas Outters发现。OIII信号极度微弱，与IC 1396重叠。",
+        tips_it: "Integrazione mostruosa richiesta (30h+ in OIII). Abbinala alla IC 1396 per un frame spettacolare.", tips_en: "Monstrous integration required (30h+ in OIII). Pair with IC 1396 for a spectacular frame.", tips_es: "Se requiere integración monstruosa (30h+ en OIII). Combínala con IC 1396 para un frame espectacular.", tips_zh: "需要超长曝光叠加(OIII通道30小时以上)。与IC 1396搭配可获得壮观画面。"
+    },
+    // ==============================================================
+    // --- NEBULOSE PLANETARIE ---
+    // ==============================================================
+    {
+        id: "ngc6543", name: "NGC 6543", size: 0.3, icon: "😺", ra: 17.97, dec: 66.63, type: "Nebulosa Planetaria", mag: "+8.1", dist: "3.300 a.l.", link: "https://it.wikipedia.org/wiki/Nebulosa_Occhio_di_Gatto",
+        it: "Nebulosa Occhio di Gatto", en: "Cat's Eye Nebula", es: "Nebulosa Ojo de Gato", zh: "猫眼星云",
+        desc_it: "Una delle nebulose planetarie più complesse e fotografate. Struttura concentrica intricatissima.", desc_en: "One of the most complex and photographed planetary nebulae. Intricate concentric structure.", desc_es: "Una de las nebulosas planetarias más complejas y fotografiadas. Intrincada estructura concéntrica.", desc_zh: "最复杂、最多被拍摄的行星状星云之一。复杂的同心环状结构。",
+        tips_it: "Serve altissima risoluzione (>2000mm). Esponi separatamente il nucleo e i gusci esterni (HDR).", tips_en: "Requires very high resolution (>2000mm). Expose the core and outer shells separately (HDR).", tips_es: "Requiere muy alta resolución (>2000mm). Expone el núcleo y las capas externas por separado (HDR).", tips_zh: "需要非常高的分辨率(>2000mm)。分别曝光核心和外层气壳(HDR合成)。"
+    },
+    {
+        id: "ngc2392", name: "NGC 2392", size: 0.7, icon: "🎅", ra: 7.49, dec: 20.91, type: "Nebulosa Planetaria", mag: "+9.2", dist: "4.160 a.l.", link: "https://it.wikipedia.org/wiki/Nebulosa_Esquimese",
+        it: "Nebulosa Eschimese", en: "Eskimo Nebula", es: "Nebulosa Esquimal", zh: "爱斯基摩星云",
+        desc_it: "Nebulosa planetaria nei Gemelli con due gusci distinti, uno interno brillante e uno esterno più tenue.", desc_en: "Planetary nebula in Gemini with two distinct shells: a bright inner one and a fainter outer one.", desc_es: "Nebulosa planetaria en Géminis con dos capas distintas: una brillante interior y una exterior más tenue.", desc_zh: "双子座行星状星云，有内外两层清晰的气壳。",
+        tips_it: "Molto luminosa: puoi usare pose da 30-60s. Ottima anche in condizioni di Luna piena.", tips_en: "Very bright: exposures of 30-60s work well. Great even under a full Moon.", tips_es: "Muy brillante: exposiciones de 30-60s funcionan bien. Genial incluso bajo Luna llena.", tips_zh: "非常明亮：30-60秒曝光效果良好。即使在满月条件下也能拍摄。"
+    },
+    {
+        id: "ngc3242", name: "NGC 3242", size: 0.7, icon: "👻", ra: 10.41, dec: -18.63, type: "Nebulosa Planetaria", mag: "+7.7", dist: "1.400 a.l.", link: "https://it.wikipedia.org/wiki/Nebulosa_Fantasma_di_Giove",
+        it: "Fantasma di Giove", en: "Ghost of Jupiter", es: "Fantasma de Júpiter", zh: "木星幽灵",
+        desc_it: "Nebulosa planetaria nell'Idra, con struttura a doppio anello simile a Giove.", desc_en: "Planetary nebula in Hydra, with a double-ring structure similar to Jupiter.", desc_es: "Nebulosa planetaria en Hydra, con estructura de doble anillo similar a Júpiter.", desc_zh: "长蛇座行星状星云，具有与木星相似的双环结构。",
+        tips_it: "Molto luminosa nell'OIII. Pose brevi con alta focale. Considera HDR per nucleo e anelli.", tips_en: "Very bright in OIII. Short exposures at high focal length. Consider HDR for core and rings.", tips_es: "Muy brillante en OIII. Exposiciones cortas con alta focal. Considera HDR para núcleo y anillos.", tips_zh: "在OIII通道中非常明亮。高焦距短曝光。考虑对核心和环状结构进行HDR合成。"
+    },
+    {
+        id: "m76", name: "M76", size: 2.7, icon: "🎭", ra: 1.70, dec: 51.58, type: "Nebulosa Planetaria", mag: "+10.1", dist: "3.400 a.l.", link: "https://it.wikipedia.org/wiki/M76",
+        it: "Piccolo Manubrio", en: "Little Dumbbell Nebula", es: "Pequeña Nebulosa Haltera", zh: "小哑铃星云",
+        desc_it: "Piccola nebulosa planetaria in Perseo, simile alla M27 ma molto più piccola e tenue.", desc_en: "Small planetary nebula in Perseus, similar to M27 but much smaller and fainter.", desc_es: "Pequeña nebulosa planetaria en Perseo, similar a M27 pero mucho más pequeña y tenue.", desc_zh: "英仙座小型行星状星云，与M27相似但体积更小、亮度更低。",
+        tips_it: "Necessita di alta focale (>1000mm). Segnale OIII molto buono. Pose medie 120-300s.", tips_en: "Needs long focal length (>1000mm). Very good OIII signal. Medium exposures 120-300s.", tips_es: "Necesita larga focal (>1000mm). Señal OIII muy buena. Posados medianos 120-300s.", tips_zh: "需要长焦距(>1000mm)。OIII信号非常好。建议中等曝光120-300秒。"
+    },
+    // ==============================================================
+    // --- GALASSIE ---
+    // ==============================================================
+    {
+        id: "ngc3628", name: "NGC 3628", size: 15, icon: "🍔", ra: 11.67, dec: 13.59, type: "Galassia a Spirale", mag: "+9.5", dist: "35 Milioni a.l.", link: "https://it.wikipedia.org/wiki/NGC_3628",
+        it: "Galassia Hamburger", en: "Hamburger Galaxy", es: "Galaxia Hamburguesa", zh: "汉堡包星系",
+        desc_it: "Terza componente del Tripletto del Leone con M65 e M66, vista di taglio con prominente banda di polvere.", desc_en: "Third member of the Leo Triplet with M65 and M66, seen edge-on with a prominent dust lane.", desc_es: "Tercer miembro del Trío de Leo con M65 y M66, vista de canto con prominente banda de polvo.", desc_zh: "狮子座三重奏第三成员(与M65、M66)，侧面可见明显尘埃带。",
+        tips_it: "Inquadra M65+M66+NGC3628 insieme per il 'Tripletto del Leone' completo. Focale media 500-800mm.", tips_en: "Frame M65+M66+NGC3628 together for the complete 'Leo Triplet'. Medium focal length 500-800mm.", tips_es: "Encuadra M65+M66+NGC3628 juntas para el 'Trío de Leo' completo. Focal media 500-800mm.", tips_zh: "将M65+M66+NGC3628一起入镜，拍摄完整狮子座三重奏。建议中焦距500-800mm。"
+    },
+    {
+        id: "m65", name: "M65", size: 8, icon: "🌀", ra: 11.31, dec: 13.09, type: "Galassia a Spirale", mag: "+9.3", dist: "35 Milioni a.l.", link: "https://it.wikipedia.org/wiki/M65",
+        it: "M65 (Tripletto del Leone)", en: "M65 (Leo Triplet)", es: "M65 (Trío de Leo)", zh: "M65(狮子座三重奏)",
+        desc_it: "Galassia a spirale nel Leone, parte del Tripletto del Leone con M66 e NGC 3628.", desc_en: "Spiral galaxy in Leo, part of the Leo Triplet with M66 and NGC 3628.", desc_es: "Galaxia espiral en Leo, parte del Trío de Leo con M66 y NGC 3628.", desc_zh: "狮子座螺旋星系，是与M66和NGC 3628组成的狮子座三重奏成员。",
+        tips_it: "Abbinala sempre a M66 e NGC 3628 per catturare l'intero tripletto. Focale 500-800mm.", tips_en: "Always pair with M66 and NGC 3628 to capture the full triplet. Focal 500-800mm.", tips_es: "Siempre combínala con M66 y NGC 3628 para capturar el trío completo. Focal 500-800mm.", tips_zh: "始终与M66和NGC 3628搭配，拍摄完整的三重奏。建议焦距500-800mm。"
+    },
+    {
+        id: "m66", name: "M66", size: 9, icon: "🌀", ra: 11.34, dec: 12.99, type: "Galassia a Spirale", mag: "+8.9", dist: "36 Milioni a.l.", link: "https://it.wikipedia.org/wiki/M66",
+        it: "M66 (Tripletto del Leone)", en: "M66 (Leo Triplet)", es: "M66 (Trío de Leo)", zh: "M66(狮子座三重奏)",
+        desc_it: "La più luminosa del Tripletto del Leone, con bracci a spirale distorte per interazione gravitazionale.", desc_en: "The brightest of the Leo Triplet, with spiral arms distorted by gravitational interaction.", desc_es: "La más brillante del Trío de Leo, con brazos espirales distorsionados por interacción gravitacional.", desc_zh: "狮子座三重奏中最亮的成员，螺旋臂因引力相互作用而产生扭曲。",
+        tips_it: "La più facile del tripletto. La distorsione dei bracci a spirale è spettacolare in L-RGB.", tips_en: "The easiest of the triplet. The distorted spiral arms are spectacular in L-RGB.", tips_es: "La más fácil del trío. Los brazos en espiral distorsionados son espectaculares en L-RGB.", tips_zh: "三重奏中最易拍摄的成员。扭曲的螺旋臂在L-RGB模式下非常壮观。"
+    },
+    {
+        id: "ngc4631", name: "NGC 4631", size: 15, icon: "🐋", ra: 12.70, dec: 32.54, type: "Galassia a Spirale", mag: "+9.2", dist: "25 Milioni a.l.", link: "https://it.wikipedia.org/wiki/NGC_4631",
+        it: "Galassia Balena", en: "Whale Galaxy", es: "Galaxia Ballena", zh: "鲸鱼星系",
+        desc_it: "Galassia vista di taglio nei Cani da Caccia, affiancata dalla più piccola NGC 4627.", desc_en: "Edge-on galaxy in Canes Venatici, flanked by the smaller NGC 4627.", desc_es: "Galaxia vista de canto en Canes Venatici, flanqueada por la más pequeña NGC 4627.", desc_zh: "猎犬座侧面星系，旁边伴有较小的NGC 4627。",
+        tips_it: "Inquadra insieme a NGC 4656 per un campo ricchissimo. LRGB con H-Alpha per il gas.", tips_en: "Frame with NGC 4656 for a rich field. LRGB with H-Alpha for the gas halo.", tips_es: "Encuadra con NGC 4656 para un campo rico. LRGB con H-Alfa para el gas.", tips_zh: "与NGC 4656一起入镜形成丰富星场。LRGB结合H-Alpha可以捕捉气体晕。"
+    },
+    {
+        id: "ngc6946", name: "NGC 6946", size: 11, icon: "🎆", ra: 20.58, dec: 60.15, type: "Galassia a Spirale", mag: "+8.8", dist: "22 Milioni a.l.", link: "https://it.wikipedia.org/wiki/Galassia_Fuochi_d%27Artificio",
+        it: "Galassia Fuochi d'Artificio", en: "Fireworks Galaxy", es: "Galaxia Fuegos Artificiales", zh: "烟花星系",
+        desc_it: "Galassia ricchissima di supernove (10 in un secolo!) al confine tra Cigno e Cefeo.", desc_en: "Galaxy with an exceptional supernova rate (10 in a century!) on the Cygnus-Cepheus border.", desc_es: "Galaxia con tasa excepcional de supernovas (10 en un siglo!) en el límite Cygnus-Cefeo.", desc_zh: "超新星爆发率极高的星系(一个世纪内10次!)，位于天鹅座和仙王座交界处。",
+        tips_it: "L'H-Alpha dei bracci è spettacolare. Abbinala all'ammasso NGC 6939 per un campo ricco.", tips_en: "The H-Alpha in the spiral arms is spectacular. Pair with cluster NGC 6939 for a rich field.", tips_es: "El H-Alfa en los brazos es espectacular. Combínala con el cúmulo NGC 6939.", tips_zh: "螺旋臂中的H-Alpha极为壮观。与NGC 6939星团搭配，形成丰富的星场。"
+    },
+    {
+        id: "ngc2403", name: "NGC 2403", size: 21, icon: "🌀", ra: 7.62, dec: 65.60, type: "Galassia a Spirale", mag: "+8.4", dist: "10 Milioni a.l.", link: "https://it.wikipedia.org/wiki/NGC_2403",
+        it: "NGC 2403", en: "NGC 2403", es: "NGC 2403", zh: "NGC 2403",
+        desc_it: "Galassia a spirale nella Giraffa, una delle più vicine al Gruppo Locale e ricca di regioni HII.", desc_en: "Spiral galaxy in Camelopardalis, one of the closest to the Local Group and rich in HII regions.", desc_es: "Galaxia espiral en Jirafa, una de las más cercanas al Grupo Local y rica en regiones HII.", desc_zh: "鹿豹座螺旋星系，是本星系群最近邻之一，富含HII区域。",
+        tips_it: "Le regioni HII emergono bene con H-Alpha. LRGB+Ha per un risultato completo.", tips_en: "The HII regions emerge nicely with H-Alpha. LRGB+Ha for a complete result.", tips_es: "Las regiones HII emergen bien con H-Alfa. LRGB+Ha para un resultado completo.", tips_zh: "HII区域在H-Alpha下清晰可见。LRGB+Ha组合可获得完整效果。"
+    },
+    {
+        id: "ngc4038", name: "NGC 4038/4039", size: 5, icon: "📡", ra: 12.02, dec: -18.87, type: "Galassia a Spirale", mag: "+10.3", dist: "70 Milioni a.l.", link: "https://it.wikipedia.org/wiki/Galassie_Antenna",
+        it: "Galassie Antenna", en: "Antennae Galaxies", es: "Galaxias Antena", zh: "触须星系",
+        desc_it: "Due galassie in collisione nel Corvo, con lunghe code di marea che ricordano antenne di insetto.", desc_en: "Two colliding galaxies in Corvus, with long tidal tails resembling insect antennae.", desc_es: "Dos galaxias en colisión en Corvus, con largas colas de mareas que parecen antenas.", desc_zh: "乌鸦座两个正在碰撞的星系，拥有形似触须的潮汐尾巴。",
+        tips_it: "Alta focale per i dettagli. L-RGB per catturare le code di marea tenue. Oggetto australe.", tips_en: "High focal for details. L-RGB to capture the faint tidal tails. Southern object.", tips_es: "Alta focal para los detalles. L-RGB para capturar las tenues colas de mareas. Objeto austral.", tips_zh: "高焦距捕捉细节。L-RGB拍摄微弱的潮汐尾。南天目标。"
+    },
+    // ==============================================================
+    // --- AMMASSI GLOBULARI ---
+    // ==============================================================
+    {
+        id: "m15", name: "M15", size: 18, icon: "🎇", ra: 21.49, dec: 12.17, type: "Ammasso Globulare", mag: "+6.2", dist: "33.600 a.l.", link: "https://it.wikipedia.org/wiki/M15_(astronomia)",
+        it: "M15", en: "M15", es: "M15", zh: "M15",
+        desc_it: "Uno degli ammassi globulari più densi e antichi della Via Lattea, nel Pegaso.", desc_en: "One of the densest and oldest globular clusters in the Milky Way, in Pegasus.", desc_es: "Uno de los cúmulos globulares más densos y antiguos de la Vía Láctea, en Pegaso.", desc_zh: "飞马座银河系中最密集、最古老的球状星团之一。",
+        tips_it: "Nucleo molto condensato. Alta focale (>1000mm) e pose brevissime (30-60s) per non saturare.", tips_en: "Very condensed core. High focal (>1000mm) and very short exposures (30-60s) to avoid saturation.", tips_es: "Núcleo muy condensado. Alta focal (>1000mm) y posados muy cortos (30-60s) para no saturar.", tips_zh: "核心极为密集。高焦距(>1000mm)配合极短曝光(30-60秒)以避免过饱和。"
+    },
+    {
+        id: "m22", name: "M22", size: 32, icon: "🎇", ra: 18.60, dec: -23.90, type: "Ammasso Globulare", mag: "+5.1", dist: "10.600 a.l.", link: "https://it.wikipedia.org/wiki/M22_(astronomia)",
+        it: "M22", en: "M22", es: "M22", zh: "M22",
+        desc_it: "Uno dei più grandi e vicini ammassi globulari della Via Lattea, nel Sagittario.", desc_en: "One of the largest and nearest globular clusters in the Milky Way, in Sagittarius.", desc_es: "Uno de los cúmulos globulares más grandes y cercanos de la Vía Láctea, en Sagitario.", desc_zh: "银河系中最大、最近的球状星团之一，位于人马座。",
+        tips_it: "Molto grande e luminoso. Focale media (500-800mm) per catturarne la grande estensione.", tips_en: "Very large and bright. Medium focal (500-800mm) to capture its full extent.", tips_es: "Muy grande y brillante. Focal media (500-800mm) para capturar toda su extensión.", tips_zh: "体积大、亮度高。中等焦距(500-800mm)以捕捉其完整范围。"
+    },
+    {
+        id: "m92", name: "M92", size: 14, icon: "🎇", ra: 17.28, dec: 43.14, type: "Ammasso Globulare", mag: "+6.4", dist: "26.700 a.l.", link: "https://it.wikipedia.org/wiki/M92_(astronomia)",
+        it: "M92", en: "M92", es: "M92", zh: "M92",
+        desc_it: "Ammasso globulare nell'Ercole, spesso trascurato rispetto al famoso M13 ma altrettanto bello.", desc_en: "Globular cluster in Hercules, often overlooked next to M13 but equally beautiful.", desc_es: "Cúmulo globular en Hércules, a menudo ignorado junto a M13 pero igualmente bello.", desc_zh: "武仙座球状星团，常被著名的M13所掩盖，但同样美丽。",
+        tips_it: "Abbinalo a M13 nella stessa sessione. Alta focale per risolvere le stelle periferiche.", tips_en: "Pair with M13 in the same session. High focal to resolve the outer stars.", tips_es: "Combínalo con M13 en la misma sesión. Alta focal para resolver las estrellas externas.", tips_zh: "可与M13在同一拍摄夜晚配对。高焦距以分辨外围恒星。"
+    },
+    // ==============================================================
+    // --- AMMASSI APERTI ---
+    // ==============================================================
+    {
+        id: "m44", name: "M44", size: 95, icon: "🐝", ra: 8.67, dec: 19.67, type: "Ammasso Aperto", mag: "+3.7", dist: "577 a.l.", link: "https://it.wikipedia.org/wiki/Ammasso_del_Presepe",
+        it: "Ammasso del Presepe", en: "Beehive Cluster", es: "Cúmulo del Pesebre", zh: "蜂巢星团",
+        desc_it: "Ammasso aperto vicinissimo nel Cancro, visibile ad occhio nudo come una piccola nuvola.", desc_en: "Very nearby open cluster in Cancer, visible to the naked eye as a small cloud.", desc_es: "Cúmulo abierto muy cercano en Cáncer, visible a simple vista como una pequeña nube.", desc_zh: "巨蟹座近距离疏散星团，肉眼可见为一片小云雾。",
+        tips_it: "Enormemente grande: usa un campo largo o grandangolare. Tempi di posa corti (30-60s).", tips_en: "Very large: use a wide field or wide-angle lens. Short exposures (30-60s).", tips_es: "Muy grande: usa un campo amplio o angular. Exposiciones cortas (30-60s).", tips_zh: "体积庞大：使用广角或宽视野拍摄。短曝光(30-60秒)。"
+    },
+    {
+        id: "m35", name: "M35", size: 28, icon: "✨", ra: 6.15, dec: 24.34, type: "Ammasso Aperto", mag: "+5.3", dist: "2.800 a.l.", link: "https://it.wikipedia.org/wiki/M35_(astronomia)",
+        it: "M35", en: "M35", es: "M35", zh: "M35",
+        desc_it: "Ricco ammasso aperto nei Gemelli, con in campo l'ammasso di fondo NGC 2158 più lontano.", desc_en: "Rich open cluster in Gemini, with the more distant background cluster NGC 2158 in the field.", desc_es: "Rico cúmulo abierto en Géminis, con el cúmulo de fondo NGC 2158 en el campo.", desc_zh: "双子座丰富的疏散星团，背景中可见更遥远的NGC 2158星团。",
+        tips_it: "Abbinalo a NGC 2158 sullo stesso campo. Focale 500-800mm. Pose brevi per i colori.", tips_en: "Pair with NGC 2158 in the same field. Focal 500-800mm. Short exposures to preserve star colors.", tips_es: "Combínalo con NGC 2158 en el mismo campo. Focal 500-800mm. Posados cortos para colores.", tips_zh: "与NGC 2158一起入镜。焦距500-800mm。短曝光以保留星色。"
+    },
+    {
+        id: "ngc7789", name: "NGC 7789", size: 25, icon: "🌹", ra: 23.96, dec: 56.72, type: "Ammasso Aperto", mag: "+6.7", dist: "7.600 a.l.", link: "https://it.wikipedia.org/wiki/NGC_7789",
+        it: "Rosa di Carolina", en: "Caroline's Rose", es: "Rosa de Carolina", zh: "卡罗琳玫瑰",
+        desc_it: "Denso ammasso aperto in Cassiopea scoperto da Caroline Herschel. Migliaia di stelle.", desc_en: "Dense open cluster in Cassiopeia discovered by Caroline Herschel. Thousands of stars.", desc_es: "Denso cúmulo abierto en Casiopea descubierto por Caroline Herschel. Miles de estrellas.", desc_zh: "仙后座密集疏散星团，由卡罗琳·赫歇尔发现，包含数千颗恒星。",
+        tips_it: "Alta focale (>800mm) per risolvere le stelle. Pose brevi per evitare saturazione. Spettacolare.", tips_en: "High focal (>800mm) to resolve the stars. Short exposures to avoid saturation. Spectacular.", tips_es: "Alta focal (>800mm) para resolver las estrellas. Posados cortos para evitar saturación.", tips_zh: "高焦距(>800mm)以分辨恒星。短曝光避免过饱和。景象壮观。"
+    },
+    {
+        id: "m6", name: "M6", size: 25, icon: "🦋", ra: 17.66, dec: -32.22, type: "Ammasso Aperto", mag: "+4.2", dist: "1.600 a.l.", link: "https://it.wikipedia.org/wiki/Ammasso_Farfalla",
+        it: "Ammasso Farfalla", en: "Butterfly Cluster", es: "Cúmulo Mariposa", zh: "蝴蝶星团",
+        desc_it: "Ammasso aperto nello Scorpione, con disposizione delle stelle che ricorda una farfalla.", desc_en: "Open cluster in Scorpius, with stars arranged in a butterfly pattern.", desc_es: "Cúmulo abierto en Escorpión, con estrellas dispuestas en forma de mariposa.", desc_zh: "天蝎座疏散星团，恒星排列形似蝴蝶。",
+        tips_it: "Vicino a M7, ottimo con focali corte (200-400mm) per catturarli insieme nel ricco campo della Via Lattea.", tips_en: "Near M7, great with short focal lengths (200-400mm) to capture both in the rich Milky Way field.", tips_es: "Cercano a M7, genial con focales cortas (200-400mm) para capturarlos juntos en la Vía Láctea.", tips_zh: "靠近M7，适合短焦距(200-400mm)在丰富的银河背景中同时拍摄两者。"
+    },
+    {
+        id: "m7", name: "M7", size: 80, icon: "✨", ra: 17.90, dec: -34.81, type: "Ammasso Aperto", mag: "+3.3", dist: "980 a.l.", link: "https://it.wikipedia.org/wiki/M7",
+        it: "M7 (Ammasso di Tolomeo)", en: "M7 (Ptolemy Cluster)", es: "M7 (Cúmulo de Ptolomeo)", zh: "M7(托勒密星团)",
+        desc_it: "Uno degli ammassi aperti più vicini e vistosi, nello Scorpione. Visibile ad occhio nudo.", desc_en: "One of the nearest and most prominent open clusters, in Scorpius. Visible to the naked eye.", desc_es: "Uno de los cúmulos abiertos más cercanos y vistosos, en Escorpión. Visible a simple vista.", desc_zh: "天蝎座最近、最显著的疏散星团之一，肉眼可见。",
+        tips_it: "Enormemente grande (1.3°): usa solo grandangolari o teleobiettivi corti (85-200mm).", tips_en: "Very large (1.3°): use only wide-angle or short telephoto lenses (85-200mm).", tips_es: "Muy grande (1.3°): usa solo gran angular o teleobjetivos cortos (85-200mm).", tips_zh: "体积极大(1.3度)：只能使用广角或短焦距镜头(85-200mm)拍摄。"
     }
+
 ];

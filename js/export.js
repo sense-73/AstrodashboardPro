@@ -14,8 +14,17 @@
                     let dithChk = document.getElementById(`${f.id}-dither`);
                     let dithFrq = document.getElementById(`${f.id}-dfreq`);
                     let doDither = isLight && dithChk ? dithChk.checked : false;
-                    let ditherFreq = parseInt(dithFrq ? dithFrq.value : 3) || 3;
+                    let ditherFreq = parseInt(dithFrq ? dithFrq.value : 4) || 4;
                     esposizioni.push({ count: count, exp: exp, filter: (isMono && isLight) ? document.getElementById(`nina-name-${f.id}`).value.trim() : null, type: f.id.includes('dark') ? "DARK" : f.id.includes('bias') ? "FLAT" : "LIGHT", doDither: doDither, ditherFreq: ditherFreq });
+                    // Blocco HDR: se il campo HDR ha un valore, aggiunge un secondo blocco Light
+                    if (isLight && count > 0) {
+                        let _hdrElE = document.getElementById(`${f.id}-hdr`);
+                        let _hdrExpE = _hdrElE ? (parseInt(_hdrElE.value) || 0) : 0;
+                        if (_hdrExpE > 0) {
+                            let _hdrCountE = Math.max(5, Math.ceil(count * 0.5));
+                            esposizioni.push({ count: _hdrCountE, exp: _hdrExpE, filter: (isMono && isLight) ? document.getElementById(`nina-name-${f.id}`).value.trim() : null, type: "LIGHT", doDither: doDither, ditherFreq: ditherFreq });
+                        }
+                    }
                 }
             });
             if (esposizioni.length === 0) { alert(t("alert_noseq")); return; }

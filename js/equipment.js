@@ -4,6 +4,8 @@
         const dbTelescopiBase = [
             // Obiettivi Fotografici
             { nome: "Samyang 135mm f/2", focale: 135, diametro: 67 },
+            // Explore Scientific
+            { nome: "Comethunter", focale: 731, diametro: 152 },
             // ZWO
             { nome: "ZWO Seestar S50", focale: 250, diametro: 50 },
             { nome: "ZWO FF65 APO", focale: 416, diametro: 65 },
@@ -38,15 +40,94 @@
         ];
 
         const dbCamereBase = [
-            { nome: "ASI 533MC/MM (Square)", w: 11.31, h: 11.31, p: 3.76 },
-            { nome: "ASI 294MC/MM (4/3\")", w: 19.1, h: 13.0, p: 4.63 },
-            { nome: "ASI 2600MC/MM (APS-C)", w: 23.5, h: 15.7, p: 3.76 },
-            { nome: "SONY IMX571 (APS-C Gen)", w: 23.5, h: 15.7, p: 3.76 },
-            { nome: "ASI 6200MC/MM (Full Frame)", w: 36.0, h: 24.0, p: 3.76 },
-            { nome: "ASI 183MC/MM (1\")", w: 13.2, h: 8.8, p: 2.4 },
-            { nome: "SONY IMX585", w: 11.14, h: 6.26, p: 2.9 },
-            { nome: "ASI 1600MM (4/3\")", w: 17.7, h: 13.4, p: 3.8 },
-            { nome: "Reflex APS-C (Canon/Nikon)", w: 22.3, h: 14.9, p: 4.3 }
+
+            // ── SONY IMX — Chip generici (usati da molti produttori) ──────────
+            { nome: "Sony IMX178  (6.4MP  1/1.8\")",  w:  7.37, h:  4.92, p: 2.4  },
+            { nome: "Sony IMX183  (20MP   1\")",       w: 13.2,  h:  8.8,  p: 2.4  },
+            { nome: "Sony IMX290  (2MP    1/2.8\")",   w:  5.64, h:  3.17, p: 2.9  },
+            { nome: "Sony IMX294  (11MP   4/3\")",     w: 19.1,  h: 13.0,  p: 4.63 },
+            { nome: "Sony IMX432  (9MP    1\" sq)",    w: 12.8,  h: 10.7,  p: 9.0  },
+            { nome: "Sony IMX462  (2MP    1/2.8\")",   w:  6.46, h:  4.72, p: 2.9  },
+            { nome: "Sony IMX464  (8.3MP  4/3\")",     w:  9.55, h:  7.17, p: 2.9  },
+            { nome: "Sony IMX485  (8.3MP  1\")",       w: 13.0,  h:  8.7,  p: 2.9  },
+            { nome: "Sony IMX533  (9MP    1\" sq)",    w: 11.31, h: 11.31, p: 3.76 },
+            { nome: "Sony IMX571  (26MP   APS-C)",     w: 23.5,  h: 15.7,  p: 3.76 },
+            { nome: "Sony IMX585  (8.3MP  4/3\")",     w: 11.14, h:  6.26, p: 2.9  },
+            { nome: "Sony IMX662  (4MP    1/2.8\")",   w:  7.68, h:  4.32, p: 2.9  },
+            { nome: "Sony IMX715  (8MP    1/2.8\")",   w:  7.56, h:  5.35, p: 1.85 },
+            { nome: "Sony IMX455  (61MP   FF)",        w: 36.0,  h: 24.0,  p: 3.76 },
+
+            // ── ZWO ASI — Planetarie / EAA ────────────────────────────────────
+            { nome: "ZWO ASI120MM/MC",                 w:  4.8,  h:  3.6,  p: 3.75 },
+            { nome: "ZWO ASI174MM/MC",                 w: 11.3,  h:  7.1,  p: 5.86 },
+            { nome: "ZWO ASI178MM/MC",                 w:  7.37, h:  4.92, p: 2.4  },
+            { nome: "ZWO ASI224MC",                    w:  4.9,  h:  3.7,  p: 3.75 },
+            { nome: "ZWO ASI290MM/MC",                 w:  5.64, h:  3.17, p: 2.9  },
+            { nome: "ZWO ASI385MC",                    w:  7.4,  h:  4.16, p: 2.9  },
+            { nome: "ZWO ASI462MC",                    w:  6.46, h:  4.72, p: 2.9  },
+            { nome: "ZWO ASI662MC",                    w:  7.68, h:  4.32, p: 2.9  },
+            { nome: "ZWO ASI715MC",                    w:  7.56, h:  5.35, p: 1.85 },
+
+            // ── ZWO ASI — Deep Sky ────────────────────────────────────────────
+            { nome: "ZWO ASI183MM/MC (1\")",           w: 13.2,  h:  8.8,  p: 2.4  },
+            { nome: "ZWO ASI294MM/MC (4/3\")",         w: 19.1,  h: 13.0,  p: 4.63 },
+            { nome: "ZWO ASI432MM",                    w: 12.8,  h: 10.7,  p: 9.0  },
+            { nome: "ZWO ASI485MC",                    w: 13.0,  h:  8.7,  p: 2.9  },
+            { nome: "ZWO ASI533MM/MC (sq)",            w: 11.31, h: 11.31, p: 3.76 },
+            { nome: "ZWO ASI585MC",                    w: 11.14, h:  6.26, p: 2.9  },
+            { nome: "ZWO ASI1600MM/MC (4/3\")",        w: 17.7,  h: 13.4,  p: 3.8  },
+            { nome: "ZWO ASI2600MM/MC (APS-C)",        w: 23.5,  h: 15.7,  p: 3.76 },
+            { nome: "ZWO ASI2400MC (FF)",              w: 35.9,  h: 23.9,  p: 5.94 },
+            { nome: "ZWO ASI6200MM/MC (FF)",           w: 36.0,  h: 24.0,  p: 3.76 },
+
+            // ── QHY ──────────────────────────────────────────────────────────
+            { nome: "QHY163M/C (4/3\")",               w: 17.7,  h: 13.4,  p: 3.8  },
+            { nome: "QHY183M/C (1\")",                 w: 13.2,  h:  8.8,  p: 2.4  },
+            { nome: "QHY294M/C (4/3\")",               w: 19.1,  h: 13.0,  p: 4.63 },
+            { nome: "QHY533M/C (1\" sq)",              w: 11.31, h: 11.31, p: 3.76 },
+            { nome: "QHY268M/C (APS-C)",               w: 23.5,  h: 15.7,  p: 3.76 },
+            { nome: "QHY485C (1\")",                   w: 13.0,  h:  8.7,  p: 2.9  },
+            { nome: "QHY600M/C (FF)",                  w: 36.0,  h: 24.0,  p: 3.76 },
+            { nome: "QHY128C (APS-C Canon)",           w: 22.3,  h: 14.9,  p: 4.3  },
+            { nome: "QHY367C (FF)",                    w: 35.8,  h: 23.9,  p: 4.88 },
+
+            // ── PlayerOne ────────────────────────────────────────────────────
+            { nome: "PlayerOne Mars-C II (IMX662)",    w:  7.68, h:  4.32, p: 2.9  },
+            { nome: "PlayerOne Neptune-C II (IMX464)", w:  9.55, h:  7.17, p: 2.9  },
+            { nome: "PlayerOne Saturn-C/M (IMX183)",   w: 13.2,  h:  8.8,  p: 2.4  },
+            { nome: "PlayerOne Uranus-C (IMX585)",     w: 11.14, h:  6.26, p: 2.9  },
+            { nome: "PlayerOne Poseidon-C (IMX294)",   w: 19.1,  h: 13.0,  p: 4.63 },
+            { nome: "PlayerOne Artemis-C/M (IMX571)",  w: 23.5,  h: 15.7,  p: 3.76 },
+            { nome: "PlayerOne Ares-M (IMX432)",       w: 12.8,  h: 10.7,  p: 9.0  },
+            { nome: "PlayerOne Apollo-M Max (IMX455)", w: 36.0,  h: 24.0,  p: 3.76 },
+
+            // ── Atik ─────────────────────────────────────────────────────────
+            { nome: "Atik 314L+ (ICX285)",             w:  6.5,  h:  4.8,  p: 4.65 },
+            { nome: "Atik 383L+ (KAF-8300)",           w: 17.6,  h: 13.5,  p: 5.4  },
+            { nome: "Atik 460EX (ICX694)",             w: 15.1,  h: 15.1,  p: 4.54 },
+            { nome: "Atik Infinity",                   w:  5.7,  h:  4.28, p: 5.6  },
+            { nome: "Atik Horizon (APS-C CMOS)",       w: 23.4,  h: 15.6,  p: 3.69 },
+            { nome: "Atik 16200 (KAF-16200, FF)",      w: 35.8,  h: 23.9,  p: 6.0  },
+
+            // ── Canon DSLR / Mirrorless ───────────────────────────────────────
+            { nome: "Canon 450D/550D/600D/700D (APS-C)", w: 22.3, h: 14.9, p: 4.29 },
+            { nome: "Canon 60Da (APS-C Astro)",        w: 22.3,  h: 14.9,  p: 4.3  },
+            { nome: "Canon 7D MkII (APS-C)",           w: 22.4,  h: 15.0,  p: 4.09 },
+            { nome: "Canon 90D (APS-C)",               w: 22.3,  h: 14.9,  p: 3.21 },
+            { nome: "Canon 6D (FF)",                   w: 35.8,  h: 23.9,  p: 6.54 },
+            { nome: "Canon 6D MkII (FF)",              w: 35.9,  h: 24.0,  p: 5.74 },
+            { nome: "Canon Ra / EOS R (FF Astro)",     w: 35.9,  h: 24.0,  p: 4.39 },
+
+            // ── Nikon DSLR ───────────────────────────────────────────────────
+            { nome: "Nikon D3300/D5300/D5500 (APS-C)", w: 23.5,  h: 15.6,  p: 3.89 },
+            { nome: "Nikon D7500 (APS-C)",             w: 23.5,  h: 15.7,  p: 4.22 },
+            { nome: "Nikon D810A (FF Astro)",          w: 35.9,  h: 24.0,  p: 4.88 },
+            { nome: "Nikon D850 (FF)",                 w: 35.9,  h: 23.9,  p: 4.35 },
+
+            // ── Sony Mirrorless ──────────────────────────────────────────────
+            { nome: "Sony A6000/A6100/A6400 (APS-C)",  w: 23.5,  h: 15.6,  p: 3.89 },
+            { nome: "Sony A7 III / A7C (FF)",          w: 35.6,  h: 23.8,  p: 5.97 },
+            { nome: "Sony A7R III / IV (FF HiRes)",    w: 35.7,  h: 23.8,  p: 4.51 },
         ];
 
 
@@ -93,6 +174,7 @@
                 document.getElementById('sensor-height').value=p[1];
                 if(p[2]) document.getElementById('pixel-size').value=p[2];
                 aggiornaFOV();
+                if (typeof aggiornaAI === 'function') aggiornaAI();
             } 
         }
 

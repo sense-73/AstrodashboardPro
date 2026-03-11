@@ -186,9 +186,18 @@
             if (!tips||tips==='--') return '';
             return '<div class="tip-box"><div class="tip-label">'+_esc(_t('rpt_tip_label'))+'</div><div class="tip-text">'+_esc(tips)+'</div></div>';
         }
+        function _hdrFootnote() {
+            if (!window._hdrNotePresent) return '';
+            window._hdrNotePresent = false; // reset per prossimo report
+            return '<div style="margin-top:6px;font-size:0.82em;color:#bb86fc;border-top:1px solid #3a2050;padding-top:5px;">'
+                + '<span style="font-weight:600;">* HDR:</span> '
+                + _esc(_t('rpt_hdr_note'))
+                + '</div>';
+        }
 
         // ── Legge filtri dal DOM ──────────────────────────────────────
         function _leggiFiltrirRows(isPro, isM) {
+            window._hdrNotePresent = false; // reset prima di leggere
             var possibili = isM ? ['m-l','m-r','m-g','m-b','m-ha','m-oiii','m-sii'] : ['c-light'];
             var rows=[], totalSecs=0, totalFrames=0;
             possibili.forEach(function(pid){
@@ -216,6 +225,18 @@
                 var tot = count*exp;
                 totalSecs += tot; totalFrames += count;
                 rows.push([name, count, exp+'s', gainVal||'--', offsetVal||'--', (binVal||'1')+'×'+(binVal||'1'), _fmtSecs(tot)]);
+                // ── Riga HDR ──────────────────────────────────────────
+                var hdrId = isPro ? ('pro-'+pid+'-hdr') : (pid+'-hdr');
+                var hdrEl = document.getElementById(hdrId);
+                var hdrExp = hdrEl ? (parseInt(hdrEl.value)||0) : 0;
+                var hdrVisible = hdrEl ? (hdrEl.style.display !== 'none') : false;
+                if (hdrExp > 0 && (isPro || hdrVisible)) {
+                    var hdrCount = Math.max(5, Math.ceil(count * 0.5));
+                    var hdrTot = hdrCount * hdrExp;
+                    totalSecs += hdrTot; totalFrames += hdrCount;
+                    rows.push([name+'*', hdrCount, hdrExp+'s', gainVal||'--', offsetVal||'--', (binVal||'1')+'×'+(binVal||'1'), _fmtSecs(hdrTot)]);
+                    window._hdrNotePresent = true;
+                }
             });
 
             // ── Dark e Bias (calibrazione) ────────────────────────────
@@ -381,7 +402,8 @@
                 {label:_t('rpt_label_end'),      value:tE},
                 {label:_t('rpt_label_duration'), value:durStr},
             ], 3);
-            html += _filterTable(fd.rows);
+            var _ftableHtml = _filterTable(fd.rows);
+            html += _ftableHtml + _hdrFootnote();
             html += _totRow(fd.totalFrames, fd.totalSecs);
             html += '</div>';
 

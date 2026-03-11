@@ -38,10 +38,11 @@
             container.innerHTML = '';
 
             container.innerHTML = `
-                <div style="display: grid; grid-template-columns: 1fr 0.8fr 0.8fr 0.8fr 0.8fr 0.8fr 1fr; gap: 5px; font-size: 0.8em; color: #aaa; text-align: center; border-bottom: 1px solid #444; padding-bottom: 5px;">
+                <div style="display: grid; grid-template-columns: 1fr 0.8fr 0.6fr 0.65fr 0.65fr 0.65fr 0.65fr 1fr; gap: 5px; font-size: 0.8em; color: #aaa; text-align: center; border-bottom: 1px solid #444; padding-bottom: 5px;">
                     <div style="text-align: left;">Filtro</div>
                     <div>Pose</div>
                     <div>Secs</div>
+                    <div style="color:#bb86fc;">HDR<span class="info-icon" style="font-size:1.0em;margin-left:2px;cursor:help;" onmouseenter="mostraTooltip(this,'info_hdr_col')" onmouseleave="nascondiTooltip()">ℹ️</span></div>
                     <div>Gain</div>
                     <div>Offset</div>
                     <div>Bin</div>
@@ -58,12 +59,16 @@
                 let defaultName = localStorage.getItem('nina_filter_' + f.id) || f.name;
 
                 let row = document.createElement('div');
-                row.style.cssText = "display: grid; grid-template-columns: 1fr 0.8fr 0.8fr 0.8fr 0.8fr 0.8fr 1fr; gap: 5px; align-items: center; background: #1a1a1a; padding: 10px; border-radius: 4px; border-left: 3px solid #00c6ff;";
+                row.style.cssText = "display: grid; grid-template-columns: 1fr 0.8fr 0.6fr 0.65fr 0.65fr 0.65fr 0.65fr 1fr; gap: 5px; align-items: center; background: #1a1a1a; padding: 10px; border-radius: 4px; border-left: 3px solid #00c6ff;";
                 
                 row.innerHTML = `
                     <div style="font-weight: bold; color: #fff; font-size: 0.9em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${defaultName}">${defaultName}</div>
                     <input type="number" id="pro-${f.id}-count" value="${defaultCount}" min="0" oninput="calcolaNightFillBar()" style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box;">
                     <input type="number" id="pro-${f.id}-exp" value="${defaultExp}" min="1" oninput="calcolaNightFillBar()" style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box;">
+                    <input type="number" id="pro-${f.id}-hdr" value="" placeholder="—" min="0" oninput="calcolaNightFillBar()"
+                        style="width:100%!important;text-align:center;padding:4px!important;box-sizing:border-box;
+                        color:#bb86fc;background:#1a1015;border:1px solid #3a2050;border-radius:3px;"
+                        title="Secondi esposizione breve HDR">
                     <input type="text" id="pro-${f.id}-gain" value="Auto" style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box;">
                     <input type="text" id="pro-${f.id}-offset" value="Auto" style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box;">
                     <select id="pro-${f.id}-bin" style="width: 100%!important; padding: 4px!important; text-align: center; box-sizing: border-box;">
@@ -71,7 +76,7 @@
                     </select>
                     <div style="display: flex; align-items: center; gap: 5px; justify-content: center;">
                         <input type="checkbox" id="pro-${f.id}-dither" checked style="transform: scale(1.2); cursor: pointer;" onchange="calcolaNightFillBar()">
-                        <input type="number" id="pro-${f.id}-dfreq" value="3" min="1" style="width: 45px!important; padding: 4px!important; text-align: center;" oninput="calcolaNightFillBar()">
+                        <input type="number" id="pro-${f.id}-dfreq" value="4" min="1" style="width: 45px!important; padding: 4px!important; text-align: center;" oninput="calcolaNightFillBar()">
                     </div>
                 `;
                 container.appendChild(row);
@@ -104,7 +109,7 @@
                 let borderColor = isDark ? '#555' : '#888';
 
                 let row = document.createElement('div');
-                row.style.cssText = `display: grid; grid-template-columns: 1fr 0.8fr 0.8fr 0.8fr 0.8fr 0.8fr 1fr; gap: 5px; align-items: center; background: #141414; padding: 10px; border-radius: 4px; border-left: 3px solid ${borderColor};`;
+                row.style.cssText = `display: grid; grid-template-columns: 1fr 0.8fr 0.6fr 0.65fr 0.65fr 0.65fr 0.65fr 1fr; gap: 5px; align-items: center; background: #141414; padding: 10px; border-radius: 4px; border-left: 3px solid ${borderColor};`;
 
                 let expCell = isDark
                     ? `<input type="number" id="pro-${f.id}-exp" value="${defaultExp}" min="0" oninput="calcolaNightFillBar()" style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box;">`
@@ -117,6 +122,7 @@
                     <div style="font-weight: bold; color: #aaa; font-size: 0.9em;">${defaultName}</div>
                     <input type="number" id="pro-${f.id}-count" value="${defaultCount}" min="0" oninput="calcolaNightFillBar()" style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box;">
                     ${expCell}
+                    <div style="color:#555;text-align:center;font-size:0.85em;">—</div>
                     <input type="text" id="pro-${f.id}-gain" value="${f.id.includes('bias') ? '0' : 'Auto'}" style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box;">
                     <input type="text" id="pro-${f.id}-offset" value="Auto" style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box;">
                     <select id="pro-${f.id}-bin" style="width: 100%!important; padding: 4px!important; box-sizing: border-box;">
@@ -184,7 +190,11 @@
                     if (usaDither && dFreq > 0) {
                         tempoDither = Math.floor(count / dFreq) * ditherOverheadSecs;
                     }
-                    secUsati += (tempoPose + tempoDither);
+                    // HDR frames overhead (50% delle pose principali)
+                    let _hdrElPro = document.getElementById(`pro-${f.id}-hdr`);
+                    let _hdrExpPro = _hdrElPro ? (parseInt(_hdrElPro.value) || 0) : 0;
+                    let _hdrTime = (_hdrExpPro > 0) ? Math.ceil(count * 0.5) * _hdrExpPro : 0;
+                    secUsati += (tempoPose + tempoDither + _hdrTime);
                 }
             });
 
@@ -234,17 +244,41 @@
                 if (count <= 0) return;
                 let gainRaw = gainEl ? gainEl.value.trim() : 'Auto';
                 let offRaw  = offEl  ? offEl.value.trim()  : 'Auto';
+                let _mainExp = parseFloat(expEl ? expEl.value : 180) || 180;
+                let _mainGain = (gainRaw === 'Auto' || gainRaw === '') ? -1 : parseInt(gainRaw);
+                let _mainOff  = (offRaw  === 'Auto' || offRaw  === '') ? -1 : parseInt(offRaw);
+                let _mainBin  = parseInt(binEl ? binEl.value : 1) || 1;
+                let _mainDith = dithChk ? dithChk.checked : false;
+                let _mainDFreq = parseInt(dithFrq ? dithFrq.value : 4) || 4;
+                let _mainFilter = isMono ? (localStorage.getItem('nina_filter_' + f.id) || f.name) : null;
                 esposizioni.push({
                     count:     count,
-                    exp:       parseFloat(expEl ? expEl.value : 180) || 180,
-                    gain:      (gainRaw === 'Auto' || gainRaw === '') ? -1 : parseInt(gainRaw),
-                    offset:    (offRaw  === 'Auto' || offRaw  === '') ? -1 : parseInt(offRaw),
-                    bin:       parseInt(binEl ? binEl.value : 1) || 1,
-                    dither:    dithChk ? dithChk.checked : false,
-                    ditherFreq: parseInt(dithFrq ? dithFrq.value : 3) || 3,
-                    filterName: isMono ? (localStorage.getItem('nina_filter_' + f.id) || f.name) : null,
+                    exp:       _mainExp,
+                    gain:      _mainGain,
+                    offset:    _mainOff,
+                    bin:       _mainBin,
+                    dither:    _mainDith,
+                    ditherFreq: _mainDFreq,
+                    filterName: _mainFilter,
                     frameId:   f.id
                 });
+                // Blocco HDR: se il campo HDR è valorizzato
+                let _hdrElPRO = document.getElementById(`pro-${f.id}-hdr`);
+                let _hdrExpPRO = _hdrElPRO ? (parseInt(_hdrElPRO.value) || 0) : 0;
+                if (_hdrExpPRO > 0) {
+                    let _hdrCnt = Math.max(5, Math.ceil(count * 0.5));
+                    esposizioni.push({
+                        count:     _hdrCnt,
+                        exp:       _hdrExpPRO,
+                        gain:      _mainGain,
+                        offset:    _mainOff,
+                        bin:       _mainBin,
+                        dither:    _mainDith,
+                        ditherFreq: _mainDFreq,
+                        filterName: _mainFilter ? _mainFilter + ' HDR' : null,
+                        frameId:   f.id + '-hdr'
+                    });
+                }
             });
 
             if (esposizioni.length === 0) { alert(t("alert_noseq")); return; }

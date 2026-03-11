@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AstroDashboard v5.8.8 - Global Edition</title>
+    <title>AstroDashboard v5.9.3 - Global Edition</title>
     
     <link rel="manifest" href="manifest.json?v=3">
     <meta name="theme-color" content="#121212">
@@ -49,7 +49,7 @@
         </div>
         <div class="author-section">
             <div>
-                <p style="margin: 0 0 6px 0; font-size: 0.9em; color: #fff; font-weight: bold;">v5.8.8-Global</p>
+                <p style="margin: 0 0 6px 0; font-size: 0.9em; color: #fff; font-weight: bold;">v5.9.3-Global</p>
                 <button class="btn-guide" onclick="apriGuida()" style="margin: 0;"><span data-i18n="manual_btn">📖 Apri Manuale</span></button>
             </div>
             <img src="logo astro enrico sfondo.png" alt="Enrico Salis Logo" style="height: 60px; object-fit: contain; border-radius: 5px;">
@@ -183,11 +183,11 @@
                 <h3><span data-i18n="optical_setup">📸 Setup Ottico</span> <span class="info-icon" onmouseenter="mostraTooltip(this, 'info_setup')" onmouseleave="nascondiTooltip()">ℹ️</span></h3>
                 <div class="input-group" style="display: flex; align-items: center; gap: 5px;">
                     <label data-i18n="telescope">Telescopio:</label>
-                    <select id="preset-telescope" onchange="applicaPresetTelescopio()" style="flex: 1;">
+                    <select id="preset-telescope" onchange="applicaPresetTelescopio(); if(typeof aggiornaAI==='function') aggiornaAI();" style="flex: 1;">
                         <option value="" data-i18n="select_opt">-- Seleziona --</option>
                     </select>
                     <button class="btn-guide" style="margin:0; padding: 6px 10px; border-color: #ffaa00; color: #ffaa00;" onclick="salvaTelescopioCustom()" data-i18n="save_btn">💾 Salva</button>
-                    <button class="btn-guide" style="margin:0; padding: 6px 10px; border-color: #ff4444; color: #ff4444;" onclick="apriEliminaTelescopio()" data-i18n="del_tel_btn">🗑️</button>
+                    <button class="btn-guide" style="margin:0; padding: 6px 10px; border-color: #f44336; color: #f44336;" onclick="apriEliminaTelescopio()" data-i18n="del_tel_btn" title="Elimina telescopio salvato">🗑️</button>
                 </div>
                 <div class="input-group">
                     <label data-i18n="focal_len">Focale (mm):</label>
@@ -1017,20 +1017,136 @@
             </div>
         </div>
     </div>
-    <!-- ═══ MODAL ELIMINA TELESCOPIO CUSTOM ═══ -->
-    <div id="delete-telescope-modal" class="modal">
-        <div class="modal-content" style="max-width:420px;">
+
+    <!-- MODAL: Elimina Telescopio -->
+    <div id="delete-telescope-modal" class="modal" style="display:none;">
+        <div class="modal-content" style="max-width:460px;">
             <span class="close-btn" onclick="document.getElementById('delete-telescope-modal').style.display='none'">&times;</span>
-            <h2 style="border-bottom:1px solid #333; padding-bottom:12px; margin-bottom:16px; color:#ff4444;">
-                🗑️ <span data-i18n="del_tel_title">Elimina Telescopio</span>
-            </h2>
+            <h3 style="margin-bottom:14px;">🗑️ <span data-i18n="del_tel_title">Elimina Telescopio</span></h3>
             <div id="delete-telescope-list" style="display:flex; flex-direction:column; gap:8px; max-height:300px; overflow-y:auto;"></div>
-            <p id="delete-telescope-empty" style="display:none; color:#888; font-size:0.9em; text-align:center; padding:20px 0;" data-i18n="del_tel_empty">Nessun telescopio salvato.</p>
-            <div style="margin-top:18px; text-align:right;">
-                <button class="btn-smart" style="background:transparent; border:1px solid #555; color:#aaa;" onclick="document.getElementById('delete-telescope-modal').style.display='none'" data-i18n="save_tel_cancel">Chiudi</button>
+            <div style="margin-top:14px; text-align:right;">
+                <button class="btn-smart" style="background:transparent; border:1px solid #555; color:#aaa; padding:8px 20px;" onclick="document.getElementById('delete-telescope-modal').style.display='none'" data-i18n="save_tel_cancel">Annulla</button>
             </div>
         </div>
     </div>
+
+
+    <!-- ═══ CHANGELOG / WHAT'S NEW MODAL ═══ -->
+    <div id="changelog-modal" style="
+        display:none; position:fixed; inset:0; z-index:99998;
+        background:rgba(0,0,0,0.72); backdrop-filter:blur(4px);
+        align-items:center; justify-content:center;
+    ">
+        <div style="
+            background:#1a1a2e; border:1px solid #7850dc;
+            border-radius:16px; max-width:520px; width:92vw;
+            max-height:85vh; overflow-y:auto;
+            padding:28px 28px 22px; position:relative;
+            box-shadow:0 8px 48px rgba(120,80,220,0.35);
+        ">
+            <!-- Badge versione -->
+            <div style="display:flex; align-items:center; gap:12px; margin-bottom:18px;">
+                <div style="font-size:1.5em;">🚀</div>
+                <div>
+                    <div style="font-size:0.75em; color:#bb86fc; text-transform:uppercase; letter-spacing:1px; font-weight:700;">Aggiornamento</div>
+                    <div style="font-size:1.25em; font-weight:800; color:#fff; letter-spacing:.5px;">AstroDashboard PRO <span style="color:#bb86fc;">v5.9.3</span></div>
+                </div>
+                <button onclick="chiudiChangelog()" style="
+                    margin-left:auto; background:transparent; border:none;
+                    color:#888; font-size:1.4em; cursor:pointer; line-height:1;
+                    padding:4px 8px; border-radius:6px;
+                ">✕</button>
+            </div>
+
+            <div style="font-size:0.82em; color:#9090b8; margin-bottom:18px; font-style:italic;">
+                Novità rispetto alla versione precedente
+            </div>
+
+            <!-- Changelog items -->
+            <div style="display:flex; flex-direction:column; gap:10px;">
+
+                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#23213a; border-radius:10px; border-left:3px solid #7850dc;">
+                    <span style="font-size:1.2em; flex-shrink:0;">🔭</span>
+                    <div>
+                        <div style="font-weight:700; color:#e0d8ff; font-size:0.9em; margin-bottom:3px;">Database telescopi e sensori ampliato</div>
+                        <div style="color:#aaa; font-size:0.82em; line-height:1.5;">60+ nuovi sensori ZWO, QHY, PlayerOne, Atik, Canon, Nikon, Sony — chip IMX generici inclusi.</div>
+                    </div>
+                </div>
+
+                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#23213a; border-radius:10px; border-left:3px solid #ffaa00;">
+                    <span style="font-size:1.2em; flex-shrink:0;">⏱️</span>
+                    <div>
+                        <div style="font-weight:700; color:#e0d8ff; font-size:0.9em; margin-bottom:3px;">Stima ore integrazione per categoria</div>
+                        <div style="color:#aaa; font-size:0.82em; line-height:1.5;">Sh2=12h, SNR=10h, LBN=8h, galassie=4h… calibrati sui consigli tattici reali. Unica fonte di verità per tutta l'app.</div>
+                    </div>
+                </div>
+
+                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#23213a; border-radius:10px; border-left:3px solid #bb86fc;">
+                    <span style="font-size:1.2em; flex-shrink:0;">📊</span>
+                    <div>
+                        <div style="font-weight:700; color:#e0d8ff; font-size:0.9em; margin-bottom:3px;">Colonna HDR nelle griglie Smart e PRO</div>
+                        <div style="color:#aaa; font-size:0.82em; line-height:1.5;">Esposizione breve affiancata per nebulose planetarie e ammassi globulari. Export NINA e Report inclusi.</div>
+                    </div>
+                </div>
+
+                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#23213a; border-radius:10px; border-left:3px solid #44ff44;">
+                    <span style="font-size:1.2em; flex-shrink:0;">⚖️</span>
+                    <div>
+                        <div style="font-weight:700; color:#e0d8ff; font-size:0.9em; margin-bottom:3px;">Pesi filtri corretti</div>
+                        <div style="color:#aaa; font-size:0.82em; line-height:1.5;">L=1, ogni RGB selezionato=1/3 — indipendentemente da quanti RGB sono attivi. Warning solo per mix broadband+narrowband reale.</div>
+                    </div>
+                </div>
+
+                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#23213a; border-radius:10px; border-left:3px solid #00c8ff;">
+                    <span style="font-size:1.2em; flex-shrink:0;">🔄</span>
+                    <div>
+                        <div style="font-weight:700; color:#e0d8ff; font-size:0.9em; margin-bottom:3px;">Stima f-ratio aggiornata in tempo reale</div>
+                        <div style="color:#aaa; font-size:0.82em; line-height:1.5;">Il pannello AI ricalcola immediatamente le ore stimate al cambio di telescopio o sensore.</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Footer -->
+            <div style="margin-top:22px; display:flex; justify-content:flex-end;">
+                <button onclick="chiudiChangelog()" style="
+                    background:linear-gradient(135deg,#7850dc,#5030a0);
+                    border:none; border-radius:10px; color:#fff;
+                    font-size:0.95em; font-weight:700; padding:11px 32px;
+                    cursor:pointer; letter-spacing:.3px;
+                    box-shadow:0 4px 16px rgba(120,80,220,0.4);
+                ">Inizia a usare v5.9.3 ✨</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            const CURRENT_VERSION = '5.9.3';
+            const STORAGE_KEY = 'ad_last_version';
+
+            function chiudiChangelog() {
+                document.getElementById('changelog-modal').style.display = 'none';
+                localStorage.setItem(STORAGE_KEY, CURRENT_VERSION);
+            }
+            window.chiudiChangelog = chiudiChangelog;
+
+            function mostraChangelogSeNuovo() {
+                var lastVersion = localStorage.getItem(STORAGE_KEY);
+                if (lastVersion !== CURRENT_VERSION) {
+                    var modal = document.getElementById('changelog-modal');
+                    if (modal) modal.style.display = 'flex';
+                }
+            }
+
+            // Aspetta che il DOM sia pronto
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', mostraChangelogSeNuovo);
+            } else {
+                mostraChangelogSeNuovo();
+            }
+        })();
+    </script>
 
 </body>
 </html>
