@@ -8,6 +8,70 @@
         let map = L.map('map', { center: [latCorrente, lonCorrente], zoom: 8, layers: [mappaScura], zoomControl: false });
         L.control.zoom({ position: 'bottomright' }).addTo(map);
         let layers = { basse: L.layerGroup().addTo(map), medie: L.layerGroup(), alte: L.layerGroup(), jet: L.layerGroup(), luna: L.layerGroup(), umidita: L.layerGroup() };
+        // Layer LP: tile Lorenz 2024 con formato custom tile_{z}_{x}_{y}.png
+        let LorenzLP = L.TileLayer.extend({
+            getTileUrl: function(coords) {
+                return `https://djlorenz.github.io/astronomy/image_tiles/tiles2024/tile_${coords.z}_${coords.x}_${coords.y}.png`;
+            }
+        });
+        let lpLayer = new LorenzLP('', {
+            opacity: 0.7,
+            maxNativeZoom: 6,
+            maxZoom: 12,
+            tileSize: 256,
+            attribution: '© <a href="https://djlorenz.github.io/astronomy/lp/" target="_blank">Light Pollution Atlas 2024</a> (D.Lorenz/VIIRS)'
+        });
+        let lpActive = false;
+        let _lpSavedLayers = []; // memoria layer meteo attivi prima di LP
+        function toggleLayerLP() {
+            let btn = document.getElementById('btn-lp');
+            let meteoLayerNames = ['basse','medie','alte','jet','luna','umidita'];
+            if (lpActive) {
+                // Disattiva LP e ripristina i layer meteo che erano attivi
+                map.removeLayer(lpLayer);
+                lpActive = false;
+                btn.classList.replace('active','disabled');
+                let leg = document.getElementById('lp-legend');
+                if (leg) leg.style.display = 'none';
+                _lpSavedLayers.forEach(n => {
+                    if (!map.hasLayer(layers[n])) {
+                        map.addLayer(layers[n]);
+                        let b = document.getElementById('btn-'+n);
+                        if (b) b.classList.replace('disabled','active');
+                    }
+                });
+                _lpSavedLayers = [];
+            } else {
+                // Salva e spegni tutti i layer meteo attivi
+                _lpSavedLayers = meteoLayerNames.filter(n => map.hasLayer(layers[n]));
+                _lpSavedLayers.forEach(n => {
+                    map.removeLayer(layers[n]);
+                    let b = document.getElementById('btn-'+n);
+                    if (b) b.classList.replace('active','disabled');
+                });
+                map.addLayer(lpLayer);
+                lpActive = true;
+                btn.classList.replace('disabled','active');
+                let leg = document.getElementById('lp-legend');
+                if (leg) leg.style.display = 'block';
+            }
+        }
+        function toggleLayer(n) {
+            let b = document.getElementById('btn-'+n), l = layers[n];
+            // Se LP è attivo, spegnilo (senza ripristinare) e attiva il layer richiesto
+            if (lpActive) {
+                map.removeLayer(lpLayer);
+                lpActive = false;
+                let btnLP = document.getElementById('btn-lp');
+                if (btnLP) btnLP.classList.replace('active','disabled');
+                _lpSavedLayers = [];
+            }
+            if (map.hasLayer(l)) {
+                map.removeLayer(l); b.classList.replace('active','disabled');
+            } else {
+                map.addLayer(l); b.classList.replace('disabled','active');
+            }
+        }
         let marker = L.marker([latCorrente, lonCorrente]).addTo(map).bindPopup(`<b>${_savedName}</b>`).openPopup();
 
 
@@ -29,7 +93,7 @@
             if (query.length < 3) { dropdown.style.display = 'none'; return; }
             clearTimeout(timerRicerca);
             timerRicerca = setTimeout(() => {
-                fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5&accept-language=${lang}`)
+                fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5`)
                     .then(r => r.json()).then(data => {
                         dropdown.innerHTML = ''; 
                         if (data.length > 0) {
@@ -149,5 +213,5 @@
             if(um>60) L.circle([latCorrente, lonCorrente], { radius: 75000, color: '#00ffff', fillColor: '#00ffff', fillOpacity: ((um-60)/100)*0.5, weight: 1, dashArray: '5, 5' }).addTo(layers.umidita);
         }
 
-        function toggleLayer(n) { let b = document.getElementById('btn-'+n), l = layers[n]; if (map.hasLayer(l)) { map.removeLayer(l); b.classList.replace('active','disabled'); } else { map.addLayer(l); b.classList.replace('disabled','active'); } }
+
 

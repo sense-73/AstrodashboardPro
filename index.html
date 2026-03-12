@@ -86,6 +86,21 @@
                 </div>
                 <div class="input-group"><label for="lat" data-i18n="lat">Latitudine:</label><input type="text" id="lat" readonly value="46.06200"></div>
                 <div class="input-group"><label for="lon" data-i18n="lon">Longitudine:</label><input type="text" id="lon" readonly value="13.23500"></div>
+                <div class="input-group" style="margin-top: 6px; align-items: center;">
+                    <label style="width: auto; margin-right: 10px; color:#ffaa00;" data-i18n="bortle_label">Bortle:</label>
+                    <select id="bortle-class" onchange="aggiornaAI(); salvaBortle();" style="border-color:#ffaa00; width:auto !important; font-size:0.9em;">
+                        <option value="1" data-i18n="bortle_1">1 — Cielo eccellente (buio totale)</option>
+                        <option value="2" data-i18n="bortle_2">2 — Cielo molto buio</option>
+                        <option value="3" data-i18n="bortle_3">3 — Cielo rurale</option>
+                        <option value="4" data-i18n="bortle_4">4 — Periferia rurale/urbana</option>
+                        <option value="5" selected data-i18n="bortle_5">5 — Periferia (cielo suburbano)</option>
+                        <option value="6" data-i18n="bortle_6">6 — Periferia urbana</option>
+                        <option value="7" data-i18n="bortle_7">7 — Cielo urbano</option>
+                        <option value="8" data-i18n="bortle_8">8 — Città (inquinamento elevato)</option>
+                        <option value="9" data-i18n="bortle_9">9 — Centro città (cielo arancione)</option>
+                    </select>
+                    <span class="info-icon" style="margin-left:8px; font-size:1.1em;" onmouseenter="mostraTooltip(this, 'bortle_info_tip')" onmouseleave="nascondiTooltip()">ℹ️</span>
+                </div>
             </div>
 
             <div class="panel">
@@ -97,7 +112,23 @@
                     <div class="meteo-item m-jet disabled" id="btn-jet" onclick="toggleLayer('jet')"><h4>Jet Stream</h4><span id="val-jet">--<span class="jet-unit">km/h</span></span></div>
                     <div class="meteo-item m-luna disabled" id="btn-luna" onclick="toggleLayer('luna')"><h4 data-i18n="moon_poll">Inq. Lunare</h4><span id="val-luna">--%</span></div>
                     <div class="meteo-item m-umidita disabled" id="btn-umidita" onclick="toggleLayer('umidita')"><h4 data-i18n="humidity">Umidità</h4><span id="val-umidita-layer" style="color:#00ffff;">--%</span></div>
+                    <div class="meteo-item disabled" id="btn-lp" onclick="toggleLayerLP()" style="border-color:#ffaa00; color:#ffaa00;"><h4 data-i18n="lp_layer">Inq. Luminoso</h4><span>Atlas</span></div>
                     <div class="meteo-item m-seeing active" id="btn-seeing"><h4 data-i18n="seeing_est">Stima Seeing</h4><span id="val-seeing" style="color:#bb86fc;">--/5</span></div>
+                </div>
+
+                <!-- Legenda Inquinamento Luminoso — visibile solo con layer LP attivo -->
+                <div id="lp-legend" style="display:none; margin-top:10px; padding:10px 14px; background:#1a1a2e; border:1px solid #ffaa00; border-radius:8px; font-size:0.78em;">
+                    <div style="font-weight:bold; color:#ffaa00; margin-bottom:6px;" data-i18n="lp_legend_title">🌍 Scala Inquinamento Luminoso (Lorenz 2024)</div>
+                    <div style="display:flex; flex-wrap:wrap; gap:6px 14px;">
+                        <span><span style="display:inline-block;width:14px;height:14px;background:#000033;border:1px solid #555;border-radius:3px;vertical-align:middle;margin-right:4px;"></span><b style="color:#aaa;" data-i18n="lp_b1">Bortle 1</b> – <span data-i18n="lp_b1_desc">Cielo pristino</span></span>
+                        <span><span style="display:inline-block;width:14px;height:14px;background:#000080;border:1px solid #555;border-radius:3px;vertical-align:middle;margin-right:4px;"></span><b style="color:#6688ff;" data-i18n="lp_b2">Bortle 2</b> – <span data-i18n="lp_b2_desc">Rurale vero</span></span>
+                        <span><span style="display:inline-block;width:14px;height:14px;background:#004d00;border:1px solid #555;border-radius:3px;vertical-align:middle;margin-right:4px;"></span><b style="color:#44cc44;" data-i18n="lp_b3">Bortle 3</b> – <span data-i18n="lp_b3_desc">Rurale</span></span>
+                        <span><span style="display:inline-block;width:14px;height:14px;background:#006600;border:1px solid #555;border-radius:3px;vertical-align:middle;margin-right:4px;"></span><b style="color:#66dd66;" data-i18n="lp_b4">Bortle 4</b> – <span data-i18n="lp_b4_desc">Transizione rurale</span></span>
+                        <span><span style="display:inline-block;width:14px;height:14px;background:#cccc00;border:1px solid #555;border-radius:3px;vertical-align:middle;margin-right:4px;"></span><b style="color:#ffff44;" data-i18n="lp_b5">Bortle 5</b> – <span data-i18n="lp_b5_desc">Suburbano</span></span>
+                        <span><span style="display:inline-block;width:14px;height:14px;background:#cc6600;border:1px solid #555;border-radius:3px;vertical-align:middle;margin-right:4px;"></span><b style="color:#ffaa44;" data-i18n="lp_b6">Bortle 6</b> – <span data-i18n="lp_b6_desc">Suburbano chiaro</span></span>
+                        <span><span style="display:inline-block;width:14px;height:14px;background:#cc0000;border:1px solid #555;border-radius:3px;vertical-align:middle;margin-right:4px;"></span><b style="color:#ff4444;" data-i18n="lp_b7">Bortle 7</b> – <span data-i18n="lp_b7_desc">Transizione urbana</span></span>
+                        <span><span style="display:inline-block;width:14px;height:14px;background:#ffffff;border:1px solid #555;border-radius:3px;vertical-align:middle;margin-right:4px;"></span><b style="color:#fff;" data-i18n="lp_b89">Bortle 8-9</b> – <span data-i18n="lp_b89_desc">Città / Centro urbano</span></span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -600,68 +631,16 @@
             
         </div>
     </div>
-    <!-- ═══ TOAST — conferme ok/info (in basso) ═══ -->
-    <div id="app-toast" style="
-        display:none; position:fixed; bottom:28px; left:50%; transform:translateX(-50%);
-        background:#1a1a2e; border:1px solid #44dd88; border-radius:12px;
-        padding:18px 26px; box-shadow:0 4px 28px rgba(68,221,136,0.25);
-        z-index:99999; max-width:88vw; min-width:260px;
-        font-size:16px; color:#e0d8ff; align-items:center; gap:14px;
-    ">
-        <span id="app-toast-icon" style="font-size:1.6em; flex-shrink:0;">✅</span>
-        <span id="app-toast-msg" style="line-height:1.5; flex:1;"></span>
-    </div>
-
-    <!-- ═══ MODAL AVVISO — warn/error (centrato) ═══ -->
-    <div id="app-warn-overlay" style="
-        display:none; position:fixed; inset:0; z-index:99998;
-        background:rgba(0,0,0,0.65); backdrop-filter:blur(3px);
-        align-items:center; justify-content:center;
-    " onclick="if(event.target===this) document.getElementById('app-warn-overlay').style.display='none';">
-        <div style="
-            background:#1a1a2e; border-radius:14px; max-width:400px; width:88vw;
-            padding:30px 26px 22px; box-shadow:0 8px 40px rgba(0,0,0,0.6);
-            text-align:center;
-        ">
-            <div id="app-warn-icon" style="font-size:2.6em; margin-bottom:14px;">⚠️</div>
-            <div id="app-warn-msg" style="font-size:15px; color:#e0d8ff; line-height:1.6; margin-bottom:24px;"></div>
-            <button onclick="document.getElementById('app-warn-overlay').style.display='none';" style="
-                background:linear-gradient(135deg,#7850dc,#5030a0); border:none;
-                border-radius:10px; color:#fff; font-size:15px; font-weight:700;
-                padding:12px 36px; cursor:pointer; width:100%; letter-spacing:.5px;
-            ">OK</button>
+    <div id="asiair-modal" class="modal">
+        <div class="modal-content" style="max-width: 500px; border-color: #D32F2F; box-shadow: 0 0 25px rgba(211, 47, 47, 0.4);">
+            <span class="close-btn" style="color: #D32F2F;" onclick="chiudiAsiairReport()">&times;</span>
+            <h2 style="color: #D32F2F; margin-top:0; border-bottom: 1px solid #333; padding-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                <span style="background: #D32F2F; color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 0.7em; font-weight: bold; letter-spacing: 1px;">ZWO</span> ASIAIR Plan
+            </h2>
+            <div id="asiair-report-content"></div>
+            <button class="btn-copy" style="border-color: #D32F2F; margin-top: 20px;" onclick="chiudiAsiairReport()" data-i18n="asiair_close">✅ Chiudi e Vai al Telescopio</button>
         </div>
     </div>
-
-    <script>
-    var _toastTimer = null;
-    function mostraAvviso(msg, tipo) {
-        tipo = tipo || "warn";
-        if (tipo === "ok" || tipo === "info") {
-            var toast  = document.getElementById("app-toast");
-            var iconEl = document.getElementById("app-toast-icon");
-            var msgEl  = document.getElementById("app-toast-msg");
-            if (!toast) { alert(msg); return; }
-            iconEl.innerText = tipo === "info" ? "ℹ️" : "✅";
-            msgEl.innerHTML  = msg;
-            toast.style.borderColor = tipo === "info" ? "#7850dc" : "#44dd88";
-            toast.style.display = "flex";
-            if (_toastTimer) clearTimeout(_toastTimer);
-            _toastTimer = setTimeout(function(){ toast.style.display = "none"; }, 4000);
-        } else {
-            var overlay = document.getElementById("app-warn-overlay");
-            if (!overlay) { alert(msg); return; }
-            document.getElementById("app-warn-icon").innerText  = tipo === "error" ? "❌" : "⚠️";
-            document.getElementById("app-warn-msg").innerHTML   = msg;
-            var btn = overlay.querySelector("button");
-            if (btn) btn.style.background = tipo === "error"
-                ? "linear-gradient(135deg,#cc2222,#991111)"
-                : "linear-gradient(135deg,#7850dc,#5030a0)";
-            overlay.style.display = "flex";
-        }
-    }
-    </script>
-
 
     <div id="guide-view">
         <button class="btn-back" style="margin-bottom: 40px;" onclick="chiudiGuida()" data-i18n="back_dash">Torna Indietro</button>
@@ -682,7 +661,9 @@
                     <li><strong>Mappa a Raggio (50 Km):</strong> Progettata per gli astrofotografi itineranti. Il cerchio simbolico di 50 km ti permette di valutare a colpo d'occhio dove spostarti per trovare "buchi di sereno". Attiva i layer sovrapposti (Nuvole Basse, Medie, Alte, Jet Stream, Umidità, Luna) e scorri la timeline per vedere l'evoluzione nelle prossime ore.</li>
                     <li><strong>Jet Stream:</strong> Il vero nemico del Seeing. Un valore sotto i 50 km/h sopra la tua posizione garantisce cieli stabili e stelle puntiformi. Oltre i 100 km/h la turbolenza atmosferica devasterà i dettagli fini — inutile usare focali lunghe.</li>
                     <li><strong>Allarme Umidità:</strong> Se il dato supera l'85% (indicatore rosso), attiva le fasce riscaldanti anticondensa al massimo della potenza <em>prima</em> che la temperatura scenda al punto di rugiada. Una volta che l'ottica è appannata, la serata è compromessa.</li>
-                    <li><strong>Inquinamento Lunare:</strong> Mostra la percentuale di cielo "bruciato" dalla luce della Luna in base alla sua fase e posizione. Un valore alto scoraggia le riprese a banda larga — considera filtri narrowband (Ha, OIII, SII) che tagliano il continuo lunare.</li>
+                    <li><strong>Inquinamento Lunare:</strong> Mostra la percentuale di cielo "bruciato" dalla luce della Luna in base alla sua fase e posizione. La penalità si azzera automaticamente quando la Luna è sotto l'orizzonte. Un valore alto scoraggia le riprese a banda larga — considera filtri narrowband (Ha, OIII, SII) che tagliano il continuo lunare.</li>
+                    <li><strong>Inquinamento Luminoso (Layer Atlas 2024):</strong> Attiva il layer <em>Inq. Luminoso</em> per sovrapporre alla mappa la scala di Bortle a colori reali (dati VIIRS 2024 di David Lorenz): blu scuro = cielo pristino (Bortle 1–2), verde = rurale (3–4), giallo = suburbano (5), arancione = periferia urbana (6–7), bianco = centro città (8–9). Quando il layer è attivo compare automaticamente la legenda colorata sotto i pulsanti. Usa questo layer per individuare visivamente il tuo livello Bortle reale e impostarlo nel selettore — influisce direttamente sui consigli filtri dell'AI.</li>
+                    <li><strong>Selettore Bortle:</strong> Imposta il livello di inquinamento luminoso del tuo sito di osservazione (1 = cielo buio totale, 9 = centro città). Il valore viene usato dall'assistente AI per calibrare i consigli sui filtri: cieli scuri (1–3) non richiedono filtri LP; cieli suburbani (4–7) beneficiano di filtri broadband (CLS, L-Pro, Quadband); cieli urbani (8–9) rendono indispensabile il narrowband (Ha/OIII dual-band). Clicca ℹ️ per istruzioni su come trovare il tuo Bortle con il layer mappa.</li>
                 </ul>
             </div>
 
@@ -748,7 +729,7 @@
                 <ul>
                     <li><strong>Export N.I.N.A. Smart:</strong> Genera un file JSON per N.I.N.A. Advanced Sequencer con la sequenza calcolata dall'assistente smart. Include Slew &amp; Center, autoguida, dithering configurato e meridian flip. Trascina il file dentro N.I.N.A. e la notte parte da sola.</li>
                     <li><strong>Export N.I.N.A. PRO (Advanced Sequence):</strong> Il JSON PRO è una sequenza nativa N.I.N.A. di livello avanzato: ogni filtro ha la sua struttura con LoopCondition (loop nativo, non ExposureCount), trigger di dithering per-filtro, gain/offset/binning individuali, tutti i trigger hardware configurati nell'ordine corretto (Cool → Slew → AF → Rotate → Guide → Imaging → Warm → Park).</li>
-                    <li><strong>Export ASIAIR:</strong> Genera un unico file HTML scaricabile, ottimizzato per la visualizzazione su smartphone e tablet. Il documento contiene: la riga CSV delle coordinate J2000 con bottone COPY per incollarla direttamente in ASIAIR (Piano › Aggiungi Target), la tabella completa del piano di scatto con filtri, pose, esposizione, gain, offset, binning e colonna HDR se presente, e i parametri di dithering e angolo camera PA. Il file usa lo stile grafico ZWO ed è ottimizzato anche per la stampa. Tutti gli avvisi di operazione (file scaricato, errori, sequenza vuota) appaiono ora come notifiche native nell'interfaccia — toast in basso per le conferme, modal centrato per gli avvisi.</li>
+                    <li><strong>Export ASIAIR:</strong> Genera un file CSV con le coordinate di precisione e mostra a schermo il riepilogo del piano di scatto ottimizzato per l'interfaccia tablet di ASIAIR/ASIAIR+/ASIAIR Pro. Include l'angolo di rotazione camera suggerito per l'inquadratura ottimale.</li>
                     <li><strong>Coordinate FOV Personalizzate:</strong> Se hai spostato la mappa durante la simulazione FOV, le coordinate del centro aggiornato vengono usate in tutti gli export (N.I.N.A. Smart, PRO e Multinotte). Il badge "⚠ Offset attivo" ti avvisa quando le coordinate di export differiscono dal centro nominale del target.</li>
                 </ul>
             </div>
@@ -770,7 +751,9 @@
                     <li><strong>50km Radius Map:</strong> Designed for mobile astrophotographers. The symbolic 50km circle lets you instantly evaluate where to relocate to find "clear sky holes". Activate overlapping layers (Low/Mid/High Clouds, Jet Stream, Humidity, Moon) and scroll the timeline to forecast conditions over the next hours.</li>
                     <li><strong>Jet Stream:</strong> The true enemy of Seeing. Values below 50 km/h guarantee stable skies and pinpoint stars. Above 100 km/h, atmospheric turbulence will destroy fine detail — avoid long focal lengths.</li>
                     <li><strong>Humidity Alarm:</strong> If the reading exceeds 85% (red indicator), activate your dew heaters at full power <em>before</em> the temperature drops to the dew point. Once optics fog up, the session is ruined.</li>
-                    <li><strong>Moon Pollution:</strong> Shows the percentage of sky "burned" by moonlight based on current phase and position. High values discourage broadband imaging — consider narrowband filters (Ha, OIII, SII) which cut lunar continuum.</li>
+                    <li><strong>Moon Pollution:</strong> Shows the percentage of sky "burned" by moonlight based on current phase and position. The penalty automatically drops to zero when the Moon is below the horizon. High values discourage broadband imaging — consider narrowband filters (Ha, OIII, SII) which cut lunar continuum.</li>
+                    <li><strong>Light Pollution Layer (Atlas 2024):</strong> Enable the <em>Light Pollution</em> layer to overlay the Bortle colour scale on the map (VIIRS 2024 data by David Lorenz): dark blue = pristine sky (Bortle 1–2), green = rural (3–4), yellow = suburban (5), orange = urban fringe (6–7), white = city centre (8–9). When the layer is active, a colour legend appears automatically below the buttons. Use this layer to visually identify your real Bortle level and set it in the selector — it directly affects the AI filter recommendations.</li>
+                    <li><strong>Bortle Selector:</strong> Sets the light pollution level of your observing site (1 = pristine dark sky, 9 = city centre). The value is used by the AI assistant to calibrate filter advice: dark skies (1–3) need no LP filters; suburban skies (4–7) benefit from broadband filters (CLS, L-Pro, Quadband); urban skies (8–9) make narrowband (Ha/OIII dual-band) essential. Click ℹ️ for instructions on finding your Bortle using the map layer.</li>
                 </ul>
             </div>
 
@@ -836,7 +819,7 @@
                 <ul>
                     <li><strong>N.I.N.A. Smart Export:</strong> Generates a JSON file for N.I.N.A. Advanced Sequencer with the smart assistant-calculated sequence. Includes Slew &amp; Center, autoguiding, configured dithering and meridian flip. Drag the file into N.I.N.A. and the night runs itself.</li>
                     <li><strong>N.I.N.A. PRO Export (Advanced Sequence):</strong> The PRO JSON is a native N.I.N.A. advanced-level sequence: each filter has its own structure with LoopCondition (native loop, not ExposureCount), per-filter dithering triggers, individual gain/offset/binning, all hardware triggers in the correct order (Cool → Slew → AF → Rotate → Guide → Imaging → Warm → Park).</li>
-                    <li><strong>ASIAIR Export:</strong> Generates a single downloadable HTML file, optimised for viewing on smartphones and tablets. The document contains: the J2000 coordinate CSV row with a COPY button to paste it directly into ASIAIR (Plan › Add Target), the complete shooting plan table with filters, frames, exposure, gain, offset, binning and HDR column if present, and dithering and camera angle PA parameters. The file uses ZWO visual styling and is also print-optimised. All operation notifications (file downloaded, errors, empty sequence) now appear as native interface notifications — bottom toast for confirmations, centred modal for warnings.</li>
+                    <li><strong>ASIAIR Export:</strong> Generates a CSV file with precision coordinates and displays a visual shooting plan optimized for the ASIAIR/ASIAIR+/ASIAIR Pro tablet interface. Includes the suggested camera rotation angle for optimal framing.</li>
                     <li><strong>Custom FOV Coordinates:</strong> If you moved the map during FOV simulation, the updated center coordinates are used in all exports (N.I.N.A. Smart, PRO and Multi-Night). The "⚠ Offset active" badge warns you when export coordinates differ from the target's nominal center.</li>
                 </ul>
             </div>
@@ -858,7 +841,9 @@
                     <li><strong>Mapa de Radio 50km:</strong> Diseñado para astrofotógrafos itinerantes. El círculo de 50 km te permite evaluar de un vistazo dónde desplazarte para encontrar "claros en las nubes". Activa las capas superpuestas y desliza la línea de tiempo para prever las condiciones de las próximas horas.</li>
                     <li><strong>Jet Stream:</strong> El verdadero enemigo del Seeing. Por debajo de 50 km/h garantiza cielos estables y estrellas puntiformes. Por encima de 100 km/h, la turbulencia atmosférica destruirá los detalles finos — evita focales largas.</li>
                     <li><strong>Alarma de Humedad:</strong> Si supera el 85% (indicador rojo), activa las cintas calefactoras anticondensación a máxima potencia <em>antes</em> de que la temperatura baje al punto de rocío. Una vez que la óptica se empaña, la sesión está arruinada.</li>
-                    <li><strong>Contaminación Lunar:</strong> Muestra el porcentaje de cielo "quemado" por la luz de la Luna según su fase y posición actual. Valores altos desaconsejan la fotografía de banda ancha — considera filtros narrowband (Ha, OIII, SII).</li>
+                    <li><strong>Contaminación Lunar:</strong> Muestra el porcentaje de cielo "quemado" por la luz de la Luna según su fase y posición actual. La penalización se anula automáticamente cuando la Luna está bajo el horizonte. Valores altos desaconsejan la fotografía de banda ancha — considera filtros narrowband (Ha, OIII, SII).</li>
+                    <li><strong>Capa de Contaminación Lumínica (Atlas 2024):</strong> Activa la capa <em>Contam. Lumínica</em> para superponer en el mapa la escala Bortle en colores reales (datos VIIRS 2024 de David Lorenz): azul oscuro = cielo prístino (Bortle 1–2), verde = rural (3–4), amarillo = suburbano (5), naranja = periferia urbana (6–7), blanco = centro ciudad (8–9). Al activar la capa aparece automáticamente la leyenda de colores bajo los botones. Usa esta capa para identificar visualmente tu nivel Bortle real y configurarlo en el selector.</li>
+                    <li><strong>Selector Bortle:</strong> Establece el nivel de contaminación lumínica de tu sitio de observación (1 = cielo oscuro total, 9 = centro urbano). El valor lo usa el asistente AI para calibrar los consejos de filtros: cielos oscuros (1–3) no requieren filtros LP; cielos suburbanos (4–7) se benefician de filtros broadband (CLS, L-Pro, Quadband); cielos urbanos (8–9) hacen indispensable el narrowband (dual-band Ha/OIII). Haz clic en ℹ️ para instrucciones sobre cómo encontrar tu Bortle con la capa del mapa.</li>
                 </ul>
             </div>
 
@@ -922,7 +907,7 @@
                 <ul>
                     <li><strong>Export N.I.N.A. Smart:</strong> Genera un JSON para N.I.N.A. Advanced Sequencer con la secuencia calculada por la IA. Incluye Slew &amp; Center, autoguiado, dithering configurado y meridian flip. Arrastra el archivo a N.I.N.A. y la noche se conduce sola.</li>
                     <li><strong>Export N.I.N.A. PRO (Advanced Sequence):</strong> El JSON PRO es una secuencia N.I.N.A. nativa de nivel avanzado: cada filtro tiene su estructura con LoopCondition, disparadores de dithering por filtro, gain/offset/binning individuales y todos los disparadores de hardware en el orden correcto.</li>
-                    <li><strong>Export ASIAIR:</strong> Genera un único archivo HTML descargable, optimizado para su visualización en smartphones y tablets. El documento contiene: la fila CSV de coordenadas J2000 con botón COPY para pegarla directamente en ASIAIR (Plan › Añadir Objetivo), la tabla completa del plan de disparo con filtros, tomas, exposición, gain, offset, binning y columna HDR si está presente, y los parámetros de dithering y ángulo de cámara PA. El archivo usa el estilo visual ZWO y también está optimizado para impresión. Todas las notificaciones de operación (archivo descargado, errores, secuencia vacía) aparecen ahora como notificaciones nativas en la interfaz — toast inferior para confirmaciones, modal centrado para avisos.</li>
+                    <li><strong>Export ASIAIR:</strong> Genera un archivo CSV con coordenadas de precisión y muestra el plan de tomas visual optimizado para la interfaz tablet de ASIAIR. Incluye el ángulo de rotación de cámara sugerido.</li>
                     <li><strong>Coordenadas FOV Personalizadas:</strong> Si desplazaste el mapa durante la simulación FOV, las coordenadas actualizadas se usan en todas las exportaciones. El badge "⚠ Offset activo" te avisa cuando las coordenadas de exportación difieren del centro nominal del objetivo.</li>
                 </ul>
             </div>
@@ -944,7 +929,9 @@
                     <li><strong>50公里半径地图：</strong>专为移动天文摄影师设计。象征性的50公里圆圈让您一眼就能评估应移动到哪里寻找"晴空洞"。激活叠加图层（低云、中云、高云、急流、湿度、月光），滑动时间轴预测未来数小时的天气变化。</li>
                     <li><strong>急流 (Jet Stream)：</strong>视宁度的真正敌人。您所在位置上方低于50 km/h保证天空稳定、星点清晰。超过100 km/h，大气湍流将摧毁精细细节 — 避免使用长焦段。</li>
                     <li><strong>湿度警报：</strong>若读数超过85%（红色指示），请在温度降到露点之前将除露带调到最大功率。一旦光学元件起雾，拍摄会话就毁了。</li>
-                    <li><strong>月光污染：</strong>根据当前月相和位置显示被月光"烧毁"的天空百分比。数值高时不建议宽带拍摄 — 考虑使用能截断月光连续谱的窄带滤镜（Ha、OIII、SII）。</li>
+                    <li><strong>月光污染：</strong>根据当前月相和位置显示被月光"烧毁"的天空百分比。当月亮在地平线以下时，惩罚值自动归零。数值高时不建议宽带拍摄 — 考虑使用能截断月光连续谱的窄带滤镜（Ha、OIII、SII）。</li>
+                    <li><strong>光污染图层（Lorenz 2024 地图集）：</strong>启用<em>光污染</em>图层，将博特尔色彩比例尺叠加到地图上（David Lorenz的VIIRS 2024数据）：深蓝色 = 原始天空（博特尔1–2）、绿色 = 农村（3–4）、黄色 = 郊区（5）、橙色 = 城市边缘（6–7）、白色 = 市中心（8–9）。激活图层时，颜色图例自动显示在按钮下方。使用此图层直观识别您的真实博特尔等级并在选择器中设置 — 直接影响AI滤镜建议。</li>
+                    <li><strong>博特尔选择器：</strong>设置您观测地点的光污染等级（1 = 完全黑暗天空，9 = 市中心）。AI助手使用此值来校准滤镜建议：暗天空（1–3）不需要LP滤镜；郊区天空（4–7）受益于宽带滤镜（CLS、L-Pro、四频带）；城市天空（8–9）使窄带（Ha/OIII双频带）不可或缺。点击ℹ️获取使用地图图层查找您的博特尔等级的说明。</li>
                 </ul>
             </div>
 
@@ -1008,7 +995,7 @@
                 <ul>
                     <li><strong>N.I.N.A. 智能导出：</strong>为 N.I.N.A. 高级序列器生成含智能助手计算序列的 JSON 文件。包括指向并居中、自动导星、已配置的抖动和中天翻转。将文件拖入 N.I.N.A.，整夜自动运行。</li>
                     <li><strong>N.I.N.A. PRO 导出（高级序列）：</strong>PRO 生成的 JSON 是原生 N.I.N.A. 高级序列：每个滤镜有自己带 LoopCondition 的结构、独立的抖动触发器、各自的 gain/offset/binning，以及所有硬件触发器按正确顺序排列（降温→指向→自动对焦→旋转→导星→拍摄→回温→归位）。</li>
-                    <li><strong>ASIAIR 导出：</strong>生成单个可下载的HTML文件，针对智能手机和平板电脑的显示进行了优化。文档包含：J2000坐标CSV行及COPY按钮（可直接粘贴到ASIAIR计划›添加目标），包含滤镜、帧数、曝光、增益、偏置、合并及HDR列（如有）的完整拍摄计划表，以及抖动和相机角度PA参数。文件采用ZWO视觉风格，同时针对打印进行了优化。所有操作通知（文件已下载、错误、空序列）现在均以界面原生通知形式显示——确认信息显示为底部Toast，警告显示为居中弹窗。</li>
+                    <li><strong>ASIAIR 导出：</strong>生成含精确坐标的 CSV 文件，并显示为 ASIAIR/ASIAIR+/ASIAIR Pro 平板界面优化的可视拍摄计划，包括建议的相机旋转角度。</li>
                     <li><strong>自定义视场坐标：</strong>如果在视场模拟过程中移动了地图，更新的中心坐标将用于所有导出（N.I.N.A. 智能、PRO 和多夜）。当导出坐标与目标名义中心不同时，"⚠ 偏移激活"徽章会提醒您。</li>
                 </ul>
             </div>
@@ -1076,7 +1063,6 @@
             <span class="close-btn" onclick="document.getElementById('delete-telescope-modal').style.display='none'">&times;</span>
             <h3 style="margin-bottom:14px;">🗑️ <span data-i18n="del_tel_title">Elimina Telescopio</span></h3>
             <div id="delete-telescope-list" style="display:flex; flex-direction:column; gap:8px; max-height:300px; overflow-y:auto;"></div>
-            <div id="delete-telescope-empty" style="display:none; color:#888; font-size:0.9em; padding:10px 4px;" data-i18n="del_tel_empty">Nessun telescopio salvato.</div>
             <div style="margin-top:14px; text-align:right;">
                 <button class="btn-smart" style="background:transparent; border:1px solid #555; color:#aaa; padding:8px 20px;" onclick="document.getElementById('delete-telescope-modal').style.display='none'" data-i18n="save_tel_cancel">Annulla</button>
             </div>
@@ -1158,31 +1144,23 @@
                     </div>
                 </div>
 
-            </div>
-
-                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#23213a; border-radius:10px; border-left:3px solid #D32F2F;">
-                    <span style="font-size:1.2em; flex-shrink:0;">📱</span>
+                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#23213a; border-radius:10px; border-left:3px solid #ffffaa;">
+                    <span style="font-size:1.2em; flex-shrink:0;">🌙</span>
                     <div>
-                        <div style="font-weight:700; color:#e0d8ff; font-size:0.9em; margin-bottom:3px;">Export ASIAIR — file HTML unico</div>
-                        <div style="color:#aaa; font-size:0.82em; line-height:1.5;">Coordinata CSV con tasto COPY, tabella filtri completa e parametri PA/dithering — stile grafico ZWO, compatibile mobile.</div>
-                    </div>
-                </div>
-
-                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#23213a; border-radius:10px; border-left:3px solid #44dd88;">
-                    <span style="font-size:1.2em; flex-shrink:0;">🔔</span>
-                    <div>
-                        <div style="font-weight:700; color:#e0d8ff; font-size:0.9em; margin-bottom:3px;">Sistema notifiche unificato</div>
-                        <div style="color:#aaa; font-size:0.82em; line-height:1.5;">Niente più alert del browser. Toast verde per le conferme, modal centrato per avvisi ed errori — coerenti con l'interfaccia.</div>
+                        <div style="font-weight:700; color:#e0d8ff; font-size:0.9em; margin-bottom:3px;">Fix penalità lunare</div>
+                        <div style="color:#aaa; font-size:0.82em; line-height:1.5;">Il calcolo dell'inquinamento lunare ora azzera correttamente la penalità quando la Luna è sotto l'orizzonte — niente più sovrastime nelle notti con Luna bassa.</div>
                     </div>
                 </div>
 
                 <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#23213a; border-radius:10px; border-left:3px solid #ffaa00;">
-                    <span style="font-size:1.2em; flex-shrink:0;">🌙</span>
+                    <span style="font-size:1.2em; flex-shrink:0;">🌍</span>
                     <div>
-                        <div style="font-weight:700; color:#e0d8ff; font-size:0.9em; margin-bottom:3px;">Penalità lunare basata su inquinamento reale</div>
-                        <div style="color:#aaa; font-size:0.82em; line-height:1.5;">La stima delle ore non penalizza più la fase lunare se la Luna è sotto l'orizzonte. Soglie: &gt;30% penalità 1.5×, &gt;70% penalità 2×.</div>
+                        <div style="font-weight:700; color:#e0d8ff; font-size:0.9em; margin-bottom:3px;">Layer Inquinamento Luminoso con scala Bortle</div>
+                        <div style="color:#aaa; font-size:0.82em; line-height:1.5;">Nuovo layer mappa (Lorenz 2024 / VIIRS) con colori Bortle 1→9 (blu pristino → bianco urbano). Legenda interattiva visibile solo quando il layer è attivo. Tooltip sul selettore Bortle per trovare il proprio livello visivamente sulla mappa.</div>
                     </div>
                 </div>
+
+            </div>
 
             <!-- Footer -->
             <div style="margin-top:22px; display:flex; justify-content:flex-end;">
@@ -1225,5 +1203,13 @@
         })();
     </script>
 
+    <script>
+    function salvaBortle() {
+        let saved = localStorage.getItem('ad_instrument');
+        let data = saved ? JSON.parse(saved) : {};
+        data['bortle-class'] = document.getElementById('bortle-class').value;
+        localStorage.setItem('ad_instrument', JSON.stringify(data));
+    }
+    </script>
 </body>
 </html>

@@ -953,6 +953,89 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.zh.del_tel_title       = "删除望远镜";
 
         i18n.it.del_tel_empty       = "Nessun telescopio salvato.";
+
+        // Bortle
+        i18n.it.bortle_label   = "Bortle (inquinamento luminoso):";
+        i18n.en.bortle_label   = "Bortle (light pollution):";
+        i18n.es.bortle_label   = "Bortle (contaminación lumínica):";
+        i18n.zh.bortle_label   = "Bortle（光污染等级）:";
+
+        i18n.it.bortle_1 = "1 — Cielo eccellente (buio totale)";
+        i18n.en.bortle_1 = "1 — Excellent sky (total darkness)";
+        i18n.es.bortle_1 = "1 — Cielo excelente (oscuridad total)";
+        i18n.zh.bortle_1 = "1 — 优秀天空（完全黑暗）";
+
+        i18n.it.bortle_2 = "2 — Cielo molto buio";
+        i18n.en.bortle_2 = "2 — Very dark sky";
+        i18n.es.bortle_2 = "2 — Cielo muy oscuro";
+        i18n.zh.bortle_2 = "2 — 非常暗的天空";
+
+        i18n.it.bortle_3 = "3 — Cielo rurale";
+        i18n.en.bortle_3 = "3 — Rural sky";
+        i18n.es.bortle_3 = "3 — Cielo rural";
+        i18n.zh.bortle_3 = "3 — 农村天空";
+
+        i18n.it.bortle_4 = "4 — Periferia rurale/urbana";
+        i18n.en.bortle_4 = "4 — Rural/urban transition";
+        i18n.es.bortle_4 = "4 — Transición rural/urbana";
+        i18n.zh.bortle_4 = "4 — 农村/城市过渡带";
+
+        i18n.it.bortle_5 = "5 — Periferia (cielo suburbano)";
+        i18n.en.bortle_5 = "5 — Suburban sky";
+        i18n.es.bortle_5 = "5 — Cielo suburbano";
+        i18n.zh.bortle_5 = "5 — 郊区天空";
+
+        i18n.it.bortle_6 = "6 — Periferia urbana";
+        i18n.en.bortle_6 = "6 — Bright suburban sky";
+        i18n.es.bortle_6 = "6 — Periferia urbana";
+        i18n.zh.bortle_6 = "6 — 明亮郊区天空";
+
+        i18n.it.bortle_7 = "7 — Cielo urbano";
+        i18n.en.bortle_7 = "7 — Urban sky";
+        i18n.es.bortle_7 = "7 — Cielo urbano";
+        i18n.zh.bortle_7 = "7 — 城市天空";
+
+        i18n.it.bortle_8 = "8 — Città (inquinamento elevato)";
+        i18n.en.bortle_8 = "8 — City sky (heavy pollution)";
+        i18n.es.bortle_8 = "8 — Ciudad (contaminación alta)";
+        i18n.zh.bortle_8 = "8 — 城市天空（严重污染）";
+
+        i18n.it.bortle_9 = "9 — Centro città (cielo arancione)";
+        i18n.en.bortle_9 = "9 — Inner city (orange sky)";
+        i18n.es.bortle_9 = "9 — Centro ciudad (cielo naranja)";
+        i18n.zh.bortle_9 = "9 — 市中心（橙色天空）";
+
+        i18n.it.lp_layer = "Inquinamento Luminoso";
+        i18n.en.lp_layer = "Light Pollution";
+        i18n.es.lp_layer = "Contaminación Lumínica";
+        i18n.zh.lp_layer = "光污染";
+        // Legenda LP
+        i18n.it.lp_legend_title = "🌍 Scala Inquinamento Luminoso (Lorenz 2024)";
+        i18n.en.lp_legend_title = "🌍 Light Pollution Scale (Lorenz 2024)";
+        i18n.es.lp_legend_title = "🌍 Escala de Contaminación Lumínica (Lorenz 2024)";
+        i18n.zh.lp_legend_title = "🌍 光污染等级（Lorenz 2024）";
+        i18n.it.lp_b1 = "Bortle 1"; i18n.en.lp_b1 = "Bortle 1"; i18n.es.lp_b1 = "Bortle 1"; i18n.zh.lp_b1 = "博特尔1";
+        i18n.it.lp_b2 = "Bortle 2"; i18n.en.lp_b2 = "Bortle 2"; i18n.es.lp_b2 = "Bortle 2"; i18n.zh.lp_b2 = "博特尔2";
+        i18n.it.lp_b3 = "Bortle 3"; i18n.en.lp_b3 = "Bortle 3"; i18n.es.lp_b3 = "Bortle 3"; i18n.zh.lp_b3 = "博特尔3";
+        i18n.it.lp_b4 = "Bortle 4"; i18n.en.lp_b4 = "Bortle 4"; i18n.es.lp_b4 = "Bortle 4"; i18n.zh.lp_b4 = "博特尔4";
+        i18n.it.lp_b5 = "Bortle 5"; i18n.en.lp_b5 = "Bortle 5"; i18n.es.lp_b5 = "Bortle 5"; i18n.zh.lp_b5 = "博特尔5";
+        i18n.it.lp_b6 = "Bortle 6"; i18n.en.lp_b6 = "Bortle 6"; i18n.es.lp_b6 = "Bortle 6"; i18n.zh.lp_b6 = "博特尔6";
+        i18n.it.lp_b7 = "Bortle 7"; i18n.en.lp_b7 = "Bortle 7"; i18n.es.lp_b7 = "Bortle 7"; i18n.zh.lp_b7 = "博特尔7";
+        i18n.it.lp_b89 = "Bortle 8-9"; i18n.en.lp_b89 = "Bortle 8-9"; i18n.es.lp_b89 = "Bortle 8-9"; i18n.zh.lp_b89 = "博特尔8-9";
+        // Descrizioni legenda LP
+        i18n.it.lp_b1_desc = "Cielo pristino";          i18n.en.lp_b1_desc = "Pristine sky";              i18n.es.lp_b1_desc = "Cielo prístino";         i18n.zh.lp_b1_desc = "原始天空";
+        i18n.it.lp_b2_desc = "Rurale vero";              i18n.en.lp_b2_desc = "True rural";                i18n.es.lp_b2_desc = "Rural verdadero";         i18n.zh.lp_b2_desc = "真正农村";
+        i18n.it.lp_b3_desc = "Rurale";                   i18n.en.lp_b3_desc = "Rural";                     i18n.es.lp_b3_desc = "Rural";                   i18n.zh.lp_b3_desc = "农村";
+        i18n.it.lp_b4_desc = "Transizione rurale";       i18n.en.lp_b4_desc = "Rural/suburban transition"; i18n.es.lp_b4_desc = "Transición rural";        i18n.zh.lp_b4_desc = "农村过渡带";
+        i18n.it.lp_b5_desc = "Suburbano";                i18n.en.lp_b5_desc = "Suburban";                  i18n.es.lp_b5_desc = "Suburbano";               i18n.zh.lp_b5_desc = "郊区";
+        i18n.it.lp_b6_desc = "Suburbano chiaro";         i18n.en.lp_b6_desc = "Bright suburban";           i18n.es.lp_b6_desc = "Suburbano luminoso";      i18n.zh.lp_b6_desc = "明亮郊区";
+        i18n.it.lp_b7_desc = "Transizione urbana";       i18n.en.lp_b7_desc = "Urban/suburban transition"; i18n.es.lp_b7_desc = "Transición urbana";       i18n.zh.lp_b7_desc = "城市过渡带";
+        i18n.it.lp_b89_desc = "Città / Centro urbano";   i18n.en.lp_b89_desc = "City / Urban center";      i18n.es.lp_b89_desc = "Ciudad / Centro urbano"; i18n.zh.lp_b89_desc = "城市/市中心";
+        // Tooltip info Bortle
+        i18n.it.bortle_info_tip = "💡 Non sei sicuro del tuo Bortle? Attiva il layer <b>Inq. Luminoso</b> sulla mappa: i colori (blu→verde→giallo→rosso→bianco) corrispondono ai livelli Bortle 1→9. Individua la tua posizione e scegli il valore corrispondente.";
+        i18n.en.bortle_info_tip = "💡 Not sure about your Bortle? Enable the <b>Light Pollution</b> layer on the map: colors (blue→green→yellow→red→white) correspond to Bortle levels 1→9. Find your location and pick the matching value.";
+        i18n.es.bortle_info_tip = "💡 ¿No estás seguro de tu Bortle? Activa la capa <b>Contaminación Lumínica</b> en el mapa: los colores (azul→verde→amarillo→rojo→blanco) corresponden a los niveles Bortle 1→9. Localiza tu posición y elige el valor correspondiente.";
+        i18n.zh.bortle_info_tip = "💡 不确定你的博特尔等级？在地图上启用<b>光污染</b>图层：颜色（蓝→绿→黄→红→白）对应博特尔1→9级。找到你的位置并选择对应的值。";
         i18n.en.del_tel_empty       = "No saved telescopes.";
         i18n.es.del_tel_empty       = "No hay telescopios guardados.";
         i18n.zh.del_tel_empty       = "没有已保存的望远镜。";

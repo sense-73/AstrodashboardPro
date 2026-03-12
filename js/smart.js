@@ -294,6 +294,54 @@ function toggleLock(id) {
                     reason += `<br><br>今晚的可用时间 (> 30° 高度) 只有 <b style="color:#ff4444;">${aS.toFixed(1)} 小时</b>，时间不足。`;
                 }
 
+                // ── Consiglio filtro anti-inquinamento (Bortle) ──────────
+                let bortle = parseInt((document.getElementById('bortle-class')||{}).value||5);
+                let isEmissionTarget = ['sh2','lbn','snr','hii','planetaria'].includes(_catAI);
+                let isBroadbandTarget = ['galassia','vdb','ldn','aperto','globulare'].includes(_catAI);
+                let filterTip = '';
+                if (bortle <= 3) {
+                    filterTip = lang==='it' ? '💡 <b>Filtri:</b> Cielo buio — nessun filtro antinquinamento necessario. Un filtro ridurrebbe il segnale.'
+                              : lang==='en' ? '💡 <b>Filters:</b> Dark sky — no light pollution filter needed. A filter would reduce your signal.'
+                              : lang==='es' ? '💡 <b>Filtros:</b> Cielo oscuro — no se necesita filtro anticontaminación. Un filtro reduciría la señal.'
+                              :               '💡 <b>滤镜：</b>暗天空——不需要光污染滤镜，使用滤镜会降低信号。';
+                } else if (bortle <= 5) {
+                    if (isEmissionTarget)
+                        filterTip = lang==='it' ? '💡 <b>Filtri:</b> Cielo suburbano — per nebulose a emissione un filtro antinquinamento broadband è utile (es. CLS, L-Pro, Quadband). Per altri target meglio aumentare il tempo di integrazione.'
+                                  : lang==='en' ? '💡 <b>Filters:</b> Suburban sky — for emission nebulae a broadband light pollution filter is helpful (e.g. CLS, L-Pro, Quadband). For other targets, increase integration time instead.'
+                                  : lang==='es' ? '💡 <b>Filtros:</b> Cielo suburbano — para nebulosas de emisión un filtro anticontaminación broadband es útil (p.ej. CLS, L-Pro, Quadband). Para otros objetivos, aumentar el tiempo de integración.'
+                                  :               '💡 <b>滤镜：</b>郊区天空——对于发射星云，宽带光污染滤镜有帮助（如CLS、L-Pro、Quadband）。其他目标建议增加曝光时间。';
+                    else
+                        filterTip = lang==='it' ? '💡 <b>Filtri:</b> Cielo suburbano — su galassie e ammassi i filtri antinquinamento hanno effetto limitato. Punta a più ore di integrazione.'
+                                  : lang==='en' ? '💡 <b>Filters:</b> Suburban sky — light pollution filters have limited effect on galaxies and clusters. Aim for more integration time.'
+                                  : lang==='es' ? '💡 <b>Filtros:</b> Cielo suburbano — los filtros anticontaminación tienen efecto limitado en galaxias y cúmulos. Aumenta el tiempo de integración.'
+                                  :               '💡 <b>滤镜：</b>郊区天空——光污染滤镜对星系和星团效果有限，建议增加曝光时间。';
+                } else if (bortle <= 7) {
+                    if (isEmissionTarget)
+                        filterTip = lang==='it' ? '💡 <b>Filtri:</b> Cielo urbano — <b>filtro antinquinamento broadband consigliato</b> per nebulose (es. CLS, UHC, L-Pro, Quadband). Migliora significativamente il contrasto.'
+                                  : lang==='en' ? '💡 <b>Filters:</b> Urban sky — <b>broadband light pollution filter recommended</b> for nebulae (e.g. CLS, UHC, L-Pro, Quadband). Significantly improves contrast.'
+                                  : lang==='es' ? '💡 <b>Filtros:</b> Cielo urbano — <b>filtro anticontaminación broadband recomendado</b> para nebulosas (p.ej. CLS, UHC, L-Pro, Quadband). Mejora significativamente el contraste.'
+                                  :               '💡 <b>滤镜：</b>城市天空——<b>强烈推荐宽带光污染滤镜</b>用于星云（如CLS、UHC、L-Pro、Quadband），可显著改善对比度。';
+                    else if (isBroadbandTarget)
+                        filterTip = lang==='it' ? '💡 <b>Filtri:</b> Cielo urbano — su galassie e ammassi un filtro antinquinamento broadband (es. L-Pro) aiuta, ma è necessaria molta integrazione (15–20h+).'
+                                  : lang==='en' ? '💡 <b>Filters:</b> Urban sky — for galaxies and clusters a broadband filter (e.g. L-Pro) helps, but long integration is still required (15–20h+).'
+                                  : lang==='es' ? '💡 <b>Filtros:</b> Cielo urbano — para galaxias y cúmulos un filtro broadband (p.ej. L-Pro) ayuda, pero sigue siendo necesaria mucha integración (15–20h+).'
+                                  :               '💡 <b>滤镜：</b>城市天空——对于星系和星团，宽带滤镜（如L-Pro）有所帮助，但仍需大量曝光时间（15-20小时以上）。';
+                } else {
+                    if (isEmissionTarget)
+                        filterTip = lang==='it' ? '💡 <b>Filtri:</b> Cielo da città — <b>filtro narrowband fortemente consigliato</b> per nebulose (es. dual-band Ha/OIII, Quadband, Tri-band). I filtri broadband sono insufficienti a questi livelli di inquinamento.'
+                                  : lang==='en' ? '💡 <b>Filters:</b> Heavy light pollution — <b>narrowband filter strongly recommended</b> for nebulae (e.g. dual-band Ha/OIII, Quadband, Tri-band). Broadband filters are insufficient at these pollution levels.'
+                                  : lang==='es' ? '💡 <b>Filtros:</b> Contaminación severa — <b>filtro narrowband muy recomendado</b> para nebulosas (p.ej. dual-band Ha/OIII, Quadband, Tri-band). Los filtros broadband son insuficientes a estos niveles.'
+                                  :               '💡 <b>滤镜：</b>严重光污染——<b>强烈推荐窄带滤镜</b>用于星云（如双波段Ha/OIII、Quadband、三波段）。宽带滤镜在此污染级别下效果不足。';
+                    else
+                        filterTip = lang==='it' ? '💡 <b>Filtri:</b> Cielo da città — su galassie e ammassi i risultati restano difficili anche con filtro. Considera di spostarti in un sito più buio o di usare un filtro narrowband per nebulose nelle vicinanze.'
+                                  : lang==='en' ? '💡 <b>Filters:</b> Heavy light pollution — galaxies and clusters remain challenging even with filters. Consider a darker site or switch to nearby emission nebulae with narrowband filters.'
+                                  : lang==='es' ? '💡 <b>Filtros:</b> Contaminación severa — galaxias y cúmulos son difíciles incluso con filtros. Considera un lugar más oscuro o cambia a nebulosas de emisión con filtros narrowband.'
+                                  :               '💡 <b>滤镜：</b>严重光污染——即使使用滤镜，星系和星团仍然很困难，建议前往较暗的地点或改拍发射星云配合窄带滤镜。';
+                }
+                if (filterTip)
+                    reason += `<br><br><div style="margin-top:8px; padding:10px 12px; background:rgba(255,170,0,0.08); border-left:3px solid #ffaa00; border-radius:4px; font-size:0.88em; color:#e0d8ff; line-height:1.6;">${filterTip}</div>`;
+                // ────────────────────────────────────────────────────────
+
                 html += `<div style="font-size:0.9em; line-height:1.5; color:#ddd; margin-bottom:15px;">${reason}</div>`;
                 html += `<button class="btn-guide" style="width:100%; padding:10px; font-size:1.1em; background: linear-gradient(135deg, #ffaa00 0%, #d48800 100%); color:#121212; border:none; box-shadow: 0 4px 15px rgba(255, 170, 0, 0.3);" onclick="apriMultiNight('smart')">${t("ai_plan_btn")}</button>`;
             } else {

@@ -269,7 +269,7 @@
             'focal-length', 'aperture',
             'sensor-width', 'sensor-height', 'pixel-size',
             'sensor-type',
-            'preset-telescope', 'preset-sensor'
+            'preset-telescope', 'preset-sensor', 'bortle-class'
         ];
 
         function salvaImpostazioniStrumento() {
