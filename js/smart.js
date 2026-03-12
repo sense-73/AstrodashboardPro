@@ -209,13 +209,15 @@ function toggleLock(id) {
             }
             let sFact = (doingN && !isEmission) ? 2.0 : 1.0;
 
-            // 5. FASE LUNARE
-            let dOggi = new Date(); if (dOggi.getHours() < 12) dOggi.setDate(dOggi.getDate() - 1);
-            let mIll = SunCalc.getMoonIllumination(dOggi).fraction;
+            // 5. INQUINAMENTO LUNARE EFFETTIVO
+            // Usa val-luna (già calcolato da weather.js: fase × sin(altitudine))
+            // Ignora le ore in cui la Luna è sotto l'orizzonte — nessuna penalità ingiustificata.
+            let lunaEl = document.getElementById('val-luna');
+            let inqLuna = lunaEl ? (parseInt(lunaEl.innerText) || 0) : 0;
             let mFact = 1.0;
             if(!doingN) {
-                if(mIll > 0.3 && mIll <= 0.75) mFact = 1.5;
-                else if(mIll > 0.75) mFact = 2.0;
+                if(inqLuna > 30 && inqLuna <= 70) mFact = 1.5;
+                else if(inqLuna > 70) mFact = 2.0;
             }
 
             // 6. CALCOLO FINALE 
@@ -385,8 +387,8 @@ function toggleLock(id) {
         }
 
         function generaSequenzaOttimale() {
-            if (!targetSelezionato) { mostraAvviso(t("alert_planetarium"), "warn"); return; }
-            let tS = document.getElementById('time-start').value, tE = document.getElementById('time-end').value; if(!tS || !tE) { mostraAvviso(t("alert_times"), "warn"); return; }
+            if (!targetSelezionato) { alert(t("alert_planetarium")); return; }
+            let tS = document.getElementById('time-start').value, tE = document.getElementById('time-end').value; if(!tS || !tE) { alert(t("alert_times")); return; }
             let dS = new Date(`1970-01-01T${tS}:00`), dE = new Date(`1970-01-01T${tE}:00`); if (dE <= dS) dE.setDate(dE.getDate() + 1);
             let aS = (dE - dS) / 1000;
             
@@ -400,10 +402,10 @@ function toggleLock(id) {
             let isM = document.getElementById('sensor-type').value === 'mono', fL = isM ? framesMono : framesColor, cS = 0;
             
             fL.forEach(f => { if (f.id.includes('dark') || f.id.includes('bias')) cS += (parseInt(document.getElementById(`${f.id}-count`).value)||0) * (parseInt(document.getElementById(`${f.id}-exp`).value)||0); });
-            let rS = aS - cS; if (rS <= 0) { mostraAvviso(t("alert_calib"), "warn"); return; }
+            let rS = aS - cS; if (rS <= 0) { alert(t("alert_calib")); return; }
             
             let aL = []; fL.forEach(f => { if (!f.id.includes('dark') && !f.id.includes('bias')) { let c = document.getElementById(`${f.id}-check`); if (c && c.checked) aL.push(f); } });
-            if (aL.length === 0) { mostraAvviso(t("alert_nolight"), "warn"); return; }
+            if (aL.length === 0) { alert(t("alert_nolight")); return; }
 
             let w = {};
             if (!isM) w[aL[0].id] = 1.0;
