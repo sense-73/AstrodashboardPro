@@ -385,8 +385,8 @@ function toggleLock(id) {
         }
 
         function generaSequenzaOttimale() {
-            if (!targetSelezionato) { alert(t("alert_planetarium")); return; }
-            let tS = document.getElementById('time-start').value, tE = document.getElementById('time-end').value; if(!tS || !tE) { alert(t("alert_times")); return; }
+            if (!targetSelezionato) { mostraAvviso(t("alert_planetarium"), "warn"); return; }
+            let tS = document.getElementById('time-start').value, tE = document.getElementById('time-end').value; if(!tS || !tE) { mostraAvviso(t("alert_times"), "warn"); return; }
             let dS = new Date(`1970-01-01T${tS}:00`), dE = new Date(`1970-01-01T${tE}:00`); if (dE <= dS) dE.setDate(dE.getDate() + 1);
             let aS = (dE - dS) / 1000;
             
@@ -400,10 +400,10 @@ function toggleLock(id) {
             let isM = document.getElementById('sensor-type').value === 'mono', fL = isM ? framesMono : framesColor, cS = 0;
             
             fL.forEach(f => { if (f.id.includes('dark') || f.id.includes('bias')) cS += (parseInt(document.getElementById(`${f.id}-count`).value)||0) * (parseInt(document.getElementById(`${f.id}-exp`).value)||0); });
-            let rS = aS - cS; if (rS <= 0) { alert(t("alert_calib")); return; }
+            let rS = aS - cS; if (rS <= 0) { mostraAvviso(t("alert_calib"), "warn"); return; }
             
             let aL = []; fL.forEach(f => { if (!f.id.includes('dark') && !f.id.includes('bias')) { let c = document.getElementById(`${f.id}-check`); if (c && c.checked) aL.push(f); } });
-            if (aL.length === 0) { alert(t("alert_nolight")); return; }
+            if (aL.length === 0) { mostraAvviso(t("alert_nolight"), "warn"); return; }
 
             let w = {};
             if (!isM) w[aL[0].id] = 1.0;

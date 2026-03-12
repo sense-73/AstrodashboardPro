@@ -600,16 +600,68 @@
             
         </div>
     </div>
-    <div id="asiair-modal" class="modal">
-        <div class="modal-content" style="max-width: 500px; border-color: #D32F2F; box-shadow: 0 0 25px rgba(211, 47, 47, 0.4);">
-            <span class="close-btn" style="color: #D32F2F;" onclick="chiudiAsiairReport()">&times;</span>
-            <h2 style="color: #D32F2F; margin-top:0; border-bottom: 1px solid #333; padding-bottom: 15px; display: flex; align-items: center; gap: 10px;">
-                <span style="background: #D32F2F; color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 0.7em; font-weight: bold; letter-spacing: 1px;">ZWO</span> ASIAIR Plan
-            </h2>
-            <div id="asiair-report-content"></div>
-            <button class="btn-copy" style="border-color: #D32F2F; margin-top: 20px;" onclick="chiudiAsiairReport()" data-i18n="asiair_close">✅ Chiudi e Vai al Telescopio</button>
+    <!-- ═══ TOAST — conferme ok/info (in basso) ═══ -->
+    <div id="app-toast" style="
+        display:none; position:fixed; bottom:28px; left:50%; transform:translateX(-50%);
+        background:#1a1a2e; border:1px solid #44dd88; border-radius:12px;
+        padding:18px 26px; box-shadow:0 4px 28px rgba(68,221,136,0.25);
+        z-index:99999; max-width:88vw; min-width:260px;
+        font-size:16px; color:#e0d8ff; align-items:center; gap:14px;
+    ">
+        <span id="app-toast-icon" style="font-size:1.6em; flex-shrink:0;">✅</span>
+        <span id="app-toast-msg" style="line-height:1.5; flex:1;"></span>
+    </div>
+
+    <!-- ═══ MODAL AVVISO — warn/error (centrato) ═══ -->
+    <div id="app-warn-overlay" style="
+        display:none; position:fixed; inset:0; z-index:99998;
+        background:rgba(0,0,0,0.65); backdrop-filter:blur(3px);
+        align-items:center; justify-content:center;
+    " onclick="if(event.target===this) document.getElementById('app-warn-overlay').style.display='none';">
+        <div style="
+            background:#1a1a2e; border-radius:14px; max-width:400px; width:88vw;
+            padding:30px 26px 22px; box-shadow:0 8px 40px rgba(0,0,0,0.6);
+            text-align:center;
+        ">
+            <div id="app-warn-icon" style="font-size:2.6em; margin-bottom:14px;">⚠️</div>
+            <div id="app-warn-msg" style="font-size:15px; color:#e0d8ff; line-height:1.6; margin-bottom:24px;"></div>
+            <button onclick="document.getElementById('app-warn-overlay').style.display='none';" style="
+                background:linear-gradient(135deg,#7850dc,#5030a0); border:none;
+                border-radius:10px; color:#fff; font-size:15px; font-weight:700;
+                padding:12px 36px; cursor:pointer; width:100%; letter-spacing:.5px;
+            ">OK</button>
         </div>
     </div>
+
+    <script>
+    var _toastTimer = null;
+    function mostraAvviso(msg, tipo) {
+        tipo = tipo || "warn";
+        if (tipo === "ok" || tipo === "info") {
+            var toast  = document.getElementById("app-toast");
+            var iconEl = document.getElementById("app-toast-icon");
+            var msgEl  = document.getElementById("app-toast-msg");
+            if (!toast) { alert(msg); return; }
+            iconEl.innerText = tipo === "info" ? "ℹ️" : "✅";
+            msgEl.innerHTML  = msg;
+            toast.style.borderColor = tipo === "info" ? "#7850dc" : "#44dd88";
+            toast.style.display = "flex";
+            if (_toastTimer) clearTimeout(_toastTimer);
+            _toastTimer = setTimeout(function(){ toast.style.display = "none"; }, 4000);
+        } else {
+            var overlay = document.getElementById("app-warn-overlay");
+            if (!overlay) { alert(msg); return; }
+            document.getElementById("app-warn-icon").innerText  = tipo === "error" ? "❌" : "⚠️";
+            document.getElementById("app-warn-msg").innerHTML   = msg;
+            var btn = overlay.querySelector("button");
+            if (btn) btn.style.background = tipo === "error"
+                ? "linear-gradient(135deg,#cc2222,#991111)"
+                : "linear-gradient(135deg,#7850dc,#5030a0)";
+            overlay.style.display = "flex";
+        }
+    }
+    </script>
+
 
     <div id="guide-view">
         <button class="btn-back" style="margin-bottom: 40px;" onclick="chiudiGuida()" data-i18n="back_dash">Torna Indietro</button>
@@ -696,7 +748,7 @@
                 <ul>
                     <li><strong>Export N.I.N.A. Smart:</strong> Genera un file JSON per N.I.N.A. Advanced Sequencer con la sequenza calcolata dall'assistente smart. Include Slew &amp; Center, autoguida, dithering configurato e meridian flip. Trascina il file dentro N.I.N.A. e la notte parte da sola.</li>
                     <li><strong>Export N.I.N.A. PRO (Advanced Sequence):</strong> Il JSON PRO è una sequenza nativa N.I.N.A. di livello avanzato: ogni filtro ha la sua struttura con LoopCondition (loop nativo, non ExposureCount), trigger di dithering per-filtro, gain/offset/binning individuali, tutti i trigger hardware configurati nell'ordine corretto (Cool → Slew → AF → Rotate → Guide → Imaging → Warm → Park).</li>
-                    <li><strong>Export ASIAIR:</strong> Genera un file CSV con le coordinate di precisione e mostra a schermo il riepilogo del piano di scatto ottimizzato per l'interfaccia tablet di ASIAIR/ASIAIR+/ASIAIR Pro. Include l'angolo di rotazione camera suggerito per l'inquadratura ottimale.</li>
+                    <li><strong>Export ASIAIR:</strong> Genera un unico file HTML scaricabile, ottimizzato per la visualizzazione su smartphone e tablet. Il documento contiene: la riga CSV delle coordinate J2000 con bottone COPY per incollarla direttamente in ASIAIR (Piano › Aggiungi Target), la tabella completa del piano di scatto con filtri, pose, esposizione, gain, offset, binning e colonna HDR se presente, e i parametri di dithering e angolo camera PA. Il file usa lo stile grafico ZWO ed è ottimizzato anche per la stampa. Tutti gli avvisi di operazione (file scaricato, errori, sequenza vuota) appaiono ora come notifiche native nell'interfaccia — toast in basso per le conferme, modal centrato per gli avvisi.</li>
                     <li><strong>Coordinate FOV Personalizzate:</strong> Se hai spostato la mappa durante la simulazione FOV, le coordinate del centro aggiornato vengono usate in tutti gli export (N.I.N.A. Smart, PRO e Multinotte). Il badge "⚠ Offset attivo" ti avvisa quando le coordinate di export differiscono dal centro nominale del target.</li>
                 </ul>
             </div>
@@ -784,7 +836,7 @@
                 <ul>
                     <li><strong>N.I.N.A. Smart Export:</strong> Generates a JSON file for N.I.N.A. Advanced Sequencer with the smart assistant-calculated sequence. Includes Slew &amp; Center, autoguiding, configured dithering and meridian flip. Drag the file into N.I.N.A. and the night runs itself.</li>
                     <li><strong>N.I.N.A. PRO Export (Advanced Sequence):</strong> The PRO JSON is a native N.I.N.A. advanced-level sequence: each filter has its own structure with LoopCondition (native loop, not ExposureCount), per-filter dithering triggers, individual gain/offset/binning, all hardware triggers in the correct order (Cool → Slew → AF → Rotate → Guide → Imaging → Warm → Park).</li>
-                    <li><strong>ASIAIR Export:</strong> Generates a CSV file with precision coordinates and displays a visual shooting plan optimized for the ASIAIR/ASIAIR+/ASIAIR Pro tablet interface. Includes the suggested camera rotation angle for optimal framing.</li>
+                    <li><strong>ASIAIR Export:</strong> Generates a single downloadable HTML file, optimised for viewing on smartphones and tablets. The document contains: the J2000 coordinate CSV row with a COPY button to paste it directly into ASIAIR (Plan › Add Target), the complete shooting plan table with filters, frames, exposure, gain, offset, binning and HDR column if present, and dithering and camera angle PA parameters. The file uses ZWO visual styling and is also print-optimised. All operation notifications (file downloaded, errors, empty sequence) now appear as native interface notifications — bottom toast for confirmations, centred modal for warnings.</li>
                     <li><strong>Custom FOV Coordinates:</strong> If you moved the map during FOV simulation, the updated center coordinates are used in all exports (N.I.N.A. Smart, PRO and Multi-Night). The "⚠ Offset active" badge warns you when export coordinates differ from the target's nominal center.</li>
                 </ul>
             </div>
@@ -870,7 +922,7 @@
                 <ul>
                     <li><strong>Export N.I.N.A. Smart:</strong> Genera un JSON para N.I.N.A. Advanced Sequencer con la secuencia calculada por la IA. Incluye Slew &amp; Center, autoguiado, dithering configurado y meridian flip. Arrastra el archivo a N.I.N.A. y la noche se conduce sola.</li>
                     <li><strong>Export N.I.N.A. PRO (Advanced Sequence):</strong> El JSON PRO es una secuencia N.I.N.A. nativa de nivel avanzado: cada filtro tiene su estructura con LoopCondition, disparadores de dithering por filtro, gain/offset/binning individuales y todos los disparadores de hardware en el orden correcto.</li>
-                    <li><strong>Export ASIAIR:</strong> Genera un archivo CSV con coordenadas de precisión y muestra el plan de tomas visual optimizado para la interfaz tablet de ASIAIR. Incluye el ángulo de rotación de cámara sugerido.</li>
+                    <li><strong>Export ASIAIR:</strong> Genera un único archivo HTML descargable, optimizado para su visualización en smartphones y tablets. El documento contiene: la fila CSV de coordenadas J2000 con botón COPY para pegarla directamente en ASIAIR (Plan › Añadir Objetivo), la tabla completa del plan de disparo con filtros, tomas, exposición, gain, offset, binning y columna HDR si está presente, y los parámetros de dithering y ángulo de cámara PA. El archivo usa el estilo visual ZWO y también está optimizado para impresión. Todas las notificaciones de operación (archivo descargado, errores, secuencia vacía) aparecen ahora como notificaciones nativas en la interfaz — toast inferior para confirmaciones, modal centrado para avisos.</li>
                     <li><strong>Coordenadas FOV Personalizadas:</strong> Si desplazaste el mapa durante la simulación FOV, las coordenadas actualizadas se usan en todas las exportaciones. El badge "⚠ Offset activo" te avisa cuando las coordenadas de exportación difieren del centro nominal del objetivo.</li>
                 </ul>
             </div>
@@ -956,7 +1008,7 @@
                 <ul>
                     <li><strong>N.I.N.A. 智能导出：</strong>为 N.I.N.A. 高级序列器生成含智能助手计算序列的 JSON 文件。包括指向并居中、自动导星、已配置的抖动和中天翻转。将文件拖入 N.I.N.A.，整夜自动运行。</li>
                     <li><strong>N.I.N.A. PRO 导出（高级序列）：</strong>PRO 生成的 JSON 是原生 N.I.N.A. 高级序列：每个滤镜有自己带 LoopCondition 的结构、独立的抖动触发器、各自的 gain/offset/binning，以及所有硬件触发器按正确顺序排列（降温→指向→自动对焦→旋转→导星→拍摄→回温→归位）。</li>
-                    <li><strong>ASIAIR 导出：</strong>生成含精确坐标的 CSV 文件，并显示为 ASIAIR/ASIAIR+/ASIAIR Pro 平板界面优化的可视拍摄计划，包括建议的相机旋转角度。</li>
+                    <li><strong>ASIAIR 导出：</strong>生成单个可下载的HTML文件，针对智能手机和平板电脑的显示进行了优化。文档包含：J2000坐标CSV行及COPY按钮（可直接粘贴到ASIAIR计划›添加目标），包含滤镜、帧数、曝光、增益、偏置、合并及HDR列（如有）的完整拍摄计划表，以及抖动和相机角度PA参数。文件采用ZWO视觉风格，同时针对打印进行了优化。所有操作通知（文件已下载、错误、空序列）现在均以界面原生通知形式显示——确认信息显示为底部Toast，警告显示为居中弹窗。</li>
                     <li><strong>自定义视场坐标：</strong>如果在视场模拟过程中移动了地图，更新的中心坐标将用于所有导出（N.I.N.A. 智能、PRO 和多夜）。当导出坐标与目标名义中心不同时，"⚠ 偏移激活"徽章会提醒您。</li>
                 </ul>
             </div>
@@ -1106,6 +1158,22 @@
                 </div>
 
             </div>
+
+                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#23213a; border-radius:10px; border-left:3px solid #D32F2F;">
+                    <span style="font-size:1.2em; flex-shrink:0;">📱</span>
+                    <div>
+                        <div style="font-weight:700; color:#e0d8ff; font-size:0.9em; margin-bottom:3px;">Export ASIAIR — file HTML unico</div>
+                        <div style="color:#aaa; font-size:0.82em; line-height:1.5;">Coordinata CSV con tasto COPY, tabella filtri completa e parametri PA/dithering — stile grafico ZWO, compatibile mobile.</div>
+                    </div>
+                </div>
+
+                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#23213a; border-radius:10px; border-left:3px solid #44dd88;">
+                    <span style="font-size:1.2em; flex-shrink:0;">🔔</span>
+                    <div>
+                        <div style="font-weight:700; color:#e0d8ff; font-size:0.9em; margin-bottom:3px;">Sistema notifiche unificato</div>
+                        <div style="color:#aaa; font-size:0.82em; line-height:1.5;">Niente più alert del browser. Toast verde per le conferme, modal centrato per avvisi ed errori — coerenti con l'interfaccia.</div>
+                    </div>
+                </div>
 
             <!-- Footer -->
             <div style="margin-top:22px; display:flex; justify-content:flex-end;">

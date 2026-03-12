@@ -2,7 +2,7 @@
 // ============================================================
 
         function apriProView() {
-            if (!targetSelezionato) { alert(t("alert_planetarium")); return; }
+            if (!targetSelezionato) { mostraAvviso(t("alert_planetarium"), "warn"); return; }
             document.getElementById('planning-view').style.display = 'none';
             document.getElementById('dashboard-view').style.display = 'none';
             document.getElementById('pro-view').style.display = 'block';
@@ -222,7 +222,7 @@
             }
         }
         function esportaNinaPRO() {
-            if (!targetSelezionato) { alert(t("alert_planetarium")); return; }
+            if (!targetSelezionato) { mostraAvviso(t("alert_planetarium"), "warn"); return; }
 
             // --- LETTURA PARAMETRI DALLA GRIGLIA PRO ---
             let isMono = document.getElementById('pro-sensor-type').value === 'mono';
@@ -281,7 +281,7 @@
                 }
             });
 
-            if (esposizioni.length === 0) { alert(t("alert_noseq")); return; }
+            if (esposizioni.length === 0) { mostraAvviso(t("alert_noseq"), "warn"); return; }
 
             // --- LETTURA TRIGGERS PRO ---
             let doCool   = document.getElementById('pro-cool')   ? document.getElementById('pro-cool').checked   : false;

@@ -2,7 +2,7 @@
 // ============================================================
 
         function esportaNINA() {
-            if (!targetSelezionato) { alert(t("alert_planetarium")); return; }
+            if (!targetSelezionato) { mostraAvviso(t("alert_planetarium"), "warn"); return; }
             let doCool = document.getElementById('nina-cool').checked, tempTarget = parseFloat(document.getElementById('nina-temp').value) || -10;
             let doSlew = document.getElementById('nina-slew').checked, doGuide = document.getElementById('nina-guide').checked, doWarm = document.getElementById('nina-warm').checked, doPark = document.getElementById('nina-park').checked, doFlip = document.getElementById('nina-flip').checked;
             let isMono = document.getElementById('sensor-type').value === 'mono', frameList = isMono ? framesMono : framesColor, esposizioni = [];
@@ -27,7 +27,7 @@
                     }
                 }
             });
-            if (esposizioni.length === 0) { alert(t("alert_noseq")); return; }
+            if (esposizioni.length === 0) { mostraAvviso(t("alert_noseq"), "warn"); return; }
 
             let idCounter = 1; function nextId() { return (idCounter++).toString(); }
             function makeObs(type, values) { return { "$id": nextId(), "$type": `System.Collections.ObjectModel.ObservableCollection\`1[[${type}, NINA.Sequencer]], System.ObjectModel`, "$values": values }; }
@@ -71,78 +71,202 @@
             let dlAnchorElem = document.createElement('a'); dlAnchorElem.setAttribute("href", dataStr); dlAnchorElem.setAttribute("download", `AD_Seq_${targetSelezionato.name.replace(/\s+/g, '_')}.json`); document.body.appendChild(dlAnchorElem); dlAnchorElem.click(); dlAnchorElem.remove();
         }
         function esportaASIAIR() {
-            if (!targetSelezionato) { alert(t("alert_planetarium")); return; }
-            
-            // 1. DOWNLOAD DEL FILE CSV PER LE COORDINATE
-            let ra = targetSelezionato.ra, rh = Math.floor(ra), rm = Math.floor((ra - rh) * 60), rs = Math.round(((ra - rh) * 60 - rm) * 60);
-            if(rs === 60) { rs = 0; rm++; } if(rm === 60) { rm = 0; rh++; }
-            let raStr = `${rh.toString().padStart(2, '0')}:${rm.toString().padStart(2, '0')}:${rs.toString().padStart(2, '0')}`;
+            if (!targetSelezionato) { mostraAvviso(t("alert_planetarium"), "warn"); return; }
 
-            let dec = targetSelezionato.dec, negD = dec < 0, aD = Math.abs(dec), dd = Math.floor(aD), dm = Math.floor((aD - dd) * 60), ds = Math.round(((aD - dd) * 60 - dm) * 60);
-            if(ds === 60) { ds = 0; dm++; } if(dm === 60) { dm = 0; dd++; }
-            let decStr = `${negD ? "-" : "+"}${dd.toString().padStart(2, '0')}:${dm.toString().padStart(2, '0')}:${ds.toString().padStart(2, '0')}`;
+            // ── Coordinate J2000 ─────────────────────────────────────────
+            let ra = targetSelezionato.ra;
+            let rh = Math.floor(ra), rm = Math.floor((ra-rh)*60), rs = Math.round(((ra-rh)*60-rm)*60);
+            if(rs===60){rs=0;rm++;} if(rm===60){rm=0;rh++;}
+            let raStr = `${rh.toString().padStart(2,'0')}:${rm.toString().padStart(2,'0')}:${rs.toString().padStart(2,'0')}`;
+            let dec = targetSelezionato.dec, negD = dec<0, aD = Math.abs(dec);
+            let dd = Math.floor(aD), dm = Math.floor((aD-dd)*60), ds = Math.round(((aD-dd)*60-dm)*60);
+            if(ds===60){ds=0;dm++;} if(dm===60){dm=0;dd++;}
+            let decStr = `${negD?"-":"+"}${dd.toString().padStart(2,'0')}:${dm.toString().padStart(2,'0')}:${ds.toString().padStart(2,'0')}`;
+            let safeName = targetSelezionato.name.replace(/,/g,'').trim();
+            let csvRow   = `${safeName}, ${raStr}, ${decStr}`;
 
-            let safeName = targetSelezionato.name.replace(/,/g, '').trim();
-            let csvContent = `${safeName}, ${raStr}, ${decStr}\n`;
-            let dataStr = "data:text/csv;charset=utf-8," + encodeURIComponent(csvContent);
-            let dlAnchorElem = document.createElement('a');
-            dlAnchorElem.setAttribute("href", dataStr);
-            dlAnchorElem.setAttribute("download", `ASIAIR_Plan_${safeName.replace(/\s+/g, '_')}.csv`);
-            document.body.appendChild(dlAnchorElem); dlAnchorElem.click(); dlAnchorElem.remove();
-
-            // 2. CREAZIONE DEL DOSSIER VISIVO ZWO (Generazione dinamica per le lingue)
-            let isMono = document.getElementById('sensor-type').value === 'mono';
+            // ── Raccolta piano di scatto ──────────────────────────────────
+            let isMono    = document.getElementById('sensor-type').value === 'mono';
             let frameList = isMono ? framesMono : framesColor;
-            let planHtml = ''; let hasPoses = false;
+            let planRows  = ''; let hasPoses = false;
 
             frameList.forEach(f => {
                 let count = parseInt(document.getElementById(`${f.id}-count`).value) || 0;
-                let exp = parseInt(document.getElementById(`${f.id}-exp`).value) || 0;
-                if(count > 0 && exp > 0) {
+                let expV  = parseInt(document.getElementById(`${f.id}-exp`).value)   || 0;
+                if (count > 0 && expV > 0) {
                     hasPoses = true;
-                    let filterName = (isMono && (!f.id.includes('dark') && !f.id.includes('bias'))) ? document.getElementById(`nina-name-${f.id}`).value : f.name;
-                    planHtml += `
-                    <div style="display:flex; justify-content:space-between; align-items:center; background:#222; padding:10px 15px; margin-bottom:8px; border-left:4px solid #D32F2F; border-radius:4px;">
-                        <span style="color:#ddd; font-weight:bold; font-size:1.1em;">${filterName}</span>
-                        <span style="color:#ffaa00; font-size:1.2em;">${count}x <b style="color:#fff;">${exp}s</b></span>
-                    </div>`;
+                    let filterName = (isMono && !f.id.includes('dark') && !f.id.includes('bias'))
+                        ? document.getElementById(`nina-name-${f.id}`).value : f.name;
+                    let gain   = (document.getElementById(`${f.id}-gain`)   || {}).value || '--';
+                    let offset = (document.getElementById(`${f.id}-offset`) || {}).value || '--';
+                    let bin    = (document.getElementById(`${f.id}-bin`)    || {}).value || '1';
+                    let hdrExp = document.getElementById(`${f.id}-hdr`) ? (parseInt(document.getElementById(`${f.id}-hdr`).value)||0) : 0;
+                    let hdrCell = hdrExp > 0 ? `<td class="hdr-cell">${hdrExp}s</td>` : `<td class="dim">—</td>`;
+                    planRows += `<tr>
+                        <td class="f-name">${filterName}</td>
+                        <td class="f-count">${count}×</td>
+                        <td class="f-exp">${expV}s</td>
+                        ${hdrCell}
+                        <td class="dim">${gain}</td>
+                        <td class="dim">${offset}</td>
+                        <td class="dim">${bin}×${bin}</td>
+                    </tr>`;
                 }
             });
+            if (!hasPoses) { mostraAvviso(t("alert_noseq"), "warn"); return; }
 
-            if (!hasPoses) { alert(t("alert_noseq")); return; }
-
-            let anyDither = frameList.some(f => { let chk = document.getElementById(`${f.id}-dither`); return chk && chk.checked; });
-            let dFreq = (() => { let frqs = frameList.map(f => { let el = document.getElementById(`${f.id}-dfreq`); return el ? parseInt(el.value)||3 : null; }).filter(v => v !== null); return frqs.length ? Math.min(...frqs) : 3; })();
-
-            // Traduzioni integrate al volo senza toccare il dizionario in alto
-            let introTxt = lang === 'it' ? "Il file <b>.csv</b> con le coordinate millimetriche è stato scaricato.<br>Importalo sul tablet e ricopia <b>manualmente</b> questo piano di scatto calcolato dall'AI nel Plan Mode di ASIAIR:" :
-                           lang === 'en' ? "The <b>.csv</b> file with pinpoint coordinates has been downloaded.<br>Import it to your tablet and <b>manually</b> copy this AI-calculated exposure plan into ASIAIR's Plan Mode:" :
-                           lang === 'es' ? "El archivo <b>.csv</b> con las coordenadas exactas se ha descargado.<br>Impórtalo en tu tablet y copia <b>manualmente</b> este plan calculado por la IA en el Modo Plan de ASIAIR:" :
-                                           "具有精确坐标的 <b>.csv</b> 文件已下载。<br>将其导入平板电脑，然后在 ASIAIR 的计划模式下<b>手动</b>复制此 AI 计算的曝光计划：";
-
-            let dithTxt = lang === 'it' ? "Dithering" : lang === 'en' ? "Dithering" : lang === 'es' ? "Dithering" : "抖动";
-            let dithVal = anyDither ? (lang === 'it' ? `Ogni ${dFreq} scatti` : lang === 'en' ? `Every ${dFreq} frames` : lang === 'es' ? `Cada ${dFreq} tomas` : `每 ${dFreq} 帧`) : "OFF";
+            let anyDither = frameList.some(f => { let c = document.getElementById(`${f.id}-dither`); return c && c.checked; });
+            let dFreq = (() => { let ff = frameList.map(f => { let e = document.getElementById(`${f.id}-dfreq`); return e ? parseInt(e.value)||3 : null; }).filter(v=>v!==null); return ff.length ? Math.min(...ff) : 3; })();
             let rotVal = document.getElementById('fov-rotation').value || "0";
+            let now    = new Date().toLocaleString();
 
-            let html = `
-                <p style="font-size: 0.95em; color: #ccc; line-height: 1.6; margin-bottom: 25px; border-bottom: 1px dashed #444; padding-bottom: 15px;">📥 ${introTxt}</p>
-                <div style="margin-bottom: 25px;">
-                    ${planHtml}
-                </div>
-                <div style="background: rgba(211, 47, 47, 0.1); padding: 12px; border-radius: 4px; border: 1px dashed #D32F2F; display:flex; justify-content:space-between; align-items:center;">
-                    <span style="color:#ffaaaa; font-size:0.9em;">📍 ${dithTxt}:</span>
-                    <b style="color:#fff; font-size:1.1em;">${dithVal}</b>
-                </div>
-                <div style="background: rgba(211, 47, 47, 0.1); padding: 12px; border-radius: 4px; border: 1px dashed #D32F2F; display:flex; justify-content:space-between; align-items:center; margin-top: 5px;">
-                    <span style="color:#ffaaaa; font-size:0.9em;">🔄 Camera Angle (PA):</span>
-                    <b style="color:#fff; font-size:1.1em;">${rotVal}°</b>
-                </div>
-            `;
+            // ── Etichette multilingua ─────────────────────────────────────
+            let L = {
+                title:    lang==='it'?'Piano di Scatto ASIAIR'  :lang==='en'?'ASIAIR Shooting Plan'     :lang==='es'?'Plan de Disparo ASIAIR'  :'ASIAIR 拍摄计划',
+                csvLbl:   lang==='it'?'Riga CSV — copia in ASIAIR (Piano › Aggiungi Target)':lang==='en'?'CSV row — paste in ASIAIR (Plan › Add Target)':lang==='es'?'Fila CSV — pega en ASIAIR (Plan › Añadir Objetivo)':'CSV行 — 粘贴到ASIAIR(计划›添加目标)',
+                note:     lang==='it'?'Dopo aver importato il target, configura manualmente le impostazioni di scatto dalla tabella sottostante nel Plan Mode di ASIAIR.'
+                         :lang==='en'?'After importing the target, manually configure the shooting settings from the table below in ASIAIR Plan Mode.'
+                         :lang==='es'?'Tras importar el objetivo, configura manualmente los ajustes de disparo desde la tabla en el Modo Plan de ASIAIR.'
+                                     :'导入目标后，在ASIAIR计划模式中根据下表手动配置拍摄设置。',
+                filter:   lang==='it'?'Filtro'      :lang==='en'?'Filter'  :lang==='es'?'Filtro'    :'滤镜',
+                frames:   lang==='it'?'Pose'        :lang==='en'?'Frames'  :lang==='es'?'Tomas'     :'帧数',
+                exp:      lang==='it'?'Esposizione' :lang==='en'?'Exposure':lang==='es'?'Exposición':'曝光',
+                hdr:      'HDR',
+                dither:   'Dithering',
+                dithVal:  anyDither?(lang==='it'?`Ogni ${dFreq} scatti`:lang==='en'?`Every ${dFreq} frames`:lang==='es'?`Cada ${dFreq} tomas`:`每 ${dFreq} 帧`):'OFF',
+                angle:    lang==='it'?'Angolo Camera (PA)':lang==='en'?'Camera Angle (PA)':lang==='es'?'Ángulo Cámara (PA)':'相机角度 (PA)',
+                gen:      lang==='it'?'Generato il':lang==='en'?'Generated on':lang==='es'?'Generado el':'生成于',
+                ok:       lang==='it'?'Piano ASIAIR scaricato':lang==='en'?'ASIAIR plan downloaded':lang==='es'?'Plan ASIAIR descargado':'ASIAIR计划已下载',
+            };
 
-            document.getElementById('asiair-report-content').innerHTML = html;
-            document.getElementById('asiair-modal').style.display = 'block';
+            // ── HTML con stile ZWO ────────────────────────────────────────
+            let htmlDoc = `<!DOCTYPE html>
+<html lang="${lang}">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${L.title} — ${safeName}</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body   { background: #0d0d0d; color: #e8e8e8; font-family: 'Segoe UI', Arial, sans-serif; min-height: 100vh; padding: 0 0 40px; }
+
+  /* ── HEADER ZWO ── */
+  .zwo-header { background: #111; border-bottom: 3px solid #D32F2F; padding: 18px 24px 14px; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 10px; }
+  .zwo-brand  { display: flex; align-items: center; gap: 10px; }
+  .zwo-badge  { background: #D32F2F; color: #fff; font-size: 11px; font-weight: 800; letter-spacing: 2px; padding: 3px 9px; border-radius: 3px; }
+  .zwo-app    { color: #888; font-size: 13px; }
+  .zwo-target { text-align: right; }
+  .zwo-target .name { font-size: 22px; font-weight: 800; color: #fff; }
+  .zwo-target .date { font-size: 11px; color: #555; margin-top: 2px; }
+
+  /* ── CONTENUTO ── */
+  .content { max-width: 680px; margin: 0 auto; padding: 24px 20px 0; }
+
+  /* ── NOTE BOX ── */
+  .note-box { background: #161616; border: 1px solid #2a2a2a; border-left: 4px solid #D32F2F; border-radius: 6px; padding: 14px 16px; font-size: 13px; color: #aaa; line-height: 1.6; margin-bottom: 20px; }
+
+  /* ── CSV BOX ── */
+  .csv-section { margin-bottom: 24px; }
+  .section-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #D32F2F; margin-bottom: 8px; }
+  .csv-box { background: #0a0a0a; border: 1px solid #D32F2F; border-radius: 6px; padding: 16px 18px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .csv-value { font-family: 'Courier New', monospace; font-size: 15px; font-weight: 700; color: #fff; letter-spacing: .5px; flex: 1; min-width: 0; word-break: break-all; }
+  .copy-btn { background: #D32F2F; color: #fff; border: none; border-radius: 5px; padding: 8px 14px; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
+  .copy-btn:active { background: #b71c1c; }
+  .copy-ok { color: #4caf50; font-size: 12px; font-weight: 700; display: none; margin-top: 6px; }
+
+  /* ── TABELLA FILTRI ── */
+  .table-section { margin-bottom: 20px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead { background: #1a1a1a; }
+  thead th { padding: 9px 10px; text-align: center; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #666; border-bottom: 2px solid #D32F2F; }
+  thead th:first-child { text-align: left; padding-left: 14px; }
+  tbody tr { border-bottom: 1px solid #1a1a1a; }
+  tbody tr:nth-child(even) { background: #111; }
+  tbody tr:nth-child(odd)  { background: #0d0d0d; }
+  td { padding: 10px 10px; text-align: center; vertical-align: middle; }
+  td:first-child { text-align: left; padding-left: 14px; }
+  .f-name  { font-weight: 700; color: #fff; font-size: 14px; }
+  .f-count { color: #ffaa00; font-weight: 700; font-size: 14px; }
+  .f-exp   { color: #bb86fc; font-weight: 600; }
+  .hdr-cell{ color: #ff6b6b; font-size: 12px; }
+  .dim     { color: #555; font-size: 12px; }
+
+  /* ── PARAMETRI ── */
+  .params { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
+  .param-card { background: #111; border: 1px solid #222; border-radius: 6px; padding: 12px 16px; display: flex; flex-direction: column; gap: 4px; }
+  .param-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #555; }
+  .param-value { font-size: 16px; font-weight: 800; color: #fff; }
+
+  @media (max-width: 480px) { .params { grid-template-columns: 1fr; } .zwo-target .name { font-size: 18px; } }
+  @media print { body { background: #fff; color: #000; } .zwo-header { background: #fff; } .copy-btn { display: none; } }
+</style>
+</head>
+<body>
+
+<div class="zwo-header">
+  <div class="zwo-brand">
+    <span class="zwo-badge">ZWO</span>
+    <span class="zwo-app">AstroDashboard PRO</span>
+  </div>
+  <div class="zwo-target">
+    <div class="name">${safeName}</div>
+    <div class="date">${L.gen} ${now}</div>
+  </div>
+</div>
+
+<div class="content">
+
+  <div class="note-box">${L.note}</div>
+
+  <div class="csv-section">
+    <div class="section-label">${L.csvLbl}</div>
+    <div class="csv-box">
+      <span class="csv-value" id="csv-val">${csvRow}</span>
+      <button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('csv-val').innerText).then(()=>{ var ok=document.getElementById('copy-ok'); ok.style.display='block'; setTimeout(()=>ok.style.display='none',2000); })">COPY</button>
+    </div>
+    <div class="copy-ok" id="copy-ok">✓ Copiato!</div>
+  </div>
+
+  <div class="table-section">
+    <div class="section-label">${L.frames}</div>
+    <table>
+      <thead><tr>
+        <th>${L.filter}</th>
+        <th>${L.frames}</th>
+        <th>${L.exp}</th>
+        <th>${L.hdr}</th>
+        <th>Gain</th>
+        <th>Offset</th>
+        <th>BIN</th>
+      </tr></thead>
+      <tbody>${planRows}</tbody>
+    </table>
+  </div>
+
+  <div class="params">
+    <div class="param-card">
+      <span class="param-label">${L.dither}</span>
+      <span class="param-value">${L.dithVal}</span>
+    </div>
+    <div class="param-card">
+      <span class="param-label">${L.angle}</span>
+      <span class="param-value">${rotVal}°</span>
+    </div>
+  </div>
+
+</div>
+</body></html>`;
+
+            // ── Download unico file HTML (Blob URL — identico a report.js) ─
+            var blob = new Blob([htmlDoc], {type:'text/html;charset=utf-8'});
+            var url  = URL.createObjectURL(blob);
+            var a    = document.createElement('a');
+            a.href = url; a.download = `ASIAIR_${safeName.replace(/\s+/g,'_')}_plan.html`;
+            document.body.appendChild(a); a.click();
+            setTimeout(function(){ document.body.removeChild(a); URL.revokeObjectURL(url); }, 200);
+            mostraAvviso(L.ok, 'ok');
         }
 
-        function chiudiAsiairReport() { document.getElementById('asiair-modal').style.display = 'none'; }
+        function chiudiAsiairReport() {} // mantenuto per compatibilità
         /* --- MULTI NIGHT MANAGER E EXPORT JSON --- */
 
