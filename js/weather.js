@@ -148,10 +148,11 @@
                 let times = SunCalc.getTimes(d, latCorrente, lonCorrente);
                 let pct = (i / maxSteps) * 100;
                 
-                // Colori: Giorno (Azzurro), Crepuscolo (Arancione scuro), Notte profonda (Blu notte/Nero)
-                let color = "#0a0f1d"; 
-                if (d > times.sunrise && d < times.sunset) color = "#5c9fb8"; 
-                else if ((d > times.dawn && d <= times.sunrise) || (d >= times.sunset && d < times.dusk)) color = "#d97b2b"; 
+                // Colori: Giorno (Azzurro), Tramonto (Arancione), Notte (Nero), Alba (Viola)
+                let color = "#0a0f1d";
+                if (d > times.sunrise && d < times.sunset) color = "#5c9fb8";          // Giorno
+                else if (d >= times.sunset && d < times.dusk)   color = "#d97b2b";     // Tramonto
+                else if (d >= times.dawn   && d <= times.sunrise) color = "#5c2d8a";   // Alba
                 
                 stops.push(`${color} ${pct}%`);
             }
