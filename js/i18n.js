@@ -1050,4 +1050,115 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.es.rpt_alert_no_nights = "Ninguna noche planificada!";
         i18n.zh.rpt_alert_no_nights = "未规划任何夜晚！";
 
+        i18n.it.del_tel_empty       = "Nessun telescopio salvato.";
+        i18n.en.del_tel_empty       = "No saved telescopes.";
+        i18n.es.del_tel_empty       = "No hay telescopios guardados.";
+        i18n.zh.del_tel_empty       = "没有已保存的望远镜。";
+
+        // --- CHANGELOG v5.9.3 ---
+        i18n.it.cl_update_label     = "Aggiornamento";
+        i18n.en.cl_update_label     = "Update";
+        i18n.es.cl_update_label     = "Actualización";
+        i18n.zh.cl_update_label     = "更新";
+
+        i18n.it.cl_subtitle         = "Novità rispetto alla versione precedente";
+        i18n.en.cl_subtitle         = "What's new since the previous version";
+        i18n.es.cl_subtitle         = "Novedades respecto a la versión anterior";
+        i18n.zh.cl_subtitle         = "与上一版本相比的新内容";
+
+        i18n.it.cl_close_btn        = "Inizia a usare v5.9.3 ✨";
+        i18n.en.cl_close_btn        = "Start using v5.9.3 ✨";
+        i18n.es.cl_close_btn        = "Empezar a usar v5.9.3 ✨";
+        i18n.zh.cl_close_btn        = "开始使用 v5.9.3 ✨";
+
+        i18n.it.cl1_title           = "Database telescopi e sensori ampliato";
+        i18n.en.cl1_title           = "Expanded telescope and sensor database";
+        i18n.es.cl1_title           = "Base de datos de telescopios y sensores ampliada";
+        i18n.zh.cl1_title           = "望远镜与传感器数据库扩展";
+
+        i18n.it.cl1_desc            = "60+ nuovi sensori ZWO, QHY, PlayerOne, Atik, Canon, Nikon, Sony — chip IMX generici inclusi.";
+        i18n.en.cl1_desc            = "60+ new sensors from ZWO, QHY, PlayerOne, Atik, Canon, Nikon, Sony — generic IMX chips included.";
+        i18n.es.cl1_desc            = "60+ nuevos sensores de ZWO, QHY, PlayerOne, Atik, Canon, Nikon, Sony — chips IMX genéricos incluidos.";
+        i18n.zh.cl1_desc            = "新增60+款传感器，涵盖ZWO、QHY、PlayerOne、Atik、Canon、Nikon、Sony及通用IMX芯片。";
+
+        i18n.it.cl2_title           = "Stima ore integrazione per categoria";
+        i18n.en.cl2_title           = "Integration time estimate by category";
+        i18n.es.cl2_title           = "Estimación de horas de integración por categoría";
+        i18n.zh.cl2_title           = "按类别估算积分时间";
+
+        i18n.it.cl2_desc            = "Sh2=12h, SNR=10h, LBN=8h, galassie=4h… calibrati sui consigli tattici reali. Unica fonte di verità per tutta l'app.";
+        i18n.en.cl2_desc            = "Sh2=12h, SNR=10h, LBN=8h, galaxies=4h… calibrated on real tactical advice. Single source of truth across the whole app.";
+        i18n.es.cl2_desc            = "Sh2=12h, SNR=10h, LBN=8h, galaxias=4h… calibrados según consejos tácticos reales. Fuente única de verdad para toda la app.";
+        i18n.zh.cl2_desc            = "Sh2=12h、SNR=10h、LBN=8h、星系=4h……根据实际战术建议校准，为整个应用提供唯一数据来源。";
+
+        i18n.it.cl3_title           = "Colonna HDR nelle griglie Smart e PRO";
+        i18n.en.cl3_title           = "HDR column in Smart and PRO grids";
+        i18n.es.cl3_title           = "Columna HDR en las cuadrículas Smart y PRO";
+        i18n.zh.cl3_title           = "Smart和PRO网格中的HDR列";
+
+        i18n.it.cl3_desc            = "Esposizione breve affiancata per nebulose planetarie e ammassi globulari. Export NINA e Report inclusi.";
+        i18n.en.cl3_desc            = "Short exposure alongside for planetary nebulae and globular clusters. NINA export and Report included.";
+        i18n.es.cl3_desc            = "Exposición corta paralela para nebulosas planetarias y cúmulos globulares. Exportación NINA e Informe incluidos.";
+        i18n.zh.cl3_desc            = "为行星状星云和球状星团提供并排短曝光。包含NINA导出和报告功能。";
+
+        i18n.it.cl4_title           = "Pesi filtri corretti";
+        i18n.en.cl4_title           = "Corrected filter weights";
+        i18n.es.cl4_title           = "Pesos de filtros corregidos";
+        i18n.zh.cl4_title           = "滤镜权重修正";
+
+        i18n.it.cl4_desc            = "L=1, ogni RGB selezionato=1/3 — indipendentemente da quanti RGB sono attivi. Warning solo per mix broadband+narrowband reale.";
+        i18n.en.cl4_desc            = "L=1, each selected RGB=1/3 — regardless of how many RGBs are active. Warning only for real broadband+narrowband mix.";
+        i18n.es.cl4_desc            = "L=1, cada RGB seleccionado=1/3 — independientemente de cuántos RGB estén activos. Aviso solo para mix real broadband+narrowband.";
+        i18n.zh.cl4_desc            = "L=1，每个选定的RGB=1/3——无论激活多少个RGB。仅在真正的宽带+窄带混合时显示警告。";
+
+        i18n.it.cl5_title           = "Stima f-ratio aggiornata in tempo reale";
+        i18n.en.cl5_title           = "Real-time f-ratio estimate update";
+        i18n.es.cl5_title           = "Estimación de f-ratio actualizada en tiempo real";
+        i18n.zh.cl5_title           = "实时更新焦比估算";
+
+        i18n.it.cl5_desc            = "Il pannello AI ricalcola immediatamente le ore stimate al cambio di telescopio o sensore.";
+        i18n.en.cl5_desc            = "The AI panel immediately recalculates estimated hours when the telescope or sensor changes.";
+        i18n.es.cl5_desc            = "El panel IA recalcula inmediatamente las horas estimadas al cambiar telescopio o sensor.";
+        i18n.zh.cl5_desc            = "更换望远镜或传感器时，AI面板立即重新计算估计小时数。";
+
+        i18n.it.cl6_title           = "Fix penalità lunare";
+        i18n.en.cl6_title           = "Lunar penalty fix";
+        i18n.es.cl6_title           = "Corrección de penalización lunar";
+        i18n.zh.cl6_title           = "月光惩罚修正";
+
+        i18n.it.cl6_desc            = "Il calcolo dell'inquinamento lunare ora azzera correttamente la penalità quando la Luna è sotto l'orizzonte — niente più sovrastime nelle notti con Luna bassa.";
+        i18n.en.cl6_desc            = "Moon pollution calculation now correctly zeroes the penalty when the Moon is below the horizon — no more overestimates on nights with a low Moon.";
+        i18n.es.cl6_desc            = "El cálculo de contaminación lunar ahora anula correctamente la penalización cuando la Luna está bajo el horizonte — sin más sobreestimaciones en noches con Luna baja.";
+        i18n.zh.cl6_desc            = "月光污染计算现在在月亮低于地平线时正确归零惩罚——不再因月亮较低的夜晚产生高估。";
+
+        i18n.it.cl7_title           = "Layer Inquinamento Luminoso con scala Bortle";
+        i18n.en.cl7_title           = "Light Pollution layer with Bortle scale";
+        i18n.es.cl7_title           = "Capa de Contaminación Lumínica con escala Bortle";
+        i18n.zh.cl7_title           = "含博特尔等级的光污染图层";
+
+        i18n.it.cl7_desc            = "Nuovo layer mappa (Lorenz 2024 / VIIRS) con colori Bortle 1→9 (blu pristino → bianco urbano). Legenda interattiva e tooltip sul selettore Bortle.";
+        i18n.en.cl7_desc            = "New map layer (Lorenz 2024 / VIIRS) with Bortle 1→9 colors (pristine blue → urban white). Interactive legend and tooltip on Bortle selector.";
+        i18n.es.cl7_desc            = "Nueva capa de mapa (Lorenz 2024 / VIIRS) con colores Bortle 1→9 (azul prístino → blanco urbano). Leyenda interactiva y tooltip en el selector Bortle.";
+        i18n.zh.cl7_desc            = "新地图图层（Lorenz 2024 / VIIRS），显示博特尔1→9色阶（原始蓝→城市白）。交互式图例和博特尔选择器工具提示。";
+
+        i18n.it.cl8_title           = "Bortle integrato nell'algoritmo predittivo";
+        i18n.en.cl8_title           = "Bortle integrated in the predictive algorithm";
+        i18n.es.cl8_title           = "Bortle integrado en el algoritmo predictivo";
+        i18n.zh.cl8_title           = "博特尔指数集成至预测算法";
+
+        i18n.it.cl8_desc            = "Il selettore Bortle ora influenza direttamente la stima delle ore. Cieli bui (1–4) riducono il tempo; cieli urbani (6–9) lo aumentano. Sistema avvisa se la combinazione di fattori è irragionevole.";
+        i18n.en.cl8_desc            = "The Bortle selector now directly affects the hour estimate. Dark skies (1–4) reduce time; urban skies (6–9) increase it. System warns when the factor combination is unreasonable.";
+        i18n.es.cl8_desc            = "El selector Bortle ahora afecta directamente la estimación de horas. Cielos oscuros (1–4) reducen el tiempo; cielos urbanos (6–9) lo aumentan. El sistema avisa si la combinación de factores es irrazonable.";
+        i18n.zh.cl8_desc            = "博特尔选择器现在直接影响小时估算。暗天空（1–4）减少时间；城市天空（6–9）增加时间。当因素组合不合理时系统发出警告。";
+
+        i18n.it.cl9_title           = "Barra meteo: alba viola, tramonto arancione";
+        i18n.en.cl9_title           = "Weather bar: purple dawn, orange dusk";
+        i18n.es.cl9_title           = "Barra meteorológica: amanecer violeta, atardecer naranja";
+        i18n.zh.cl9_title           = "气象条：紫色黎明，橙色黄昏";
+
+        i18n.it.cl9_desc            = "La timeline meteo distingue ora le due fasi crepuscolari: tramonto (arancione) e alba (viola), calcolati da SunCalc per la tua posizione.";
+        i18n.en.cl9_desc            = "The weather timeline now distinguishes the two twilight phases: dusk (orange) and dawn (purple), calculated by SunCalc for your location.";
+        i18n.es.cl9_desc            = "La línea de tiempo meteorológica distingue ahora las dos fases crepusculares: atardecer (naranja) y amanecer (violeta), calculados por SunCalc para tu ubicación.";
+        i18n.zh.cl9_desc            = "气象时间线现在区分两个暮光阶段：黄昏（橙色）和黎明（紫色），由SunCalc根据您的位置计算。";
+
         function t(key) { return i18n[lang][key] || key; }

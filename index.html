@@ -1063,6 +1063,7 @@
             <span class="close-btn" onclick="document.getElementById('delete-telescope-modal').style.display='none'">&times;</span>
             <h3 style="margin-bottom:14px;">🗑️ <span data-i18n="del_tel_title">Elimina Telescopio</span></h3>
             <div id="delete-telescope-list" style="display:flex; flex-direction:column; gap:8px; max-height:300px; overflow-y:auto;"></div>
+            <div id="delete-telescope-empty" style="display:none; color:#888; font-size:0.9em; text-align:center; padding:18px 0;" data-i18n="del_tel_empty">Nessun telescopio salvato.</div>
             <div style="margin-top:14px; text-align:right;">
                 <button class="btn-smart" style="background:transparent; border:1px solid #555; color:#aaa; padding:8px 20px;" onclick="document.getElementById('delete-telescope-modal').style.display='none'" data-i18n="save_tel_cancel">Annulla</button>
             </div>
@@ -1087,7 +1088,7 @@
             <div style="display:flex; align-items:center; gap:12px; margin-bottom:18px;">
                 <div style="font-size:1.5em;">🚀</div>
                 <div>
-                    <div style="font-size:0.75em; color:#bb86fc; text-transform:uppercase; letter-spacing:1px; font-weight:700;">Aggiornamento</div>
+                    <div style="font-size:0.75em; color:#bb86fc; text-transform:uppercase; letter-spacing:1px; font-weight:700;" data-i18n="cl_update_label">Aggiornamento</div>
                     <div style="font-size:1.25em; font-weight:800; color:#fff; letter-spacing:.5px;">AstroDashboard PRO <span style="color:#bb86fc;">v5.9.3</span></div>
                 </div>
                 <button onclick="chiudiChangelog()" style="
@@ -1097,7 +1098,7 @@
                 ">✕</button>
             </div>
 
-            <div style="font-size:0.82em; color:#9090b8; margin-bottom:18px; font-style:italic;">
+            <div style="font-size:0.82em; color:#9090b8; margin-bottom:18px; font-style:italic;" data-i18n="cl_subtitle">
                 Novità rispetto alla versione precedente
             </div>
 
@@ -1107,72 +1108,72 @@
                 <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#23213a; border-radius:10px; border-left:3px solid #7850dc;">
                     <span style="font-size:1.2em; flex-shrink:0;">🔭</span>
                     <div>
-                        <div style="font-weight:700; color:#e0d8ff; font-size:0.9em; margin-bottom:3px;">Database telescopi e sensori ampliato</div>
-                        <div style="color:#aaa; font-size:0.82em; line-height:1.5;">60+ nuovi sensori ZWO, QHY, PlayerOne, Atik, Canon, Nikon, Sony — chip IMX generici inclusi.</div>
+                        <div style="font-weight:700; color:#e0d8ff; font-size:0.9em; margin-bottom:3px;" data-i18n="cl1_title">Database telescopi e sensori ampliato</div>
+                        <div style="color:#aaa; font-size:0.82em; line-height:1.5;" data-i18n="cl1_desc">60+ nuovi sensori ZWO, QHY, PlayerOne, Atik, Canon, Nikon, Sony — chip IMX generici inclusi.</div>
                     </div>
                 </div>
 
                 <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#23213a; border-radius:10px; border-left:3px solid #ffaa00;">
                     <span style="font-size:1.2em; flex-shrink:0;">⏱️</span>
                     <div>
-                        <div style="font-weight:700; color:#e0d8ff; font-size:0.9em; margin-bottom:3px;">Stima ore integrazione per categoria</div>
-                        <div style="color:#aaa; font-size:0.82em; line-height:1.5;">Sh2=12h, SNR=10h, LBN=8h, galassie=4h… calibrati sui consigli tattici reali. Unica fonte di verità per tutta l'app.</div>
+                        <div style="font-weight:700; color:#e0d8ff; font-size:0.9em; margin-bottom:3px;" data-i18n="cl2_title">Stima ore integrazione per categoria</div>
+                        <div style="color:#aaa; font-size:0.82em; line-height:1.5;" data-i18n="cl2_desc">Sh2=12h, SNR=10h, LBN=8h, galassie=4h… calibrati sui consigli tattici reali. Unica fonte di verità per tutta l'app.</div>
                     </div>
                 </div>
 
                 <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#23213a; border-radius:10px; border-left:3px solid #bb86fc;">
                     <span style="font-size:1.2em; flex-shrink:0;">📊</span>
                     <div>
-                        <div style="font-weight:700; color:#e0d8ff; font-size:0.9em; margin-bottom:3px;">Colonna HDR nelle griglie Smart e PRO</div>
-                        <div style="color:#aaa; font-size:0.82em; line-height:1.5;">Esposizione breve affiancata per nebulose planetarie e ammassi globulari. Export NINA e Report inclusi.</div>
+                        <div style="font-weight:700; color:#e0d8ff; font-size:0.9em; margin-bottom:3px;" data-i18n="cl3_title">Colonna HDR nelle griglie Smart e PRO</div>
+                        <div style="color:#aaa; font-size:0.82em; line-height:1.5;" data-i18n="cl3_desc">Esposizione breve affiancata per nebulose planetarie e ammassi globulari. Export NINA e Report inclusi.</div>
                     </div>
                 </div>
 
                 <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#23213a; border-radius:10px; border-left:3px solid #44ff44;">
                     <span style="font-size:1.2em; flex-shrink:0;">⚖️</span>
                     <div>
-                        <div style="font-weight:700; color:#e0d8ff; font-size:0.9em; margin-bottom:3px;">Pesi filtri corretti</div>
-                        <div style="color:#aaa; font-size:0.82em; line-height:1.5;">L=1, ogni RGB selezionato=1/3 — indipendentemente da quanti RGB sono attivi. Warning solo per mix broadband+narrowband reale.</div>
+                        <div style="font-weight:700; color:#e0d8ff; font-size:0.9em; margin-bottom:3px;" data-i18n="cl4_title">Pesi filtri corretti</div>
+                        <div style="color:#aaa; font-size:0.82em; line-height:1.5;" data-i18n="cl4_desc">L=1, ogni RGB selezionato=1/3 — indipendentemente da quanti RGB sono attivi. Warning solo per mix broadband+narrowband reale.</div>
                     </div>
                 </div>
 
                 <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#23213a; border-radius:10px; border-left:3px solid #00c8ff;">
                     <span style="font-size:1.2em; flex-shrink:0;">🔄</span>
                     <div>
-                        <div style="font-weight:700; color:#e0d8ff; font-size:0.9em; margin-bottom:3px;">Stima f-ratio aggiornata in tempo reale</div>
-                        <div style="color:#aaa; font-size:0.82em; line-height:1.5;">Il pannello AI ricalcola immediatamente le ore stimate al cambio di telescopio o sensore.</div>
+                        <div style="font-weight:700; color:#e0d8ff; font-size:0.9em; margin-bottom:3px;" data-i18n="cl5_title">Stima f-ratio aggiornata in tempo reale</div>
+                        <div style="color:#aaa; font-size:0.82em; line-height:1.5;" data-i18n="cl5_desc">Il pannello AI ricalcola immediatamente le ore stimate al cambio di telescopio o sensore.</div>
                     </div>
                 </div>
 
                 <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#23213a; border-radius:10px; border-left:3px solid #ffffaa;">
                     <span style="font-size:1.2em; flex-shrink:0;">🌙</span>
                     <div>
-                        <div style="font-weight:700; color:#e0d8ff; font-size:0.9em; margin-bottom:3px;">Fix penalità lunare</div>
-                        <div style="color:#aaa; font-size:0.82em; line-height:1.5;">Il calcolo dell'inquinamento lunare ora azzera correttamente la penalità quando la Luna è sotto l'orizzonte — niente più sovrastime nelle notti con Luna bassa.</div>
+                        <div style="font-weight:700; color:#e0d8ff; font-size:0.9em; margin-bottom:3px;" data-i18n="cl6_title">Fix penalità lunare</div>
+                        <div style="color:#aaa; font-size:0.82em; line-height:1.5;" data-i18n="cl6_desc">Il calcolo dell'inquinamento lunare ora azzera correttamente la penalità quando la Luna è sotto l'orizzonte — niente più sovrastime nelle notti con Luna bassa.</div>
                     </div>
                 </div>
 
                 <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#23213a; border-radius:10px; border-left:3px solid #ffaa00;">
                     <span style="font-size:1.2em; flex-shrink:0;">🌍</span>
                     <div>
-                        <div style="font-weight:700; color:#e0d8ff; font-size:0.9em; margin-bottom:3px;">Layer Inquinamento Luminoso con scala Bortle</div>
-                        <div style="color:#aaa; font-size:0.82em; line-height:1.5;">Nuovo layer mappa (Lorenz 2024 / VIIRS) con colori Bortle 1→9 (blu pristino → bianco urbano). Legenda interattiva visibile solo quando il layer è attivo. Tooltip sul selettore Bortle per trovare il proprio livello visivamente sulla mappa.</div>
+                        <div style="font-weight:700; color:#e0d8ff; font-size:0.9em; margin-bottom:3px;" data-i18n="cl7_title">Layer Inquinamento Luminoso con scala Bortle</div>
+                        <div style="color:#aaa; font-size:0.82em; line-height:1.5;" data-i18n="cl7_desc">Nuovo layer mappa (Lorenz 2024 / VIIRS) con colori Bortle 1→9 (blu pristino → bianco urbano). Legenda interattiva e tooltip sul selettore Bortle.</div>
                     </div>
                 </div>
 
                 <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#23213a; border-radius:10px; border-left:3px solid #ffaa00;">
                     <span style="font-size:1.2em; flex-shrink:0;">🌑</span>
                     <div>
-                        <div style="font-weight:700; color:#e0d8ff; font-size:0.9em; margin-bottom:3px;">Bortle integrato nell'algoritmo predittivo</div>
-                        <div style="color:#aaa; font-size:0.82em; line-height:1.5;">Il selettore Bortle ora influenza direttamente la stima delle ore di integrazione. Cieli bui (1–4) riducono il tempo necessario; cieli urbani (6–9) lo aumentano progressivamente. Per nebulose a emissione con filtri narrowband la penalità è attenuata. Quando la combinazione di fattori porta a stime irragionevoli, il sistema sconsiglia l'integrazione e suggerisce il filtro narrowband adeguato o un sito più buio.</div>
+                        <div style="font-weight:700; color:#e0d8ff; font-size:0.9em; margin-bottom:3px;" data-i18n="cl8_title">Bortle integrato nell'algoritmo predittivo</div>
+                        <div style="color:#aaa; font-size:0.82em; line-height:1.5;" data-i18n="cl8_desc">Il selettore Bortle ora influenza direttamente la stima delle ore. Cieli bui (1–4) riducono il tempo; cieli urbani (6–9) lo aumentano. Sistema avvisa se la combinazione di fattori è irragionevole.</div>
                     </div>
                 </div>
 
                 <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#23213a; border-radius:10px; border-left:3px solid #5c2d8a;">
                     <span style="font-size:1.2em; flex-shrink:0;">🌅</span>
                     <div>
-                        <div style="font-weight:700; color:#e0d8ff; font-size:0.9em; margin-bottom:3px;">Barra meteo: alba viola, tramonto arancione</div>
-                        <div style="color:#aaa; font-size:0.82em; line-height:1.5;">La timeline meteo distingue ora le due fasi crepuscolari: il tramonto (nero→arancione→azzurro) e l'alba (nero→viola→azzurro) corrispondono agli orari reali calcolati da SunCalc per la tua posizione.</div>
+                        <div style="font-weight:700; color:#e0d8ff; font-size:0.9em; margin-bottom:3px;" data-i18n="cl9_title">Barra meteo: alba viola, tramonto arancione</div>
+                        <div style="color:#aaa; font-size:0.82em; line-height:1.5;" data-i18n="cl9_desc">La timeline meteo distingue ora le due fasi crepuscolari: tramonto (arancione) e alba (viola), calcolati da SunCalc per la tua posizione.</div>
                     </div>
                 </div>
 
@@ -1180,7 +1181,7 @@
 
             <!-- Footer -->
             <div style="margin-top:22px; display:flex; justify-content:flex-end;">
-                <button onclick="chiudiChangelog()" style="
+                <button onclick="chiudiChangelog()" data-i18n="cl_close_btn" style="
                     background:linear-gradient(135deg,#7850dc,#5030a0);
                     border:none; border-radius:10px; color:#fff;
                     font-size:0.95em; font-weight:700; padding:11px 32px;
