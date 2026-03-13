@@ -693,7 +693,7 @@
                 <h3>✨ 4. Calcolatore Sessione Smart</h3>
                 <p>In modalità Smart il sistema è il tuo assistente esperto. Analizzi il target, comunichi le caratteristiche del tuo setup e lasci che l'algoritmo generi una sequenza bilanciata e ottimizzata per le condizioni di quella specifica notte.</p>
                 <ul>
-                    <li><strong>L'Algoritmo Predittivo:</strong> Il calcolo non è una media generica. Considera il rapporto focale del tuo ottico (f/4 vs f/8 cambia radicalmente i tempi), il tipo di sensore (OSC o Mono), i filtri attivi, l'inquinamento lunare attuale e la magnitudine superficiale del target. Un oggetto debole con Luna al 70% richiede esposizioni molto più lunghe per affogare il fondo cielo.</li>
+                    <li><strong>L'Algoritmo Predittivo:</strong> Il calcolo non è una media generica. Considera il rapporto focale del tuo ottico (f/4 vs f/8 cambia radicalmente i tempi), il tipo di sensore (OSC o Mono), i filtri attivi, l'inquinamento lunare attuale, la magnitudine superficiale del target e — dalla v5.9.3 — <b>l'indice di Bortle del sito di osservazione</b>. Cieli bui (Bortle 1–4) riducono il tempo necessario rispetto al riferimento suburbano; cieli urbani (Bortle 6–9) aumentano la stima progressivamente. Per nebulose a emissione con filtri narrowband attivi la penalità è attenuata, perché Ha/OIII isolano le righe spettrali riducendo l'impatto del fondo cielo. Quando la combinazione di fattori porta a stime irragionevoli (es. target a banda larga da cielo Bortle 8–9), il sistema sconsiglia l'integrazione e suggerisce alternative — filtro narrowband o sito più buio.</li>
                     <li><strong>Generazione Sequenza Ottimale:</strong> Clicca "Genera Sequenza Ottimale" e il sistema distribuisce le pose sulla finestra notturna disponibile (orario inizio–fine che hai impostato), bilanciando il tempo tra i filtri e riservando le calibrazioni. Per i sensori Mono calcola separatamente L, R, G, B e narrowband.</li>
                     <li><strong>Dithering Smart:</strong> Se attivi il dithering, specifica la frequenza (ogni N pose) e il tempo di assestamento. Il sistema li sottrae automaticamente dal tempo totale disponibile: quello che vedi in "Tempo Acquisizione" è il tempo reale di integrazione netta, già al netto degli overhead.</li>
                     <li><strong>Mappatura Nomi Filtri N.I.N.A.:</strong> Per i sensori Mono, ogni filtro ha un campo dove inserire il nome esatto come lo riconosce la tua ruota portafiltri in N.I.N.A. (es. "Hα 3nm" invece di "Ha"). Se i nomi non corrispondono esattamente, N.I.N.A. darà errore durante la sequenza.</li>
@@ -783,7 +783,7 @@
                 <h3>✨ 4. Smart Session Calculator</h3>
                 <p>In Smart mode the system is your expert assistant. You analyze the target, share your setup specs and let the algorithm generate a balanced sequence optimized for the conditions of that specific night.</p>
                 <ul>
-                    <li><strong>Predictive Algorithm:</strong> The calculation is not a generic average. It factors in your optical focal ratio (f/4 vs f/8 radically changes integration times), sensor type (OSC or Mono), active filters, current moon pollution and target surface brightness. A faint object with 70% moon requires much longer exposures to drown the sky background.</li>
+                    <li><strong>Predictive Algorithm:</strong> The calculation is not a generic average. It factors in your optical focal ratio (f/4 vs f/8 radically changes integration times), sensor type (OSC or Mono), active filters, current moon pollution, target surface brightness and — from v5.9.3 — <b>the Bortle index of your observing site</b>. Dark skies (Bortle 1–4) reduce the required time relative to the suburban baseline; urban skies (Bortle 6–9) progressively increase the estimate. For emission nebulae with narrowband filters active, the penalty is reduced because Ha/OIII isolate spectral lines and cut through sky background. When the combination of factors leads to unreasonable estimates (e.g. broadband targets from Bortle 8–9 skies), the system advises against imaging and suggests alternatives — a narrowband filter or a darker site.</li>
                     <li><strong>Generate Optimal Sequence:</strong> Click "Generate Optimal Sequence" and the system distributes frames across the available night window (start–end times you set), balancing time between filters and reserving time for calibration frames. For Mono sensors it calculates L, R, G, B and narrowband independently.</li>
                     <li><strong>Smart Dithering:</strong> Enable dithering, specify frequency (every N frames) and settling time. The system automatically subtracts them from the total available time — the "Acquisition Time" you see is real net integration time, already accounting for all overhead.</li>
                     <li><strong>N.I.N.A. Filter Name Mapping:</strong> For Mono sensors, each filter has a field where you enter its exact name as N.I.N.A. recognizes it from your filter wheel (e.g. "Hα 3nm" instead of "Ha"). If names don't match exactly, N.I.N.A. will throw an error during the sequence.</li>
@@ -873,7 +873,7 @@
                 <h3>✨ 4. Calculadora de Sesión Smart</h3>
                 <p>En modo Smart el sistema es tu asistente experto. Analizas el objetivo, compartes las características de tu equipo y dejas que el algoritmo genere una secuencia equilibrada y optimizada para las condiciones de esa noche específica.</p>
                 <ul>
-                    <li><strong>Algoritmo Predictivo:</strong> El cálculo no es una media genérica. Considera la relación focal de tu óptica, el tipo de sensor (OSC o Mono), los filtros activos, la contaminación lunar actual y la magnitud superficial del objetivo.</li>
+                    <li><strong>Algoritmo Predictivo:</strong> El cálculo no es una media genérica. Considera la relación focal de tu óptica, el tipo de sensor (OSC o Mono), los filtros activos, la contaminación lunar actual, la magnitud superficial del objetivo y — desde la v5.9.3 — <b>el índice Bortle del sitio de observación</b>. Los cielos oscuros (Bortle 1–4) reducen el tiempo necesario respecto a la referencia suburbana; los cielos urbanos (Bortle 6–9) aumentan la estimación progresivamente. Para nebulosas de emisión con filtros narrowband activos, la penalización se reduce porque Ha/OIII aíslan las líneas espectrales. Cuando la combinación de factores lleva a estimaciones irrazonables, el sistema desaconseja la integración y sugiere alternativas.</li>
                     <li><strong>Generar Secuencia Óptima:</strong> Haz clic en "Generar Secuencia Óptima" y el sistema distribuye las tomas en la ventana nocturna disponible, equilibrando el tiempo entre filtros y reservando tiempo para los frames de calibración.</li>
                     <li><strong>Dithering Smart:</strong> Activa el dithering, especifica la frecuencia y el tiempo de estabilización. El sistema los resta automáticamente del tiempo total disponible.</li>
                     <li><strong>Mapeo de Nombres de Filtros N.I.N.A.:</strong> Para sensores Mono, cada filtro tiene un campo donde introduces su nombre exacto tal como lo reconoce tu rueda de filtros en N.I.N.A. Si los nombres no coinciden exactamente, N.I.N.A. dará error.</li>
@@ -961,7 +961,7 @@
                 <h3>✨ 4. 智能序列计算</h3>
                 <p>在智能模式下，系统是您的专家助手。您分析目标、提供设备规格，让算法为该特定夜晚的条件生成平衡且优化的序列。</p>
                 <ul>
-                    <li><strong>预测算法：</strong>计算并非通用平均值。它考虑您的光学焦比（f/4 vs f/8 对积分时间影响巨大）、传感器类型（彩色或黑白）、激活的滤镜、当前月光污染和目标表面亮度。月亮70%时，暗弱目标需要更长的曝光才能淹没天空背景。</li>
+                    <li><strong>预测算法：</strong>计算并非通用平均值。它考虑您的光学焦比（f/4 vs f/8 对积分时间影响巨大）、传感器类型（彩色或黑白）、激活的滤镜、当前月光污染、目标表面亮度以及——从v5.9.3起——<b>观测地点的博特尔指数</b>。暗天空（博特尔1–4）相对郊区基准减少所需时间；城市天空（博特尔6–9）逐步增加估计时间。对于使用窄带滤镜的发射星云，惩罚有所减轻，因为Ha/OIII可隔离谱线、降低天空背景影响。当多重因素叠加导致估计时间不合理时（如在博特尔8–9下拍摄宽带目标），系统会建议放弃并推荐替代方案——窄带滤镜或更暗的地点。</li>
                     <li><strong>生成最佳曝光序列：</strong>点击"生成最佳曝光序列"，系统在可用夜间窗口内分配帧数，平衡滤镜间的时间并为校准帧预留时间。黑白传感器独立计算 L、R、G、B 和窄带。</li>
                     <li><strong>智能抖动：</strong>启用抖动，指定频率和稳定时间。系统自动从总可用时间中扣除 — 您看到的"采集时间"已是扣除所有开销后的真实净积分时间。</li>
                     <li><strong>N.I.N.A. 滤镜名称映射：</strong>对于黑白传感器，每个滤镜都有一个字段用于输入 N.I.N.A. 从滤镜轮识别的确切名称（如"Hα 3nm"而非"Ha"）。名称不完全匹配时，N.I.N.A. 将报错。</li>
@@ -1157,6 +1157,22 @@
                     <div>
                         <div style="font-weight:700; color:#e0d8ff; font-size:0.9em; margin-bottom:3px;">Layer Inquinamento Luminoso con scala Bortle</div>
                         <div style="color:#aaa; font-size:0.82em; line-height:1.5;">Nuovo layer mappa (Lorenz 2024 / VIIRS) con colori Bortle 1→9 (blu pristino → bianco urbano). Legenda interattiva visibile solo quando il layer è attivo. Tooltip sul selettore Bortle per trovare il proprio livello visivamente sulla mappa.</div>
+                    </div>
+                </div>
+
+                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#23213a; border-radius:10px; border-left:3px solid #ffaa00;">
+                    <span style="font-size:1.2em; flex-shrink:0;">🌑</span>
+                    <div>
+                        <div style="font-weight:700; color:#e0d8ff; font-size:0.9em; margin-bottom:3px;">Bortle integrato nell'algoritmo predittivo</div>
+                        <div style="color:#aaa; font-size:0.82em; line-height:1.5;">Il selettore Bortle ora influenza direttamente la stima delle ore di integrazione. Cieli bui (1–4) riducono il tempo necessario; cieli urbani (6–9) lo aumentano progressivamente. Per nebulose a emissione con filtri narrowband la penalità è attenuata. Quando la combinazione di fattori porta a stime irragionevoli, il sistema sconsiglia l'integrazione e suggerisce il filtro narrowband adeguato o un sito più buio.</div>
+                    </div>
+                </div>
+
+                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#23213a; border-radius:10px; border-left:3px solid #5c2d8a;">
+                    <span style="font-size:1.2em; flex-shrink:0;">🌅</span>
+                    <div>
+                        <div style="font-weight:700; color:#e0d8ff; font-size:0.9em; margin-bottom:3px;">Barra meteo: alba viola, tramonto arancione</div>
+                        <div style="color:#aaa; font-size:0.82em; line-height:1.5;">La timeline meteo distingue ora le due fasi crepuscolari: il tramonto (nero→arancione→azzurro) e l'alba (nero→viola→azzurro) corrispondono agli orari reali calcolati da SunCalc per la tua posizione.</div>
                     </div>
                 </div>
 

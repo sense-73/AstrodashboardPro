@@ -220,8 +220,21 @@ function toggleLock(id) {
                 else if(inqLuna > 70) mFact = 2.0;
             }
 
-            // 6. CALCOLO FINALE 
-            let totId = subT * sFact * mFact * fFact;
+            // 6. PENALITÀ INQUINAMENTO LUMINOSO (Bortle)
+            // Calibrazione: bH è espresso per Bortle 5 (suburbano, default).
+            // Per Bortle < 5 si riduce il tempo, per Bortle > 5 si aumenta progressivamente.
+            // Per target a emissione (sh2, snr, hii…) con narrowband attivo la penalità è attenuata
+            // perché Ha/OIII isolano le righe spettrali scavalcando buona parte del fondo cielo.
+            let bortle = parseInt((document.getElementById('bortle-class')||{}).value||5);
+            const _lpFactBB = {1:0.6, 2:0.7, 3:0.85, 4:0.95, 5:1.0, 6:1.4, 7:1.9, 8:2.5, 9:3.0};
+            const _lpFactNB = {1:0.6, 2:0.7, 3:0.85, 4:0.95, 5:1.0, 6:1.1, 7:1.3, 8:1.5, 9:1.8};
+            // narrowband attivo = doingN OPPURE sensore OSC con filtro dual-band (futuro); per ora solo doingN
+            let usingNarrowband = doingN;
+            let lpFact = (isEmission && usingNarrowband) ? (_lpFactNB[bortle]||1.0) : (_lpFactBB[bortle]||1.0);
+            let lpApplied = (bortle !== 5); // flag per il messaggio
+
+            // 7. CALCOLO FINALE 
+            let totId = subT * sFact * mFact * lpFact * fFact;
             let isMosaic = document.getElementById('capture-mode').value === 'mosaic';
             let panels = 1;
             if (isMosaic) {
@@ -229,7 +242,23 @@ function toggleLock(id) {
                 totId *= panels;
             }
 
-            oreNecessarieGlobali = totId; 
+            // Soglie sconsiglio: oltre questi valori il progetto è fuori portata per una pianificazione normale
+            const _sogliaBB = 50;  // ore — target broadband
+            const _sogliaNB = 70;  // ore — target narrowband/emissione con filtro
+            let totIdSenzaLP = subT * sFact * mFact * fFact; // stima senza penalità Bortle (per confronto)
+            let isImpraticabile = false;
+            // Sconsiglio se ANCHE con narrowband si supera la soglia, OPPURE se broadband supera soglia BB
+            if (!isEmission && totId > _sogliaBB) isImpraticabile = true;
+            if (isEmission && !usingNarrowband && totId > _sogliaBB) isImpraticabile = true;
+            if (isEmission && usingNarrowband && totId > _sogliaNB) isImpraticabile = true;
+
+            // Stima "con filtro narrowband consigliato" (per il messaggio quando NB non è attivo)
+            let totIdConNB = (isEmission && !usingNarrowband)
+                ? subT * sFact * mFact * (_lpFactNB[bortle]||1.0) * fFact
+                : null;
+            let nbSogliaSuperata = totIdConNB !== null && totIdConNB > _sogliaNB;
+
+            oreNecessarieGlobali = isImpraticabile ? 9999 : totId;
 
             // 7. TEMPO DISPONIBILE STANOTTE
             let tS = document.getElementById('time-start').value, tE = document.getElementById('time-end').value, aS = 0;
@@ -262,14 +291,66 @@ function toggleLock(id) {
                 html += _unkMsg;
             }
 
-            if (aS < totId * 0.9) {
+            if (aS < totId * 0.9 || isImpraticabile) {
                 let reason = "";
+
+                // ── CASO IMPRATICABILE ─────────────────────────────────────
+                if (isImpraticabile) {
+                    if (lang === 'it') {
+                        reason = `<div style="padding:10px 12px; background:rgba(255,60,60,0.10); border-left:3px solid #ff4444; border-radius:4px; font-size:0.9em; color:#ffcccc; line-height:1.6; margin-bottom:10px;">`;
+                        reason += `🚫 <b>Progetto non consigliato nelle condizioni attuali.</b><br>`;
+                        if (!isEmission && bortle >= 8)
+                            reason += `Un target a banda larga (${tipoNomeReport}) da Bortle ${bortle} richiede un tempo di integrazione stimato superiore a ${_sogliaBB}h. Questo tipo di soggetto è molto difficile da separare dal fondo cielo in condizioni di forte inquinamento luminoso. <b>Considera un sito più buio o scegli una nebulosa a emissione con filtro narrowband.</b>`;
+                        else if (isEmission && !usingNarrowband && bortle >= 6)
+                            reason += `Il target (${tipoNomeReport}) da Bortle ${bortle} senza filtro narrowband richiederebbe oltre ${_sogliaBB}h di integrazione. <b>Con un filtro Ha/OIII dual-band il tempo stimato scenderebbe a ${totIdConNB!==null?totIdConNB.toFixed(1):'?'} ore</b> — praticabile in più sessioni.<br>Senza filtro si sconsiglia di procedere: il segnale è troppo debole rispetto al fondo cielo.`;
+                        else
+                            reason += `Anche con filtro narrowband, questo target da Bortle ${bortle} richiederebbe oltre ${_sogliaNB}h di integrazione — un progetto di stagione intera. Valuta un sito più buio.`;
+                        reason += `</div>`;
+                    } else if (lang === 'en') {
+                        reason = `<div style="padding:10px 12px; background:rgba(255,60,60,0.10); border-left:3px solid #ff4444; border-radius:4px; font-size:0.9em; color:#ffcccc; line-height:1.6; margin-bottom:10px;">`;
+                        reason += `🚫 <b>Project not recommended under current conditions.</b><br>`;
+                        if (!isEmission && bortle >= 8)
+                            reason += `A broadband target (${tipoNomeReport}) from Bortle ${bortle} requires an estimated integration time above ${_sogliaBB}h. This type of subject is very hard to separate from the sky background under heavy light pollution. <b>Consider a darker site or switch to an emission nebula with a narrowband filter.</b>`;
+                        else if (isEmission && !usingNarrowband && bortle >= 6)
+                            reason += `This target (${tipoNomeReport}) from Bortle ${bortle} without a narrowband filter would require over ${_sogliaBB}h of integration. <b>With a Ha/OIII dual-band filter the estimated time drops to ${totIdConNB!==null?totIdConNB.toFixed(1):'?'} hours</b> — feasible over multiple sessions.<br>Without a filter, proceeding is not recommended: the signal is too weak against the sky background.`;
+                        else
+                            reason += `Even with a narrowband filter, this target from Bortle ${bortle} would require over ${_sogliaNB}h of integration — a full-season project. Consider a darker site.`;
+                        reason += `</div>`;
+                    } else if (lang === 'es') {
+                        reason = `<div style="padding:10px 12px; background:rgba(255,60,60,0.10); border-left:3px solid #ff4444; border-radius:4px; font-size:0.9em; color:#ffcccc; line-height:1.6; margin-bottom:10px;">`;
+                        reason += `🚫 <b>Proyecto no recomendado en las condiciones actuales.</b><br>`;
+                        if (!isEmission && bortle >= 8)
+                            reason += `Un objetivo de banda ancha (${tipoNomeReport}) desde Bortle ${bortle} requiere un tiempo de integración estimado superior a ${_sogliaBB}h. Este tipo de objetivo es muy difícil de separar del fondo del cielo con mucha contaminación lumínica. <b>Considera un lugar más oscuro o elige una nebulosa de emisión con filtro narrowband.</b>`;
+                        else if (isEmission && !usingNarrowband && bortle >= 6)
+                            reason += `Este objetivo (${tipoNomeReport}) desde Bortle ${bortle} sin filtro narrowband requeriría más de ${_sogliaBB}h de integración. <b>Con un filtro dual-band Ha/OIII el tiempo estimado baja a ${totIdConNB!==null?totIdConNB.toFixed(1):'?'} horas</b> — factible en varias sesiones.<br>Sin filtro no se recomienda proceder: la señal es demasiado débil frente al fondo del cielo.`;
+                        else
+                            reason += `Incluso con filtro narrowband, este objetivo desde Bortle ${bortle} requeriría más de ${_sogliaNB}h — un proyecto de temporada completa. Considera un lugar más oscuro.`;
+                        reason += `</div>`;
+                    } else {
+                        reason = `<div style="padding:10px 12px; background:rgba(255,60,60,0.10); border-left:3px solid #ff4444; border-radius:4px; font-size:0.9em; color:#ffcccc; line-height:1.6; margin-bottom:10px;">`;
+                        reason += `🚫 <b>当前条件下不建议此项目。</b><br>`;
+                        if (!isEmission && bortle >= 8)
+                            reason += `在博特尔${bortle}下的宽带目标（${tipoNomeReport}）估计需要超过${_sogliaBB}小时的积分时间。在强光污染下，此类目标很难从天空背景中分离。<b>建议选择更暗的地点或改拍配合窄带滤镜的发射星云。</b>`;
+                        else if (isEmission && !usingNarrowband && bortle >= 6)
+                            reason += `在博特尔${bortle}下不使用窄带滤镜，此目标（${tipoNomeReport}）将需要超过${_sogliaBB}小时的积分。<b>使用Ha/OIII双波段滤镜，估计时间降至${totIdConNB!==null?totIdConNB.toFixed(1):'?'}小时</b>——可分多次完成。<br>不建议在没有滤镜的情况下进行：信号相对于天空背景太弱。`;
+                        else
+                            reason += `即使使用窄带滤镜，在博特尔${bortle}下此目标也需要超过${_sogliaNB}小时——整季项目，建议选择更暗的地点。`;
+                        reason += `</div>`;
+                    }
+                    html += `<div style="font-size:0.9em; line-height:1.5; color:#ddd; margin-bottom:15px;">${reason}</div>`;
+
+                } else {
+                // ── CASO NORMALE (insufficiente ma praticabile) ────────────
                 if(lang === 'it') {
                     reason = `Trattandosi di <b>${tipoNomeReport}</b> di magnitudine <b>${mVal.toFixed(1)}</b> ripresa a <b>f/${fR.toFixed(1)}</b>`;
                     if (isMosaic && panels > 1) reason += ` divisa in <b>${panels} pannelli</b> (Mosaico)`;
                     reason += `, l'algoritmo stima necessarie <b style="color:#ffaa00;">${totId.toFixed(1)} ore</b> di integrazione.`;
                     if(sFact > 1.0) reason += ` <br><i style="color:#aaa; font-size: 0.9em;">* È applicata una penalità 2x perché stai usando filtri Narrow su un target a banda larga.</i>`;
                     if(mFact > 1.0) reason += ` <br><i style="color:#aaa; font-size: 0.9em;">* È applicata una penalità per forte inquinamento lunare.</i>`;
+                    if(lpApplied && lpFact > 1.0) reason += ` <br><i style="color:#aaa; font-size: 0.9em;">* È applicata una penalità per inquinamento luminoso (Bortle ${bortle}).</i>`;
+                    if(lpApplied && lpFact < 1.0) reason += ` <br><i style="color:#aaa; font-size: 0.9em;">* Applicato un bonus cielo buio (Bortle ${bortle}) — meno integrazione necessaria.</i>`;
+                    if(totIdConNB !== null && !nbSogliaSuperata)
+                        reason += ` <br><i style="color:#bb86fc; font-size: 0.9em;">💡 Con filtro Ha/OIII narrowband il tempo stimato scenderebbe a <b>${totIdConNB.toFixed(1)} ore</b>.</i>`;
                     reason += `<br><br>Il tempo utile di stanotte (> 30° sull'orizzonte) è di <b style="color:#ff4444;">${aS.toFixed(1)} ore</b> ed è insufficiente.`;
                 } else if(lang === 'en') {
                     reason = `Being a <b>${tipoNomeReport}</b> of magnitude <b>${mVal.toFixed(1)}</b> shot at <b>f/${fR.toFixed(1)}</b>`;
@@ -277,6 +358,10 @@ function toggleLock(id) {
                     reason += `, the algorithm estimates <b style="color:#ffaa00;">${totId.toFixed(1)} hours</b> of total integration.`;
                     if(sFact > 1.0) reason += ` <br><i style="color:#aaa; font-size: 0.9em;">* A 2x penalty is applied for using Narrowband filters on a Broadband target.</i>`;
                     if(mFact > 1.0) reason += ` <br><i style="color:#aaa; font-size: 0.9em;">* A penalty for heavy lunar light pollution is applied.</i>`;
+                    if(lpApplied && lpFact > 1.0) reason += ` <br><i style="color:#aaa; font-size: 0.9em;">* A light pollution penalty is applied (Bortle ${bortle}).</i>`;
+                    if(lpApplied && lpFact < 1.0) reason += ` <br><i style="color:#aaa; font-size: 0.9em;">* A dark sky bonus is applied (Bortle ${bortle}) — less integration needed.</i>`;
+                    if(totIdConNB !== null && !nbSogliaSuperata)
+                        reason += ` <br><i style="color:#bb86fc; font-size: 0.9em;">💡 With a Ha/OIII narrowband filter the estimated time would drop to <b>${totIdConNB.toFixed(1)} hours</b>.</i>`;
                     reason += `<br><br>Tonight's useful time (> 30° altitude) is <b style="color:#ff4444;">${aS.toFixed(1)} hours</b>, which is insufficient.`;
                 } else if(lang === 'es') {
                     reason = `Tratándose de <b>${tipoNomeReport}</b> de magnitud <b>${mVal.toFixed(1)}</b> capturada a <b>f/${fR.toFixed(1)}</b>`;
@@ -284,6 +369,10 @@ function toggleLock(id) {
                     reason += `, el algoritmo estima necesarias <b style="color:#ffaa00;">${totId.toFixed(1)} horas</b> de integración total.`;
                     if(sFact > 1.0) reason += ` <br><i style="color:#aaa; font-size: 0.9em;">* Se aplica una penalización 2x por usar filtros Narrowband en un objetivo de banda ancha.</i>`;
                     if(mFact > 1.0) reason += ` <br><i style="color:#aaa; font-size: 0.9em;">* Se aplica una penalización por fuerte contaminación lumínica lunar.</i>`;
+                    if(lpApplied && lpFact > 1.0) reason += ` <br><i style="color:#aaa; font-size: 0.9em;">* Se aplica una penalización por contaminación lumínica (Bortle ${bortle}).</i>`;
+                    if(lpApplied && lpFact < 1.0) reason += ` <br><i style="color:#aaa; font-size: 0.9em;">* Se aplica un bono de cielo oscuro (Bortle ${bortle}) — menos integración necesaria.</i>`;
+                    if(totIdConNB !== null && !nbSogliaSuperata)
+                        reason += ` <br><i style="color:#bb86fc; font-size: 0.9em;">💡 Con filtro narrowband Ha/OIII el tiempo estimado bajaría a <b>${totIdConNB.toFixed(1)} horas</b>.</i>`;
                     reason += `<br><br>El tiempo útil de esta noche (> 30° sobre el horizonte) es de <b style="color:#ff4444;">${aS.toFixed(1)} horas</b> y resulta insuficiente.`;
                 } else {
                     reason = `作为星等 <b>${mVal.toFixed(1)}</b> 的 <b>${tipoNomeReport}</b>，在 <b>f/${fR.toFixed(1)}</b> 下拍摄`;
@@ -291,11 +380,14 @@ function toggleLock(id) {
                     reason += `，算法估计需要 <b style="color:#ffaa00;">${totId.toFixed(1)} 小时</b> 的总曝光。`;
                     if(sFact > 1.0) reason += ` <br><i style="color:#aaa; font-size: 0.9em;">* 对宽带目标使用窄带滤镜，计算 2x 惩罚时间。</i>`;
                     if(mFact > 1.0) reason += ` <br><i style="color:#aaa; font-size: 0.9em;">* 已应用强月光污染惩罚。</i>`;
+                    if(lpApplied && lpFact > 1.0) reason += ` <br><i style="color:#aaa; font-size: 0.9em;">* 已应用光污染惩罚（博特尔 ${bortle}）。</i>`;
+                    if(lpApplied && lpFact < 1.0) reason += ` <br><i style="color:#aaa; font-size: 0.9em;">* 已应用暗天空奖励（博特尔 ${bortle}）——所需积分时间更少。</i>`;
+                    if(totIdConNB !== null && !nbSogliaSuperata)
+                        reason += ` <br><i style="color:#bb86fc; font-size: 0.9em;">💡 使用Ha/OIII窄带滤镜，估计时间将降至 <b>${totIdConNB.toFixed(1)} 小时</b>。</i>`;
                     reason += `<br><br>今晚的可用时间 (> 30° 高度) 只有 <b style="color:#ff4444;">${aS.toFixed(1)} 小时</b>，时间不足。`;
                 }
 
                 // ── Consiglio filtro anti-inquinamento (Bortle) ──────────
-                let bortle = parseInt((document.getElementById('bortle-class')||{}).value||5);
                 let isEmissionTarget = ['sh2','lbn','snr','hii','planetaria'].includes(_catAI);
                 let isBroadbandTarget = ['galassia','vdb','ldn','aperto','globulare'].includes(_catAI);
                 let filterTip = '';
@@ -344,6 +436,7 @@ function toggleLock(id) {
 
                 html += `<div style="font-size:0.9em; line-height:1.5; color:#ddd; margin-bottom:15px;">${reason}</div>`;
                 html += `<button class="btn-guide" style="width:100%; padding:10px; font-size:1.1em; background: linear-gradient(135deg, #ffaa00 0%, #d48800 100%); color:#121212; border:none; box-shadow: 0 4px 15px rgba(255, 170, 0, 0.3);" onclick="apriMultiNight('smart')">${t("ai_plan_btn")}</button>`;
+                } // chiude else (caso normale vs impraticabile)
             } else {
                 let msgOk = lang === 'it' ? "Il tempo a disposizione stanotte sopra i 30° è sufficiente a completare l'integrazione consigliata." : 
                             lang === 'en' ? "Tonight's available time above 30° is enough to complete the recommended integration." :
