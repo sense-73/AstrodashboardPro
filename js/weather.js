@@ -93,7 +93,7 @@
             if (query.length < 3) { dropdown.style.display = 'none'; return; }
             clearTimeout(timerRicerca);
             timerRicerca = setTimeout(() => {
-                fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5&accept-language=${lang}`)
+                fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5&accept-language=${localStorage.getItem('ad_lang') || 'it'}`)
                     .then(r => r.json()).then(data => {
                         dropdown.innerHTML = ''; 
                         if (data.length > 0) {
