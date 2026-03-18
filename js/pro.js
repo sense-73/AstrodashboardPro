@@ -1,35 +1,334 @@
 // pro.js — Modulo PRO: griglia, fill bar, triggers, autofocus, export JSON
 // ============================================================
 
-        function apriProView() {
-            if (!targetSelezionato) { mostraAvviso(t("alert_planetarium"), "warn"); return; }
-            document.getElementById('planning-view').style.display = 'none';
-            document.getElementById('dashboard-view').style.display = 'none';
-            document.getElementById('pro-view').style.display = 'block';
+// ── SETUP SYNC — Sincronizzazione bidirezionale con sezione Smart ──────────
 
-            // Salva lo stato in memoria per resistere al Refresh (F5)
-            sessionStorage.setItem('ad_current_view', 'pro');
-
-            document.getElementById('pro-time-start').value = document.getElementById('time-start').value;
-            document.getElementById('pro-time-end').value = document.getElementById('time-end').value;
-            document.getElementById('pro-sensor-type').value = document.getElementById('sensor-type').value;
-
-            disegnaGrigliaPro();
-            window.scrollTo(0,0);
+        function toggleProSetupPanel() {
+            let body = document.getElementById('pro-setup-body');
+            let chevron = document.getElementById('pro-setup-chevron');
+            if (!body || !chevron) return;
+            let isOpen = body.style.display !== 'none';
+            body.style.display = isOpen ? 'none' : 'block';
+            chevron.style.transform = isOpen ? 'rotate(-90deg)' : 'rotate(0deg)';
         }
 
-        function chiudiProView() {
-            document.getElementById('pro-view').style.display = 'none';
-            document.getElementById('planning-view').style.display = 'block';
-            window.scrollTo(0,0);
-            
-            // Ripristina lo stato "Smart" in memoria
-            sessionStorage.setItem('ad_current_view', 'smart');
+        function sincronizzaSetupDaSmartAPro() {
+            // Clona opzioni telescopio
+            let srcTel = document.getElementById('preset-telescope');
+            let dstTel = document.getElementById('pro-preset-telescope');
+            if (srcTel && dstTel) { dstTel.innerHTML = srcTel.innerHTML; dstTel.value = srcTel.value; }
+
+            // Clona opzioni sensore
+            let srcSens = document.getElementById('preset-sensor');
+            let dstSens = document.getElementById('pro-preset-sensor');
+            if (srcSens && dstSens) { dstSens.innerHTML = srcSens.innerHTML; dstSens.value = srcSens.value; }
+
+            // Sync input numerici
+            ['focal-length', 'aperture', 'sensor-width', 'sensor-height', 'pixel-size'].forEach(id => {
+                let src = document.getElementById(id);
+                let dst = document.getElementById('pro-' + id);
+                if (src && dst) dst.value = src.value;
+            });
+
+            // Sync BIN attivo
+            let activeBin = document.querySelector('#bin-selector .bin-active');
+            if (activeBin) {
+                let binVal = activeBin.dataset.bin;
+                document.querySelectorAll('#pro-bin-selector .bin-btn').forEach(b => {
+                    b.classList.toggle('bin-active', b.dataset.bin === binVal);
+                });
+            }
+
+            // Sync modalità (singolo / mosaico)
+            let srcMode = document.getElementById('capture-mode');
+            let dstMode = document.getElementById('pro-capture-mode');
+            if (srcMode && dstMode) {
+                dstMode.value = srcMode.value;
+                let mosaicDiv = document.getElementById('pro-mosaic-settings');
+                if (mosaicDiv) mosaicDiv.style.display = srcMode.value === 'mosaic' ? 'flex' : 'none';
+            }
+
+            // Sync valori mosaico
+            ['mosaic-x', 'mosaic-y', 'mosaic-overlap'].forEach(id => {
+                let src = document.getElementById(id);
+                let dst = document.getElementById('pro-' + id);
+                if (src && dst) dst.value = src.value;
+            });
+
+            // Aggiorna display FOV/campionamento/f-ratio
+            aggiornaDisplayFOVPro();
         }
+
+        function aggiornaDisplayFOVPro() {
+            let fovEl     = document.getElementById('fov-result');
+            let sampEl    = document.getElementById('sampling-result');
+            let sampMsgEl = document.getElementById('sampling-msg');
+            let focal     = parseFloat(document.getElementById('focal-length')?.value) || 0;
+            let aperture  = parseFloat(document.getElementById('aperture')?.value) || 1;
+
+            let prFov     = document.getElementById('pro-fov-display');
+            let prSamp    = document.getElementById('pro-sampling-display');
+            let prSampMsg = document.getElementById('pro-sampling-msg');
+            let prFratio  = document.getElementById('pro-fratio-display');
+
+            if (fovEl     && prFov)     prFov.innerHTML     = fovEl.innerHTML;
+            if (sampEl    && prSamp)    prSamp.innerHTML    = sampEl.innerHTML;
+            if (sampMsgEl && prSampMsg) prSampMsg.innerHTML = sampMsgEl.innerHTML;
+            if (prFratio && focal && aperture > 0) {
+                prFratio.innerHTML = 'f/' + (focal / aperture).toFixed(1);
+            }
+        }
+
+        // Input numerico cambiato in PRO → aggiorna Smart + ricalcola
+        function proSyncNumerico(proId, smartId) {
+            let proEl   = document.getElementById(proId);
+            let smartEl = document.getElementById(smartId);
+            if (!proEl || !smartEl) return;
+            smartEl.value = proEl.value;
+            if (typeof aggiornaFOV   === 'function') aggiornaFOV();
+            if (typeof calcolaTempi  === 'function') calcolaTempi();
+            setTimeout(aggiornaDisplayFOVPro, 50);
+        }
+
+        // Preset telescopio cambiato in PRO
+        function proApplicaPresetTelescopio() {
+            let dstTel = document.getElementById('pro-preset-telescope');
+            let srcTel = document.getElementById('preset-telescope');
+            if (!srcTel || !dstTel) return;
+            srcTel.value = dstTel.value;
+            if (typeof applicaPresetTelescopio === 'function') applicaPresetTelescopio();
+            if (typeof aggiornaAI              === 'function') aggiornaAI();
+            setTimeout(() => {
+                ['focal-length', 'aperture'].forEach(id => {
+                    let s = document.getElementById(id);
+                    let d = document.getElementById('pro-' + id);
+                    if (s && d) d.value = s.value;
+                });
+                aggiornaDisplayFOVPro();
+            }, 30);
+        }
+
+        // Preset sensore cambiato in PRO
+        function proApplicaPresetSensore() {
+            let dstSens = document.getElementById('pro-preset-sensor');
+            let srcSens = document.getElementById('preset-sensor');
+            if (!srcSens || !dstSens) return;
+            srcSens.value = dstSens.value;
+            if (typeof applicaPresetSensore === 'function') applicaPresetSensore();
+            setTimeout(() => {
+                ['sensor-width', 'sensor-height', 'pixel-size'].forEach(id => {
+                    let s = document.getElementById(id);
+                    let d = document.getElementById('pro-' + id);
+                    if (s && d) d.value = s.value;
+                });
+                aggiornaDisplayFOVPro();
+            }, 30);
+        }
+
+        // BIN selezionato in PRO
+        function selezionaBINPro(n) {
+            if (typeof selezionaBIN === 'function') selezionaBIN(n);
+            document.querySelectorAll('#pro-bin-selector .bin-btn').forEach(b => {
+                b.classList.toggle('bin-active', parseInt(b.dataset.bin) === n);
+            });
+            setTimeout(aggiornaDisplayFOVPro, 50);
+        }
+
+        // Modalità mosaico cambiata in PRO
+        function toggleProMosaic() {
+            let dstMode   = document.getElementById('pro-capture-mode');
+            let srcMode   = document.getElementById('capture-mode');
+            let mosaicDiv = document.getElementById('pro-mosaic-settings');
+            if (!dstMode) return;
+            let val = dstMode.value;
+            if (mosaicDiv) mosaicDiv.style.display = val === 'mosaic' ? 'flex' : 'none';
+            if (srcMode) {
+                srcMode.value = val;
+                if (typeof toggleMosaic === 'function') toggleMosaic();
+                if (typeof aggiornaFOV  === 'function') aggiornaFOV();
+                setTimeout(aggiornaDisplayFOVPro, 50);
+            }
+        }
+
+        // Valori mosaico cambiati in PRO
+        function proSyncMosaic() {
+            ['mosaic-x', 'mosaic-y', 'mosaic-overlap'].forEach(id => {
+                let src = document.getElementById('pro-' + id);
+                let dst = document.getElementById(id);
+                if (src && dst) dst.value = src.value;
+            });
+            if (typeof aggiornaFOV === 'function') aggiornaFOV();
+            setTimeout(aggiornaDisplayFOVPro, 50);
+        }
+
+        // Orari sessione cambiati in PRO → aggiorna anche Smart
+        function proSyncTime() {
+            let pStart = document.getElementById('pro-time-start');
+            let pEnd   = document.getElementById('pro-time-end');
+            let sStart = document.getElementById('time-start');
+            let sEnd   = document.getElementById('time-end');
+            if (pStart && sStart) sStart.value = pStart.value;
+            if (pEnd   && sEnd)   sEnd.value   = pEnd.value;
+            if (typeof calcolaTempi === 'function') calcolaTempi();
+        }
+
+// ── FINE SETUP SYNC ─────────────────────────────────────────────────────────
+
+        function _injectProSetupPanel() {
+            // Rimuove eventuale pannello precedente e lo ricrea sempre fresco
+            let old = document.getElementById('pro-setup-inject');
+            if (old) old.remove();
+
+            let seqGrid = document.getElementById('pro-sequence-grid');
+            if (!seqGrid) return;
+
+            let panel = document.createElement('div');
+            panel.id = 'pro-setup-inject';
+            panel.style.cssText = 'background:#1c2230; border:1px solid #2d3a50; border-radius:10px; padding:14px 16px; margin-bottom:18px;';
+
+            panel.innerHTML = `
+                <div style="display:flex; justify-content:space-between; align-items:center; cursor:pointer; user-select:none;" onclick="toggleProSetupPanel()">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <svg width="16" height="16" stroke="currentColor" fill="none" style="color:#c49a3c;flex-shrink:0;"><use href="#i-telescope"/></svg>
+                        <span style="font-size:0.85em; font-weight:700; color:#c9d1d9;">Setup Ottico &amp; FOV</span>
+                        <span style="font-size:0.66em; color:#3d4852; font-family:monospace; text-transform:uppercase; letter-spacing:0.5px;">· sincronizzato con Smart</span>
+                    </div>
+                    <svg id="pro-setup-chevron" width="16" height="16" style="flex-shrink:0; transition:transform 0.25s; color:#6e7a8a;" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
+
+                <div id="pro-setup-body" style="margin-top:12px;">
+
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;">
+
+                        <div style="background:#161b22; border-radius:7px; padding:11px; border:1px solid #21293a;">
+                            <div style="font-size:0.7em; color:#c49a3c; text-transform:uppercase; letter-spacing:1px; margin-bottom:9px; font-weight:700;">
+                                <svg width="12" height="12" style="display:inline-block;vertical-align:middle;" stroke="currentColor" fill="none"><use href="#i-telescope"/></svg> Ottica
+                            </div>
+                            <div class="input-group">
+                                <label>Telescopio:</label>
+                                <select id="pro-preset-telescope" onchange="proApplicaPresetTelescopio()" style="flex:1;">
+                                    <option value="">-- Seleziona --</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>Focale (mm):</label>
+                                <input type="number" id="pro-focal-length" value="400" oninput="proSyncNumerico('pro-focal-length','focal-length')">
+                            </div>
+                            <div class="input-group" style="margin-bottom:0;">
+                                <label style="color:#c49a3c;">Diametro (mm):</label>
+                                <input type="number" id="pro-aperture" value="72" oninput="proSyncNumerico('pro-aperture','aperture')">
+                            </div>
+                        </div>
+
+                        <div style="background:#161b22; border-radius:7px; padding:11px; border:1px solid #21293a;">
+                            <div style="font-size:0.7em; color:#00c6ff; text-transform:uppercase; letter-spacing:1px; margin-bottom:9px; font-weight:700;">
+                                <svg width="12" height="12" style="display:inline-block;vertical-align:middle;" stroke="currentColor" fill="none"><use href="#i-camera"/></svg> Sensore
+                            </div>
+                            <div class="input-group">
+                                <label>Sensore:</label>
+                                <select id="pro-preset-sensor" onchange="proApplicaPresetSensore()">
+                                    <option value="">-- Seleziona --</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>W (mm):</label>
+                                <input type="number" id="pro-sensor-width" value="23.5" step="0.1" oninput="proSyncNumerico('pro-sensor-width','sensor-width')">
+                            </div>
+                            <div class="input-group">
+                                <label>H (mm):</label>
+                                <input type="number" id="pro-sensor-height" value="15.7" step="0.1" oninput="proSyncNumerico('pro-sensor-height','sensor-height')">
+                            </div>
+                            <div class="input-group" style="margin-bottom:0;">
+                                <label>Pixel (µm):</label>
+                                <input type="number" id="pro-pixel-size" value="3.76" step="0.01" oninput="proSyncNumerico('pro-pixel-size','pixel-size')">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center; padding:9px 12px; background:#161b22; border-radius:7px; border:1px solid #21293a; margin-bottom:10px;">
+                        <div style="display:flex; align-items:center; gap:7px;">
+                            <span style="font-size:0.8em; color:#6e7a8a;">BIN:</span>
+                            <div id="pro-bin-selector" style="display:flex; gap:4px;">
+                                <button class="bin-btn bin-active" data-bin="1" onclick="selezionaBINPro(1)">1×1</button>
+                                <button class="bin-btn" data-bin="2" onclick="selezionaBINPro(2)">2×2</button>
+                                <button class="bin-btn" data-bin="3" onclick="selezionaBINPro(3)">3×3</button>
+                                <button class="bin-btn" data-bin="4" onclick="selezionaBINPro(4)">4×4</button>
+                            </div>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:7px; margin-left:auto;">
+                            <label style="width:auto; color:#c49a3c; font-weight:bold; font-size:0.88em;">Modalità:</label>
+                            <select id="pro-capture-mode" onchange="toggleProMosaic()" style="background:#131920; border:1px solid #c49a3c; color:#c49a3c; padding:4px 8px; border-radius:4px; cursor:pointer; width:auto!important; font-size:0.88em;">
+                                <option value="single">Scatto Singolo</option>
+                                <option value="mosaic">Mosaico</option>
+                            </select>
+                        </div>
+                        <div id="pro-mosaic-settings" style="display:none; align-items:center; gap:7px; flex-wrap:wrap; width:100%; padding-top:9px; border-top:1px solid #2d3a50; margin-top:3px;">
+                            <label style="width:auto;">Pannelli (X, Y):</label>
+                            <input type="number" id="pro-mosaic-x" value="2" min="1" max="10" oninput="proSyncMosaic()" style="width:46px!important; padding:4px!important; text-align:center;">
+                            <span>×</span>
+                            <input type="number" id="pro-mosaic-y" value="2" min="1" max="10" oninput="proSyncMosaic()" style="width:46px!important; padding:4px!important; text-align:center;">
+                            <label style="width:auto; margin-left:10px;">Overlap:</label>
+                            <input type="number" id="pro-mosaic-overlap" value="20" min="5" max="50" step="5" oninput="proSyncMosaic()" style="width:52px!important; padding:4px!important; text-align:center;">
+                            <span>%</span>
+                        </div>
+                    </div>
+
+                    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                        <div style="flex:1; min-width:90px; text-align:center; background:#0d1117; padding:8px 10px; border-radius:7px; border:1px solid #21293a;">
+                            <div style="font-size:0.62em; color:#6e7a8a; text-transform:uppercase; letter-spacing:1px; margin-bottom:3px;">FOV</div>
+                            <div id="pro-fov-display" style="font-size:1.05em; font-weight:bold; color:#44ff44;">--° × --°</div>
+                        </div>
+                        <div style="flex:1; min-width:90px; text-align:center; background:#0d1117; padding:8px 10px; border-radius:7px; border:1px solid #21293a;">
+                            <div style="font-size:0.62em; color:#6e7a8a; text-transform:uppercase; letter-spacing:1px; margin-bottom:3px;">Campionamento</div>
+                            <div id="pro-sampling-display" style="font-size:0.95em; font-weight:bold; color:#c9d1d9;">-- "/px</div>
+                            <div id="pro-sampling-msg" style="font-size:0.72em; margin-top:2px;"></div>
+                        </div>
+                        <div style="flex:1; min-width:90px; text-align:center; background:#0d1117; padding:8px 10px; border-radius:7px; border:1px solid #21293a;">
+                            <div style="font-size:0.62em; color:#6e7a8a; text-transform:uppercase; letter-spacing:1px; margin-bottom:3px;">f/ratio</div>
+                            <div id="pro-fratio-display" style="font-size:1.2em; font-weight:bold; color:#c49a3c;">f/--</div>
+                        </div>
+                    </div>
+
+                </div>
+            `;
+
+            seqGrid.parentNode.insertBefore(panel, seqGrid);
+        }
+
+        function setCalcMode(mode) {
+            let smartSection = document.getElementById('mode-smart-section');
+            let proSection   = document.getElementById('mode-pro-section');
+            let btnSmart     = document.getElementById('btn-mode-smart');
+            let btnPro       = document.getElementById('btn-mode-pro');
+            if (!smartSection || !proSection) return;
+
+            if (mode === 'pro') {
+                smartSection.style.display = 'none';
+                proSection.style.display   = 'block';
+                btnSmart.style.background  = 'transparent';
+                btnSmart.style.color       = '#6e7a8a';
+                btnPro.style.background    = '#c49a3c';
+                btnPro.style.color         = '#0d1117';
+                sessionStorage.setItem('ad_current_view', 'pro');
+                disegnaGrigliaPro();
+                calcolaNightFillBar();
+            } else {
+                smartSection.style.display = 'block';
+                proSection.style.display   = 'none';
+                btnSmart.style.background  = '#00c6ff';
+                btnSmart.style.color       = '#0d1117';
+                btnPro.style.background    = 'transparent';
+                btnPro.style.color         = '#6e7a8a';
+                sessionStorage.setItem('ad_current_view', 'smart');
+            }
+        }
+
+        // Legacy aliases (kept for any remaining references)
+        function apriProView()  { setCalcMode('pro'); }
+        function chiudiProView() { setCalcMode('smart'); }
 
         function disegnaGrigliaPro() {
-            let isMono = document.getElementById('pro-sensor-type').value === 'mono';
-            document.getElementById('sensor-type').value = isMono ? 'mono' : 'color'; 
+            let isMono = document.getElementById('sensor-type').value === 'mono'; 
             
             aggiornaFiltriNinaPro(); // Richiama i filtri appena creati!
             
@@ -38,11 +337,10 @@
             container.innerHTML = '';
 
             container.innerHTML = `
-                <div style="display: grid; grid-template-columns: 1fr 0.8fr 0.6fr 0.65fr 0.65fr 0.65fr 0.65fr 1fr; gap: 5px; font-size: 0.8em; color: #aaa; text-align: center; border-bottom: 1px solid #444; padding-bottom: 5px;">
+                <div style="display: grid; grid-template-columns: 1fr 0.8fr 0.8fr 0.65fr 0.65fr 0.65fr 1fr; gap: 5px; font-size: 0.8em; color: #aaa; text-align: center; border-bottom: 1px solid #444; padding-bottom: 5px;">
                     <div style="text-align: left;">Filtro</div>
                     <div>Pose</div>
                     <div>Secs</div>
-                    <div style="color:#bb86fc;">HDR<span class="info-icon" style="font-size:1.0em;margin-left:2px;cursor:help;" onmouseenter="mostraTooltip(this,'info_hdr_col')" onmouseleave="nascondiTooltip()">ℹ️</span></div>
                     <div>Gain</div>
                     <div>Offset</div>
                     <div>Bin</div>
@@ -59,16 +357,12 @@
                 let defaultName = localStorage.getItem('nina_filter_' + f.id) || f.name;
 
                 let row = document.createElement('div');
-                row.style.cssText = "display: grid; grid-template-columns: 1fr 0.8fr 0.6fr 0.65fr 0.65fr 0.65fr 0.65fr 1fr; gap: 5px; align-items: center; background: #1a1a1a; padding: 10px; border-radius: 4px; border-left: 3px solid #00c6ff;";
+                row.style.cssText = "display: grid; grid-template-columns: 1fr 0.8fr 0.8fr 0.65fr 0.65fr 0.65fr 1fr; gap: 5px; align-items: center; background: #1a1a1a; padding: 10px; border-radius: 4px; border-left: 3px solid #00c6ff;";
                 
                 row.innerHTML = `
                     <div style="font-weight: bold; color: #fff; font-size: 0.9em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${defaultName}">${defaultName}</div>
                     <input type="number" id="pro-${f.id}-count" value="${defaultCount}" min="0" oninput="calcolaNightFillBar()" style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box;">
                     <input type="number" id="pro-${f.id}-exp" value="${defaultExp}" min="1" oninput="calcolaNightFillBar()" style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box;">
-                    <input type="number" id="pro-${f.id}-hdr" value="" placeholder="—" min="0" oninput="calcolaNightFillBar()"
-                        style="width:100%!important;text-align:center;padding:4px!important;box-sizing:border-box;
-                        color:#bb86fc;background:#1a1015;border:1px solid #3a2050;border-radius:3px;"
-                        title="Secondi esposizione breve HDR">
                     <input type="text" id="pro-${f.id}-gain" value="Auto" style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box;">
                     <input type="text" id="pro-${f.id}-offset" value="Auto" style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box;">
                     <select id="pro-${f.id}-bin" style="width: 100%!important; padding: 4px!important; text-align: center; box-sizing: border-box;">
@@ -80,6 +374,38 @@
                     </div>
                 `;
                 container.appendChild(row);
+                // ── Riga companion Light HDR (sempre visibile, toggle ON/OFF) ───
+                let hdrRowPro = document.createElement('div');
+                hdrRowPro.id = `pro-${f.id}-hdr-row`;
+                hdrRowPro.dataset.hdrActive = '1';
+                hdrRowPro.style.cssText = 'display: grid; grid-template-columns: 1fr 0.8fr 0.8fr 0.65fr 0.65fr 0.65fr 1fr; gap: 5px; align-items: center; background: #160d24; padding: 8px 10px; border-radius: 4px; border-left: 3px solid #7c4dff; margin-top: 3px; margin-bottom: 8px;';
+                hdrRowPro.innerHTML = `
+                    <div style="display:flex;align-items:center;gap:6px;flex-wrap:nowrap;">
+                        <span style="color:#bb86fc;font-weight:bold;font-size:0.82em;white-space:nowrap;">✦ Light HDR</span>
+                        <span class="info-icon" style="font-size:1.0em;margin-left:2px;cursor:help;" onmouseenter="mostraTooltip(this,'info_hdr_row')" onmouseleave="nascondiTooltip()">ℹ️</span>
+                        <button id="pro-${f.id}-hdr-toggle"
+                            onclick="toggleHdrRowPro('${f.id}')"
+                            style="background:#7c4dff;color:#fff;border:none;border-radius:3px;padding:2px 8px;font-size:0.7em;font-weight:700;cursor:pointer;letter-spacing:0.5px;flex-shrink:0;">ON</button>
+                    </div>
+                    <input type="number" id="pro-${f.id}-hdr-count" value="0" min="0" oninput="calcolaNightFillBar()"
+                        style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box; background:#1a0d2e; border:1px solid #3a2050; color:#bb86fc;">
+                    <input type="number" id="pro-${f.id}-hdr-exp" value="" placeholder="s" min="0" oninput="calcolaNightFillBar()"
+                        style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box; background:#1a0d2e; border:1px solid #3a2050; color:#bb86fc;">
+                    <input type="text" id="pro-${f.id}-hdr-gain" value="Auto"
+                        style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box; background:#1a0d2e; border:1px solid #3a2050;">
+                    <input type="text" id="pro-${f.id}-hdr-offset" value="Auto"
+                        style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box; background:#1a0d2e; border:1px solid #3a2050;">
+                    <select id="pro-${f.id}-hdr-bin"
+                        style="width: 100%!important; padding: 4px!important; box-sizing: border-box; background:#1a0d2e; border:1px solid #3a2050;">
+                        <option value="1">1x1</option><option value="2">2x2</option><option value="3">3x3</option>
+                    </select>
+                    <div style="display: flex; align-items: center; gap: 5px; justify-content: center;">
+                        <input type="checkbox" id="pro-${f.id}-hdr-dither" checked style="transform: scale(1.2); cursor: pointer;" onchange="calcolaNightFillBar()">
+                        <input type="number" id="pro-${f.id}-hdr-dfreq" value="4" min="1"
+                            style="width: 45px!important; padding: 4px!important; text-align: center; background:#1a0d2e; border:1px solid #3a2050;" oninput="calcolaNightFillBar()">
+                    </div>
+                `;
+                container.appendChild(hdrRowPro);
             });
 
             // ── Separatore Dark/Bias ──────────────────────────────────────
@@ -109,7 +435,7 @@
                 let borderColor = isDark ? '#555' : '#888';
 
                 let row = document.createElement('div');
-                row.style.cssText = `display: grid; grid-template-columns: 1fr 0.8fr 0.6fr 0.65fr 0.65fr 0.65fr 0.65fr 1fr; gap: 5px; align-items: center; background: #141414; padding: 10px; border-radius: 4px; border-left: 3px solid ${borderColor};`;
+                row.style.cssText = `display: grid; grid-template-columns: 1fr 0.8fr 0.8fr 0.65fr 0.65fr 0.65fr 1fr; gap: 5px; align-items: center; background: #141414; padding: 10px; border-radius: 4px; border-left: 3px solid ${borderColor};`;
 
                 let expCell = isDark
                     ? `<input type="number" id="pro-${f.id}-exp" value="${defaultExp}" min="0" oninput="calcolaNightFillBar()" style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box;">`
@@ -122,7 +448,6 @@
                     <div style="font-weight: bold; color: #aaa; font-size: 0.9em;">${defaultName}</div>
                     <input type="number" id="pro-${f.id}-count" value="${defaultCount}" min="0" oninput="calcolaNightFillBar()" style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box;">
                     ${expCell}
-                    <div style="color:#555;text-align:center;font-size:0.85em;">—</div>
                     <input type="text" id="pro-${f.id}-gain" value="${f.id.includes('bias') ? '0' : 'Auto'}" style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box;">
                     <input type="text" id="pro-${f.id}-offset" value="Auto" style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box;">
                     <select id="pro-${f.id}-bin" style="width: 100%!important; padding: 4px!important; box-sizing: border-box;">
@@ -137,8 +462,8 @@
         }
 
         function calcolaNightFillBar() {
-            let tS = document.getElementById('pro-time-start').value;
-            let tE = document.getElementById('pro-time-end').value;
+            let tS = document.getElementById('time-start').value;
+            let tE = document.getElementById('time-end').value;
             if(!tS || !tE) return;
 
             let dS = new Date(`1970-01-01T${tS}:00`);
@@ -148,7 +473,7 @@
 
             let secUsati = 0;
             let ditherOverheadSecs = 15;
-            let isMono = document.getElementById('pro-sensor-type').value === 'mono';
+            let isMono = document.getElementById('sensor-type').value === 'mono';
             let frameList = isMono ? framesMono : framesColor;
 
             // Ricalcola bias overhead con valori sensore attuali
@@ -190,10 +515,21 @@
                     if (usaDither && dFreq > 0) {
                         tempoDither = Math.floor(count / dFreq) * ditherOverheadSecs;
                     }
-                    // HDR frames overhead (50% delle pose principali)
-                    let _hdrElPro = document.getElementById(`pro-${f.id}-hdr`);
-                    let _hdrExpPro = _hdrElPro ? (parseInt(_hdrElPro.value) || 0) : 0;
-                    let _hdrTime = (_hdrExpPro > 0) ? Math.ceil(count * 0.5) * _hdrExpPro : 0;
+                    // HDR companion row
+                    let _hdrTime = 0;
+                    let _hdrRowFill = document.getElementById(`pro-${f.id}-hdr-row`);
+                    if (_hdrRowFill && _hdrRowFill.dataset.hdrActive !== '0') {
+                        let _hdrC = parseInt((document.getElementById(`pro-${f.id}-hdr-count`)||{}).value)||0;
+                        let _hdrE = parseInt((document.getElementById(`pro-${f.id}-hdr-exp`)||{}).value)||0;
+                        if (_hdrC > 0 && _hdrE > 0) {
+                            _hdrTime += _hdrC * _hdrE;
+                            let _hdrDith = document.getElementById(`pro-${f.id}-hdr-dither`);
+                            let _hdrDFreqEl = document.getElementById(`pro-${f.id}-hdr-dfreq`);
+                            if (_hdrDith && _hdrDith.checked && _hdrDFreqEl) {
+                                _hdrTime += Math.floor(_hdrC / (parseInt(_hdrDFreqEl.value)||4)) * ditherOverheadSecs;
+                            }
+                        }
+                    }
                     secUsati += (tempoPose + tempoDither + _hdrTime);
                 }
             });
@@ -218,14 +554,32 @@
                 btnMn.style.display = 'none';
             } else {
                 bar.style.background = '#ff4444';
-                btnMn.style.display = 'inline-block'; // Appare il bottone d'emergenza Multi-Night!
+                btnMn.style.display = 'inline-block';
+            }
+
+            // Aggiorna pannelli Smart (solo valori, senza warning/button)
+            let _calcAvail = document.getElementById('calc-available');
+            let _calcTotal = document.getElementById('calc-total');
+            let _calcResid = document.getElementById('calc-residual');
+            if (_calcAvail) _calcAvail.innerText = `${Math.floor(secDisponibili/3600)}h ${Math.floor((secDisponibili%3600)/60)}m`;
+            if (_calcTotal) _calcTotal.innerText = `${Math.floor(secUsati/3600)}h ${Math.floor((secUsati%3600)/60)}m`;
+            if (_calcResid) {
+                let _rS = secDisponibili - secUsati;
+                if (_rS >= 0) {
+                    _calcResid.innerText = `${Math.floor(_rS/3600)}h ${Math.floor((_rS%3600)/60)}m`;
+                    _calcResid.className = 'text-green';
+                } else {
+                    let _abs = Math.abs(_rS);
+                    _calcResid.innerText = `- ${Math.floor(_abs/3600)}h ${Math.floor((_abs%3600)/60)}m`;
+                    _calcResid.className = 'text-red';
+                }
             }
         }
         function esportaNinaPRO() {
             if (!targetSelezionato) { mostraAvviso(t("alert_planetarium"), "warn"); return; }
 
             // --- LETTURA PARAMETRI DALLA GRIGLIA PRO ---
-            let isMono = document.getElementById('pro-sensor-type').value === 'mono';
+            let isMono = document.getElementById('sensor-type').value === 'mono';
             let frameList = isMono ? framesMono : framesColor;
 
             // Raccoglie solo le righe con pose > 0
@@ -262,22 +616,29 @@
                     filterName: _mainFilter,
                     frameId:   f.id
                 });
-                // Blocco HDR: se il campo HDR è valorizzato
-                let _hdrElPRO = document.getElementById(`pro-${f.id}-hdr`);
-                let _hdrExpPRO = _hdrElPRO ? (parseInt(_hdrElPRO.value) || 0) : 0;
-                if (_hdrExpPRO > 0) {
-                    let _hdrCnt = Math.max(5, Math.ceil(count * 0.5));
-                    esposizioni.push({
-                        count:     _hdrCnt,
-                        exp:       _hdrExpPRO,
-                        gain:      _mainGain,
-                        offset:    _mainOff,
-                        bin:       _mainBin,
-                        dither:    _mainDith,
-                        ditherFreq: _mainDFreq,
-                        filterName: _mainFilter ? _mainFilter + ' HDR' : null,
-                        frameId:   f.id + '-hdr'
-                    });
+                // Blocco HDR: legge dalla riga companion
+                let _hdrRowNina = document.getElementById(`pro-${f.id}-hdr-row`);
+                if (_hdrRowNina && _hdrRowNina.dataset.hdrActive !== '0') {
+                    let _hdrCnt = parseInt((document.getElementById(`pro-${f.id}-hdr-count`)||{}).value)||0;
+                    let _hdrExpPRO = parseInt((document.getElementById(`pro-${f.id}-hdr-exp`)||{}).value)||0;
+                    if (_hdrCnt > 0 && _hdrExpPRO > 0) {
+                        let _hdrGain   = (document.getElementById(`pro-${f.id}-hdr-gain`)  ||{}).value||'Auto';
+                        let _hdrOffset = (document.getElementById(`pro-${f.id}-hdr-offset`)||{}).value||'Auto';
+                        let _hdrBin    = parseInt((document.getElementById(`pro-${f.id}-hdr-bin`)||{}).value)||1;
+                        let _hdrDith   = (document.getElementById(`pro-${f.id}-hdr-dither`)||{}).checked||false;
+                        let _hdrDFreq  = parseInt((document.getElementById(`pro-${f.id}-hdr-dfreq`)||{}).value)||4;
+                        esposizioni.push({
+                            count:     _hdrCnt,
+                            exp:       _hdrExpPRO,
+                            gain:      (_hdrGain==='Auto'||_hdrGain==='')?-1:parseInt(_hdrGain),
+                            offset:    (_hdrOffset==='Auto'||_hdrOffset==='')?-1:parseInt(_hdrOffset),
+                            bin:       _hdrBin,
+                            dither:    _hdrDith,
+                            ditherFreq: _hdrDFreq,
+                            filterName: _mainFilter ? _mainFilter + ' HDR' : null,
+                            frameId:   f.id + '-hdr'
+                        });
+                    }
                 }
             });
 
@@ -648,3 +1009,17 @@
 
         /* --- FINE LOGICA PLANCIA PRO --- */
 
+        function toggleHdrRowPro(filterId) {
+            let row = document.getElementById(`pro-${filterId}-hdr-row`);
+            let btn = document.getElementById(`pro-${filterId}-hdr-toggle`);
+            if (!row || !btn) return;
+            let isActive = row.dataset.hdrActive !== '0';
+            isActive = !isActive;
+            row.dataset.hdrActive = isActive ? '1' : '0';
+            row.style.opacity = isActive ? '1' : '0.4';
+            btn.textContent = isActive ? 'ON' : 'OFF';
+            btn.style.background = isActive ? '#7c4dff' : '#444';
+            btn.style.color = isActive ? '#fff' : '#888';
+            row.querySelectorAll('input, select').forEach(el => { el.disabled = !isActive; });
+            calcolaNightFillBar();
+        }

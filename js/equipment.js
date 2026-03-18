@@ -188,7 +188,7 @@
                          lang === 'en' ? "Please enter a valid Focal Length and Aperture in the fields below." :
                          lang === 'es' ? "Ingresa primero una Focal y Diámetro válidos en los campos de abajo." :
                                          "请先在下方输入有效的焦距和口径。";
-            if (!f || !d || isNaN(f) || isNaN(d)) { alert(errTxt); return; }
+            if (!f || !d || isNaN(f) || isNaN(d)) { mostraAvviso(errTxt, "warn"); return; }
 
             // Popola info nella modal
             let infoEl = document.getElementById('save-telescope-info');

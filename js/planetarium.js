@@ -4,7 +4,7 @@
         function cambiaOraAstro() {
             if (!datiMeteo) return;
             let step = parseInt(document.getElementById('astroSlider').value), dOra = new Date(datiMeteo.time[indicePartenza + step]);
-            document.getElementById('astro-time-display').innerText = "🔭 " + (step === 0 ? t("now") + " (" + new Date().toLocaleTimeString('it-IT', {hour: '2-digit', minute:'2-digit'}) + ")" : dOra.toLocaleDateString(lang==='it'?'it-IT':'en-US', { weekday: 'short', day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }));
+            document.getElementById('astro-time-display').innerHTML = "<svg width=\"22\" height=\"22\" style=\"display:inline-block;vertical-align:middle;flex-shrink:0\" stroke=\"currentColor\" fill=\"none\"><use href=\"#i-eye-spark\"/></svg> " + (step === 0 ? t("now") + " (" + new Date().toLocaleTimeString('it-IT', {hour: '2-digit', minute:'2-digit'}) + ")" : dOra.toLocaleDateString(lang==='it'?'it-IT':'en-US', { weekday: 'short', day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }));
             
             let pL = document.getElementById('planets-list'), dL = document.getElementById('dso-list'); pL.innerHTML = ''; dL.innerHTML = '';
             if (SunCalc.getPosition(dOra, latCorrente, lonCorrente).altitude * (180/Math.PI) > -6) { pL.innerHTML = dL.innerHTML = `<p style="color:#aaa; padding:10px;">${t("too_bright")}</p>`; return; }
@@ -76,10 +76,72 @@
         }
 
         function creaCardHTML(tObj, alt, az, c) {
-            let div = document.createElement('div'); div.className = c ? 'dso-card card-clickable' : 'dso-card card-static';
-            let finalName = getLocalizedName(tObj);
-            div.innerHTML = `<div class="dso-icon">${tObj.icon}</div><div class="dso-info"><h4>${finalName}</h4><p>Alt: <b>${Math.round(alt)}°</b></p><span class="dso-direction">${getPuntoCardinale(az)}</span></div>`;
-            if(c) div.onclick = () => apriPianificazione(tObj); return div;
+            const div = document.createElement('div');
+            div.className = c ? 'dso-card card-clickable' : 'dso-card card-static';
+            const finalName = getLocalizedName(tObj);
+            const imgPath   = (typeof dsoImgMap !== 'undefined') ? (dsoImgMap[tObj.id] || null) : null;
+            const altClass  = alt >= 50 ? 'alt-high' : alt >= 30 ? 'alt-mid' : 'alt-low';
+
+            // ── Wrap immagine ──────────────────────────────────────
+            const wrap = document.createElement('div');
+            wrap.className = 'dso-icon-img';
+
+            let imgEl = null;
+            if (imgPath) {
+                imgEl = document.createElement('img');
+                imgEl.src     = imgPath;
+                imgEl.alt     = tObj.name;
+                imgEl.loading = 'lazy';
+                imgEl.onerror = () => {
+                    const sp = document.createElement('span');
+                    sp.style.fontSize = '2em';
+                    sp.textContent = tObj.icon;
+                    if (imgEl.parentNode) imgEl.parentNode.replaceChild(sp, imgEl);
+                    imgEl = null;
+                };
+                wrap.appendChild(imgEl);
+            } else {
+                const sp = document.createElement('span');
+                sp.style.fontSize = '2em';
+                sp.textContent = tObj.icon;
+                wrap.appendChild(sp);
+            }
+
+            // ── Bottone upload ────────────────────────────────────
+            const uploadBtn = document.createElement('button');
+            uploadBtn.className = 'dso-upload-btn';
+            uploadBtn.title     = 'Carica la tua foto';
+            uploadBtn.innerHTML = (typeof _ICON_CAM_UP !== 'undefined') ? _ICON_CAM_UP : '📷';
+            uploadBtn.onclick   = e => { e.stopPropagation(); dsoUploadFoto(tObj, wrap, imgEl); };
+            wrap.appendChild(uploadBtn);
+
+            // ── Bottone elimina foto utente ───────────────────────
+            const delBtn = document.createElement('button');
+            delBtn.className    = 'dso-delete-btn';
+            delBtn.title        = 'Rimuovi foto personale';
+            delBtn.textContent  = '✕';
+            // display gestito interamente da CSS (.dso-card:hover .dso-icon-img.has-user-img .dso-delete-btn)
+            delBtn.onclick = e => { e.stopPropagation(); dsoDeleteFoto(tObj, wrap, imgEl, imgPath); };
+            wrap.appendChild(delBtn);
+
+            div.appendChild(wrap);
+
+            // ── Info testo ─────────────────────────────────────────
+            const info = document.createElement('div');
+            info.className = 'dso-info';
+            info.innerHTML = `<h4 title="${finalName}">${finalName}</h4><p>Alt: <b>${Math.round(alt)}°</b></p><span class="dso-direction ${altClass}">${getPuntoCardinale(az)}</span>`;
+            div.appendChild(info);
+
+            if (c) div.onclick = () => apriPianificazione(tObj);
+
+            // ── Controlla IndexedDB: foto utente ha priorità massima ──
+            if (typeof UserImgDB !== 'undefined' && tObj.id) {
+                UserImgDB.get(tObj.id).then(dataUrl => {
+                    if (dataUrl) _dsoApplyUserImg(imgEl, wrap, dataUrl, delBtn);
+                });
+            }
+
+            return div;
         }
 
         function setupSearch(iId, sId) {
@@ -116,7 +178,7 @@
             if (ex) { inp.value = getLocalizedName(ex); apriPianificazione(ex); return; } 
             if (pt) { inp.value = getLocalizedName(pt); apriPianificazione(pt); return; }
 
-            if(st) { st.style.display = 'block'; st.style.color = '#ffaa00'; st.innerText = "SIMBAD Search... 🛰️"; }
+            if(st) { st.style.display = 'block'; st.style.color = '#ffaa00'; st.innerText = "SIMBAD Search..."; }
             fetch(`https://cds.unistra.fr/cgi-bin/nph-sesame/-oI/A?${encodeURIComponent(q)}`).then(r => r.text()).then(d => {
                 let lines = d.split('\n'), fc = false, ra, dec, ty = "", rawType = "", mg = "N/D", dist = "N/D";
 
@@ -177,7 +239,7 @@
                 else {
                     // Se il parser non ha riconosciuto il tipo, usa il codice grezzo SIMBAD
                     if (!ty && rawType) ty = rawType;
-                    if(st) st.innerText = "Database... 🔭";
+                    if(st) st.innerText = "Database...";
                     let wLang = (lang === 'it' || lang === 'es' || lang === 'zh') ? lang : 'en';
                     let qClean = q.trim();
 

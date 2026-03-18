@@ -7,32 +7,32 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         // --- MOTORE MULTI-LINGUA (i18n) ---
         const i18n = {
             it: {
-                "manual_btn": "📖 Apri Manuale", "pos_title": "📍 Posizione", "find_place": "Trova Luogo:", "search_place": "Es. Monte Lussari...",
-                "lat": "Latitudine:", "lon": "Longitudine:", "env_data": "🎛️ Dati Ambientali",
+                "manual_btn": "Apri Manuale", "pos_title": "Posizione", "find_place": "Trova Luogo:", "search_place": "Es. Monte Lussari...",
+                "lat": "Latitudine:", "lon": "Longitudine:", "env_data": "Dati Ambientali",
                 "low_clouds": "Nuvole Basse", "mid_clouds": "Nuvole Medie", "high_clouds": "Nuvole Alte", "moon_poll": "Inq. Lunare",
                 "humidity": "Umidità", "seeing_est": "Stima Seeing", "now": "Adesso",
-                "hybrid_planetarium": "🔭 Planetario Predittivo Ibrido", "solar_system": "🪐 Sistema Solare",
-                "rec_targets": "🌌 Oggetti Consigliati Visibili", "free_search": "🔍 Ricerca Libera Oggetto", "search_target": "Es. M31, Pleiadi...",
-                "plan_target_btn": "Pianifica 🚀", "back_dash": "Torna alla Dashboard", "change_target": "Cambia",
-                "dossier": "📖 Dossier Astrofotografico", "type": "Tipologia", "app_mag": "Magnitudine App.", "distance": "Distanza", "wiki_link": "🔗 Wikipedia",
-                "tactical_tip": "💡 Consiglio Tattico:", "optical_setup": "📸 Setup Ottico", "telescope": "Telescopio:", "focal_len": "Focale (mm):",
+                "hybrid_planetarium": "Planetario Predittivo Ibrido", "solar_system": "Sistema Solare",
+                "rec_targets": "Oggetti Consigliati Visibili", "free_search": "Ricerca Libera Oggetto", "search_target": "Es. M31, Pleiadi...",
+                "plan_target_btn": "Pianifica", "back_dash": "Torna alla Dashboard", "change_target": "Cambia",
+                "dossier": "Dossier Astrofotografico", "type": "Tipologia", "app_mag": "Magnitudine App.", "distance": "Distanza", "wiki_link": "Wikipedia",
+                "tactical_tip": "Consiglio Tattico:", "optical_setup": "Setup Ottico", "telescope": "Telescopio:", "focal_len": "Focale (mm):",
                 "sensor": "Sensore:", "width": "Larg. W (mm):", "height": "Alet. H (mm):", "fov_calc": "Campo Inquadrato Calcolato",
-                "fov_sim": "📐 Simulatore FOV Realistico (DSS2)", "smart_calc": "⏱️ Calcolatore Sessione Smart",
+                "fov_sim": "Simulatore FOV Realistico (DSS2)", "smart_calc": "Calcolatore Sessione Smart",
                 "sunset": "Tramonto", "night_start": "Inizio Notte Astr.", "night_end": "Fine Notte Astr.", "sunrise": "Alba",
                 "session_start": "Inizio Sessione:", "session_end": "Fine Sessione:", "sensor_type": "Tipo Sensore:",
-                "seq_setup": "Impostazione Sequenza", "gen_seq_btn": "✨ Genera Sequenza Ottimale", "use_frame": "Usa | Frame", "poses_sec": "Pose x Sec.",
-                "total": "Totale", "every": "Ogni", "avail_window": "Finestra Disponibile", "acq_time": "Tempo Acquisizione", "res_time": "Tempo Residuo", "time_overflow": "⚠️ Sforamento tempo!",
-                "nina_export_title": "🚀 Esportazione N.I.N.A. Advanced Sequencer", "seq_start": "Avvio Sequenza", "cool_cam": "Raffredda Camera a",
+                "seq_setup": "Impostazione Sequenza", "gen_seq_btn": "Genera Sequenza Ottimale", "use_frame": "Usa | Frame", "poses_sec": "Pose x Sec.",
+                "total": "Totale", "every": "Ogni", "avail_window": "Finestra Disponibile", "acq_time": "Tempo Acquisizione", "res_time": "Tempo Residuo", "time_overflow": "Sforamento tempo!",
+                "nina_export_title": "Esportazione N.I.N.A. Advanced Sequencer", "seq_start": "Avvio Sequenza", "cool_cam": "Raffredda Camera a",
                 "slew_center": "Slew & Center (Plate Solve)", "start_guide": "Avvia Autoguida", "end_sec": "Fine / Sicurezza", "warm_cam": "Riscalda Camera (Warm Up)",
-                "park_mount": "Parcheggia Montatura", "meridian_flip": "Attiva Meridian Flip", "filter_map": "Mappatura Nomi Filtri", "gen_nina_btn": "💾 Genera File per N.I.N.A.",
+                "park_mount": "Parcheggia Montatura", "meridian_flip": "Attiva Meridian Flip", "filter_map": "Mappatura Nomi Filtri", "gen_nina_btn": "Genera File per N.I.N.A.",
                 "clear": "Sereno", "partly_cloudy": "Poco Nuvoloso", "mostly_cloudy": "Nubi Sparse", "overcast": "Coperto", "daytime": "Giorno",
                 "new_moon": "Luna Nuova", "waxing_crescent": "Falce Crescente", "first_quarter": "Primo Quarto", "waxing_gibbous": "Gibbosa Crescente", "full_moon": "Luna Piena", "waning_gibbous": "Gibbosa Calante", "last_quarter": "Ultimo Quarto", "waning_crescent": "Falce Calante",
                 "galaxy": "Galassia", "nebula": "Nebulosa", "cluster": "Ammasso", "star": "Stella", "unknown": "Sconosciuta",
                 "alert_planetarium": "Scegli prima un bersaglio dal Planetario 🔭!", "alert_noseq": "Nessuna posa calcolata! Clicca prima su 'Genera Sequenza Ottimale'.",
                 "alert_calib": "I frame di calibrazione occupano tutto il tempo!", "alert_nolight": "Seleziona almeno un filtro Light.", "alert_times": "Imposta prima gli orari di Inizio e Fine.", "no_target": "Nessun oggetto visibile.", "too_bright": "☀️ Cielo troppo luminoso.", "dso_too_bright": "☀️ Cielo troppo luminoso per il Deep Sky.", "select_opt": "-- Seleziona --",
                 "jupiter": "Giove", "mars": "Marte", "venus": "Venere", "moon": "Luna", "sun": "Sole", "weather": "Meteo",
-                "mode": "Modalità:", "single_panel": "Scatto Singolo", "mosaic": "Mosaico", "panels": "Pannelli (X, Y):", "overlap": "Sovrapposizione:", "time_per_panel": "Tempo per Pannello", "fov_warning": "⚠️ L'oggetto è più grande del campo! Valuta un mosaico.", "nina_mosaic_msg": "📌 Modalità Mosaico attiva. Usa il Framing Assistant di N.I.N.A. per le coordinate.",
-                "gen_report_btn": "📝 Genera Report Strategico", "report_title": "Dossier Mosaico", "copy_report": "Copia negli Appunti", "copied": "Copiato!", "report_general": "Info Generali Mosaico", "report_strategy": "Strategia Singolo Pannello", "report_plan": "Piano di Scatto (Per Pannello)",
+                "mode": "Modalità:", "single_panel": "Scatto Singolo", "mosaic": "Mosaico", "panels": "Pannelli (X, Y):", "overlap": "Sovrapposizione:", "time_per_panel": "Tempo per Pannello", "fov_warning": "L'oggetto è più grande del campo! Valuta un mosaico.", "nina_mosaic_msg": "Modalità Mosaico attiva. Usa il Framing Assistant di N.I.N.A. per le coordinate.",
+                "gen_report_btn": "Genera Report Strategico", "report_title": "Dossier Mosaico", "copy_report": "Copia negli Appunti", "copied": "Copiato!", "report_general": "Info Generali Mosaico", "report_strategy": "Strategia Singolo Pannello", "report_plan": "Piano di Scatto (Per Pannello)",
                 "info_pos": "Cerca un luogo o inserisci coordinate. La mappa mostra un raggio di 50km utile per trovare 'buchi di sereno' spostandoti.",
                 "info_env": "Dati meteo professionali estratti dal satellite in tempo reale.",
                 "info_planetarium": "Mostra i target visibili calcolando l'altezza sull'orizzonte. Sposta lo slider per simulare la volta celeste stanotte.",
@@ -43,27 +43,27 @@ let lang = localStorage.getItem('ad_lang') || 'it';
                 "info_hdr_col": "Esposizione breve per la strategia HDR. Usata per catturare il nucleo brillante di nebulose planetarie e ammassi globulari senza saturarlo, da affiancare alle pose lunghe principali. L'algoritmo aggiunge automaticamente un blocco separato nel file N.I.N.A. Il numero di pose HDR è stimato al 50% di quelle principali.",
                 "rpt_hdr_note": "Esposizione breve affiancata alle pose principali per recuperare i dettagli nelle aree più luminose (nucleo stellare, centro nebulare) senza saturazione. Il numero di pose HDR è stimato automaticamente al 50% delle pose principali.",
                 "info_nina": "Salva un file JSON perfetto. Trascinalo dentro N.I.N.A. (Advanced Sequencer) e la sessione partirà in autonomia totale.",
-                "mn_title": "📅 Progettazione Multinotte",
-                "mn_warning": "⚠️ ATTENZIONE N.I.N.A.: Assicurati che i nomi dei filtri nella 'Mappatura Nomi' (nel pannello principale) corrispondano esattamente a quelli della tua ruota portafiltri, altrimenti il file darà errore!",
+                "mn_title": "Progettazione Multinotte",
+                "mn_warning": "ATTENZIONE N.I.N.A.: Assicurati che i nomi dei filtri nella 'Mappatura Nomi' (nel pannello principale) corrispondano esattamente a quelli della tua ruota portafiltri, altrimenti il file darà errore!",
                 "mn_target_ai": "Target Consigliato",
                 "mn_planned": "Tempo Pianificato",
-                "mn_add_night": "➕ Aggiungi Sessione (Notte)",
-                "ai_strat_title": "🧠 Analisi Strategica",
+                "mn_add_night": "Aggiungi Sessione (Notte)",
+                "ai_strat_title": "Analisi Strategica",
                 "ai_tot_goal": "Obiettivo Totale:",
                 "ai_hours": "Ore",
-                "ai_plan_btn": "📅 Pianifica Progetto Multi-Notte",
+                "ai_plan_btn": "Pianifica Progetto Multi-Notte",
                 "mn_sess": "SESSIONE",
                 "mn_real_h": "ORE REALI:",
                 "mn_start": "INIZIO (> 30°):",
                 "mn_end": "FINE (Tramonto/Alba):",
                 "mn_filters": "Filtri da riprendere in questa notte:",
-                "mn_delete": "🗑️ Elimina",
-                "mn_export": "🚀 Export N.I.N.A. Sessione",
+                "mn_delete": "Elimina",
+                "mn_export": "Export N.I.N.A. Sessione",
                 "pro_back": "Torna alla Dashboard Smart",
                 "pro_session_start": "Inizio Sessione:",
                 "pro_session_end": "Fine Sessione:",
-                "pro_overflow": "⚠️ Sforamento! Dividi in Multi-Notte",
-                "pro_triggers": "⚙️ Triggers & Hardware",
+                "pro_overflow": "Sforamento! Dividi in Multi-Notte",
+                "pro_triggers": "Triggers & Hardware",
                 "pro_preflight": "Pre-Flight",
                 "pro_cool_cam": "Raffredda a",
                 "pro_auto_rotator": "Rotatore Automatico",
@@ -80,40 +80,40 @@ let lang = localStorage.getItem('ad_lang') || 'it';
                 "pro_flat": "Accendi Flat Panel",
                 "pro_sensor_osc": "Sensore OSC (Color)",
                 "pro_sensor_mono": "Sensore Mono",
-                "pro_seq_builder": "📸 Calcolatore di Sequenze",
-                "pro_export_btn": "💾 Esporta Advanced Sequence (.json)",
-                "mn_target_tpt": "🎯 Obiettivo Progetto (TPT)",
-                "mn_target_ai_label": "🎯 Target Consigliato dall'assistente",
-                "mn_planned_time": "📅 Tempo Pianificato",
+                "pro_seq_builder": "Calcolatore di Sequenze",
+                "pro_export_btn": "Esporta Advanced Sequence (.json)",
+                "mn_target_tpt": "Obiettivo Progetto (TPT)",
+                "mn_target_ai_label": "Analisi Consigliata",
+                "mn_planned_time": "Tempo Pianificato",
                 "mn_completed": "% completato"
             },
             en: {
-                "manual_btn": "📖 Open Manual", "pos_title": "📍 Location", "find_place": "Find Place:", "search_place": "E.g. Yellowstone...",
-                "lat": "Latitude:", "lon": "Longitude:", "env_data": "🎛️ Env Data",
+                "manual_btn": "Open Manual", "pos_title": "Location", "find_place": "Find Place:", "search_place": "E.g. Yellowstone...",
+                "lat": "Latitude:", "lon": "Longitude:", "env_data": "Env Data",
                 "low_clouds": "Low Clouds", "mid_clouds": "Mid Clouds", "high_clouds": "High Clouds", "moon_poll": "Moon Poll.",
                 "humidity": "Humidity", "seeing_est": "Seeing Est.", "now": "Now",
-                "hybrid_planetarium": "🔭 Hybrid Predictive Planetarium", "solar_system": "🪐 Solar System",
-                "rec_targets": "🌌 Recommended Targets", "free_search": "🔍 Free Target Search", "search_target": "E.g. M31, Pleiades...",
-                "plan_target_btn": "Plan Target 🚀", "back_dash": "Back to Dashboard", "change_target": "Change",
-                "dossier": "📖 Astrophotography Dossier", "type": "Type", "app_mag": "App. Magnitude", "distance": "Distance", "wiki_link": "🔗 Wikipedia",
-                "tactical_tip": "💡 Tactical Tip:", "optical_setup": "📸 Optical Setup", "telescope": "Telescope:", "focal_len": "Focal (mm):",
+                "hybrid_planetarium": "Hybrid Predictive Planetarium", "solar_system": "Solar System",
+                "rec_targets": "Recommended Targets", "free_search": "Free Target Search", "search_target": "E.g. M31, Pleiades...",
+                "plan_target_btn": "Plan Target", "back_dash": "Back to Dashboard", "change_target": "Change",
+                "dossier": "Astrophotography Dossier", "type": "Type", "app_mag": "App. Magnitude", "distance": "Distance", "wiki_link": "Wikipedia",
+                "tactical_tip": "Tactical Tip:", "optical_setup": "Optical Setup", "telescope": "Telescope:", "focal_len": "Focal (mm):",
                 "sensor": "Sensor:", "width": "Width (mm):", "height": "Height (mm):", "fov_calc": "Calculated Field of View",
-                "fov_sim": "📐 Realistic FOV Simulator (DSS2)", "smart_calc": "⏱️ Smart Session Calculator",
+                "fov_sim": "Realistic FOV Simulator (DSS2)", "smart_calc": "Smart Session Calculator",
                 "sunset": "Sunset", "night_start": "Astr. Night Starts", "night_end": "Astr. Night Ends", "sunrise": "Sunrise",
                 "session_start": "Session Start:", "session_end": "Session End:", "sensor_type": "Sensor Type:",
-                "seq_setup": "Sequence Setup", "gen_seq_btn": "✨ Generate Optimal Sequence", "use_frame": "Use | Frame", "poses_sec": "Exposures x Sec",
-                "total": "Total", "every": "Every", "avail_window": "Available Window", "acq_time": "Acquisition Time", "res_time": "Residual Time", "time_overflow": "⚠️ Time Overflow!",
-                "nina_export_title": "🚀 N.I.N.A. Advanced Sequencer Export", "seq_start": "Sequence Start", "cool_cam": "Cool Camera to",
+                "seq_setup": "Sequence Setup", "gen_seq_btn": "Generate Optimal Sequence", "use_frame": "Use | Frame", "poses_sec": "Exposures x Sec",
+                "total": "Total", "every": "Every", "avail_window": "Available Window", "acq_time": "Acquisition Time", "res_time": "Residual Time", "time_overflow": "Time Overflow!",
+                "nina_export_title": "N.I.N.A. Advanced Sequencer Export", "seq_start": "Sequence Start", "cool_cam": "Cool Camera to",
                 "slew_center": "Slew & Center (Plate Solve)", "start_guide": "Start Autoguiding", "end_sec": "End / Safety", "warm_cam": "Warm Up Camera",
-                "park_mount": "Park Mount", "meridian_flip": "Enable Meridian Flip", "filter_map": "Filter Name Mapping", "gen_nina_btn": "💾 Generate N.I.N.A. File",
+                "park_mount": "Park Mount", "meridian_flip": "Enable Meridian Flip", "filter_map": "Filter Name Mapping", "gen_nina_btn": "Generate N.I.N.A. File",
                 "clear": "Clear", "partly_cloudy": "Partly Cloudy", "mostly_cloudy": "Mostly Cloudy", "overcast": "Overcast", "daytime": "Daytime",
                 "new_moon": "New Moon", "waxing_crescent": "Waxing Crescent", "first_quarter": "First Quarter", "waxing_gibbous": "Waxing Gibbous", "full_moon": "Full Moon", "waning_gibbous": "Waning Gibbous", "last_quarter": "Last Quarter", "waning_crescent": "Waning Crescent",
                 "galaxy": "Galaxy", "nebula": "Nebula", "cluster": "Cluster", "star": "Star", "unknown": "Unknown",
                 "alert_planetarium": "Choose a target from the Planetarium first 🔭!", "alert_noseq": "No exposures calculated! Click 'Generate Optimal Sequence' first.",
                 "alert_calib": "Calibration frames take up all the time!", "alert_nolight": "Select at least one Light filter.", "alert_times": "Please set Start and End times.", "no_target": "No visible objects.", "too_bright": "☀️ Sky is too bright.", "dso_too_bright": "☀️ Sky is too bright for Deep Sky.", "select_opt": "-- Select --",
                 "jupiter": "Jupiter", "mars": "Mars", "venus": "Venus", "moon": "Moon", "sun": "Sun", "weather": "Weather",
-                "mode": "Mode:", "single_panel": "Single Panel", "mosaic": "Mosaic", "panels": "Panels (X, Y):", "overlap": "Overlap:", "time_per_panel": "Time per Panel", "fov_warning": "⚠️ Target is larger than your FOV! Consider a mosaic.", "nina_mosaic_msg": "📌 Mosaic Mode active. Use N.I.N.A.'s Framing Assistant to generate panel coordinates.",
-                "gen_report_btn": "📝 Generate Strategic Report", "report_title": "Mosaic Dossier", "copy_report": "Copy to Clipboard", "copied": "Copied!", "report_general": "General Info", "report_strategy": "Per-Panel Strategy", "report_plan": "Exposure Plan (Per Panel)",
+                "mode": "Mode:", "single_panel": "Single Panel", "mosaic": "Mosaic", "panels": "Panels (X, Y):", "overlap": "Overlap:", "time_per_panel": "Time per Panel", "fov_warning": "Target is larger than your FOV! Consider a mosaic.", "nina_mosaic_msg": "Mosaic Mode active. Use N.I.N.A.'s Framing Assistant to generate panel coordinates.",
+                "gen_report_btn": "Generate Strategic Report", "report_title": "Mosaic Dossier", "copy_report": "Copy to Clipboard", "copied": "Copied!", "report_general": "General Info", "report_strategy": "Per-Panel Strategy", "report_plan": "Exposure Plan (Per Panel)",
                 "info_pos": "Search a location. The map shows a 50km radius to help you find 'clear sky holes' while moving under the clouds.",
                 "info_env": "Professional real-time satellite weather data.",
                 "info_planetarium": "Shows visible targets based on altitude. Use the slider to simulate the night sky hours.",
@@ -124,27 +124,27 @@ let lang = localStorage.getItem('ad_lang') || 'it';
                 "info_hdr_col": "Short exposure for HDR strategy. Used to capture the bright core of planetary nebulae and globular clusters without saturating it, alongside the main long exposures. The algorithm automatically adds a separate block in the N.I.N.A. file. HDR frame count is estimated at 50% of the main frames.",
                 "rpt_hdr_note": "Short exposure paired with main frames to recover detail in bright areas (stellar core, nebula center) without saturation. HDR frame count is automatically estimated at 50% of main frames.",
                 "info_nina": "Export a perfect JSON file. Drag & drop it into N.I.N.A. Advanced Sequencer for a fully autonomous night.",
-                "mn_title": "📅 Multi-Night Project Manager",
-                "mn_warning": "⚠️ N.I.N.A. WARNING: Make sure filter names in 'Filter Mapping' perfectly match the names in your filter wheel, or the sequence will fail!",
+                "mn_title": "Multi-Night Project Manager",
+                "mn_warning": "N.I.N.A. WARNING: Make sure filter names in 'Filter Mapping' perfectly match the names in your filter wheel, or the sequence will fail!",
                 "mn_target_ai": "Recommended Target",
                 "mn_planned": "Planned Time",
-                "mn_add_night": "➕ Add Session (Night)",
-                "ai_strat_title": "🧠 Strategic Analysis",
+                "mn_add_night": "Add Session (Night)",
+                "ai_strat_title": "Strategic Analysis",
                 "ai_tot_goal": "Total Goal:",
                 "ai_hours": "Hours",
-                "ai_plan_btn": "📅 Plan Multi-Night Project",
+                "ai_plan_btn": "Plan Multi-Night Project",
                 "mn_sess": "SESSION",
                 "mn_real_h": "REAL HOURS:",
                 "mn_start": "START (> 30°):",
                 "mn_end": "END (Dawn/Dusk):",
                 "mn_filters": "Filters to capture this night:",
-                "mn_delete": "🗑️ Delete",
-                "mn_export": "🚀 Export N.I.N.A. Session",
+                "mn_delete": "Delete",
+                "mn_export": "Export N.I.N.A. Session",
                 "pro_back": "Back to Smart Dashboard",
                 "pro_session_start": "Session Start:",
                 "pro_session_end": "Session End:",
-                "pro_overflow": "⚠️ Overflow! Split into Multi-Night",
-                "pro_triggers": "⚙️ Triggers & Hardware",
+                "pro_overflow": "Overflow! Split into Multi-Night",
+                "pro_triggers": "Triggers & Hardware",
                 "pro_preflight": "Pre-Flight",
                 "pro_cool_cam": "Cool Camera to",
                 "pro_auto_rotator": "Auto Rotator",
@@ -161,40 +161,40 @@ let lang = localStorage.getItem('ad_lang') || 'it';
                 "pro_flat": "Turn On Flat Panel",
                 "pro_sensor_osc": "OSC Sensor (Color)",
                 "pro_sensor_mono": "Mono Sensor",
-                "pro_seq_builder": "📸 Sequence Builder",
-                "pro_export_btn": "💾 Export Advanced Sequence (.json)",
-                "mn_target_tpt": "🎯 Project Goal (TPT)",
-                "mn_target_ai_label": "🎯 Smart Assistant Recommended Target",
-                "mn_planned_time": "📅 Planned Time",
+                "pro_seq_builder": "Sequence Builder",
+                "pro_export_btn": "Export Advanced Sequence (.json)",
+                "mn_target_tpt": "Project Goal (TPT)",
+                "mn_target_ai_label": "Recommended Target",
+                "mn_planned_time": "Planned Time",
                 "mn_completed": "% completed"
             },
             es: {
-                "manual_btn": "📖 Abrir Manual", "pos_title": "📍 Ubicación", "find_place": "Buscar Lugar:", "search_place": "Ej. Atacama...",
-                "lat": "Latitud:", "lon": "Longitud:", "env_data": "🎛️ Datos Ambientales",
+                "manual_btn": "Abrir Manual", "pos_title": "Ubicación", "find_place": "Buscar Lugar:", "search_place": "Ej. Atacama...",
+                "lat": "Latitud:", "lon": "Longitud:", "env_data": "Datos Ambientales",
                 "low_clouds": "Nubes Bajas", "mid_clouds": "Nubes Medias", "high_clouds": "Nubes Altas", "moon_poll": "Ilum. Lunar",
                 "humidity": "Humedad", "seeing_est": "Est. Seeing", "now": "Ahora",
-                "hybrid_planetarium": "🔭 Planetario Híbrido", "solar_system": "🪐 Sistema Solar",
-                "rec_targets": "🌌 Objetivos Recomendados", "free_search": "🔍 Búsqueda Libre", "search_target": "Ej. M31, Pléyades...",
-                "plan_target_btn": "Planificar 🚀", "back_dash": "Volver al Panel", "change_target": "Cambiar",
-                "dossier": "📖 Dosier Fotográfico", "type": "Tipo", "app_mag": "Magnitud", "distance": "Distancia", "wiki_link": "🔗 Wikipedia",
-                "tactical_tip": "💡 Consejo Táctico:", "optical_setup": "📸 Equipo Óptico", "telescope": "Telescopio:", "focal_len": "Focal (mm):",
+                "hybrid_planetarium": "Planetario Híbrido", "solar_system": "Sistema Solar",
+                "rec_targets": "Objetivos Recomendados", "free_search": "Búsqueda Libre", "search_target": "Ej. M31, Pléyades...",
+                "plan_target_btn": "Planificar", "back_dash": "Volver al Panel", "change_target": "Cambiar",
+                "dossier": "Dosier Fotográfico", "type": "Tipo", "app_mag": "Magnitud", "distance": "Distancia", "wiki_link": "Wikipedia",
+                "tactical_tip": "Consejo Táctico:", "optical_setup": "Equipo Óptico", "telescope": "Telescopio:", "focal_len": "Focal (mm):",
                 "sensor": "Sensor:", "width": "Ancho (mm):", "height": "Alto (mm):", "fov_calc": "Campo de Visión (FOV)",
-                "fov_sim": "📐 Simulador FOV Realista (DSS2)", "smart_calc": "⏱️ Calculadora de Sesión Smart",
+                "fov_sim": "Simulador FOV Realista (DSS2)", "smart_calc": "Calculadora de Sesión Smart",
                 "sunset": "Atardecer", "night_start": "Inicio Noche Oscura", "night_end": "Fin Noche Oscura", "sunrise": "Amanecer",
                 "session_start": "Inicio Sesión:", "session_end": "Fin Sesión:", "sensor_type": "Tipo de Sensor:",
-                "seq_setup": "Configuración de Secuencia", "gen_seq_btn": "✨ Generar Secuencia Óptima", "use_frame": "Usar | Frame", "poses_sec": "Tomas x Seg",
-                "total": "Total", "every": "Cada", "avail_window": "Tiempo Disponible", "acq_time": "Tiempo de Captura", "res_time": "Tiempo Restante", "time_overflow": "⚠️ ¡Tiempo excedido!",
-                "nina_export_title": "🚀 Exportar Secuencia a N.I.N.A.", "seq_start": "Inicio Secuencia", "cool_cam": "Enfriar Cámara a",
+                "seq_setup": "Configuración de Secuencia", "gen_seq_btn": "Generar Secuencia Óptima", "use_frame": "Usar | Frame", "poses_sec": "Tomas x Seg",
+                "total": "Total", "every": "Cada", "avail_window": "Tiempo Disponible", "acq_time": "Tiempo de Captura", "res_time": "Tiempo Restante", "time_overflow": "¡Tiempo excedido!",
+                "nina_export_title": "Exportar Secuencia a N.I.N.A.", "seq_start": "Inicio Secuencia", "cool_cam": "Enfriar Cámara a",
                 "slew_center": "Apuntar y Centrar (Plate Solve)", "start_guide": "Iniciar Guiado", "end_sec": "Fin / Seguridad", "warm_cam": "Calentar Cámara",
-                "park_mount": "Aparcar Montura", "meridian_flip": "Activar Meridian Flip", "filter_map": "Mapeo Nombres de Filtros", "gen_nina_btn": "💾 Generar Archivo N.I.N.A.",
+                "park_mount": "Aparcar Montura", "meridian_flip": "Activar Meridian Flip", "filter_map": "Mapeo Nombres de Filtros", "gen_nina_btn": "Generar Archivo N.I.N.A.",
                 "clear": "Despejado", "partly_cloudy": "Poco Nublado", "mostly_cloudy": "Nublado", "overcast": "Cubierto", "daytime": "Día",
                 "new_moon": "Luna Nueva", "waxing_crescent": "Luna Creciente", "first_quarter": "Cuarto Creciente", "waxing_gibbous": "Gibosa Creciente", "full_moon": "Luna Llena", "waning_gibbous": "Gibosa Menguante", "last_quarter": "Cuarto Menguante", "waning_crescent": "Luna Menguante",
                 "galaxy": "Galaxia", "nebula": "Nebulosa", "cluster": "Cúmulo", "star": "Estrella", "unknown": "Desconocido",
                 "alert_planetarium": "¡Elige primero un objetivo en el Planetario 🔭!", "alert_noseq": "¡No se han calculado tomas! Haz clic en 'Generar Secuencia Óptima'.",
                 "alert_calib": "¡Las tomas de calibración ocupan todo el tiempo!", "alert_nolight": "Selecciona al menos un filtro Light.", "alert_times": "Configura las horas de Inicio y Fin.", "no_target": "No hay objetos visibles.", "too_bright": "☀️ Cielo demasiado brillante.", "dso_too_bright": "☀️ Cielo demasiado brillante para cielo profundo.", "select_opt": "-- Seleccionar --",
                 "jupiter": "Júpiter", "mars": "Marte", "venus": "Venus", "moon": "Luna", "sun": "Sol", "weather": "Clima",
-                "mode": "Modo:", "single_panel": "Panel Único", "mosaic": "Mosaico", "panels": "Paneles (X, Y):", "overlap": "Solapamiento:", "time_per_panel": "Tiempo por Panel", "fov_warning": "⚠️ ¡El objeto es más grande que tu campo visual! Considera un mosaico.", "nina_mosaic_msg": "📌 Modo Mosaico activo. Utiliza el Framing Assistant de N.I.N.A. para crear las coordenadas de los paneles.",
-                "gen_report_btn": "📝 Generar Informe Estratégico", "report_title": "Dosier Mosaico", "copy_report": "Copiar al Portapapeles", "copied": "¡Copiado!", "report_general": "Info General", "report_strategy": "Estrategia por Panel", "report_plan": "Plan de Captura",
+                "mode": "Modo:", "single_panel": "Panel Único", "mosaic": "Mosaico", "panels": "Paneles (X, Y):", "overlap": "Solapamiento:", "time_per_panel": "Tiempo por Panel", "fov_warning": "¡El objeto es más grande que tu campo visual! Considera un mosaico.", "nina_mosaic_msg": "Modo Mosaico activo. Utiliza el Framing Assistant de N.I.N.A. para crear las coordenadas de los paneles.",
+                "gen_report_btn": "Generar Informe Estratégico", "report_title": "Dosier Mosaico", "copy_report": "Copiar al Portapapeles", "copied": "¡Copiado!", "report_general": "Info General", "report_strategy": "Estrategia por Panel", "report_plan": "Plan de Captura",
                 "info_pos": "El mapa muestra un radio de 50km para encontrar claros en las nubes si te desplazas.",
                 "info_env": "Datos meteorológicos satelitales en tiempo real.",
                 "info_planetarium": "Muestra objetivos visibles. Desliza la barra temporal para simular el cielo.",
@@ -205,27 +205,27 @@ let lang = localStorage.getItem('ad_lang') || 'it';
                 "info_hdr_col": "Exposición corta para la estrategia HDR. Usada para capturar el núcleo brillante de nebulosas planetarias y cúmulos globulares sin saturarlo. El algoritmo añade automáticamente un bloque separado en el archivo N.I.N.A. El número de poses HDR se estima al 50% de las principales.",
                 "rpt_hdr_note": "Exposición corta junto a las poses principales para recuperar detalles en zonas brillantes (núcleo estelar, centro nebular) sin saturación. El número de poses HDR se estima automáticamente al 50% de las principales.",
                 "info_nina": "Genera un archivo JSON. Arrástralo a N.I.N.A. Advanced Sequencer para automatizar toda tu noche.",
-                "mn_title": "📅 Gestor Multi-Noche",
-                "mn_warning": "⚠️ ATENCIÓN N.I.N.A.: ¡Asegúrate de que los nombres de los filtros en 'Mapeo Nombres' coincidan exactamente con tu rueda de filtros o fallará!",
+                "mn_title": "Gestor Multi-Noche",
+                "mn_warning": "ATENCIÓN N.I.N.A.: ¡Asegúrate de que los nombres de los filtros en 'Mapeo Nombres' coincidan exactamente con tu rueda de filtros o fallará!",
                 "mn_target_ai": "Objetivo",
                 "mn_planned": "Tiempo Planeado",
-                "mn_add_night": "➕ Añadir Sesión (Noche)",
-                "ai_strat_title": "🧠 Análisis Estratégico",
+                "mn_add_night": "Añadir Sesión (Noche)",
+                "ai_strat_title": "Análisis Estratégico",
                 "ai_tot_goal": "Objetivo Total:",
                 "ai_hours": "Horas",
-                "ai_plan_btn": "📅 Planificar Proyecto Multi-Noche",
+                "ai_plan_btn": "Planificar Proyecto Multi-Noche",
                 "mn_sess": "SESIÓN",
                 "mn_real_h": "HORAS REALES:",
                 "mn_start": "INICIO (> 30°):",
                 "mn_end": "FIN (Amanecer):",
                 "mn_filters": "Filtros para esta noche:",
-                "mn_delete": "🗑️ Eliminar",
-                "mn_export": "🚀 Exportar N.I.N.A. Sesión",
+                "mn_delete": "Eliminar",
+                "mn_export": "Exportar N.I.N.A. Sesión",
                 "pro_back": "Volver al Dashboard Smart",
                 "pro_session_start": "Inicio de Sesión:",
                 "pro_session_end": "Fin de Sesión:",
-                "pro_overflow": "⚠️ ¡Desbordamiento! Dividir en Multi-Noche",
-                "pro_triggers": "⚙️ Disparadores y Hardware",
+                "pro_overflow": "¡Desbordamiento! Dividir en Multi-Noche",
+                "pro_triggers": "Disparadores y Hardware",
                 "pro_preflight": "Pre-Vuelo",
                 "pro_cool_cam": "Enfriar Cámara a",
                 "pro_auto_rotator": "Rotador Automático",
@@ -242,40 +242,40 @@ let lang = localStorage.getItem('ad_lang') || 'it';
                 "pro_flat": "Encender Panel Flat",
                 "pro_sensor_osc": "Sensor OSC (Color)",
                 "pro_sensor_mono": "Sensor Mono",
-                "pro_seq_builder": "📸 Constructor de Secuencia",
-                "pro_export_btn": "💾 Exportar Secuencia Avanzada (.json)",
-                "mn_target_tpt": "🎯 Objetivo del Proyecto (TPT)",
-                "mn_target_ai_label": "🎯 Objetivo Recomendado por el Asistente",
-                "mn_planned_time": "📅 Tiempo Planificado",
+                "pro_seq_builder": "Constructor de Secuencia",
+                "pro_export_btn": "Exportar Secuencia Avanzada (.json)",
+                "mn_target_tpt": "Objetivo del Proyecto (TPT)",
+                "mn_target_ai_label": "Objetivo Recomendado",
+                "mn_planned_time": "Tiempo Planificado",
                 "mn_completed": "% completado"
             },
             zh: {
-                "manual_btn": "📖 打开手册", "pos_title": "📍 位置", "find_place": "查找地点:", "search_place": "例如: 丽江...",
-                "lat": "纬度:", "lon": "经度:", "env_data": "🎛️ 环境数据",
+                "manual_btn": "打开手册", "pos_title": "位置", "find_place": "查找地点:", "search_place": "例如: 丽江...",
+                "lat": "纬度:", "lon": "经度:", "env_data": "环境数据",
                 "low_clouds": "低云", "mid_clouds": "中云", "high_clouds": "高云", "moon_poll": "月光影响",
                 "humidity": "湿度", "seeing_est": "视宁度预估", "now": "现在",
-                "hybrid_planetarium": "🔭 混合预测星图", "solar_system": "🪐 太阳系",
-                "rec_targets": "🌌 推荐深空目标", "free_search": "🔍 自由搜索目标", "search_target": "如: M31...",
-                "plan_target_btn": "计划拍摄 🚀", "back_dash": "返回仪表板", "change_target": "更改",
-                "dossier": "📖 天文目标档案", "type": "类型", "app_mag": "视星等", "distance": "距离", "wiki_link": "🔗 维基百科",
-                "tactical_tip": "💡 拍摄建议:", "optical_setup": "📸 光学设置", "telescope": "望远镜:", "focal_len": "焦距 (mm):",
+                "hybrid_planetarium": "混合预测星图", "solar_system": "太阳系",
+                "rec_targets": "推荐深空目标", "free_search": "自由搜索目标", "search_target": "如: M31...",
+                "plan_target_btn": "计划拍摄", "back_dash": "返回仪表板", "change_target": "更改",
+                "dossier": "天文目标档案", "type": "类型", "app_mag": "视星等", "distance": "距离", "wiki_link": "维基百科",
+                "tactical_tip": "拍摄建议:", "optical_setup": "光学设置", "telescope": "望远镜:", "focal_len": "焦距 (mm):",
                 "sensor": "传感器:", "width": "宽度 (mm):", "height": "高度 (mm):", "fov_calc": "视场 (FOV) 计算",
-                "fov_sim": "📐 真实视场模拟器 (DSS2)", "smart_calc": "⏱️ 智能序列计算",
+                "fov_sim": "真实视场模拟器 (DSS2)", "smart_calc": "智能序列计算",
                 "sunset": "日落", "night_start": "天文黑夜开始", "night_end": "天文黑夜结束", "sunrise": "日出",
                 "session_start": "拍摄开始:", "session_end": "拍摄结束:", "sensor_type": "相机类型:",
-                "seq_setup": "序列设置", "gen_seq_btn": "✨ 生成最佳曝光序列", "use_frame": "使用 | 帧类型", "poses_sec": "曝光数 x 秒",
-                "total": "总计", "every": "每隔", "avail_window": "可用拍摄窗口", "acq_time": "总曝光时间", "res_time": "剩余时间", "time_overflow": "⚠️ 时间溢出！",
-                "nina_export_title": "🚀 N.I.N.A. 高级序列导出", "seq_start": "序列开始前", "cool_cam": "相机降温至",
+                "seq_setup": "序列设置", "gen_seq_btn": "生成最佳曝光序列", "use_frame": "使用 | 帧类型", "poses_sec": "曝光数 x 秒",
+                "total": "总计", "every": "每隔", "avail_window": "可用拍摄窗口", "acq_time": "总曝光时间", "res_time": "剩余时间", "time_overflow": "时间溢出！",
+                "nina_export_title": "N.I.N.A. 高级序列导出", "seq_start": "序列开始前", "cool_cam": "相机降温至",
                 "slew_center": "指向并居中 (星板解析)", "start_guide": "开始导星", "end_sec": "结束 / 安全", "warm_cam": "相机回温",
-                "park_mount": "赤道仪归位", "meridian_flip": "启用自动中天翻转", "filter_map": "滤镜名称映射", "gen_nina_btn": "💾 生成 N.I.N.A. 文件",
+                "park_mount": "赤道仪归位", "meridian_flip": "启用自动中天翻转", "filter_map": "滤镜名称映射", "gen_nina_btn": "生成 N.I.N.A. 文件",
                 "clear": "晴朗", "partly_cloudy": "少云", "mostly_cloudy": "多云", "overcast": "阴天", "daytime": "白天",
                 "new_moon": "新月", "waxing_crescent": "蛾眉月", "first_quarter": "上弦月", "waxing_gibbous": "盈凸月", "full_moon": "满月", "waning_gibbous": "亏凸月", "last_quarter": "下弦月", "waning_crescent": "残月",
                 "galaxy": "星系", "nebula": "星云", "cluster": "星团", "star": "恒星", "unknown": "未知",
                 "alert_planetarium": "请先从星图中选择一个目标 🔭！", "alert_noseq": "没有计算出任何曝光！请先点击 '生成最佳曝光序列'。",
                 "alert_calib": "校准帧占据了所有可用时间！", "alert_nolight": "请至少选择一个亮场 (Light) 滤镜。", "alert_times": "请先设置开始和结束时间。", "no_target": "当前没有可见目标。", "too_bright": "☀️ 天空太亮了。", "dso_too_bright": "☀️ 天空对深空目标来说太亮了。", "select_opt": "-- 请选择 --",
                 "jupiter": "木星", "mars": "火星", "venus": "金星", "moon": "月球", "sun": "太阳", "weather": "天气",
-                "mode": "模式:", "single_panel": "单面板", "mosaic": "拼接", "panels": "面板 (X, Y):", "overlap": "重叠度:", "time_per_panel": "每块面板时间", "fov_warning": "⚠️ 目标比你的视场还要大！考虑使用拼接拍摄。", "nina_mosaic_msg": "📌 拼接模式已激活。请使用 N.I.N.A. 的构图助手生成面板坐标。",
-                "gen_report_btn": "📝 生成策略报告", "report_title": "拼接拍摄档案", "copy_report": "复制到剪贴板", "copied": "已复制!", "report_general": "基本信息", "report_strategy": "单面板策略", "report_plan": "曝光计划",
+                "mode": "模式:", "single_panel": "单面板", "mosaic": "拼接", "panels": "面板 (X, Y):", "overlap": "重叠度:", "time_per_panel": "每块面板时间", "fov_warning": "目标比你的视场还要大！考虑使用拼接拍摄。", "nina_mosaic_msg": "拼接模式已激活。请使用 N.I.N.A. 的构图助手生成面板坐标。",
+                "gen_report_btn": "生成策略报告", "report_title": "拼接拍摄档案", "copy_report": "复制到剪贴板", "copied": "已复制!", "report_general": "基本信息", "report_strategy": "单面板策略", "report_plan": "曝光计划",
                 "info_pos": "搜索位置。地图显示 50 公里半径，帮助您在云层下寻找晴空区。",
                 "info_env": "专业的实时卫星气象数据。",
                 "info_planetarium": "显示可见目标。滑动时间轴以模拟今晚的星空。",
@@ -286,27 +286,27 @@ let lang = localStorage.getItem('ad_lang') || 'it';
                 "info_hdr_col": "HDR 策略的短曝光时间。用于捕捉行星状星云和球状星团明亮核心而不使其过曝，与主要长曝光并行使用。算法会在 N.I.N.A. 文件中自动添加独立模块，HDR 帧数估算为主帧的 50%。",
                 "rpt_hdr_note": "与主要曝光配合的短曝光，用于恢复明亮区域（恒星核心、星云中心）的细节而不过曝。HDR 帧数自动估算为主帧的 50%。",
                 "info_nina": "导出 JSON 文件。将其拖入 N.I.N.A. 高级序列器即可实现全自动拍摄。",
-                "mn_title": "📅 多夜拍摄项目管理",
-                "mn_warning": "⚠️ N.I.N.A. 警告：请确保底部面板的“滤镜名称”与滤镜轮中的名称完全一致，否则序列将报错！",
+                "mn_title": "多夜拍摄项目管理",
+                "mn_warning": "N.I.N.A. 警告：请确保底部面板的“滤镜名称”与滤镜轮中的名称完全一致，否则序列将报错！",
                 "mn_target_ai": "建议目标时间",
                 "mn_planned": "已计划时间",
-                "mn_add_night": "➕ 添加拍摄会话 (夜晚)",
-                "ai_strat_title": "🧠 策略分析",
+                "mn_add_night": "添加拍摄会话 (夜晚)",
+                "ai_strat_title": "策略分析",
                 "ai_tot_goal": "总目标：",
                 "ai_hours": "小时",
-                "ai_plan_btn": "📅 计划多夜拍摄",
+                "ai_plan_btn": "计划多夜拍摄",
                 "mn_sess": "会话",
                 "mn_real_h": "实际时间：",
                 "mn_start": "开始 (> 30°)：",
                 "mn_end": "结束 (晨昏)：",
                 "mn_filters": "本夜拍摄滤镜：",
-                "mn_delete": "🗑️ 删除",
-                "mn_export": "🚀 导出 N.I.N.A. 会话",
+                "mn_delete": "删除",
+                "mn_export": "导出 N.I.N.A. 会话",
                 "pro_back": "返回智能仪表板",
                 "pro_session_start": "拍摄开始:",
                 "pro_session_end": "拍摄结束:",
-                "pro_overflow": "⚠️ 时间溢出！拆分为多夜拍摄",
-                "pro_triggers": "⚙️ 触发器与硬件",
+                "pro_overflow": "时间溢出！拆分为多夜拍摄",
+                "pro_triggers": "触发器与硬件",
                 "pro_preflight": "拍摄前准备",
                 "pro_cool_cam": "相机降温至",
                 "pro_auto_rotator": "自动旋转器",
@@ -323,11 +323,11 @@ let lang = localStorage.getItem('ad_lang') || 'it';
                 "pro_flat": "开启平场灯",
                 "pro_sensor_osc": "彩色相机 (OSC)",
                 "pro_sensor_mono": "黑白相机 (Mono)",
-                "pro_seq_builder": "📸 序列构建器",
-                "pro_export_btn": "💾 导出高级序列 (.json)",
-                "mn_target_tpt": "🎯 项目目标 (TPT)",
-                "mn_target_ai_label": "🎯 智能助手推荐目标",
-                "mn_planned_time": "📅 已计划时间",
+                "pro_seq_builder": "序列构建器",
+                "pro_export_btn": "导出高级序列 (.json)",
+                "mn_target_tpt": "项目目标 (TPT)",
+                "mn_target_ai_label": "推荐目标",
+                "mn_planned_time": "已计划时间",
                 "mn_completed": "% 已完成"
             }
         };
@@ -337,10 +337,10 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.en.go_to_pro = "Go to PRO Calculator";
         i18n.es.go_to_pro = "Ir a la Calculadora PRO";
         i18n.zh.go_to_pro = "进入 PRO 计算器";
-        i18n.it.mosaic_active_msg = "✅ Modalità Mosaico attiva.";
-        i18n.en.mosaic_active_msg = "✅ Mosaic Mode active.";
-        i18n.es.mosaic_active_msg = "✅ Modo Mosaico activo.";
-        i18n.zh.mosaic_active_msg = "✅ 拼接模式已激活。";
+        i18n.it.mosaic_active_msg = "Modalità Mosaico attiva.";
+        i18n.en.mosaic_active_msg = "Mosaic Mode active.";
+        i18n.es.mosaic_active_msg = "Modo Mosaico activo.";
+        i18n.zh.mosaic_active_msg = "拼接模式已激活。";
 	i18n.it.info_map = "Mappa Empirica di Visibilità. Visualizza un raggio simbolico di 50 km per mostrarti a colpo d'occhio le reali condizioni del cielo. La sovrapposizione dei vari strati ti farà capire subito se la serata sarà limpida o compromessa. Usa i bottoni superiori per attivare i filtri meteo (Nuvole, Jet Stream, Umidità) e scorri la linea temporale per prevedere la loro evoluzione nelle prossime ore.";
         i18n.en.info_map = "Empirical Visibility Map. Shows a symbolic 50 km radius to give you at-a-glance real sky conditions. The overlay of different layers will let you know immediately if the night will be clear or compromised. Use the top buttons to toggle weather filters (Clouds, Jet Stream, Humidity) and slide the timeline to forecast their evolution.";
         i18n.es.info_map = "Mapa Empírico de Visibilidad. Muestra un radio simbólico de 50 km para indicarte de un vistazo las condiciones reales del cielo. La superposición de capas te hará entender de inmediato si la noche será despejada o comprometida. Usa los botones superiores para activar filtros (Nubes, Jet Stream, Humedad) y desliza la línea temporal para prever su evolución.";
@@ -363,23 +363,23 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.zh.info_multinight = "<b>多夜拍摄规划</b><br><br>当计划帧数超出单夜时间时，此工具将其分配到多个拍摄夜晚。<br><br>顶部显示 <b>TPT</b>（总计划时间）：您项目的固定目标，由 PRO 网格计算得出。只有当所有夜晚总和达到 TPT 时，进度条才变绿。<br><br>每个夜晚可以：<br>• 设置开始和结束时间<br>• 决定每个滤镜的拍摄帧数<br>• 检查帧数是否能在夜间窗口内完成<br>• 导出该夜专属的 N.I.N.A. 文件<br><br>持续添加夜晚直到<b>已计划时间</b>达到 TPT。";
 
         // Iniezione traduzioni per il bottone Salva
-        i18n.it.save_btn = "💾 Salva";
-        i18n.en.save_btn = "💾 Save";
-        i18n.es.save_btn = "💾 Guardar";
-        i18n.zh.save_btn = "💾 保存";
+        i18n.it.save_btn = "Salva";
+        i18n.en.save_btn = "Save";
+        i18n.es.save_btn = "Guardar";
+        i18n.zh.save_btn = "保存";
         i18n.it.aperture = "Diametro (mm):";
         i18n.en.aperture = "Aperture (mm):";
         i18n.es.aperture = "Diámetro (mm):";
         i18n.zh.aperture = "口径 (mm):";
 
-        i18n.it.asiair_close = "✅ Chiudi e Vai al Telescopio";
-        i18n.en.asiair_close = "✅ Close and Go to Mount";
-        i18n.es.asiair_close = "✅ Cerrar e Ir al Telescopio";
-        i18n.zh.asiair_close = "✅ 关闭并开始拍摄";
-        i18n.it.export_asiair = "🔴 Esporta per ZWO ASIAIR";
-        i18n.en.export_asiair = "🔴 Export ZWO ASIAIR";
-        i18n.es.export_asiair = "🔴 Exportar ZWO ASIAIR";
-        i18n.zh.export_asiair = "🔴 导出 ZWO ASIAIR";
+        i18n.it.asiair_close = "Chiudi e Vai al Telescopio";
+        i18n.en.asiair_close = "Close and Go to Mount";
+        i18n.es.asiair_close = "Cerrar e Ir al Telescopio";
+        i18n.zh.asiair_close = "关闭并开始拍摄";
+        i18n.it.export_asiair = "Esporta per ZWO ASIAIR";
+        i18n.en.export_asiair = "Export ZWO ASIAIR";
+        i18n.es.export_asiair = "Exportar ZWO ASIAIR";
+        i18n.zh.export_asiair = "导出 ZWO ASIAIR";
         i18n.it.info_strat_analysis = "L'analisi è generata da un algoritmo matematico che combina più fattori: tipologia del bersaglio (ogni categoria ha un tempo base calibrato), magnitudine superficiale, rapporto focale dello strumento, inquinamento lunare, caratteristiche del sensore e — dalla v5.9.3 — l'indice di Bortle del sito. I cieli bui (Bortle 1–4) riducono il tempo stimato; i cieli urbani (Bortle 6–9) lo aumentano progressivamente. Per nebulose a emissione con filtri narrowband attivi la penalità è attenuata. Quando la combinazione di fattori porta a stime irragionevoli, il sistema sconsiglia l'integrazione e suggerisce alternative.";
         i18n.en.info_strat_analysis = "The analysis is generated by a mathematical algorithm combining multiple factors: target type (each category has a calibrated base time), surface brightness, instrument focal ratio, lunar pollution, sensor characteristics and — from v5.9.3 — the site's Bortle index. Dark skies (Bortle 1–4) reduce the estimated time; urban skies (Bortle 6–9) progressively increase it. For emission nebulae with narrowband filters active, the penalty is reduced. When the combination of factors leads to unreasonable estimates, the system advises against imaging and suggests alternatives.";
         i18n.es.info_strat_analysis = "El análisis es generado por un algoritmo matemático que combina varios factores: tipo de objetivo (cada categoría tiene un tiempo base calibrado), brillo superficial, relación focal del instrumento, contaminación lunar, características del sensor y — desde la v5.9.3 — el índice Bortle del sitio. Los cielos oscuros (Bortle 1–4) reducen el tiempo estimado; los cielos urbanos (Bortle 6–9) lo aumentan progresivamente. Para nebulosas de emisión con filtros narrowband activos, la penalización se reduce. Cuando la combinación de factores lleva a estimaciones irrazonables, el sistema desaconseja y sugiere alternativas.";
@@ -398,20 +398,20 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.es.sampling_scale = "Escala de Muestreo";
         i18n.zh.sampling_scale = "采样率 (Image Scale)";
 
-        i18n.it.oversampled = "⚠️ Sovracampionato (Luce dispersa, minor SNR)";
-        i18n.en.oversampled = "⚠️ Oversampled (Light spread, lower SNR)";
-        i18n.es.oversampled = "⚠️ Sobremuestreado (Pérdida de luz/SNR)";
-        i18n.zh.oversampled = "⚠️ 过采样 (星点模糊, 信噪比低)";
+        i18n.it.oversampled = "Sovracampionato (Luce dispersa, minor SNR)";
+        i18n.en.oversampled = "Oversampled (Light spread, lower SNR)";
+        i18n.es.oversampled = "Sobremuestreado (Pérdida de luz/SNR)";
+        i18n.zh.oversampled = "过采样 (星点模糊, 信噪比低)";
 
-        i18n.it.ideal_sampling = "✅ Campionamento Ideale";
-        i18n.en.ideal_sampling = "✅ Ideal Sampling";
-        i18n.es.ideal_sampling = "✅ Muestreo Ideal";
-        i18n.zh.ideal_sampling = "✅ 理想采样";
+        i18n.it.ideal_sampling = "Campionamento Ideale";
+        i18n.en.ideal_sampling = "Ideal Sampling";
+        i18n.es.ideal_sampling = "Muestreo Ideal";
+        i18n.zh.ideal_sampling = "理想采样";
 
-        i18n.it.undersampled = "⚠️ Sottocampionato (Stelle squadrate)";
-        i18n.en.undersampled = "⚠️ Undersampled (Blocky stars)";
-        i18n.es.undersampled = "⚠️ Submuestreado (Estrellas cuadradas)";
-        i18n.zh.undersampled = "⚠️ 欠采样 (星点呈方形)";
+        i18n.it.undersampled = "Sottocampionato (Stelle squadrate)";
+        i18n.en.undersampled = "Undersampled (Blocky stars)";
+        i18n.es.undersampled = "Submuestreado (Estrellas cuadradas)";
+        i18n.zh.undersampled = "欠采样 (星点呈方形)";
         i18n.it.rotate_target = "Ruota Camera (Rotatore Auto)";
         i18n.en.rotate_target = "Rotate Camera (Auto Rotator)";
         i18n.es.rotate_target = "Rotar Cámara (Rotador Auto)";
@@ -419,10 +419,10 @@ let lang = localStorage.getItem('ad_lang') || 'it';
 
         
 
-        i18n.it.fov_center_title = "📍 Centro FOV";
-        i18n.en.fov_center_title = "📍 FOV Center";
-        i18n.es.fov_center_title = "📍 Centro FOV";
-        i18n.zh.fov_center_title = "📍 视场中心";
+        i18n.it.fov_center_title = "Centro FOV";
+        i18n.en.fov_center_title = "FOV Center";
+        i18n.es.fov_center_title = "Centro FOV";
+        i18n.zh.fov_center_title = "视场中心";
 
         i18n.it.fov_ra_label = "AR:";
         i18n.en.fov_ra_label = "RA:";
@@ -454,10 +454,10 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.es.meridian_flip_outside = "Fuera de noche";
         i18n.zh.meridian_flip_outside = "夜外";
 
-        i18n.it.meridian_flip_warn = "⚠️ Il Meridian Flip cade dentro la sessione pianificata! Considera di spezzare la sequenza in due blocchi.";
-        i18n.en.meridian_flip_warn = "⚠️ Meridian Flip falls within the planned session! Consider splitting the sequence into two blocks.";
-        i18n.es.meridian_flip_warn = "⚠️ El Meridian Flip ocurre durante la sesión planificada. Considera dividir la secuencia en dos bloques.";
-        i18n.zh.meridian_flip_warn = "⚠️ 子午翻转发生在计划拍摄时间段内！建议将序列分为两段。";
+        i18n.it.meridian_flip_warn = "Il Meridian Flip cade dentro la sessione pianificata! Considera di spezzare la sequenza in due blocchi.";
+        i18n.en.meridian_flip_warn = "Meridian Flip falls within the planned session! Consider splitting the sequence into two blocks.";
+        i18n.es.meridian_flip_warn = "El Meridian Flip ocurre durante la sesión planificada. Considera dividir la secuencia en dos bloques.";
+        i18n.zh.meridian_flip_warn = "子午翻转发生在计划拍摄时间段内！建议将序列分为两段。";
 
         i18n.it.meridian_flip_ok = "Il Meridian Flip non interferisce con la sessione pianificata.";
         i18n.en.meridian_flip_ok = "Meridian Flip does not interfere with the planned session.";
@@ -484,25 +484,30 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.es.bias_overhead_tip = "Sobrecarga técnica estimada por fotograma (lectura del sensor + guardado FITS). Los Bias tienen exp=0 pero requieren este tiempo.";
         i18n.zh.bias_overhead_tip = "每帧预估技术开销（传感器读出 + FITS保存）。偏置帧曝光=0，但每帧仍需此时间开销。";
 
-        i18n.it.rotate_hint = "📱 Per una visualizzazione ottimale della griglia filtri, ruota il telefono in orizzontale.";
-        i18n.en.rotate_hint = "📱 For optimal filter grid display, rotate your phone to landscape.";
-        i18n.es.rotate_hint = "📱 Para una visualización óptima de la cuadrícula, gira el teléfono en horizontal.";
-        i18n.zh.rotate_hint = "📱 为了最佳滤镜网格显示效果，请将手机横向旋转。";
+        i18n.it.info_hdr_row = "La riga <b>Light HDR</b> serve per la strategia ad alto dinamismo: affianca alle pose lunghe un set di esposizioni brevi per catturare i dettagli nei nuclei sovraesposti (es. nebulose planetarie, ammassi globulari) senza saturarli.<br><br>Imposta <b>Pose</b> e <b>Secondi</b> liberamente — i lucchetti 🔒 proteggono i tuoi valori personalizzati quando clicchi su 'Genera Sequenza Ottimale'.<br><br>Le pose HDR vengono incluse nel calcolo dei tempi e nell'export N.I.N.A., dove appaiono come blocco separato con il suffisso <i>HDR</i>.";
+        i18n.en.info_hdr_row = "The <b>Light HDR</b> row enables a high-dynamic-range strategy: it pairs short exposures alongside the main long ones to capture detail in overexposed cores (e.g. planetary nebulae, globular clusters) without saturation.<br><br>Set <b>Frames</b> and <b>Seconds</b> freely — the 🔒 locks protect your custom values when you click 'Generate Optimal Sequence'.<br><br>HDR frames are included in the time calculation and in the N.I.N.A. export, where they appear as a separate block with the <i>HDR</i> suffix.";
+        i18n.es.info_hdr_row = "La fila <b>Light HDR</b> permite una estrategia de alto rango dinámico: complementa las exposiciones largas con exposiciones cortas para capturar detalles en núcleos sobreexpuestos (nebulosas planetarias, cúmulos globulares) sin saturarlos.<br><br>Ajusta <b>Poses</b> y <b>Segundos</b> libremente — los 🔒 protegen tus valores personalizados al hacer clic en 'Generar Secuencia Óptima'.<br><br>Las poses HDR se incluyen en el cálculo de tiempos y en el export N.I.N.A., donde aparecen como bloque separado con el sufijo <i>HDR</i>.";
+        i18n.zh.info_hdr_row = "<b>Light HDR</b> 行用于高动态范围策略：将短曝光与主要长曝光配合使用，以捕捉过曝核心（如行星状星云、球状星团）的细节而不饱和。<br><br>自由设置<b>帧数</b>和<b>秒数</b> — 🔒 锁定键在点击'生成最优序列'时保护您的自定义值。<br><br>HDR 帧将计入时间计算，并在 N.I.N.A. 导出文件中以独立模块显示，后缀为 <i>HDR</i>。";
+
+        i18n.it.rotate_hint = "Per una visualizzazione ottimale della griglia filtri, ruota il telefono in orizzontale.";
+        i18n.en.rotate_hint = "For optimal filter grid display, rotate your phone to landscape.";
+        i18n.es.rotate_hint = "Para una visualización óptima de la cuadrícula, gira el teléfono en horizontal.";
+        i18n.zh.rotate_hint = "为了最佳滤镜网格显示效果，请将手机横向旋转。";
 
         i18n.it.bin_label = "BIN:";
         i18n.en.bin_label = "BIN:";
         i18n.es.bin_label = "BIN:";
         i18n.zh.bin_label = "像素合并:";
 
-        i18n.it.report_pdf_btn    = "📄 Esporta Report HTML";
-        i18n.en.report_pdf_btn    = "📄 Export HTML Report";
-        i18n.es.report_pdf_btn    = "📄 Exportar Informe HTML";
-        i18n.zh.report_pdf_btn    = "📄 导出HTML报告";
+        i18n.it.report_pdf_btn    = "Esporta Report HTML";
+        i18n.en.report_pdf_btn    = "Export HTML Report";
+        i18n.es.report_pdf_btn    = "Exportar Informe HTML";
+        i18n.zh.report_pdf_btn    = "导出HTML报告";
 
-        i18n.it.report_mn_pdf_btn = "📄 Esporta Report HTML Progetto";
-        i18n.en.report_mn_pdf_btn = "📄 Export Project HTML Report";
-        i18n.es.report_mn_pdf_btn = "📄 Exportar Informe HTML del Proyecto";
-        i18n.zh.report_mn_pdf_btn = "📄 导出项目HTML报告";
+        i18n.it.report_mn_pdf_btn = "Esporta Report HTML Progetto";
+        i18n.en.report_mn_pdf_btn = "Export Project HTML Report";
+        i18n.es.report_mn_pdf_btn = "Exportar Informe HTML del Proyecto";
+        i18n.zh.report_mn_pdf_btn = "导出项目HTML报告";
 
         // ── Traduzioni PDF Report ──────────────────────────────────────────────
         i18n.it.rpt_session_title   = "Report Sessione di Ripresa";
@@ -932,20 +937,20 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.es.save_tel_label      = "Nombre del telescopio / objetivo:";
         i18n.zh.save_tel_label      = "望远镜 / 镜头名称:";
 
-        i18n.it.save_tel_confirm    = "💾 Salva";
-        i18n.en.save_tel_confirm    = "💾 Save";
-        i18n.es.save_tel_confirm    = "💾 Guardar";
-        i18n.zh.save_tel_confirm    = "💾 保存";
+        i18n.it.save_tel_confirm    = "Salva";
+        i18n.en.save_tel_confirm    = "Save";
+        i18n.es.save_tel_confirm    = "Guardar";
+        i18n.zh.save_tel_confirm    = "保存";
 
         i18n.it.save_tel_cancel     = "Annulla";
         i18n.en.save_tel_cancel     = "Cancel";
         i18n.es.save_tel_cancel     = "Cancelar";
         i18n.zh.save_tel_cancel     = "取消";
 
-        i18n.it.del_tel_btn         = "🗑️";
-        i18n.en.del_tel_btn         = "🗑️";
-        i18n.es.del_tel_btn         = "🗑️";
-        i18n.zh.del_tel_btn         = "🗑️";
+        i18n.it.del_tel_btn         = "";
+        i18n.en.del_tel_btn         = "";
+        i18n.es.del_tel_btn         = "";
+        i18n.zh.del_tel_btn         = "";
 
         i18n.it.del_tel_title       = "Elimina Telescopio";
         i18n.en.del_tel_title       = "Delete Telescope";
@@ -1010,10 +1015,10 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.es.lp_layer = "Contaminación Lumínica";
         i18n.zh.lp_layer = "光污染";
         // Legenda LP
-        i18n.it.lp_legend_title = "🌍 Scala Inquinamento Luminoso (Lorenz 2024)";
-        i18n.en.lp_legend_title = "🌍 Light Pollution Scale (Lorenz 2024)";
-        i18n.es.lp_legend_title = "🌍 Escala de Contaminación Lumínica (Lorenz 2024)";
-        i18n.zh.lp_legend_title = "🌍 光污染等级（Lorenz 2024）";
+        i18n.it.lp_legend_title = "Scala Inquinamento Luminoso (Lorenz 2024)";
+        i18n.en.lp_legend_title = "Light Pollution Scale (Lorenz 2024)";
+        i18n.es.lp_legend_title = "Escala de Contaminación Lumínica (Lorenz 2024)";
+        i18n.zh.lp_legend_title = "光污染等级（Lorenz 2024）";
         i18n.it.lp_b1 = "Bortle 1"; i18n.en.lp_b1 = "Bortle 1"; i18n.es.lp_b1 = "Bortle 1"; i18n.zh.lp_b1 = "博特尔1";
         i18n.it.lp_b2 = "Bortle 2"; i18n.en.lp_b2 = "Bortle 2"; i18n.es.lp_b2 = "Bortle 2"; i18n.zh.lp_b2 = "博特尔2";
         i18n.it.lp_b3 = "Bortle 3"; i18n.en.lp_b3 = "Bortle 3"; i18n.es.lp_b3 = "Bortle 3"; i18n.zh.lp_b3 = "博特尔3";
@@ -1066,10 +1071,10 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.es.cl_subtitle         = "Novedades respecto a la versión anterior";
         i18n.zh.cl_subtitle         = "与上一版本相比的新内容";
 
-        i18n.it.cl_close_btn        = "Inizia a usare v5.9.3 ✨";
-        i18n.en.cl_close_btn        = "Start using v5.9.3 ✨";
-        i18n.es.cl_close_btn        = "Empezar a usar v5.9.3 ✨";
-        i18n.zh.cl_close_btn        = "开始使用 v5.9.3 ✨";
+        i18n.it.cl_close_btn = "Inizia a usare v6.0 🚀";
+        i18n.en.cl_close_btn = "Start using v6.0 🚀";
+        i18n.es.cl_close_btn = "Empezar a usar v6.0 🚀";
+        i18n.zh.cl_close_btn = "开始使用 v6.0 🚀";
 
         i18n.it.cl1_title           = "Database telescopi e sensori ampliato";
         i18n.en.cl1_title           = "Expanded telescope and sensor database";
@@ -1162,3 +1167,235 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.zh.cl9_desc            = "气象时间线现在区分两个暮光阶段：黄昏（橙色）和黎明（紫色），由SunCalc根据您的位置计算。";
 
         function t(key) { return i18n[lang][key] || key; }
+
+        i18n.it.info_mn_nina = "<b>Orari predefiniti per la notte</b><br><br>L'orario di <b>inizio</b> viene impostato automaticamente sull'alba astronomica (quando il Sole scende a –18°) oppure sul momento in cui il soggetto supera i 30° sull'orizzonte — viene usato il valore più tardivo tra i due.<br><br>L'orario di <b>fine</b> coincide con l'alba astronomica del mattino successivo.<br><br>Puoi modificare liberamente questi orari per adattarli alle tue esigenze reali.";
+        i18n.en.info_mn_nina = "<b>Default night times</b><br><br>The <b>start</b> time is automatically set to astronomical dusk (Sun at –18°) or the moment the target rises above 30° — whichever comes later.<br><br>The <b>end</b> time coincides with the following morning's astronomical dawn.<br><br>You can freely adjust these times to match your actual needs.";
+        i18n.es.info_mn_nina = "<b>Horarios predeterminados de la noche</b><br><br>El horario de <b>inicio</b> se establece automáticamente al anochecer astronómico (Sol a –18°) o cuando el objetivo supera los 30° sobre el horizonte — se usa el valor más tardío.<br><br>El horario de <b>fin</b> coincide con el amanecer astronómico de la mañana siguiente.<br><br>Puedes modificar estos horarios libremente para adaptarlos a tus necesidades.";
+        i18n.zh.info_mn_nina = "<b>默认夜间时间</b><br><br><b>开始</b>时间自动设置为天文薄暮（太阳位于–18°）或目标升至地平线30°以上的时刻——取两者中较晚的一个。<br><br><b>结束</b>时间与次日清晨的天文晨光一致。<br><br>您可以根据实际需要自由调整这些时间。";
+
+        // ── Landing page ──
+        i18n.it.land_badge         = "Suite completa per astrofotografi";
+        i18n.en.land_badge         = "Complete astrophotography suite";
+        i18n.es.land_badge         = "Suite completa para astrofotógrafos";
+        i18n.zh.land_badge         = "天文摄影一体化套件";
+
+        i18n.it.land_title1        = "Pianifica la notte";
+        i18n.en.land_title1        = "Plan the perfect";
+        i18n.es.land_title1        = "Planifica la noche";
+        i18n.zh.land_title1        = "规划完美";
+
+        i18n.it.land_title2        = "perfetta";
+        i18n.en.land_title2        = "night";
+        i18n.es.land_title2        = "perfecta";
+        i18n.zh.land_title2        = "拍摄之夜";
+
+        i18n.it.land_sub           = "Meteo tattico, planetario predittivo, calcolo ottico e generazione automatica di sequenze per N.I.N.A. — tutto in un'unica app.";
+        i18n.en.land_sub           = "Tactical weather, predictive planetarium, optical calculator and automatic sequence generation for N.I.N.A. — all in one app.";
+        i18n.es.land_sub           = "Meteorología táctica, planetario predictivo, cálculo óptico y generación automática de secuencias para N.I.N.A. — todo en una sola app.";
+        i18n.zh.land_sub           = "战术天气、预测星历、光学计算和自动生成 N.I.N.A. 序列 — 一体化应用。";
+
+        i18n.it.land_cta_open      = "Apri Dashboard";
+        i18n.en.land_cta_open      = "Open Dashboard";
+        i18n.es.land_cta_open      = "Abrir Dashboard";
+        i18n.zh.land_cta_open      = "打开仪表板";
+
+        i18n.it.land_cta_weather   = "Meteo tattico";
+        i18n.en.land_cta_weather   = "Tactical weather";
+        i18n.es.land_cta_weather   = "Meteorología";
+        i18n.zh.land_cta_weather   = "战术天气";
+
+        i18n.it.land_cta_smart     = "Calcolatore Smart";
+        i18n.en.land_cta_smart     = "Smart calculator";
+        i18n.es.land_cta_smart     = "Calculadora Smart";
+        i18n.zh.land_cta_smart     = "智能计算器";
+
+        i18n.it.land_cta_pro       = "Calcolatore PRO";
+        i18n.en.land_cta_pro       = "PRO calculator";
+        i18n.es.land_cta_pro       = "Calculadora PRO";
+        i18n.zh.land_cta_pro       = "PRO 计算器";
+
+        i18n.it.land_cta_start     = "Comincia";
+        i18n.en.land_cta_start     = "Get Started";
+        i18n.es.land_cta_start     = "Comenzar";
+        i18n.zh.land_cta_start     = "开始使用";
+
+        i18n.it.land_preview_night = "Finestra notturna";
+        i18n.en.land_preview_night = "Night window";
+        i18n.es.land_preview_night = "Ventana nocturna";
+        i18n.zh.land_preview_night = "夜间窗口";
+
+        i18n.it.land_preview_seq   = "Sequenza ottimale";
+        i18n.en.land_preview_seq   = "Optimal sequence";
+        i18n.es.land_preview_seq   = "Secuencia óptima";
+        i18n.zh.land_preview_seq   = "最优序列";
+
+        i18n.it.land_preview_tl    = "Timeline meteo — prossime 24h";
+        i18n.en.land_preview_tl    = "Weather timeline — next 24h";
+        i18n.es.land_preview_tl    = "Línea de tiempo — próximas 24h";
+        i18n.zh.land_preview_tl    = "天气时间轴 — 未来24小时";
+
+        i18n.it.land_stat_dso      = "oggetti DSO";
+        i18n.en.land_stat_dso      = "DSO objects";
+        i18n.es.land_stat_dso      = "objetos DSO";
+        i18n.zh.land_stat_dso      = "深空天体";
+
+        i18n.it.land_stat_lang     = "lingue";
+        i18n.en.land_stat_lang     = "languages";
+        i18n.es.land_stat_lang     = "idiomas";
+        i18n.zh.land_stat_lang     = "语言";
+
+        i18n.it.land_stat_export   = "export nativo";
+        i18n.en.land_stat_export   = "native export";
+        i18n.es.land_stat_export   = "exportación nativa";
+        i18n.zh.land_stat_export   = "原生导出";
+
+        i18n.it.land_stat_pwa      = "funziona offline";
+        i18n.en.land_stat_pwa      = "works offline";
+        i18n.es.land_stat_pwa      = "funciona sin conexión";
+        i18n.zh.land_stat_pwa      = "离线可用";
+
+        i18n.it.land_feat_sup      = "cosa include";
+        i18n.en.land_feat_sup      = "what's included";
+        i18n.es.land_feat_sup      = "qué incluye";
+        i18n.zh.land_feat_sup      = "功能概览";
+
+        i18n.it.land_feat_title    = "Tutto quello che ti serve, in un'unica app";
+        i18n.en.land_feat_title    = "Everything you need, in one app";
+        i18n.es.land_feat_title    = "Todo lo que necesitas, en una sola app";
+        i18n.zh.land_feat_title    = "一切所需，尽在一处";
+
+        i18n.it.land_f1_name       = "Meteo tattico";
+        i18n.en.land_f1_name       = "Tactical weather";
+        i18n.es.land_f1_name       = "Meteorología táctica";
+        i18n.zh.land_f1_name       = "战术天气";
+
+        i18n.it.land_f1_desc       = "Nuvole, jet stream, seeing e inquinamento luminoso su mappa con timeline 24h.";
+        i18n.en.land_f1_desc       = "Clouds, jet stream, seeing and light pollution on map with 24h timeline.";
+        i18n.es.land_f1_desc       = "Nubes, corriente en chorro, seeing e contaminación lumínica con línea de tiempo 24h.";
+        i18n.zh.land_f1_desc       = "云量、急流、视宁度和光污染地图，附24小时时间轴。";
+
+        i18n.it.land_f2_name       = "Planetario ibrido";
+        i18n.en.land_f2_name       = "Hybrid planetarium";
+        i18n.es.land_f2_name       = "Planetario híbrido";
+        i18n.zh.land_f2_name       = "混合星历";
+
+        i18n.it.land_f2_desc       = "Oggetti consigliati per orario, ricerca SIMBAD universale e simulatore FOV su DSS2.";
+        i18n.en.land_f2_desc       = "Targets recommended by time, universal SIMBAD search and FOV simulator on DSS2.";
+        i18n.es.land_f2_desc       = "Objetivos recomendados por horario, búsqueda SIMBAD universal y simulador FOV en DSS2.";
+        i18n.zh.land_f2_desc       = "按时间推荐目标、SIMBAD通用搜索及DSS2视场模拟器。";
+
+        i18n.it.land_f3_name       = "Calcolatore Smart";
+        i18n.en.land_f3_name       = "Smart calculator";
+        i18n.es.land_f3_name       = "Calculadora Smart";
+        i18n.zh.land_f3_name       = "智能计算器";
+
+        i18n.it.land_f3_desc       = "Sequenza ottimale calcolata automaticamente in base a setup, DSO e finestra notturna.";
+        i18n.en.land_f3_desc       = "Optimal sequence automatically calculated based on setup, DSO and night window.";
+        i18n.es.land_f3_desc       = "Secuencia óptima calculada automáticamente según el setup, el DSO y la ventana nocturna.";
+        i18n.zh.land_f3_desc       = "根据设备、深空天体和夜间窗口自动计算最优序列。";
+
+        i18n.it.land_f4_name       = "Calcolatore PRO";
+        i18n.en.land_f4_name       = "PRO calculator";
+        i18n.es.land_f4_name       = "Calculadora PRO";
+        i18n.zh.land_f4_name       = "PRO 计算器";
+
+        i18n.it.land_f4_desc       = "Controllo totale, export N.I.N.A. Advanced Sequencer e pianificazione multinotte.";
+        i18n.en.land_f4_desc       = "Full control, N.I.N.A. Advanced Sequencer export and multi-night planning.";
+        i18n.es.land_f4_desc       = "Control total, exportación N.I.N.A. Advanced Sequencer y planificación multinoche.";
+        i18n.zh.land_f4_desc       = "全面控制，N.I.N.A.高级序列器导出及多夜规划。";
+
+        i18n.it.land_privacy       = "Questa app non invia alcun dato a terzi. Tutto viene salvato localmente sul tuo dispositivo.";
+        i18n.en.land_privacy       = "This app does not send any data to third parties. Everything is saved locally on your device.";
+        i18n.es.land_privacy       = "Esta app no envía ningún dato a terceros. Todo se guarda localmente en tu dispositivo.";
+        i18n.zh.land_privacy       = "本应用不向任何第三方发送数据。所有内容均保存在您的设备本地。";
+
+        i18n.it.land_contact       = "Contattaci";
+        i18n.en.land_contact       = "Contact us";
+        i18n.es.land_contact       = "Contáctanos";
+        i18n.zh.land_contact       = "联系我们";
+
+        i18n.it.nav_home    = "Home";    i18n.en.nav_home    = "Home";    i18n.es.nav_home    = "Inicio";   i18n.zh.nav_home    = "首页";
+        i18n.it.nav_weather = "Meteo";   i18n.en.nav_weather = "Weather"; i18n.es.nav_weather = "Meteo";    i18n.zh.nav_weather = "天气";
+        i18n.it.nav_smart   = "Smart";   i18n.en.nav_smart   = "Smart";   i18n.es.nav_smart   = "Smart";    i18n.zh.nav_smart   = "智能";
+        i18n.it.nav_pro     = "PRO";     i18n.en.nav_pro     = "PRO";     i18n.es.nav_pro     = "PRO";      i18n.zh.nav_pro     = "PRO";
+
+        // ── Changelog v6.0 ──
+        i18n.it.cl1_title = "Nuova landing page";
+        i18n.en.cl1_title = "New landing page";
+        i18n.es.cl1_title = "Nueva página de inicio";
+        i18n.zh.cl1_title = "全新主页";
+
+        i18n.it.cl1_desc = "Pagina di benvenuto con anteprima live della finestra notturna e della sequenza ottimale. Navigazione diretta a Meteo, Smart e PRO.";
+        i18n.en.cl1_desc = "Welcome page with live preview of the night window and optimal sequence. Direct navigation to Weather, Smart and PRO.";
+        i18n.es.cl1_desc = "Página de bienvenida con vista previa en vivo de la ventana nocturna y la secuencia óptima. Navegación directa a Meteo, Smart y PRO.";
+        i18n.zh.cl1_desc = "欢迎页面，实时预览夜间窗口和最优序列，直接导航至天气、Smart和PRO。";
+
+        i18n.it.cl2_title = "Calcolatori Smart e PRO unificati";
+        i18n.en.cl2_title = "Unified Smart and PRO calculators";
+        i18n.es.cl2_title = "Calculadoras Smart y PRO unificadas";
+        i18n.zh.cl2_title = "Smart与PRO计算器统一";
+
+        i18n.it.cl2_desc = "Toggle Smart/PRO in un'unica vista: nessuna sincronizzazione manuale, tutti i parametri condivisi in tempo reale.";
+        i18n.en.cl2_desc = "Smart/PRO toggle in a single view: no manual sync, all parameters shared in real time.";
+        i18n.es.cl2_desc = "Toggle Smart/PRO en una sola vista: sin sincronización manual, todos los parámetros compartidos en tiempo real.";
+        i18n.zh.cl2_desc = "Smart/PRO切换在单一视图中：无需手动同步，所有参数实时共享。";
+
+        i18n.it.cl3_title = "Navbar responsive per mobile";
+        i18n.en.cl3_title = "Responsive navbar for mobile";
+        i18n.es.cl3_title = "Barra de navegación responsive para móvil";
+        i18n.zh.cl3_title = "移动端响应式导航栏";
+
+        i18n.it.cl3_desc = "Logo e bandiere lingua su prima riga, link di navigazione su seconda riga. Nessuno scroll orizzontale su smartphone.";
+        i18n.en.cl3_desc = "Logo and language flags on first row, navigation links on second row. No horizontal scroll on smartphones.";
+        i18n.es.cl3_desc = "Logo y banderas de idioma en primera fila, enlaces de navegación en segunda. Sin scroll horizontal en smartphones.";
+        i18n.zh.cl3_desc = "徽标和语言旗帜在第一行，导航链接在第二行。智能手机上无横向滚动。";
+
+        i18n.it.cl4_title = "Toast notification al posto dei popup Chrome";
+        i18n.en.cl4_title = "Toast notifications instead of Chrome popups";
+        i18n.es.cl4_title = "Notificaciones toast en lugar de popups de Chrome";
+        i18n.zh.cl4_title = "Toast通知替代Chrome弹窗";
+
+        i18n.it.cl4_desc = "Tutti i warning e avvisi appaiono come toast in-app (gold/rosso/verde) coerenti con il dark theme, senza interruzioni.";
+        i18n.en.cl4_desc = "All warnings and alerts appear as in-app toasts (gold/red/green) consistent with the dark theme, without interruptions.";
+        i18n.es.cl4_desc = "Todos los avisos aparecen como toasts en la app (oro/rojo/verde) coherentes con el tema oscuro, sin interrupciones.";
+        i18n.zh.cl4_desc = "所有警告和提示以应用内toast形式显示（金/红/绿），与暗色主题一致，不打断操作。";
+
+        i18n.it.cl5_title = "Ripristino automatico sezione al reload";
+        i18n.en.cl5_title = "Automatic section restore on reload";
+        i18n.es.cl5_title = "Restauración automática de sección al recargar";
+        i18n.zh.cl5_title = "重新加载时自动恢复当前页面";
+
+        i18n.it.cl5_desc = "Aggiornando la pagina si ritorna alla sezione dove si stava lavorando (Meteo, Smart o PRO), non alla home.";
+        i18n.en.cl5_desc = "Refreshing the page returns you to the section you were working in (Weather, Smart or PRO), not the home.";
+        i18n.es.cl5_desc = "Al recargar la página, vuelves a la sección donde estabas trabajando (Meteo, Smart o PRO), no al inicio.";
+        i18n.zh.cl5_desc = "刷新页面后，返回到您正在工作的部分（天气、Smart或PRO），而不是首页。";
+
+        i18n.it.cl6_title = "Auto Smart per multinotte";
+        i18n.en.cl6_title = "Auto Smart for multi-night";
+        i18n.es.cl6_title = "Auto Smart para multinoche";
+        i18n.zh.cl6_title = "多夜拍摄自动Smart";
+
+        i18n.it.cl6_desc = "Pulsante ✨ Auto Smart in ogni notte della pianificazione multinotte: calcola le pose ottimali per quella specifica finestra oraria.";
+        i18n.en.cl6_desc = "✨ Auto Smart button in each multi-night session: calculates optimal exposures for that specific time window.";
+        i18n.es.cl6_desc = "Botón ✨ Auto Smart en cada noche de la planificación multinoche: calcula las poses óptimas para esa ventana horaria.";
+        i18n.zh.cl6_desc = "每个多夜计划中的✨Auto Smart按钮：针对该特定时间窗口计算最优曝光。";
+
+        i18n.it.cl7_title = "Privacy by design";
+        i18n.en.cl7_title = "Privacy by design";
+        i18n.es.cl7_title = "Privacidad por diseño";
+        i18n.zh.cl7_title = "隐私设计";
+
+        i18n.it.cl7_desc = "Nessun dato inviato a terzi. Tutto salvato localmente. Info visibili nel footer della home.";
+        i18n.en.cl7_desc = "No data sent to third parties. Everything saved locally. Info visible in the home footer.";
+        i18n.es.cl7_desc = "Ningún dato enviado a terceros. Todo guardado localmente. Información visible en el pie de página.";
+        i18n.zh.cl7_desc = "不向第三方发送任何数据。所有内容本地保存。信息在主页页脚可见。";
+
+        i18n.it.cl0_title = "Nuova veste grafica — redesign completo";
+        i18n.en.cl0_title = "New visual design — full redesign";
+        i18n.es.cl0_title = "Nuevo diseño visual — rediseño completo";
+        i18n.zh.cl0_title = "全新视觉设计";
+
+        i18n.it.cl0_desc = "Dark theme raffinato, icone coerenti, navbar sticky con bandiere lingua, layout ottimizzato per desktop e mobile. L'app ora inizia con una landing page.";
+        i18n.en.cl0_desc = "Refined dark theme, consistent icons, sticky navbar with language flags, optimized layout for desktop and mobile. The app now starts with a landing page.";
+        i18n.es.cl0_desc = "Tema oscuro refinado, iconos coherentes, barra de navegación sticky con banderas de idioma, diseño optimizado para escritorio y móvil. La app ahora inicia con una landing page.";
+        i18n.zh.cl0_desc = "精致暗色主题、统一图标、带语言旗帜的固定导航栏、桌面与移动端优化布局。应用现在以欢迎页开始。";

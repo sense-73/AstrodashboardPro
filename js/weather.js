@@ -5,7 +5,9 @@
         
         let mappaScura = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { maxZoom: 19, attribution: 'Meteo Data &copy; <a href="https://open-meteo.com/" target="_blank" style="color:#bb86fc;">Open-Meteo</a> | Map &copy; <a href="https://carto.com/" target="_blank">CartoDB</a>' });
         let _savedName = localStorage.getItem('ad_location_name') || 'Udine';
+        window._leafletMap = null;
         let map = L.map('map', { center: [latCorrente, lonCorrente], zoom: 8, layers: [mappaScura], zoomControl: false });
+        window._leafletMap = map;
         L.control.zoom({ position: 'bottomright' }).addTo(map);
         let layers = { basse: L.layerGroup().addTo(map), medie: L.layerGroup(), alte: L.layerGroup(), jet: L.layerGroup(), luna: L.layerGroup(), umidita: L.layerGroup() };
         // Layer LP: tile Lorenz 2024 con formato custom tile_{z}_{x}_{y}.png

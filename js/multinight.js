@@ -39,6 +39,111 @@
 
         function chiudiMultiNight() { document.getElementById('multinight-modal').style.display = 'none'; }
 
+        function autoCompilaPoseNotte(notteId) {
+            if (!targetSelezionato) { mostraAvviso(t("alert_planetarium"), "warn"); return; }
+
+            let tS = document.getElementById(`start-mn-${notteId}`).value;
+            let tE = document.getElementById(`end-mn-${notteId}`).value;
+            if (!tS || !tE) { mostraAvviso(t("alert_times"), "warn"); return; }
+
+            let dS = new Date(`1970-01-01T${tS}:00`), dE = new Date(`1970-01-01T${tE}:00`);
+            if (dE <= dS) dE.setDate(dE.getDate() + 1);
+            let aS = (dE - dS) / 1000; // secondi disponibili per questa notte
+
+            let isM = document.getElementById('sensor-type').value === 'mono';
+            let filtriIds = isM ? ['m-l','m-r','m-g','m-b','m-ha','m-oiii','m-sii'] : ['c-light'];
+
+            // Raccoglie filtri attivi (checkbox checked) per questa notte
+            let aL = [];
+            filtriIds.forEach(pid => {
+                let chk = document.getElementById(`chk-mn-${notteId}-${pid}`);
+                if (chk && chk.checked) aL.push(pid);
+            });
+            if (aL.length === 0) { mostraAvviso(t("alert_nolight"), "warn"); return; }
+
+            // ── Stessa logica dei pesi di generaSequenzaOttimale ──
+            let w = {};
+            if (!isM) {
+                w[aL[0]] = 1.0;
+            } else {
+                let narrowL = aL.filter(id => id.includes('ha') || id.includes('oiii') || id.includes('sii'));
+                let broadL  = aL.filter(id => !id.includes('ha') && !id.includes('oiii') && !id.includes('sii'));
+                let hNarrow = narrowL.length > 0;
+                let hBroad  = broadL.length > 0;
+                let hL      = aL.includes('m-l');
+
+                if (!hNarrow) {
+                    if (hL) {
+                        let rgbSel = broadL.filter(id => id !== 'm-l');
+                        let total = 1 + rgbSel.length * (1/3);
+                        w['m-l'] = 1 / total;
+                        rgbSel.forEach(id => w[id] = (1/3) / total);
+                    } else {
+                        let eq = 1.0 / aL.length; aL.forEach(id => w[id] = eq);
+                    }
+                } else if (!hBroad) {
+                    let eq = 1.0 / aL.length; aL.forEach(id => w[id] = eq);
+                } else {
+                    let total = 0;
+                    if (hL) total += 1;
+                    broadL.filter(id => id !== 'm-l').forEach(id => total += 1/3);
+                    narrowL.forEach(id => total += 1);
+                    if (hL) w['m-l'] = 1 / total;
+                    broadL.filter(id => id !== 'm-l').forEach(id => w[id] = (1/3) / total);
+                    narrowL.forEach(id => total += 1); // già sommati sopra
+                    narrowL.forEach(id => w[id] = 1 / total);
+                }
+            }
+
+            // ── Categoria target (identica a generaSequenzaOttimale) ──
+            let _objNameG = (targetSelezionato.name || '').toUpperCase();
+            let _nG = _objNameG.replace(/\s+/g, '');
+            let _tLowG = targetSelezionato.type ? targetSelezionato.type.toLowerCase() : '';
+            let _catG = null;
+            if (_nG.startsWith('SH2') || _objNameG.startsWith('SH 2-')) _catG = 'sh2';
+            else if (_nG.startsWith('LBN')) _catG = 'lbn';
+            else if (_nG.startsWith('LDN')) _catG = 'ldn';
+            else if (_nG.startsWith('VDB')) _catG = 'vdb';
+            else if (_tLowG.includes('supernova') || _tLowG.includes('snr')) _catG = 'snr';
+            else if (_tLowG.includes('planetari') || _tLowG.includes('planetary')) _catG = 'planetaria';
+            else if (_tLowG.includes('galassi') || _tLowG.includes('galaxy')) _catG = 'galassia';
+            else if (_tLowG.includes('globulare') || _tLowG.includes('globular')) _catG = 'globulare';
+            else if (_tLowG.includes('aperto') || _tLowG.includes('open cluster')) _catG = 'aperto';
+            else if (_tLowG.includes('h ii') || _tLowG.includes('emissio') || _tLowG.includes('emission')) _catG = 'hii';
+            else if (_tLowG.includes('riflessione') || _tLowG.includes('reflection')) _catG = 'vdb';
+            else if (_tLowG.includes('oscura') || _tLowG.includes('dark')) _catG = 'ldn';
+
+            const _catExpMap = {
+                sh2: 300, lbn: 180, ldn: 120, vdb: 180, snr: 300,
+                hii: 180, galassia: 120, planetaria: 60, globulare: 30, aperto: 60
+            };
+            let _dFreqG = (_catG === 'sh2') ? 3 : 4;
+            let dD = parseInt(document.getElementById('dither-duration') ? document.getElementById('dither-duration').value : 15) || 15;
+
+            // ── Calcola e compila pose per ogni filtro attivo ──
+            aL.forEach(pid => {
+                let _baseExp = (_catExpMap[_catG] !== undefined) ? _catExpMap[_catG] : 180;
+                let eS;
+                if (pid === 'm-l') eS = Math.min(_baseExp, 120);
+                else if (pid.includes('ha') || pid.includes('oiii') || pid.includes('sii')) eS = Math.max(_baseExp, 300);
+                else eS = _baseExp;
+
+                // Dither: legge dalla griglia smart se disponibile
+                let dChkF = document.getElementById(`${pid}-dither`);
+                let uD = dChkF && dChkF.checked;
+                let dFrqEl = document.getElementById(`${pid}-dfreq`);
+                let dF = parseInt(dFrqEl ? dFrqEl.value : _dFreqG) || _dFreqG;
+                let eeS = eS + (uD && dF > 0 ? dD / dF : 0);
+
+                let countEl = document.getElementById(`count-mn-${notteId}-${pid}`);
+                let expEl   = document.getElementById(`exp-mn-${notteId}-${pid}`);
+                if (countEl) countEl.value = Math.max(1, Math.floor((aS * w[pid]) / eeS));
+                if (expEl)   expEl.value   = eS;
+            });
+
+            ricalcolaOreNotte(notteId);
+        }
+
 function aggiungiNotte() {
             contatoreNotti++;
             let isM = document.getElementById('sensor-type').value === 'mono';
@@ -85,6 +190,53 @@ function aggiungiNotte() {
             });
             grigliaFiltri += `</div>`;
 
+            // ── Righe HDR (se attive) ──────────────────────────────────────
+            let hdrFiltri = isM ? ['m-l','m-r','m-g','m-b','m-ha','m-oiii','m-sii'] : ['c-light'];
+            let hasHdr = false;
+            hdrFiltri.forEach(hdrId => {
+                // Smart: row visible? PRO: hdrActive !== '0'?
+                let hdrRowEl = mnContesto === 'pro'
+                    ? document.getElementById(`pro-${hdrId}-hdr-row`)
+                    : document.getElementById(`${hdrId}-hdr-row`);
+                if (!hdrRowEl) return;
+                let isHdrOn = mnContesto === 'pro'
+                    ? (hdrRowEl.dataset.hdrActive !== '0')
+                    : (hdrRowEl.style.display !== 'none');
+                if (!isHdrOn) return;
+                let hdrCntEl = mnContesto === 'pro'
+                    ? document.getElementById(`pro-${hdrId}-hdr-count`)
+                    : document.getElementById(`${hdrId}-hdr-count`);
+                let hdrExpEl = mnContesto === 'pro'
+                    ? document.getElementById(`pro-${hdrId}-hdr-exp`)
+                    : document.getElementById(`${hdrId}-hdr-exp`);
+                let defHdrCount = hdrCntEl ? (parseInt(hdrCntEl.value)||0) : 0;
+                let defHdrExp   = hdrExpEl ? (parseInt(hdrExpEl.value)||0) : 0;
+                if (defHdrCount <= 0 && defHdrExp <= 0) return;
+                hasHdr = true;
+                let hdrLabel = hdrId.replace('m-','').replace('c-','').toUpperCase() + ' HDR';
+                if (hdrLabel === 'LIGHT HDR') hdrLabel = 'Light HDR';
+                if (hdrLabel === 'HA HDR') hdrLabel = 'Ha HDR';
+                grigliaFiltri += `
+                <div style="display: flex; align-items: center; justify-content: space-between; background: #1a0d2e; border: 1px solid #3a2050; padding: 8px 12px; border-radius: 4px;">
+                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; width: 100px;">
+                        <input type="checkbox" id="chk-mn-${contatoreNotti}-${hdrId}-hdr" ${defHdrCount > 0 ? 'checked' : ''} style="transform: scale(1.1);" onchange="ricalcolaOreNotte(${contatoreNotti})">
+                        <span style="font-size: 0.85em; color: #bb86fc; font-weight: bold;">✦ ${hdrLabel}</span>
+                    </label>
+                    <div style="display: flex; align-items: center; gap: 5px;">
+                        <input type="number" id="count-mn-${contatoreNotti}-${hdrId}-hdr" value="${defHdrCount}" min="0" style="width: 55px!important; padding: 4px!important; text-align: center; background: #1a0d2e; border: 1px solid #3a2050; color: #bb86fc; border-radius: 3px;" oninput="ricalcolaOreNotte(${contatoreNotti})">
+                        <span style="color: #aaa; font-size: 0.85em;">pose x</span>
+                        <input type="number" id="exp-mn-${contatoreNotti}-${hdrId}-hdr" value="${defHdrExp}" min="1" style="width: 55px!important; padding: 4px!important; text-align: center; background: #1a0d2e; border: 1px solid #3a2050; color: #bb86fc; border-radius: 3px;" oninput="ricalcolaOreNotte(${contatoreNotti})">
+                        <span style="color: #aaa; font-size: 0.85em;">s</span>
+                    </div>
+                </div>`;
+            });
+            if (hasHdr) {
+                grigliaFiltri = grigliaFiltri.replace(
+                    '<div style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">',
+                    '<div style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">'
+                );
+            }
+
             // NUOVA STRUTTURA CON ACCORDION
             let html = `
             <div style="background: #1a1a1a; border-radius: 8px; border: 1px solid #444; margin-bottom: 15px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
@@ -114,7 +266,13 @@ function aggiungiNotte() {
                     
                     <div id="warn-mn-${contatoreNotti}" style="display:none; color:#ff4444; font-size:0.85em; margin-top:10px; font-weight:bold; background: rgba(255,68,68,0.1); padding: 8px; border-left: 3px solid #ff4444; border-radius: 4px;"></div>
 
-                    <span style="display:block; color:#bb86fc; font-size:0.7em; text-transform: uppercase; margin-top:15px; margin-bottom:5px; font-weight: bold;">Configurazione Pose:</span>
+                    <div style="display:flex; align-items:center; gap:10px; margin-top:15px; margin-bottom:5px;">
+                        <span style="color:#bb86fc; font-size:0.7em; text-transform: uppercase; font-weight: bold;">Configurazione Pose:</span>
+                        <button onclick="autoCompilaPoseNotte(${contatoreNotti})" title="Genera sequenza ottimale per questa notte" style="background:transparent; border:1px solid #00c6ff; color:#00c6ff; border-radius:6px; padding:3px 8px; cursor:pointer; display:flex; align-items:center; gap:5px; font-size:0.75em; font-weight:bold; white-space:nowrap; transition:all 0.2s;" onmouseover="this.style.background='rgba(0,198,255,0.12)'" onmouseout="this.style.background='transparent'">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0;"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M16 19a1 1 0 0 1 0 -2a1 1 0 0 0 1 -1c0 -1.333 2 -1.333 2 0a1 1 0 0 0 1 1c1.333 0 1.333 2 0 2a1 1 0 0 0 -1 1c0 1.333 -2 1.333 -2 0a1 1 0 0 0 -1 -1" /><path d="M3 11a5 5 0 0 0 5 -5c0 -1.333 2 -1.333 2 0a5 5 0 0 0 5 5c1.333 0 1.333 2 0 2a5 5 0 0 0 -5 5a1 1 0 0 1 -2 0a5 5 0 0 0 -5 -5c-1.333 0 -1.333 -2 0 -2" /><path d="M16 7a1 1 0 0 1 0 -2a1 1 0 0 0 1 -1c0 -1.333 2 -1.333 2 0a1 1 0 0 0 1 1c1.333 0 1.333 2 0 2a1 1 0 0 0 -1 1c0 1.333 -2 1.333 -2 0a1 1 0 0 0 -1 -1" /></svg>
+                            Auto Smart
+                        </button>
+                    </div>
                     ${grigliaFiltri}
                     
                     <div style="margin-top: 15px; display: flex; gap: 10px;">
@@ -187,6 +345,19 @@ function aggiungiNotte() {
                     warnEl.style.display = 'none';
                 }
             }
+
+            // Calcola anche le righe HDR della notte
+            let possibiliHdr = isM ? ['m-l','m-r','m-g','m-b','m-ha','m-oiii','m-sii'] : ['c-light'];
+            possibiliHdr.forEach(hdrPid => {
+                let chkHdr = document.getElementById(`chk-mn-${id}-${hdrPid}-hdr`);
+                if (chkHdr && chkHdr.checked) {
+                    let countH = parseInt(document.getElementById(`count-mn-${id}-${hdrPid}-hdr`).value) || 0;
+                    let expH   = parseInt(document.getElementById(`exp-mn-${id}-${hdrPid}-hdr`).value) || 0;
+                    if (countH > 0 && expH > 0) {
+                        totalSecs += countH * expH;
+                    }
+                }
+            });
 
             calcolaTotaleNotti();
         }
@@ -281,8 +452,41 @@ function aggiungiNotte() {
                 esposizioni.push({ count, exp, filter: ninaName, type: "LIGHT", gain, offset, bin, doDither, dFreq });
             });
 
+            // Aggiungi le righe HDR al export
+            possibili.forEach(pid => {
+                let chkHdr = document.getElementById(`chk-mn-${notteId}-${pid}-hdr`);
+                if (!chkHdr || !chkHdr.checked) return;
+                let countH = parseInt(document.getElementById(`count-mn-${notteId}-${pid}-hdr`).value) || 0;
+                let expH   = parseInt(document.getElementById(`exp-mn-${notteId}-${pid}-hdr`).value) || 0;
+                if (countH <= 0 || expH <= 0) return;
+                let ninaNameHdr = null;
+                if (isMono) {
+                    let nameEl = isPro
+                        ? document.getElementById(`pro-nina-name-${pid}`)
+                        : document.getElementById(`nina-name-${pid}`);
+                    let baseName = nameEl ? nameEl.value.trim() : pid;
+                    ninaNameHdr = (baseName || pid) + ' HDR';
+                }
+                let gainH = -1, offsetH = -1, binH = 1;
+                if (isPro) {
+                    let gEl = document.getElementById(`pro-${pid}-hdr-gain`);
+                    let oEl = document.getElementById(`pro-${pid}-hdr-offset`);
+                    let bEl = document.getElementById(`pro-${pid}-hdr-bin`);
+                    let gRaw = gEl ? gEl.value.trim() : 'Auto';
+                    let oRaw = oEl ? oEl.value.trim() : 'Auto';
+                    gainH   = (gRaw === 'Auto' || gRaw === '') ? -1 : parseInt(gRaw);
+                    offsetH = (oRaw === 'Auto' || oRaw === '') ? -1 : parseInt(oRaw);
+                    binH    = bEl ? (parseInt(bEl.value)||1) : 1;
+                }
+                let dChkH = isPro ? document.getElementById(`pro-${pid}-hdr-dither`) : document.getElementById(`${pid}-hdr-dither`);
+                let dFrqHEl = isPro ? document.getElementById(`pro-${pid}-hdr-dfreq`) : document.getElementById(`${pid}-hdr-dfreq`);
+                let doDitherH = dChkH ? dChkH.checked : false;
+                let dFreqH = parseInt((dFrqHEl||{}).value)||4;
+                esposizioni.push({ count: countH, exp: expH, filter: ninaNameHdr, type: "LIGHT", gain: gainH, offset: offsetH, bin: binH, doDither: doDitherH, dFreq: dFreqH });
+            });
+
             let errFilter = lang === 'it' ? "Devi selezionare almeno un filtro per questa sessione!" : lang === 'en' ? "You must select at least one filter for this session!" : lang === 'es' ? "¡Debes seleccionar al menos un filtro para esta sesión!" : "您必须为本次拍摄选择至少一个滤镜！";
-            if (esposizioni.length === 0) { alert(errFilter); return; }
+            if (esposizioni.length === 0) { mostraAvviso(errFilter, "warn"); return; }
 
             // GENERAZIONE JSON NINA SPECIFICO PER LA NOTTE
             let idCounter = 2000; function nextId() { return (idCounter++).toString(); }
@@ -482,11 +686,18 @@ function aggiungiNotte() {
             
             if (savedTarget) {
                 try { 
-                    apriPianificazione(JSON.parse(savedTarget)); 
+                    apriPianificazione(JSON.parse(savedTarget));
+                    sessionStorage.setItem('ad_active_section', 'planning-view');
+
+                    // Nascondi landing-view quando si ripristina planning
+                    let lv = document.getElementById('landing-view');
+                    if(lv) lv.style.display = 'none';
                     
                     // Se l'utente era nella Plancia PRO, riportalo lì automaticamente
                     if (savedView === 'pro') {
-                        setTimeout(() => { apriProView(); }, 150); // Piccolo ritardo per permettere all'AI di caricare i dati
+                        setTimeout(() => { setCalcMode('pro'); }, 150);
+                    } else {
+                        setTimeout(() => { setCalcMode('smart'); }, 150);
                     }
                 } catch(e) { 
                     sessionStorage.removeItem('ad_current_target'); 

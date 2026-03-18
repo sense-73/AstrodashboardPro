@@ -3,13 +3,16 @@
 function toggleLock(id) {
             let el = document.getElementById(id + '-lock');
             if (!el) return;
-            if (el.innerText === '🔓') {
-                el.innerText = '🔒';
+            const locked = el.dataset.locked === '1';
+            if (!locked) {
+                el.innerHTML = "<svg width='15' height='15' style='vertical-align:middle'><use href='#i-lock'/></svg>";
+                el.dataset.locked = '1';
                 el.style.opacity = '1';
                 el.classList.add('locked');
             } else {
-                el.innerText = '🔓';
-                el.style.opacity = '0.5';
+                el.innerHTML = "<svg width='15' height='15' style='vertical-align:middle'><use href='#i-lock-open'/></svg>";
+                el.dataset.locked = '0';
+                el.style.opacity = '0.4';
                 el.classList.remove('locked');
             }
         }
@@ -25,9 +28,6 @@ function toggleLock(id) {
             header.id = 'smart-grid-header';
             header.style.cssText = 'display:grid; grid-template-columns: 2fr 0.7fr 0.9fr 0.7fr 0.7fr 0.7fr 1fr 0.9fr; gap:4px; font-size:0.75em; color:#aaa; text-align:center; border-bottom:1px solid #444; padding-bottom:5px; margin-bottom:6px;';
             header.innerHTML = '<div style="text-align:left;">Filtro</div><div>Pose</div><div>Secs</div>'
-                + '<div id="smart-hdr-col-header" style="display:none;color:#bb86fc;">HDR'
-                + '<span class="info-icon" style="font-size:1.0em;margin-left:2px;cursor:help;"'
-                + ' onmouseenter="mostraTooltip(this,\'info_hdr_col\')" onmouseleave="nascondiTooltip()">ℹ️</span></div>'
                 + '<div>Gain</div><div>Offset</div><div>Bin</div><div>Dither</div><div style="text-align:right;">Totale</div>';
             c.appendChild(header);
 
@@ -55,7 +55,7 @@ function toggleLock(id) {
                     ? `<input type="number" id="${f.id}-exp" value="0" min="0" oninput="calcolaTempi()" style="width:100%!important;text-align:center;padding:3px!important;">`
                     : `<div style="display:flex;align-items:center;gap:3px;">
                            <input type="number" id="${f.id}-exp" value="${f.dE}" min="0" oninput="sincronizzaDarkDaLight();calcolaTempi()" style="width:48px!important;text-align:center;padding:3px!important;flex:1;">
-                           <span id="${f.id}-lock" onclick="toggleLock('${f.id}')" title="Blocca secondi" style="cursor:pointer;font-size:1.1em;opacity:0.4;user-select:none;line-height:1;">🔓</span>
+                           <span id="${f.id}-lock" onclick="toggleLock('${f.id}')" title="Blocca secondi" style="cursor:pointer;opacity:0.4;user-select:none;line-height:1;display:inline-flex;align-items:center;" data-locked="0"><svg width="15" height="15" style="vertical-align:middle"><use href="#i-lock-open"/></svg></span>
                        </div>`;
 
                 // HDR cell: colonna dedicata, nascosta di default in Smart
@@ -75,7 +75,6 @@ function toggleLock(id) {
                     ${nameCell}
                     <input type="number" id="${f.id}-count" value="${f.dC}" min="0" oninput="calcolaTempi()" style="width:100%!important;text-align:center;padding:3px!important;">
                     ${expInput}
-                    ${hdrCell}
                     <input type="text" id="${f.id}-gain" value="${defGain}" style="width:100%!important;text-align:center;padding:3px!important;">
                     <input type="text" id="${f.id}-offset" value="Auto" style="width:100%!important;text-align:center;padding:3px!important;">
                     <select id="${f.id}-bin" style="width:100%!important;padding:3px!important;">
@@ -85,6 +84,38 @@ function toggleLock(id) {
                     <div class="calc-total" id="${f.id}-tot" style="text-align:right;">0h 0m</div>
                 `;
                 c.appendChild(r);
+                // ── Riga companion Light HDR ─────────────────────────────────────
+                if (isL) {
+                    let hdrR = document.createElement('div');
+                    hdrR.id = `${f.id}-hdr-row`;
+                    hdrR.dataset.smartHdrRow = '1';
+                    hdrR.style.cssText = 'display:none; grid-template-columns: 2fr 0.7fr 0.9fr 0.7fr 0.7fr 0.7fr 1fr 0.9fr; gap:4px; align-items:center; background:#1a0d2e; padding:5px 6px 5px 24px; border-radius:5px; border-left:3px solid #7c4dff; margin-bottom:6px; margin-top:-2px;';
+                    hdrR.innerHTML = `
+                        <div style="display:flex;align-items:center;gap:4px;">
+                            <span style="color:#bb86fc;font-size:0.82em;font-weight:bold;">✦ Light HDR</span>
+                            <span class="info-icon" style="font-size:1.0em;margin-left:2px;cursor:help;" onmouseenter="mostraTooltip(this,'info_hdr_row')" onmouseleave="nascondiTooltip()">ℹ️</span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:3px;">
+                            <input type="number" id="${f.id}-hdr-count" value="0" min="0" oninput="calcolaTempi()" style="width:100%!important;text-align:center;padding:3px!important;background:#1a0d2e;color:#bb86fc;border:1px solid #3a2050;">
+                            <span id="${f.id}-hdr-count-lock" onclick="toggleLock('${f.id}-hdr-count')" title="Blocca pose HDR" style="cursor:pointer;opacity:0.4;user-select:none;line-height:1;display:inline-flex;align-items:center;" data-locked="0"><svg width="15" height="15" style="vertical-align:middle"><use href="#i-lock-open"/></svg></span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:3px;">
+                            <input type="number" id="${f.id}-hdr-exp" value="" placeholder="s" min="0" oninput="calcolaTempi()" style="width:48px!important;text-align:center;padding:3px!important;flex:1;color:#bb86fc;background:#1a0d2e;border:1px solid #3a2050;">
+                            <span id="${f.id}-hdr-exp-lock" onclick="toggleLock('${f.id}-hdr-exp')" title="Blocca secondi HDR" style="cursor:pointer;opacity:0.4;user-select:none;line-height:1;display:inline-flex;align-items:center;" data-locked="0"><svg width="15" height="15" style="vertical-align:middle"><use href="#i-lock-open"/></svg></span>
+                        </div>
+                        <input type="text" id="${f.id}-hdr-gain" value="Auto" style="width:100%!important;text-align:center;padding:3px!important;background:#1a0d2e;border:1px solid #3a2050;">
+                        <input type="text" id="${f.id}-hdr-offset" value="Auto" style="width:100%!important;text-align:center;padding:3px!important;background:#1a0d2e;border:1px solid #3a2050;">
+                        <select id="${f.id}-hdr-bin" style="width:100%!important;padding:3px!important;background:#1a0d2e;border:1px solid #3a2050;">
+                            <option value="1">1x1</option><option value="2">2x2</option><option value="3">3x3</option><option value="4">4x4</option>
+                        </select>
+                        <div style="display:flex;align-items:center;gap:3px;justify-content:center;">
+                            <input type="checkbox" id="${f.id}-hdr-dither" checked style="transform:scale(1.1);cursor:pointer;" onchange="calcolaTempi()">
+                            <input type="number" id="${f.id}-hdr-dfreq" value="4" min="1" style="width:32px!important;padding:2px!important;text-align:center;background:#1a0d2e;border:1px solid #3a2050;" oninput="calcolaTempi()">
+                        </div>
+                        <div class="calc-total" id="${f.id}-hdr-tot" style="text-align:right;color:#bb86fc;">—</div>
+                    `;
+                    c.appendChild(hdrR);
+                }
             });
 
             // Sincronizza Dark exp = primo Light exp (dinamico)
@@ -108,24 +139,24 @@ function toggleLock(id) {
             lightExp.addEventListener('input', () => { darkExp.value = lightExp.value; calcolaTempi(); });
         }
 
-        // Mostra/nasconde la colonna HDR nella griglia Smart
-        function aggiornaColonnaHDR(show) {
-            const COL8 = '2fr 0.7fr 0.9fr 0.7fr 0.7fr 0.7fr 1fr 0.9fr';
-            const COL9 = '2fr 0.7fr 0.8fr 0.65fr 0.65fr 0.65fr 0.65fr 1fr 0.9fr';
-            let hdr = document.getElementById('smart-grid-header');
-            let hdrCell = document.getElementById('smart-hdr-col-header');
-            if (hdr) hdr.style.gridTemplateColumns = show ? COL9 : COL8;
-            if (hdrCell) hdrCell.style.display = show ? '' : 'none';
-            // Aggiorna tutte le righe
-            document.querySelectorAll('[data-smart-row]').forEach(row => {
-                row.style.gridTemplateColumns = show ? COL9 : COL8;
-            });
-            // Mostra/nasconde le celle HDR in ogni riga
+        // Mostra/nasconde le righe companion HDR nella griglia Smart
+        function aggiornaRigheHDR(hdrExp) {
+            let show = hdrExp > 0;
             let isM = document.getElementById('sensor-type').value === 'mono';
             (isM ? framesMono : framesColor).forEach(f => {
-                let el = document.getElementById(f.id + '-hdr');
-                if (el) el.style.display = show ? '' : 'none';
+                if (f.id.includes('dark') || f.id.includes('bias')) return;
+                let hdrRow = document.getElementById(`${f.id}-hdr-row`);
+                if (!hdrRow) return;
+                hdrRow.style.display = show ? 'grid' : 'none';
+                if (show && hdrExp > 0) {
+                    let expEl = document.getElementById(`${f.id}-hdr-exp`);
+                    let expLock = document.getElementById(`${f.id}-hdr-exp-lock`);
+                    if (expEl && (!expLock || !expLock.classList.contains('locked'))) {
+                        expEl.value = hdrExp;
+                    }
+                }
             });
+            calcolaTempi();
         }
 
         function sincronizzaDarkDaLight() {
@@ -269,24 +300,24 @@ function toggleLock(id) {
             }
 
             // 8. RENDER DEL REPORT GIUSTIFICATIVO MULTI-NOTTE
-            let html = `<h4 style="margin:0 0 10px 0; color:#ffaa00; border-bottom:1px solid #333; padding-bottom:5px; display:flex; align-items:center; justify-content:space-between;"><span>${t("ai_strat_title")}</span> <span class="info-icon" style="font-size: 0.9em; font-weight:normal;" onmouseenter="mostraTooltip(this, 'info_strat_analysis')" onmouseleave="nascondiTooltip()">ℹ️</span></h4>`;
+            let html = `<h4 style="margin:0 0 10px 0; color:#ffaa00; border-bottom:1px solid #333; padding-bottom:5px; display:flex; align-items:center; justify-content:space-between;"><span style="display:inline-flex;align-items:center;gap:8px;"><svg width="30" height="30" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 6a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v4a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2l0 -4" /><path d="M12 2v2" /><path d="M9 12v9" /><path d="M15 12v9" /><path d="M5 16l4 -2" /><path d="M15 14l4 2" /><path d="M9 18h6" /><path d="M10 8v.01" /><path d="M14 8v.01" /></svg>${t("ai_strat_title")}</span> <span class="info-icon" style="font-size: 0.9em; font-weight:normal;" onmouseenter="mostraTooltip(this, 'info_strat_analysis')" onmouseleave="nascondiTooltip()">ℹ️</span></h4>`;
 
             // Avviso categoria sconosciuta
             if (_catUnknown && !dsoVIP[nameID]) {
                 let _unkMsg = lang === 'it'
                     ? `<div style="margin-bottom:12px; padding:10px; background:rgba(255,170,0,0.08); border-left:3px solid #ffaa00; border-radius:4px; font-size:0.88em; color:#ccc; line-height:1.5;">`
-                    + `⚠️ <b>Tipo oggetto non riconosciuto.</b> La stima delle ore di integrazione potrebbe non essere accurata.<br>`
+                    + `<span class='adp-icon'><svg width='14' height='14' style='vertical-align:middle'><use href='#i-alert'/></svg></span> <b>Tipo oggetto non riconosciuto.</b> La stima delle ore di integrazione potrebbe non essere accurata.<br>`
                     + `In astrofotografia, raramente meno di <b>4 ore</b> producono risultati soddisfacenti — pianifica di conseguenza.</div>`
                     : lang === 'en'
                     ? `<div style="margin-bottom:12px; padding:10px; background:rgba(255,170,0,0.08); border-left:3px solid #ffaa00; border-radius:4px; font-size:0.88em; color:#ccc; line-height:1.5;">`
-                    + `⚠️ <b>Object type not recognised.</b> The integration time estimate may not be accurate.<br>`
+                    + `<span class='adp-icon'><svg width='14' height='14' style='vertical-align:middle'><use href='#i-alert'/></svg></span> <b>Object type not recognised.</b> The integration time estimate may not be accurate.<br>`
                     + `In astrophotography, less than <b>4 hours</b> rarely produces satisfying results — plan accordingly.</div>`
                     : lang === 'es'
                     ? `<div style="margin-bottom:12px; padding:10px; background:rgba(255,170,0,0.08); border-left:3px solid #ffaa00; border-radius:4px; font-size:0.88em; color:#ccc; line-height:1.5;">`
-                    + `⚠️ <b>Tipo de objeto no reconocido.</b> La estimación del tiempo de integración puede no ser precisa.<br>`
+                    + `<span class='adp-icon'><svg width='14' height='14' style='vertical-align:middle'><use href='#i-alert'/></svg></span> <b>Tipo de objeto no reconocido.</b> La estimación del tiempo de integración puede no ser precisa.<br>`
                     + `En astrofotografía, menos de <b>4 horas</b> raramente produce resultados satisfactorios.</div>`
                     : `<div style="margin-bottom:12px; padding:10px; background:rgba(255,170,0,0.08); border-left:3px solid #ffaa00; border-radius:4px; font-size:0.88em; color:#ccc; line-height:1.5;">`
-                    + `⚠️ <b>未识别目标类型。</b>积分时间估算可能不准确。<br>`
+                    + `<span class='adp-icon'><svg width='14' height='14' style='vertical-align:middle'><use href='#i-alert'/></svg></span> <b>未识别目标类型。</b>积分时间估算可能不准确。<br>`
                     + `天文摄影中，少于 <b>4小时</b> 很少能产生令人满意的结果。</div>`;
                 html += _unkMsg;
             }
@@ -298,7 +329,7 @@ function toggleLock(id) {
                 if (isImpraticabile) {
                     if (lang === 'it') {
                         reason = `<div style="padding:10px 12px; background:rgba(255,60,60,0.10); border-left:3px solid #ff4444; border-radius:4px; font-size:0.9em; color:#ffcccc; line-height:1.6; margin-bottom:10px;">`;
-                        reason += `🚫 <b>Progetto non consigliato nelle condizioni attuali.</b><br>`;
+                        reason += `<span class='adp-icon'><svg width='14' height='14' style='vertical-align:middle'><use href='#i-ban'/></svg></span> <b>Progetto non consigliato nelle condizioni attuali.</b><br>`;
                         if (!isEmission && bortle >= 8)
                             reason += `Un target a banda larga (${tipoNomeReport}) da Bortle ${bortle} richiede un tempo di integrazione stimato superiore a ${_sogliaBB}h. Questo tipo di soggetto è molto difficile da separare dal fondo cielo in condizioni di forte inquinamento luminoso. <b>Considera un sito più buio o scegli una nebulosa a emissione con filtro narrowband.</b>`;
                         else if (isEmission && !usingNarrowband && bortle >= 6)
@@ -308,7 +339,7 @@ function toggleLock(id) {
                         reason += `</div>`;
                     } else if (lang === 'en') {
                         reason = `<div style="padding:10px 12px; background:rgba(255,60,60,0.10); border-left:3px solid #ff4444; border-radius:4px; font-size:0.9em; color:#ffcccc; line-height:1.6; margin-bottom:10px;">`;
-                        reason += `🚫 <b>Project not recommended under current conditions.</b><br>`;
+                        reason += `<span class='adp-icon'><svg width='14' height='14' style='vertical-align:middle'><use href='#i-ban'/></svg></span> <b>Project not recommended under current conditions.</b><br>`;
                         if (!isEmission && bortle >= 8)
                             reason += `A broadband target (${tipoNomeReport}) from Bortle ${bortle} requires an estimated integration time above ${_sogliaBB}h. This type of subject is very hard to separate from the sky background under heavy light pollution. <b>Consider a darker site or switch to an emission nebula with a narrowband filter.</b>`;
                         else if (isEmission && !usingNarrowband && bortle >= 6)
@@ -318,7 +349,7 @@ function toggleLock(id) {
                         reason += `</div>`;
                     } else if (lang === 'es') {
                         reason = `<div style="padding:10px 12px; background:rgba(255,60,60,0.10); border-left:3px solid #ff4444; border-radius:4px; font-size:0.9em; color:#ffcccc; line-height:1.6; margin-bottom:10px;">`;
-                        reason += `🚫 <b>Proyecto no recomendado en las condiciones actuales.</b><br>`;
+                        reason += `<span class='adp-icon'><svg width='14' height='14' style='vertical-align:middle'><use href='#i-ban'/></svg></span> <b>Proyecto no recomendado en las condiciones actuales.</b><br>`;
                         if (!isEmission && bortle >= 8)
                             reason += `Un objetivo de banda ancha (${tipoNomeReport}) desde Bortle ${bortle} requiere un tiempo de integración estimado superior a ${_sogliaBB}h. Este tipo de objetivo es muy difícil de separar del fondo del cielo con mucha contaminación lumínica. <b>Considera un lugar más oscuro o elige una nebulosa de emisión con filtro narrowband.</b>`;
                         else if (isEmission && !usingNarrowband && bortle >= 6)
@@ -328,7 +359,7 @@ function toggleLock(id) {
                         reason += `</div>`;
                     } else {
                         reason = `<div style="padding:10px 12px; background:rgba(255,60,60,0.10); border-left:3px solid #ff4444; border-radius:4px; font-size:0.9em; color:#ffcccc; line-height:1.6; margin-bottom:10px;">`;
-                        reason += `🚫 <b>当前条件下不建议此项目。</b><br>`;
+                        reason += `<span class='adp-icon'><svg width='14' height='14' style='vertical-align:middle'><use href='#i-ban'/></svg></span> <b>当前条件下不建议此项目。</b><br>`;
                         if (!isEmission && bortle >= 8)
                             reason += `在博特尔${bortle}下的宽带目标（${tipoNomeReport}）估计需要超过${_sogliaBB}小时的积分时间。在强光污染下，此类目标很难从天空背景中分离。<b>建议选择更暗的地点或改拍配合窄带滤镜的发射星云。</b>`;
                         else if (isEmission && !usingNarrowband && bortle >= 6)
@@ -435,14 +466,14 @@ function toggleLock(id) {
                 // ────────────────────────────────────────────────────────
 
                 html += `<div style="font-size:0.9em; line-height:1.5; color:#ddd; margin-bottom:15px;">${reason}</div>`;
-                html += `<button class="btn-guide" style="width:100%; padding:10px; font-size:1.1em; background: linear-gradient(135deg, #ffaa00 0%, #d48800 100%); color:#121212; border:none; box-shadow: 0 4px 15px rgba(255, 170, 0, 0.3);" onclick="apriMultiNight('smart')">${t("ai_plan_btn")}</button>`;
+                html += `<button class="btn-a-secondary btn-a-red" style="width:100%; padding:11px; font-size:1em; margin-top:10px;" onclick="apriMultiNight('smart')"><svg width="30" height="30" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" style="display:inline-block;vertical-align:middle;flex-shrink:0;"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M11 21h-5a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v3.5" /><path d="M16 3v4" /><path d="M8 3v4" /><path d="M4 11h11" /><path d="M17.8 20.817l-2.172 1.138a.392 .392 0 0 1 -.568 -.41l.415 -2.411l-1.757 -1.707a.389 .389 0 0 1 .217 -.665l2.428 -.352l1.086 -2.193a.392 .392 0 0 1 .702 0l1.086 2.193l2.428 .352a.39 .39 0 0 1 .217 .665l-1.757 1.707l.414 2.41a.39 .39 0 0 1 -.567 .411l-2.172 -1.138" /></svg> ${t("ai_plan_btn")}</button>`;
                 } // chiude else (caso normale vs impraticabile)
             } else {
                 let msgOk = lang === 'it' ? "Il tempo a disposizione stanotte sopra i 30° è sufficiente a completare l'integrazione consigliata." : 
                             lang === 'en' ? "Tonight's available time above 30° is enough to complete the recommended integration." :
                             lang === 'es' ? "El tiempo disponible esta noche por encima de 30° es suficiente para completar la integración recomendada." :
                                             "今晚 > 30° 的可用时间足以完成推荐的曝光时间。";
-                html += `<div style="margin-top:5px; padding:10px; background:rgba(68,255,68,0.1); border-left:3px solid #44ff44; border-radius:4px; font-size:0.9em; color:#fff;">✅ <b>OK:</b> ${msgOk}</div>`;
+                html += `<div style="margin-top:5px; padding:10px; background:rgba(74,138,111,0.1); border-left:3px solid #4a8a6f; border-radius:4px; font-size:0.9em; color:#fff;"><svg width='14' height='14' style='vertical-align:middle;margin-right:4px'><use href='#i-check'/></svg><b>OK:</b> ${msgOk}</div>`;
             }
             panel.innerHTML = html;
         }
@@ -487,17 +518,21 @@ function toggleLock(id) {
                 let rs = c * eEff;
                 tSec += rs;
                 if (!f.id.includes('dark') && !f.id.includes('bias')) tLF += c;
-                // HDR frames: se il campo è visibile e ha un valore, aggiunge tempo (50% delle pose)
+                // HDR companion row: se visibile e con pose > 0, aggiunge tempo reale
                 if (!f.id.includes('dark') && !f.id.includes('bias')) {
-                    let _hdrEl = document.getElementById(`${f.id}-hdr`);
-                    if (_hdrEl && _hdrEl.style.display !== 'none') {
-                        let _hdrExp = parseInt(_hdrEl.value) || 0;
-                        if (_hdrExp > 0 && c > 0) tSec += Math.ceil(c * 0.5) * _hdrExp;
+                    let _hdrRow = document.getElementById(`${f.id}-hdr-row`);
+                    if (_hdrRow && _hdrRow.style.display !== 'none') {
+                        let _hdrC = parseInt((document.getElementById(`${f.id}-hdr-count`)||{}).value)||0;
+                        let _hdrE = parseInt((document.getElementById(`${f.id}-hdr-exp`)||{}).value)||0;
+                        let _hdrSec = _hdrC * _hdrE;
+                        if (_hdrC > 0 && _hdrE > 0) { tSec += _hdrSec; tLF += _hdrC; }
+                        let _hdrTot = document.getElementById(`${f.id}-hdr-tot`);
+                        if (_hdrTot) _hdrTot.innerHTML = (_hdrSec > 0) ? formatSeconds(_hdrSec) : '—';
                     }
                 }
                 let rsLabel = formatSeconds(rs);
                 if (f.id.includes('bias') && c > 0 && e === 0) {
-                    rsLabel += ` <span onmouseenter="mostraTooltip(this,'bias_overhead_tip')" onmouseleave="nascondiTooltip()" style="font-size:0.85em;color:#888;cursor:help;">⚙️</span>`;
+                    rsLabel += ` <span onmouseenter="mostraTooltip(this,'bias_overhead_tip')" onmouseleave="nascondiTooltip()" style="color:#888;cursor:help;display:inline-flex;align-items:center;"><svg width='13' height='13' style='vertical-align:middle'><use href='#i-settings'/></svg></span>`;
                 }
                 document.getElementById(`${f.id}-tot`).innerHTML = rsLabel;
             });
@@ -514,22 +549,55 @@ function toggleLock(id) {
                     dSec += Math.floor(cnt / dFreq) * dD;
                 }
             });
+            // Dither per le righe HDR companion
+            fL.forEach(f => {
+                if (f.id.includes('dark') || f.id.includes('bias')) return;
+                let _hdrRow = document.getElementById(`${f.id}-hdr-row`);
+                if (!_hdrRow || _hdrRow.style.display === 'none') return;
+                let _hdrDChk = document.getElementById(`${f.id}-hdr-dither`);
+                if (_hdrDChk && _hdrDChk.checked) {
+                    let _hdrCnt = parseInt((document.getElementById(`${f.id}-hdr-count`)||{}).value)||0;
+                    let _hdrDFreq = parseInt((document.getElementById(`${f.id}-hdr-dfreq`)||{}).value)||4;
+                    dSec += Math.floor(_hdrCnt / _hdrDFreq) * dD;
+                }
+            });
             tSec += dSec;
             let ditherTotEl = document.getElementById('dither-tot');
             if (ditherTotEl) ditherTotEl.innerText = formatSeconds(dSec);
 
             document.getElementById('calc-total').innerText = formatSeconds(tSec);
             let rS = aS - tSec, rD = document.getElementById('calc-residual'), wD = document.getElementById('calc-warning');
-            if (rS >= 0) { rD.innerText = formatSeconds(rS); rD.className = "text-green"; wD.style.display = "none"; } 
-            else { rD.innerText = `- ${formatSeconds(Math.abs(rS))}`; rD.className = "text-red"; wD.style.display = "block"; }
+            let _smartMnBtn = document.getElementById('btn-smart-overflow-mn');
+            let _smartFillBar  = document.getElementById('smart-fill-bar');
+            let _smartFillText = document.getElementById('smart-fill-text');
+            if (rS >= 0) {
+                rD.innerText = formatSeconds(rS);
+                rD.className = "text-green";
+                wD.style.display = "none";
+                if (_smartMnBtn) _smartMnBtn.style.display = 'none';
+            } else {
+                rD.innerText = `- ${formatSeconds(Math.abs(rS))}`;
+                rD.className = "text-red";
+                wD.style.display = "block";
+                if (_smartMnBtn) _smartMnBtn.style.display = 'block';
+            }
+            // Aggiorna fill bar Smart
+            if (_smartFillBar && aS > 0) {
+                let _pct = Math.min((tSec / aS) * 100, 999);
+                _smartFillBar.style.width = Math.min(100, _pct) + '%';
+                _smartFillBar.style.background = _pct < 90 ? '#44ff44' : _pct <= 100 ? '#ffaa00' : '#ff4444';
+                let _strU = `${Math.floor(tSec/3600)}h ${Math.floor((tSec%3600)/60)}m`;
+                let _strT = `${Math.floor(aS/3600)}h ${Math.floor((aS%3600)/60)}m`;
+                if (_smartFillText) _smartFillText.innerText = `${_strU} / ${_strT} (${Math.round(_pct)}%)`;
+            }
             
             // Richiama l'AI ogni volta che si cambiano i tempi!
             if (typeof aggiornaAI === "function") aggiornaAI();
         }
 
         function generaSequenzaOttimale() {
-            if (!targetSelezionato) { alert(t("alert_planetarium")); return; }
-            let tS = document.getElementById('time-start').value, tE = document.getElementById('time-end').value; if(!tS || !tE) { alert(t("alert_times")); return; }
+            if (!targetSelezionato) { mostraAvviso(t("alert_planetarium"), "warn"); return; }
+            let tS = document.getElementById('time-start').value, tE = document.getElementById('time-end').value; if(!tS || !tE) { mostraAvviso(t("alert_times"), "warn"); return; }
             let dS = new Date(`1970-01-01T${tS}:00`), dE = new Date(`1970-01-01T${tE}:00`); if (dE <= dS) dE.setDate(dE.getDate() + 1);
             let aS = (dE - dS) / 1000;
             
@@ -543,10 +611,29 @@ function toggleLock(id) {
             let isM = document.getElementById('sensor-type').value === 'mono', fL = isM ? framesMono : framesColor, cS = 0;
             
             fL.forEach(f => { if (f.id.includes('dark') || f.id.includes('bias')) cS += (parseInt(document.getElementById(`${f.id}-count`).value)||0) * (parseInt(document.getElementById(`${f.id}-exp`).value)||0); });
-            let rS = aS - cS; if (rS <= 0) { alert(t("alert_calib")); return; }
+            let rS = aS - cS; if (rS <= 0) { mostraAvviso(t("alert_calib"), "warn"); return; }
+            // Sottrai il tempo HDR lockato dal budget disponibile per i frame principali
+            let hdrLockedSec = 0;
+            fL.forEach(f => {
+                if (f.id.includes('dark') || f.id.includes('bias')) return;
+                let _hdrRowRs = document.getElementById(`${f.id}-hdr-row`);
+                if (!_hdrRowRs || _hdrRowRs.style.display === 'none') return;
+                let _hdrCLock = document.getElementById(`${f.id}-hdr-count-lock`);
+                let _hdrELock = document.getElementById(`${f.id}-hdr-exp-lock`);
+                let _hdrCLocked = _hdrCLock && _hdrCLock.classList.contains('locked');
+                let _hdrELocked = _hdrELock && _hdrELock.classList.contains('locked');
+                // Sottrai solo se almeno un valore è lockato (l'utente ha dati personalizzati)
+                if (_hdrCLocked || _hdrELocked) {
+                    let _hdrC = parseInt((document.getElementById(`${f.id}-hdr-count`)||{}).value)||0;
+                    let _hdrE = parseInt((document.getElementById(`${f.id}-hdr-exp`)||{}).value)||0;
+                    hdrLockedSec += _hdrC * _hdrE;
+                }
+            });
+            let rSMain = Math.max(0, rS - hdrLockedSec);
+            if (rSMain <= 0) { mostraAvviso(t("alert_calib"), "warn"); return; }
             
             let aL = []; fL.forEach(f => { if (!f.id.includes('dark') && !f.id.includes('bias')) { let c = document.getElementById(`${f.id}-check`); if (c && c.checked) aL.push(f); } });
-            if (aL.length === 0) { alert(t("alert_nolight")); return; }
+            if (aL.length === 0) { mostraAvviso(t("alert_nolight"), "warn"); return; }
 
             let w = {};
             if (!isM) w[aL[0].id] = 1.0;
@@ -622,20 +709,54 @@ function toggleLock(id) {
 
             let dD = parseInt(document.getElementById('dither-duration').value)||0;
 
-            // Mostra/nasconde colonna HDR e imposta dither freq
-            aggiornaColonnaHDR(_hdrExpG > 0);
+            // Mostra righe HDR e imposta dither freq
+            aggiornaRigheHDR(_hdrExpG);
             (isM ? framesMono : framesColor).forEach(f => {
                 if (f.id.includes('dark') || f.id.includes('bias')) return;
-                let _hdrEl = document.getElementById(`${f.id}-hdr`);
-                if (_hdrEl) _hdrEl.value = _hdrExpG > 0 ? _hdrExpG : '';
                 let _dFrqEl = document.getElementById(`${f.id}-dfreq`);
                 if (_dFrqEl) _dFrqEl.value = _dFreqG;
             });
 
+            // ── LUMINANZA (m-l): esposizione calibrata per categoria + correzione magnitudine ────────────────
+            // Logica separata dalla base dei filtri RGB/narrowband perché L satura molto prima.
+            //
+            // Tabella base L per categoria (aggiornata 2026-03):
+            //   planetaria / globulare → 20s  (nuclei compatti, altissima brillanza superficiale)
+            //   aperto                 → 30s  (campo stellare denso, stelle brillanti)
+            //   galassia               → 30s  + correzione mag (vedi sotto)
+            //   hii / snr / vdb        → 90s  (nebulosa diffusa, brillanza media)
+            //   sh2 / lbn / ldn        → 120s (oggetti faint, massimo segnale L utile)
+            //   sconosciuto / default  → 30s  (conservativo)
+            //
+            // Correzione magnitudine (solo galassie): +5s per ogni punto mag > 8, cap 180s.
+            //   es. mag 10 → 30+10=40s | mag 12 → 30+20=50s | mag 20 → 30+60=90s
+            //
+            // Il lucchetto su Secs ha sempre la precedenza su tutto.
+            const _lumBaseMap = {
+                planetaria: 20, globulare: 20,
+                aperto: 30,
+                galassia: 30,
+                hii: 90, snr: 90, vdb: 90,
+                sh2: 120, lbn: 120, ldn: 120
+            };
+            let _lumBase = (_lumBaseMap[_catG] !== undefined) ? _lumBaseMap[_catG] : 30;
+            // Correzione magnitudine per galassie
+            if (_catG === 'galassia' && targetSelezionato) {
+                let _magRaw = targetSelezionato.mag;
+                if (_magRaw && _magRaw !== 'N/D' && _magRaw !== '--') {
+                    let _magMatch = _magRaw.toString().match(/([+\-]?\d+\.?\d*)/);
+                    if (_magMatch) {
+                        let _magV = parseFloat(_magMatch[1]);
+                        if (_magV > 8) _lumBase = Math.min(180, _lumBase + Math.round((_magV - 8) * 5));
+                    }
+                }
+            }
+            // ────────────────────────────────────────────────────────────────────────────────────────────────
+
             aL.forEach(f => {
                 let _baseExp = (_catExpMap[_catG] !== undefined) ? _catExpMap[_catG] : 180;
                 let eS;
-                if (f.id === 'm-l') eS = Math.min(_baseExp, 120);
+                if (f.id === 'm-l') eS = _lumBase;
                 else if (f.id.includes('ha') || f.id.includes('oiii') || f.id.includes('sii')) eS = Math.max(_baseExp, 300);
                 else eS = _baseExp;
 
@@ -652,7 +773,16 @@ function toggleLock(id) {
                 let dF = parseInt(dFrqEl ? dFrqEl.value : _dFreqG) || _dFreqG;
                 let eeS = eS + (uD && dF > 0 ? dD / dF : 0);
                 document.getElementById(`${f.id}-exp`).value = eS;
-                document.getElementById(`${f.id}-count`).value = Math.floor((rS * w[f.id]) / eeS);
+                let _mainComputedCount = Math.floor((rSMain * w[f.id]) / eeS);
+                document.getElementById(`${f.id}-count`).value = _mainComputedCount;
+                // Suggerisci count HDR (30% del count principale, min 5) — rispetta il lucchetto
+                let _hdrRowGen = document.getElementById(`${f.id}-hdr-row`);
+                if (_hdrRowGen && _hdrRowGen.style.display !== 'none') {
+                    let _hdrCountLock = document.getElementById(`${f.id}-hdr-count-lock`);
+                    if (!_hdrCountLock || !_hdrCountLock.classList.contains('locked')) {
+                        document.getElementById(`${f.id}-hdr-count`).value = Math.max(5, Math.ceil(_mainComputedCount * 0.3));
+                    }
+                }
             });
             sincronizzaDarkDaLight();
 
@@ -696,7 +826,7 @@ function toggleLock(id) {
 /* --- LOGICA PLANCIA PRO --- */
         /* --- LOGICA PLANCIA PRO --- */
         function aggiornaFiltriNinaPro() {
-            let isM = document.getElementById('pro-sensor-type').value === 'mono';
+            let isM = document.getElementById('sensor-type').value === 'mono';
             let c = document.getElementById('pro-nina-filters-container'); 
             if (!c) return;
             c.innerHTML = '';

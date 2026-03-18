@@ -260,7 +260,19 @@
             disegnaGraficoAltezza(); toggleSensorMode(); calcolaTempi(); window.scrollTo(0,0);
         }
 
-        function tornaDashboard() { document.getElementById('planning-view').style.display = 'none'; document.getElementById('dashboard-view').style.display = 'block'; document.getElementById('search-dash-input').value = ''; document.getElementById('search-plan-input').value = ''; sessionStorage.removeItem('ad_current_target'); }
+        function tornaDashboard() {
+            document.getElementById('planning-view').style.display = 'none';
+            document.getElementById('dashboard-view').style.display = 'block';
+            document.getElementById('search-dash-input').value = '';
+            document.getElementById('search-plan-input').value = '';
+            sessionStorage.removeItem('ad_current_target');
+            // Leaflet non sa che il contenitore è tornato visibile → ridisegna la mappa
+            setTimeout(() => {
+                if (window._leafletMap && window._leafletMap.invalidateSize) {
+                    window._leafletMap.invalidateSize({ animate: false });
+                }
+            }, 120);
+        }
         function applicaPresetTelescopio() { let v = document.getElementById('preset-telescope').value; if(v){ let p = v.split(','); document.getElementById('focal-length').value = p[0]; document.getElementById('aperture').value = p[1] || 100; aggiornaFOV(); } }
         
 

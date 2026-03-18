@@ -7,8 +7,9 @@
             lang = l; localStorage.setItem('ad_lang', l);
             
             document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.nav-flag').forEach(btn => btn.classList.remove('active'));
             let actBtn = document.getElementById('btn-lang-' + l);
-            if(actBtn) actBtn.classList.add('active');
+            if(actBtn) { actBtn.classList.add('active'); }
 
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 let k = el.getAttribute('data-i18n');
