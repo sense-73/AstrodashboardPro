@@ -11,7 +11,7 @@
 
             let vP = [], mP = SunCalc.getMoonPosition(dOra, latCorrente, lonCorrente), mA = mP.altitude * (180/Math.PI);
             if (mA > 5) vP.push({ html: creaCardHTML({id: "moon", name: "moon", icon: "🌕"}, mA, (mP.azimuth * 180/Math.PI + 180) % 360, false), alt: mA });
-            planetsDatabase.forEach(p => { let pos = calcolaAltAz(p.ra, p.dec, latCorrente, lonCorrente, dOra); if (pos.alt > 10) vP.push({ html: creaCardHTML(p, pos.alt, pos.az, false), alt: pos.alt }); });
+            getPlanetDatabase(dOra).forEach(p => { let pos = calcolaAltAz(p.ra, p.dec, latCorrente, lonCorrente, dOra); if (pos.alt > 10) vP.push({ html: creaCardHTML(p, pos.alt, pos.az, false), alt: pos.alt }); });
             vP.sort((a, b) => b.alt - a.alt).forEach(i => pL.appendChild(i.html));
 
             let vD = [];
@@ -60,7 +60,8 @@
         function getLocalizedName(obj) {
             if (!obj) return "";
             let checkName = obj.id || obj.name;
-            if (checkName === "jupiter" || checkName === "mars" || checkName === "venus" || checkName === "moon") {
+            if (checkName === "jupiter" || checkName === "mars" || checkName === "venus" || checkName === "moon" ||
+                checkName === "mercury" || checkName === "saturn" || checkName === "uranus" || checkName === "neptune") {
                 return t(checkName);
             }
             if (obj[lang]) return `${obj.name} - ${obj[lang]}`;
@@ -151,7 +152,7 @@
                 let v = inp.value.trim().toLowerCase().replace(/\s+/g, ''); box.innerHTML = '';
                 if (!v) { box.style.display = 'none'; return; }
                 let m = dsoDatabase.filter(d => d.id.toLowerCase().includes(v) || d.name.toLowerCase().replace(/\s+/g, '').includes(v) || (d[lang] && d[lang].toLowerCase().replace(/\s+/g, '').includes(v)));
-                if (m.length > 0) { box.style.display = 'block'; m.forEach(x => { let li = document.createElement('li'); li.innerHTML = `${x.icon} ${getLocalizedName(x)}`; li.onclick = () => { inp.value = getLocalizedName(x); box.style.display = 'none'; apriPianificazione(x); }; box.appendChild(li); }); } else box.style.display = 'none';
+                if (m.length > 0) { box.style.display = 'block'; m.forEach(x => { let li = document.createElement('li'); let _tipo = x.type ? `<span style="color:#6e7a8a; font-size:0.82em; margin-left:6px;">${x.type}</span>` : ''; li.innerHTML = `${getLocalizedName(x)}${_tipo}`; li.onclick = () => { inp.value = getLocalizedName(x); box.style.display = 'none'; apriPianificazione(x); }; box.appendChild(li); }); } else box.style.display = 'none';
             });
             inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); box.style.display = 'none'; eseguiRicerca(iId); } });
             document.addEventListener('click', e => { if (e.target !== inp) box.style.display = 'none'; });
@@ -337,7 +338,11 @@
                         apriPianificazione({ name:qClean.toUpperCase(), ra:ra/15, dec:dec, type:ty, mag:mg, dist:dist, link:`https://en.wikipedia.org/w/index.php?search=${encodeURIComponent(qClean)}`, desc:_simbadDesc(), tips:"Dati scaricati in tempo reale." });
                     });
                 }
-            }).catch(e => { if(st) { st.style.color = '#ff4444'; st.innerText = "Network Error."; } });
+            }).catch(() => { 
+                if(st) { st.style.color = '#ff4444'; st.innerText = "Not found."; setTimeout(() => { if(st) st.style.display='none'; }, 2500); }
+                inp.value = '';
+                mostraAvviso('❌ SIMBAD non raggiungibile. Controlla la connessione.', 'error');
+            });
         }
 
         // --- GESTIONE TOOLTIP FLUTTUANTE ---

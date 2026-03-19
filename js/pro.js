@@ -653,6 +653,14 @@
             let doFlip   = document.getElementById('pro-flip')   ? document.getElementById('pro-flip').checked   : false;
             let doAfStart  = document.getElementById('pro-af-start')  ? document.getElementById('pro-af-start').checked  : false;
             let doAfFilter = document.getElementById('pro-af-filter') ? document.getElementById('pro-af-filter').checked : false;
+            let doAfHfr    = document.getElementById('pro-af-hfr')    ? document.getElementById('pro-af-hfr').checked    : false;
+            // Orari sessione (time-start / time-end)
+            let _tS = document.getElementById('time-start') ? document.getElementById('time-start').value : '';
+            let _tE = document.getElementById('time-end')   ? document.getElementById('time-end').value   : '';
+            let _startH = _tS ? parseInt(_tS.split(':')[0]) : 21;
+            let _startM = _tS ? parseInt(_tS.split(':')[1]) : 0;
+            let _endH   = _tE ? parseInt(_tE.split(':')[0]) : 4;
+            let _endM   = _tE ? parseInt(_tE.split(':')[1]) : 30;
             let doWarm   = document.getElementById('pro-warm')   ? document.getElementById('pro-warm').checked   : false;
             let doPark   = document.getElementById('pro-park')   ? document.getElementById('pro-park').checked   : false;
             let doCover  = document.getElementById('pro-cover')  ? document.getElementById('pro-cover').checked  : false;
@@ -695,7 +703,7 @@
                 "NegativeDec": negD, "DecDegrees": dd, "DecMinutes": dm, "DecSeconds": ds
             });
 
-            // --- HELPER: FilterInfo minimale (come nel file reale) ---
+            // --- HELPER: FilterInfo completo (conforme al prototipo NINA) ---
             const makeFilter = (name) => ({
                 "$id": nid(),
                 "$type": "NINA.Core.Model.Equipment.FilterInfo, NINA.Core",
@@ -703,7 +711,24 @@
                 "_focusOffset": 0,
                 "_position": 0,
                 "_autoFocusExposureTime": -1.0,
-                "_autoFocusFilter": false
+                "_autoFocusFilter": false,
+                "FlatWizardFilterSettings": {
+                    "$id": nid(),
+                    "$type": "NINA.Core.Model.Equipment.FlatWizardFilterSettings, NINA.Core",
+                    "FlatWizardMode": 0,
+                    "HistogramMeanTarget": 0.5,
+                    "HistogramTolerance": 0.1,
+                    "MaxFlatExposureTime": 30.0,
+                    "MinFlatExposureTime": 0.01,
+                    "MaxAbsoluteFlatDeviceBrightness": 32767,
+                    "MinAbsoluteFlatDeviceBrightness": 0,
+                    "Gain": -1,
+                    "Offset": -1,
+                    "Binning": { "$id": nid(), "$type": "NINA.Core.Model.Equipment.BinningMode, NINA.Core", "X": 1, "Y": 1 }
+                },
+                "_autoFocusBinning": { "$id": nid(), "$type": "NINA.Core.Model.Equipment.BinningMode, NINA.Core", "X": 1, "Y": 1 },
+                "_autoFocusGain": -1,
+                "_autoFocusOffset": -1
             });
 
             // --- HELPER: Dither trigger ---
@@ -737,6 +762,8 @@
 
             // --- SEZIONE START ---
             let startItems = [];
+            // UnparkScope — sempre presente
+            startItems.push({ "$id": nid(), "$type": "NINA.Sequencer.SequenceItem.Telescope.UnparkScope, NINA.Sequencer", "Parent": { "$ref": "START_REF" }, "ErrorBehavior": 0, "Attempts": 1 });
             if (doCool) startItems.push({
                 "$id": nid(),
                 "$type": "NINA.Sequencer.SequenceItem.Camera.CoolCamera, NINA.Sequencer",
@@ -788,6 +815,8 @@
                 "ForceCalibration": false,
                 "Parent": { "$ref": "DSO_REF" }, "ErrorBehavior": 0, "Attempts": 1
             });
+            // WaitForTime — attende l'inizio sessione
+            dsoPreItems.push({ "$id": nid(), "$type": "NINA.Sequencer.SequenceItem.Utility.WaitForTime, NINA.Sequencer", "Hours": _startH, "Minutes": _startM, "MinutesOffset": 0, "Seconds": 0, "SelectedProvider": { "$type": "NINA.Sequencer.Utility.DateTimeProvider.TimeProvider, NINA.Sequencer" }, "Parent": { "$ref": "DSO_REF" }, "ErrorBehavior": 0, "Attempts": 1 });
 
             // --- BLOCCHI FILTRO (LoopCondition + SwitchFilter + TakeExposure + Dither) ---
             let imagingContId = nid(); // id del SequentialContainer "Target Imaging Instructions"
@@ -806,14 +835,7 @@
                         "Parent": { "$ref": blockId }, "ErrorBehavior": 0, "Attempts": 1
                     });
                 }
-                // Autofocus al cambio filtro
-                if (doAfFilter && expo.filterName) {
-                    items.push({
-                        "$id": nid(),
-                        "$type": "NINA.Sequencer.SequenceItem.Autofocus.RunAutofocus, NINA.Sequencer",
-                        "Parent": { "$ref": blockId }, "ErrorBehavior": 0, "Attempts": 1
-                    });
-                }
+                // Autofocus al cambio filtro: gestito dal trigger AutofocusAfterFilterChange sul container imaging
                 // TakeExposure (singola — il loop è gestito da LoopCondition)
                 items.push({
                     "$id": nid(),
@@ -874,13 +896,14 @@
                 });
             }
 
-            // Container "Target Imaging Instructions"
+            // Container "Target Imaging Instructions" con AboveHorizonCondition (offset 30°)
+            let _aboveH = { "$id": nid(), "$type": "NINA.Sequencer.Conditions.AboveHorizonCondition, NINA.Sequencer", "HasDsoParent": true, "Data": { "$id": nid(), "$type": "NINA.Sequencer.SequenceItem.Utility.WaitLoopData, NINA.Sequencer", "Coordinates": makeCoords(), "Offset": 30.0, "Comparator": 3 }, "Parent": { "$ref": imagingContId } };
             let imagingContainer = {
                 "$id": imagingContId,
                 "$type": "NINA.Sequencer.Container.SequentialContainer, NINA.Sequencer",
                 "Strategy": seqStrat(),
                 "Name": "Target Imaging Instructions",
-                "Conditions": condCol(),
+                "Conditions": condCol([_aboveH]),
                 "IsExpanded": true,
                 "Items": itemCol(filterBlocks),
                 "Triggers": trigCol(imagingTriggers),
@@ -922,10 +945,10 @@
                 },
                 "Strategy": seqStrat(),
                 "Name": targetSelezionato.name,
-                "Conditions": condCol(),
+                "Conditions": condCol([{ "$id": nid(), "$type": "NINA.Sequencer.Conditions.TimeCondition, NINA.Sequencer", "Hours": _endH, "Minutes": _endM, "MinutesOffset": 0, "Seconds": 0, "SelectedProvider": { "$type": "NINA.Sequencer.Utility.DateTimeProvider.TimeProvider, NINA.Sequencer" }, "Parent": { "$ref": dsoId } }]),
                 "IsExpanded": true,
                 "Items": itemCol([...dsoPreItems, imagingContainer]),
-                "Triggers": trigCol(),
+                "Triggers": (() => { let _t = []; if (doAfHfr) { let hfrRid = nid(); _t.push({ "$id": nid(), "$type": "NINA.Sequencer.Trigger.Autofocus.AutofocusAfterHFRIncreaseTrigger, NINA.Sequencer", "Amount": 10.0, "SampleSize": 10, "Parent": { "$ref": dsoId }, "TriggerRunner": { "$id": hfrRid, "$type": "NINA.Sequencer.Container.SequentialContainer, NINA.Sequencer", "Strategy": seqStrat(), "Name": null, "Conditions": condCol(), "IsExpanded": true, "Items": itemCol([{ "$id": nid(), "$type": "NINA.Sequencer.SequenceItem.Autofocus.RunAutofocus, NINA.Sequencer", "Parent": { "$ref": hfrRid }, "ErrorBehavior": 0, "Attempts": 1 }]), "Triggers": trigCol(), "Parent": null, "ErrorBehavior": 0, "Attempts": 1 } }); } if (doAfFilter) { let afFRid = nid(); _t.push({ "$id": nid(), "$type": "NINA.Sequencer.Trigger.Autofocus.AutofocusAfterFilterChange, NINA.Sequencer", "Parent": { "$ref": dsoId }, "TriggerRunner": { "$id": afFRid, "$type": "NINA.Sequencer.Container.SequentialContainer, NINA.Sequencer", "Strategy": seqStrat(), "Name": null, "Conditions": condCol(), "IsExpanded": true, "Items": itemCol([{ "$id": nid(), "$type": "NINA.Sequencer.SequenceItem.Autofocus.RunAutofocus, NINA.Sequencer", "Parent": { "$ref": afFRid }, "ErrorBehavior": 0, "Attempts": 1 }]), "Triggers": trigCol(), "Parent": null, "ErrorBehavior": 0, "Attempts": 1 } }); } return trigCol(_t); })(),
                 "Parent": { "$ref": "TARGET_REF" },
                 "ErrorBehavior": 0, "Attempts": 1
             };

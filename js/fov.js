@@ -26,8 +26,8 @@
             setTimeout(() => { tooltip.style.display = 'none'; }, 200);
         }
 
-        function apriGuida() { vistaPrecedente = document.getElementById('planning-view').style.display === 'block' ? 'planning-view' : 'dashboard-view'; document.getElementById('dashboard-view').style.display = 'none'; document.getElementById('planning-view').style.display = 'none'; document.getElementById('guide-view').style.display = 'block'; window.scrollTo(0,0); }
-        function chiudiGuida() { document.getElementById('guide-view').style.display = 'none'; document.getElementById(vistaPrecedente).style.display = 'block'; if(vistaPrecedente==='planning-view') aggiornaFOV(); window.scrollTo(0,0); }
+        function apriGuida() { let lv = document.getElementById('landing-view'); vistaPrecedente = (lv && lv.style.display !== 'none') ? 'landing-view' : (document.getElementById('planning-view').style.display === 'block' ? 'planning-view' : 'dashboard-view'); ['landing-view','dashboard-view','planning-view'].forEach(v => { let el = document.getElementById(v); if(el) el.style.display = 'none'; }); document.getElementById('guide-view').style.display = 'block'; window.scrollTo(0,0); }
+        function chiudiGuida() { document.getElementById('guide-view').style.display = 'none'; if(vistaPrecedente === 'landing-view') { tornaHome(); } else { document.getElementById(vistaPrecedente).style.display = 'block'; if(vistaPrecedente==='planning-view') aggiornaFOV(); } window.scrollTo(0,0); }
 
         window.onclick = function(event) {
             if (event.target == document.getElementById('report-modal')) { chiudiReport(); }
@@ -212,21 +212,37 @@
             // ─────────────────────────────────────────────────────────────────────
             
             let nS = atStart.night || atStart.sunset; let nE = atEnd.nightEnd || atEnd.sunrise;
-            let cur = new Date(nS.getTime()); let maxA = -90; let currentBlock = { start: null, end: null }; let bestBlock = { start: null, end: null, duration: 0 }; let isAbove = false;
-            
-            // Simula l'intera nottata a scatti di 10 minuti per trovare la finestra migliore sopra i 30°
+            let cur = new Date(nS.getTime()); let maxA = -90; let firstAbove30 = null; let lastAbove30 = null;
+
+            // Scansione nottata a 10 min: prima e ultima volta sopra i 30°
             while(cur <= nE) {
                 let a = calcolaAltAz(targetSelezionato.ra, targetSelezionato.dec, latCorrente, lonCorrente, cur).alt;
                 if(a > maxA) maxA = a;
-                if(a >= 30) { if(!isAbove) { currentBlock.start = new Date(cur); isAbove = true; } currentBlock.end = new Date(cur); } 
-                else { if(isAbove) { let dur = currentBlock.end.getTime() - currentBlock.start.getTime(); if(dur > bestBlock.duration) { bestBlock = { start: currentBlock.start, end: currentBlock.end, duration: dur }; } isAbove = false; } }
+                if(a >= 30) {
+                    if(!firstAbove30) firstAbove30 = new Date(cur);
+                    lastAbove30 = new Date(cur);
+                }
                 cur.setMinutes(cur.getMinutes() + 10);
             }
-            if(isAbove) { let dur = currentBlock.end.getTime() - currentBlock.start.getTime(); if(dur > bestBlock.duration) { bestBlock = { start: currentBlock.start, end: currentBlock.end, duration: dur }; } }
-            
-            // Assegna la finestra calcolata agli input
-            if(bestBlock.duration > 0) { document.getElementById('time-start').value = ft(bestBlock.start); document.getElementById('time-end').value = ft(bestBlock.end); } 
-            else { document.getElementById('time-start').value = ft(nS); document.getElementById('time-end').value = ft(nE); }
+
+            // time-start = max(inizio_notte_astronomica, prima_volta_sopra_30°, ora_attuale)
+            // time-end   = min(fine_notte_astronomica, ultima_volta_sopra_30°)
+            let _rawStart = new Date(nS.getTime());
+            if (firstAbove30 && firstAbove30 > _rawStart) {
+                _rawStart = new Date(firstAbove30.getTime());
+            }
+            let _adesso = new Date();
+            _adesso.setSeconds(0, 0);
+            if (_adesso > _rawStart && _adesso < nE) {
+                _rawStart = new Date(_adesso.getTime());
+            }
+            let _rawEnd = new Date(nE.getTime());
+            if (lastAbove30 && lastAbove30 < _rawEnd) {
+                _rawEnd = new Date(lastAbove30.getTime());
+            }
+
+            document.getElementById('time-start').value = ft(_rawStart);
+            document.getElementById('time-end').value   = ft(_rawEnd);
 
             // Generazione Mappa Stellare
             if (!aladinSkyMap) {

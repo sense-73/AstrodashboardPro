@@ -854,3 +854,88 @@ function toggleLock(id) {
             if (smartInput) smartInput.value = nuovoNome;
             disegnaGrigliaPro();
         }
+
+
+        // ── SINCRONIZZAZIONE AUTOFOCUS SMART ↔ PRO ─────────────────────────
+        // I campi smart-af-* e pro-af-* sono sempre allineati in tempo reale.
+        (function() {
+            const pairs = [
+                ['smart-af-start',    'pro-af-start'],
+                ['smart-af-filter',   'pro-af-filter'],
+                ['smart-af-time',     'pro-af-time'],
+                ['smart-af-time-val', 'pro-af-time-val'],
+                ['smart-af-temp',     'pro-af-temp'],
+                ['smart-af-temp-val', 'pro-af-temp-val'],
+            ];
+
+            function syncEl(from, to) {
+                let fEl = document.getElementById(from);
+                let tEl = document.getElementById(to);
+                if (!fEl || !tEl) return;
+                if (fEl.type === 'checkbox') tEl.checked = fEl.checked;
+                else tEl.value = fEl.value;
+            }
+
+            function attachSync(srcId, dstId) {
+                let el = document.getElementById(srcId);
+                if (!el) return;
+                el.addEventListener('change', () => syncEl(srcId, dstId));
+                el.addEventListener('input',  () => syncEl(srcId, dstId));
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+                // Smart → PRO
+                pairs.forEach(([s, p]) => attachSync(s, p));
+                // PRO → Smart
+                pairs.forEach(([s, p]) => attachSync(p, s));
+                // Allineamento iniziale: Smart → PRO (Smart ha i default)
+                pairs.forEach(([s, p]) => syncEl(s, p));
+            });
+        })();
+
+
+        // ── SINCRONIZZAZIONE GAIN/OFFSET PER GRUPPO ─────────────────────
+        // Event delegation su document: intercetta qualsiasi input/change
+        // anche sugli elementi creati dinamicamente da disegnaGriglia().
+        (function() {
+            // Gruppi Smart
+            const smartLRGB = ['m-l', 'm-r', 'm-g', 'm-b'];
+            const smartHOS  = ['m-ha', 'm-oiii', 'm-sii'];
+            // Gruppi PRO (indipendenti da Smart)
+            const proLRGB   = ['pro-m-l', 'pro-m-r', 'pro-m-g', 'pro-m-b'];
+            const proHOS    = ['pro-m-ha', 'pro-m-oiii', 'pro-m-sii'];
+
+            const allGroups = [smartLRGB, smartHOS, proLRGB, proHOS];
+
+            function propagate(changedId, field, value) {
+                // Trova il gruppo cui appartiene l'elemento modificato
+                for (const group of allGroups) {
+                    if (group.includes(changedId)) {
+                        group.forEach(id => {
+                            if (id === changedId) return;
+                            let el = document.getElementById(`${id}-${field}`);
+                            if (el) el.value = value;
+                        });
+                        return;
+                    }
+                }
+            }
+
+            function handler(e) {
+                let el = e.target;
+                if (!el || el.tagName !== 'INPUT') return;
+                let id = el.id; // es. "m-l-gain", "pro-m-r-offset"
+                if (!id) return;
+                let field = null;
+                if (id.endsWith('-gain'))   field = 'gain';
+                if (id.endsWith('-offset')) field = 'offset';
+                if (!field) return;
+                // Ricostruisce il filterId rimuovendo il suffisso "-gain"/"-offset"
+                let filterId = id.slice(0, -(field.length + 1));
+                propagate(filterId, field, el.value);
+            }
+
+            document.addEventListener('input',  handler, true);
+            document.addEventListener('change', handler, true);
+        })();
+

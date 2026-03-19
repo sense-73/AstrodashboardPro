@@ -25,9 +25,55 @@
         });
         let lpActive = false;
         let _lpSavedLayers = []; // memoria layer meteo attivi prima di LP
+
+        const _METEO_LAYER_NAMES = ['basse','medie','alte','jet','luna','umidita'];
+
+        function _saveLayerState() {
+            let active = _METEO_LAYER_NAMES.filter(n => map.hasLayer(layers[n]));
+            let c = map.getCenter();
+            try {
+                localStorage.setItem('ad_meteo_layers', JSON.stringify(active));
+                localStorage.setItem('ad_meteo_lp', lpActive ? '1' : '0');
+                localStorage.setItem('ad_meteo_zoom', map.getZoom());
+                localStorage.setItem('ad_meteo_center', JSON.stringify([c.lat, c.lng]));
+            } catch(e) {}
+        }
+
+        function _restoreLayerState() {
+            let savedZoom   = localStorage.getItem('ad_meteo_zoom');
+            let savedCenter = localStorage.getItem('ad_meteo_center');
+            let savedLayers = localStorage.getItem('ad_meteo_layers');
+            let savedLp     = localStorage.getItem('ad_meteo_lp');
+
+            if (savedCenter && savedZoom) {
+                try {
+                    let c = JSON.parse(savedCenter);
+                    map.setView(c, parseInt(savedZoom));
+                } catch(e) {}
+            } else if (savedZoom) {
+                map.setZoom(parseInt(savedZoom));
+            }
+
+            if (savedLayers !== null) {
+                let active = [];
+                try { active = JSON.parse(savedLayers); } catch(e) {}
+                _METEO_LAYER_NAMES.forEach(n => {
+                    let b = document.getElementById('btn-' + n);
+                    if (active.includes(n)) {
+                        if (!map.hasLayer(layers[n])) map.addLayer(layers[n]);
+                        if (b) { b.classList.remove('disabled'); b.classList.add('active'); }
+                    } else {
+                        if (map.hasLayer(layers[n])) map.removeLayer(layers[n]);
+                        if (b) { b.classList.remove('active'); b.classList.add('disabled'); }
+                    }
+                });
+            }
+
+            if (savedLp === '1' && !lpActive) toggleLayerLP();
+        }
+
         function toggleLayerLP() {
             let btn = document.getElementById('btn-lp');
-            let meteoLayerNames = ['basse','medie','alte','jet','luna','umidita'];
             if (lpActive) {
                 // Disattiva LP e ripristina i layer meteo che erano attivi
                 map.removeLayer(lpLayer);
@@ -45,7 +91,7 @@
                 _lpSavedLayers = [];
             } else {
                 // Salva e spegni tutti i layer meteo attivi
-                _lpSavedLayers = meteoLayerNames.filter(n => map.hasLayer(layers[n]));
+                _lpSavedLayers = _METEO_LAYER_NAMES.filter(n => map.hasLayer(layers[n]));
                 _lpSavedLayers.forEach(n => {
                     map.removeLayer(layers[n]);
                     let b = document.getElementById('btn-'+n);
@@ -57,6 +103,7 @@
                 let leg = document.getElementById('lp-legend');
                 if (leg) leg.style.display = 'block';
             }
+            _saveLayerState();
         }
         function toggleLayer(n) {
             let b = document.getElementById('btn-'+n), l = layers[n];
@@ -73,8 +120,23 @@
             } else {
                 map.addLayer(l); b.classList.replace('disabled','active');
             }
+            _saveLayerState();
         }
         let marker = L.marker([latCorrente, lonCorrente]).addTo(map).bindPopup(`<b>${_savedName}</b>`).openPopup();
+
+        // Salva zoom quando l'utente zooma/sposta la mappa
+        map.on('zoomend moveend', _saveLayerState);
+
+        // Al zoom le coordinate pixel cambiano → ricalcola cerchi e maschere
+        map.on('zoomend', function() {
+            if (typeof datiMeteo !== 'undefined' && datiMeteo) {
+                cambiaOraMeteo();
+                if (typeof cambiaOraAstro === 'function') cambiaOraAstro();
+            }
+        });
+
+        // Ripristina layer e zoom salvati al reload
+        _restoreLayerState();
 
 
         function getJulianDate(date) { return (date.getTime() / 86400000) + 2440587.5; }
@@ -96,11 +158,15 @@
             clearTimeout(timerRicerca);
             timerRicerca = setTimeout(() => {
                 fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5&accept-language=${localStorage.getItem('ad_lang') || 'it'}`)
-                    .then(r => r.json()).then(data => {
+                    .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+                    .then(data => {
                         dropdown.innerHTML = ''; 
                         if (data.length > 0) {
                             dropdown.style.display = 'block'; data.forEach(l => { let li = document.createElement('li'); li.textContent = l.display_name; li.onclick = () => selezionaLuogo(l.lat, l.lon, l.display_name); dropdown.appendChild(li); });
                         } else dropdown.style.display = 'none';
+                    }).catch(() => {
+                        dropdown.style.display = 'none';
+                        mostraAvviso('⚠️ ' + (typeof t === 'function' ? t('nominatim_err') || 'Ricerca luogo non disponibile.' : 'Ricerca luogo non disponibile.'), 'warn');
                     });
             }, 500); 
         }
@@ -131,13 +197,17 @@
 
         function scaricaDatiPrevisionali() {
             fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latCorrente}&longitude=${lonCorrente}&hourly=cloud_cover_low,cloud_cover_mid,cloud_cover_high,wind_speed_250hPa,wind_speed_10m,temperature_2m,relative_humidity_2m&forecast_days=3&timezone=auto`)
-            .then(r => r.json()).then(data => {
+            .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+            .then(data => {
+                if (!data.hourly || !data.hourly.time) throw new Error('invalid_data');
                 datiMeteo = data.hourly; let adesso = new Date();
                 indicePartenza = Math.max(0, datiMeteo.time.findIndex(x => new Date(x).getTime() >= adesso.getTime() - 3600000));
                 document.getElementById('timeSlider').disabled = false; document.getElementById('timeSlider').value = 0; 
                 document.getElementById('astroSlider').disabled = false; document.getElementById('astroSlider').value = 0; 
                 applicaGradienteGiornoNotte();
                 cambiaOraMeteo(); cambiaOraAstro();
+            }).catch(() => {
+                mostraAvviso('❌ Dati meteo non disponibili. Controlla la connessione e riprova.', 'error');
             });
         }
 
@@ -171,6 +241,40 @@
             cambiaOraMeteo(); 
             cambiaOraAstro(); 
         }
+
+        // ── Helper: calcola lat/lon a distanza e bearing dal centro ───────
+        function _offsetLatLon(lat, lon, distM, bearingDeg) {
+            const R = 6371000, d = distM / R, t = bearingDeg * Math.PI / 180;
+            const p1 = lat * Math.PI / 180, l1 = lon * Math.PI / 180;
+            const p2 = Math.asin(Math.sin(p1)*Math.cos(d) + Math.cos(p1)*Math.sin(d)*Math.cos(t));
+            const l2 = l1 + Math.atan2(Math.sin(t)*Math.sin(d)*Math.cos(p1), Math.cos(d)-Math.sin(p1)*Math.sin(p2));
+            return [p2 * 180/Math.PI, l2 * 180/Math.PI];
+        }
+
+        // ── Crea marker icona bianca (contrasto su qualsiasi fill layer) ──
+        function _meteoIcon(latLon, svgPaths, filled) {
+            const sw = filled ? 0 : 2;
+            const pathsHtml = svgPaths.map(d =>
+                filled
+                    ? `<path fill="white" d="${d}"/>`
+                    : `<path fill="none" stroke="white" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round" d="${d}"/>`
+            ).join('');
+            const html = `<svg width="16" height="16" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="display:block">${pathsHtml}</svg>`;
+            return L.marker(latLon, {
+                icon: L.divIcon({ html, className: '', iconSize: [16,16], iconAnchor: [8,8] }),
+                interactive: false, keyboard: false
+            });
+        }
+
+        // SVG paths per ogni layer
+        const _SVG = {
+            basse:   { filled: true,  paths: ['M10.04 4.305c2.195-.667 4.615-.224 6.36 1.176c1.386 1.108 2.188 2.686 2.252 4.34l.003.212l.091.003c2.3.107 4.143 1.961 4.25 4.27l.004.211c0 2.407-1.885 4.372-4.255 4.482l-.21.005h-11.878l-.222-.008c-2.94-.11-5.317-2.399-5.43-5.263l-.005-.216c0-2.747 2.08-5.01 4.784-5.417l.114-.016l.07-.181c.663-1.62 2.056-2.906 3.829-3.518l.244-.08z'] },
+            medie:   { filled: false, paths: ['M6.657 18c-2.572 0-4.657-2.007-4.657-4.483c0-2.475 2.085-4.482 4.657-4.482c.393-1.762 1.794-3.2 3.675-3.773c1.88-.572 3.956-.193 5.444 1c1.488 1.19 2.162 3.007 1.77 4.769h.99c1.913 0 3.464 1.56 3.464 3.486c0 1.927-1.551 3.487-3.465 3.487h-11.878'] },
+            alte:    { filled: false, paths: ['M7 16a4.6 4.4 0 0 1 0-9a5 4.5 0 0 1 11 2h1a3.5 3.5 0 0 1 0 7h-12','M5 20l14 0'] },
+            jet:     { filled: false, paths: ['M5 8h8.5a2.5 2.5 0 1 0-2.34-3.24','M3 12h15.5a2.5 2.5 0 1 1-2.34 3.24','M4 16h5.5a2.5 2.5 0 1 1-2.34 3.24'] },
+            luna:    { filled: false, paths: ['M16.418 4.157a8 8 0 0 0 0 15.686','M3 12a9 9 0 1 0 18 0a9 9 0 1 0-18 0'] },
+            umidita: { filled: false, paths: ['M4.072 20.3a2.999 2.999 0 0 0 3.856 0a3.002 3.002 0 0 0 .67-3.798l-2.095-3.227a.6.6 0 0 0-1.005 0l-2.098 3.227a3.003 3.003 0 0 0 .671 3.798','M16.072 20.3a2.999 2.999 0 0 0 3.856 0a3.002 3.002 0 0 0 .67-3.798l-2.095-3.227a.6.6 0 0 0-1.005 0l-2.098 3.227a3.003 3.003 0 0 0 .671 3.798','M10.072 10.3a2.999 2.999 0 0 0 3.856 0a3.002 3.002 0 0 0 .67-3.798l-2.095-3.227a.6.6 0 0 0-1.005 0l-2.098 3.227a3.003 3.003 0 0 0 .671 3.798'] }
+        };
 
         function cambiaOraMeteo() {
             if (!datiMeteo) return;
@@ -208,12 +312,34 @@
             document.getElementById('val-basse').innerText = b+"%"; document.getElementById('val-medie').innerText = m+"%"; document.getElementById('val-alte').innerText = a+"%"; document.getElementById('val-jet').innerHTML = jet+' <span class="jet-unit">km/h</span>'; document.getElementById('val-luna').innerText = inqL+"%";
 
             Object.values(layers).forEach(l => l.clearLayers());
-            L.circle([latCorrente, lonCorrente], { radius: 50000, color: '#ff4444', fillColor: '#ff4444', fillOpacity: (b/100)*0.7, weight: 1 }).addTo(layers.basse);
-            L.circle([latCorrente, lonCorrente], { radius: 50000, color: '#44ff44', fillColor: '#44ff44', fillOpacity: (m/100)*0.7, weight: 1 }).addTo(layers.medie);
-            L.circle([latCorrente, lonCorrente], { radius: 50000, color: '#4444ff', fillColor: '#4444ff', fillOpacity: (a/100)*0.7, weight: 1 }).addTo(layers.alte);
-            if(jet>50) L.circle([latCorrente, lonCorrente], { radius: 60000, color: '#ff00ff', fillColor: '#ff00ff', fillOpacity: (jet/200)*0.5, weight: 2, dashArray: '10, 10' }).addTo(layers.jet);
-            if(inqL>0) L.circle([latCorrente, lonCorrente], { radius: 100000, color: '#ffffaa', fillColor: '#ffffaa', fillOpacity: (inqL/100)*0.4, weight: 0 }).addTo(layers.luna);
-            if(um>60) L.circle([latCorrente, lonCorrente], { radius: 75000, color: '#00ffff', fillColor: '#00ffff', fillOpacity: ((um-60)/100)*0.5, weight: 1, dashArray: '5, 5' }).addTo(layers.umidita);
+
+            // Raggi in metri. Icone bianche al 92% del raggio (vicino al bordo, no sovrapposizioni).
+            // Nuvole stesso raggio — basse ore 9 (270°), medie ore 10:30 (315°), alte ore 12 (0°)
+            // Jet/Luna/Umidità raggi crescenti — tutti ore 1:30 (45°), cerchi diversi
+            const R_NUV = 50000, R_JET = 60000, R_UMID = 75000, R_LUNA = 100000;
+            const PCT = 0.92;
+
+            L.circle([latCorrente, lonCorrente], { radius: R_NUV, color: '#ff4444', fillColor: '#ff4444', fillOpacity: (b/100)*0.7, weight: 1 }).addTo(layers.basse);
+            _meteoIcon(_offsetLatLon(latCorrente, lonCorrente, R_NUV*PCT, 270), _SVG.basse.paths, _SVG.basse.filled).addTo(layers.basse);
+
+            L.circle([latCorrente, lonCorrente], { radius: R_NUV, color: '#44ff44', fillColor: '#44ff44', fillOpacity: (m/100)*0.7, weight: 1 }).addTo(layers.medie);
+            _meteoIcon(_offsetLatLon(latCorrente, lonCorrente, R_NUV*PCT, 315), _SVG.medie.paths, _SVG.medie.filled).addTo(layers.medie);
+
+            L.circle([latCorrente, lonCorrente], { radius: R_NUV, color: '#4444ff', fillColor: '#4444ff', fillOpacity: (a/100)*0.7, weight: 1 }).addTo(layers.alte);
+            _meteoIcon(_offsetLatLon(latCorrente, lonCorrente, R_NUV*PCT, 0), _SVG.alte.paths, _SVG.alte.filled).addTo(layers.alte);
+
+            if (jet > 50) {
+                L.circle([latCorrente, lonCorrente], { radius: R_JET, color: '#ff00ff', fillColor: '#ff00ff', fillOpacity: (jet/200)*0.5, weight: 2, dashArray: '10, 10' }).addTo(layers.jet);
+                _meteoIcon(_offsetLatLon(latCorrente, lonCorrente, R_JET*PCT, 45), _SVG.jet.paths, _SVG.jet.filled).addTo(layers.jet);
+            }
+            if (inqL > 0) {
+                L.circle([latCorrente, lonCorrente], { radius: R_LUNA, color: '#ffffaa', fillColor: '#ffffaa', fillOpacity: (inqL/100)*0.4, weight: 0 }).addTo(layers.luna);
+                _meteoIcon(_offsetLatLon(latCorrente, lonCorrente, R_LUNA*PCT, 45), _SVG.luna.paths, _SVG.luna.filled).addTo(layers.luna);
+            }
+            if (um > 60) {
+                L.circle([latCorrente, lonCorrente], { radius: R_UMID, color: '#00ffff', fillColor: '#00ffff', fillOpacity: ((um-60)/100)*0.5, weight: 1, dashArray: '5, 5' }).addTo(layers.umidita);
+                _meteoIcon(_offsetLatLon(latCorrente, lonCorrente, R_UMID*PCT, 45), _SVG.umidita.paths, _SVG.umidita.filled).addTo(layers.umidita);
+            }
         }
 
 

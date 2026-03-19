@@ -30,7 +30,7 @@ let lang = localStorage.getItem('ad_lang') || 'it';
                 "galaxy": "Galassia", "nebula": "Nebulosa", "cluster": "Ammasso", "star": "Stella", "unknown": "Sconosciuta",
                 "alert_planetarium": "Scegli prima un bersaglio dal Planetario 🔭!", "alert_noseq": "Nessuna posa calcolata! Clicca prima su 'Genera Sequenza Ottimale'.",
                 "alert_calib": "I frame di calibrazione occupano tutto il tempo!", "alert_nolight": "Seleziona almeno un filtro Light.", "alert_times": "Imposta prima gli orari di Inizio e Fine.", "no_target": "Nessun oggetto visibile.", "too_bright": "☀️ Cielo troppo luminoso.", "dso_too_bright": "☀️ Cielo troppo luminoso per il Deep Sky.", "select_opt": "-- Seleziona --",
-                "jupiter": "Giove", "mars": "Marte", "venus": "Venere", "moon": "Luna", "sun": "Sole", "weather": "Meteo",
+                "jupiter": "Giove", "mars": "Marte", "venus": "Venere", "moon": "Luna", "sun": "Sole", "weather": "Meteo", "mercury": "Mercurio", "saturn": "Saturno", "uranus": "Urano", "neptune": "Nettuno",
                 "mode": "Modalità:", "single_panel": "Scatto Singolo", "mosaic": "Mosaico", "panels": "Pannelli (X, Y):", "overlap": "Sovrapposizione:", "time_per_panel": "Tempo per Pannello", "fov_warning": "L'oggetto è più grande del campo! Valuta un mosaico.", "nina_mosaic_msg": "Modalità Mosaico attiva. Usa il Framing Assistant di N.I.N.A. per le coordinate.",
                 "gen_report_btn": "Genera Report Strategico", "report_title": "Dossier Mosaico", "copy_report": "Copia negli Appunti", "copied": "Copiato!", "report_general": "Info Generali Mosaico", "report_strategy": "Strategia Singolo Pannello", "report_plan": "Piano di Scatto (Per Pannello)",
                 "info_pos": "Cerca un luogo o inserisci coordinate. La mappa mostra un raggio di 50km utile per trovare 'buchi di sereno' spostandoti.",
@@ -44,7 +44,7 @@ let lang = localStorage.getItem('ad_lang') || 'it';
                 "rpt_hdr_note": "Esposizione breve affiancata alle pose principali per recuperare i dettagli nelle aree più luminose (nucleo stellare, centro nebulare) senza saturazione. Il numero di pose HDR è stimato automaticamente al 50% delle pose principali.",
                 "info_nina": "Salva un file JSON perfetto. Trascinalo dentro N.I.N.A. (Advanced Sequencer) e la sessione partirà in autonomia totale.",
                 "mn_title": "Progettazione Multinotte",
-                "mn_warning": "ATTENZIONE N.I.N.A.: Assicurati che i nomi dei filtri nella 'Mappatura Nomi' (nel pannello principale) corrispondano esattamente a quelli della tua ruota portafiltri, altrimenti il file darà errore!",
+                "mn_warning": "ATTENZIONE: Assicurati che i nomi dei filtri nella 'Mappatura Nomi' (nel pannello principale) corrispondano esattamente a quelli della tua ruota portafiltri in NINA per evitare errori.",
                 "mn_target_ai": "Target Consigliato",
                 "mn_planned": "Tempo Pianificato",
                 "mn_add_night": "Aggiungi Sessione (Notte)",
@@ -68,8 +68,10 @@ let lang = localStorage.getItem('ad_lang') || 'it';
                 "pro_cool_cam": "Raffredda a",
                 "pro_auto_rotator": "Rotatore Automatico",
                 "pro_start_guide": "Avvia Autoguida",
+                "pro_af_title": "Autofocus",
                 "pro_af_start": "All'avvio sequenza",
                 "pro_af_filter": "Al cambio filtro",
+                "pro_af_hfr": "Alla variazione dell'HFR",
                 "pro_af_every": "Ogni",
                 "pro_af_min": "min",
                 "pro_af_temp_lbl": "Variazione",
@@ -111,7 +113,7 @@ let lang = localStorage.getItem('ad_lang') || 'it';
                 "galaxy": "Galaxy", "nebula": "Nebula", "cluster": "Cluster", "star": "Star", "unknown": "Unknown",
                 "alert_planetarium": "Choose a target from the Planetarium first 🔭!", "alert_noseq": "No exposures calculated! Click 'Generate Optimal Sequence' first.",
                 "alert_calib": "Calibration frames take up all the time!", "alert_nolight": "Select at least one Light filter.", "alert_times": "Please set Start and End times.", "no_target": "No visible objects.", "too_bright": "☀️ Sky is too bright.", "dso_too_bright": "☀️ Sky is too bright for Deep Sky.", "select_opt": "-- Select --",
-                "jupiter": "Jupiter", "mars": "Mars", "venus": "Venus", "moon": "Moon", "sun": "Sun", "weather": "Weather",
+                "jupiter": "Jupiter", "mars": "Mars", "venus": "Venus", "moon": "Moon", "sun": "Sun", "weather": "Weather", "mercury": "Mercury", "saturn": "Saturn", "uranus": "Uranus", "neptune": "Neptune",
                 "mode": "Mode:", "single_panel": "Single Panel", "mosaic": "Mosaic", "panels": "Panels (X, Y):", "overlap": "Overlap:", "time_per_panel": "Time per Panel", "fov_warning": "Target is larger than your FOV! Consider a mosaic.", "nina_mosaic_msg": "Mosaic Mode active. Use N.I.N.A.'s Framing Assistant to generate panel coordinates.",
                 "gen_report_btn": "Generate Strategic Report", "report_title": "Mosaic Dossier", "copy_report": "Copy to Clipboard", "copied": "Copied!", "report_general": "General Info", "report_strategy": "Per-Panel Strategy", "report_plan": "Exposure Plan (Per Panel)",
                 "info_pos": "Search a location. The map shows a 50km radius to help you find 'clear sky holes' while moving under the clouds.",
@@ -125,7 +127,7 @@ let lang = localStorage.getItem('ad_lang') || 'it';
                 "rpt_hdr_note": "Short exposure paired with main frames to recover detail in bright areas (stellar core, nebula center) without saturation. HDR frame count is automatically estimated at 50% of main frames.",
                 "info_nina": "Export a perfect JSON file. Drag & drop it into N.I.N.A. Advanced Sequencer for a fully autonomous night.",
                 "mn_title": "Multi-Night Project Manager",
-                "mn_warning": "N.I.N.A. WARNING: Make sure filter names in 'Filter Mapping' perfectly match the names in your filter wheel, or the sequence will fail!",
+                "mn_warning": "WARNING: Make sure filter names in 'Filter Mapping' (main panel) exactly match those in your NINA filter wheel to avoid errors.",
                 "mn_target_ai": "Recommended Target",
                 "mn_planned": "Planned Time",
                 "mn_add_night": "Add Session (Night)",
@@ -149,8 +151,10 @@ let lang = localStorage.getItem('ad_lang') || 'it';
                 "pro_cool_cam": "Cool Camera to",
                 "pro_auto_rotator": "Auto Rotator",
                 "pro_start_guide": "Start Autoguiding",
+                "pro_af_title": "Autofocus",
                 "pro_af_start": "At sequence start",
                 "pro_af_filter": "On filter change",
+                "pro_af_hfr": "On HFR increase",
                 "pro_af_every": "Every",
                 "pro_af_min": "min",
                 "pro_af_temp_lbl": "Temp. change",
@@ -192,7 +196,7 @@ let lang = localStorage.getItem('ad_lang') || 'it';
                 "galaxy": "Galaxia", "nebula": "Nebulosa", "cluster": "Cúmulo", "star": "Estrella", "unknown": "Desconocido",
                 "alert_planetarium": "¡Elige primero un objetivo en el Planetario 🔭!", "alert_noseq": "¡No se han calculado tomas! Haz clic en 'Generar Secuencia Óptima'.",
                 "alert_calib": "¡Las tomas de calibración ocupan todo el tiempo!", "alert_nolight": "Selecciona al menos un filtro Light.", "alert_times": "Configura las horas de Inicio y Fin.", "no_target": "No hay objetos visibles.", "too_bright": "☀️ Cielo demasiado brillante.", "dso_too_bright": "☀️ Cielo demasiado brillante para cielo profundo.", "select_opt": "-- Seleccionar --",
-                "jupiter": "Júpiter", "mars": "Marte", "venus": "Venus", "moon": "Luna", "sun": "Sol", "weather": "Clima",
+                "jupiter": "Júpiter", "mars": "Marte", "venus": "Venus", "moon": "Luna", "sun": "Sol", "weather": "Clima", "mercury": "Mercurio", "saturn": "Saturno", "uranus": "Urano", "neptune": "Neptuno",
                 "mode": "Modo:", "single_panel": "Panel Único", "mosaic": "Mosaico", "panels": "Paneles (X, Y):", "overlap": "Solapamiento:", "time_per_panel": "Tiempo por Panel", "fov_warning": "¡El objeto es más grande que tu campo visual! Considera un mosaico.", "nina_mosaic_msg": "Modo Mosaico activo. Utiliza el Framing Assistant de N.I.N.A. para crear las coordenadas de los paneles.",
                 "gen_report_btn": "Generar Informe Estratégico", "report_title": "Dosier Mosaico", "copy_report": "Copiar al Portapapeles", "copied": "¡Copiado!", "report_general": "Info General", "report_strategy": "Estrategia por Panel", "report_plan": "Plan de Captura",
                 "info_pos": "El mapa muestra un radio de 50km para encontrar claros en las nubes si te desplazas.",
@@ -206,7 +210,7 @@ let lang = localStorage.getItem('ad_lang') || 'it';
                 "rpt_hdr_note": "Exposición corta junto a las poses principales para recuperar detalles en zonas brillantes (núcleo estelar, centro nebular) sin saturación. El número de poses HDR se estima automáticamente al 50% de las principales.",
                 "info_nina": "Genera un archivo JSON. Arrástralo a N.I.N.A. Advanced Sequencer para automatizar toda tu noche.",
                 "mn_title": "Gestor Multi-Noche",
-                "mn_warning": "ATENCIÓN N.I.N.A.: ¡Asegúrate de que los nombres de los filtros en 'Mapeo Nombres' coincidan exactamente con tu rueda de filtros o fallará!",
+                "mn_warning": "ATENCIÓN: Asegúrate de que los nombres en 'Mapeo Nombres' (panel principal) coincidan exactamente con los de tu rueda de filtros en NINA para evitar errores.",
                 "mn_target_ai": "Objetivo",
                 "mn_planned": "Tiempo Planeado",
                 "mn_add_night": "Añadir Sesión (Noche)",
@@ -230,8 +234,10 @@ let lang = localStorage.getItem('ad_lang') || 'it';
                 "pro_cool_cam": "Enfriar Cámara a",
                 "pro_auto_rotator": "Rotador Automático",
                 "pro_start_guide": "Iniciar Autoguiado",
+                "pro_af_title": "Autofocus",
                 "pro_af_start": "Al inicio de secuencia",
                 "pro_af_filter": "Al cambiar filtro",
+                "pro_af_hfr": "Al incremento de HFR",
                 "pro_af_every": "Cada",
                 "pro_af_min": "min",
                 "pro_af_temp_lbl": "Variación de temp.",
@@ -273,7 +279,7 @@ let lang = localStorage.getItem('ad_lang') || 'it';
                 "galaxy": "星系", "nebula": "星云", "cluster": "星团", "star": "恒星", "unknown": "未知",
                 "alert_planetarium": "请先从星图中选择一个目标 🔭！", "alert_noseq": "没有计算出任何曝光！请先点击 '生成最佳曝光序列'。",
                 "alert_calib": "校准帧占据了所有可用时间！", "alert_nolight": "请至少选择一个亮场 (Light) 滤镜。", "alert_times": "请先设置开始和结束时间。", "no_target": "当前没有可见目标。", "too_bright": "☀️ 天空太亮了。", "dso_too_bright": "☀️ 天空对深空目标来说太亮了。", "select_opt": "-- 请选择 --",
-                "jupiter": "木星", "mars": "火星", "venus": "金星", "moon": "月球", "sun": "太阳", "weather": "天气",
+                "jupiter": "木星", "mars": "火星", "venus": "金星", "moon": "月球", "sun": "太阳", "weather": "天气", "mercury": "水星", "saturn": "土星", "uranus": "天王星", "neptune": "海王星",
                 "mode": "模式:", "single_panel": "单面板", "mosaic": "拼接", "panels": "面板 (X, Y):", "overlap": "重叠度:", "time_per_panel": "每块面板时间", "fov_warning": "目标比你的视场还要大！考虑使用拼接拍摄。", "nina_mosaic_msg": "拼接模式已激活。请使用 N.I.N.A. 的构图助手生成面板坐标。",
                 "gen_report_btn": "生成策略报告", "report_title": "拼接拍摄档案", "copy_report": "复制到剪贴板", "copied": "已复制!", "report_general": "基本信息", "report_strategy": "单面板策略", "report_plan": "曝光计划",
                 "info_pos": "搜索位置。地图显示 50 公里半径，帮助您在云层下寻找晴空区。",
@@ -311,8 +317,10 @@ let lang = localStorage.getItem('ad_lang') || 'it';
                 "pro_cool_cam": "相机降温至",
                 "pro_auto_rotator": "自动旋转器",
                 "pro_start_guide": "开始自动导星",
+                "pro_af_title": "Autofocus",
                 "pro_af_start": "序列开始时",
                 "pro_af_filter": "切换滤镜时",
+                "pro_af_hfr": "HFR增大时",
                 "pro_af_every": "每隔",
                 "pro_af_min": "分钟",
                 "pro_af_temp_lbl": "温度变化",
@@ -1071,10 +1079,10 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.es.cl_subtitle         = "Novedades respecto a la versión anterior";
         i18n.zh.cl_subtitle         = "与上一版本相比的新内容";
 
-        i18n.it.cl_close_btn = "Inizia a usare v6.0 🚀";
-        i18n.en.cl_close_btn = "Start using v6.0 🚀";
-        i18n.es.cl_close_btn = "Empezar a usar v6.0 🚀";
-        i18n.zh.cl_close_btn = "开始使用 v6.0 🚀";
+        i18n.it.cl_close_btn = "Inizia a usare v6.1 🚀";
+        i18n.en.cl_close_btn = "Start using v6.1 🚀";
+        i18n.es.cl_close_btn = "Empezar a usar v6.1 🚀";
+        i18n.zh.cl_close_btn = "开始使用 v6.1 🚀";
 
         i18n.it.cl1_title           = "Database telescopi e sensori ampliato";
         i18n.en.cl1_title           = "Expanded telescope and sensor database";
@@ -1399,3 +1407,155 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.en.cl0_desc = "Refined dark theme, consistent icons, sticky navbar with language flags, optimized layout for desktop and mobile. The app now starts with a landing page.";
         i18n.es.cl0_desc = "Tema oscuro refinado, iconos coherentes, barra de navegación sticky con banderas de idioma, diseño optimizado para escritorio y móvil. La app ahora inicia con una landing page.";
         i18n.zh.cl0_desc = "精致暗色主题、统一图标、带语言旗帜的固定导航栏、桌面与移动端优化布局。应用现在以欢迎页开始。";
+
+        // ── Changelog v6.1 ───────────────────────────────────────────────
+        i18n.it.cl_v61_af_title = "Autofocus NINA \u2014 struttura corretta";
+        i18n.en.cl_v61_af_title = "NINA Autofocus \u2014 correct structure";
+        i18n.es.cl_v61_af_title = "Autofocus NINA \u2014 estructura correcta";
+        i18n.zh.cl_v61_af_title = "NINA\u81ea\u52a8\u5bf9\u7126 \u2014 \u6b63\u786e\u7ed3\u6784";
+
+        i18n.it.cl_v61_af_desc = "JSON per N.I.N.A. ora genera autofocus corretto in tutte e tre le modalit\u00e0: RunAutofocus prima dell'autoguida, trigger AfterFilterChange/Time/Temp sul container imaging.";
+        i18n.en.cl_v61_af_desc = "JSON export for N.I.N.A. now generates correct autofocus in all three modes: RunAutofocus before guiding, AfterFilterChange/Time/Temp triggers on the imaging container.";
+        i18n.es.cl_v61_af_desc = "JSON para N.I.N.A. ahora genera autofocus correcto en los tres modos: RunAutofocus antes del guiado, triggers AfterFilterChange/Time/Temp en el contenedor de imaging.";
+        i18n.zh.cl_v61_af_desc = "N.I.N.A.\u7684JSON\u5bfc\u51fa\u73b0\u5728\u5728\u6240\u6709\u4e09\u79cd\u6a21\u5f0f\u4e0b\u751f\u6210\u6b63\u786e\u7684\u81ea\u52a8\u5bf9\u7126\u5e8f\u5217\u3002";
+
+        i18n.it.cl_v61_loop_title = "LoopCondition nel JSON NINA (Smart)";
+        i18n.en.cl_v61_loop_title = "LoopCondition in NINA JSON (Smart)";
+        i18n.es.cl_v61_loop_title = "LoopCondition en JSON NINA (Smart)";
+        i18n.zh.cl_v61_loop_title = "NINA JSON\u4e2d\u7684LoopCondition\uff08Smart\u6a21\u5f0f\uff09";
+
+        i18n.it.cl_v61_loop_desc = "Smart non aggiungeva LoopCondition nel container filtro \u2014 NINA non ripeteva le pose. Ora allineata a PRO e Multinotte.";
+        i18n.en.cl_v61_loop_desc = "Smart was missing LoopCondition in the filter container \u2014 NINA did not repeat frames. Now aligned with PRO and Multi-night.";
+        i18n.es.cl_v61_loop_desc = "Smart no a\u00f1ad\u00eda LoopCondition \u2014 NINA no repet\u00eda las poses. Ahora alineado con PRO y Multinoche.";
+        i18n.zh.cl_v61_loop_desc = "Smart\u6a21\u5f0f\u7f3a\u5c11LoopCondition\uff0cNINA\u672a\u80fd\u91cd\u590d\u62cd\u6444\u3002\u73b0\u5df2\u4e0ePRO\u548c\u591a\u591c\u6a21\u5f0f\u4fdd\u6301\u4e00\u81f4\u3002";
+
+        i18n.it.cl_v61_sensor_title = "Selettore sensore spostato in Smart";
+        i18n.en.cl_v61_sensor_title = "Sensor selector moved to Smart";
+        i18n.es.cl_v61_sensor_title = "Selector de sensor movido a Smart";
+        i18n.zh.cl_v61_sensor_title = "\u4f20\u611f\u5668\u9009\u62e9\u5668\u79fb\u81f3Smart\u6a21\u5f0f";
+
+        i18n.it.cl_v61_sensor_desc = "Color/Mono non compariva in PRO. In Smart \u00e8 ora nell'header Impostazione Sequenza, a sinistra di Reset Filtri.";
+        i18n.en.cl_v61_sensor_desc = "Color/Mono was not visible in PRO mode. In Smart it is now in the Sequence Setup header, left of Reset Filters.";
+        i18n.es.cl_v61_sensor_desc = "Color/Mono no aparec\u00eda en PRO. En Smart ahora est\u00e1 en el encabezado Configuraci\u00f3n de Secuencia, a la izquierda de Restablecer Filtros.";
+        i18n.zh.cl_v61_sensor_desc = "Color/Mono\u5728PRO\u6a21\u5f0f\u4e0b\u4e0d\u53ef\u89c1\u3002\u5728Smart\u6a21\u5f0f\u4e2d\uff0c\u5b83\u73b0\u5728\u4f4d\u4e8e\u5e8f\u5217\u8bbe\u7f6e\u6807\u9898\u680f\uff0c\u5728\u91cd\u7f6e\u6ee4\u955c\u6309\u9215\u7684\u5de6\u4fa7\u3002";
+
+        i18n.it.cl_v61_gain_title = "Sync gain/offset per gruppo filtri";
+        i18n.en.cl_v61_gain_title = "Gain/offset sync per filter group";
+        i18n.es.cl_v61_gain_title = "Sincronizaci\u00f3n gain/offset por grupo";
+        i18n.zh.cl_v61_gain_title = "\u6309\u6ee4\u955c\u7ec4\u540c\u6b65\u589e\u76ca/\u504f\u7f6e";
+
+        i18n.it.cl_v61_gain_desc = "Modificare gain o offset su un filtro LRGB aggiorna tutto il gruppo. Stessa logica per HOS. Smart e PRO indipendenti.";
+        i18n.en.cl_v61_gain_desc = "Changing gain or offset on one LRGB filter updates the whole group. Same for HOS. Smart and PRO remain independent.";
+        i18n.es.cl_v61_gain_desc = "Cambiar gain u offset en un filtro LRGB actualiza todo el grupo. Lo mismo para HOS. Smart y PRO permanecen independientes.";
+        i18n.zh.cl_v61_gain_desc = "\u66f4\u6539LRGB\u7ec4\u4e2d\u4efb\u4e00\u6ee4\u955c\u7684\u589e\u76ca\u6216\u504f\u7f6e\u5c06\u66f4\u65b0\u6574\u7ec4\u3002HOS\u540c\u7406\u3002Smart\u548cPRO\u4fdd\u6301\u72ec\u7acb\u3002";
+
+        i18n.it.cl_v61_time_title = "Ora di inizio sessione adattiva";
+        i18n.en.cl_v61_time_title = "Adaptive session start time";
+        i18n.es.cl_v61_time_title = "Hora de inicio adaptativa";
+        i18n.zh.cl_v61_time_title = "\u81ea\u9002\u5e94\u4f1a\u8bdd\u5f00\u59cb\u65f6\u95f4";
+
+        i18n.it.cl_v61_time_desc = "Se l'ora calcolata \u00e8 gi\u00e0 passata, l'inizio sessione diventa l'ora attuale. Nel multinotte vale solo per la notte corrente.";
+        i18n.en.cl_v61_time_desc = "If the calculated start time has already passed, the session start is set to the current time. In multi-night, this applies only to tonight.";
+        i18n.es.cl_v61_time_desc = "Si la hora de inicio calculada ya pas\u00f3, el inicio se establece en la hora actual. En multinoche, solo aplica a la noche actual.";
+        i18n.zh.cl_v61_time_desc = "\u5982\u679c\u8ba1\u7b97\u7684\u5f00\u59cb\u65f6\u95f4\u5df2\u8fc7\uff0c\u5c06\u4f7f\u7528\u5f53\u524d\u65f6\u95f4\u3002\u591a\u591c\u6a21\u5f0f\u4e0b\u4ec5\u9002\u7528\u4e8e\u5f53\u665a\u3002";
+
+        i18n.it.cl_v61_reset_title = "Pulsanti Reset tradotti";
+        i18n.en.cl_v61_reset_title = "Reset buttons translated";
+        i18n.es.cl_v61_reset_title = "Botones Reset traducidos";
+        i18n.zh.cl_v61_reset_title = "\u91cd\u7f6e\u6309\u9215\u5df2\u7ffb\u8bd1";
+
+        i18n.it.cl_v61_reset_desc = "Reset Generale e Reset Filtri mostravano la chiave i18n grezza. Aggiunte traduzioni IT, EN, ES, ZH per etichette, modal e tooltip.";
+        i18n.en.cl_v61_reset_desc = "Reset General and Reset Filters showed raw i18n keys. Added translations in IT, EN, ES, ZH for labels, modals, and tooltips.";
+        i18n.es.cl_v61_reset_desc = "Reset General y Reset Filtros mostraban claves i18n sin traducir. A\u00f1adidas traducciones IT, EN, ES, ZH para etiquetas, modales y tooltips.";
+        i18n.zh.cl_v61_reset_desc = "\u91cd\u7f6e\u6309\u9215\u663e\u793a\u4e86\u539f\u59cbi18n\u952e\u3002\u5df2\u6dfb\u52a0IT\u3001EN\u3001ES\u3001ZH\u7684\u6807\u7b7e\u3001\u6a21\u6001\u6846\u548c\u5de5\u5177\u63d0\u793a\u7ffb\u8bd1\u3002";
+
+        // Reset button labels
+        i18n.it.reset_general_btn = "Reset";
+        i18n.en.reset_general_btn = "Reset";
+        i18n.es.reset_general_btn = "Reset";
+        i18n.zh.reset_general_btn = "\u91cd\u7f6e";
+
+        i18n.it.reset_filters_btn = "Reset Filtri";
+        i18n.en.reset_filters_btn = "Reset Filters";
+        i18n.es.reset_filters_btn = "Reset Filtros";
+        i18n.zh.reset_filters_btn = "\u91cd\u7f6e\u6ee4\u955c";
+
+        // Reset modal titles & bodies
+        i18n.it.reset_general_modal_title = "Reset Generale";
+        i18n.en.reset_general_modal_title = "General Reset";
+        i18n.es.reset_general_modal_title = "Reset General";
+        i18n.zh.reset_general_modal_title = "\u5168\u9762\u91cd\u7f6e";
+
+        i18n.it.reset_general_modal_body = "Questa operazione cancellerà tutte le preferenze salvate: setup ottico, sensore, pose dei filtri, trigger PRO e posizione GPS. La pagina verrà ricaricata con i valori di fabbrica.";
+        i18n.en.reset_general_modal_body = "This will erase all saved preferences: optics, sensor, filter frames, PRO triggers and GPS location. The page will reload with factory defaults.";
+        i18n.es.reset_general_modal_body = "Esta operación borrará todas las preferencias guardadas: óptica, sensor, poses de filtros, triggers PRO y posición GPS. La página se recargará con los valores de fábrica.";
+        i18n.zh.reset_general_modal_body = "\u6b64\u64cd\u4f5c\u5c06\u6e05\u9664\u6240\u6709\u5df2\u4fdd\u5b58\u7684\u8bbe\u7f6e\uff1a\u5149\u5b66\u8bbe\u7f6e\u3001\u4f20\u611f\u5668\u3001\u6ee4\u955c\u5e27\u3001PRO\u89e6\u53d1\u5668\u548cGPS\u4f4d\u7f6e\u3002\u9875\u9762\u5c06\u6062\u590d\u51fa\u5382\u9ed8\u8ba4\u5c40\u3002";
+
+        i18n.it.reset_filters_modal_title = "Reset Filtri";
+        i18n.en.reset_filters_modal_title = "Reset Filters";
+        i18n.es.reset_filters_modal_title = "Reset Filtros";
+        i18n.zh.reset_filters_modal_title = "\u91cd\u7f6e\u6ee4\u955c";
+
+        i18n.it.reset_filters_modal_body = "Azzera BIN (\u2192 1\u00d71), conteggio pose, esposizione, gain, offset e nomi filtri NINA per tutti i filtri in modalità Smart e PRO. Le impostazioni ottiche e GPS non vengono toccate.";
+        i18n.en.reset_filters_modal_body = "Resets BIN (\u2192 1\u00d71), frame count, exposure, gain, offset and NINA filter names for all filters in Smart and PRO mode. Optics and GPS settings are not affected.";
+        i18n.es.reset_filters_modal_body = "Restablece BIN (\u2192 1\u00d71), conteo de poses, exposición, gain, offset y nombres de filtros NINA para todos los filtros en modo Smart y PRO. Los ajustes de óptica y GPS no se ven afectados.";
+        i18n.zh.reset_filters_modal_body = "\u91cd\u7f6e\u6240\u6709Smart\u548cPRO\u6a21\u5f0f\u4e0b\u6ee4\u955c\u7684BIN(\u21921\u00d71)\u3001\u5e27\u6570\u3001\u66dd\u5149\u3001\u589e\u76ca\u3001\u504f\u7f6e\u548cNINA\u6ee4\u955c\u540d\u79f0\u3002\u5149\u5b66\u548cGPS\u8bbe\u7f6e\u4e0d\u53d7\u5f71\u54cd\u3002";
+
+        // Reset confirm buttons
+        i18n.it.reset_general_confirm_btn = "Cancella tutto e ricarica";
+        i18n.en.reset_general_confirm_btn = "Clear all and reload";
+        i18n.es.reset_general_confirm_btn = "Borrar todo y recargar";
+        i18n.zh.reset_general_confirm_btn = "\u5168\u90e8\u6e05\u9664\u5e76\u91cd\u8f7d";
+
+        i18n.it.reset_filters_confirm_btn = "Azzera filtri";
+        i18n.en.reset_filters_confirm_btn = "Reset filters";
+        i18n.es.reset_filters_confirm_btn = "Restablecer filtros";
+        i18n.zh.reset_filters_confirm_btn = "\u91cd\u7f6e\u6ee4\u955c";
+
+        // Reset tooltips
+        i18n.it.reset_general_tooltip = "Ripristina tutti i valori di fabbrica";
+        i18n.en.reset_general_tooltip = "Restore all factory defaults";
+        i18n.es.reset_general_tooltip = "Restaurar todos los valores de fábrica";
+        i18n.zh.reset_general_tooltip = "\u6062\u590d\u6240\u6709\u51fa\u5382\u9ed8\u8ba4\u5c40";
+
+        i18n.it.reset_filters_tooltip = "Azzera pose e impostazioni di tutti i filtri";
+        i18n.en.reset_filters_tooltip = "Reset frames and settings for all filters";
+        i18n.es.reset_filters_tooltip = "Restablecer poses e ajustes de todos los filtros";
+        i18n.zh.reset_filters_tooltip = "\u91cd\u7f6e\u6240\u6709\u6ee4\u955c\u7684\u5e27\u6570\u548c\u8bbe\u7f6e";
+
+        // Reset filters done toast
+        i18n.it.reset_filters_done = "Reset filtri effettuato";
+        i18n.en.reset_filters_done = "Filters reset successfully";
+        i18n.es.reset_filters_done = "Filtros restablecidos";
+        i18n.zh.reset_filters_done = "\u6ee4\u955c\u5df2\u91cd\u7f6e";
+
+        // Changelog v6.1b items
+        i18n.it.cl_v61b_af_title = "Autofocus semplificato — 3 modalità";
+        i18n.en.cl_v61b_af_title = "Simplified Autofocus — 3 modes";
+        i18n.es.cl_v61b_af_title = "Autofocus simplificado — 3 modos";
+        i18n.zh.cl_v61b_af_title = "自动对焦简化 — 3种模式";
+
+        i18n.it.cl_v61b_af_desc = "Rimossi AF ogni N minuti e AF a variazione °C. Le tre modalità attive sono: avvio sequenza, cambio filtro e variazione HFR — N.I.N.A. misura il deterioramento del fuoco in tempo reale e interviene solo quando necessario.";
+        i18n.en.cl_v61b_af_desc = "Removed AF every N minutes and AF on °C change. The three active modes are: sequence start, filter change and HFR increase — N.I.N.A. measures focus degradation in real time and triggers only when needed.";
+        i18n.es.cl_v61b_af_desc = "Eliminados AF cada N minutos y AF por variación °C. Los tres modos activos son: inicio de secuencia, cambio de filtro e incremento de HFR — N.I.N.A. mide el deterioro del enfoque en tiempo real e interviene solo cuando es necesario.";
+        i18n.zh.cl_v61b_af_desc = "移除了每N分钟AF和温度变化AF。三种有效模式为：序列开始、切换滤镜和HFR增大 — N.I.N.A.实时检测对焦恶化并仅在必要时触发。";
+
+        i18n.it.cl_v61b_nina_title = "JSON N.I.N.A. arricchito — struttura completa";
+        i18n.en.cl_v61b_nina_title = "Enriched N.I.N.A. JSON — full structure";
+        i18n.es.cl_v61b_nina_title = "JSON N.I.N.A. enriquecido — estructura completa";
+        i18n.zh.cl_v61b_nina_title = "增强的N.I.N.A. JSON — 完整结构";
+
+        i18n.it.cl_v61b_nina_desc = "Tutti gli export ora includono: UnparkScope, WaitForTime, AboveHorizonCondition (stop sotto 30°), TimeCondition (stop a fine sessione), FilterInfo completo con FlatWizardSettings.";
+        i18n.en.cl_v61b_nina_desc = "All exports now include: UnparkScope, WaitForTime, AboveHorizonCondition (stop below 30°), TimeCondition (stop at session end), full FilterInfo with FlatWizardSettings.";
+        i18n.es.cl_v61b_nina_desc = "Todas las exportaciones ahora incluyen: UnparkScope, WaitForTime, AboveHorizonCondition (parada bajo 30°), TimeCondition (parada al final de sesión), FilterInfo completo con FlatWizardSettings.";
+        i18n.zh.cl_v61b_nina_desc = "所有导出现包含：UnparkScope、WaitForTime、AboveHorizonCondition（低于30°停止）、TimeCondition（会话结束停止）、含FlatWizardSettings的完整FilterInfo。";
+
+        i18n.it.cl_v61b_ui_title = "Interfaccia Smart e PRO unificata";
+        i18n.en.cl_v61b_ui_title = "Unified Smart and PRO interface";
+        i18n.es.cl_v61b_ui_title = "Interfaz Smart y PRO unificada";
+        i18n.zh.cl_v61b_ui_title = "Smart与PRO界面统一";
+
+        i18n.it.cl_v61b_ui_desc = "Stessa intestazione N.I.N.A. in entrambe le modalità. Sezioni rinominate uniformemente: Autofocus, Pre-Flight, Post-Flight. Colori titoli allineati. Manuale aggiornato.";
+        i18n.en.cl_v61b_ui_desc = "Same N.I.N.A. header in both modes. Sections uniformly renamed: Autofocus, Pre-Flight, Post-Flight. Title colors aligned. Manual updated.";
+        i18n.es.cl_v61b_ui_desc = "Mismo encabezado N.I.N.A. en ambos modos. Secciones renombradas uniformemente: Autofocus, Pre-Flight, Post-Flight. Colores de títulos alineados. Manual actualizado.";
+        i18n.zh.cl_v61b_ui_desc = "两种模式使用相同的N.I.N.A.标题。章节统一重命名：Autofocus、Pre-Flight、Post-Flight。标题颜色统一。手册已更新。";
