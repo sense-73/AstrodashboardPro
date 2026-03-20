@@ -849,7 +849,7 @@
                         "X": expo.bin, "Y": expo.bin
                     },
                     "ImageType": "LIGHT",
-                    "ExposureCount": 1,   // sempre 1: il loop è LoopCondition
+                    "ExposureCount": 0,   // 0: il loop è gestito da LoopCondition
                     "Parent": { "$ref": blockId }, "ErrorBehavior": 0, "Attempts": 1
                 });
 

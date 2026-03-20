@@ -1079,10 +1079,13 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.es.cl_subtitle         = "Novedades respecto a la versión anterior";
         i18n.zh.cl_subtitle         = "与上一版本相比的新内容";
 
-        i18n.it.cl_close_btn = "Inizia a usare v6.1 🚀";
-        i18n.en.cl_close_btn = "Start using v6.1 🚀";
-        i18n.es.cl_close_btn = "Empezar a usar v6.1 🚀";
-        i18n.zh.cl_close_btn = "开始使用 v6.1 🚀";
+        // ⚠️ AGGIORNARE VERSIONE QUI quando si rilascia una nuova versione:
+        // cl_close_btn = testo del pulsante nel modal changelog (NON è hardcoded in index.html)
+        // Aggiornare anche: title tag, badge navbar (>vX.X</button>), landing (>vX.X</span>), modal badge, pulsante "Inizia a usare" in index.html
+        i18n.it.cl_close_btn = "Inizia a usare v6.2 🚀";
+        i18n.en.cl_close_btn = "Start using v6.2 🚀";
+        i18n.es.cl_close_btn = "Empezar a usar v6.2 🚀";
+        i18n.zh.cl_close_btn = "开始使用 v6.2 🚀";
 
         i18n.it.cl1_title           = "Database telescopi e sensori ampliato";
         i18n.en.cl1_title           = "Expanded telescope and sensor database";
@@ -1559,3 +1562,14 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.en.cl_v61b_ui_desc = "Same N.I.N.A. header in both modes. Sections uniformly renamed: Autofocus, Pre-Flight, Post-Flight. Title colors aligned. Manual updated.";
         i18n.es.cl_v61b_ui_desc = "Mismo encabezado N.I.N.A. en ambos modos. Secciones renombradas uniformemente: Autofocus, Pre-Flight, Post-Flight. Colores de títulos alineados. Manual actualizado.";
         i18n.zh.cl_v61b_ui_desc = "两种模式使用相同的N.I.N.A.标题。章节统一重命名：Autofocus、Pre-Flight、Post-Flight。标题颜色统一。手册已更新。";
+
+        // Changelog v6.2
+        i18n.it.cl_v62_nina_title = "Fix export N.I.N.A. — sequenza funzionante";
+        i18n.en.cl_v62_nina_title = "N.I.N.A. export fix — working sequence";
+        i18n.es.cl_v62_nina_title = "Fix exportación N.I.N.A. — secuencia funcional";
+        i18n.zh.cl_v62_nina_title = "N.I.N.A.导出修复 — 序列正常工作";
+
+        i18n.it.cl_v62_nina_desc = "Riscrittura completa del motore di esportazione JSON per N.I.N.A. Advanced Sequencer. Il file generato ora funziona correttamente: struttura verificata su file reali, ordine degli \$id conforme al deserializzatore .NET, ExposureCount e LoopCondition allineati.";
+        i18n.en.cl_v62_nina_desc = "Complete rewrite of the JSON export engine for N.I.N.A. Advanced Sequencer. The generated file now works correctly: structure verified against real files, \$id order compliant with the .NET deserializer, ExposureCount and LoopCondition aligned.";
+        i18n.es.cl_v62_nina_desc = "Reescritura completa del motor de exportación JSON para N.I.N.A. Advanced Sequencer. El archivo generado ahora funciona correctamente: estructura verificada con archivos reales, orden de \$id conforme al deserializador .NET, ExposureCount y LoopCondition alineados.";
+        i18n.zh.cl_v62_nina_desc = "完全重写N.I.N.A. Advanced Sequencer的JSON导出引擎。生成的文件现在可以正常工作：结构经过真实文件验证，\$id顺序符合.NET反序列化器要求，ExposureCount和LoopCondition已对齐。";
