@@ -1325,6 +1325,11 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.es.land_contact       = "Contáctanos";
         i18n.zh.land_contact       = "联系我们";
 
+        i18n.it.land_visits = "Visite totali:";
+        i18n.en.land_visits = "Total visits:";
+        i18n.es.land_visits = "Visitas totales:";
+        i18n.zh.land_visits = "总访问量:";
+
         i18n.it.nav_home    = "Home";    i18n.en.nav_home    = "Home";    i18n.es.nav_home    = "Inicio";   i18n.zh.nav_home    = "首页";
         i18n.it.nav_weather = "Meteo";   i18n.en.nav_weather = "Weather"; i18n.es.nav_weather = "Meteo";    i18n.zh.nav_weather = "天气";
         i18n.it.nav_smart   = "Smart";   i18n.en.nav_smart   = "Smart";   i18n.es.nav_smart   = "Smart";    i18n.zh.nav_smart   = "智能";

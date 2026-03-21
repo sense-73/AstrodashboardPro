@@ -599,9 +599,15 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
 
         <!-- FOOTER -->
         <div style="background:#0d1117; border-top:1px solid #21293a; padding:18px 24px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; position:relative; z-index:1;">
-            <div style="display:flex; align-items:center; gap:7px; font-size:10px; color:#3d4852;">
-                <div style="width:5px;height:5px;border-radius:50%;background:#44ff44;flex-shrink:0;"></div>
-                <span data-i18n="land_privacy">Questa app non invia alcun dato a terzi. Tutto viene salvato localmente sul tuo dispositivo.</span>
+            <div style="display:flex; flex-direction:column; gap:6px;">
+                <div style="display:flex; align-items:center; gap:7px; font-size:10px; color:#3d4852;">
+                    <div style="width:5px;height:5px;border-radius:50%;background:#44ff44;flex-shrink:0;"></div>
+                    <span data-i18n="land_privacy">Questa app non invia alcun dato a terzi. Tutto viene salvato localmente sul tuo dispositivo.</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:6px; font-size:10px; color:#3d4852;">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#3d4852" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    <span data-i18n="land_visits">Visite:</span> <span id="visit-counter" style="color:#6e7a8a;">—</span>
+                </div>
             </div>
             <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
                 <!-- Contattaci -->
@@ -1693,6 +1699,24 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
     <script src="js/multinight.js"></script>
     <script src="js/report.js"></script>
 
+
+    <!-- ═══ Visit Counter ═══ -->
+    <script>
+        (function() {
+            fetch('https://api.countapi.xyz/hit/sense-73.github.io/astrodashboardpro-visits')
+                .then(r => r.json())
+                .then(data => {
+                    let el = document.getElementById('visit-counter');
+                    if (el && data && data.value) {
+                        el.textContent = data.value.toLocaleString();
+                    }
+                })
+                .catch(() => {
+                    let el = document.getElementById('visit-counter');
+                    if (el) el.style.display = 'none';
+                });
+        })();
+    </script>
     <!-- Banner aggiornamento SW -->
     <div id="sw-update-banner" style="
         display:none; position:fixed; bottom:20px; left:50%; transform:translateX(-50%);
