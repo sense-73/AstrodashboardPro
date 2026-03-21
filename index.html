@@ -1703,12 +1703,12 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
     <!-- ═══ Visit Counter ═══ -->
     <script>
         (function() {
-            fetch('https://api.countapi.xyz/hit/sense-73.github.io/astrodashboardpro-visits')
+            fetch('https://api.counterapi.dev/v1/sense-73-github-io/astrodashboardpro/up')
                 .then(r => r.json())
                 .then(data => {
                     let el = document.getElementById('visit-counter');
-                    if (el && data && data.value) {
-                        el.textContent = data.value.toLocaleString();
+                    if (el && data && data.count !== undefined) {
+                        el.textContent = data.count.toLocaleString();
                     }
                 })
                 .catch(() => {
