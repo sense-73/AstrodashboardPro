@@ -1764,7 +1764,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                 // gamma: sinistra/destra, centro a 0° — range ±30°
                 // beta: telefono verticale ≈ 90° → centro; range ±30° attorno a 90°
                 eyeXInput.value = Math.max(0, Math.min(100, 50 + (e.gamma || 0) / 30 * 50));
-                eyeYInput.value = Math.max(0, Math.min(100, 50 + ((e.beta || 0) - 0) / 15 * 50));
+                eyeYInput.value = Math.max(0, Math.min(100, 50 + ((e.beta || 90) - 90) / 15 * 50));
             });
         }
 
