@@ -4,7 +4,7 @@
 
 // CACHE_NAME usa un timestamp fisso aggiornato ad ogni deploy
 // Non serve più incrementare manualmente — basta cambiare questa data
-const CACHE_TIMESTAMP = '20260320-008';
+const CACHE_TIMESTAMP = '20260321-003';
 const CACHE_NAME = 'astrodash-' + CACHE_TIMESTAMP;
 const APP_VERSION = CACHE_TIMESTAMP;
 
@@ -27,6 +27,8 @@ const FILES_TO_CACHE = [
     './js/report.js',
     './js/userimg.js',
     './manifest.json',
+    './rive.js',
+    './star_adp.riv',
     './css/fonts/Audiowide-Regular.ttf'
 ];
 
@@ -96,7 +98,7 @@ self.addEventListener('fetch', event => {
 
     // 3. File JS, CSS e PNG → Network First (aggiornamenti immediati)
     //    Altri asset statici → Cache First (cambiano raramente)
-    const isJsOrCss = url.pathname.endsWith('.js') || url.pathname.endsWith('.css');
+    const isJsOrCss = url.pathname.endsWith('.js') || url.pathname.endsWith('.css') || url.pathname.endsWith('.riv');
     const isPng     = url.pathname.endsWith('.png') || url.pathname.endsWith('.jpg') || url.pathname.endsWith('.webp');
 
     if (isJsOrCss || isPng) {

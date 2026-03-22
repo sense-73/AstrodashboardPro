@@ -473,10 +473,10 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                 <span data-i18n="land_badge">Suite completa per astrofotografi</span>
             </div>
 
-            <!-- Logo stellina -->
-            <img src="logo_new_icon.png" alt="AstroDashboard"
-                 style="width:96px; height:96px; object-fit:contain; margin-bottom:24px; border-radius:18px; filter:drop-shadow(0 0 20px rgba(196,154,60,0.4));"
-                 onerror="this.style.display='none'">
+            <!-- Logo Rive animato -->
+            <div id="rive-logo-wrap" style="width:120px; height:120px; margin-bottom:16px; position:relative; z-index:2;">
+                <canvas id="rive-canvas" width="120" height="120" style="width:120px; height:120px; display:block;"></canvas>
+            </div>
 
             <h1 style="font-size:clamp(32px,6vw,46px); font-weight:800; color:#c9d1d9; line-height:1.1; letter-spacing:-1px; margin-bottom:8px;">
                 <span data-i18n="land_title1">Pianifica la notte</span><br><span style="color:#c49a3c;" data-i18n="land_title2">perfetta</span>
@@ -1717,6 +1717,79 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                 });
         })();
     </script>
+    <!-- ═══ Rive Animation ═══ -->
+    <script src="rive.js"></script>
+    <script>
+    (function() {
+        var eyeXInput = null, eyeYInput = null, riveInst = null;
+
+        function showFallback() {
+            var wrap = document.getElementById('rive-logo-wrap');
+            if (!wrap) return;
+            var img = document.createElement('img');
+            img.src = 'logo_new_icon.png';
+            img.style.cssText = 'width:96px;height:96px;object-fit:contain;border-radius:18px;filter:drop-shadow(0 0 20px rgba(196,154,60,0.4));margin:12px auto;display:block;';
+            img.onerror = function() { this.style.display = 'none'; };
+            wrap.innerHTML = '';
+            wrap.appendChild(img);
+        }
+
+        function startBlink() {
+            (function loop() {
+                setTimeout(function() {
+                    if (riveInst) try { riveInst.play('blink'); } catch(e) {}
+                    loop();
+                }, 3000 + Math.random() * 4000);
+            })();
+        }
+
+        // Mouse: posizione globale come % 0-100
+        window.addEventListener('mousemove', function(e) {
+            if (!eyeXInput || !eyeYInput) return;
+            eyeXInput.value = (e.clientX / window.innerWidth)  * 100;
+            eyeYInput.value = (e.clientY / window.innerHeight) * 100;
+        });
+
+        // Giroscopio mobile
+        if (window.DeviceOrientationEvent) {
+            window.addEventListener('deviceorientation', function(e) {
+                if (!eyeXInput || !eyeYInput) return;
+                // gamma: rotazione sinistra/destra (-90/+90) → eye_x
+                // beta: inclinazione avanti/indietro (-180/+180) → eye_y
+                eyeXInput.value = Math.max(0, Math.min(100, 50 + (e.gamma || 0) / 5 * 50));
+                eyeYInput.value = Math.max(0, Math.min(100, 50 + ((e.beta || 0) ) / 5 * 50));
+            });
+        }
+
+        // Init Rive
+        var canvas = document.getElementById('rive-canvas');
+        if (!canvas) { showFallback(); return; }
+        var RiveClass = (typeof rive !== 'undefined') ? rive.Rive : (typeof Rive !== 'undefined') ? Rive : null;
+        if (!RiveClass) { showFallback(); return; }
+
+        riveInst = new RiveClass({
+            src: 'star_adp.riv',
+            canvas: canvas,
+            autoplay: true,
+            stateMachines: 'State Machine 1',
+            onLoad: function() {
+                riveInst.resizeDrawingSurfaceToCanvas();
+                var inputs = riveInst.stateMachineInputs('State Machine 1');
+                if (inputs) {
+                    inputs.forEach(function(inp) {
+                        if (inp.name === 'eye_x') eyeXInput = inp;
+                        else if (inp.name === 'eye_y') eyeYInput = inp;
+                    });
+                }
+                if (eyeXInput) eyeXInput.value = 50;
+                if (eyeYInput) eyeYInput.value = 50;
+                startBlink();
+            },
+            onLoadError: function() { showFallback(); }
+        });
+    })();
+    </script>
+
     <!-- Banner aggiornamento SW -->
     <div id="sw-update-banner" style="
         display:none; position:fixed; bottom:20px; left:50%; transform:translateX(-50%);
