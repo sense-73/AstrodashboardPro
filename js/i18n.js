@@ -1079,6 +1079,11 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.es.cl_subtitle         = "Novedades respecto a la versión anterior";
         i18n.zh.cl_subtitle         = "与上一版本相比的新内容";
 
+        i18n.it.report_download_ok = "Report salvato con successo!";
+        i18n.en.report_download_ok = "Report saved successfully!";
+        i18n.es.report_download_ok = "¡Informe guardado con éxito!";
+        i18n.zh.report_download_ok = "报告保存成功！";
+
         // ⚠️ AGGIORNARE VERSIONE QUI quando si rilascia una nuova versione:
         // cl_close_btn = testo del pulsante nel modal changelog (NON è hardcoded in index.html)
         // Aggiornare anche: title tag, badge navbar (>vX.X</button>), landing (>vX.X</span>), modal badge, pulsante "Inizia a usare" in index.html

@@ -475,7 +475,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
 
             <!-- Logo Rive animato -->
             <div id="rive-logo-wrap" style="width:120px; height:120px; margin-bottom:16px; position:relative; z-index:2;">
-                <canvas id="rive-canvas" width="120" height="120" style="width:120px; height:120px; display:block;"></canvas>
+                <canvas id="rive-canvas" width="120" height="120" onclick="if(typeof salutaRive==='function')salutaRive()" style="width:120px; height:120px; display:block; cursor:pointer;" title="Click me!"></canvas>
             </div>
 
             <h1 style="font-size:clamp(32px,6vw,46px); font-weight:800; color:#c9d1d9; line-height:1.1; letter-spacing:-1px; margin-bottom:8px;">
@@ -1765,10 +1765,43 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
         var RiveClass = (typeof rive !== 'undefined') ? rive.Rive : (typeof Rive !== 'undefined') ? Rive : null;
         if (!RiveClass) { showFallback(); return; }
 
+        var riveLoaded = false;
+        var riveStarted = false;
+
+        window.avviaRive = function() {
+            if (riveStarted) return;
+            riveStarted = true;
+            if (riveLoaded) {
+                riveInst.play('State Machine 1');
+                startBlink();
+            }
+        };
+
+        // Riparte l'animazione di saluto dal click sulla stellina
+        window.salutaRive = function() {
+            if (!riveLoaded || !riveInst) return;
+            try {
+                riveInst.reset();
+                riveInst.play('State Machine 1');
+                // Riacquisisce gli input dopo il reset
+                setTimeout(function() {
+                    var inputs = riveInst.stateMachineInputs('State Machine 1');
+                    if (inputs) {
+                        inputs.forEach(function(inp) {
+                            if (inp.name === 'eye_x') eyeXInput = inp;
+                            else if (inp.name === 'eye_y') eyeYInput = inp;
+                        });
+                    }
+                    if (eyeXInput) eyeXInput.value = 50;
+                    if (eyeYInput) eyeYInput.value = 50;
+                }, 100);
+            } catch(e) {}
+        };
+
         riveInst = new RiveClass({
             src: 'star_adp.riv',
             canvas: canvas,
-            autoplay: true,
+            autoplay: false,
             stateMachines: 'State Machine 1',
             onLoad: function() {
                 riveInst.resizeDrawingSurfaceToCanvas();
@@ -1781,7 +1814,9 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                 }
                 if (eyeXInput) eyeXInput.value = 50;
                 if (eyeYInput) eyeYInput.value = 50;
-                startBlink();
+                riveLoaded = true;
+                // Se avviaRive() è già stato chiamato, parte subito
+                if (riveStarted) { riveInst.play('State Machine 1'); startBlink(); }
             },
             onLoadError: function() { showFallback(); }
         });
@@ -2026,7 +2061,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
 
     <script>
         (function() {
-            const CURRENT_VERSION = '6.1';
+            const CURRENT_VERSION = '6.2';
             const STORAGE_KEY = 'ad_last_version';
 
             function mostraChangelogManuale() {
@@ -2038,6 +2073,8 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
             function chiudiChangelog() {
                 let _cm = document.getElementById('changelog-modal'); if(_cm) { _cm.style.display = 'none'; _cm.style.pointerEvents = 'none'; }
                 localStorage.setItem(STORAGE_KEY, CURRENT_VERSION);
+                // Avvia animazione Rive dopo chiusura changelog
+                if (typeof window.avviaRive === 'function') window.avviaRive();
             }
             window.chiudiChangelog = chiudiChangelog;
 
@@ -2046,6 +2083,12 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                 if (lastVersion !== CURRENT_VERSION) {
                     var modal = document.getElementById('changelog-modal');
                     if (modal) { modal.style.display = 'flex'; modal.style.pointerEvents = 'auto'; }
+                    // Rive parte alla chiusura changelog (vedi chiudiChangelog)
+                } else {
+                    // Nessuna changelog — avvia Rive dopo 2 secondi
+                    setTimeout(function() {
+                        if (typeof window.avviaRive === 'function') window.avviaRive();
+                    }, 2000);
                 }
             }
 
