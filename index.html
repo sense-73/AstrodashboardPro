@@ -475,7 +475,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
 
             <!-- Logo Rive animato -->
             <div id="rive-logo-wrap" style="width:120px; height:120px; margin-bottom:16px; position:relative; z-index:2;">
-                <canvas id="rive-canvas" width="120" height="120" onclick="if(typeof salutaRive==='function')salutaRive()" style="width:120px; height:120px; display:block; cursor:pointer;" title="Click me!"></canvas>
+                <canvas id="rive-canvas" width="120" height="120" onclick="if(typeof salutaRive==='function')salutaRive()" ontouchend="if(typeof salutaRive==='function'){salutaRive();}" style="width:120px; height:120px; display:block; cursor:pointer;" title="Click me!"></canvas>
             </div>
 
             <h1 style="font-size:clamp(32px,6vw,46px); font-weight:800; color:#c9d1d9; line-height:1.1; letter-spacing:-1px; margin-bottom:8px;">
