@@ -180,6 +180,8 @@
             let doPark    = document.getElementById('nina-park')   ? document.getElementById('nina-park').checked   : false;
 
             // ── Raccolta esposizioni ──────────────────────────────────
+            // Tipo filtro OSC (dual/quad-band) — letto dall'elemento UI
+            let filterOscType = (document.getElementById('filter-osc-type') || {value:'none'}).value;
             // Nome filtro OSC per NINA (dual/quad-band)
             let oscFilterName = null;
             if (!isMono && filterOscType !== 'none') {
