@@ -133,11 +133,17 @@
                 "Parent": { "$ref": blockId }
             };
 
+            // Nome contestuale: filtro > DARK con durata > BIAS > Light
+            const _blockName = expo.filter          ? `${expo.count}x ${expo.filter}`
+                             : expo.type === 'DARK'  ? `${expo.count}x Dark ${expo.exp}s`
+                             : expo.type === 'BIAS'  ? `${expo.count}x Bias`
+                             :                         `${expo.count}x Light`;
+
             return {
                 "$id": blockId,
                 "$type": "NINA.Sequencer.Container.SequentialContainer, NINA.Sequencer",
                 "Strategy": seqStrategy,
-                "Name": expo.filter ? `${expo.count}x ${expo.filter}` : `${expo.count}x Light`,
+                "Name": _blockName,
                 "Conditions": obsCol("condition", [loopCond]),
                 "IsExpanded": true,
                 "Items": obsCol("item", items),
@@ -193,7 +199,10 @@
             frameList.forEach(f => {
                 let count  = parseInt((document.getElementById(`${f.id}-count`) || {}).value) || 0;
                 let exp    = parseInt((document.getElementById(`${f.id}-exp`)   || {}).value) || 0;
-                if (count <= 0 || exp <= 0) return;
+                let isBias = f.id.includes('bias');
+                // BIAS hanno exp=0 per definizione: li includiamo se count>0
+                // Per tutti gli altri frame servono sia count>0 che exp>0
+                if (count <= 0 || (!isBias && exp <= 0)) return;
 
                 let binVal    = parseInt((document.getElementById(`${f.id}-bin`) || {}).value) || 1;
                 let gainVal   = parseInt((document.getElementById(`${f.id}-gain`) || {}).value);

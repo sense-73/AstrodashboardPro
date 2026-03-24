@@ -278,8 +278,8 @@
                 document.getElementById('time-end').value   = ft(_rawEnd);
             }
 
-            // Generazione Mappa Stellare
-            if (!aladinSkyMap) {
+            // Generazione Mappa Stellare — solo se Aladin è disponibile
+            if (!aladinSkyMap && typeof A !== 'undefined') {
                 aladinSkyMap = A.aladin('#aladin-lite-div', {
                     survey: "P/DSS2/color",
                     fov: 2,
@@ -301,7 +301,7 @@
             } else {
                 setTimeout(() => {
                     fovCenterOverride = null;
-                    aladinSkyMap.gotoRaDec(targetSelezionato.ra * 15, targetSelezionato.dec);
+                    if (aladinSkyMap) aladinSkyMap.gotoRaDec(targetSelezionato.ra * 15, targetSelezionato.dec);
                     aggiornaCoordinateFOVdaTarget();
                     toggleMosaic();
                 }, 100); 
