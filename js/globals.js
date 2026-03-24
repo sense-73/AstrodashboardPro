@@ -197,6 +197,7 @@ const dsoImgMap = {
   "m31":     "images/dso/m31.png",
   "m33":     "images/dso/m33.png",
   "m42":     "images/dso/m42.png",
+  "m43":     "images/dso/m43.png",
   "m45":     "images/dso/m45.png",
   "m51":     "images/dso/m51.png",
   "m81":     "images/dso/m81.png",

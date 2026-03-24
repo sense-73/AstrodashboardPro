@@ -83,6 +83,12 @@ const dsoDatabase = [
         tips_it: "Il nucleo (Trapezio) si brucia facilmente. Scatta pose brevi (10s) e fondile in HDR con pose lunghe (180s).", tips_en: "The core (Trapezium) blows out easily. Shoot short exposures (10s) and HDR blend them with long ones (180s).", tips_es: "El núcleo se quema fácilmente. Haz exposiciones cortas (10s) y combínalas en HDR con tomas largas (180s).", tips_zh: "核心（四边形星团）极易过曝。拍摄短曝光（10秒）并与长曝光（180秒）进行 HDR 合成。"
     },
     { 
+        id: "m43", name: "M43", size: 20, icon: "🌌", ra: 5.592, dec: -5.27, type: "Nebulosa a Emissione", mag: "+9.0", dist: "1.344 a.l.", link: "https://it.wikipedia.org/wiki/NGC_1982",
+        it: "Nebulosa De Mairan (NGC 1982)", en: "De Mairan's Nebula (NGC 1982)", es: "Nebulosa de De Mairan (NGC 1982)", zh: "德·迈兰星云 (NGC 1982)",
+        desc_it: "Nebulosa a emissione separata visivamente da M42 ma parte dello stesso complesso nebulare di Orione. Contiene la stella OriA (HD 37688) che ionizza il gas circostante.", desc_en: "Emission nebula visually separated from M42 but part of the same Orion nebular complex. Contains the star OriA (HD 37688) which ionizes the surrounding gas.", desc_es: "Nebulosa de emisión visualmente separada de M42 pero parte del mismo complejo nebular de Orión.", desc_zh: "发射星云，在视觉上与M42分开，但属于同一猎户座星云复合体。",
+        tips_it: "Spesso fotografata insieme a M42. Posa più lunga rispetto al nucleo di M42 per non sovraesporla. Ottima con filtro Ha.", tips_en: "Often photographed alongside M42. Longer exposure than the M42 core to avoid overexposure. Excellent with Ha filter.", tips_es: "A menudo fotografiada junto a M42. Mayor exposición que el núcleo de M42. Excelente con filtro Ha.", tips_zh: "经常与M42一起拍摄。曝光时间比M42核心长。Ha滤镜效果出色。"
+    },
+    { 
         id: "m45", name: "M45", size: 110, icon: "✨", ra: 3.78, dec: 24.11, type: "Ammasso Aperto", mag: "+1.6", dist: "444 a.l.", link: "https://it.wikipedia.org/wiki/Pleiadi",
         it: "Le Pleiadi", en: "Pleiades Cluster", es: "Pléyades", zh: "昴星团",
         desc_it: "Magnifico ammasso aperto circondato da polvere interstellare a riflessione azzurra.", desc_en: "Magnificent open cluster surrounded by blue reflection interstellar dust.", desc_es: "Magnífico cúmulo abierto rodeado de polvo interestelar de reflexión azul.", desc_zh: "壮丽的疏散星团，被蓝色的星际反射尘埃包围。",
@@ -429,7 +435,7 @@ const dsoDatabase = [
         tips_it: "Segnale H-Alpha eccellente. Includi il bow-shock di Cygnus X-1 nel campo per un dettaglio unico.", tips_en: "Excellent H-Alpha signal. Include the Cygnus X-1 bow-shock in the frame for a unique detail.", tips_es: "Excelente señal H-Alfa. Incluye el bow-shock de Cygnus X-1 para un detalle único.", tips_zh: "H-Alpha信号极佳。将天鹅座X-1的弓形激波纳入画面，捕捉独特细节。"
     },
     {
-        id: "ou4", name: "Ou4", size: 60, icon: "🦑", ra: 21.65, dec: 57.50, type: "Nebulosa a Emissione", mag: "N/D", dist: "2.300 a.l.", link: "https://en.wikipedia.org/wiki/Squid_Nebula",
+        id: "ou4", name: "Ou4", size: 60, icon: "🦑", ra: 21.1962, dec: 59.9456, type: "Nebulosa a Emissione", mag: "N/D", dist: "2.300 a.l.", link: "https://en.wikipedia.org/wiki/Squid_Nebula",
         it: "Nebulosa Calamaro Gigante", en: "Giant Squid Nebula", es: "Nebulosa Calamar Gigante", zh: "巨乌贼星云",
         desc_it: "Scoperta nel 2011 da Nicolas Outters. Segnale OIII estremo e debolissimo, sovrapposta alla IC 1396.", desc_en: "Discovered in 2011 by Nicolas Outters. Extremely faint OIII signal, overlapping IC 1396.", desc_es: "Descubierta en 2011 por Nicolas Outters. Señal OIII extremadamente débil, superpuesta a IC 1396.", desc_zh: "2011年由Nicolas Outters发现。OIII信号极度微弱，与IC 1396重叠。",
         tips_it: "Integrazione mostruosa richiesta (30h+ in OIII). Abbinala alla IC 1396 per un frame spettacolare.", tips_en: "Monstrous integration required (30h+ in OIII). Pair with IC 1396 for a spectacular frame.", tips_es: "Se requiere integración monstruosa (30h+ en OIII). Combínala con IC 1396 para un frame espectacular.", tips_zh: "需要超长曝光叠加(OIII通道30小时以上)。与IC 1396搭配可获得壮观画面。"

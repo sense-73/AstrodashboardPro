@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AstroDashboard v6.2 - Global Edition</title>
+    <title>AstroDashboard v6.3 - Global Edition</title>
     
     <link rel="manifest" href="manifest.json?v=3">
     <meta name="theme-color" content="#121212">
@@ -48,6 +48,15 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
     /* Manuale: testo visibile solo su desktop */
     .nav-manual-text { display: inline; }
     @media (max-width: 480px) { .nav-manual-text { display: none !important; } }
+
+    /* Filtro OSC dual/quad: va a capo su smartphone */
+    @media (max-width: 540px) {
+        #filter-osc-wrap,
+        #pro-filter-osc-wrap {
+            width: 100%;
+            margin-top: 4px;
+        }
+    }
 
     /* ── Multinotte in landscape su smartphone ── */
     @media screen and (orientation: landscape) and (max-height: 520px) {
@@ -444,7 +453,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 19a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6l0 13" /><path d="M12 6l0 13" /><path d="M21 6l0 13" /></svg>
                     <span class="nav-manual-text" data-i18n="manual_btn" style="letter-spacing:.3px;">Guida</span>
                 </button>
-                <button onclick="mostraChangelogManuale()" title="Versione & novità" class="nav-version-btn" style="background:rgba(196,154,60,0.08); border:1px solid rgba(196,154,60,0.3); border-radius:5px; padding:3px 8px; color:#c49a3c; font-size:10px; font-weight:700; cursor:pointer; flex-shrink:0; letter-spacing:.5px;">v6.2</button>
+                <button onclick="mostraChangelogManuale()" title="Versione & novità" class="nav-version-btn" style="background:rgba(196,154,60,0.08); border:1px solid rgba(196,154,60,0.3); border-radius:5px; padding:3px 8px; color:#c49a3c; font-size:10px; font-weight:700; cursor:pointer; flex-shrink:0; letter-spacing:.5px;">v6.3</button>
             </div>
         </div>
 
@@ -620,7 +629,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c1.379 3.53-.923 7.947-6.712 7.947H11.23l-1.332 8.453h3.288c.524 0 .968-.382 1.05-.9l.87-5.505h2.163c4.298 0 7.066-2.076 7.953-6.36.41-1.99.073-3.466-.8-4.094z"/></svg>
                     Supporta il progetto
                 </a>
-                <span style="font-size:14px; color:#3d4852;">v6.2</span>
+                <span style="font-size:14px; color:#3d4852;">v6.3</span>
             </div>
         </div>
 
@@ -785,13 +794,17 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
         <div class="planning-grid">
             <div class="panel">
                 <h3><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-camera"/></svg> <span data-i18n="optical_setup">Setup Ottico</span> <span class="info-icon" onmouseenter="mostraTooltip(this, 'info_setup')" onmouseleave="nascondiTooltip()">ℹ️</span></h3>
-                <div class="input-group" style="display: flex; align-items: center; gap: 5px;">
-                    <label data-i18n="telescope">Telescopio:</label>
-                    <select id="preset-telescope" onchange="applicaPresetTelescopio(); if(typeof aggiornaAI==='function') aggiornaAI();" style="flex: 1;">
-                        <option value="" data-i18n="select_opt">-- Seleziona --</option>
-                    </select>
-                    <button class="btn-guide" style="margin:0; padding: 6px 10px; border-color: #c49a3c; color: #c49a3c;" onclick="salvaTelescopioCustom()"><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-save"/></svg> <span data-i18n="save_btn">Salva</span></button>
-                    <button class="btn-guide" style="margin:0; padding: 6px 10px; border-color: #f44336; color: #f44336;" onclick="apriEliminaTelescopio()" title="Elimina telescopio salvato"><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-trash"/></svg></button>
+                <div class="input-group" style="display:flex; align-items:flex-start; gap:5px;">
+                    <label data-i18n="telescope" style="padding-top:6px;">Telescopio:</label>
+                    <div style="display:flex; flex-direction:column; gap:6px; flex:1; min-width:0;">
+                        <select id="preset-telescope" onchange="applicaPresetTelescopio(); if(typeof aggiornaAI==='function') aggiornaAI();" style="width:100%;">
+                            <option value="" data-i18n="select_opt">-- Seleziona --</option>
+                        </select>
+                        <div style="display:flex; gap:6px;">
+                            <button class="btn-guide" style="margin:0; padding:5px 10px; border-color:#c49a3c; color:#c49a3c; flex:1;" onclick="salvaTelescopioCustom()"><svg width="16" height="16" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-save"/></svg> <span data-i18n="save_btn">Salva</span></button>
+                            <button class="btn-guide" style="margin:0; padding:5px 10px; border-color:#f44336; color:#f44336;" onclick="apriEliminaTelescopio()" title="Elimina telescopio salvato"><svg width="16" height="16" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-trash"/></svg></button>
+                        </div>
+                    </div>
                 </div>
                 <div class="input-group">
                     <label data-i18n="focal_len">Focale (mm):</label>
@@ -802,11 +815,17 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <input type="number" id="aperture" value="72" oninput="aggiornaFOV(); calcolaTempi();">
                 </div>
                 <hr style="border: 1px solid #21293a; margin: 15px 0;">
-                <div class="input-group">
-                    <label data-i18n="sensor">Sensore:</label>
-                    <select id="preset-sensor" onchange="applicaPresetSensore()">
-                        <option value="" data-i18n="select_opt">-- Seleziona --</option>
-                    </select>
+                <div class="input-group" style="display:flex; align-items:flex-start; gap:5px;">
+                    <label data-i18n="sensor" style="padding-top:6px;">Sensore:</label>
+                    <div style="display:flex; flex-direction:column; gap:6px; flex:1; min-width:0;">
+                        <select id="preset-sensor" onchange="applicaPresetSensore()" style="width:100%;">
+                            <option value="" data-i18n="select_opt">-- Seleziona --</option>
+                        </select>
+                        <div style="display:flex; gap:6px;">
+                            <button class="btn-guide" style="margin:0; padding:5px 10px; border-color:#c49a3c; color:#c49a3c; flex:1;" onclick="salvaCameraCustom()"><svg width="16" height="16" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-save"/></svg> <span data-i18n="save_btn">Salva</span></button>
+                            <button class="btn-guide" style="margin:0; padding:5px 10px; border-color:#f44336; color:#f44336;" onclick="apriEliminaCamera()" title="Elimina sensore salvato"><svg width="16" height="16" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-trash"/></svg></button>
+                        </div>
+                    </div>
                 </div>
                 <div class="input-group"><label data-i18n="width">Larg. W (mm):</label><input type="number" id="sensor-width" value="23.5" step="0.1" oninput="aggiornaFOV()"></div>
                 <div class="input-group"><label data-i18n="height">Alet. H (mm):</label><input type="number" id="sensor-height" value="15.7" step="0.1" oninput="aggiornaFOV()"></div>
@@ -872,6 +891,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
             <div style="display: flex; flex-direction: column;">
                 <div class="panel" style="padding:0; overflow:hidden;">
                     <h3 style="padding: 15px 20px 0 20px;"><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-ruler"/></svg> <span data-i18n="fov_sim">Simulatore FOV Realistico (DSS2)</span></h3>
+                    <p id="session-visibility-warning" style="color:#ff6b6b; font-size:0.85em; margin:6px 20px 0 20px; display:none; font-weight:bold; background:rgba(255,107,107,0.08); border:1px solid rgba(255,107,107,0.3); border-radius:6px; padding:8px 12px;"></p>
                     <p id="fov-warning-msg" style="color: #c49a3c; font-size: 0.85em; margin: 6px 20px 0 20px; display: none; font-weight: bold;"><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-alert"/></svg> <span data-i18n="fov_warning">L'oggetto è più grande del tuo campo inquadrato! Valuta un mosaico.</span></p>
                     <div class="fov-simulator-container" id="fov-simulator-container">
                         <div id="aladin-lite-div"></div>
@@ -930,7 +950,13 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
         
         <div class="panel" style="margin-bottom: 20px; text-align: center; display: flex; justify-content: space-around; flex-wrap: wrap;">
             <div class="input-group" style="margin: 0;"><label style="width: auto; margin-right: 10px; color:#c9d1d9;" data-i18n="session_start">Inizio Sessione:</label><input type="time" id="time-start" onchange="calcolaTempi()"></div>
-            <div class="input-group" style="margin: 0;"><label style="width: auto; margin-right: 10px; color:#c9d1d9;" data-i18n="session_end">Fine Sessione:</label><input type="time" id="time-end" onchange="calcolaTempi()"></div>
+            <div class="input-group" style="margin: 0; flex-direction:column; align-items:flex-start; gap:4px;">
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <label style="width: auto; margin-right: 10px; color:#c9d1d9;" data-i18n="session_end">Fine Sessione:</label>
+                    <input type="time" id="time-end" onchange="calcolaTempi()" style="transition: border-color 0.3s, color 0.3s;">
+                </div>
+                <div id="time-end-warning" style="display:none; color:#ff6b6b; font-size:0.78em; font-weight:600; padding:4px 8px; background:rgba(255,107,107,0.08); border:1px solid rgba(255,107,107,0.3); border-radius:5px;"></div>
+            </div>
         </div>
 
         <!-- ═══ RIGA TEMPI (unica riga orizzontale) ═══ -->
@@ -970,11 +996,19 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
         <div class="panel" style="margin-top: 20px;">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
                 <h3 style="margin: 0;"><span data-i18n="seq_setup">Impostazione Sequenza</span> <span class="info-icon" onmouseenter="mostraTooltip(this, 'info_seq_opt')" onmouseleave="nascondiTooltip()">ℹ️</span></h3>
-                <div style="display:inline-flex; align-items:center; gap:8px; margin-left:auto;">
-                    <select id="sensor-type" onchange="toggleSensorMode(); calcolaTempi();" style="background:#1a1a1a; color:#c49a3c; font-weight:bold; border-color:#c49a3c; cursor:pointer; width:auto !important; font-size:0.82em; padding:4px 8px; border-radius:4px;">
-                        <option value="color" data-i18n="pro_sensor_osc">Sensore OSC (Color)</option>
-                        <option value="mono" data-i18n="pro_sensor_mono">Sensore Mono</option>
-                    </select>
+                <div style="display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-left:auto;">
+                    <select id="sensor-type" onchange="toggleSensorMode(); calcolaTempi(); aggiornaFiltroOSC();" style="background:#1a1a1a; color:#c49a3c; font-weight:bold; border-color:#c49a3c; cursor:pointer; width:auto !important; font-size:0.82em; padding:4px 8px; border-radius:4px;">
+                            <option value="color" data-i18n="pro_sensor_osc">Sensore OSC (Color)</option>
+                            <option value="mono" data-i18n="pro_sensor_mono">Sensore Mono</option>
+                        </select>
+                        <span id="filter-osc-wrap" style="display:inline-flex; align-items:center; gap:4px;">
+                            <button id="filter-osc-btn" onclick="apriModalFiltroOSC()" style="background:#1a1a1a; color:#6e7a8a; font-weight:bold; border:1px solid #6e7a8a; cursor:pointer; font-size:0.82em; padding:4px 10px; border-radius:4px; display:inline-flex; align-items:center; gap:5px;">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
+                                <span id="filter-osc-label" data-i18n="filter_osc_none">Nessun filtro</span>
+                            </button>
+                            <input type="hidden" id="filter-osc-type" value="none">
+                            <span class="info-icon" onmouseenter="mostraTooltip(this,'info_filter_osc')" onmouseleave="nascondiTooltip()">ℹ️</span>
+                        </span>
                     <button class="btn-a-secondary" style="padding:5px 12px; font-size:0.78em; border-color:#6e7a8a; color:#6e7a8a; display:inline-flex; align-items:center; gap:5px;" onclick="apriModalResetFiltri()" onmouseenter="mostraTooltip(this,'reset_filters_tooltip')" onmouseleave="nascondiTooltip()"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 10a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M6 4v4" /><path d="M6 12v8" /><path d="M13.653 14.874a2 2 0 1 0 -.586 2.818" /><path d="M12 4v10" /><path d="M12 18v2" /><path d="M16 7a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M18 4v1" /><path d="M18 9v4" /><path d="M22 22l-5 -5" /><path d="M17 22l5 -5" /></svg> <span data-i18n="reset_filters_btn">Reset Filtri</span></button>
                 </div>
                 <span id="mosaic-total-badge" style="display:none; background: #c49a3c; color: #0d1117; padding: 4px 10px; border-radius: 4px; font-size: 0.9em; font-weight: bold;"></span>
@@ -1057,6 +1091,16 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                 <div style="background: #222; padding: 15px; border-radius: 8px; grid-column: 1 / -1;">
                     <div id="nina-filter-warning" style="display:none; background: #3a2a00; border: 1px solid #ffaa00; border-radius: 6px; padding: 10px 14px; margin-bottom: 12px; color: #ffcc44; font-size: 0.85em;"><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-alert"/></svg> <span data-i18n="mn_warning">ATTENZIONE: Assicurati che i nomi dei filtri nella 'Mappatura Nomi' (nel pannello principale) corrispondano esattamente a quelli della tua ruota portafiltri in NINA per evitare errori.</span></div>
                     <h4 style="margin: 0 0 5px 0; color: #c9d1d9;"><span data-i18n="filter_map">Mappatura Nomi Filtri</span></h4>
+                    <!-- Campo nome filtro OSC dual/quad per NINA -->
+                    <div id="nina-osc-filter-name-wrap" style="display:none; margin-bottom:12px; padding:10px 12px; background:#1a1a2e; border:1px solid rgba(196,154,60,0.3); border-radius:6px;">
+                        <label style="font-size:0.82em; color:#c49a3c; font-weight:600; display:block; margin-bottom:6px;">
+                            <span data-i18n="nina_osc_filter_label">Nome filtro in N.I.N.A.</span>
+                            <span class="info-icon" style="margin-left:4px;" onmouseenter="mostraTooltip(this,'nina_osc_filter_info')" onmouseleave="nascondiTooltip()">ℹ️</span>
+                        </label>
+                        <input type="text" id="nina-osc-filter-name" placeholder="es. L-eXtreme" 
+                               style="background:#0d1117; color:#c49a3c; border:1px solid #c49a3c; border-radius:4px; padding:5px 10px; font-size:0.85em; width:100%; max-width:220px;"
+                               oninput="localStorage.setItem('nina_osc_filter_name', this.value)">
+                    </div>
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px;" id="nina-filters-container">
                     </div>
                     <div style="border-top:1px solid #21293a; padding-top:14px; margin-top:14px;">
@@ -1092,17 +1136,35 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                         <span style="color: #00c6ff; font-size: 0.8em; margin-left: 10px;">(Sincronizzazione N.I.N.A.)</span>
                     </h4>
                 </div>
+                <!-- Campo nome filtro OSC per NINA (PRO) -->
+                <div id="pro-nina-osc-filter-name-wrap" style="display:none; margin-bottom:12px; padding:10px 12px; background:#1a1a2e; border:1px solid rgba(0,198,255,0.3); border-radius:6px;">
+                    <label style="font-size:0.82em; color:#00c6ff; font-weight:600; display:block; margin-bottom:6px;">
+                        <span data-i18n="nina_osc_filter_label">Nome filtro in N.I.N.A.</span>
+                        <span class="info-icon" style="margin-left:4px;" onmouseenter="mostraTooltip(this,'nina_osc_filter_info')" onmouseleave="nascondiTooltip()">ℹ️</span>
+                    </label>
+                    <input type="text" id="pro-nina-osc-filter-name" placeholder="es. L-eXtreme"
+                           style="background:#0d1117; color:#00c6ff; border:1px solid #00c6ff; border-radius:4px; padding:5px 10px; font-size:0.85em; width:100%; max-width:220px;"
+                           oninput="localStorage.setItem('nina_osc_filter_name', this.value); document.getElementById('nina-osc-filter-name') && (document.getElementById('nina-osc-filter-name').value=this.value)">
+                </div>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px;" id="pro-nina-filters-container">
                 </div>
             </div>
             <div class="panel">
                 <div style="border-bottom: 1px solid #21293a; padding-bottom: 15px; margin-bottom: 15px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;">
                     <h3 style="margin: 0; color: #c9d1d9;"><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-camera"/></svg> <span data-i18n="pro_seq_builder">Calcolatore di Sequenze</span> <span class="info-icon" onmouseenter="mostraTooltip(this, 'info_pro_seq')" onmouseleave="nascondiTooltip()">ℹ️</span></h3>
-                    <div style="display:inline-flex; align-items:center; gap:8px; margin-left:auto;">
-                        <select id="pro-sensor-type" onchange="document.getElementById('sensor-type').value=this.value; toggleSensorMode(); disegnaGrigliaPro(); aggiornaFiltriNinaPro();" style="background:#1a1a1a; color:#00c6ff; font-weight:bold; border-color:#00c6ff; cursor:pointer; width:auto !important; font-size:0.82em; padding:4px 8px; border-radius:4px;">
-                            <option value="color" data-i18n="pro_sensor_osc">Sensore OSC (Color)</option>
-                            <option value="mono" data-i18n="pro_sensor_mono">Sensore Mono</option>
-                        </select>
+                    <div style="display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-left:auto;">
+                            <select id="pro-sensor-type" onchange="document.getElementById('sensor-type').value=this.value; toggleSensorMode(); disegnaGrigliaPro(); aggiornaFiltriNinaPro(); aggiornaFiltroOSC();" style="background:#1a1a1a; color:#00c6ff; font-weight:bold; border-color:#00c6ff; cursor:pointer; width:auto !important; font-size:0.82em; padding:4px 8px; border-radius:4px;">
+                                <option value="color" data-i18n="pro_sensor_osc">Sensore OSC (Color)</option>
+                                <option value="mono" data-i18n="pro_sensor_mono">Sensore Mono</option>
+                            </select>
+                            <span id="pro-filter-osc-wrap" style="display:inline-flex; align-items:center; gap:4px;">
+                                <button id="pro-filter-osc-btn" onclick="apriModalFiltroOSC()" style="background:#1a1a1a; color:#6e7a8a; font-weight:bold; border:1px solid #6e7a8a; cursor:pointer; font-size:0.82em; padding:4px 10px; border-radius:4px; display:inline-flex; align-items:center; gap:5px;">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
+                                    <span id="pro-filter-osc-label" data-i18n="filter_osc_none">Nessun filtro</span>
+                                </button>
+                                <input type="hidden" id="pro-filter-osc-type" value="none">
+                                <span class="info-icon" onmouseenter="mostraTooltip(this,'info_filter_osc')" onmouseleave="nascondiTooltip()">ℹ️</span>
+                            </span>
                         <button class="btn-a-secondary" style="padding:5px 12px; font-size:0.78em; border-color:#6e7a8a; color:#6e7a8a; display:inline-flex; align-items:center; gap:5px;" onclick="apriModalResetFiltri()" onmouseenter="mostraTooltip(this,'reset_filters_tooltip')" onmouseleave="nascondiTooltip()"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 10a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M6 4v4" /><path d="M6 12v8" /><path d="M13.653 14.874a2 2 0 1 0 -.586 2.818" /><path d="M12 4v10" /><path d="M12 18v2" /><path d="M16 7a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M18 4v1" /><path d="M18 9v4" /><path d="M22 22l-5 -5" /><path d="M17 22l5 -5" /></svg> <span data-i18n="reset_filters_btn">Reset Filtri</span></button>
                     </div>
                 </div>
@@ -1371,7 +1433,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                 <h3><svg width="20" height="20" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-stars"/></svg> 4. Calcolatore Sessione Smart</h3>
                 <p>In modalità Smart il sistema è il tuo assistente esperto. Analizzi il target, comunichi le caratteristiche del tuo setup e lasci che l'algoritmo generi una sequenza bilanciata e ottimizzata per le condizioni di quella specifica notte.</p>
                 <ul>
-                    <li><strong>L'Algoritmo Predittivo:</strong> Il calcolo non è una media generica. Considera il rapporto focale del tuo ottico (f/4 vs f/8 cambia radicalmente i tempi), il tipo di sensore (OSC o Mono), i filtri attivi, l'inquinamento lunare attuale, la magnitudine superficiale del target e — dalla v6.0 — <b>l'indice di Bortle del sito di osservazione</b>. Cieli bui (Bortle 1–4) riducono il tempo necessario rispetto al riferimento suburbano; cieli urbani (Bortle 6–9) aumentano la stima progressivamente. Per nebulose a emissione con filtri narrowband attivi la penalità è attenuata, perché Ha/OIII isolano le righe spettrali riducendo l'impatto del fondo cielo. Quando la combinazione di fattori porta a stime irragionevoli (es. target a banda larga da cielo Bortle 8–9), il sistema sconsiglia l'integrazione e suggerisce alternative — filtro narrowband o sito più buio.</li>
+                    <li><strong>L'Algoritmo Predittivo:</strong> Il calcolo non è una media generica. Considera il rapporto focale del tuo ottico (f/4 vs f/8 cambia radicalmente i tempi), il tipo di sensore (OSC o Mono), i filtri attivi, l'inquinamento lunare attuale, la magnitudine superficiale del target e l'indice di Bortle del sito di osservazione. Cieli bui (Bortle 1–4) riducono il tempo necessario; cieli urbani (Bortle 6–9) aumentano la stima progressivamente. Per nebulose a emissione con filtri narrowband attivi la penalità è attenuata. Dalla <b>v6.3</b>: i sensori OSC supportano filtri <b>Dual-band e Quad-band</b> — il calcolo usa la formula fisica dello swamping (RN, QE, bandwidth, f-ratio, blue-shift) per stimare la posa minima ottimale. Quando la combinazione di fattori porta a stime irragionevoli, il sistema sconsiglia l'integrazione e suggerisce alternative.</li>
                     <li><strong>Generazione Sequenza Ottimale:</strong> Clicca "Genera Sequenza Ottimale" e il sistema distribuisce le pose sulla finestra notturna disponibile (orario inizio–fine che hai impostato), bilanciando il tempo tra i filtri e riservando le calibrazioni. Per i sensori Mono calcola separatamente L, R, G, B e narrowband.</li>
                     <li><strong>Dithering Smart:</strong> Se attivi il dithering, specifica la frequenza (ogni N pose). Il sistema sottrae automaticamente l'overhead di dithering dal tempo totale: quello che vedi in "Tempo Acquisizione" è il tempo reale di integrazione netta.</li>
                     <li><strong>Mappatura Nomi Filtri N.I.N.A.:</strong> Per i sensori Mono, ogni filtro ha un campo dove inserire il nome esatto come lo riconosce la tua ruota portafiltri in N.I.N.A. (es. "Hα 3nm" invece di "Ha"). Se i nomi non corrispondono esattamente, N.I.N.A. darà errore durante la sequenza.</li>
@@ -1461,7 +1523,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                 <h3><svg width="20" height="20" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-stars"/></svg> 4. Smart Session Calculator</h3>
                 <p>In Smart mode the system is your expert assistant. You analyze the target, share your setup specs and let the algorithm generate a balanced sequence optimized for the conditions of that specific night.</p>
                 <ul>
-                    <li><strong>Predictive Algorithm:</strong> The calculation is not a generic average. It factors in your optical focal ratio (f/4 vs f/8 radically changes integration times), sensor type (OSC or Mono), active filters, current moon pollution, target surface brightness and — from v6.0 — <b>the Bortle index of your observing site</b>. Dark skies (Bortle 1–4) reduce the required time relative to the suburban baseline; urban skies (Bortle 6–9) progressively increase the estimate. For emission nebulae with narrowband filters active, the penalty is reduced because Ha/OIII isolate spectral lines and cut through sky background. When the combination of factors leads to unreasonable estimates (e.g. broadband targets from Bortle 8–9 skies), the system advises against imaging and suggests alternatives — a narrowband filter or a darker site.</li>
+                    <li><strong>Predictive Algorithm:</strong> The calculation is not a generic average. It factors in your optical focal ratio (f/4 vs f/8 radically changes integration times), sensor type (OSC or Mono), active filters, current moon pollution, target surface brightness and the Bortle index of your observing site. Dark skies (Bortle 1–4) reduce required time; urban skies (Bortle 6–9) progressively increase the estimate. For emission nebulae with narrowband filters active, the penalty is reduced. From <b>v6.3</b>: OSC sensors support <b>Dual-band and Quad-band filters</b> — the calculation uses the physical swamping formula (RN, QE, bandwidth, f-ratio, blue-shift correction) to estimate the optimal minimum exposure. When combinations of factors lead to unreasonable estimates, the system advises against imaging and suggests alternatives.</li>
                     <li><strong>Generate Optimal Sequence:</strong> Click "Generate Optimal Sequence" and the system distributes frames across the available night window (start–end times you set), balancing time between filters and reserving time for calibration frames. For Mono sensors it calculates L, R, G, B and narrowband independently.</li>
                     <li><strong>Smart Dithering:</strong> Enable dithering and specify frequency (every N frames). The system automatically subtracts dithering overhead from total available time — the "Acquisition Time" shown is real net integration time, already accounting for all overhead.</li>
                     <li><strong>N.I.N.A. Filter Name Mapping:</strong> For Mono sensors, each filter has a field where you enter its exact name as N.I.N.A. recognizes it from your filter wheel (e.g. "Hα 3nm" instead of "Ha"). If names don't match exactly, N.I.N.A. will throw an error during the sequence.</li>
@@ -1551,7 +1613,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                 <h3><svg width="20" height="20" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-stars"/></svg> 4. Calculadora de Sesión Smart</h3>
                 <p>En modo Smart el sistema es tu asistente experto. Analizas el objetivo, compartes las características de tu equipo y dejas que el algoritmo genere una secuencia equilibrada y optimizada para las condiciones de esa noche específica.</p>
                 <ul>
-                    <li><strong>Algoritmo Predictivo:</strong> El cálculo no es una media genérica. Considera la relación focal de tu óptica, el tipo de sensor (OSC o Mono), los filtros activos, la contaminación lunar actual, la magnitud superficial del objetivo y — desde la v6.0 — <b>el índice Bortle del sitio de observación</b>. Los cielos oscuros (Bortle 1–4) reducen el tiempo necesario respecto a la referencia suburbana; los cielos urbanos (Bortle 6–9) aumentan la estimación progresivamente. Para nebulosas de emisión con filtros narrowband activos, la penalización se reduce porque Ha/OIII aíslan las líneas espectrales. Cuando la combinación de factores lleva a estimaciones irrazonables, el sistema desaconseja la integración y sugiere alternativas.</li>
+                    <li><strong>Algoritmo Predictivo:</strong> El cálculo no es una media genérica. Considera la relación focal de tu óptica, el tipo de sensor (OSC o Mono), los filtros activos, la contaminación lunar actual, la magnitud superficial del objetivo y el índice Bortle del sitio de observación. Los cielos oscuros (Bortle 1–4) reducen el tiempo necesario; los cielos urbanos (Bortle 6–9) aumentan la estimación. Para nebulosas de emisión con filtros narrowband activos, la penalización se reduce. Desde la <b>v6.3</b>: los sensores OSC soportan <b>filtros Dual-band y Quad-band</b> — el cálculo usa la fórmula física de swamping (RN, QE, ancho de banda, f-ratio, corrección blue-shift) para estimar la exposición mínima óptima. Cuando los factores llevan a estimaciones irrazonables, el sistema desaconseja continuar y sugiere alternativas.</li>
                     <li><strong>Generar Secuencia Óptima:</strong> Haz clic en "Generar Secuencia Óptima" y el sistema distribuye las tomas en la ventana nocturna disponible, equilibrando el tiempo entre filtros y reservando tiempo para los frames de calibración.</li>
                     <li><strong>Dithering Smart:</strong> Activa el dithering y especifica la frecuencia (cada N tomas). El sistema resta automáticamente el overhead de dithering del tiempo total disponible.</li>
                     <li><strong>Mapeo de Nombres de Filtros N.I.N.A.:</strong> Para sensores Mono, cada filtro tiene un campo donde introduces su nombre exacto tal como lo reconoce tu rueda de filtros en N.I.N.A. Si los nombres no coinciden exactamente, N.I.N.A. dará error.</li>
@@ -1639,7 +1701,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                 <h3><svg width="20" height="20" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-stars"/></svg> 4. 智能序列计算</h3>
                 <p>在智能模式下，系统是您的专家助手。您分析目标、提供设备规格，让算法为该特定夜晚的条件生成平衡且优化的序列。</p>
                 <ul>
-                    <li><strong>预测算法：</strong>计算并非通用平均值。它考虑您的光学焦比（f/4 vs f/8 对积分时间影响巨大）、传感器类型（彩色或黑白）、激活的滤镜、当前月光污染、目标表面亮度以及——从v6.0起——<b>观测地点的博特尔指数</b>。暗天空（博特尔1–4）相对郊区基准减少所需时间；城市天空（博特尔6–9）逐步增加估计时间。对于使用窄带滤镜的发射星云，惩罚有所减轻，因为Ha/OIII可隔离谱线、降低天空背景影响。当多重因素叠加导致估计时间不合理时（如在博特尔8–9下拍摄宽带目标），系统会建议放弃并推荐替代方案——窄带滤镜或更暗的地点。</li>
+                    <li><strong>预测算法：</strong>计算并非通用平均值。它考虑您的光学焦比、传感器类型（彩色或黑白）、激活的滤镜、当前月光污染、目标表面亮度以及观测地点的博特尔指数。暗天空（博特尔1–4）减少所需时间；城市天空（博特尔6–9）增加估计时间。对于使用窄带滤镜的发射星云，惩罚有所减轻。从<b>v6.3</b>起：彩色传感器（OSC）支持<b>双波段和四波段滤镜</b>——计算使用物理swamping公式（读出噪声、量子效率、带宽、焦比、蓝移修正）估算最优最短曝光时间。当多重因素导致估算不合理时，系统会建议放弃并推荐替代方案。</li>
                     <li><strong>生成最佳曝光序列：</strong>点击"生成最佳曝光序列"，系统在可用夜间窗口内分配帧数，平衡滤镜间的时间并为校准帧预留时间。黑白传感器独立计算 L、R、G、B 和窄带。</li>
                     <li><strong>智能抖动：</strong>启用抖动并指定频率（每N帧）。系统自动从总可用时间中扣除抖动开销 — 您看到的"采集时间"已是扣除所有开销后的真实净积分时间。</li>
                     <li><strong>N.I.N.A. 滤镜名称映射：</strong>对于黑白传感器，每个滤镜都有一个字段用于输入 N.I.N.A. 从滤镜轮识别的确切名称（如"Hα 3nm"而非"Ha"）。名称不完全匹配时，N.I.N.A. 将报错。</li>
@@ -1823,6 +1885,115 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
     })();
     </script>
 
+
+    <!-- ═══ Modal Configurazione Filtro OSC ═══ -->
+    <div id="filter-osc-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:3000; align-items:center; justify-content:center; padding:16px;">
+        <div style="background:#161b22; border:1px solid #21293a; border-radius:12px; width:100%; max-width:520px; max-height:90vh; overflow-y:auto;">
+            <!-- Header -->
+            <div style="display:flex; align-items:center; justify-content:space-between; padding:16px 20px; border-bottom:1px solid #21293a;">
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c49a3c" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
+                    <span style="font-weight:700; color:#c9d1d9; font-size:1em;" data-i18n="filter_modal_title">Configurazione Filtro Narrowband</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <span class="info-icon" onmouseenter="mostraTooltip(this,'info_filter_modal')" onmouseleave="nascondiTooltip()">ℹ️</span>
+                    <button onclick="chiudiModalFiltroOSC()" style="background:none; border:none; color:#6e7a8a; cursor:pointer; font-size:1.3em; padding:2px 6px;">✕</button>
+                </div>
+            </div>
+            <!-- Parametri sessione (sola lettura) -->
+            <div style="padding:14px 20px 0;">
+                <div style="font-size:0.75em; color:#6e7a8a; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:8px;" data-i18n="filter_modal_context">Parametri sessione corrente</div>
+                <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-bottom:14px;">
+                    <div style="background:#0d1117; border:1px solid #21293a; border-radius:6px; padding:8px 10px; text-align:center;">
+                        <div style="font-size:0.7em; color:#6e7a8a;" data-i18n="filter_ctx_bortle">Bortle</div>
+                        <div id="foctx-bortle" style="font-size:1.1em; font-weight:700; color:#c49a3c;">—</div>
+                    </div>
+                    <div style="background:#0d1117; border:1px solid #21293a; border-radius:6px; padding:8px 10px; text-align:center;">
+                        <div style="font-size:0.7em; color:#6e7a8a;">f-ratio</div>
+                        <div id="foctx-fratio" style="font-size:1.1em; font-weight:700; color:#c49a3c;">—</div>
+                    </div>
+                    <div style="background:#0d1117; border:1px solid #21293a; border-radius:6px; padding:8px 10px; text-align:center;">
+                        <div style="font-size:0.7em; color:#6e7a8a;" data-i18n="filter_ctx_sensor">Sensore</div>
+                        <div id="foctx-sensor" style="font-size:0.85em; font-weight:700; color:#c49a3c;">OSC</div>
+                    </div>
+                </div>
+            </div>
+            <!-- Database filtri -->
+            <div style="padding:0 20px;">
+                <label style="font-size:0.8em; color:#c9d1d9; font-weight:600; display:block; margin-bottom:6px;" data-i18n="filter_db_label">Seleziona filtro dal database</label>
+                <select id="filter-db-select" onchange="selezionaFiltroDB()" style="width:100%; background:#0d1117; color:#c9d1d9; border:1px solid #21293a; border-radius:6px; padding:8px 10px; font-size:0.9em; margin-bottom:14px;">
+                    <option value="none">— Nessun filtro —</option>
+                    <optgroup label="Dual-band (Ha+OIII)">
+                        <option value="dual|14|L-eXtreme">Optolong L-eXtreme (7+7 nm)</option>
+                        <option value="dual|6|L-Ultimate">Optolong L-Ultimate (3+3 nm)</option>
+                        <option value="dual|14|L-Enhance">Optolong L-Enhance (7+7 nm)</option>
+                        <option value="dual|10|ALP-T">Antlia ALP-T (5+5 nm)</option>
+                        <option value="dual|24|NBZ">IDAS NBZ (12+12 nm)</option>
+                        <option value="dual|8|DualBand Ultra">Altair DualBand Ultra (4+4 nm)</option>
+                        <option value="dual|10|SV220">Svbony SV220 (5+5 nm)</option>
+                        <option value="dual|14|Ha-OIII 7nm">Generico Dual-band 7nm</option>
+                    </optgroup>
+                    <optgroup label="Quad-band (Ha+OIII+SII+Hβ)">
+                        <option value="quad|20|L-Quad Enhance">Optolong L-Quad Enhance</option>
+                        <option value="quad|20|QuadBand">Altair QuadBand</option>
+                        <option value="quad|24|Triad Ultra">Triad Ultra</option>
+                        <option value="quad|20|SkyMatic">SkyMatic Quad</option>
+                        <option value="quad|20|Antlia Quad">Antlia Quad-band</option>
+                    </optgroup>
+                    <option value="custom" data-i18n="filter_osc_custom">— Personalizzato —</option>
+                </select>
+            </div>
+            <!-- Tipo filtro (solo per personalizzato) -->
+            <div id="filter-type-row" style="display:none; padding:0 20px; margin-bottom:14px;">
+                <label style="font-size:0.8em; color:#c9d1d9; font-weight:600; display:block; margin-bottom:6px;" data-i18n="filter_modal_type">Tipo filtro</label>
+                <select id="filter-modal-type" onchange="aggiornaCalcoloFiltro()" style="width:100%; background:#0d1117; color:#c9d1d9; border:1px solid #21293a; border-radius:6px; padding:8px 10px; font-size:0.9em;">
+                    <option value="none" data-i18n="filter_osc_none">Nessun filtro</option>
+                    <option value="dual" data-i18n="filter_osc_dual">Dual-band (Ha+OIII)</option>
+                    <option value="quad" data-i18n="filter_osc_quad">Quad-band</option>
+                </select>
+            </div>
+            <!-- Banda nm -->
+            <div style="padding:0 20px; margin-bottom:14px;">
+                <label style="font-size:0.8em; color:#c9d1d9; font-weight:600; display:flex; align-items:center; gap:4px; margin-bottom:6px;">
+                    <span data-i18n="filter_modal_bw">Banda totale</span><span style="color:#6e7a8a;">(nm)</span>
+                    <span class="info-icon" style="font-size:0.9em;" onmouseenter="mostraTooltip(this,'info_filter_bw')" onmouseleave="nascondiTooltip()">ℹ️</span>
+                </label>
+                <input type="number" id="filter-modal-bw" value="14" min="3" max="80" oninput="onBwManualInput()" style="width:100%; background:#0d1117; color:#c9d1d9; border:1px solid #21293a; border-radius:6px; padding:8px 10px; font-size:0.9em; box-sizing:border-box;">
+            </div>
+            <!-- Sensore camera — sincronizzato con FOV -->
+            <div style="padding:0 20px; margin-bottom:14px;">
+                <label style="font-size:0.8em; color:#c9d1d9; font-weight:600; display:flex; align-items:center; gap:4px; margin-bottom:6px;">
+                    <span data-i18n="filter_modal_sensor">Sensore camera</span>
+                    <span class="info-icon" style="font-size:0.9em;" onmouseenter="mostraTooltip(this,'info_filter_sensor')" onmouseleave="nascondiTooltip()">ℹ️</span>
+                </label>
+                <div id="filter-sensor-display" style="background:#0d1117; border:1px solid #21293a; border-radius:6px; padding:8px 12px; font-size:0.85em; color:#c9d1d9;">—</div>
+                <div id="filter-sensor-info" style="font-size:0.75em; color:#6e7a8a; margin-top:4px;"></div>
+            </div>
+            <!-- Nome NINA -->
+            <div style="padding:0 20px; margin-bottom:14px;">
+                <label style="font-size:0.8em; color:#c9d1d9; font-weight:600; display:flex; align-items:center; gap:4px; margin-bottom:6px;">
+                    <span data-i18n="nina_osc_filter_label">Nome filtro in N.I.N.A.</span>
+                    <span class="info-icon" style="font-size:0.9em;" onmouseenter="mostraTooltip(this,'nina_osc_filter_info')" onmouseleave="nascondiTooltip()">ℹ️</span>
+                </label>
+                <input type="text" id="nina-osc-filter-name-modal" placeholder="es. L-eXtreme"
+                       style="width:100%; background:#0d1117; color:#c49a3c; border:1px solid #c49a3c44; border-radius:6px; padding:8px 10px; font-size:0.9em; box-sizing:border-box;">
+            </div>
+            <!-- Risultato posa minima -->
+            <div style="margin:0 20px 16px; padding:12px 14px; background:#0d1117; border:1px solid #c49a3c44; border-radius:8px;">
+                <div style="font-size:0.75em; color:#6e7a8a; margin-bottom:6px;" data-i18n="filter_result_label">Posa minima consigliata</div>
+                <div style="display:flex; align-items:baseline; gap:8px; flex-wrap:wrap;">
+                    <span id="filter-tmin-result" style="font-size:1.8em; font-weight:800; color:#c49a3c;">—</span>
+                    <span style="font-size:0.85em; color:#6e7a8a;" id="filter-tmin-note"></span>
+                </div>
+                <div id="filter-fratio-warn" style="display:none; margin-top:6px; font-size:0.78em; color:#ffaa00;"></div>
+            </div>
+            <!-- Pulsanti -->
+            <div style="display:flex; justify-content:flex-end; gap:10px; padding:14px 20px; border-top:1px solid #21293a;">
+                <button onclick="chiudiModalFiltroOSC()" style="background:transparent; border:1px solid #21293a; border-radius:6px; padding:8px 18px; color:#6e7a8a; cursor:pointer; font-size:0.9em;" data-i18n="btn_cancel">Annulla</button>
+                <button onclick="applicaFiltroOSC()" style="background:#c49a3c; border:none; border-radius:6px; padding:8px 22px; color:#0d1117; font-weight:700; cursor:pointer; font-size:0.9em;" data-i18n="btn_apply">Applica</button>
+            </div>
+        </div>
+    </div>
     <!-- Banner aggiornamento SW -->
     <div id="sw-update-banner" style="
         display:none; position:fixed; bottom:20px; left:50%; transform:translateX(-50%);
@@ -1841,7 +2012,39 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
             font-size:18px; cursor:pointer; padding:0 2px; line-height:1;
         "><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-x"/></svg></button>
     </div>    <!-- ═══ MODAL SALVA TELESCOPIO CUSTOM ═══ -->
-    <div id="save-telescope-modal" class="modal">
+    <!-- Modal salva sensore custom -->
+    <div id="save-camera-modal" class="modal">
+        <div class="modal-content" style="max-width:400px;">
+            <span class="close-btn" onclick="document.getElementById('save-camera-modal').style.display='none'">&times;</span>
+            <h3 style="color:#c49a3c; margin-bottom:12px;">
+                📷 <span data-i18n="save_cam_title">Salva Sensore</span>
+            </h3>
+            <div id="save-camera-info" style="font-size:0.85em; color:#6e7a8a; margin-bottom:16px; background:#1c2230; padding:10px 14px; border-radius:8px; border-left:3px solid #c49a3c;"></div>
+            <input type="text" id="save-camera-name"
+                placeholder="Nome sensore (es. ASI2600MC)"
+                style="width:100%; padding:10px; border-radius:8px; border:1px solid #555; background:#1a1a1a; color:#fff; font-size:1em; margin-bottom:14px; box-sizing:border-box;"
+                onkeydown="if(event.key==='Enter') confermaSalvaCamera()">
+            <div style="display:flex; gap:10px;">
+                <button class="btn-smart" style="flex:1; background:transparent; border:1px solid #555; color:#6e7a8a;" onclick="document.getElementById('save-camera-modal').style.display='none'" data-i18n="save_tel_cancel">Annulla</button>
+                <button class="btn-smart" style="flex:2; background:linear-gradient(135deg,#c49a3c,#a07828);" onclick="confermaSalvaCamera()"><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-save"/></svg> <span data-i18n="save_tel_confirm">Salva</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal elimina sensore custom -->
+    <div id="delete-camera-modal" class="modal">
+        <div class="modal-content" style="max-width:460px;">
+            <span class="close-btn" onclick="document.getElementById('delete-camera-modal').style.display='none'">&times;</span>
+            <h3 style="color:#f44336; margin-bottom:12px;">
+                🗑️ <span data-i18n="del_cam_title">Elimina Sensore Salvato</span>
+            </h3>
+            <div id="delete-camera-list" style="display:flex; flex-direction:column; gap:8px; margin-bottom:16px;"></div>
+            <div id="delete-camera-empty" style="display:none; color:#6e7a8a; font-size:0.9em; text-align:center; padding:20px;" data-i18n="del_tel_empty">Nessun sensore personalizzato salvato.</div>
+            <button class="btn-smart" style="width:100%; background:transparent; border:1px solid #555; color:#6e7a8a;" onclick="document.getElementById('delete-camera-modal').style.display='none'" data-i18n="save_tel_cancel">Chiudi</button>
+        </div>
+    </div>
+
+        <div id="save-telescope-modal" class="modal">
         <div class="modal-content" style="max-width:420px;">
             <span class="close-btn" onclick="document.getElementById('save-telescope-modal').style.display='none'">&times;</span>
             <h2 style="border-bottom:1px solid #333; padding-bottom:12px; margin-bottom:16px; color:#c49a3c;">
@@ -1892,7 +2095,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                 <div style="color:#c49a3c;"><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-rocket"/></svg></div>
                 <div>
                     <div style="font-size:0.75em; color:#c49a3c; text-transform:uppercase; letter-spacing:1px; font-weight:700;" data-i18n="cl_update_label">Aggiornamento</div>
-                    <div style="font-size:1.25em; font-weight:800; color:#c9d1d9; letter-spacing:.5px;">AstroDashboard PRO <span style="color:#c49a3c;">v6.2</span></div>
+                    <div style="font-size:1.25em; font-weight:800; color:#c9d1d9; letter-spacing:.5px;">AstroDashboard PRO <span style="color:#c49a3c;">v6.3</span></div>
                 </div>
                 <button onclick="chiudiChangelog()" style="
                     margin-left:auto; background:transparent; border:none;
@@ -1908,6 +2111,37 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
             <!-- Changelog items -->
             <div style="display:flex; flex-direction:column; gap:10px;">
 
+                <!-- ── v6.3 ── -->
+                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #c49a3c; box-shadow:0 0 0 1px rgba(196,154,60,0.15);">
+                    <span style="flex-shrink:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c49a3c" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg></span>
+                    <div>
+                        <div style="font-weight:700; color:#c49a3c; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v63_nb_title">Filtri Narrowband OSC — Dual/Quad-Band</div>
+                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v63_nb_desc">Nuovo modal configurazione filtri narrowband OSC con database filtri commerciali (Optolong, Antlia, IDAS, Altair…). Calcolo fisico della posa minima basato su formula swamping: flusso Bortle × f-ratio × banda filtro × QE sensore × correzione blue-shift. Analisi strategica aggiornata per non suggerire filtri già attivi.</div>
+                    </div>
+                </div>
+                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #00c6ff;">
+                    <span style="flex-shrink:0;"><svg width="24" height="24" fill="currentColor" style="color:#00c6ff;"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M17 3.34a10 10 0 1 1 -14.995 8.984l-.005 -.324l.005 -.324a10 10 0 0 1 14.995 -8.336zm-1.293 5.953a1 1 0 0 0 -1.32 -.083l-.094 .083l-3.293 3.292l-1.293 -1.292l-.094 -.083a1 1 0 0 0 -1.403 1.403l.083 .094l2 2l.094 .083a1 1 0 0 0 1.226 0l.094 -.083l4 -4l.083 -.094a1 1 0 0 0 -.083 -1.32z"/></svg></span>
+                    <div>
+                        <div style="font-weight:700; color:#c9d1d9; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v63_sensor_title">Salvataggio sensore personalizzato + database corretto</div>
+                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v63_sensor_desc">Pulsanti Salva/Elimina per il sensore camera nel FOV (come per i telescopi). Database PlayerOne completamente corretto (Saturn→IMX533, Poseidon→IMX571, Artemis-C→IMX294/M→IMX492, Zeus→IMX455). Aggiunta QHY miniCAM8 (IMX585). Sensore sincronizzato con il modal filtri narrowband.</div>
+                    </div>
+                </div>
+                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #00c6ff;">
+                    <span style="flex-shrink:0;"><svg width="24" height="24" fill="currentColor" style="color:#00c6ff;"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M17 3.34a10 10 0 1 1 -14.995 8.984l-.005 -.324l.005 -.324a10 10 0 0 1 14.995 -8.336zm-1.293 5.953a1 1 0 0 0 -1.32 -.083l-.094 .083l-3.293 3.292l-1.293 -1.292l-.094 -.083a1 1 0 0 0 -1.403 1.403l.083 .094l2 2l.094 .083a1 1 0 0 0 1.226 0l.094 -.083l4 -4l.083 -.094a1 1 0 0 0 -.083 -1.32z"/></svg></span>
+                    <div>
+                        <div style="font-weight:700; color:#c9d1d9; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v63_vis_title">Warning visibilità target + fix finestra sessione</div>
+                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v63_vis_desc">Quando il target non è visibile (mai sopra 30° o già tramontato), il campo Fine Sessione diventa rosso con avviso. La finestra viene impostata a zero evitando il calcolo errato di 24h. Genera Sequenza Ottimale bloccato con messaggio esplicativo.</div>
+                    </div>
+                </div>
+                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #00c6ff;">
+                    <span style="flex-shrink:0;"><svg width="24" height="24" fill="currentColor" style="color:#00c6ff;"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M17 3.34a10 10 0 1 1 -14.995 8.984l-.005 -.324l.005 -.324a10 10 0 0 1 14.995 -8.336zm-1.293 5.953a1 1 0 0 0 -1.32 -.083l-.094 .083l-3.293 3.292l-1.293 -1.292l-.094 -.083a1 1 0 0 0 -1.403 1.403l.083 .094l2 2l.094 .083a1 1 0 0 0 1.226 0l.094 -.083l4 -4l.083 -.094a1 1 0 0 0 -.083 -1.32z"/></svg></span>
+                    <div>
+                        <div style="font-weight:700; color:#c9d1d9; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v63_db_title">M43 nel database + fix ricerca Messier</div>
+                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v63_db_desc">Aggiunta NGC 1982 (Nebulosa De Mairan / M43). Fix ricerca Messier: query Wikidata ora usa "Messier N" invece di "MN" — elimina risultati incongrui come autostrade ungheresi. HDR automatico attivato per M42 (Trapezio).</div>
+                    </div>
+                </div>
+
+                <!-- ── v6.2 (precedente) ── -->
                 <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #c49a3c; box-shadow:0 0 0 1px rgba(196,154,60,0.15);">
                     <span style="flex-shrink:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c49a3c" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5M2 17l10 5 10-5M2 12l10 5 10-5"/></svg></span>
                     <div>
@@ -2054,14 +2288,14 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     font-size:0.95em; font-weight:700; padding:14px 32px;
                     cursor:pointer; letter-spacing:.3px; text-align:center;
                     box-shadow:0 4px 16px rgba(196,154,60,0.25);
-                ">Inizia a usare v6.2 🚀</button>
+                "></button>
             </div>
         </div>
     </div>
 
     <script>
         (function() {
-            const CURRENT_VERSION = '6.2';
+            const CURRENT_VERSION = '6.3';
             const STORAGE_KEY = 'ad_last_version';
 
             function mostraChangelogManuale() {

@@ -1084,13 +1084,207 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.es.report_download_ok = "¡Informe guardado con éxito!";
         i18n.zh.report_download_ok = "报告保存成功！";
 
+        // Filtro narrowband OSC
+        i18n.it.info_filter_type = "Seleziona il filtro narrowband montato sulla camera OSC.<br><br><b>Dual-Band (Ha+OIII):</b> Passa solo Hα (656nm) e OIII (500nm). Ideale per nebulose a emissione sotto cieli inquinati. Richiede pose lunghe (10–25 min).<br><br><b>Quad-Band:</b> Aggiunge SII e Hβ al dual-band. Più segnale per nebulose ricche di zolfo. Riduzione fondo cielo leggermente inferiore al dual-band.<br><br><b>Attenzione:</b> questi filtri non funzionano su galassie e nebulose a riflessione.";
+        i18n.en.info_filter_type = "Select the narrowband filter mounted on your OSC camera.<br><br><b>Dual-Band (Ha+OIII):</b> Passes only Hα (656nm) and OIII (500nm). Ideal for emission nebulae under light-polluted skies. Requires long exposures (10–25 min).<br><br><b>Quad-Band:</b> Adds SII and Hβ to dual-band. More signal for sulphur-rich nebulae. Slightly lower sky rejection than dual-band.<br><br><b>Warning:</b> these filters do not work on galaxies and reflection nebulae.";
+        i18n.es.info_filter_type = "Selecciona el filtro de banda estrecha montado en tu cámara OSC.<br><br><b>Dual-Band (Ha+OIII):</b> Solo pasa Hα (656nm) y OIII (500nm). Ideal para nebulosas de emisión bajo cielos contaminados. Requiere poses largas (10–25 min).<br><br><b>Quad-Band:</b> Añade SII y Hβ al dual-band. Más señal para nebulosas ricas en azufre.<br><br><b>Atención:</b> estos filtros no funcionan en galaxias y nebulosas de reflexión.";
+        i18n.zh.info_filter_type = "选择安装在OSC相机上的窄带滤镜。<br><br><b>双频带 (Ha+OIII)：</b>仅通过Hα(656nm)和OIII(500nm)。适合在光污染天空下拍摄发射星云，需要长时间曝光(10-25分钟)。<br><br><b>四频带：</b>在双频带基础上增加SII和Hβ，对富含硫的星云信号更强。<br><br><b>注意：</b>这些滤镜对星系和反射星云无效。";
+
+        i18n.it.filter_type_none = "Nessun filtro NB";
+        i18n.en.filter_type_none = "No NB filter";
+        i18n.es.filter_type_none = "Sin filtro NB";
+        i18n.zh.filter_type_none = "无窄带滤镜";
+
+        i18n.it.filter_type_dual = "Dual-band (Ha+OIII)";
+        i18n.en.filter_type_dual = "Dual-band (Ha+OIII)";
+        i18n.es.filter_type_dual = "Dual-banda (Ha+OIII)";
+        i18n.zh.filter_type_dual = "双频带 (Ha+OIII)";
+
+        i18n.it.filter_type_quad = "Quad-band (Ha+OIII+SII+Hβ)";
+        i18n.en.filter_type_quad = "Quad-band (Ha+OIII+SII+Hβ)";
+        i18n.es.filter_type_quad = "Cuatro bandas (Ha+OIII+SII+Hβ)";
+        i18n.zh.filter_type_quad = "四频带 (Ha+OIII+SII+Hβ)";
+
+        // Filtro OSC dual/quad-band
+        i18n.it.filter_osc_none = "Nessun filtro";
+        i18n.en.filter_osc_none = "No filter";
+        i18n.es.filter_osc_none = "Sin filtro";
+        i18n.zh.filter_osc_none = "无滤镜";
+
+        i18n.it.filter_osc_dual = "Dual-band (Ha+OIII)";
+        i18n.en.filter_osc_dual = "Dual-band (Ha+OIII)";
+        i18n.es.filter_osc_dual = "Doble banda (Ha+OIII)";
+        i18n.zh.filter_osc_dual = "双波段 (Ha+OIII)";
+
+        i18n.it.filter_osc_quad = "Quad-band (Ha+OIII+SII+Hβ)";
+        i18n.en.filter_osc_quad = "Quad-band (Ha+OIII+SII+Hβ)";
+        i18n.es.filter_osc_quad = "Cuatro bandas (Ha+OIII+SII+Hβ)";
+        i18n.zh.filter_osc_quad = "四波段 (Ha+OIII+SII+Hβ)";
+
+
+        i18n.it.info_filter_osc = "Filtri Narrowband OSC\n\nDual-band: passa solo Ha e OIII. Riduce il fondo cielo del 94-95%. Ideale per nebulose a emissione da cieli urbani. Richiede pose lunghe (10-20 min). Non usare su galassie.\n\nQuad-band: aggiunge SII e H-beta. Utile per nebulose con forte emissione SII. Riduzione fondo cielo leggermente inferiore al dual-band.\n\nIl calcolo del tempo di posa si aggiorna automaticamente.";
+        i18n.en.info_filter_osc = "OSC Narrowband Filters\n\nDual-band: passes only Ha and OIII. Reduces sky background by 94-95%. Ideal for emission nebulae from light-polluted skies. Requires long exposures (10-20 min). Do not use on galaxies.\n\nQuad-band: adds SII and H-beta bands. Useful for nebulae with strong SII emission. Sky reduction slightly lower than dual-band.\n\nExposure time is updated automatically.";
+        i18n.es.info_filter_osc = "Filtros Narrowband OSC\n\nDoble banda: deja pasar solo Ha y OIII. Reduce el fondo del cielo un 94-95%. Ideal para nebulosas de emision desde cielos urbanos. Requiere poses largas (10-20 min). No usar en galaxias.\n\nCuatro bandas: anade SII y H-beta. Util para nebulosas con fuerte emision SII. Reduccion del fondo ligeramente menor.\n\nEl tiempo de exposicion se actualiza automaticamente.";
+        i18n.zh.info_filter_osc = "OSC窄带滤镜\n\n双波段：仅透过Ha和OIII。将背景降低94-95%。适合城市天空下的发射星云。需要长曝光(10-20分钟)。不适用于星系。\n\n四波段：增加SII和H-beta。适用于SII发射强烈的星云。背景降低效果略低。\n\n曝光时间会自动更新。";
+
+                i18n.it.warn_not_visible  = "Attenzione: questo oggetto non raggiungerà i 30° sull'orizzonte stanotte. Scegli una notte diversa o un altro target.";
+        i18n.en.warn_not_visible  = "Warning: this object will not reach 30° above the horizon tonight. Choose a different night or target.";
+        i18n.es.warn_not_visible  = "Atención: este objeto no alcanzará los 30° sobre el horizonte esta noche. Elige otra noche u otro objetivo.";
+        i18n.zh.warn_not_visible  = "警告：今晚该目标不会升至地平线30°以上。请选择其他夜晚或目标。";
+
+        i18n.it.warn_already_set  = "Attenzione: questo oggetto non è più visibile a quest'ora — è già tramontato sotto i 30°. La finestra di ripresa di stanotte è terminata.";
+        i18n.en.warn_already_set  = "Warning: this object is no longer visible at this time — it has already set below 30°. Tonight's imaging window has ended.";
+        i18n.es.warn_already_set  = "Atención: este objeto ya no es visible a esta hora — ya se ha puesto por debajo de 30°. La ventana de captura de esta noche ha terminado.";
+        i18n.zh.warn_already_set  = "警告：此目标当前已不可见——已降至30°以下。今晚的拍摄窗口已结束。";
+
+        i18n.it.nina_osc_filter_label = "Nome filtro in N.I.N.A.";
+        i18n.en.nina_osc_filter_label = "Filter name in N.I.N.A.";
+        i18n.es.nina_osc_filter_label = "Nombre del filtro en N.I.N.A.";
+        i18n.zh.nina_osc_filter_label = "N.I.N.A.中的滤镜名称";
+
+        i18n.it.nina_osc_filter_info = "Inserisci il nome esatto del filtro dual/quad-band come appare nella tua ruota portafiltri in N.I.N.A. (es. \"L-eXtreme\", \"ALP-T\", \"L-Ultimate\"). Se lasci vuoto viene usato \"Dual-band\" o \"Quad-band\" come default. Il nome viene inserito nel blocco SwitchFilter della sequenza esportata.";
+        i18n.en.nina_osc_filter_info = "Enter the exact name of your dual/quad-band filter as it appears in your N.I.N.A. filter wheel (e.g. \"L-eXtreme\", \"ALP-T\", \"L-Ultimate\"). If left empty, \"Dual-band\" or \"Quad-band\" is used as default. The name is inserted in the SwitchFilter block of the exported sequence.";
+        i18n.es.nina_osc_filter_info = "Introduce el nombre exacto del filtro dual/quad-band tal como aparece en tu rueda de filtros de N.I.N.A. (p.ej. \"L-eXtreme\", \"ALP-T\"). Si se deja vacío se usa \"Dual-band\" o \"Quad-band\" por defecto.";
+        i18n.zh.nina_osc_filter_info = "输入双/四波段滤镜在N.I.N.A.滤镜轮中显示的确切名称（如\"L-eXtreme\"、\"ALP-T\"）。留空则默认使用\"Dual-band\"或\"Quad-band\"。";
+
+        i18n.it.filter_modal_title   = "Configurazione Filtro Narrowband";
+        i18n.en.filter_modal_title   = "Narrowband Filter Configuration";
+        i18n.es.filter_modal_title   = "Configuración Filtro Narrowband";
+        i18n.zh.filter_modal_title   = "窄带滤镜配置";
+
+        i18n.it.filter_modal_context = "Parametri sessione corrente";
+        i18n.en.filter_modal_context = "Current session parameters";
+        i18n.es.filter_modal_context = "Parámetros de sesión actuales";
+        i18n.zh.filter_modal_context = "当前会话参数";
+
+        i18n.it.filter_ctx_bortle    = "Bortle";
+        i18n.en.filter_ctx_bortle    = "Bortle";
+        i18n.es.filter_ctx_bortle    = "Bortle";
+        i18n.zh.filter_ctx_bortle    = "博特尔";
+
+        i18n.it.filter_ctx_sensor    = "Sensore";
+        i18n.en.filter_ctx_sensor    = "Sensor";
+        i18n.es.filter_ctx_sensor    = "Sensor";
+        i18n.zh.filter_ctx_sensor    = "传感器";
+
+        i18n.it.filter_db_label      = "Seleziona filtro dal database";
+        i18n.en.filter_db_label      = "Select filter from database";
+        i18n.es.filter_db_label      = "Seleccionar filtro de la base de datos";
+        i18n.zh.filter_db_label      = "从数据库选择滤镜";
+
+        i18n.it.filter_modal_type    = "Tipo filtro";
+        i18n.en.filter_modal_type    = "Filter type";
+        i18n.es.filter_modal_type    = "Tipo de filtro";
+        i18n.zh.filter_modal_type    = "滤镜类型";
+
+        i18n.it.filter_modal_bw      = "Banda totale (nm)";
+        i18n.en.filter_modal_bw      = "Total bandwidth (nm)";
+        i18n.es.filter_modal_bw      = "Ancho de banda total (nm)";
+        i18n.zh.filter_modal_bw      = "总带宽 (nm)";
+
+        i18n.it.filter_modal_sensor  = "Sensore camera";
+        i18n.en.filter_modal_sensor  = "Camera sensor";
+        i18n.es.filter_modal_sensor  = "Sensor de la cámara";
+        i18n.zh.filter_modal_sensor  = "相机传感器";
+
+        i18n.it.filter_result_label  = "Posa minima consigliata";
+        i18n.en.filter_result_label  = "Minimum recommended exposure";
+        i18n.es.filter_result_label  = "Exposición mínima recomendada";
+        i18n.zh.filter_result_label  = "建议最短曝光时间";
+
+        i18n.it.filter_warn_fratio   = "A f/4 o inferiore con filtri stretti (\u22647nm) la perdita di efficienza per blue-shift può superare il 10%. Considera un filtro con banda più larga.";
+        i18n.en.filter_warn_fratio   = "At f/4 or faster with narrow filters (\u22647nm), blue-shift efficiency loss can exceed 10%. Consider a wider bandwidth filter.";
+        i18n.es.filter_warn_fratio   = "A f/4 o más rápido con filtros estrechos (\u22647nm), la pérdida por desplazamiento azul puede superar el 10%. Considera un filtro de mayor ancho de banda.";
+        i18n.zh.filter_warn_fratio   = "在f/4或更快的光学系统中使用窄带滤镜（\u22647nm），蓝移导致的效率损失可能超过10%。建议使用更宽带宽的滤镜。";
+
+        i18n.it.info_filter_bw       = "La larghezza di banda totale è la somma delle FWHM di tutte le bande del filtro. Es: un dual-band 7+7nm ha banda totale 14nm. Più è stretta, più il fondo cielo viene tagliato ma servono pose più lunghe.";
+        i18n.en.info_filter_bw       = "Total bandwidth is the sum of FWHM of all filter bands. E.g. a dual-band 7+7nm has 14nm total. Narrower = more sky cut but longer exposures needed.";
+        i18n.es.info_filter_bw       = "El ancho de banda total es la suma de los FWHM de todas las bandas del filtro. Ej: un dual-band 7+7nm tiene 14nm total. Más estrecho = más cielo cortado pero poses más largas.";
+        i18n.zh.info_filter_bw       = "总带宽是滤镜所有波段FWHM之和。例如双波段7+7nm总带宽为14nm。越窄=背景抑制越强，但需要更长曝光。";
+
+        i18n.it.info_filter_sensor   = "Seleziona il sensore della tua camera OSC. Vengono caricati automaticamente il read noise e la dimensione del pixel per il calcolo della posa minima. I valori si riferiscono al gain unity tipico.";
+        i18n.en.info_filter_sensor   = "Select your OSC camera sensor. Read noise and pixel size are loaded automatically for the minimum exposure calculation. Values refer to typical unity gain.";
+        i18n.es.info_filter_sensor   = "Selecciona el sensor de tu cámara OSC. El ruido de lectura y el tamaño de píxel se cargan automáticamente para el cálculo de la exposición mínima.";
+        i18n.zh.info_filter_sensor   = "选择您的OSC相机传感器。读出噪声和像素尺寸将自动加载用于计算最短曝光时间。数值基于典型统一增益。";
+
+        i18n.it.btn_cancel           = "Annulla";
+        i18n.en.btn_cancel           = "Cancel";
+        i18n.es.btn_cancel           = "Cancelar";
+        i18n.zh.btn_cancel           = "取消";
+
+        i18n.it.btn_apply            = "Applica";
+        i18n.en.btn_apply            = "Apply";
+        i18n.es.btn_apply            = "Aplicar";
+        i18n.zh.btn_apply            = "应用";
+
+        i18n.it.filter_osc_custom    = "Personalizzato";
+        i18n.en.filter_osc_custom    = "Custom";
+        i18n.es.filter_osc_custom    = "Personalizado";
+        i18n.zh.filter_osc_custom    = "自定义";
+
+        i18n.it.info_filter_modal    = "Seleziona il tuo filtro dal database per compilare automaticamente tipo e larghezza di banda. Se modifichi i nm manualmente il filtro passa automaticamente a Personalizzato e dovrai indicare il tipo (dual o quad). Il sensore camera aggiorna anche il campo pixel nel FOV. La posa minima in fondo al modal si aggiorna in tempo reale e indica il tempo minimo necessario per superare il rumore di lettura del sensore con il filtro e le condizioni selezionate.";
+        i18n.en.info_filter_modal    = "Select your filter from the database to automatically fill in the type and bandwidth. If you manually change the nm value, the filter switches to Custom and you will need to specify the type (dual or quad). The camera sensor also updates the pixel field in the FOV section. The minimum exposure at the bottom updates in real time and shows the minimum time needed to overcome the sensor read noise with the selected filter and conditions.";
+        i18n.es.info_filter_modal    = "Selecciona tu filtro de la base de datos para rellenar automáticamente el tipo y el ancho de banda. Si modificas los nm manualmente, el filtro pasa a Personalizado y deberás indicar el tipo (dual o quad). El sensor de cámara también actualiza el campo de píxeles en el FOV. La exposición mínima se actualiza en tiempo real.";
+        i18n.zh.info_filter_modal    = "从数据库选择滤镜可自动填写类型和带宽。手动修改nm值后，滤镜将切换为自定义，需要指定类型（双波段或四波段）。相机传感器选择同步更新FOV像素字段。底部最短曝光时间实时更新。";
+
+        i18n.it.save_cam_title = "Salva Sensore";
+        i18n.en.save_cam_title = "Save Sensor";
+        i18n.es.save_cam_title = "Guardar Sensor";
+        i18n.zh.save_cam_title = "保存传感器";
+
+        i18n.it.del_cam_title  = "Elimina Sensore Salvato";
+        i18n.en.del_cam_title  = "Delete Saved Sensor";
+        i18n.es.del_cam_title  = "Eliminar Sensor Guardado";
+        i18n.zh.del_cam_title  = "删除已保存传感器";
+
+        // ── Changelog v6.3 ──────────────────────────────────────────
+        i18n.it.cl_v63_nb_title     = "Filtri Narrowband OSC — Dual/Quad-Band";
+        i18n.en.cl_v63_nb_title     = "OSC Narrowband Filters — Dual/Quad-Band";
+        i18n.es.cl_v63_nb_title     = "Filtros Narrowband OSC — Dual/Quad-Band";
+        i18n.zh.cl_v63_nb_title     = "OSC窄带滤镜 — 双/四波段";
+
+        i18n.it.cl_v63_nb_desc      = "Nuovo modal configurazione filtri narrowband OSC con database filtri commerciali (Optolong, Antlia, IDAS, Altair…). Calcolo fisico della posa minima basato su formula swamping: flusso Bortle × f-ratio × banda filtro × QE sensore × correzione blue-shift. Analisi strategica aggiornata.";
+        i18n.en.cl_v63_nb_desc      = "New OSC narrowband filter configuration modal with commercial filter database (Optolong, Antlia, IDAS, Altair…). Physical minimum exposure calculation based on swamping formula: Bortle flux × f-ratio × filter bandwidth × sensor QE × blue-shift correction. Updated strategic analysis.";
+        i18n.es.cl_v63_nb_desc      = "Nuevo modal de configuración de filtros narrowband OSC con base de datos de filtros comerciales (Optolong, Antlia, IDAS, Altair…). Cálculo físico de la exposición mínima basado en la fórmula swamping. Análisis estratégico actualizado.";
+        i18n.zh.cl_v63_nb_desc      = "全新OSC窄带滤镜配置弹窗，含商业滤镜数据库（Optolong、Antlia、IDAS、Altair等）。基于swamping物理公式计算最短曝光时间：博特尔通量×焦比×滤镜带宽×传感器QE×蓝移修正。战略分析已更新。";
+
+        i18n.it.cl_v63_sensor_title = "Salvataggio sensore + database corretto";
+        i18n.en.cl_v63_sensor_title = "Sensor save + corrected database";
+        i18n.es.cl_v63_sensor_title = "Guardar sensor + base de datos corregida";
+        i18n.zh.cl_v63_sensor_title = "保存传感器 + 数据库修正";
+
+        i18n.it.cl_v63_sensor_desc  = "Pulsanti Salva/Elimina per sensore camera nel FOV. Database PlayerOne completamente corretto (Saturn→IMX533, Poseidon→IMX571, Artemis-C→IMX294/M→IMX492, Zeus→IMX455). Aggiunta QHY miniCAM8 (IMX585). Sensore sincronizzato con modal filtri.";
+        i18n.en.cl_v63_sensor_desc  = "Save/Delete buttons for camera sensor in FOV. PlayerOne database fully corrected (Saturn→IMX533, Poseidon→IMX571, Artemis-C→IMX294/M→IMX492, Zeus→IMX455). Added QHY miniCAM8 (IMX585). Sensor synced with filter modal.";
+        i18n.es.cl_v63_sensor_desc  = "Botones Guardar/Eliminar para el sensor de cámara en el FOV. Base de datos PlayerOne completamente corregida. Añadida QHY miniCAM8 (IMX585). Sensor sincronizado con el modal de filtros.";
+        i18n.zh.cl_v63_sensor_desc  = "FOV中相机传感器的保存/删除按钮。PlayerOne数据库完全修正（Saturn→IMX533，Poseidon→IMX571，Artemis-C→IMX294/M→IMX492，Zeus→IMX455）。新增QHY miniCAM8（IMX585）。传感器与滤镜弹窗同步。";
+
+        i18n.it.cl_v63_vis_title    = "Warning visibilità target + fix finestra sessione";
+        i18n.en.cl_v63_vis_title    = "Target visibility warning + session window fix";
+        i18n.es.cl_v63_vis_title    = "Aviso visibilidad objetivo + corrección ventana";
+        i18n.zh.cl_v63_vis_title    = "目标可见性警告 + 会话窗口修复";
+
+        i18n.it.cl_v63_vis_desc     = "Quando il target non è visibile (mai sopra 30° o già tramontato), Fine Sessione diventa rosso con avviso. Finestra a zero evita il calcolo errato di 24h. Genera Sequenza Ottimale bloccato con messaggio esplicativo.";
+        i18n.en.cl_v63_vis_desc     = "When the target is not visible (never above 30° or already set), End Session turns red with a warning. Zero window prevents the erroneous 24h calculation. Generate Optimal Sequence blocked with explanatory message.";
+        i18n.es.cl_v63_vis_desc     = "Cuando el objetivo no es visible, Fin de Sesión se vuelve rojo con aviso. Ventana cero evita el cálculo erróneo de 24h. Generar Secuencia Óptima bloqueado con mensaje explicativo.";
+        i18n.zh.cl_v63_vis_desc     = "当目标不可见时，结束时间变红并显示警告。零窗口防止错误的24小时计算。生成最优序列被阻止并显示说明信息。";
+
+        i18n.it.cl_v63_db_title     = "M43 nel database + fix ricerca Messier";
+        i18n.en.cl_v63_db_title     = "M43 in database + Messier search fix";
+        i18n.es.cl_v63_db_title     = "M43 en la base de datos + fix búsqueda Messier";
+        i18n.zh.cl_v63_db_title     = "M43加入数据库 + Messier搜索修复";
+
+        i18n.it.cl_v63_db_desc      = "Aggiunta NGC 1982 (Nebulosa De Mairan / M43). Fix ricerca Messier: query Wikidata usa \"Messier N\" invece di \"MN\" — elimina risultati incongrui come autostrade ungheresi. HDR automatico attivato per M42 (Trapezio, 10s).";
+        i18n.en.cl_v63_db_desc      = "Added NGC 1982 (De Mairan's Nebula / M43). Messier search fix: Wikidata query now uses \"Messier N\" instead of \"MN\" — eliminates incongruous results like Hungarian motorways. Automatic HDR activated for M42 (Trapezium, 10s).";
+        i18n.es.cl_v63_db_desc      = "Añadida NGC 1982 (Nebulosa De Mairan / M43). Fix búsqueda Messier: la consulta Wikidata ahora usa \"Messier N\" — elimina resultados incongruentes como autopistas húngaras. HDR automático activado para M42 (Trapezoide, 10s).";
+        i18n.zh.cl_v63_db_desc      = "新增NGC 1982（德·迈兰星云/M43）。Messier搜索修复：Wikidata查询现使用\"Messier N\"而非\"MN\"——消除如匈牙利高速公路等不相关结果。M42（四边形星团，10秒）自动启用HDR。";
+
         // ⚠️ AGGIORNARE VERSIONE QUI quando si rilascia una nuova versione:
         // cl_close_btn = testo del pulsante nel modal changelog (NON è hardcoded in index.html)
         // Aggiornare anche: title tag, badge navbar (>vX.X</button>), landing (>vX.X</span>), modal badge, pulsante "Inizia a usare" in index.html
-        i18n.it.cl_close_btn = "Inizia a usare v6.2 🚀";
-        i18n.en.cl_close_btn = "Start using v6.2 🚀";
-        i18n.es.cl_close_btn = "Empezar a usar v6.2 🚀";
-        i18n.zh.cl_close_btn = "开始使用 v6.2 🚀";
+        i18n.it.cl_close_btn = "Inizia a usare v6.3 🚀";
+        i18n.en.cl_close_btn = "Start using v6.3 🚀";
+        i18n.es.cl_close_btn = "Empezar a usar v6.3 🚀";
+        i18n.zh.cl_close_btn = "开始使用 v6.3 🚀";
 
         i18n.it.cl1_title           = "Database telescopi e sensori ampliato";
         i18n.en.cl1_title           = "Expanded telescope and sensor database";

@@ -165,7 +165,15 @@
             
             // --- NORMALIZZATORE CATALOGHI (AIUTA SIMBAD A CAPIRE I FORMATI) ---
             let q = rawQ;
-            if (/^sh\s*2[-\s]*(\d+)$/i.test(q)) q = q.replace(/^sh\s*2[-\s]*(\d+)$/i, "Sh2-$1");
+            // Normalizzazione Messier: M43 → "Messier 43" per Wikidata (evita ambiguità con strade ecc.)
+            let _isMessier = /^m\s*(\d+)$/i.test(q.trim());
+            let _messierWdQuery = null; // query alternativa per Wikidata se è un oggetto Messier
+            if (_isMessier) {
+                let _mn = q.trim().replace(/^m\s*/i, '');
+                _messierWdQuery = "Messier " + _mn; // es. "Messier 43" — non ambiguo su Wikidata
+                q = "M " + _mn; // formato SIMBAD
+            }
+            else if (/^sh\s*2[-\s]*(\d+)$/i.test(q)) q = q.replace(/^sh\s*2[-\s]*(\d+)$/i, "Sh2-$1");
             else if (/^vdb[-\s]*(\d+)$/i.test(q)) q = q.replace(/^vdb[-\s]*(\d+)$/i, "VdB $1");
             else if (/^(lbn|ldn)[-\s]*(\d+)$/i.test(q)) q = q.replace(/^(lbn|ldn)[-\s]*(\d+)$/i, (m, p1, p2) => p1.toUpperCase() + " " + p2);
             else if (/^(ngc|ic)[-\s]*(\d+)$/i.test(q)) q = q.replace(/^(ngc|ic)[-\s]*(\d+)$/i, (m, p1, p2) => p1.toUpperCase() + " " + p2);
@@ -269,17 +277,29 @@
                     }
 
                     // STEP 1 — Wikidata: cerca entità per nome e ottieni descrizione + sitelinks
-                    fetch(`https://www.wikidata.org/w/api.php?action=wbsearchentities&search=${encodeURIComponent(qClean)}&language=en&type=item&format=json&origin=*&limit=3`)
+                    // Per oggetti Messier usa "Messier N" per evitare ambiguità (es. M43 = autostrada ungherese)
+                    let _wdSearchTerm = (_messierWdQuery) ? _messierWdQuery : qClean;
+                    fetch(`https://www.wikidata.org/w/api.php?action=wbsearchentities&search=${encodeURIComponent(_wdSearchTerm)}&language=en&type=item&format=json&origin=*&limit=5`)
                     .then(r=>r.json()).then(wd=>{
                         let entityId = null;
                         if (wd.search && wd.search.length > 0) {
-                            // Prendi la prima entità il cui label o alias corrisponde
-                            for (let e of wd.search) {
-                                let lbl = (e.label||'').toLowerCase().replace(/[\s\-_]/g,'');
-                                let qn  = qClean.toLowerCase().replace(/[\s\-_]/g,'');
-                                if (lbl===qn || lbl.includes(qn) || qn.includes(lbl)) { entityId = e.id; break; }
+                            // Per oggetti Messier: filtra entità astronomiche (nebula, galaxy, cluster, star)
+                            if (_messierWdQuery) {
+                                let astroKeywords = ['nebul','galaxy','galax','cluster','star','nebula','astronomic','messier','ngc'];
+                                for (let e of wd.search) {
+                                    let desc = ((e.description||'') + ' ' + (e.label||'')).toLowerCase();
+                                    if (astroKeywords.some(k => desc.includes(k))) { entityId = e.id; break; }
+                                }
                             }
-                            if (!entityId) entityId = wd.search[0].id; // primo risultato come fallback
+                            // Fallback: prima entità con label corrispondente
+                            if (!entityId) {
+                                for (let e of wd.search) {
+                                    let lbl = (e.label||'').toLowerCase().replace(/[\s\-_]/g,'');
+                                    let qn  = (_messierWdQuery||qClean).toLowerCase().replace(/[\s\-_]/g,'').replace('messier','m');
+                                    if (lbl===qn || lbl.includes(qn) || qn.includes(lbl)) { entityId = e.id; break; }
+                                }
+                            }
+                            if (!entityId) entityId = wd.search[0].id;
                         }
 
                         if (!entityId) {

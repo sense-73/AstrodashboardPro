@@ -241,8 +241,42 @@
                 _rawEnd = new Date(lastAbove30.getTime());
             }
 
-            document.getElementById('time-start').value = ft(_rawStart);
-            document.getElementById('time-end').value   = ft(_rawEnd);
+            // ── Helper: applica stile warning al campo time-end ────
+            function setTimeEndWarning(show, msg) {
+                let inp = document.getElementById('time-end');
+                let warn = document.getElementById('time-end-warning');
+                let topWarn = document.getElementById('session-visibility-warning');
+                if (show) {
+                    if (inp) { inp.value = ''; inp.style.borderColor = '#ff6b6b'; inp.style.color = '#ff6b6b'; inp.placeholder = '--:--'; }
+                    if (warn) { warn.style.display = 'block'; warn.innerHTML = '⚠️ ' + msg; }
+                    if (topWarn) { topWarn.style.display = 'block'; topWarn.innerHTML = '⚠️ ' + msg; }
+                } else {
+                    if (inp) { inp.style.borderColor = ''; inp.style.color = ''; }
+                    if (warn) { warn.style.display = 'none'; warn.innerHTML = ''; }
+                    if (topWarn) { topWarn.style.display = 'none'; }
+                }
+            }
+
+            // ── Warning visibilità (solo informativo, non blocca) ───
+            // Caso 1: oggetto non raggiunge mai 30° — finestra zero, stessa ora
+            if (!firstAbove30 && !lastAbove30) {
+                setTimeEndWarning(true, t('warn_not_visible'));
+                document.getElementById('time-start').value = ft(nS);
+                document.getElementById('time-end').value   = ft(nS);
+            }
+            // Caso 2: oggetto già tramontato — finestra zero, stessa ora su entrambi
+            else if (_rawStart >= _rawEnd) {
+                setTimeEndWarning(true, t('warn_already_set'));
+                let _fallback = lastAbove30 ? ft(lastAbove30) : ft(nS);
+                document.getElementById('time-start').value = _fallback;
+                document.getElementById('time-end').value   = _fallback;
+            }
+            // Caso 3: finestra valida — rimuovi warning
+            else {
+                setTimeEndWarning(false, '');
+                document.getElementById('time-start').value = ft(_rawStart);
+                document.getElementById('time-end').value   = ft(_rawEnd);
+            }
 
             // Generazione Mappa Stellare
             if (!aladinSkyMap) {

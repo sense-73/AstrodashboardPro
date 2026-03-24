@@ -422,6 +422,14 @@ function aggiungiNotte() {
                         : document.getElementById(`nina-name-${pid}`);
                     ninaName = nameEl ? nameEl.value.trim() : pid;
                     if (!ninaName) ninaName = pid; // fallback
+                } else {
+                    // OSC con filtro dual/quad: usa il nome filtro OSC
+                    let filterOscType = (document.getElementById('filter-osc-type')||{value:'none'}).value;
+                    if (filterOscType !== 'none') {
+                        let nameEl = document.getElementById('pro-nina-osc-filter-name') || document.getElementById('nina-osc-filter-name');
+                        ninaName = (nameEl && nameEl.value.trim()) ? nameEl.value.trim()
+                            : (filterOscType === 'dual' ? 'Dual-band' : 'Quad-band');
+                    }
                 }
 
                 // Gain/Offset: PRO legge dalla griglia PRO, SMART usa default -1

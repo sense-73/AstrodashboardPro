@@ -90,16 +90,20 @@
             { nome: "QHY600M/C (FF)",                  w: 36.0,  h: 24.0,  p: 3.76 },
             { nome: "QHY128C (APS-C Canon)",           w: 22.3,  h: 14.9,  p: 4.3  },
             { nome: "QHY367C (FF)",                    w: 35.8,  h: 23.9,  p: 4.88 },
+            { nome: "QHY miniCAM8M/C (IMX585)",         w: 11.14, h:  6.26, p: 2.9  }, // 1/1.2" — AGGIUNTO
 
             // ── PlayerOne ────────────────────────────────────────────────────
-            { nome: "PlayerOne Mars-C II (IMX662)",    w:  7.68, h:  4.32, p: 2.9  },
-            { nome: "PlayerOne Neptune-C II (IMX464)", w:  9.55, h:  7.17, p: 2.9  },
-            { nome: "PlayerOne Saturn-C/M (IMX183)",   w: 13.2,  h:  8.8,  p: 2.4  },
-            { nome: "PlayerOne Uranus-C (IMX585)",     w: 11.14, h:  6.26, p: 2.9  },
-            { nome: "PlayerOne Poseidon-C (IMX294)",   w: 19.1,  h: 13.0,  p: 4.63 },
-            { nome: "PlayerOne Artemis-C/M (IMX571)",  w: 23.5,  h: 15.7,  p: 3.76 },
-            { nome: "PlayerOne Ares-M (IMX432)",       w: 12.8,  h: 10.7,  p: 9.0  },
-            { nome: "PlayerOne Apollo-M Max (IMX455)", w: 36.0,  h: 24.0,  p: 3.76 },
+            // Fonte: player-one-astronomy.com/cooled-camera/ + planetary-camera/ (verificato mar 2026)
+            { nome: "PlayerOne Mars-C II (IMX662)",        w:  7.68, h:  4.32, p: 2.9   }, // 1/2.8"
+            { nome: "PlayerOne Neptune-C II (IMX464)",     w:  9.55, h:  7.17, p: 2.9   }, // 4/3" ridotto
+            { nome: "PlayerOne Saturn-C SQR (IMX533)",     w: 11.31, h: 11.31, p: 3.76  }, // 1" sq — CORRETTO (era IMX183)
+            { nome: "PlayerOne Saturn-M SQR (IMX533)",     w: 11.31, h: 11.31, p: 3.76  }, // 1" sq
+            { nome: "PlayerOne Uranus-C/M PRO (IMX585)",   w: 11.14, h:  6.26, p: 2.9   }, // 1/1.2"
+            { nome: "PlayerOne Ares-C/M PRO (IMX533)",     w: 11.31, h: 11.31, p: 3.76  }, // 1" sq — NUOVO
+            { nome: "PlayerOne Artemis-C PRO (IMX294)",    w: 19.1,  h: 13.0,  p: 4.63  }, // 4/3" color — CORRETTO
+            { nome: "PlayerOne Artemis-M PRO (IMX492)",    w: 19.2,  h: 13.0,  p: 2.315 }, // 4/3" mono — CORRETTO
+            { nome: "PlayerOne Poseidon-C/M PRO (IMX571)", w: 23.5,  h: 15.7,  p: 3.76  }, // APS-C — CORRETTO
+            { nome: "PlayerOne Zeus 455C/M PRO (IMX455)",  w: 36.0,  h: 24.0,  p: 3.76  }, // FF — CORRETTO (era Apollo-M Max)
 
             // ── Atik ─────────────────────────────────────────────────────────
             { nome: "Atik 314L+ (ICX285)",             w:  6.5,  h:  4.8,  p: 4.65 },
@@ -147,12 +151,29 @@
 
             const selCam = document.getElementById('preset-sensor'); 
             selCam.innerHTML = '<option value="" data-i18n="select_opt">-- Seleziona --</option>';
+            // Sensori custom salvati
+            let customCams = JSON.parse(localStorage.getItem('ad_custom_cameras')) || [];
+            if (customCams.length) {
+                let grpCustom = document.createElement('optgroup');
+                grpCustom.label = '⭐ ' + (lang==='it'?'I miei sensori':lang==='en'?'My sensors':lang==='es'?'Mis sensores':'我的传感器');
+                customCams.forEach(c => {
+                    let opt = document.createElement('option');
+                    opt.value = `${c.w},${c.h},${c.p}`;
+                    opt.textContent = '⭐ ' + c.nome;
+                    grpCustom.appendChild(opt);
+                });
+                selCam.appendChild(grpCustom);
+            }
+            // Sensori base
+            let grpBase = document.createElement('optgroup');
+            grpBase.label = lang==='it'?'Database sensori':lang==='en'?'Sensor database':lang==='es'?'Base de datos':'传感器数据库';
             dbCamereBase.forEach(c => { 
                 let opt = document.createElement('option'); 
                 opt.value = `${c.w},${c.h},${c.p}`; 
                 opt.textContent = c.nome; 
-                selCam.appendChild(opt); 
+                grpBase.appendChild(opt);
             });
+            selCam.appendChild(grpBase);
         }
 
         function applicaPresetTelescopio() { 
@@ -261,6 +282,80 @@
             localStorage.setItem('ad_custom_telescopes', JSON.stringify(customTels));
             popolaMenuAttrezzatura();
             apriEliminaTelescopio(); // ricarica lista aggiornata
+        }
+
+        function salvaCameraCustom() {
+            let w = document.getElementById('sensor-width').value;
+            let h = document.getElementById('sensor-height').value;
+            let p = document.getElementById('pixel-size').value;
+            let errTxt = lang==='it' ? "Inserisci prima valori validi per larghezza, altezza e pixel." :
+                         lang==='en' ? "Please enter valid width, height and pixel size values." :
+                         lang==='es' ? "Introduce valores válidos para ancho, alto y tamaño de píxel." :
+                                       "请先输入有效的宽度、高度和像素尺寸值。";
+            if (!w || !h || !p || isNaN(w) || isNaN(h) || isNaN(p)) { mostraAvviso(errTxt, "warn"); return; }
+            let infoEl = document.getElementById('save-camera-info');
+            if (infoEl) {
+                infoEl.innerHTML = lang==='it' ? `W: <strong>${w} mm</strong> &nbsp;·&nbsp; H: <strong>${h} mm</strong> &nbsp;·&nbsp; Pixel: <strong>${p} µm</strong>` :
+                                   lang==='en' ? `W: <strong>${w} mm</strong> &nbsp;·&nbsp; H: <strong>${h} mm</strong> &nbsp;·&nbsp; Pixel: <strong>${p} µm</strong>` :
+                                   lang==='es' ? `A: <strong>${w} mm</strong> &nbsp;·&nbsp; Al: <strong>${h} mm</strong> &nbsp;·&nbsp; Píxel: <strong>${p} µm</strong>` :
+                                                 `宽: <strong>${w} mm</strong> &nbsp;·&nbsp; 高: <strong>${h} mm</strong> &nbsp;·&nbsp; 像素: <strong>${p} µm</strong>`;
+            }
+            let nameEl = document.getElementById('save-camera-name');
+            if (nameEl) nameEl.value = '';
+            document.getElementById('save-camera-modal').style.display = 'block';
+            setTimeout(function() { if (nameEl) nameEl.focus(); }, 100);
+        }
+
+        function confermaSalvaCamera() {
+            let w    = document.getElementById('sensor-width').value;
+            let h    = document.getElementById('sensor-height').value;
+            let p    = document.getElementById('pixel-size').value;
+            let nome = (document.getElementById('save-camera-name').value || '').trim();
+            if (!nome) {
+                document.getElementById('save-camera-name').style.borderColor = '#ff4444';
+                return;
+            }
+            document.getElementById('save-camera-name').style.borderColor = '#555';
+            document.getElementById('save-camera-modal').style.display = 'none';
+            let customCams = JSON.parse(localStorage.getItem('ad_custom_cameras')) || [];
+            customCams.push({ nome, w: parseFloat(w), h: parseFloat(h), p: parseFloat(p) });
+            localStorage.setItem('ad_custom_cameras', JSON.stringify(customCams));
+            popolaMenuAttrezzatura();
+            document.getElementById('preset-sensor').value = `${w},${h},${p}`;
+            salvaImpostazioniStrumento();
+        }
+
+        function apriEliminaCamera() {
+            let customCams = JSON.parse(localStorage.getItem('ad_custom_cameras')) || [];
+            let list  = document.getElementById('delete-camera-list');
+            let empty = document.getElementById('delete-camera-empty');
+            list.innerHTML = '';
+            if (!customCams.length) {
+                list.style.display = 'none'; empty.style.display = 'block';
+            } else {
+                list.style.display = 'flex'; empty.style.display = 'none';
+                customCams.forEach(function(cam, idx) {
+                    let row = document.createElement('div');
+                    row.style.cssText = 'display:flex; align-items:center; justify-content:space-between; background:#2a2a2a; border-radius:8px; padding:10px 14px; border-left:3px solid #c49a3c;';
+                    row.innerHTML = `
+                        <div>
+                            <div style="color:#fff; font-weight:bold; font-size:0.9em;">⭐ ${cam.nome}</div>
+                            <div style="color:#888; font-size:0.8em; margin-top:2px;">${cam.w}×${cam.h} mm &nbsp;·&nbsp; ${cam.p} µm/px</div>
+                        </div>
+                        <button class="btn-guide" style="margin:0; padding:5px 10px; border-color:#ff4444; color:#ff4444; flex-shrink:0;"
+                            onclick="eliminaCameraCustom(${idx})">🗑️</button>`;
+                    list.appendChild(row);
+                });
+            }
+            document.getElementById('delete-camera-modal').style.display = 'block';
+        }
+
+        function eliminaCameraCustom(idx) {
+            let customCams = JSON.parse(localStorage.getItem('ad_custom_cameras')) || [];
+            customCams.splice(idx, 1);
+            localStorage.setItem('ad_custom_cameras', JSON.stringify(customCams));
+            popolaMenuAttrezzatura();
+            apriEliminaCamera();
         }
 
         // ── PERSISTENZA IMPOSTAZIONI STRUMENTO ───────────────────────────

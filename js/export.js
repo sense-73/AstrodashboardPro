@@ -180,6 +180,13 @@
             let doPark    = document.getElementById('nina-park')   ? document.getElementById('nina-park').checked   : false;
 
             // ── Raccolta esposizioni ──────────────────────────────────
+            // Nome filtro OSC per NINA (dual/quad-band)
+            let oscFilterName = null;
+            if (!isMono && filterOscType !== 'none') {
+                let nameEl = document.getElementById('nina-osc-filter-name');
+                oscFilterName = (nameEl && nameEl.value.trim()) ? nameEl.value.trim() : (filterOscType === 'dual' ? 'Dual-band' : 'Quad-band');
+            }
+
             let esposizioni = [];
             frameList.forEach(f => {
                 let count  = parseInt((document.getElementById(`${f.id}-count`) || {}).value) || 0;
@@ -194,7 +201,9 @@
                 let dithFrq   = document.getElementById(`${f.id}-dfreq`);
                 let doDither  = isLight && dithChk ? dithChk.checked : false;
                 let ditherFreq= parseInt(dithFrq ? dithFrq.value : 4) || 4;
-                let filterName= (isMono && isLight) ? (document.getElementById(`nina-name-${f.id}`) || {value:''}).value.trim() : null;
+                // OSC con filtro dual/quad: usa il nome del filtro OSC per SwitchFilter
+                let filterName= isMono && isLight ? (document.getElementById(`nina-name-${f.id}`) || {value:''}).value.trim()
+                              : (!isMono && isLight && oscFilterName) ? oscFilterName : null;
                 let imageType = f.id.includes('dark') ? "DARK" : f.id.includes('bias') ? "BIAS" : "LIGHT";
 
                 esposizioni.push({

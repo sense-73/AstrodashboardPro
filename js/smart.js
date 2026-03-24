@@ -17,7 +17,286 @@ function toggleLock(id) {
             }
         }
 
-        function toggleSensorMode() {
+        // Mostra/nasconde il dropdown filtro OSC e il campo nome NINA
+        function aggiornaFiltroOSC() {
+            let isM = document.getElementById('sensor-type').value === 'mono';
+            let wrapSmart = document.getElementById('filter-osc-wrap');
+            let wrapPro   = document.getElementById('pro-filter-osc-wrap');
+            if (wrapSmart) wrapSmart.style.display = isM ? 'none' : 'inline-flex';
+            if (wrapPro)   wrapPro.style.display   = isM ? 'none' : 'inline-flex';
+            // Sincronizza i due dropdown
+            let selSmart = document.getElementById('filter-osc-type');
+            let selPro   = document.getElementById('pro-filter-osc-type');
+            if (selSmart && selPro) selPro.value = selSmart.value;
+            // Mostra/nascondi campi nome filtro NINA (Smart e PRO)
+            let filterType = selSmart ? selSmart.value : 'none';
+            let active = !isM && filterType !== 'none';
+            let nameWrap    = document.getElementById('nina-osc-filter-name-wrap');
+            let nameWrapPro = document.getElementById('pro-nina-osc-filter-name-wrap');
+            if (nameWrap)    nameWrap.style.display    = active ? 'block' : 'none';
+            if (nameWrapPro) nameWrapPro.style.display = active ? 'block' : 'none';
+            // Carica valore salvato e sincronizza entrambi i campi
+            let saved = localStorage.getItem('nina_osc_filter_name') || '';
+            let nameInput    = document.getElementById('nina-osc-filter-name');
+            let nameInputPro = document.getElementById('pro-nina-osc-filter-name');
+            if (nameInput    && !nameInput.value)    nameInput.value    = saved;
+            if (nameInputPro && !nameInputPro.value) nameInputPro.value = saved;
+        }
+
+        // ── Lookup pixel_size → {rn, qe} per il calcolo filtro ────────
+        // Chiave: pixel_size arrotondato a 2 decimali
+        const _sensorLookup = {
+            '1.85': {rn:0.7,  qe:0.80, label:'IMX715 (~1.85µm)'},
+            '2.00': {rn:0.7,  qe:0.80, label:'IMX678 (~2.0µm)'},
+            '2.32': {rn:1.5,  qe:0.90, label:'IMX492 native (~2.315µm)'},
+            '2.40': {rn:1.5,  qe:0.75, label:'IMX178/183 (~2.4µm)'},
+            '2.90': {rn:0.8,  qe:0.80, label:'IMX290/585 (~2.9µm)'},
+            '3.21': {rn:1.0,  qe:0.80, label:'IMX561 (~3.2µm)'},
+            '3.69': {rn:1.2,  qe:0.78, label:'Atik Horizon (~3.7µm)'},
+            '3.75': {rn:1.5,  qe:0.80, label:'ASI120/224 (~3.75µm)'},
+            '3.76': {rn:1.3,  qe:0.80, label:'IMX571/455/533 (~3.76µm)'},
+            '3.80': {rn:1.8,  qe:0.75, label:'IMX183/1600 (~3.8µm)'},
+            '3.89': {rn:2.0,  qe:0.65, label:'Nikon/Sony APS-C (~3.9µm)'},
+            '4.09': {rn:2.0,  qe:0.65, label:'Canon 7D (~4.1µm)'},
+            '4.22': {rn:2.0,  qe:0.65, label:'Nikon D7500 (~4.2µm)'},
+            '4.29': {rn:2.0,  qe:0.65, label:'Canon DSLR (~4.3µm)'},
+            '4.30': {rn:2.5,  qe:0.60, label:'Canon 60Da (~4.3µm)'},
+            '4.35': {rn:2.0,  qe:0.65, label:'Nikon D850 (~4.4µm)'},
+            '4.39': {rn:2.0,  qe:0.65, label:'Canon Ra (~4.4µm)'},
+            '4.51': {rn:2.0,  qe:0.65, label:'Sony A7R (~4.5µm)'},
+            '4.54': {rn:2.0,  qe:0.65, label:'Atik 460EX (~4.5µm)'},
+            '4.63': {rn:1.2,  qe:0.75, label:'IMX294 (~4.63µm)'},
+            '4.65': {rn:2.5,  qe:0.60, label:'Atik 314L+ (~4.65µm)'},
+            '4.88': {rn:2.0,  qe:0.65, label:'QHY367C (~4.9µm)'},
+            '5.40': {rn:2.5,  qe:0.60, label:'Atik 383L+ (~5.4µm)'},
+            '5.60': {rn:2.5,  qe:0.60, label:'Atik Infinity (~5.6µm)'},
+            '5.74': {rn:2.0,  qe:0.65, label:'Canon 6D MkII (~5.7µm)'},
+            '5.86': {rn:2.5,  qe:0.65, label:'IMX174 (~5.9µm)'},
+            '5.94': {rn:2.5,  qe:0.60, label:'ZWO ASI2400/DSLR FF (~5.9µm)'},
+            '5.97': {rn:2.0,  qe:0.65, label:'Sony A7 III (~6.0µm)'},
+            '6.00': {rn:2.5,  qe:0.60, label:'Atik 16200 (~6.0µm)'},
+            '6.54': {rn:2.5,  qe:0.60, label:'Canon 6D (~6.5µm)'},
+            '9.00': {rn:3.0,  qe:0.55, label:'IMX432 (~9.0µm)'},
+        };
+
+        function getSensorParams() {
+            let px  = parseFloat((document.getElementById('pixel-size')||{}).value) || 3.76;
+            let key = px.toFixed(2);
+            // Cerca corrispondenza esatta, poi la più vicina
+            let entry = _sensorLookup[key];
+            if (!entry) {
+                let best = null, bestDiff = 99;
+                Object.keys(_sensorLookup).forEach(k => {
+                    let diff = Math.abs(parseFloat(k) - px);
+                    if (diff < bestDiff) { bestDiff = diff; best = k; }
+                });
+                entry = _sensorLookup[best] || {rn:2.0, qe:0.70, label:'Sensore (~'+px+'µm)'};
+            }
+            // Leggi anche il nome dal preset-sensor se disponibile
+            let presetEl = document.getElementById('preset-sensor');
+            let sensorName = entry.label;
+            if (presetEl && presetEl.selectedIndex > 0) {
+                sensorName = presetEl.options[presetEl.selectedIndex].text.replace('⭐ ','');
+            }
+            return { rn: entry.rn, qe: entry.qe, px, label: sensorName };
+        }
+
+        // ── Database flusso Bortle OSC (e/px/s, f/5, QE 80%, px 3.8µm) ─
+        const _bortleFluxOSC = {1:0.013,2:0.027,3:0.05,4:0.10,5:0.20,6:0.40,7:0.83,8:1.67,9:3.33};
+
+        // ── Modal Filtro OSC ──────────────────────────────────────────
+        function apriModalFiltroOSC() {
+            let modal = document.getElementById('filter-osc-modal');
+            if (!modal) return;
+            let bortle = (document.getElementById('bortle-class')||{}).value || '5';
+            let fL = parseFloat((document.getElementById('focal-length')||{}).value)||400;
+            let ap = parseFloat((document.getElementById('aperture')||{}).value)||72;
+            let fR = (fL/ap).toFixed(1);
+            document.getElementById('foctx-bortle').textContent = 'Bortle ' + bortle;
+            document.getElementById('foctx-fratio').textContent = 'f/' + fR;
+            let curType  = (document.getElementById('filter-osc-type')||{}).value || 'none';
+            let curBw    = localStorage.getItem('filter_osc_bw') || (curType==='quad'?'20':'14');
+            let curDb    = localStorage.getItem('filter_osc_db') || 'none';
+            let typeEl   = document.getElementById('filter-modal-type');
+            let bwEl     = document.getElementById('filter-modal-bw');
+            let sensEl   = document.getElementById('filter-modal-sensor');
+            let dbEl     = document.getElementById('filter-db-select');
+            if (typeEl) typeEl.value = curType;
+            if (bwEl)   bwEl.value  = curBw;
+            if (dbEl)   { try { dbEl.value = curDb; } catch(e){} }
+            // Sincronizza sensore dal FOV (pixel-size)
+            if (sensEl) {
+                let fovPx = parseFloat((document.getElementById('pixel-size')||{}).value)||3.76;
+                let curSens = localStorage.getItem('filter_osc_sensor') || '';
+                // Prova prima il valore salvato, poi cerca corrispondenza per pixel size
+                let matched = false;
+                if (curSens) { try { sensEl.value = curSens; matched = sensEl.value === curSens; } catch(e){} }
+                if (!matched) {
+                    for (let opt of sensEl.options) {
+                        if (opt.value !== 'custom') {
+                            let p = opt.value.split('|');
+                            if (Math.abs(parseFloat(p[1]) - fovPx) < 0.01) { sensEl.value = opt.value; break; }
+                        }
+                    }
+                }
+            }
+            // Ripristina campo nome NINA nel modal
+            let ninaModalEl = document.getElementById('nina-osc-filter-name-modal');
+            if (ninaModalEl) ninaModalEl.value = localStorage.getItem('nina_osc_filter_name') || '';
+            // Aggiorna display sensore dal FOV
+            aggiornaDisplaySensore();
+            aggiornaVisibilitaTipoBw();
+            aggiornaCalcoloFiltro();
+            modal.style.display = 'flex';
+        }
+
+        function chiudiModalFiltroOSC() {
+            let modal = document.getElementById('filter-osc-modal');
+            if (modal) modal.style.display = 'none';
+        }
+
+        function aggiornaDisplaySensore() {
+            let sp = getSensorParams();
+            let dispEl = document.getElementById('filter-sensor-display');
+            let infoEl = document.getElementById('filter-sensor-info');
+            if (dispEl) dispEl.textContent = sp.label;
+            if (infoEl) infoEl.textContent = 'Read noise: ~'+sp.rn+' e⁻  |  Pixel: '+sp.px+' µm  |  QE Ha: ~'+Math.round(sp.qe*100)+'%';
+        }
+
+        function aggiornaVisibilitaTipoBw() {
+            let dbEl   = document.getElementById('filter-db-select');
+            let typeRow = document.getElementById('filter-type-row');
+            if (!dbEl || !typeRow) return;
+            let isCustom = (dbEl.value === 'custom');
+            typeRow.style.display = isCustom ? 'block' : 'none';
+        }
+
+        function selezionaFiltroDB() {
+            let dbEl   = document.getElementById('filter-db-select');
+            let typeEl = document.getElementById('filter-modal-type');
+            let bwEl   = document.getElementById('filter-modal-bw');
+            if (!dbEl) return;
+            let val = dbEl.value;
+            if (val === 'none') {
+                if (typeEl) typeEl.value = 'none';
+            } else if (val !== 'custom') {
+                let parts = val.split('|');
+                if (parts.length >= 2) {
+                    if (typeEl) typeEl.value = parts[0];
+                    if (bwEl)   bwEl.value   = parts[1];
+                }
+            }
+            aggiornaVisibilitaTipoBw();
+            aggiornaCalcoloFiltro();
+        }
+
+        function onBwManualInput() {
+            // Se l'utente modifica i nm manualmente → passa a "Personalizzato"
+            let dbEl = document.getElementById('filter-db-select');
+            if (dbEl && dbEl.value !== 'none' && dbEl.value !== 'custom') {
+                dbEl.value = 'custom';
+                aggiornaVisibilitaTipoBw();
+            }
+            aggiornaCalcoloFiltro();
+        }
+
+        function aggiornaCalcoloFiltro() {
+            let typeEl = document.getElementById('filter-modal-type');
+            let bwEl   = document.getElementById('filter-modal-bw');
+            let resEl  = document.getElementById('filter-tmin-result');
+            let noteEl = document.getElementById('filter-tmin-note');
+            let warnEl = document.getElementById('filter-fratio-warn');
+            let infoEl = document.getElementById('filter-sensor-info');
+            if (!typeEl || !bwEl || !resEl) return;
+            let filterType = typeEl.value;
+            let bw  = parseFloat(bwEl.value) || 14;
+            let bortle = parseInt((document.getElementById('bortle-class')||{}).value||5);
+            let fL = parseFloat((document.getElementById('focal-length')||{}).value)||400;
+            let ap = parseFloat((document.getElementById('aperture')||{}).value)||72;
+            let fR = fL / ap;
+            let sp2 = getSensorParams();
+            let rn = sp2.rn, px = sp2.px, qe = sp2.qe;
+            aggiornaDisplaySensore();
+            if (filterType === 'none') {
+                if (resEl)  resEl.textContent  = '—';
+                if (noteEl) noteEl.textContent = '';
+                if (warnEl) warnEl.style.display = 'none';
+                return;
+            }
+            let baseFlux  = _bortleFluxOSC[bortle] || 0.20;
+            let filterRed = bw / 300;
+            let pixCorr   = Math.pow(px / 3.8, 2);
+            let flux      = baseFlux * (1 / Math.pow(fR,2)) * filterRed * qe * pixCorr;
+            let fRCorr    = fR<=2?1.6:fR<=3?1.22:fR<=4?1.12:1.0;
+            flux = flux / fRCorr;
+            let tMin = flux > 0 ? Math.round((10 * rn * rn) / flux) : 600;
+            tMin = Math.max(60, Math.min(3600, tMin));
+            let tStr = tMin >= 60 ? Math.round(tMin/60)+' min' : tMin+' sec';
+            if (resEl)  resEl.textContent  = tStr;
+            if (noteEl) noteEl.textContent = '(Bortle '+bortle+', f/'+fR.toFixed(1)+', '+bw+'nm)';
+            if (warnEl) {
+                if (fR <= 4 && bw <= 7) {
+                    warnEl.style.display = 'block';
+                    warnEl.textContent   = '⚠ ' + t('filter_warn_fratio');
+                } else {
+                    warnEl.style.display = 'none';
+                }
+            }
+        }
+
+        function applicaFiltroOSC() {
+            let typeEl = document.getElementById('filter-modal-type');
+            let bwEl   = document.getElementById('filter-modal-bw');
+            let dbEl   = document.getElementById('filter-db-select');
+            if (!typeEl) return;
+            let filterType = typeEl.value;
+            let bw    = bwEl ? bwEl.value : '14';
+            let dbVal = dbEl ? dbEl.value : 'none';
+            // Nome da mostrare sul pulsante
+            let filterName = t('filter_osc_none');
+            if (filterType !== 'none') {
+                if (dbVal !== 'none' && dbVal !== 'custom') {
+                    let parts = dbVal.split('|');
+                    filterName = (parts[2] || '').replace(/-/g,' ') || (filterType==='dual'?t('filter_osc_dual'):t('filter_osc_quad'));
+                } else if (dbVal === 'custom') {
+                    filterName = t('filter_osc_custom');
+                } else {
+                    filterName = filterType==='dual' ? t('filter_osc_dual') : t('filter_osc_quad');
+                }
+            }
+            // Aggiorna hidden inputs e label pulsanti
+            ['filter-osc-type','pro-filter-osc-type'].forEach(id => {
+                let el = document.getElementById(id); if (el) el.value = filterType;
+            });
+            ['filter-osc-label','pro-filter-osc-label'].forEach(id => {
+                let el = document.getElementById(id); if (el) el.textContent = filterName;
+            });
+            // Colore pulsanti
+            let smartBtn = document.getElementById('filter-osc-btn');
+            let proBtn   = document.getElementById('pro-filter-osc-btn');
+            let active   = filterType !== 'none';
+            if (smartBtn) { smartBtn.style.borderColor = active?'#c49a3c':'#6e7a8a'; smartBtn.style.color = active?'#c49a3c':'#6e7a8a'; }
+            if (proBtn)   { proBtn.style.borderColor   = active?'#00c6ff':'#6e7a8a'; proBtn.style.color   = active?'#00c6ff':'#6e7a8a'; }
+            // Salva in localStorage
+            localStorage.setItem('filter_osc_bw',  bw);
+            localStorage.setItem('filter_osc_db',     dbVal);
+            // Salva nome NINA dal campo del modal
+            let ninaModalEl = document.getElementById('nina-osc-filter-name-modal');
+            let ninaEl      = document.getElementById('nina-osc-filter-name');
+            let ninaVal     = ninaModalEl ? ninaModalEl.value.trim() : '';
+            // Se il campo modal è vuoto e c'è un filtro DB, usa il nome del filtro
+            if (!ninaVal && filterType !== 'none' && dbVal !== 'none' && dbVal !== 'custom') {
+                let parts = dbVal.split('|');
+                ninaVal = parts[2] || '';
+            }
+            if (ninaEl) ninaEl.value = ninaVal;
+            localStorage.setItem('nina_osc_filter_name', ninaVal);
+            chiudiModalFiltroOSC();
+            aggiornaFiltroOSC();
+            calcolaTempi();
+        }
+
+                function toggleSensorMode() {
             let isM = document.getElementById('sensor-type').value === 'mono';
             let c = document.getElementById('frames-container'); c.innerHTML = '';
             let filterWarning = document.getElementById('nina-filter-warning');
@@ -157,6 +436,7 @@ function toggleLock(id) {
                 }
             });
             calcolaTempi();
+            if (typeof aggiornaFiltroOSC === 'function') aggiornaFiltroOSC();
         }
 
         function sincronizzaDarkDaLight() {
@@ -238,6 +518,9 @@ function toggleLock(id) {
                 let checkS2 = document.getElementById('m-sii-check');
                 if ((checkHa && checkHa.checked) || (checkO3 && checkO3.checked) || (checkS2 && checkS2.checked)) { doingN = true; }
             }
+            // Filtro OSC dual/quad-band
+            let filterOscType = (document.getElementById('filter-osc-type')||{value:'none'}).value;
+            let doingOscNB = !isM && (filterOscType === 'dual' || filterOscType === 'quad');
             let sFact = (doingN && !isEmission) ? 2.0 : 1.0;
 
             // 5. INQUINAMENTO LUNARE EFFETTIVO
@@ -259,9 +542,10 @@ function toggleLock(id) {
             let bortle = parseInt((document.getElementById('bortle-class')||{}).value||5);
             const _lpFactBB = {1:0.6, 2:0.7, 3:0.85, 4:0.95, 5:1.0, 6:1.4, 7:1.9, 8:2.5, 9:3.0};
             const _lpFactNB = {1:0.6, 2:0.7, 3:0.85, 4:0.95, 5:1.0, 6:1.1, 7:1.3, 8:1.5, 9:1.8};
-            // narrowband attivo = doingN OPPURE sensore OSC con filtro dual-band (futuro); per ora solo doingN
-            let usingNarrowband = doingN;
-            let lpFact = (isEmission && usingNarrowband) ? (_lpFactNB[bortle]||1.0) : (_lpFactBB[bortle]||1.0);
+            // narrowband attivo = mono con filtri NB OPPURE OSC con filtro dual/quad-band
+            let usingNarrowband = doingN || doingOscNB;
+            // Con filtro OSC dual/quad il comportamento Bortle è sempre narrowband
+            let lpFact = (usingNarrowband) ? (_lpFactNB[bortle]||1.0) : (_lpFactBB[bortle]||1.0);
             let lpApplied = (bortle !== 5); // flag per il messaggio
 
             // 7. CALCOLO FINALE 
@@ -293,7 +577,7 @@ function toggleLock(id) {
 
             // 7. TEMPO DISPONIBILE STANOTTE
             let tS = document.getElementById('time-start').value, tE = document.getElementById('time-end').value, aS = 0;
-            if(tS && tE) { 
+            if(tS && tE && tS !== tE) { 
                 let dS = new Date(`1970-01-01T${tS}:00`), dE = new Date(`1970-01-01T${tE}:00`); 
                 if (dE <= dS) dE.setDate(dE.getDate() + 1); 
                 aS = (dE - dS) / 3600000; 
@@ -380,8 +664,12 @@ function toggleLock(id) {
                     if(mFact > 1.0) reason += ` <br><i style="color:#aaa; font-size: 0.9em;">* È applicata una penalità per forte inquinamento lunare.</i>`;
                     if(lpApplied && lpFact > 1.0) reason += ` <br><i style="color:#aaa; font-size: 0.9em;">* È applicata una penalità per inquinamento luminoso (Bortle ${bortle}).</i>`;
                     if(lpApplied && lpFact < 1.0) reason += ` <br><i style="color:#aaa; font-size: 0.9em;">* Applicato un bonus cielo buio (Bortle ${bortle}) — meno integrazione necessaria.</i>`;
-                    if(totIdConNB !== null && !nbSogliaSuperata)
+                    if(totIdConNB !== null && !nbSogliaSuperata && !doingOscNB)
                         reason += ` <br><i style="color:#bb86fc; font-size: 0.9em;">💡 Con filtro Ha/OIII narrowband il tempo stimato scenderebbe a <b>${totIdConNB.toFixed(1)} ore</b>.</i>`;
+                    if(doingOscNB && !isEmission)
+                        reason += ` <br><i style="color:#ff9944; font-size: 0.9em;">⚠️ Il filtro dual/quad-band non è adatto a questo tipo di target (${tipoNomeReport}): blocca la luce broadband riducendo drasticamente il segnale. Rimuovi il filtro o scegli una nebulosa a emissione.</i>`;
+                    if(doingOscNB && isEmission)
+                        reason += ` <br><i style="color:#44ccaa; font-size: 0.9em;">✅ Filtro dual/quad-band attivo: penalità Bortle ridotta per target a emissione.</i>`;
                     reason += `<br><br>Il tempo utile di stanotte (> 30° sull'orizzonte) è di <b style="color:#ff4444;">${aS.toFixed(1)} ore</b> ed è insufficiente.`;
                 } else if(lang === 'en') {
                     reason = `Being a <b>${tipoNomeReport}</b> of magnitude <b>${mVal.toFixed(1)}</b> shot at <b>f/${fR.toFixed(1)}</b>`;
@@ -391,8 +679,12 @@ function toggleLock(id) {
                     if(mFact > 1.0) reason += ` <br><i style="color:#aaa; font-size: 0.9em;">* A penalty for heavy lunar light pollution is applied.</i>`;
                     if(lpApplied && lpFact > 1.0) reason += ` <br><i style="color:#aaa; font-size: 0.9em;">* A light pollution penalty is applied (Bortle ${bortle}).</i>`;
                     if(lpApplied && lpFact < 1.0) reason += ` <br><i style="color:#aaa; font-size: 0.9em;">* A dark sky bonus is applied (Bortle ${bortle}) — less integration needed.</i>`;
-                    if(totIdConNB !== null && !nbSogliaSuperata)
+                    if(totIdConNB !== null && !nbSogliaSuperata && !doingOscNB)
                         reason += ` <br><i style="color:#bb86fc; font-size: 0.9em;">💡 With a Ha/OIII narrowband filter the estimated time would drop to <b>${totIdConNB.toFixed(1)} hours</b>.</i>`;
+                    if(doingOscNB && !isEmission)
+                        reason += ` <br><i style="color:#ff9944; font-size: 0.9em;">⚠️ The dual/quad-band filter is not suitable for this target type (${tipoNomeReport}): it blocks broadband light, drastically reducing signal. Remove the filter or choose an emission nebula.</i>`;
+                    if(doingOscNB && isEmission)
+                        reason += ` <br><i style="color:#44ccaa; font-size: 0.9em;">✅ Dual/quad-band filter active: reduced Bortle penalty for emission target.</i>`;
                     reason += `<br><br>Tonight's useful time (> 30° altitude) is <b style="color:#ff4444;">${aS.toFixed(1)} hours</b>, which is insufficient.`;
                 } else if(lang === 'es') {
                     reason = `Tratándose de <b>${tipoNomeReport}</b> de magnitud <b>${mVal.toFixed(1)}</b> capturada a <b>f/${fR.toFixed(1)}</b>`;
@@ -402,8 +694,12 @@ function toggleLock(id) {
                     if(mFact > 1.0) reason += ` <br><i style="color:#aaa; font-size: 0.9em;">* Se aplica una penalización por fuerte contaminación lumínica lunar.</i>`;
                     if(lpApplied && lpFact > 1.0) reason += ` <br><i style="color:#aaa; font-size: 0.9em;">* Se aplica una penalización por contaminación lumínica (Bortle ${bortle}).</i>`;
                     if(lpApplied && lpFact < 1.0) reason += ` <br><i style="color:#aaa; font-size: 0.9em;">* Se aplica un bono de cielo oscuro (Bortle ${bortle}) — menos integración necesaria.</i>`;
-                    if(totIdConNB !== null && !nbSogliaSuperata)
+                    if(totIdConNB !== null && !nbSogliaSuperata && !doingOscNB)
                         reason += ` <br><i style="color:#bb86fc; font-size: 0.9em;">💡 Con filtro narrowband Ha/OIII el tiempo estimado bajaría a <b>${totIdConNB.toFixed(1)} horas</b>.</i>`;
+                    if(doingOscNB && !isEmission)
+                        reason += ` <br><i style="color:#ff9944; font-size: 0.9em;">⚠️ El filtro dual/quad-band no es adecuado para este tipo de objetivo (${tipoNomeReport}). Quita el filtro o elige una nebulosa de emisión.</i>`;
+                    if(doingOscNB && isEmission)
+                        reason += ` <br><i style="color:#44ccaa; font-size: 0.9em;">✅ Filtro dual/quad-band activo: penalización Bortle reducida.</i>`;
                     reason += `<br><br>El tiempo útil de esta noche (> 30° sobre el horizonte) es de <b style="color:#ff4444;">${aS.toFixed(1)} horas</b> y resulta insuficiente.`;
                 } else {
                     reason = `作为星等 <b>${mVal.toFixed(1)}</b> 的 <b>${tipoNomeReport}</b>，在 <b>f/${fR.toFixed(1)}</b> 下拍摄`;
@@ -413,8 +709,12 @@ function toggleLock(id) {
                     if(mFact > 1.0) reason += ` <br><i style="color:#aaa; font-size: 0.9em;">* 已应用强月光污染惩罚。</i>`;
                     if(lpApplied && lpFact > 1.0) reason += ` <br><i style="color:#aaa; font-size: 0.9em;">* 已应用光污染惩罚（博特尔 ${bortle}）。</i>`;
                     if(lpApplied && lpFact < 1.0) reason += ` <br><i style="color:#aaa; font-size: 0.9em;">* 已应用暗天空奖励（博特尔 ${bortle}）——所需积分时间更少。</i>`;
-                    if(totIdConNB !== null && !nbSogliaSuperata)
+                    if(totIdConNB !== null && !nbSogliaSuperata && !doingOscNB)
                         reason += ` <br><i style="color:#bb86fc; font-size: 0.9em;">💡 使用Ha/OIII窄带滤镜，估计时间将降至 <b>${totIdConNB.toFixed(1)} 小时</b>。</i>`;
+                    if(doingOscNB && !isEmission)
+                        reason += ` <br><i style="color:#ff9944; font-size: 0.9em;">⚠️ 双/四波段滤镜不适合此目标（${tipoNomeReport}）。请移除滤镜或选择发射星云。</i>`;
+                    if(doingOscNB && isEmission)
+                        reason += ` <br><i style="color:#44ccaa; font-size: 0.9em;">✅ 双/四波段滤镜已启用：博特尔惩罚已降低。</i>`;
                     reason += `<br><br>今晚的可用时间 (> 30° 高度) 只有 <b style="color:#ff4444;">${aS.toFixed(1)} 小时</b>，时间不足。`;
                 }
 
@@ -422,7 +722,22 @@ function toggleLock(id) {
                 let isEmissionTarget = ['sh2','lbn','snr','hii','planetaria'].includes(_catAI);
                 let isBroadbandTarget = ['galassia','vdb','ldn','aperto','globulare'].includes(_catAI);
                 let filterTip = '';
-                if (bortle <= 3) {
+
+                // ── Consiglio filtro: se dual/quad-band OSC attivo, mostra messaggio dedicato
+                // altrimenti mostra i consigli standard in base al Bortle
+                if (doingOscNB) {
+                    if (!isEmissionTarget) {
+                        filterTip = lang==='it' ? '⚠️ <b>Attenzione filtro:</b> Il filtro dual/quad-band selezionato non è adatto a questo target. Blocca la luce broadband riducendo drasticamente il segnale. <b>Rimuovi il filtro.</b>'
+                                  : lang==='en' ? '⚠️ <b>Filter warning:</b> The selected dual/quad-band filter is not suitable for this target. It blocks broadband light, drastically reducing signal. <b>Remove the filter.</b>'
+                                  : lang==='es' ? '⚠️ <b>Advertencia filtro:</b> El filtro dual/quad-band no es adecuado para este objetivo. Bloquea la luz de banda ancha. <b>Quita el filtro.</b>'
+                                  :               '⚠️ <b>滤镜警告：</b>所选双/四波段滤镜不适合此目标。请移除滤镜。';
+                    } else {
+                        filterTip = lang==='it' ? '✅ <b>Filtro dual/quad-band attivo</b> — ottima scelta per nebulose a emissione. Riduce il fondo cielo del 94–95%, ideale anche da cieli urbani e con la Luna.'
+                                  : lang==='en' ? '✅ <b>Dual/quad-band filter active</b> — excellent choice for emission nebulae. Reduces sky background by 94–95%, ideal even from urban skies and with the Moon.'
+                                  : lang==='es' ? '✅ <b>Filtro dual/quad-band activo</b> — excelente para nebulosas de emisión. Reduce el fondo del cielo un 94–95%, ideal incluso desde cielos urbanos y con la Luna.'
+                                  :               '✅ <b>双/四波段滤镜已启用</b> ——发射星云绝佳选择，天空背景降低94–95%，城市天空和月光下均可使用。';
+                    }
+                } else if (bortle <= 3) {
                     filterTip = lang==='it' ? '💡 <b>Filtri:</b> Cielo buio — nessun filtro antinquinamento necessario. Un filtro ridurrebbe il segnale.'
                               : lang==='en' ? '💡 <b>Filters:</b> Dark sky — no light pollution filter needed. A filter would reduce your signal.'
                               : lang==='es' ? '💡 <b>Filtros:</b> Cielo oscuro — no se necesita filtro anticontaminación. Un filtro reduciría la señal.'
@@ -432,7 +747,7 @@ function toggleLock(id) {
                         filterTip = lang==='it' ? '💡 <b>Filtri:</b> Cielo suburbano — per nebulose a emissione un filtro antinquinamento broadband è utile (es. CLS, L-Pro, Quadband). Per altri target meglio aumentare il tempo di integrazione.'
                                   : lang==='en' ? '💡 <b>Filters:</b> Suburban sky — for emission nebulae a broadband light pollution filter is helpful (e.g. CLS, L-Pro, Quadband). For other targets, increase integration time instead.'
                                   : lang==='es' ? '💡 <b>Filtros:</b> Cielo suburbano — para nebulosas de emisión un filtro anticontaminación broadband es útil (p.ej. CLS, L-Pro, Quadband). Para otros objetivos, aumentar el tiempo de integración.'
-                                  :               '💡 <b>滤镜：</b>郊区天空——对于发射星云，宽带光污染滤镜有帮助（如CLS、L-Pro、Quadband）。其他目标建议增加曝光时间。';
+                                  :               '💡 <b>滤镜：</b>郊区天空——对于发射星云，宽带光污染滤镜很有帮助（如CLS、L-Pro、Quadband）。其他目标建议增加曝光时间。';
                     else
                         filterTip = lang==='it' ? '💡 <b>Filtri:</b> Cielo suburbano — su galassie e ammassi i filtri antinquinamento hanno effetto limitato. Punta a più ore di integrazione.'
                                   : lang==='en' ? '💡 <b>Filters:</b> Suburban sky — light pollution filters have limited effect on galaxies and clusters. Aim for more integration time.'
@@ -489,7 +804,15 @@ function toggleLock(id) {
 
         function calcolaTempi() {
             let tS = document.getElementById('time-start').value, tE = document.getElementById('time-end').value; if(!tS || !tE) return;
-            let dS = new Date(`1970-01-01T${tS}:00`), dE = new Date(`1970-01-01T${tE}:00`); if (dE <= dS) dE.setDate(dE.getDate() + 1);
+            let dS = new Date(`1970-01-01T${tS}:00`), dE = new Date(`1970-01-01T${tE}:00`);
+            if (tS === tE) { // finestra zero — oggetto non visibile
+                document.getElementById('calc-available').innerHTML = formatSeconds(0);
+                let rD = document.getElementById('calc-residual'), wD = document.getElementById('calc-warning');
+                if (rD) { rD.innerText = formatSeconds(0); rD.className = 'text-red'; }
+                if (wD) wD.style.display = 'block';
+                return;
+            }
+            if (dE <= dS) dE.setDate(dE.getDate() + 1);
             let aS = (dE - dS) / 1000; 
 
             // ── Overhead Bias: stima tempo tecnico per frame con exp=0 ──────
@@ -598,6 +921,7 @@ function toggleLock(id) {
         function generaSequenzaOttimale() {
             if (!targetSelezionato) { mostraAvviso(t("alert_planetarium"), "warn"); return; }
             let tS = document.getElementById('time-start').value, tE = document.getElementById('time-end').value; if(!tS || !tE) { mostraAvviso(t("alert_times"), "warn"); return; }
+            if (tS === tE) { mostraAvviso(lang==='it'?"L'oggetto non è visibile stanotte — finestra di sessione zero.":lang==='en'?"Object not visible tonight — session window is zero.":lang==='es'?"El objeto no es visible esta noche — ventana cero.":"今晚目标不可见——会话窗口为零。", "warn"); return; }
             let dS = new Date(`1970-01-01T${tS}:00`), dE = new Date(`1970-01-01T${tE}:00`); if (dE <= dS) dE.setDate(dE.getDate() + 1);
             let aS = (dE - dS) / 1000;
             
@@ -706,6 +1030,9 @@ function toggleLock(id) {
             // Dither: 3 per Sh2, 4 per tutto il resto
             let _dFreqG = (_catG === 'sh2') ? 3 : 4;
             let _hdrExpG = _catHdrMap[_catG] || 0;
+            // M42 (Nebulosa di Orione): nucleo Trapezio saturante → HDR sempre attivo
+            let _isM42 = (_nG === 'M42' || _objNameG === 'M42' || _objNameG.includes('ORION NEBULA') || _objNameG.includes('NEBULOSA DI ORIONE'));
+            if (_isM42 && _hdrExpG === 0) _hdrExpG = 10; // 10s per il Trapezio
 
             let dD = parseInt(document.getElementById('dither-duration').value)||0;
 

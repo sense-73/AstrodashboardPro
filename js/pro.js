@@ -604,7 +604,17 @@
                 let _mainBin  = parseInt(binEl ? binEl.value : 1) || 1;
                 let _mainDith = dithChk ? dithChk.checked : false;
                 let _mainDFreq = parseInt(dithFrq ? dithFrq.value : 4) || 4;
-                let _mainFilter = isMono ? (localStorage.getItem('nina_filter_' + f.id) || f.name) : null;
+                // Nome filtro OSC dual/quad per NINA
+                let oscFilterNamePro = null;
+                if (!isMono) {
+                    let filterOscType = (document.getElementById('filter-osc-type')||{value:'none'}).value;
+                    if (filterOscType !== 'none') {
+                        let nameEl = document.getElementById('pro-nina-osc-filter-name') || document.getElementById('nina-osc-filter-name');
+                        oscFilterNamePro = (nameEl && nameEl.value.trim()) ? nameEl.value.trim()
+                            : (filterOscType === 'dual' ? 'Dual-band' : 'Quad-band');
+                    }
+                }
+                let _mainFilter = isMono ? (localStorage.getItem('nina_filter_' + f.id) || f.name) : oscFilterNamePro;
                 esposizioni.push({
                     count:     count,
                     exp:       _mainExp,
