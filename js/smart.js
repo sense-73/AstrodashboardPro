@@ -200,6 +200,14 @@ function toggleLock(id) {
             aggiornaCalcoloFiltro();
         }
 
+        // Rileva se il filtro selezionato è OIII+SII (segnale più debole di Ha+OIII)
+        function isOIIISIIFilter() {
+            let dbEl = document.getElementById('filter-db-select');
+            if (!dbEl) return false;
+            let v = dbEl.value || '';
+            return v.includes('SII+OIII') || v.includes('OIII+SII') || v.includes('L-Synergy') || v.includes('ALP-T SII');
+        }
+
         function aggiornaCalcoloFiltro() {
             let typeEl = document.getElementById('filter-modal-type');
             let bwEl   = document.getElementById('filter-modal-bw');
@@ -217,6 +225,8 @@ function toggleLock(id) {
             let sp2 = getSensorParams();
             let rn = sp2.rn, px = sp2.px, qe = sp2.qe;
             aggiornaDisplaySensore();
+            // Filtri OIII+SII: SII è 3-5x più debole di Ha → flux ridotto del 40% (fattore conservativo)
+            let _oiiisiiCorr = isOIIISIIFilter() ? 0.60 : 1.0;
             if (filterType === 'none') {
                 if (resEl)  resEl.textContent  = '—';
                 if (noteEl) noteEl.textContent = '';
@@ -229,6 +239,8 @@ function toggleLock(id) {
             let flux      = baseFlux * (1 / Math.pow(fR,2)) * filterRed * qe * pixCorr;
             let fRCorr    = fR<=2?1.6:fR<=3?1.22:fR<=4?1.12:1.0;
             flux = flux / fRCorr;
+            // Filtri OIII+SII: SII tipicamente 3-5x più debole di Ha → posa più conservativa
+            if (isOIIISIIFilter()) flux = flux * 0.60;
             let tMin = flux > 0 ? Math.round((10 * rn * rn) / flux) : 600;
             tMin = Math.max(60, Math.min(3600, tMin));
             let tStr = tMin >= 60 ? Math.round(tMin/60)+' min' : tMin+' sec';
@@ -521,6 +533,7 @@ function toggleLock(id) {
             // Filtro OSC dual/quad-band
             let filterOscType = (document.getElementById('filter-osc-type')||{value:'none'}).value;
             let doingOscNB = !isM && (filterOscType === 'dual' || filterOscType === 'quad');
+            let doingOIIISII = doingOscNB && isOIIISIIFilter();
             let sFact = (doingN && !isEmission) ? 2.0 : 1.0;
 
             // 5. INQUINAMENTO LUNARE EFFETTIVO
