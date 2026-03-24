@@ -1268,6 +1268,16 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.es.cl_v63_vis_desc     = "Cuando el objetivo no es visible, Fin de Sesión se vuelve rojo con aviso. Ventana cero evita el cálculo erróneo de 24h. Generar Secuencia Óptima bloqueado con mensaje explicativo.";
         i18n.zh.cl_v63_vis_desc     = "当目标不可见时，结束时间变红并显示警告。零窗口防止错误的24小时计算。生成最优序列被阻止并显示说明信息。";
 
+        i18n.it.cl_v63_coord_title  = "Correzione coordinate DSO database";
+        i18n.en.cl_v63_coord_title  = "DSO database coordinate fix";
+        i18n.es.cl_v63_coord_title  = "Corrección de coordenadas base de datos DSO";
+        i18n.zh.cl_v63_coord_title  = "DSO数据库坐标修正";
+
+        i18n.it.cl_v63_coord_desc   = "Verifica sistematica di 78 oggetti del database: 5 errori significativi corretti. Sh2-240 (Simeis 147): 31 min RA — il più grave. NGC 3628: 22 min. IC 410 (Girini): 5 min. NGC 2174 (Testa di Scimmia): 4 min. NGC 2359 (Thor's Helmet): 1.7 min. Database sensori PlayerOne verificato da siti ufficiali (Saturn→IMX533, Poseidon→IMX571, ecc.).";
+        i18n.en.cl_v63_coord_desc   = "Systematic verification of 78 database objects: 5 significant errors corrected. Sh2-240 (Simeis 147): 31 min RA — most severe. NGC 3628: 22 min. IC 410 (Tadpoles): 5 min. NGC 2174 (Monkey Head): 4 min. NGC 2359 (Thor's Helmet): 1.7 min. PlayerOne sensor database verified from official sites.";
+        i18n.es.cl_v63_coord_desc   = "Verificación sistemática de 78 objetos: 5 errores significativos corregidos. Sh2-240 (Simeis 147): 31 min AR — el más grave. NGC 3628: 22 min. IC 410 (Renacuajos): 5 min. NGC 2174 (Cabeza de Mono): 4 min. NGC 2359 (Casco de Thor): 1,7 min. Base de datos de sensores PlayerOne verificada.";
+        i18n.zh.cl_v63_coord_desc   = "对数据库78个天体进行系统验证，修正5处重大错误。Sh2-240（面条星云）：赤经误差31分钟——最严重。NGC 3628：22分钟。IC 410（蝌蚪星云）：5分钟。NGC 2174（猴头星云）：4分钟。NGC 2359（雷神头盔）：1.7分钟。PlayerOne传感器数据库已根据官方网站核实。";
+
         i18n.it.cl_v63_db_title     = "M43 nel database + fix ricerca Messier";
         i18n.en.cl_v63_db_title     = "M43 in database + Messier search fix";
         i18n.es.cl_v63_db_title     = "M43 en la base de datos + fix búsqueda Messier";
