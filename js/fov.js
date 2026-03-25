@@ -294,7 +294,7 @@
             if (!aladinSkyMap && typeof A !== 'undefined') {
                 A.init.then(() => {
                     aladinSkyMap = A.aladin('#aladin-lite-div', {
-                        survey: "https://irsa.ipac.caltech.edu/data/hips/CDS/P/PanSTARRS/DR1/color-i-r-g",
+                        survey: "P/DSS2/color",
                         fov: 2,
                         target: (targetSelezionato.ra * 15) + " " + targetSelezionato.dec,
                         showReticle: false,
@@ -344,7 +344,21 @@
             if (!modal) return;
             let saved = localStorage.getItem('ad_accessorio_value') || 'none';
             let sel = document.getElementById('accessorio-select');
-            if (sel) sel.value = saved;
+            if (sel) {
+                // Traduce le optgroup e le option "Riduttore"
+                let groups = sel.querySelectorAll('optgroup');
+                groups.forEach(g => {
+                    if (g.label === 'Riduttore di focale' || g.getAttribute('data-key') === 'acc_group_reducer') {
+                        g.setAttribute('data-key', 'acc_group_reducer');
+                        g.label = t('acc_group_reducer');
+                    }
+                });
+                sel.querySelectorAll('option[data-reducer]').forEach(o => {
+                    let factor = o.getAttribute('data-reducer');
+                    o.textContent = t('acc_reducer') + ' ' + factor;
+                });
+                sel.value = saved;
+            }
             aggiornaCustomAccessorio();
             modal.style.display = 'flex';
         }

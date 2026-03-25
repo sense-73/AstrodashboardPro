@@ -542,6 +542,16 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.es.acc_info_body      = "El factor modifica la focal efectiva: la <b>Barlow</b> la multiplica (p.ej. 2× dobla la focal, reduce el campo a la mitad), el <b>Reductor</b> la acorta (p.ej. 0.8× reduce focal y f/ratio, ampliando el campo). Todos los cálculos de FOV, muestreo y tiempos de pose usan la focal resultante.";
         i18n.zh.acc_info_body      = "该倍率修改有效焦距：<b>巴罗镜</b>增大焦距（如2×使焦距加倍，视场减半），<b>减焦镜</b>缩短焦距（如0.8×缩短焦距和f值，扩大视场）。所有FOV、采样和曝光时间计算均使用最终焦距。";
 
+        i18n.it.acc_group_reducer  = "Riduttore di focale";
+        i18n.en.acc_group_reducer  = "Focal reducer";
+        i18n.es.acc_group_reducer  = "Reductor de focal";
+        i18n.zh.acc_group_reducer  = "减焦镜";
+
+        i18n.it.acc_reducer        = "Riduttore";
+        i18n.en.acc_reducer        = "Reducer";
+        i18n.es.acc_reducer        = "Reductor";
+        i18n.zh.acc_reducer        = "减焦镜";
+
         i18n.it.info_hdr_row = "La riga <b>Light HDR</b> serve per la strategia ad alto dinamismo: affianca alle pose lunghe un set di esposizioni brevi per catturare i dettagli nei nuclei sovraesposti (es. nebulose planetarie, ammassi globulari) senza saturarli.<br><br>Imposta <b>Pose</b> e <b>Secondi</b> liberamente — i lucchetti 🔒 proteggono i tuoi valori personalizzati quando clicchi su 'Genera Sequenza Ottimale'.<br><br>Le pose HDR vengono incluse nel calcolo dei tempi e nell'export N.I.N.A., dove appaiono come blocco separato con il suffisso <i>HDR</i>.";
         i18n.en.info_hdr_row = "The <b>Light HDR</b> row enables a high-dynamic-range strategy: it pairs short exposures alongside the main long ones to capture detail in overexposed cores (e.g. planetary nebulae, globular clusters) without saturation.<br><br>Set <b>Frames</b> and <b>Seconds</b> freely — the 🔒 locks protect your custom values when you click 'Generate Optimal Sequence'.<br><br>HDR frames are included in the time calculation and in the N.I.N.A. export, where they appear as a separate block with the <i>HDR</i> suffix.";
         i18n.es.info_hdr_row = "La fila <b>Light HDR</b> permite una estrategia de alto rango dinámico: complementa las exposiciones largas con exposiciones cortas para capturar detalles en núcleos sobreexpuestos (nebulosas planetarias, cúmulos globulares) sin saturarlos.<br><br>Ajusta <b>Poses</b> y <b>Segundos</b> libremente — los 🔒 protegen tus valores personalizados al hacer clic en 'Generar Secuencia Óptima'.<br><br>Las poses HDR se incluyen en el cálculo de tiempos y en el export N.I.N.A., donde aparecen como bloque separado con el sufijo <i>HDR</i>.";

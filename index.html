@@ -1920,13 +1920,13 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                         <option value="3">Barlow 3×</option>
                         <option value="5">Barlow 5×</option>
                     </optgroup>
-                    <optgroup label="Riduttore di focale">
-                        <option value="0.63">Riduttore 0.63×</option>
-                        <option value="0.72">Riduttore 0.72×</option>
-                        <option value="0.75">Riduttore 0.75×</option>
-                        <option value="0.79">Riduttore 0.79×</option>
-                        <option value="0.8">Riduttore 0.8×</option>
-                        <option value="0.85">Riduttore 0.85×</option>
+                    <optgroup label="Riduttore di focale" data-key="acc_group_reducer">
+                        <option value="0.63" data-reducer="0.63×">Riduttore 0.63×</option>
+                        <option value="0.72" data-reducer="0.72×">Riduttore 0.72×</option>
+                        <option value="0.75" data-reducer="0.75×">Riduttore 0.75×</option>
+                        <option value="0.79" data-reducer="0.79×">Riduttore 0.79×</option>
+                        <option value="0.8" data-reducer="0.8×">Riduttore 0.8×</option>
+                        <option value="0.85" data-reducer="0.85×">Riduttore 0.85×</option>
                     </optgroup>
                     <optgroup label="Custom">
                         <option value="custom" data-i18n="acc_custom">Valore personalizzato…</option>
@@ -2427,6 +2427,10 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                 if (lastVersion !== CURRENT_VERSION) {
                     var modal = document.getElementById('changelog-modal');
                     if (modal) { modal.style.display = 'flex'; modal.style.pointerEvents = 'auto'; }
+                    // Forza traduzione del modal (changeLanguage potrebbe non essere ancora girata)
+                    if (typeof changeLanguage === 'function' && typeof lang !== 'undefined') {
+                        setTimeout(function() { changeLanguage(lang); }, 0);
+                    }
                     // Rive parte alla chiusura changelog (vedi chiudiChangelog)
                 } else {
                     // Nessuna changelog — avvia Rive dopo 2 secondi
