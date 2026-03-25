@@ -1338,13 +1338,54 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.es.cl_v63_db_desc      = "Añadida NGC 1982 (Nebulosa De Mairan / M43). Fix búsqueda Messier: la consulta Wikidata ahora usa \"Messier N\" — elimina resultados incongruentes como autopistas húngaras. HDR automático activado para M42 (Trapezoide, 10s).";
         i18n.zh.cl_v63_db_desc      = "新增NGC 1982（德·迈兰星云/M43）。Messier搜索修复：Wikidata查询现使用\"Messier N\"而非\"MN\"——消除如匈牙利高速公路等不相关结果。M42（四边形星团，10秒）自动启用HDR。";
 
+        // ── Changelog v6.4 ──
+        i18n.it.cl_v64_accessory_title = "Selettore Accessorio Ottico (Barlow / Riduttore)";
+        i18n.en.cl_v64_accessory_title = "Optical Accessory Selector (Barlow / Reducer)";
+        i18n.es.cl_v64_accessory_title = "Selector de Accesorio Óptico (Barlow / Reductor)";
+        i18n.zh.cl_v64_accessory_title = "光学附件选择器（巴罗镜/减焦镜）";
+
+        i18n.it.cl_v64_accessory_desc = "Nuovo pulsante affianco al titolo del Simulatore FOV: seleziona Barlow (1.5×–5×) o Riduttore (0.63×–0.85×) oppure un valore custom. La focale effettiva viene mostrata nel riquadro Campo Inquadrato e propagata a tutti i calcoli: FOV, campionamento, f/ratio, tempi di posa Smart e formula swamping filtri OSC.";
+        i18n.en.cl_v64_accessory_desc = "New button next to the FOV Simulator title: select a Barlow (1.5×–5×) or Reducer (0.63×–0.85×) or a custom value. The effective focal length is displayed in the Field of View box and propagated to all calculations: FOV, sampling, f/ratio, Smart exposure times and OSC filter swamping formula.";
+        i18n.es.cl_v64_accessory_desc = "Nuevo botón junto al título del Simulador FOV: selecciona una Barlow (1.5×–5×) o un Reductor (0.63×–0.85×) o un valor personalizado. La focal efectiva se muestra en el recuadro de Campo y se propaga a todos los cálculos: FOV, muestreo, f/ratio, tiempos Smart y fórmula swamping de filtros OSC.";
+        i18n.zh.cl_v64_accessory_desc = "在FOV模拟器标题旁新增按钮：可选择巴罗镜（1.5×–5×）、减焦镜（0.63×–0.85×）或自定义倍率。有效焦距显示在视场框中，并传递至所有计算：FOV、采样、f值、Smart曝光时间和OSC滤镜swamping公式。";
+
+        i18n.it.cl_v64_overhead_title = "Overhead tecnico per frame (Light, Dark, Bias)";
+        i18n.en.cl_v64_overhead_title = "Per-frame technical overhead (Light, Dark, Bias)";
+        i18n.es.cl_v64_overhead_title = "Sobrecarga técnica por fotograma (Light, Dark, Bias)";
+        i18n.zh.cl_v64_overhead_title = "每帧技术开销（Light、Dark、Bias）";
+
+        i18n.it.cl_v64_overhead_desc = "Readout sensore, download USB e salvataggio FITS sono ora contabilizzati nel budget di sessione. Formula: ~1.2s + 0.08s/MP per Light e Dark (es. ~3s @ 20MP, ~5s @ 45MP FF); ~0.8s + 0.05s/MP per Bias. L'icona ⚙️ sul totale di ogni riga mostra il dettaglio. Risolve i residui negativi nella sequenza ottimale.";
+        i18n.en.cl_v64_overhead_desc = "Sensor readout, USB download and FITS save are now accounted for in the session budget. Formula: ~1.2s + 0.08s/MP for Light and Dark (e.g. ~3s @ 20MP, ~5s @ 45MP FF); ~0.8s + 0.05s/MP for Bias. The ⚙️ icon on each row total shows the detail. Fixes negative residuals in the optimal sequence.";
+        i18n.es.cl_v64_overhead_desc = "Lectura del sensor, descarga USB y guardado FITS se contabilizan ahora en el presupuesto de sesión. Fórmula: ~1.2s + 0.08s/MP para Light y Dark (p.ej. ~3s @ 20MP, ~5s @ 45MP FF); ~0.8s + 0.05s/MP para Bias. El icono ⚙️ en cada total de fila muestra el detalle. Corrige residuos negativos en la secuencia óptima.";
+        i18n.zh.cl_v64_overhead_desc = "传感器读出、USB传输和FITS保存现已计入会话预算。公式：Light和Dark约为1.2秒+0.08秒/百万像素（如20MP约3秒，全画幅45MP约5秒）；Bias约为0.8秒+0.05秒/百万像素。每行总计的⚙️图标显示详情。修复了最优序列中的负余量问题。";
+
+        i18n.it.cl_v64_protot_title = "Colonna Totale nella griglia PRO";
+        i18n.en.cl_v64_protot_title = "Total column in the PRO grid";
+        i18n.es.cl_v64_protot_title = "Columna Total en la cuadrícula PRO";
+        i18n.zh.cl_v64_protot_title = "PRO表格新增总计列";
+
+        i18n.it.cl_v64_protot_desc = "La modalità PRO mostra ora il tempo totale per ogni riga (Light, HDR, Dark, Bias) con overhead incluso — identico alla visualizzazione Smart. Icona ⚙️ con tooltip sul contributo dell'overhead tecnico.";
+        i18n.en.cl_v64_protot_desc = "PRO mode now shows the total time for each row (Light, HDR, Dark, Bias) with overhead included — identical to the Smart display. ⚙️ icon with tooltip on the technical overhead contribution.";
+        i18n.es.cl_v64_protot_desc = "El modo PRO muestra ahora el tiempo total por fila (Light, HDR, Dark, Bias) con overhead incluido — idéntico a la vista Smart. Icono ⚙️ con tooltip sobre el overhead técnico.";
+        i18n.zh.cl_v64_protot_desc = "PRO模式现在显示每行（Light、HDR、Dark、Bias）的总时间（含开销）——与Smart显示相同。⚙️图标带有技术开销的工具提示。";
+
+        i18n.it.cl_v64_fixes_title = "Fix ripristino preset + database filtri Askar";
+        i18n.en.cl_v64_fixes_title = "Preset restore fix + Askar filter database";
+        i18n.es.cl_v64_fixes_title = "Fix restauración preset + base de datos filtros Askar";
+        i18n.zh.cl_v64_fixes_title = "预设恢复修复 + Askar滤镜数据库";
+
+        i18n.it.cl_v64_fixes_desc = "Fix: i select Telescopio e Sensore ora si ripristinano correttamente al ricaricamento. Aggiunti filtri Askar C1/C2 (50nm), D1/D2 (15nm), E1/E2 (8nm dual-band). Corretti Optolong L-eNhance (da 14nm a 34nm) e Svbony SV220 (da 10nm a 14nm).";
+        i18n.en.cl_v64_fixes_desc = "Fix: Telescope and Sensor selects now restore correctly on reload. Added Askar filters C1/C2 (50nm), D1/D2 (15nm), E1/E2 (8nm dual-band). Corrected Optolong L-eNhance (from 14nm to 34nm) and Svbony SV220 (from 10nm to 14nm).";
+        i18n.es.cl_v64_fixes_desc = "Fix: los selectores Telescopio y Sensor ahora se restauran correctamente al recargar. Añadidos filtros Askar C1/C2 (50nm), D1/D2 (15nm), E1/E2 (8nm dual-band). Corregidos Optolong L-eNhance (de 14nm a 34nm) y Svbony SV220 (de 10nm a 14nm).";
+        i18n.zh.cl_v64_fixes_desc = "修复：望远镜和传感器选择框现在在重新加载时能正确恢复。新增Askar滤镜C1/C2（50nm）、D1/D2（15nm）、E1/E2（8nm双波段）。修正Optolong L-eNhance（从14nm改为34nm）和Svbony SV220（从10nm改为14nm）。";
+
         // ⚠️ AGGIORNARE VERSIONE QUI quando si rilascia una nuova versione:
         // cl_close_btn = testo del pulsante nel modal changelog (NON è hardcoded in index.html)
         // Aggiornare anche: title tag, badge navbar (>vX.X</button>), landing (>vX.X</span>), modal badge, pulsante "Inizia a usare" in index.html
-        i18n.it.cl_close_btn = "Inizia a usare v6.3 🚀";
-        i18n.en.cl_close_btn = "Start using v6.3 🚀";
-        i18n.es.cl_close_btn = "Empezar a usar v6.3 🚀";
-        i18n.zh.cl_close_btn = "开始使用 v6.3 🚀";
+        i18n.it.cl_close_btn = "Inizia a usare v6.4 🚀";
+        i18n.en.cl_close_btn = "Start using v6.4 🚀";
+        i18n.es.cl_close_btn = "Empezar a usar v6.4 🚀";
+        i18n.zh.cl_close_btn = "开始使用 v6.4 🚀";
 
         i18n.it.cl1_title           = "Database telescopi e sensori ampliato";
         i18n.en.cl1_title           = "Expanded telescope and sensor database";
