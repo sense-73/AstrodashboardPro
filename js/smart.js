@@ -109,7 +109,7 @@ function toggleLock(id) {
             let modal = document.getElementById('filter-osc-modal');
             if (!modal) return;
             let bortle = (document.getElementById('bortle-class')||{}).value || '5';
-            let fL = parseFloat((document.getElementById('focal-length')||{}).value)||400;
+            let fL = getFocalEffettiva ? getFocalEffettiva() : (parseFloat((document.getElementById('focal-length')||{}).value)||400);
             let ap = parseFloat((document.getElementById('aperture')||{}).value)||72;
             let fR = (fL/ap).toFixed(1);
             document.getElementById('foctx-bortle').textContent = 'Bortle ' + bortle;
@@ -219,7 +219,7 @@ function toggleLock(id) {
             let filterType = typeEl.value;
             let bw  = parseFloat(bwEl.value) || 14;
             let bortle = parseInt((document.getElementById('bortle-class')||{}).value||5);
-            let fL = parseFloat((document.getElementById('focal-length')||{}).value)||400;
+            let fL = getFocalEffettiva ? getFocalEffettiva() : (parseFloat((document.getElementById('focal-length')||{}).value)||400);
             let ap = parseFloat((document.getElementById('aperture')||{}).value)||72;
             let fR = fL / ap;
             let sp2 = getSensorParams();
@@ -516,7 +516,7 @@ function toggleLock(id) {
             let subT = Math.max(0.5, bH + magAdjustment);
 
             // 3. RAPPORTO FOCALE DELL'UTENTE
-            let fL = parseFloat(document.getElementById('focal-length').value)||400;
+            let fL = getFocalEffettiva ? getFocalEffettiva() : (parseFloat(document.getElementById('focal-length').value)||400);
             let ap = parseFloat(document.getElementById('aperture').value)||72;
             let fR = fL / ap;
             let fFact = Math.pow(fR / 4.0, 2);

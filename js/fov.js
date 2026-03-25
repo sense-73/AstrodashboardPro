@@ -1,6 +1,18 @@
 // fov.js — FOV simulatore, rotazione PA, mosaico, coordinate, tooltip, guida
 // ============================================================
 
+        // ── Accessorio ottico (Barlow / riduttore) ─────────────────────────
+        // Restituisce il fattore moltiplicativo corrente (1.0 = nessun accessorio)
+        function getAccessorioFattore() {
+            return parseFloat(localStorage.getItem('ad_accessorio_fattore') || '1.0');
+        }
+        // Restituisce la focale effettiva (nativa × fattore)
+        function getFocalEffettiva() {
+            let fl = parseFloat(document.getElementById('focal-length').value) || 1000;
+            return fl * getAccessorioFattore();
+        }
+        // ──────────────────────────────────────────────────────────────────
+
         function mostraTooltip(el, key) {
             let tooltip = document.getElementById('floating-tooltip');
             tooltip.innerHTML = t(key);
@@ -326,6 +338,77 @@
                 }
             }, 120);
         }
+        // ── Modale Accessorio Ottico ───────────────────────────────────────
+        function apriModalAccessorio() {
+            let modal = document.getElementById('accessorio-modal');
+            if (!modal) return;
+            let saved = localStorage.getItem('ad_accessorio_value') || 'none';
+            let sel = document.getElementById('accessorio-select');
+            if (sel) sel.value = saved;
+            aggiornaCustomAccessorio();
+            modal.style.display = 'flex';
+        }
+
+        function chiudiModalAccessorio() {
+            let modal = document.getElementById('accessorio-modal');
+            if (modal) modal.style.display = 'none';
+        }
+
+        function aggiornaCustomAccessorio() {
+            let sel = document.getElementById('accessorio-select');
+            let customWrap = document.getElementById('accessorio-custom-wrap');
+            if (!sel || !customWrap) return;
+            customWrap.style.display = sel.value === 'custom' ? 'flex' : 'none';
+        }
+
+        function confermaAccessorio() {
+            let sel = document.getElementById('accessorio-select');
+            if (!sel) return;
+            let val = sel.value;
+            let fattore = 1.0;
+            let nome = '';
+            if (val === 'none') {
+                fattore = 1.0; nome = '';
+            } else if (val === 'custom') {
+                fattore = parseFloat(document.getElementById('accessorio-custom-val').value) || 1.0;
+                nome = `${fattore}×`;
+            } else {
+                fattore = parseFloat(val);
+                nome = sel.options[sel.selectedIndex].text;
+            }
+            localStorage.setItem('ad_accessorio_fattore', fattore.toString());
+            localStorage.setItem('ad_accessorio_value', val);
+            localStorage.setItem('ad_accessorio_nome', nome);
+            aggiornaBottoneAccessorio();
+            chiudiModalAccessorio();
+            aggiornaFOV();
+            if (typeof calcolaTempi === 'function') calcolaTempi();
+            if (typeof aggiornaAI   === 'function') aggiornaAI();
+        }
+
+        function aggiornaBottoneAccessorio() {
+            let fattore = getAccessorioFattore();
+            let nome    = localStorage.getItem('ad_accessorio_nome') || '';
+            let btn     = document.getElementById('accessorio-btn');
+            let activeSpan = document.getElementById('accessorio-active-label');
+            if (!btn) return;
+            if (fattore === 1.0 || !nome) {
+                btn.style.color        = '#6e7a8a';
+                btn.style.borderColor  = '#6e7a8a';
+                btn.querySelector('#accessorio-btn-label').textContent = t('acc_none');
+                if (activeSpan) activeSpan.style.display = 'none';
+            } else {
+                btn.style.color        = '#ffaa00';
+                btn.style.borderColor  = '#ffaa00';
+                btn.querySelector('#accessorio-btn-label').textContent = nome;
+                if (activeSpan) {
+                    activeSpan.textContent  = t('acc_active');
+                    activeSpan.style.display = 'inline';
+                }
+            }
+        }
+        // ──────────────────────────────────────────────────────────────────
+
         function applicaPresetTelescopio() { let v = document.getElementById('preset-telescope').value; if(v){ let p = v.split(','); document.getElementById('focal-length').value = p[0]; document.getElementById('aperture').value = p[1] || 100; aggiornaFOV(); } }
         
 
@@ -344,7 +427,7 @@
         }
 
         function aggiornaFOV() {
-            let fl = parseFloat(document.getElementById('focal-length').value) || 1000;
+            let fl = getFocalEffettiva();
             let sw = parseFloat(document.getElementById('sensor-width').value) || 23.5;
             let sh = parseFloat(document.getElementById('sensor-height').value) || 15.6;
             
@@ -374,6 +457,23 @@
             let fW = (2 * Math.atan(sw / (2 * fl)) * (180 / Math.PI));
             let fH = (2 * Math.atan(sh / (2 * fl)) * (180 / Math.PI));
             document.getElementById('fov-result').innerText = `${fW.toFixed(2)}° x ${fH.toFixed(2)}°`;
+
+            // ── Info focale effettiva sotto il FOV ────────────────────────
+            let _infoEl = document.getElementById('fov-focal-info');
+            let _fattore = getAccessorioFattore();
+            let _flNativa = parseFloat(document.getElementById('focal-length').value) || 1000;
+            let _ap = parseFloat(document.getElementById('aperture').value) || 100;
+            let _frEff = (_flNativa * _fattore / _ap).toFixed(1);
+            if (_infoEl) {
+                if (_fattore !== 1.0) {
+                    let _nomeAcc = localStorage.getItem('ad_accessorio_nome') || '';
+                    _infoEl.innerHTML = `<span style="color:#ffaa00; font-size:0.82em;">Focale effettiva: ${Math.round(fl)} mm &nbsp;·&nbsp; f/${_frEff}</span><br><span style="color:#6e7a8a; font-size:0.75em;">${Math.round(_flNativa)} mm nativa × ${_nomeAcc}</span>`;
+                    _infoEl.style.display = 'block';
+                } else {
+                    _infoEl.style.display = 'none';
+                }
+            }
+            // ─────────────────────────────────────────────────────────────
 
             let isMosaic = document.getElementById('capture-mode').value === 'mosaic';
             let mx = 1, my = 1, overlap = 0;

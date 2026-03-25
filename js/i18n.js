@@ -497,6 +497,51 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.es.light_overhead_tip = "El tiempo mostrado incluye la sobrecarga técnica por fotograma: lectura del sensor + descarga USB + guardado FITS en disco. Estimado ~1.2s + 0.08s/MP (p.ej. ~3s @ 20MP, ~5s @ 45MP FF). Se descuenta del presupuesto disponible para garantizar que la sesión no se exceda.";
         i18n.zh.light_overhead_tip = "显示时间包含每帧技术开销：传感器读出 + USB传输 + FITS保存至磁盘。估算约1.2秒 + 0.08秒/百万像素（如20MP约3秒，45MP全画幅约5秒）。已从可用预算中扣除，确保拍摄时间不会超出。";
 
+        i18n.it.acc_none           = "Nessun accessorio";
+        i18n.en.acc_none           = "No accessory";
+        i18n.es.acc_none           = "Sin accesorio";
+        i18n.zh.acc_none           = "无配件";
+
+        i18n.it.acc_active         = "attivo";
+        i18n.en.acc_active         = "active";
+        i18n.es.acc_active         = "activo";
+        i18n.zh.acc_active         = "已启用";
+
+        i18n.it.acc_modal_title    = "Accessorio Ottico";
+        i18n.en.acc_modal_title    = "Optical Accessory";
+        i18n.es.acc_modal_title    = "Accesorio Óptico";
+        i18n.zh.acc_modal_title    = "光学附件";
+
+        i18n.it.acc_select_label   = "Seleziona accessorio";
+        i18n.en.acc_select_label   = "Select accessory";
+        i18n.es.acc_select_label   = "Selecciona accesorio";
+        i18n.zh.acc_select_label   = "选择配件";
+
+        i18n.it.acc_custom         = "Valore personalizzato…";
+        i18n.en.acc_custom         = "Custom value…";
+        i18n.es.acc_custom         = "Valor personalizado…";
+        i18n.zh.acc_custom         = "自定义值…";
+
+        i18n.it.acc_custom_label   = "Fattore (es. 0.85):";
+        i18n.en.acc_custom_label   = "Factor (e.g. 0.85):";
+        i18n.es.acc_custom_label   = "Factor (p.ej. 0.85):";
+        i18n.zh.acc_custom_label   = "倍率（如 0.85）：";
+
+        i18n.it.acc_confirm        = "Applica";
+        i18n.en.acc_confirm        = "Apply";
+        i18n.es.acc_confirm        = "Aplicar";
+        i18n.zh.acc_confirm        = "应用";
+
+        i18n.it.acc_info_tip       = "Il fattore accessorio modifica focale effettiva e f/ratio. Barlow 2× su f/8 → f/16 (4× più lento, tempi di posa quadruplicati). Riduttore 0.8× su f/8 → f/6.4 (più luminoso, campo più ampio). Tutti i calcoli di FOV, campionamento e Smart usano la focale risultante.";
+        i18n.en.acc_info_tip       = "The accessory factor modifies the effective focal length and f/ratio. Barlow 2× on f/8 → f/16 (4× slower, exposure times quadrupled). Reducer 0.8× on f/8 → f/6.4 (brighter, wider field). All FOV, sampling and Smart calculations use the resulting focal length.";
+        i18n.es.acc_info_tip       = "El factor del accesorio modifica la focal efectiva y el f/ratio. Barlow 2× en f/8 → f/16 (4× más lento, tiempos cuadruplicados). Reductor 0.8× en f/8 → f/6.4 (más luminoso, campo más amplio). Todos los cálculos de FOV, muestreo y Smart usan la focal resultante.";
+        i18n.zh.acc_info_tip       = "附件倍率改变有效焦距和f值。2×巴罗镜用于f/8 → f/16（速度慢4倍，曝光时间变为4倍）。0.8×减焦镜用于f/8 → f/6.4（更亮，视场更宽）。所有FOV、采样和智能计算均使用最终焦距。";
+
+        i18n.it.acc_info_body      = "Il fattore modifica la focale effettiva: <b>Barlow</b> moltiplica (es. 2× raddoppia la focale, dimezza il FOV), <b>Riduttore</b> riduce (es. 0.8× accorcia focale e f/ratio, allargando il campo). Tutti i calcoli di FOV, campionamento e tempi di posa usano la focale risultante.";
+        i18n.en.acc_info_body      = "The factor modifies the effective focal length: a <b>Barlow</b> multiplies it (e.g. 2× doubles focal length, halves FOV), a <b>Reducer</b> shortens it (e.g. 0.8× reduces focal length and f/ratio, widening the field). All FOV, sampling and exposure time calculations use the resulting focal length.";
+        i18n.es.acc_info_body      = "El factor modifica la focal efectiva: la <b>Barlow</b> la multiplica (p.ej. 2× dobla la focal, reduce el campo a la mitad), el <b>Reductor</b> la acorta (p.ej. 0.8× reduce focal y f/ratio, ampliando el campo). Todos los cálculos de FOV, muestreo y tiempos de pose usan la focal resultante.";
+        i18n.zh.acc_info_body      = "该倍率修改有效焦距：<b>巴罗镜</b>增大焦距（如2×使焦距加倍，视场减半），<b>减焦镜</b>缩短焦距（如0.8×缩短焦距和f值，扩大视场）。所有FOV、采样和曝光时间计算均使用最终焦距。";
+
         i18n.it.info_hdr_row = "La riga <b>Light HDR</b> serve per la strategia ad alto dinamismo: affianca alle pose lunghe un set di esposizioni brevi per catturare i dettagli nei nuclei sovraesposti (es. nebulose planetarie, ammassi globulari) senza saturarli.<br><br>Imposta <b>Pose</b> e <b>Secondi</b> liberamente — i lucchetti 🔒 proteggono i tuoi valori personalizzati quando clicchi su 'Genera Sequenza Ottimale'.<br><br>Le pose HDR vengono incluse nel calcolo dei tempi e nell'export N.I.N.A., dove appaiono come blocco separato con il suffisso <i>HDR</i>.";
         i18n.en.info_hdr_row = "The <b>Light HDR</b> row enables a high-dynamic-range strategy: it pairs short exposures alongside the main long ones to capture detail in overexposed cores (e.g. planetary nebulae, globular clusters) without saturation.<br><br>Set <b>Frames</b> and <b>Seconds</b> freely — the 🔒 locks protect your custom values when you click 'Generate Optimal Sequence'.<br><br>HDR frames are included in the time calculation and in the N.I.N.A. export, where they appear as a separate block with the <i>HDR</i> suffix.";
         i18n.es.info_hdr_row = "La fila <b>Light HDR</b> permite una estrategia de alto rango dinámico: complementa las exposiciones largas con exposiciones cortas para capturar detalles en núcleos sobreexpuestos (nebulosas planetarias, cúmulos globulares) sin saturarlos.<br><br>Ajusta <b>Poses</b> y <b>Segundos</b> libremente — los 🔒 protegen tus valores personalizados al hacer clic en 'Generar Secuencia Óptima'.<br><br>Las poses HDR se incluyen en el cálculo de tiempos y en el export N.I.N.A., donde aparecen como bloque separado con el sufijo <i>HDR</i>.";
