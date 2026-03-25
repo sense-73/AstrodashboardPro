@@ -394,7 +394,6 @@
         // Aggancia il salvataggio automatico a tutti i campi strumento
         // (chiamato dopo il DOM ready dal DOMContentLoaded in multinight.js)
         function inizializzaPersistenzaStrumento() {
-            ripristinaImpostazioniStrumento();
             AD_INSTRUMENT_FIELDS.forEach(id => {
                 let el = document.getElementById(id);
                 if (el) el.addEventListener('change', salvaImpostazioniStrumento);

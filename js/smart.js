@@ -835,6 +835,10 @@ function toggleLock(id) {
             let mp = (sw / (px / 1000)) * (sh / (px / 1000)) / 1e6;
             // Readout ADC: ~0.1s base + 0.012s/MP | Save FITS ~2MB/MP @ 80MB/s → 0.025s/MP
             let biasOverhead = Math.max(1.0, 0.8 + mp * 0.05);
+            // ── Overhead Light/Dark: readout + download USB + salvataggio FITS ──
+            // Light e Dark producono file pieni → overhead maggiore dei Bias
+            // ~1.2s base + 0.08s/MP (conservativo: ~3s @ 20MP, ~5s @ 45MP FF)
+            let lightOverhead = Math.max(1.5, 1.2 + mp * 0.08);
             // ────────────────────────────────────────────────────────────────
             
             let isMosaic = document.getElementById('capture-mode').value === 'mosaic';
@@ -850,25 +854,30 @@ function toggleLock(id) {
             fL.forEach(f => {
                 let c = parseInt(document.getElementById(`${f.id}-count`).value)||0;
                 let e = parseInt(document.getElementById(`${f.id}-exp`).value)||0;
-                let eEff = f.id.includes('bias') ? (c > 0 ? biasOverhead : 0) : e;
+                let eEff;
+                if (f.id.includes('bias'))       eEff = c > 0 ? biasOverhead : 0;
+                else if (f.id.includes('dark'))  eEff = e + (c > 0 ? lightOverhead : 0);
+                else                             eEff = e + (c > 0 ? lightOverhead : 0);
                 let rs = c * eEff;
                 tSec += rs;
                 if (!f.id.includes('dark') && !f.id.includes('bias')) tLF += c;
-                // HDR companion row: se visibile e con pose > 0, aggiunge tempo reale
+                // HDR companion row: overhead incluso anche sui frame HDR
                 if (!f.id.includes('dark') && !f.id.includes('bias')) {
                     let _hdrRow = document.getElementById(`${f.id}-hdr-row`);
                     if (_hdrRow && _hdrRow.style.display !== 'none') {
                         let _hdrC = parseInt((document.getElementById(`${f.id}-hdr-count`)||{}).value)||0;
                         let _hdrE = parseInt((document.getElementById(`${f.id}-hdr-exp`)||{}).value)||0;
-                        let _hdrSec = _hdrC * _hdrE;
+                        let _hdrSec = _hdrC * (_hdrE + (_hdrC > 0 ? lightOverhead : 0));
                         if (_hdrC > 0 && _hdrE > 0) { tSec += _hdrSec; tLF += _hdrC; }
                         let _hdrTot = document.getElementById(`${f.id}-hdr-tot`);
-                        if (_hdrTot) _hdrTot.innerHTML = (_hdrSec > 0) ? formatSeconds(_hdrSec) : '—';
+                        if (_hdrTot) _hdrTot.innerHTML = (_hdrC > 0 && _hdrE > 0) ? formatSeconds(_hdrSec) : '—';
                     }
                 }
                 let rsLabel = formatSeconds(rs);
                 if (f.id.includes('bias') && c > 0 && e === 0) {
                     rsLabel += ` <span onmouseenter="mostraTooltip(this,'bias_overhead_tip')" onmouseleave="nascondiTooltip()" style="color:#888;cursor:help;display:inline-flex;align-items:center;"><svg width='13' height='13' style='vertical-align:middle'><use href='#i-settings'/></svg></span>`;
+                } else if (!f.id.includes('bias') && c > 0) {
+                    rsLabel += ` <span onmouseenter="mostraTooltip(this,'light_overhead_tip')" onmouseleave="nascondiTooltip()" style="color:#888;cursor:help;display:inline-flex;align-items:center;"><svg width='13' height='13' style='vertical-align:middle'><use href='#i-settings'/></svg></span>`;
                 }
                 document.getElementById(`${f.id}-tot`).innerHTML = rsLabel;
             });
@@ -946,8 +955,22 @@ function toggleLock(id) {
             }
 
             let isM = document.getElementById('sensor-type').value === 'mono', fL = isM ? framesMono : framesColor, cS = 0;
-            
-            fL.forEach(f => { if (f.id.includes('dark') || f.id.includes('bias')) cS += (parseInt(document.getElementById(`${f.id}-count`).value)||0) * (parseInt(document.getElementById(`${f.id}-exp`).value)||0); });
+
+            // Calcola overhead sensore (stessa formula di calcolaTempi)
+            let _sw = parseFloat(document.getElementById('sensor-width').value) || 23.5;
+            let _sh = parseFloat(document.getElementById('sensor-height').value) || 15.7;
+            let _px = parseFloat(document.getElementById('pixel-size').value) || 3.76;
+            let _mp = (_sw / (_px / 1000)) * (_sh / (_px / 1000)) / 1e6;
+            let _biasOvhG = Math.max(1.0, 0.8 + _mp * 0.05);
+            let _lightOvhG = Math.max(1.5, 1.2 + _mp * 0.08);
+
+            fL.forEach(f => {
+                if (!f.id.includes('dark') && !f.id.includes('bias')) return;
+                let cnt = parseInt(document.getElementById(`${f.id}-count`).value)||0;
+                let exp = parseInt(document.getElementById(`${f.id}-exp`).value)||0;
+                if (f.id.includes('bias')) cS += cnt * _biasOvhG;
+                else cS += cnt * (exp + (cnt > 0 ? _lightOvhG : 0));
+            });
             let rS = aS - cS; if (rS <= 0) { mostraAvviso(t("alert_calib"), "warn"); return; }
             // Sottrai il tempo HDR lockato dal budget disponibile per i frame principali
             let hdrLockedSec = 0;
@@ -963,7 +986,7 @@ function toggleLock(id) {
                 if (_hdrCLocked || _hdrELocked) {
                     let _hdrC = parseInt((document.getElementById(`${f.id}-hdr-count`)||{}).value)||0;
                     let _hdrE = parseInt((document.getElementById(`${f.id}-hdr-exp`)||{}).value)||0;
-                    hdrLockedSec += _hdrC * _hdrE;
+                    hdrLockedSec += _hdrC * (_hdrE + _lightOvhG);
                 }
             });
             let rSMain = Math.max(0, rS - hdrLockedSec);
@@ -1111,9 +1134,17 @@ function toggleLock(id) {
                 let uD = dChkF && dChkF.checked;
                 let dFrqEl = document.getElementById(`${f.id}-dfreq`);
                 let dF = parseInt(dFrqEl ? dFrqEl.value : _dFreqG) || _dFreqG;
-                let eeS = eS + (uD && dF > 0 ? dD / dF : 0);
+                // eeS include overhead per-frame + dither frazionario
+                let eeS = eS + _lightOvhG + (uD && dF > 0 ? dD / dF : 0);
                 document.getElementById(`${f.id}-exp`).value = eS;
                 let _mainComputedCount = Math.floor((rSMain * w[f.id]) / eeS);
+                // Verifica discreta (stessa formula di calcolaTempi) per evitare sforamenti
+                {
+                    let _budget = rSMain * w[f.id];
+                    let _ditherSec = uD && dF > 0 ? Math.floor(_mainComputedCount / dF) * dD : 0;
+                    let _actualTime = _mainComputedCount * (eS + _lightOvhG) + _ditherSec;
+                    if (_actualTime > _budget) _mainComputedCount = Math.max(0, _mainComputedCount - 1);
+                }
                 document.getElementById(`${f.id}-count`).value = _mainComputedCount;
                 // Suggerisci count HDR (30% del count principale, min 5) — rispetta il lucchetto
                 let _hdrRowGen = document.getElementById(`${f.id}-hdr-row`);

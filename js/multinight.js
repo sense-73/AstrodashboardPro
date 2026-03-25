@@ -699,6 +699,8 @@ function aggiungiNotte() {
         document.addEventListener('DOMContentLoaded', () => {
             changeLanguage(lang);
             popolaMenuAttrezzatura();
+            ripristinaImpostazioniStrumento();
+            inizializzaPersistenzaStrumento();
             aggiornaEffemeridi(new Date()); 
             scaricaDatiPrevisionali();
 
@@ -784,8 +786,8 @@ function aggiungiNotte() {
 
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js').then(reg => {
-                    console.log('App in background attivata!', reg.scope);
+                navigator.serviceWorker.register('sw.js').then(() => {
+                    // SW registrato
                 }).catch(err => console.error('Errore App:', err));
 
                 // Ascolta messaggio SW_UPDATED → mostra banner

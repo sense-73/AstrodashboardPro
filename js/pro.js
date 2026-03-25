@@ -337,7 +337,7 @@
             container.innerHTML = '';
 
             container.innerHTML = `
-                <div style="display: grid; grid-template-columns: 1fr 0.8fr 0.8fr 0.65fr 0.65fr 0.65fr 1fr; gap: 5px; font-size: 0.8em; color: #aaa; text-align: center; border-bottom: 1px solid #444; padding-bottom: 5px;">
+                <div style="display: grid; grid-template-columns: 1fr 0.8fr 0.8fr 0.65fr 0.65fr 0.65fr 1fr 0.9fr; gap: 5px; font-size: 0.8em; color: #aaa; text-align: center; border-bottom: 1px solid #444; padding-bottom: 5px;">
                     <div style="text-align: left;">Filtro</div>
                     <div>Pose</div>
                     <div>Secs</div>
@@ -345,6 +345,7 @@
                     <div>Offset</div>
                     <div>Bin</div>
                     <div>Dither (Freq.)</div>
+                    <div>Totale</div>
                 </div>
             `;
 
@@ -357,7 +358,7 @@
                 let defaultName = localStorage.getItem('nina_filter_' + f.id) || f.name;
 
                 let row = document.createElement('div');
-                row.style.cssText = "display: grid; grid-template-columns: 1fr 0.8fr 0.8fr 0.65fr 0.65fr 0.65fr 1fr; gap: 5px; align-items: center; background: #1a1a1a; padding: 10px; border-radius: 4px; border-left: 3px solid #00c6ff;";
+                row.style.cssText = "display: grid; grid-template-columns: 1fr 0.8fr 0.8fr 0.65fr 0.65fr 0.65fr 1fr 0.9fr; gap: 5px; align-items: center; background: #1a1a1a; padding: 10px; border-radius: 4px; border-left: 3px solid #00c6ff;";
                 
                 row.innerHTML = `
                     <div style="font-weight: bold; color: #fff; font-size: 0.9em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${defaultName}">${defaultName}</div>
@@ -372,13 +373,14 @@
                         <input type="checkbox" id="pro-${f.id}-dither" checked style="transform: scale(1.2); cursor: pointer;" onchange="calcolaNightFillBar()">
                         <input type="number" id="pro-${f.id}-dfreq" value="4" min="1" style="width: 45px!important; padding: 4px!important; text-align: center;" oninput="calcolaNightFillBar()">
                     </div>
+                    <div id="pro-${f.id}-tot" style="text-align: center; color: #aaa; font-size: 0.82em;">—</div>
                 `;
                 container.appendChild(row);
                 // ── Riga companion Light HDR (sempre visibile, toggle ON/OFF) ───
                 let hdrRowPro = document.createElement('div');
                 hdrRowPro.id = `pro-${f.id}-hdr-row`;
                 hdrRowPro.dataset.hdrActive = '1';
-                hdrRowPro.style.cssText = 'display: grid; grid-template-columns: 1fr 0.8fr 0.8fr 0.65fr 0.65fr 0.65fr 1fr; gap: 5px; align-items: center; background: #160d24; padding: 8px 10px; border-radius: 4px; border-left: 3px solid #7c4dff; margin-top: 3px; margin-bottom: 8px;';
+                hdrRowPro.style.cssText = 'display: grid; grid-template-columns: 1fr 0.8fr 0.8fr 0.65fr 0.65fr 0.65fr 1fr 0.9fr; gap: 5px; align-items: center; background: #160d24; padding: 8px 10px; border-radius: 4px; border-left: 3px solid #7c4dff; margin-top: 3px; margin-bottom: 8px;';
                 hdrRowPro.innerHTML = `
                     <div style="display:flex;align-items:center;gap:6px;flex-wrap:nowrap;">
                         <span style="color:#bb86fc;font-weight:bold;font-size:0.82em;white-space:nowrap;">✦ Light HDR</span>
@@ -404,6 +406,7 @@
                         <input type="number" id="pro-${f.id}-hdr-dfreq" value="4" min="1"
                             style="width: 45px!important; padding: 4px!important; text-align: center; background:#1a0d2e; border:1px solid #3a2050;" oninput="calcolaNightFillBar()">
                     </div>
+                    <div id="pro-${f.id}-hdr-tot" style="text-align: center; color: #bb86fc; font-size: 0.82em;">—</div>
                 `;
                 container.appendChild(hdrRowPro);
             });
@@ -435,7 +438,7 @@
                 let borderColor = isDark ? '#555' : '#888';
 
                 let row = document.createElement('div');
-                row.style.cssText = `display: grid; grid-template-columns: 1fr 0.8fr 0.8fr 0.65fr 0.65fr 0.65fr 1fr; gap: 5px; align-items: center; background: #141414; padding: 10px; border-radius: 4px; border-left: 3px solid ${borderColor};`;
+                row.style.cssText = `display: grid; grid-template-columns: 1fr 0.8fr 0.8fr 0.65fr 0.65fr 0.65fr 1fr 0.9fr; gap: 5px; align-items: center; background: #141414; padding: 10px; border-radius: 4px; border-left: 3px solid ${borderColor};`;
 
                 let expCell = isDark
                     ? `<input type="number" id="pro-${f.id}-exp" value="${defaultExp}" min="0" oninput="calcolaNightFillBar()" style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box;">`
@@ -454,6 +457,7 @@
                         <option value="1">1x1</option><option value="2">2x2</option><option value="3">3x3</option>
                     </select>
                     <div style="color:#555; text-align:center; font-size:0.85em;">—</div>
+                    <div id="pro-${f.id}-tot" style="text-align: center; color: #aaa; font-size: 0.82em;">—</div>
                 `;
                 container.appendChild(row);
             });
@@ -481,7 +485,8 @@
             let sh = parseFloat(document.getElementById('sensor-height').value) || 15.7;
             let px = parseFloat(document.getElementById('pixel-size').value) || 3.76;
             let mp = (sw / (px / 1000)) * (sh / (px / 1000)) / 1e6;
-            let biasOverhead = Math.max(1.0, 0.8 + mp * 0.05);
+            let biasOverhead  = Math.max(1.0, 0.8 + mp * 0.05);
+            let lightOverhead = Math.max(1.5, 1.2 + mp * 0.08);
 
             frameList.forEach(f => {
                 let countEl = document.getElementById(`pro-${f.id}-count`);
@@ -498,9 +503,9 @@
                 if (!expEl) return;
                 let exp = parseFloat(expEl.value) || 0;
 
-                // Dark: nessun dither
+                // Dark: overhead per-frame (stesso file size del light)
                 if (f.id.includes('dark')) {
-                    if (count > 0 && exp > 0) secUsati += count * exp;
+                    if (count > 0 && exp > 0) secUsati += count * (exp + lightOverhead);
                     return;
                 }
 
@@ -510,7 +515,7 @@
                 let dFreq = dFreqEl ? (parseInt(dFreqEl.value) || 1) : 1;
 
                 if (count > 0 && exp > 0) {
-                    let tempoPose = count * exp;
+                    let tempoPose = count * (exp + lightOverhead);
                     let tempoDither = 0;
                     if (usaDither && dFreq > 0) {
                         tempoDither = Math.floor(count / dFreq) * ditherOverheadSecs;
@@ -522,7 +527,7 @@
                         let _hdrC = parseInt((document.getElementById(`pro-${f.id}-hdr-count`)||{}).value)||0;
                         let _hdrE = parseInt((document.getElementById(`pro-${f.id}-hdr-exp`)||{}).value)||0;
                         if (_hdrC > 0 && _hdrE > 0) {
-                            _hdrTime += _hdrC * _hdrE;
+                            _hdrTime += _hdrC * (_hdrE + lightOverhead);
                             let _hdrDith = document.getElementById(`pro-${f.id}-hdr-dither`);
                             let _hdrDFreqEl = document.getElementById(`pro-${f.id}-hdr-dfreq`);
                             if (_hdrDith && _hdrDith.checked && _hdrDFreqEl) {
@@ -531,6 +536,32 @@
                         }
                     }
                     secUsati += (tempoPose + tempoDither + _hdrTime);
+                    // Aggiorna totale per-riga light
+                    let _totEl = document.getElementById(`pro-${f.id}-tot`);
+                    if (_totEl) {
+                        let _rowSec = tempoPose + tempoDither;
+                        _totEl.innerHTML = _rowSec > 0
+                            ? formatSeconds(_rowSec) + ` <span onmouseenter="mostraTooltip(this,'light_overhead_tip')" onmouseleave="nascondiTooltip()" style="color:#888;cursor:help;">⚙️</span>`
+                            : '—';
+                    }
+                    // Aggiorna totale riga HDR
+                    let _hdrTotEl = document.getElementById(`pro-${f.id}-hdr-tot`);
+                    if (_hdrTotEl) _hdrTotEl.innerHTML = _hdrTime > 0 ? formatSeconds(_hdrTime) : '—';
+                }
+            });
+
+            // Aggiorna totali per-riga dark e bias
+            frameList.forEach(f => {
+                if (!f.id.includes('dark') && !f.id.includes('bias')) return;
+                let _totEl = document.getElementById(`pro-${f.id}-tot`);
+                if (!_totEl) return;
+                let _cnt = parseInt((document.getElementById(`pro-${f.id}-count`)||{}).value)||0;
+                let _exp = parseFloat((document.getElementById(`pro-${f.id}-exp`)||{}).value)||0;
+                if (_cnt <= 0) { _totEl.innerHTML = '—'; return; }
+                if (f.id.includes('bias')) {
+                    _totEl.innerHTML = formatSeconds(_cnt * biasOverhead) + ` <span onmouseenter="mostraTooltip(this,'bias_overhead_tip')" onmouseleave="nascondiTooltip()" style="color:#888;cursor:help;">⚙️</span>`;
+                } else {
+                    _totEl.innerHTML = formatSeconds(_cnt * (_exp + lightOverhead)) + ` <span onmouseenter="mostraTooltip(this,'light_overhead_tip')" onmouseleave="nascondiTooltip()" style="color:#888;cursor:help;">⚙️</span>`;
                 }
             });
 

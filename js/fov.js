@@ -280,24 +280,27 @@
 
             // Generazione Mappa Stellare — solo se Aladin è disponibile
             if (!aladinSkyMap && typeof A !== 'undefined') {
-                aladinSkyMap = A.aladin('#aladin-lite-div', {
-                    survey: "P/DSS2/color",
-                    fov: 2,
-                    target: (targetSelezionato.ra * 15) + " " + targetSelezionato.dec,
-                    showReticle: false,
-                    showZoomControl: false,
-                    showFullscreenControl: false,
-                    showLayersControl: false,
-                    showGotoControl: false,
-                    showFrame: false,
-                    showCoordinatesGrid: false
+                A.init.then(() => {
+                    aladinSkyMap = A.aladin('#aladin-lite-div', {
+                        survey: "https://irsa.ipac.caltech.edu/data/hips/CDS/P/PanSTARRS/DR1/color-i-r-g",
+                        fov: 2,
+                        target: (targetSelezionato.ra * 15) + " " + targetSelezionato.dec,
+                        showReticle: false,
+                        showZoomControl: false,
+                        showFullscreenControl: false,
+                        showLayersControl: false,
+                        showGotoControl: false,
+                        showFrame: false,
+                        showCoordinatesGrid: false
+                    });
+                    aladinSkyMap.on('positionChanged', function(pos) {
+                        aggiornaCoordinateFOV(pos.ra, pos.dec);
+                    });
+                    aggiornaCoordinateFOVdaTarget();
+                    setTimeout(() => { toggleMosaic(); }, 300);
+                }).catch(() => {
+                    // Aladin WASM non disponibile — continua senza mappa stellare
                 });
-                aladinSkyMap.on('positionChanged', function(pos) {
-                    aggiornaCoordinateFOV(pos.ra, pos.dec);
-                });
-                // Imposta subito le coordinate del target senza aspettare il primo movimento
-                aggiornaCoordinateFOVdaTarget();
-                setTimeout(() => { toggleMosaic(); }, 300);
             } else {
                 setTimeout(() => {
                     fovCenterOverride = null;
