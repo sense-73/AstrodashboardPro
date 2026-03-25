@@ -23,7 +23,7 @@ const dsoDatabase = [
         tips_it: "Essendo vicino ad Antares, puoi tentare un'inquadratura a largo campo per catturare le polveri circostanti.", tips_en: "Being close to Antares, try a wide-field framing to capture the surrounding dust.", tips_es: "Al estar cerca de Antares, intenta un encuadre de campo amplio para capturar el polvo circundante.", tips_zh: "由于靠近心宿二，可以尝试广角构图来捕捉周围的星际尘埃。"
     },
     { 
-        id: "m8", name: "M8", size: 90, icon: "🌊", ra: 18.06, dec: -24.38, type: "Regione H II", mag: "+6.0", dist: "4.100 a.l.", link: "https://it.wikipedia.org/wiki/Nebulosa_Laguna",
+        id: "m8", name: "M8", size: 90, icon: "🌊", ra: 18.06, dec: -24.38, type: "Regione H II", mag: "+6.0", dist: "4.100 a.l.", link: "https://it.wikipedia.org/wiki/Nebulosa_Laguna", hdr: 15,
         it: "Nebulosa Laguna", en: "Lagoon Nebula", es: "Nebulosa de la Laguna", zh: "礁湖星云",
         desc_it: "Gigantesca nube interstellare nel Sagittario, visibile a occhio nudo.", desc_en: "Giant interstellar cloud in Sagittarius, visible to the naked eye.", desc_es: "Gigantesca nube interestelar en Sagitario, visible a simple vista.", desc_zh: "位于人马座的巨大星际云，肉眼可见。",
         tips_it: "Oggetto estivo per eccellenza. Il nucleo è luminosissimo. Segnale incredibile sia in RGB che in SHO.", tips_en: "A prime summer target. The core is very bright. Incredible signal in both RGB and SHO.", tips_es: "Un objetivo de verano excelente. El núcleo es muy brillante. Señal increíble tanto en RGB como en SHO.", tips_zh: "夏季绝佳目标。核心非常明亮。在 RGB 和 SHO 下都有极好的信号。"
@@ -35,7 +35,7 @@ const dsoDatabase = [
         tips_it: "Magnifico bersaglio in banda larga. Mantieni i tempi brevi per preservare i colori stellari rossi e blu.", tips_en: "Magnificent broadband target. Keep exposures short to preserve the red and blue stellar colors.", tips_es: "Magnífico objetivo en banda ancha. Mantén exposiciones cortas para preservar los colores estelares rojos y azules.", tips_zh: "极好的宽带目标。保持短曝光以保留恒星的红蓝色泽。"
     },
     { 
-        id: "m13", name: "M13", size: 20, icon: "🎇", ra: 16.69, dec: 36.46, type: "Ammasso Globulare", mag: "+5.8", dist: "22.200 a.l.", link: "https://it.wikipedia.org/wiki/Ammasso_Globulare_di_Ercole",
+        id: "m13", name: "M13", size: 20, icon: "🎇", ra: 16.69, dec: 36.46, type: "Ammasso Globulare", mag: "+5.8", dist: "22.200 a.l.", link: "https://it.wikipedia.org/wiki/Ammasso_Globulare_di_Ercole", hdr: 8,
         it: "Grande Ammasso d'Ercole", en: "Hercules Globular Cluster", es: "Gran Cúmulo de Hércules", zh: "武仙座球状星团",
         desc_it: "Il più celebre e luminoso ammasso globulare boreale.", desc_en: "The most famous and brightest globular cluster in the northern hemisphere.", desc_es: "El cúmulo globular más famoso y brillante del hemisferio norte.", desc_zh: "北半球最著名且最亮的球状星团。",
         tips_it: "Evita la sovraesposizione del nucleo. Posa breve e dithering per mantenere i colori delle stelle.", tips_en: "Avoid overexposing the core. Use short exposures and dithering to retain star colors.", tips_es: "Evita sobreexponer el núcleo. Usa exposiciones cortas y dithering para retener el color de las estrellas.", tips_zh: "避免核心过曝。使用短曝光和抖动来保留恒星颜色。"
@@ -53,19 +53,19 @@ const dsoDatabase = [
         tips_it: "Luminosità superficiale altissima in H-Alpha. Non saturare il nucleo centrale.", tips_en: "Very high surface brightness in H-Alpha. Do not saturate the central core.", tips_es: "Brillo superficial muy alto en H-Alfa. No satures el núcleo central.", tips_zh: "在 H-Alpha 通道中表面亮度极高。注意不要让核心过曝饱和。"
     },
     { 
-        id: "m20", name: "M20", size: 28, icon: "🌸", ra: 18.040, dec: -22.980, type: "Nebulosa Mista", mag: "+6.3", dist: "5.200 a.l.", link: "https://it.wikipedia.org/wiki/Nebulosa_Trifida",
+        id: "m20", name: "M20", size: 28, icon: "🌸", ra: 18.040, dec: -22.980, type: "Nebulosa Mista", mag: "+6.3", dist: "5.200 a.l.", link: "https://it.wikipedia.org/wiki/Nebulosa_Trifida", hdr: 10,
         it: "Nebulosa Trifida", en: "Trifid Nebula", es: "Nebulosa Trífida", zh: "三裂星云",
         desc_it: "Presenta tre tipologie di nebulosa in un colpo: a emissione (rossa), a riflessione (azzurra) e oscura.", desc_en: "Features three types of nebulae in one: emission (red), reflection (blue), and dark.", desc_es: "Presenta tres tipos de nebulosa en una: de emisión (roja), de reflexión (azul) y oscura.", desc_zh: "同时具有三种类型的星云：发射（红色）、反射（蓝色）和暗星云。",
         tips_it: "I filtri a banda stretta uccidono la parte blu (a riflessione). Prediligi riprese LRGB o unisci un canale Ha.", tips_en: "Narrowband filters will kill the blue reflection part. Prefer LRGB or blend an Ha channel.", tips_es: "Los filtros de banda estrecha matarán la parte azul. Prefiere LRGB o combina un canal Ha.", tips_zh: "窄带滤镜会过滤掉蓝色的反射部分。建议首选 LRGB 或混合 Ha 通道。"
     },
     { 
-        id: "m27", name: "M27", size: 8, icon: "🦋", ra: 19.99, dec: 22.72, type: "Nebulosa Planetaria", mag: "+7.5", dist: "1.360 a.l.", link: "https://it.wikipedia.org/wiki/Nebulosa_Manubrio",
+        id: "m27", name: "M27", size: 8, icon: "🦋", ra: 19.99, dec: 22.72, type: "Nebulosa Planetaria", mag: "+7.5", dist: "1.360 a.l.", link: "https://it.wikipedia.org/wiki/Nebulosa_Manubrio", hdr: 15,
         it: "Nebulosa Manubrio", en: "Dumbbell Nebula", es: "Nebulosa Haltera", zh: "哑铃星云",
         desc_it: "Nebulosa planetaria grande e vicina. La forma ricorda una clessidra.", desc_en: "Large and close planetary nebula. Its shape resembles an hourglass.", desc_es: "Nebulosa planetaria grande y cercana. Su forma recuerda a un reloj de arena.", desc_zh: "巨大且较近的行星状星云。形状像一个沙漏。",
         tips_it: "Target fenomenale per i filtri a doppia banda (Ha+OIII). Integrazioni lunghissime rivelano il guscio esterno.", tips_en: "Phenomenal target for dual-band filters (Ha+OIII). Very long integrations reveal the outer shell.", tips_es: "Objetivo fenomenal para filtros de doble banda (Ha+OIII). Integraciones muy largas revelan la envoltura exterior.", tips_zh: "双带滤镜 (Ha+OIII) 的绝佳目标。超长曝光可以揭示其外部气壳。"
     },
     { 
-        id: "m31", name: "M31", size: 190, icon: "🌌", ra: 0.71, dec: 41.26, type: "Galassia a Spirale", mag: "+3.4", dist: "2.5 Milioni a.l.", link: "https://it.wikipedia.org/wiki/Galassia_di_Andromeda",
+        id: "m31", name: "M31", size: 190, icon: "🌌", ra: 0.71, dec: 41.26, type: "Galassia a Spirale", mag: "+3.4", dist: "2.5 Milioni a.l.", link: "https://it.wikipedia.org/wiki/Galassia_di_Andromeda", hdr: 30,
         it: "Galassia di Andromeda", en: "Andromeda Galaxy", es: "Galaxia de Andrómeda", zh: "仙女座星系",
         desc_it: "Il nostro colossale vicino galattico. Estesa per oltre 6 volte la luna piena.", desc_en: "Our colossal galactic neighbor. It spans over 6 times the size of the full moon.", desc_es: "Nuestro colosal vecino galáctico. Se extiende por más de 6 veces el tamaño de la luna llena.", desc_zh: "我们巨大的星系邻居。其跨度超过满月大小的 6 倍。",
         tips_it: "Servono focali corte (200-400mm). Ottieni il colore in RGB, poi acquisisci H-Alpha per le nebulose sui bracci.", tips_en: "Short focal lengths needed (200-400mm). Get color in RGB, then shoot H-Alpha for the nebulae on its arms.", tips_es: "Se necesitan focales cortas (200-400mm). Consigue el color en RGB, luego captura H-Alfa para las nebulosas.", tips_zh: "需要短焦距（200-400mm）。在 RGB 下获取色彩，然后拍摄 H-Alpha 以突出旋臂上的星云。"
@@ -77,7 +77,7 @@ const dsoDatabase = [
         tips_it: "Luminosità superficiale molto bassa. Richiede cieli privi di inquinamento luminoso e molta integrazione.", tips_en: "Very low surface brightness. Requires dark skies without light pollution and lots of integration.", tips_es: "Brillo superficial muy bajo. Requiere cielos oscuros sin contaminación lumínica y mucha integración.", tips_zh: "表面亮度极低。需要没有光害的暗夜天空和大量的曝光堆栈。"
     },
     { 
-        id: "m42", name: "M42", size: 85, icon: "🌌", ra: 5.58, dec: -5.39, type: "Nebulosa a Emissione", mag: "+4.0", dist: "1.344 a.l.", link: "https://it.wikipedia.org/wiki/Nebulosa_di_Orione",
+        id: "m42", name: "M42", size: 85, icon: "🌌", ra: 5.58, dec: -5.39, type: "Nebulosa a Emissione", mag: "+4.0", dist: "1.344 a.l.", link: "https://it.wikipedia.org/wiki/Nebulosa_di_Orione", hdr: 10,
         it: "Nebulosa di Orione", en: "Orion Nebula", es: "Nebulosa de Orión", zh: "猎户座大星云",
         desc_it: "La nebulosa diffusa più luminosa del cielo notturno.", desc_en: "The brightest diffuse nebula in the night sky.", desc_es: "La nebulosa difusa más brillante del cielo nocturno.", desc_zh: "夜空中最明亮的弥漫星云。",
         tips_it: "Il nucleo (Trapezio) si brucia facilmente. Scatta pose brevi (10s) e fondile in HDR con pose lunghe (180s).", tips_en: "The core (Trapezium) blows out easily. Shoot short exposures (10s) and HDR blend them with long ones (180s).", tips_es: "El núcleo se quema fácilmente. Haz exposiciones cortas (10s) y combínalas en HDR con tomas largas (180s).", tips_zh: "核心（四边形星团）极易过曝。拍摄短曝光（10秒）并与长曝光（180秒）进行 HDR 合成。"
@@ -89,7 +89,7 @@ const dsoDatabase = [
         tips_it: "Spesso fotografata insieme a M42. Posa più lunga rispetto al nucleo di M42 per non sovraesporla. Ottima con filtro Ha.", tips_en: "Often photographed alongside M42. Longer exposure than the M42 core to avoid overexposure. Excellent with Ha filter.", tips_es: "A menudo fotografiada junto a M42. Mayor exposición que el núcleo de M42. Excelente con filtro Ha.", tips_zh: "经常与M42一起拍摄。曝光时间比M42核心长。Ha滤镜效果出色。"
     },
     { 
-        id: "m45", name: "M45", size: 110, icon: "✨", ra: 3.78, dec: 24.11, type: "Ammasso Aperto", mag: "+1.6", dist: "444 a.l.", link: "https://it.wikipedia.org/wiki/Pleiadi",
+        id: "m45", name: "M45", size: 110, icon: "✨", ra: 3.78, dec: 24.11, type: "Ammasso Aperto", mag: "+1.6", dist: "444 a.l.", link: "https://it.wikipedia.org/wiki/Pleiadi", hdr: 20,
         it: "Le Pleiadi", en: "Pleiades Cluster", es: "Pléyades", zh: "昴星团",
         desc_it: "Magnifico ammasso aperto circondato da polvere interstellare a riflessione azzurra.", desc_en: "Magnificent open cluster surrounded by blue reflection interstellar dust.", desc_es: "Magnífico cúmulo abierto rodeado de polvo interestelar de reflexión azul.", desc_zh: "壮丽的疏散星团，被蓝色的星际反射尘埃包围。",
         tips_it: "Nebulosa a riflessione: NON usare filtri a banda stretta. Usa solo filtri L-RGB sotto cieli molto bui.", tips_en: "Reflection nebula: DO NOT use narrowband filters. Use only L-RGB under very dark skies.", tips_es: "Nebulosa de reflexión: NO uses filtros de banda estrecha. Usa solo L-RGB bajo cielos muy oscuros.", tips_zh: "反射星云：千万不要使用窄带滤镜。仅在非常黑暗的天空下使用 L-RGB 滤镜。"
@@ -101,7 +101,7 @@ const dsoDatabase = [
         tips_it: "Richiede focali dal 700mm in su. Riprendi in L-RGB e aggiungi H-Alpha per le zone di formazione stellare.", tips_en: "Requires focal lengths of 700mm+. Shoot in L-RGB and add H-Alpha for star-forming regions.", tips_es: "Requiere focales de 700mm+. Dispara en L-RGB y añade H-Alfa para las zonas de formación estelar.", tips_zh: "需要 700mm 以上焦距。拍摄 L-RGB，并添加 H-Alpha 以突出恒星形成区。"
     },
     { 
-        id: "m57", name: "M57", size: 1.5, icon: "🍩", ra: 18.89, dec: 33.02, type: "Nebulosa Planetaria", mag: "+8.8", dist: "2.300 a.l.", link: "https://it.wikipedia.org/wiki/Nebulosa_Anello",
+        id: "m57", name: "M57", size: 1.5, icon: "🍩", ra: 18.89, dec: 33.02, type: "Nebulosa Planetaria", mag: "+8.8", dist: "2.300 a.l.", link: "https://it.wikipedia.org/wiki/Nebulosa_Anello", hdr: 20,
         it: "Nebulosa Anello", en: "Ring Nebula", es: "Nebulosa del Anillo", zh: "环状星云",
         desc_it: "Guscio di gas espulso da una stella morente.", desc_en: "Gas shell expelled by a dying star.", desc_es: "Cáscara de gas expulsada por una estrella moribunda.", desc_zh: "濒死恒星抛出的气体外壳。",
         tips_it: "È minuscola! Serve tutta la focale che hai. Estremamente brillante nell'OIII, tollera bene la Luna.", tips_en: "It's tiny! Use all the focal length you have. Extremely bright in OIII, tolerates moonlight well.", tips_es: "¡Es diminuta! Usa toda la focal que tengas. Extremadamente brillante en OIII, tolera bien la Luna.", tips_zh: "目标极小！使用你能用的最大焦距。在 OIII 通道中极亮，能够很好地抗月光干扰。"
@@ -131,7 +131,7 @@ const dsoDatabase = [
         tips_it: "Essendo a riflessione, i filtri H-Alpha non servono a nulla. Riprendi a banda larga da cieli molto scuri.", tips_en: "As a reflection nebula, Ha filters are useless. Shoot broadband under very dark skies.", tips_es: "Al ser de reflexión, los filtros Ha no sirven. Dispara en banda ancha desde cielos muy oscuros.", tips_zh: "作为反射星云，Ha 滤镜毫无用处。在黑暗的天空下进行宽带拍摄。"
     },
     { 
-        id: "m81", name: "M81", size: 26, icon: "🌀", ra: 9.92, dec: 69.06, type: "Galassia a Spirale", mag: "+6.9", dist: "11.7 Milioni a.l.", link: "https://it.wikipedia.org/wiki/Galassia_di_Bode",
+        id: "m81", name: "M81", size: 26, icon: "🌀", ra: 9.92, dec: 69.06, type: "Galassia a Spirale", mag: "+6.9", dist: "11.7 Milioni a.l.", link: "https://it.wikipedia.org/wiki/Galassia_di_Bode", hdr: 20,
         it: "Galassia di Bode", en: "Bode's Galaxy", es: "Galaxia de Bode", zh: "波德星系",
         desc_it: "Maestosa galassia a spirale. Spesso inquadrata con la vicina galassia Sigaro (M82).", desc_en: "Majestic spiral galaxy. Often framed with the nearby Cigar Galaxy (M82).", desc_es: "Majestuosa galaxia espiral. A menudo encuadrada con la cercana Galaxia del Cigarro (M82).", desc_zh: "壮丽的螺旋星系。通常与附近的雪茄星系 (M82) 同框拍摄。",
         tips_it: "Ha bracci molto tenui che richiedono lunghe integrazioni. Integra le nebulosità estese circostanti (IFN).", tips_en: "Has faint arms requiring long integrations. Push to reveal the surrounding Integrated Flux Nebula (IFN).", tips_es: "Tiene brazos tenues que requieren integraciones largas. Intenta revelar la nebulosidad circundante (IFN).", tips_zh: "其微弱的旋臂需要长时间曝光。努力呈现周围的综合通量星云 (IFN)。"
@@ -155,7 +155,7 @@ const dsoDatabase = [
         tips_it: "Luminosità superficiale bassissima. Riprendi sotto cieli scurissimi per l'estensione completa.", tips_en: "Very low surface brightness. Shoot under pitch-black skies to capture its full extent.", tips_es: "Brillo superficial muy bajo. Dispara bajo cielos muy oscuros para capturar toda su extensión.", tips_zh: "表面亮度极低。在极黑的天空下拍摄以捕捉其完整的全貌。"
     },
     { 
-        id: "m104", name: "M104", size: 8.6, icon: "🛸", ra: 12.66, dec: -11.62, type: "Galassia a Spirale", mag: "+8.0", dist: "31 Milioni a.l.", link: "https://it.wikipedia.org/wiki/Galassia_Sombrero",
+        id: "m104", name: "M104", size: 8.6, icon: "🛸", ra: 12.66, dec: -11.62, type: "Galassia a Spirale", mag: "+8.0", dist: "31 Milioni a.l.", link: "https://it.wikipedia.org/wiki/Galassia_Sombrero", hdr: 10,
         it: "Galassia Sombrero", en: "Sombrero Galaxy", es: "Galaxia del Sombrero", zh: "草帽星系",
         desc_it: "Divisa da un netto anello di polveri scure che le dà la forma di un cappello.", desc_en: "Divided by a sharp dark dust ring that gives it the shape of a hat.", desc_es: "Dividida por un nítido anillo de polvo oscuro que le da forma de sombrero.", desc_zh: "被清晰的黑色尘埃环分割，使其看起来像一顶帽子。",
         tips_it: "Oggetto piccolo. Focale generosa e attenzione a non sovraesporre il nucleo bianco.", tips_en: "Small target. Use long focal lengths and avoid overexposing the white core.", tips_es: "Objetivo pequeño. Usa focales largas y evita sobreexponer el núcleo blanco.", tips_zh: "目标较小。使用长焦距，并注意避免让白色核心过曝。"
@@ -283,7 +283,7 @@ const dsoDatabase = [
         tips_it: "A causa della declinazione bassa, sfrutta solo le notti con ottimo seeing verso sud.", tips_en: "Due to its low declination, only image it on nights with great seeing to the south.", tips_es: "Debido a su baja declinación, fotografíala solo en noches de excelente seeing al sur.", tips_zh: "由于其赤纬较低，请仅在南部视宁度极佳的夜晚进行拍摄。"
     },
     { 
-        id: "ic434", name: "IC 434", size: 90, icon: "🐴", ra: 5.68, dec: -2.46, type: "Nebulosa Oscura", mag: "+7.3", dist: "1.500 a.l.", link: "https://it.wikipedia.org/wiki/Nebulosa_Testa_di_Cavallo",
+        id: "ic434", name: "IC 434", size: 90, icon: "🐴", ra: 5.68, dec: -2.46, type: "Nebulosa Oscura", mag: "+7.3", dist: "1.500 a.l.", link: "https://it.wikipedia.org/wiki/Nebulosa_Testa_di_Cavallo", hdr: 15,
         it: "Nebulosa Testa di Cavallo", en: "Horsehead Nebula", es: "Nebulosa Cabeza de Caballo", zh: "马头星云",
         desc_it: "La celebre nebulosa oscura (B33) si staglia contro la luminosa IC 434 rossa.", desc_en: "The famous dark nebula (B33) silhouetted against the glowing red IC 434.", desc_es: "La famosa nebulosa oscura (B33) se recorta contra la brillante IC 434 roja.", desc_zh: "著名的暗星云 (B33) 在明亮的红色 IC 434 背景下形成的剪影。",
         tips_it: "Filtro H-Alpha obbligatorio per staccare il cavallo. Attenzione all'alone della stella Alnitak.", tips_en: "H-Alpha filter mandatory to pop the horse. Beware of Alnitak's star halo.", tips_es: "Filtro H-Alfa obligatorio para resaltar el caballo. Cuidado con el halo de Alnitak.", tips_zh: "强制使用 H-Alpha 滤镜来突出马头。注意参宿一的巨大恒星光晕。"
@@ -311,7 +311,7 @@ const dsoDatabase = [
     // --- GIOIELLI DELL'EMISFERO AUSTRALE (Nuove aggiunte!) ---
     // ==============================================================
     { 
-        id: "ngc3372", name: "NGC 3372", size: 120, icon: "🔥", ra: 10.73, dec: -59.86, type: "Nebulosa a Emissione", mag: "+1.0", dist: "8.500 a.l.", link: "https://it.wikipedia.org/wiki/Nebulosa_della_Carena",
+        id: "ngc3372", name: "NGC 3372", size: 120, icon: "🔥", ra: 10.73, dec: -59.86, type: "Nebulosa a Emissione", mag: "+1.0", dist: "8.500 a.l.", link: "https://it.wikipedia.org/wiki/Nebulosa_della_Carena", hdr: 5,
         it: "Nebulosa della Carena", en: "Carina Nebula", es: "Nebulosa de la Quilla", zh: "船底座星云",
         desc_it: "Una delle nebulose più grandi di tutta la volta celeste. Contiene Eta Carinae.", desc_en: "One of the largest nebulae in the entire sky. Contains the star Eta Carinae.", desc_es: "Una de las nebulosas más grandes de todo el cielo. Contiene la estrella Eta Carinae.", desc_zh: "全天最大的星云之一。内部包含明亮的海山二 (Eta Carinae)。",
         tips_it: "Emette fortemente in tutta la banda stretta (SHO). Un target immenso per mosaici ad alta risoluzione.", tips_en: "Emits strongly in all narrowband channels (SHO). An immense target for high-res mosaics.", tips_es: "Emite fuertemente en banda estrecha (SHO). Un objetivo inmenso para mosaicos de alta resolución.", tips_zh: "在所有窄带通道 (SHO) 中都有强烈发射。高分辨率拼接的绝佳巨型目标。"
@@ -323,7 +323,7 @@ const dsoDatabase = [
         tips_it: "Nonostante sia in un'altra galassia, è luminosissima. Ottima in LRGB e banda stretta (HOO).", tips_en: "Despite being in another galaxy, it's very bright. Great in LRGB and narrowband (HOO).", tips_es: "A pesar de estar en otra galaxia, es muy brillante. Genial en LRGB y banda estrecha (HOO).", tips_zh: "尽管在另一个星系，它依然非常明亮。非常适合 LRGB 和窄带 (HOO) 拍摄。"
     },
     { 
-        id: "ngc5139", name: "Omega Centauri", size: 36, icon: "🎆", ra: 13.44, dec: -47.47, type: "Ammasso Globulare", mag: "+3.9", dist: "15.800 a.l.", link: "https://it.wikipedia.org/wiki/Omega_Centauri",
+        id: "ngc5139", name: "Omega Centauri", size: 36, icon: "🎆", ra: 13.44, dec: -47.47, type: "Ammasso Globulare", mag: "+3.9", dist: "15.800 a.l.", link: "https://it.wikipedia.org/wiki/Omega_Centauri", hdr: 8,
         it: "Omega Centauri", en: "Omega Centauri", es: "Omega Centauri", zh: "半人马座ω",
         desc_it: "Il più grande ammasso globulare della Via Lattea (circa 10 milioni di stelle).", desc_en: "The largest globular cluster in the Milky Way (about 10 million stars).", desc_es: "El mayor cúmulo globular de la Vía Láctea (unos 10 millones de estrellas).", desc_zh: "银河系中最大的球状星团（约有 1000 万颗恒星）。",
         tips_it: "Target puramente visivo/LRGB. Pose molto brevi per non saturare il densissimo nucleo.", tips_en: "Purely visual/LRGB target. Keep exposures very short so as not to saturate the dense core.", tips_es: "Objetivo puramente LRGB. Exposiciones muy cortas para no saturar el denso núcleo.", tips_zh: "纯粹的 LRGB 目标。保持极短的曝光时间，以免密集的星团核心过曝。"
@@ -444,7 +444,7 @@ const dsoDatabase = [
     // --- NEBULOSE PLANETARIE ---
     // ==============================================================
     {
-        id: "ngc6543", name: "NGC 6543", size: 0.3, icon: "😺", ra: 17.97, dec: 66.63, type: "Nebulosa Planetaria", mag: "+8.1", dist: "3.300 a.l.", link: "https://it.wikipedia.org/wiki/Nebulosa_Occhio_di_Gatto",
+        id: "ngc6543", name: "NGC 6543", size: 0.3, icon: "😺", ra: 17.97, dec: 66.63, type: "Nebulosa Planetaria", mag: "+8.1", dist: "3.300 a.l.", link: "https://it.wikipedia.org/wiki/Nebulosa_Occhio_di_Gatto", hdr: 3,
         it: "Nebulosa Occhio di Gatto", en: "Cat's Eye Nebula", es: "Nebulosa Ojo de Gato", zh: "猫眼星云",
         desc_it: "Una delle nebulose planetarie più complesse e fotografate. Struttura concentrica intricatissima.", desc_en: "One of the most complex and photographed planetary nebulae. Intricate concentric structure.", desc_es: "Una de las nebulosas planetarias más complejas y fotografiadas. Intrincada estructura concéntrica.", desc_zh: "最复杂、最多被拍摄的行星状星云之一。复杂的同心环状结构。",
         tips_it: "Serve altissima risoluzione (>2000mm). Esponi separatamente il nucleo e i gusci esterni (HDR).", tips_en: "Requires very high resolution (>2000mm). Expose the core and outer shells separately (HDR).", tips_es: "Requiere muy alta resolución (>2000mm). Expone el núcleo y las capas externas por separado (HDR).", tips_zh: "需要非常高的分辨率(>2000mm)。分别曝光核心和外层气壳(HDR合成)。"
@@ -516,7 +516,7 @@ const dsoDatabase = [
     // --- AMMASSI GLOBULARI ---
     // ==============================================================
     {
-        id: "m15", name: "M15", size: 18, icon: "🎇", ra: 21.49, dec: 12.17, type: "Ammasso Globulare", mag: "+6.2", dist: "33.600 a.l.", link: "https://it.wikipedia.org/wiki/M15_(astronomia)",
+        id: "m15", name: "M15", size: 18, icon: "🎇", ra: 21.49, dec: 12.17, type: "Ammasso Globulare", mag: "+6.2", dist: "33.600 a.l.", link: "https://it.wikipedia.org/wiki/M15_(astronomia)", hdr: 5,
         it: "M15", en: "M15", es: "M15", zh: "M15",
         desc_it: "Uno degli ammassi globulari più densi e antichi della Via Lattea, nel Pegaso.", desc_en: "One of the densest and oldest globular clusters in the Milky Way, in Pegasus.", desc_es: "Uno de los cúmulos globulares más densos y antiguos de la Vía Láctea, en Pegaso.", desc_zh: "飞马座银河系中最密集、最古老的球状星团之一。",
         tips_it: "Nucleo molto condensato. Alta focale (>1000mm) e pose brevissime (30-60s) per non saturare.", tips_en: "Very condensed core. High focal (>1000mm) and very short exposures (30-60s) to avoid saturation.", tips_es: "Núcleo muy condensado. Alta focal (>1000mm) y posados muy cortos (30-60s) para no saturar.", tips_zh: "核心极为密集。高焦距(>1000mm)配合极短曝光(30-60秒)以避免过饱和。"

@@ -1066,9 +1066,10 @@ function toggleLock(id) {
             // Dither: 3 per Sh2, 4 per tutto il resto
             let _dFreqG = (_catG === 'sh2') ? 3 : 4;
             let _hdrExpG = _catHdrMap[_catG] || 0;
-            // M42 (Nebulosa di Orione): nucleo Trapezio saturante → HDR sempre attivo
-            let _isM42 = (_nG === 'M42' || _objNameG === 'M42' || _objNameG.includes('ORION NEBULA') || _objNameG.includes('NEBULOSA DI ORIONE'));
-            if (_isM42 && _hdrExpG === 0) _hdrExpG = 10; // 10s per il Trapezio
+            // Oggetti con campo hdr nel database: sovrascrivono il valore di categoria
+            if (targetSelezionato && targetSelezionato.hdr) {
+                _hdrExpG = targetSelezionato.hdr;
+            }
 
             let dD = parseInt(document.getElementById('dither-duration').value)||0;
 
