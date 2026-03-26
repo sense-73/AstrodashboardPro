@@ -228,7 +228,7 @@
         .twilight-item b { display: block; font-size: 1.2em; margin-top: 5px; color: var(--text-main);}
         .twilight-night { color: var(--accent) !important; }
         
-        .btn-smart { background: var(--accent); color: white; padding: 12px 30px; font-size: 1.1em; font-weight: bold; border: none; border-radius: 50px; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(0, 114, 255, 0.3);}
+        .btn-smart { background: var(--accent); color: white; padding: 12px 30px; font-size: 1.1em; font-weight: bold; border: none; border-radius: 8px; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(0, 114, 255, 0.3);}
         .btn-smart:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 6px 20px rgba(0, 114, 255, 0.5);}
 
         /* ── Bottoni Refined Stellar (stile A) ── */
@@ -369,16 +369,16 @@
 
         .floating-tooltip {
             position: absolute;
-            background: rgba(20, 20, 20, 0.95);
+            background: rgba(20, 20, 20, 0.97);
             border: 1px solid var(--accent);
             border-left: 4px solid var(--accent);
             color: var(--text-main);
             padding: 12px 15px;
             border-radius: 6px;
             font-size: 0.95em;
-            max-width: 280px;
+            max-width: 320px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.9);
-            pointer-events: none;
+            pointer-events: auto;
             opacity: 0;
             transition: opacity 0.2s ease-in-out;
             z-index: 10000;
@@ -525,4 +525,51 @@
             color: var(--accent);
             font-weight: bold;
             box-shadow: 0 0 10px rgba(196,154,60,0.25);
+        }
+
+        /* ── Legenda LP Lorenz — chip zone ── */
+        .lp-zone-chip {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            min-width: 40px;
+            height: 32px;
+            min-height: 32px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.2);
+            font-size: 12px;
+            font-weight: 700;
+            line-height: 1;
+            color: #fff;
+            cursor: pointer;
+            user-select: none;
+            box-sizing: border-box;
+            transition: transform 0.1s;
+        }
+        .lp-zone-chip:hover,
+        .lp-zone-chip:active {
+            transform: scale(1.12);
+            border-color: rgba(255,255,255,0.6);
+        }
+
+        @media (max-width: 768px) {
+            .lp-zone-chip {
+                width: 28px;
+                min-width: 28px;
+                height: 24px;
+                min-height: 24px;
+                font-size: 10px;
+                border-radius: 4px;
+            }
+        }
+
+        /* ── Bortle conferma UI ── */
+        #bortle-confirm-btn:hover {
+            background: rgba(196,122,60,0.15) !important;
+            border-color: #c49a3c !important;
+            color: #c49a3c !important;
+        }
+        #bortle-warning-banner {
+            display: none;
         }

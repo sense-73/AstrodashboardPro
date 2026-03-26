@@ -13,7 +13,10 @@
         }
         // ──────────────────────────────────────────────────────────────────
 
+        let _tooltipHideTimer = null;
+
         function mostraTooltip(el, key) {
+            if (_tooltipHideTimer) { clearTimeout(_tooltipHideTimer); _tooltipHideTimer = null; }
             let tooltip = document.getElementById('floating-tooltip');
             tooltip.innerHTML = t(key);
             tooltip.style.display = 'block';
@@ -30,12 +33,19 @@
             tooltip.style.left = left + 'px';
             
             setTimeout(() => { tooltip.style.opacity = '1'; }, 10);
+
+            tooltip.onmouseenter = () => { if (_tooltipHideTimer) { clearTimeout(_tooltipHideTimer); _tooltipHideTimer = null; } };
+            tooltip.onmouseleave = () => { nascondiTooltip(); };
         }
 
         function nascondiTooltip() {
-            let tooltip = document.getElementById('floating-tooltip');
-            tooltip.style.opacity = '0';
-            setTimeout(() => { tooltip.style.display = 'none'; }, 200);
+            if (_tooltipHideTimer) clearTimeout(_tooltipHideTimer);
+            _tooltipHideTimer = setTimeout(() => {
+                let tooltip = document.getElementById('floating-tooltip');
+                tooltip.style.opacity = '0';
+                setTimeout(() => { tooltip.style.display = 'none'; }, 200);
+                _tooltipHideTimer = null;
+            }, 300);
         }
 
         function apriGuida() { let lv = document.getElementById('landing-view'); vistaPrecedente = (lv && lv.style.display !== 'none') ? 'landing-view' : (document.getElementById('planning-view').style.display === 'block' ? 'planning-view' : 'dashboard-view'); ['landing-view','dashboard-view','planning-view'].forEach(v => { let el = document.getElementById(v); if(el) el.style.display = 'none'; }); document.getElementById('guide-view').style.display = 'block'; window.scrollTo(0,0); }

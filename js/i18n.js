@@ -552,6 +552,142 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.es.acc_reducer        = "Reductor";
         i18n.zh.acc_reducer        = "减焦镜";
 
+        i18n.it.gps_btn_label      = "Posizione attuale";
+        i18n.en.gps_btn_label      = "Current location";
+        i18n.es.gps_btn_label      = "Ubicación actual";
+        i18n.zh.gps_btn_label      = "当前位置";
+
+        i18n.it.gps_btn_tip        = "Usa la posizione GPS del dispositivo";
+        i18n.en.gps_btn_tip        = "Use the device GPS position";
+        i18n.es.gps_btn_tip        = "Usar la posición GPS del dispositivo";
+        i18n.zh.gps_btn_tip        = "使用设备GPS位置";
+
+        i18n.it.gps_not_supported  = "La geolocalizzazione non è supportata da questo browser.";
+        i18n.en.gps_not_supported  = "Geolocation is not supported by this browser.";
+        i18n.es.gps_not_supported  = "La geolocalización no está soportada por este navegador.";
+        i18n.zh.gps_not_supported  = "此浏览器不支持地理定位。";
+
+        i18n.it.gps_denied         = "Accesso alla posizione negato. Cerca il luogo manualmente.";
+        i18n.en.gps_denied         = "Location access denied. Search manually.";
+        i18n.es.gps_denied         = "Acceso a la ubicación denegado. Busca manualmente.";
+        i18n.zh.gps_denied         = "位置访问被拒绝。请手动搜索。";
+
+        // ── Bortle conferma UI ────────────────────────────────────────────
+        i18n.it.bortle_confirm_btn        = "Conferma";
+        i18n.en.bortle_confirm_btn        = "Confirm";
+        i18n.es.bortle_confirm_btn        = "Confirmar";
+        i18n.zh.bortle_confirm_btn        = "确认";
+
+        i18n.it.bortle_confirmed_ok       = "Confermato ✓";
+        i18n.en.bortle_confirmed_ok       = "Confirmed ✓";
+        i18n.es.bortle_confirmed_ok       = "Confirmado ✓";
+        i18n.zh.bortle_confirmed_ok       = "已确认 ✓";
+
+        i18n.it.bortle_unconfirmed_banner = "Indice Bortle non confermato per la tua zona — i calcoli di esposizione potrebbero essere imprecisi.";
+        i18n.en.bortle_unconfirmed_banner = "Bortle index not confirmed for your location — exposure calculations may be inaccurate.";
+        i18n.es.bortle_unconfirmed_banner = "Índice Bortle no confirmado para tu zona — los cálculos de exposición pueden ser imprecisos.";
+        i18n.zh.bortle_unconfirmed_banner = "您所在区域的博特尔指数未确认 — 曝光计算可能不准确。";
+
+        i18n.it.bortle_goto_btn           = "Vai al Bortle";
+        i18n.en.bortle_goto_btn           = "Go to Bortle";
+        i18n.es.bortle_goto_btn           = "Ir al Bortle";
+        i18n.zh.bortle_goto_btn           = "前往博特尔";
+
+        i18n.it.bortle_popup_title        = "Indice Bortle non confermato";
+        i18n.en.bortle_popup_title        = "Bortle index not confirmed";
+        i18n.es.bortle_popup_title        = "Índice Bortle no confirmado";
+        i18n.zh.bortle_popup_title        = "博特尔指数未确认";
+
+        i18n.it.bortle_popup_desc         = "Il Bortle influenza direttamente i calcoli di esposizione. Conferma o modifica il valore rilevato per la tua posizione prima di procedere con l'analisi.";
+        i18n.en.bortle_popup_desc         = "The Bortle index directly affects exposure calculations. Confirm or adjust the detected value for your location before proceeding with the analysis.";
+        i18n.es.bortle_popup_desc         = "El índice Bortle afecta directamente los cálculos de exposición. Confirma o ajusta el valor detectado para tu posición antes de continuar con el análisis.";
+        i18n.zh.bortle_popup_desc         = "博特尔指数直接影响曝光计算。在进行分析之前，请确认或调整您所在位置的检测值。";
+
+        i18n.it.bortle_popup_skip         = "Ignora per ora";
+        i18n.en.bortle_popup_skip         = "Ignore for now";
+        i18n.es.bortle_popup_skip         = "Ignorar por ahora";
+        i18n.zh.bortle_popup_skip         = "暂时忽略";
+
+        i18n.it.bortle_status_confirmed   = "Bortle confermato ✓";
+        i18n.en.bortle_status_confirmed   = "Bortle confirmed ✓";
+        i18n.es.bortle_status_confirmed   = "Bortle confirmado ✓";
+        i18n.zh.bortle_status_confirmed   = "博特尔值已确认 ✓";
+
+        i18n.it.bortle_status_unconfirmed = "Conferma il valore dell'indice Bortle per questa posizione";
+        i18n.en.bortle_status_unconfirmed = "Confirm the Bortle index value for this location";
+        i18n.es.bortle_status_unconfirmed = "Confirma el valor del índice Bortle para esta ubicación";
+        i18n.zh.bortle_status_unconfirmed = "请确认此位置的博特尔指数值";
+
+        // ── Legenda LP Lorenz — tooltip per zona ──────────────────────────
+        i18n.it.lp_tap_hint = "tocca per info";
+        i18n.en.lp_tap_hint = "tap for info";
+        i18n.es.lp_tap_hint = "toca para info";
+        i18n.zh.lp_tap_hint = "点击查看";
+
+        i18n.it.lp_z0  = "<b>Zona 0</b> — Bortle ~1<br>SQM &gt;22.00 mag/arcsec²<br>Cielo pristino teorico. Luminosità artificiale quasi nulla, limitata solo dall'airglow e dalla luce zodiacale.";
+        i18n.it.lp_z1a = "<b>Zona 1a</b> — Bortle ~2<br>SQM 21.93–21.99<br>Gegenschein visibile. Via Lattea così brillante da proiettare ombre su oggetti bianchi.";
+        i18n.it.lp_z1b = "<b>Zona 1b</b> — Bortle ~2<br>SQM 21.89–21.93<br>Le nuvole appaiono come buchi neri nel cielo. Nessuna cupola di luce all'orizzonte.";
+        i18n.it.lp_z2a = "<b>Zona 2a</b> — Bortle ~3<br>SQM 21.81–21.89<br>Cielo rurale tipico. Il cielo è affollato di stelle fino all'orizzonte. M33 visibile ad occhio nudo.";
+        i18n.it.lp_z2b = "<b>Zona 2b</b> — Bortle ~3<br>SQM 21.69–21.81<br>Lievi cupole di luce (10–15°) all'orizzonte. Via Lattea mostra il rigonfiamento verso l'Ofiuco.";
+        i18n.it.lp_z3a = "<b>Zona 3a</b> — Bortle ~4<br>SQM 21.51–21.69<br>Transizione rurale. Bagliore visibile verso almeno una città. Le nuvole sono chiare vicino al bagliore.";
+        i18n.it.lp_z3b = "<b>Zona 3b</b> — Bortle ~4<br>SQM 21.25–21.51<br>Luce zodiacale visibile nelle notti migliori. Via Lattea mostra struttura delle corsie oscure.";
+        i18n.it.lp_z4a = "<b>Zona 4a</b> — Bortle ~4.5<br>SQM 20.91–21.25<br>Via Lattea brillante allo zenit ma invisibile all'orizzonte. Cupole di luce fino a 45°. M33 difficile.";
+        i18n.it.lp_z4b = "<b>Zona 4b</b> — Bortle ~4.5<br>SQM 20.49–20.91<br>Via Lattea lavata allo zenit, invisibile all'orizzonte. Molte cupole di luce. M31 facilmente visibile.";
+        i18n.it.lp_z5a = "<b>Zona 5a</b> — Bortle ~5<br>SQM 20.02–20.49<br>Cielo suburbano. Via Lattea tenue solo allo zenit. Le nuvole sono più luminose del cielo. Mag. limite ~5.6.";
+        i18n.it.lp_z5b = "<b>Zona 5b</b> — Bortle ~5<br>SQM 19.50–20.02<br>Cielo suburbano chiaro. Via Lattea appena percettibile. Il cielo appare grigio e scolorito verso le città.";
+        i18n.it.lp_z6a = "<b>Zona 6a</b> — Bortle ~6<br>SQM 18.95–19.50<br>Periferia urbana. Via Lattea marginale solo allo zenit. Il cielo è grigio fino a 35°. Mag. limite 5.0–5.5.";
+        i18n.it.lp_z6b = "<b>Zona 6b</b> — Bortle ~7<br>SQM 18.38–18.95<br>Cielo urbano. Costellazioni familiari con stelle mancanti. Meno di 20 stelle sopra i 30°.";
+        i18n.it.lp_z7a = "<b>Zona 7a</b> — Bortle ~8<br>SQM 17.80–18.38<br>Centro urbano. Il cielo è grigio o più chiaro ovunque. L'imaging CCD è ancora possibile. Mag. limite 3–4.";
+        i18n.it.lp_z7b = "<b>Zona 7b</b> — Bortle ~9<br>SQM &lt;17.80<br>Centro città. Le stelle sono deboli e sbiadite, ridotte a poche centinaia. Il cielo è luminoso e scolorito.";
+
+        // Copia EN/ES/ZH come fallback IT per ora (da tradurre)
+        ["lp_z0","lp_z1a","lp_z1b","lp_z2a","lp_z2b","lp_z3a","lp_z3b","lp_z4a","lp_z4b","lp_z5a","lp_z5b","lp_z6a","lp_z6b","lp_z7a","lp_z7b"].forEach(k => {
+            i18n.en[k] = i18n.it[k];
+            i18n.es[k] = i18n.it[k];
+            i18n.zh[k] = i18n.it[k];
+        });
+
+        // ── Tooltip chip Bortle 1-9 (nuova legenda) ──────────────────────
+        i18n.it.lp_b1 = "<b>Bortle 1</b> — Cielo pristino<br>SQM &gt;22.00 mag/arcsec²<br>Luminosità artificiale quasi nulla. Gegenschein visibile, Via Lattea proietta ombre. Cielo ideale per qualsiasi target.";
+        i18n.it.lp_b2 = "<b>Bortle 2</b> — Cielo molto buio<br>SQM 21.89–21.99<br>Nessuna cupola di luce. Le nuvole appaiono come buchi neri nel cielo. Ottimo per oggetti deboli.";
+        i18n.it.lp_b3 = "<b>Bortle 3</b> — Cielo rurale<br>SQM 21.69–21.89 (zone 2a/2b)<br>Lievi cupole di luce all'orizzonte. M33 visibile ad occhio nudo. Eccellente per l'astrofotografia.";
+        i18n.it.lp_b4 = "<b>Bortle 4</b> — Transizione rurale<br>SQM 21.25–21.69 (zone 3a/3b)<br>Bagliore visibile verso una o più città. Via Lattea mostra struttura delle corsie oscure.";
+        i18n.it.lp_b5 = "<b>Bortle 5</b> — Cielo suburbano<br>SQM 19.50–21.25 (zone 4a/4b)<br>Via Lattea tenue solo allo zenit. Molte cupole di luce. Filtri broadband consigliati.";
+        i18n.it.lp_b6 = "<b>Bortle 6</b> — Periferia urbana<br>SQM 19.50–20.02 (zona 5b)<br>Via Lattea marginale. Il cielo appare grigio fino a 35°. Filtri narrowband raccomandati.";
+        i18n.it.lp_b7 = "<b>Bortle 7</b> — Cielo urbano<br>SQM 18.38–18.95 (zona 6b)<br>Via Lattea assente. Costellazioni con stelle mancanti. Solo narrowband.";
+        i18n.it.lp_b8 = "<b>Bortle 8</b> — Centro urbano<br>SQM 17.80–18.38 (zona 7a)<br>Il cielo è grigio ovunque. Imaging possibile solo con filtri Ha/OIII.";
+        i18n.it.lp_b9 = "<b>Bortle 9</b> — Centro città<br>SQM &lt;17.80 (zona 7b)<br>Cielo luminoso e scolorito. Solo luna, pianeti e stelle doppie senza filtri.";
+
+        i18n.en.lp_b1 = "<b>Bortle 1</b> — Pristine sky<br>SQM &gt;22.00 mag/arcsec²<br>Virtually no artificial light. Gegenschein visible, Milky Way casts shadows. Ideal for any target.";
+        i18n.en.lp_b2 = "<b>Bortle 2</b> — Very dark sky<br>SQM 21.89–21.99<br>No light domes. Clouds appear as black holes in the sky. Excellent for faint objects.";
+        i18n.en.lp_b3 = "<b>Bortle 3</b> — Rural sky<br>SQM 21.69–21.89 (zones 2a/2b)<br>Slight light domes on horizon. M33 naked-eye visible. Excellent for astrophotography.";
+        i18n.en.lp_b4 = "<b>Bortle 4</b> — Rural transition<br>SQM 21.25–21.69 (zones 3a/3b)<br>Glow visible toward one or more cities. Milky Way shows dark lane structure.";
+        i18n.en.lp_b5 = "<b>Bortle 5</b> — Suburban sky<br>SQM 19.50–21.25 (zones 4a/4b)<br>Milky Way faint only at zenith. Many light domes. Broadband filters recommended.";
+        i18n.en.lp_b6 = "<b>Bortle 6</b> — Urban fringe<br>SQM 19.50–20.02 (zone 5b)<br>Milky Way marginal. Sky appears grey up to 35°. Narrowband filters recommended.";
+        i18n.en.lp_b7 = "<b>Bortle 7</b> — Urban sky<br>SQM 18.38–18.95 (zone 6b)<br>No Milky Way. Familiar constellations missing stars. Narrowband only.";
+        i18n.en.lp_b8 = "<b>Bortle 8</b> — Urban center<br>SQM 17.80–18.38 (zone 7a)<br>Sky is grey everywhere. Imaging possible only with Ha/OIII filters.";
+        i18n.en.lp_b9 = "<b>Bortle 9</b> — City center<br>SQM &lt;17.80 (zone 7b)<br>Bright discoloured sky. Only moon, planets and double stars without filters.";
+
+        i18n.es.lp_b1 = "<b>Bortle 1</b> — Cielo prístino<br>SQM &gt;22.00 mag/arcsec²<br>Luminosidad artificial casi nula. Gegenschein visible, la Vía Láctea proyecta sombras. Ideal para cualquier objetivo.";
+        i18n.es.lp_b2 = "<b>Bortle 2</b> — Cielo muy oscuro<br>SQM 21.89–21.99<br>Sin cúpulas de luz. Las nubes aparecen como agujeros negros. Excelente para objetos débiles.";
+        i18n.es.lp_b3 = "<b>Bortle 3</b> — Cielo rural<br>SQM 21.69–21.89 (zonas 2a/2b)<br>Leves cúpulas en el horizonte. M33 visible a simple vista. Excelente para astrofotografía.";
+        i18n.es.lp_b4 = "<b>Bortle 4</b> — Transición rural<br>SQM 21.25–21.69 (zonas 3a/3b)<br>Resplandor visible hacia ciudades. La Vía Láctea muestra estructura de carriles oscuros.";
+        i18n.es.lp_b5 = "<b>Bortle 5</b> — Cielo suburbano<br>SQM 19.50–21.25 (zonas 4a/4b)<br>Vía Láctea tenue solo en el cénit. Muchas cúpulas de luz. Filtros broadband recomendados.";
+        i18n.es.lp_b6 = "<b>Bortle 6</b> — Periferia urbana<br>SQM 19.50–20.02 (zona 5b)<br>Vía Láctea marginal. El cielo aparece gris hasta 35°. Filtros narrowband recomendados.";
+        i18n.es.lp_b7 = "<b>Bortle 7</b> — Cielo urbano<br>SQM 18.38–18.95 (zona 6b)<br>Sin Vía Láctea. Constelaciones con estrellas faltantes. Solo narrowband.";
+        i18n.es.lp_b8 = "<b>Bortle 8</b> — Centro urbano<br>SQM 17.80–18.38 (zona 7a)<br>El cielo es gris en todas partes. Imaging solo con filtros Ha/OIII.";
+        i18n.es.lp_b9 = "<b>Bortle 9</b> — Centro ciudad<br>SQM &lt;17.80 (zona 7b)<br>Cielo brillante y decolorado. Solo luna, planetas y estrellas dobles sin filtros.";
+
+        i18n.zh.lp_b1 = "<b>博特勒1级</b> — 原始天空<br>SQM &gt;22.00 mag/arcsec²<br>几乎无人工光。对地光可见，銀河投影。适合任何目标。";
+        i18n.zh.lp_b2 = "<b>博特勒2级</b> — 极暗天空<br>SQM 21.89–21.99<br>无光穹。云彩呈黑洞状。适合拍摄暗弱天体。";
+        i18n.zh.lp_b3 = "<b>博特勒3级</b> — 农村天空<br>SQM 21.69–21.89ﾈ2a/2b区ﾉ<br>地平线有轻微光穹。M33肉眼可见。适合天文摄影。";
+        i18n.zh.lp_b4 = "<b>博特勒4级</b> — 农村过渡<br>SQM 21.25–21.69ﾈ3a/3b区ﾉ<br>城市方向可见辉光。銀河显示暗带结构。";
+        i18n.zh.lp_b5 = "<b>博特勒5级</b> — 郊区天空<br>SQM 19.50–21.25ﾈ4a/4b区ﾉ<br>銀河仅在天顶隐约可见。多个光穹。建议使用宿带滤镜。";
+        i18n.zh.lp_b6 = "<b>博特勒6级</b> — 城市边缘<br>SQM 19.50–20.02ﾈ5b区ﾉ<br>銀河勉强可见。天空呈灰色至35°。建议窄带滤镜。";
+        i18n.zh.lp_b7 = "<b>博特勒7级</b> — 城市天空<br>SQM 18.38–18.95ﾈ6b区ﾉ<br>无銀河。星座缺少暗星。仅限窄带摄影。";
+        i18n.zh.lp_b8 = "<b>博特勒8级</b> — 城市中心<br>SQM 17.80–18.38ﾈ7a区ﾉ<br>天空处处灰暗。仅可用Ha/OIII滤镜拍摄。";
+        i18n.zh.lp_b9 = "<b>博特勒9级</b> — 市中心<br>SQM &lt;17.80ﾈ7b区ﾉ<br>天空明亮变色。无滤镜仅可观测月球、行星和双星。";
+
         i18n.it.info_hdr_row = "La riga <b>Light HDR</b> serve per la strategia ad alto dinamismo: affianca alle pose lunghe un set di esposizioni brevi per catturare i dettagli nei nuclei sovraesposti (es. nebulose planetarie, ammassi globulari) senza saturarli.<br><br>Imposta <b>Pose</b> e <b>Secondi</b> liberamente — i lucchetti 🔒 proteggono i tuoi valori personalizzati quando clicchi su 'Genera Sequenza Ottimale'.<br><br>Le pose HDR vengono incluse nel calcolo dei tempi e nell'export N.I.N.A., dove appaiono come blocco separato con il suffisso <i>HDR</i>.";
         i18n.en.info_hdr_row = "The <b>Light HDR</b> row enables a high-dynamic-range strategy: it pairs short exposures alongside the main long ones to capture detail in overexposed cores (e.g. planetary nebulae, globular clusters) without saturation.<br><br>Set <b>Frames</b> and <b>Seconds</b> freely — the 🔒 locks protect your custom values when you click 'Generate Optimal Sequence'.<br><br>HDR frames are included in the time calculation and in the N.I.N.A. export, where they appear as a separate block with the <i>HDR</i> suffix.";
         i18n.es.info_hdr_row = "La fila <b>Light HDR</b> permite una estrategia de alto rango dinámico: complementa las exposiciones largas con exposiciones cortas para capturar detalles en núcleos sobreexpuestos (nebulosas planetarias, cúmulos globulares) sin saturarlos.<br><br>Ajusta <b>Poses</b> y <b>Segundos</b> libremente — los 🔒 protegen tus valores personalizados al hacer clic en 'Generar Secuencia Óptima'.<br><br>Las poses HDR se incluyen en el cálculo de tiempos y en el export N.I.N.A., donde aparecen como bloque separado con el sufijo <i>HDR</i>.";
@@ -1087,24 +1223,6 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.en.lp_legend_title = "Light Pollution Scale (Lorenz 2024)";
         i18n.es.lp_legend_title = "Escala de Contaminación Lumínica (Lorenz 2024)";
         i18n.zh.lp_legend_title = "光污染等级（Lorenz 2024）";
-        i18n.it.lp_b1 = "Bortle 1"; i18n.en.lp_b1 = "Bortle 1"; i18n.es.lp_b1 = "Bortle 1"; i18n.zh.lp_b1 = "博特尔1";
-        i18n.it.lp_b2 = "Bortle 2"; i18n.en.lp_b2 = "Bortle 2"; i18n.es.lp_b2 = "Bortle 2"; i18n.zh.lp_b2 = "博特尔2";
-        i18n.it.lp_b3 = "Bortle 3"; i18n.en.lp_b3 = "Bortle 3"; i18n.es.lp_b3 = "Bortle 3"; i18n.zh.lp_b3 = "博特尔3";
-        i18n.it.lp_b4 = "Bortle 4"; i18n.en.lp_b4 = "Bortle 4"; i18n.es.lp_b4 = "Bortle 4"; i18n.zh.lp_b4 = "博特尔4";
-        i18n.it.lp_b5 = "Bortle 5"; i18n.en.lp_b5 = "Bortle 5"; i18n.es.lp_b5 = "Bortle 5"; i18n.zh.lp_b5 = "博特尔5";
-        i18n.it.lp_b6 = "Bortle 6"; i18n.en.lp_b6 = "Bortle 6"; i18n.es.lp_b6 = "Bortle 6"; i18n.zh.lp_b6 = "博特尔6";
-        i18n.it.lp_b7 = "Bortle 7"; i18n.en.lp_b7 = "Bortle 7"; i18n.es.lp_b7 = "Bortle 7"; i18n.zh.lp_b7 = "博特尔7";
-        i18n.it.lp_b89 = "Bortle 8-9"; i18n.en.lp_b89 = "Bortle 8-9"; i18n.es.lp_b89 = "Bortle 8-9"; i18n.zh.lp_b89 = "博特尔8-9";
-        // Descrizioni legenda LP
-        i18n.it.lp_b1_desc = "Cielo pristino";          i18n.en.lp_b1_desc = "Pristine sky";              i18n.es.lp_b1_desc = "Cielo prístino";         i18n.zh.lp_b1_desc = "原始天空";
-        i18n.it.lp_b2_desc = "Rurale vero";              i18n.en.lp_b2_desc = "True rural";                i18n.es.lp_b2_desc = "Rural verdadero";         i18n.zh.lp_b2_desc = "真正农村";
-        i18n.it.lp_b3_desc = "Rurale";                   i18n.en.lp_b3_desc = "Rural";                     i18n.es.lp_b3_desc = "Rural";                   i18n.zh.lp_b3_desc = "农村";
-        i18n.it.lp_b4_desc = "Transizione rurale";       i18n.en.lp_b4_desc = "Rural/suburban transition"; i18n.es.lp_b4_desc = "Transición rural";        i18n.zh.lp_b4_desc = "农村过渡带";
-        i18n.it.lp_b5_desc = "Suburbano";                i18n.en.lp_b5_desc = "Suburban";                  i18n.es.lp_b5_desc = "Suburbano";               i18n.zh.lp_b5_desc = "郊区";
-        i18n.it.lp_b6_desc = "Suburbano chiaro";         i18n.en.lp_b6_desc = "Bright suburban";           i18n.es.lp_b6_desc = "Suburbano luminoso";      i18n.zh.lp_b6_desc = "明亮郊区";
-        i18n.it.lp_b7_desc = "Transizione urbana";       i18n.en.lp_b7_desc = "Urban/suburban transition"; i18n.es.lp_b7_desc = "Transición urbana";       i18n.zh.lp_b7_desc = "城市过渡带";
-        i18n.it.lp_b89_desc = "Città / Centro urbano";   i18n.en.lp_b89_desc = "City / Urban center";      i18n.es.lp_b89_desc = "Ciudad / Centro urbano"; i18n.zh.lp_b89_desc = "城市/市中心";
-        // Tooltip info Bortle
         i18n.it.bortle_info_tip = "💡 Non sei sicuro del tuo Bortle? Attiva il layer <b>Inq. Luminoso</b> sulla mappa: i colori (blu→verde→giallo→rosso→bianco) corrispondono ai livelli Bortle 1→9. Individua la tua posizione e scegli il valore corrispondente.";
         i18n.en.bortle_info_tip = "💡 Not sure about your Bortle? Enable the <b>Light Pollution</b> layer on the map: colors (blue→green→yellow→red→white) correspond to Bortle levels 1→9. Find your location and pick the matching value.";
         i18n.es.bortle_info_tip = "💡 ¿No estás seguro de tu Bortle? Activa la capa <b>Contaminación Lumínica</b> en el mapa: los colores (azul→verde→amarillo→rojo→blanco) corresponden a los niveles Bortle 1→9. Localiza tu posición y elige el valor correspondiente.";
@@ -1388,6 +1506,47 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.en.cl_v64_fixes_desc = "Fix: Telescope and Sensor selects now restore correctly on reload. Added Askar filters C1/C2 (50nm), D1/D2 (15nm), E1/E2 (8nm dual-band). Corrected Optolong L-eNhance (from 14nm to 34nm) and Svbony SV220 (from 10nm to 14nm).";
         i18n.es.cl_v64_fixes_desc = "Fix: los selectores Telescopio y Sensor ahora se restauran correctamente al recargar. Añadidos filtros Askar C1/C2 (50nm), D1/D2 (15nm), E1/E2 (8nm dual-band). Corregidos Optolong L-eNhance (de 14nm a 34nm) y Svbony SV220 (de 10nm a 14nm).";
         i18n.zh.cl_v64_fixes_desc = "修复：望远镜和传感器选择框现在在重新加载时能正确恢复。新增Askar滤镜C1/C2（50nm）、D1/D2（15nm）、E1/E2（8nm双波段）。修正Optolong L-eNhance（从14nm改为34nm）和Svbony SV220（从10nm改为14nm）。";
+
+        // ── Changelog v6.4 — sessione 2 ──────────────────────────────────────
+        i18n.it.cl_v64_lp_legend_title = "Legenda LP Lorenz 2024 — 9 livelli Bortle";
+        i18n.en.cl_v64_lp_legend_title = "LP Lorenz 2024 legend — 9 Bortle levels";
+        i18n.es.cl_v64_lp_legend_title = "Leyenda LP Lorenz 2024 — 9 niveles Bortle";
+        i18n.zh.cl_v64_lp_legend_title = "LP Lorenz 2024图例 — 9级博特尔";
+
+        i18n.it.cl_v64_lp_legend_desc = "Nuova legenda compatta con 9 chip colorati (Bortle 1–9) campionati dalla colorbar ufficiale Lorenz 2024. I chip B3 e B4 sono bicolori per distinguere le due sotto-zone. Hover/tap mostra tooltip con zona Lorenz, range SQM, Bortle approssimativo e consiglio filtri. Disponibile in 4 lingue.";
+        i18n.en.cl_v64_lp_legend_desc = "New compact legend with 9 colour-coded chips (Bortle 1–9) sampled from the official Lorenz 2024 colorbar. B3 and B4 chips are split-colour to distinguish sub-zones. Hover/tap shows a tooltip with Lorenz zone, SQM range, approximate Bortle and filter advice. Available in 4 languages.";
+        i18n.es.cl_v64_lp_legend_desc = "Nueva leyenda compacta con 9 chips de colores (Bortle 1–9) muestreados de la colorbar oficial Lorenz 2024. Los chips B3 y B4 son bicolores para distinguir las subzonas. Hover/tap muestra tooltip con zona Lorenz, rango SQM, Bortle aproximado y consejo de filtros. Disponible en 4 idiomas.";
+        i18n.zh.cl_v64_lp_legend_desc = "新增紧凑型图例，包含9个色块（博特尔1–9级），颜色来自Lorenz 2024官方色标。B3和B4色块采用双色设计以区分子区域。悬停/点击显示工具提示，含Lorenz区域、SQM范围、近似博特尔值和滤镜建议。支持4种语言。";
+
+        i18n.it.cl_v64_bortle_auto_title = "Autorilevamento Bortle da mappa LP";
+        i18n.en.cl_v64_bortle_auto_title = "Automatic Bortle detection from LP map";
+        i18n.es.cl_v64_bortle_auto_title = "Detección automática de Bortle desde mapa LP";
+        i18n.zh.cl_v64_bortle_auto_title = "从LP地图自动检测博特尔指数";
+
+        i18n.it.cl_v64_bortle_auto_desc = "Il Bortle viene rilevato automaticamente ad ogni selezione della posizione (GPS o ricerca). Il sistema campiona il colore del tile Lorenz 2024 alle coordinate esatte e lo mappa al valore Bortle. Il dropdown si aggiorna con bordo arancione finché non si clicca Conferma — che diventa verde. Se non confermato, un banner avvisa nelle sezioni Smart/PRO.";
+        i18n.en.cl_v64_bortle_auto_desc = "Bortle is detected automatically on every location selection (GPS or search). The system samples the Lorenz 2024 tile colour at the exact coordinates and maps it to the Bortle value. The dropdown updates with an orange border until Confirm is clicked — which turns green. If unconfirmed, a banner warns in the Smart/PRO sections.";
+        i18n.es.cl_v64_bortle_auto_desc = "El Bortle se detecta automáticamente en cada selección de ubicación (GPS o búsqueda). El sistema muestrea el color del tile Lorenz 2024 en las coordenadas exactas y lo mapea al valor Bortle. El desplegable se actualiza con borde naranja hasta que se pulsa Confirmar — que se vuelve verde. Si no se confirma, un banner avisa en las secciones Smart/PRO.";
+        i18n.zh.cl_v64_bortle_auto_desc = "每次选择位置（GPS或搜索）时自动检测博特尔值。系统采样精确坐标处的Lorenz 2024瓦片颜色并映射到博特尔值。下拉框更新并显示橙色边框，直到点击确认按钮后变为绿色。如未确认，Smart/PRO分析页面会显示警告横幅。";
+
+        i18n.it.cl_v64_gps_title = "Geolocalizzazione GPS";
+        i18n.en.cl_v64_gps_title = "GPS geolocation";
+        i18n.es.cl_v64_gps_title = "Geolocalización GPS";
+        i18n.zh.cl_v64_gps_title = "GPS定位";
+
+        i18n.it.cl_v64_gps_desc = "Pulsante «Posizione attuale» affianco alla barra di ricerca per localizzarsi via GPS con reverse geocoding Nominatim. Il pulsante «Comincia» nella landing rileva automaticamente la posizione GPS al primo utilizzo. Se il luogo è già salvato, va direttamente al meteo.";
+        i18n.en.cl_v64_gps_desc = "«Current location» button next to the search bar to locate via GPS with Nominatim reverse geocoding. The «Start» button on the landing page automatically detects GPS position on first use. If a location is already saved, it goes directly to the weather.";
+        i18n.es.cl_v64_gps_desc = "Botón «Posición actual» junto a la barra de búsqueda para localizarse por GPS con geocodificación inversa de Nominatim. El botón «Comenzar» en la landing detecta automáticamente la posición GPS en el primer uso. Si ya hay una ubicación guardada, va directamente al tiempo.";
+        i18n.zh.cl_v64_gps_desc = "搜索栏旁新增『当前位置』按钮，通过GPS和Nominatim逆向地理编码定位。首次使用时，着陆页的『开始』按钮自动检测GPS位置。如果已有保存的位置，则直接进入天气页面。";
+
+        i18n.it.cl_v64_hdr_db_title = "HDR automatico per 15 oggetti DSO";
+        i18n.en.cl_v64_hdr_db_title = "Automatic HDR for 15 DSO objects";
+        i18n.es.cl_v64_hdr_db_title = "HDR automático para 15 objetos DSO";
+        i18n.zh.cl_v64_hdr_db_title = "15个深空天体自动HDR";
+
+        i18n.it.cl_v64_hdr_db_desc = "Campo hdr aggiunto nel database per M8, M13, M15, M20, M27, M31, M42, M45, M57, M81, M104, IC 434, NGC 3372, NGC 5139, NGC 6543. Il valore specifico per oggetto sovrascrive il generico di categoria. Tempi da 3s (NGC 6543) a 30s (M31).";
+        i18n.en.cl_v64_hdr_db_desc = "hdr field added to the database for M8, M13, M15, M20, M27, M31, M42, M45, M57, M81, M104, IC 434, NGC 3372, NGC 5139, NGC 6543. The object-specific value overrides the generic category value. Times from 3s (NGC 6543) to 30s (M31).";
+        i18n.es.cl_v64_hdr_db_desc = "Campo hdr añadido en la base de datos para M8, M13, M15, M20, M27, M31, M42, M45, M57, M81, M104, IC 434, NGC 3372, NGC 5139, NGC 6543. El valor específico por objeto sobreescribe el genérico de categoría. Tiempos de 3s (NGC 6543) a 30s (M31).";
+        i18n.zh.cl_v64_hdr_db_desc = "为M8、M13、M15、M20、M27、M31、M42、M45、M57、M81、M104、IC 434、NGC 3372、NGC 5139、NGC 6543添加了hdr字段。对象专属值覆盖类别通用值。时间从3秒（NGC 6543）到30秒（M31）。";
 
         // ⚠️ AGGIORNARE VERSIONE QUI quando si rilascia una nuova versione:
         // cl_close_btn = testo del pulsante nel modal changelog (NON è hardcoded in index.html)

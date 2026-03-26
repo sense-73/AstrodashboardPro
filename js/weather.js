@@ -183,7 +183,73 @@
             if (marker) map.removeLayer(marker);
             marker = L.marker([latCorrente, lonCorrente]).addTo(map).bindPopup(`<b>${nome.split(',')[0]}</b>`).openPopup();
             aggiornaEffemeridi(new Date()); scaricaDatiPrevisionali();
+            _rilevaBortleDaCoordinate(latCorrente, lonCorrente);
         }
+
+        // ── Geolocalizzazione browser ──────────────────────────────────────
+        function _risolviGPSNome(lat, lon, callback) {
+            // Reverse geocoding via Nominatim per ottenere il nome del luogo
+            fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`)
+                .then(r => r.json())
+                .then(d => {
+                    let nome = d.address?.city || d.address?.town || d.address?.village || d.address?.county || d.display_name || `${lat.toFixed(3)}, ${lon.toFixed(3)}`;
+                    callback(nome);
+                })
+                .catch(() => callback(`${lat.toFixed(3)}, ${lon.toFixed(3)}`));
+        }
+
+        function usaPosizioneCorrente() {
+            // Pulsante "Posizione attuale" nel pannello posizione
+            if (!navigator.geolocation) {
+                mostraAvviso(t('gps_not_supported'), 'warn'); return;
+            }
+            let btn = document.getElementById('btn-geolocate');
+            if (btn) { btn.style.color = '#c49a3c'; btn.style.borderColor = '#c49a3c'; }
+            navigator.geolocation.getCurrentPosition(
+                pos => {
+                    let lat = pos.coords.latitude, lon = pos.coords.longitude;
+                    _risolviGPSNome(lat, lon, nome => {
+                        selezionaLuogo(lat, lon, nome);
+                        if (btn) { btn.style.color = '#44ff44'; btn.style.borderColor = '#44ff44'; setTimeout(() => { btn.style.color = ''; btn.style.borderColor = ''; }, 2000); }
+                    });
+                },
+                () => { mostraAvviso(t('gps_denied'), 'warn'); if (btn) { btn.style.color = ''; btn.style.borderColor = ''; } }
+            );
+        }
+
+        function vaiMeteoConGeoloc() {
+            // Logica pulsante "Comincia":
+            // - Luogo salvato → vai direttamente al meteo
+            // - Nessun luogo salvato → richiedi GPS → se ok imposta luogo e vai al meteo
+            //                                       → se rifiuto → vai al meteo con barra ricerca
+            let haLuogo = localStorage.getItem('ad_lat') && localStorage.getItem('ad_lon');
+            if (haLuogo) {
+                vaiMeteo();
+                return;
+            }
+            // Prima volta: tenta GPS
+            if (!navigator.geolocation) {
+                vaiMeteo();
+                setTimeout(() => { let el = document.getElementById('ricerca'); if (el) { el.scrollIntoView({behavior:'smooth', block:'center'}); el.focus(); } }, 300);
+                return;
+            }
+            navigator.geolocation.getCurrentPosition(
+                pos => {
+                    let lat = pos.coords.latitude, lon = pos.coords.longitude;
+                    _risolviGPSNome(lat, lon, nome => {
+                        selezionaLuogo(lat, lon, nome);
+                        vaiMeteo();
+                    });
+                },
+                () => {
+                    // GPS rifiutato: vai al meteo con focus sulla barra ricerca
+                    vaiMeteo();
+                    setTimeout(() => { let el = document.getElementById('ricerca'); if (el) { el.scrollIntoView({behavior:'smooth', block:'center'}); el.focus(); } }, 300);
+                },
+                { timeout: 8000 }
+            );
+        }
+        // ──────────────────────────────────────────────────────────────────
 
         function aggiornaEffemeridi(data) {
             let orariSole = SunCalc.getTimes(data, latCorrente, lonCorrente), orariLuna = SunCalc.getMoonTimes(data, latCorrente, lonCorrente), faseLuna = SunCalc.getMoonIllumination(data);
@@ -344,3 +410,93 @@
 
 
 
+
+        // ── Bortle autorilevamento via tile Lorenz 2024 ───────────────────────
+        // Campiona il colore del tile LP già usato sulla mappa e lo mappa a Bortle
+
+        // Tabella colori Lorenz → Bortle (da colorbar ufficiale campionata via PIL)
+        const _LORENZ_COLORS = [
+            { r:  26, g:  26, b:  26, bortle: 1 },  // zona 0
+            { r:  45, g:  45, b:  45, bortle: 2 },  // zona 1a
+            { r:  64, g:  64, b:  64, bortle: 2 },  // zona 1b
+            { r:  13, g:  43, b: 115, bortle: 3 },  // zona 2a
+            { r:  27, g:  84, b: 217, bortle: 3 },  // zona 2b
+            { r:   6, g:  87, b:   8, bortle: 4 },  // zona 3a
+            { r:  26, g: 162, b:  38, bortle: 4 },  // zona 3b
+            { r: 109, g: 100, b:  21, bortle: 5 },  // zona 4a
+            { r: 182, g: 167, b:  38, bortle: 5 },  // zona 4b
+            { r: 192, g: 100, b:  23, bortle: 6 },  // zona 5a
+            { r: 253, g: 151, b:  79, bortle: 6 },  // zona 5b
+            { r: 251, g:  90, b:  70, bortle: 7 },  // zona 6a
+            { r: 251, g: 154, b: 138, bortle: 7 },  // zona 6b
+            { r: 161, g: 161, b: 161, bortle: 8 },  // zona 7a
+            { r: 240, g: 240, b: 240, bortle: 9 },  // zona 7b
+        ];
+
+        function _colorDistance(r1, g1, b1, r2, g2, b2) {
+            return Math.sqrt((r1-r2)**2 + (g1-g2)**2 + (b1-b2)**2);
+        }
+
+        function _rgbToBortle(r, g, b) {
+            let best = _LORENZ_COLORS[0], bestDist = Infinity;
+            for (const c of _LORENZ_COLORS) {
+                const d = _colorDistance(r, g, b, c.r, c.g, c.b);
+                if (d < bestDist) { bestDist = d; best = c; }
+            }
+            return best.bortle;
+        }
+
+        function _latLonToTile(lat, lon, zoom) {
+            const n = Math.pow(2, zoom);
+            const x = Math.floor((lon + 180) / 360 * n);
+            const latR = lat * Math.PI / 180;
+            const y = Math.floor((1 - Math.log(Math.tan(latR) + 1/Math.cos(latR)) / Math.PI) / 2 * n);
+            return { x, y };
+        }
+
+        function _pixelInTile(lat, lon, zoom, tileSize) {
+            const n = Math.pow(2, zoom);
+            const { x: tx, y: ty } = _latLonToTile(lat, lon, zoom);
+            const xFrac = ((lon + 180) / 360 * n) - tx;
+            const latR = lat * Math.PI / 180;
+            const yFrac = ((1 - Math.log(Math.tan(latR) + 1/Math.cos(latR)) / Math.PI) / 2 * n) - ty;
+            return { tx, ty, px: Math.floor(xFrac * tileSize), py: Math.floor(yFrac * tileSize) };
+        }
+
+        function _rilevaBortleDaCoordinate(lat, lon) {
+            const zoom = 6;
+            const tileSize = 256;
+            const { tx, ty, px, py } = _pixelInTile(lat, lon, zoom, tileSize);
+            const url = `https://djlorenz.github.io/astronomy/image_tiles/tiles2024/tile_${zoom}_${tx}_${ty}.png`;
+
+            console.log('[Bortle] Carico tile:', url, 'pixel:', px, py);
+
+            const img = new Image();
+            img.crossOrigin = 'anonymous';
+            img.onload = function() {
+                console.log('[Bortle] Tile caricato, dimensioni:', img.width, img.height);
+                try {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = tileSize;
+                    canvas.height = tileSize;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, tileSize, tileSize);
+                    const pixel = ctx.getImageData(px, py, 1, 1).data;
+                    const r = pixel[0], g = pixel[1], b = pixel[2], a = pixel[3];
+                    console.log('[Bortle] Pixel rgba:', r, g, b, a);
+                    if (a < 10) { console.warn('[Bortle] Pixel trasparente, skip'); return; }
+                    const bortle = _rgbToBortle(r, g, b);
+                    console.log('[Bortle] Bortle rilevato:', bortle);
+                    if (typeof setBortleAutorilevato === 'function') {
+                        setBortleAutorilevato(bortle);
+                    }
+                } catch(e) {
+                    console.warn('[Bortle] Canvas sampling fallito:', e.message);
+                }
+            };
+            img.onerror = function() {
+                console.error('[Bortle] Tile non disponibile:', url);
+            };
+            img.src = url;
+        }
+        // ─────────────────────────────────────────────────────────────────────

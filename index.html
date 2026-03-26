@@ -40,6 +40,8 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
     @media (max-width: 480px) {
         .nav-title-text { font-size: 16px; }
         .nav-version-btn { display: inline-flex !important; }
+        .lp-zone-chip { display:inline-flex !important; align-items:center !important; justify-content:center !important; width:52px !important; min-width:52px !important; height:40px !important; min-height:40px !important; border-radius:50px !important; border:1px solid rgba(255,255,255,0.2) !important; font-size:13px !important; line-height:1 !important; font-weight:700 !important; color:#fff; cursor:pointer; user-select:none; transition:transform .1s; box-sizing:border-box !important; }
+        .lp-zone-chip:hover, .lp-zone-chip:active { transform:scale(1.12); border-color:rgba(255,255,255,0.6) !important; }
     }
     @media (max-width: 360px) {
         .nav-title-text { font-size: 13px; }
@@ -497,7 +499,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
 
             <!-- Pulsante unico Comincia -->
             <div style="margin-bottom:38px;">
-                <button onclick="vaiMeteo(); setTimeout(()=>{ let el=document.getElementById('ricerca'); if(el){el.scrollIntoView({behavior:'smooth',block:'center'}); el.focus();} },300);"
+                <button onclick="vaiMeteoConGeoloc()"
                         style="display:inline-flex; align-items:center; gap:10px; font-size:16px; font-weight:700; padding:14px 38px; border-radius:50px; cursor:pointer; background:linear-gradient(135deg,#c49a3c,#a07828); color:#0d1117; border:none; letter-spacing:.4px; box-shadow:0 4px 22px rgba(196,154,60,0.35); transition:all 0.2s;"
                         onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 30px rgba(196,154,60,0.5)'"
                         onmouseout="this.style.transform='';this.style.boxShadow='0 4px 22px rgba(196,154,60,0.35)'">
@@ -663,25 +665,51 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                 <h3><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-pin"/></svg> <span data-i18n="pos_title">Posizione</span> <span class="info-icon" onmouseenter="mostraTooltip(this, 'info_pos')" onmouseleave="nascondiTooltip()">ℹ️</span></h3>
                 <div class="input-group">
                     <label for="ricerca" data-i18n="find_place">Trova Luogo:</label>
-                    <input type="text" id="ricerca" placeholder="..." data-i18n="search_place" oninput="cercaIndirizzo()">
+                    <div style="display:flex; gap:6px; align-items:center; position:relative;">
+                        <input type="text" id="ricerca" placeholder="..." data-i18n="search_place" oninput="cercaIndirizzo()" style="flex:1;">
+                        <button id="btn-geolocate" onclick="usaPosizioneCorrente()" title="" data-i18n-title="gps_btn_tip"
+                            style="flex-shrink:0; background:#1a1a1a; border:1px solid #444; border-radius:6px; padding:6px 9px; cursor:pointer; color:#6e7a8a; display:inline-flex; align-items:center; gap:5px; font-size:0.8em; white-space:nowrap; transition:border-color .2s, color .2s;"
+                            onmouseover="this.style.borderColor='#c49a3c';this.style.color='#c49a3c';"
+                            onmouseout="this.style.borderColor='#444';this.style.color='#6e7a8a';">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="9" stroke-dasharray="4 2"/></svg>
+                            <span data-i18n="gps_btn_label">Posizione attuale</span>
+                        </button>
+                    </div>
                     <ul id="dropdown-risultati"></ul>
                 </div>
                 <div class="input-group"><label for="lat" data-i18n="lat">Latitudine:</label><input type="text" id="lat" readonly value="46.06200"></div>
                 <div class="input-group"><label for="lon" data-i18n="lon">Longitudine:</label><input type="text" id="lon" readonly value="13.23500"></div>
-                <div class="input-group" style="margin-top: 6px; align-items: center;">
-                    <label style="width: auto; margin-right: 10px; color:#c49a3c;" data-i18n="bortle_label">Bortle:</label>
-                    <select id="bortle-class" onchange="aggiornaAI(); salvaBortle();" style="border-color:#c49a3c; width:auto !important; font-size:0.9em;">
-                        <option value="1" data-i18n="bortle_1">1 \u2014 Cielo eccellente (buio totale)</option>
-                        <option value="2" data-i18n="bortle_2">2 \u2014 Cielo molto buio</option>
-                        <option value="3" data-i18n="bortle_3">3 \u2014 Cielo rurale</option>
-                        <option value="4" data-i18n="bortle_4">4 \u2014 Periferia rurale/urbana</option>
-                        <option value="5" selected data-i18n="bortle_5">5 \u2014 Periferia (cielo suburbano)</option>
-                        <option value="6" data-i18n="bortle_6">6 \u2014 Periferia urbana</option>
-                        <option value="7" data-i18n="bortle_7">7 \u2014 Cielo urbano</option>
-                        <option value="8" data-i18n="bortle_8">8 \u2014 Citt\u00e0 (inquinamento elevato)</option>
-                        <option value="9" data-i18n="bortle_9">9 \u2014 Centro citt\u00e0 (cielo arancione)</option>
-                    </select>
-                    <span class="info-icon" style="margin-left:8px; font-size:1.1em;" onmouseenter="mostraTooltip(this, 'bortle_info_tip')" onmouseleave="nascondiTooltip()">ℹ️</span>
+                <div class="input-group" style="margin-top: 6px; align-items: center; flex-wrap:wrap; gap:8px;">
+                    <label style="width: auto; color:#c49a3c;" data-i18n="bortle_label">Bortle:</label>
+                    <div style="display:inline-flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                        <div style="position:relative; display:inline-flex; align-items:center;">
+                            <span id="bortle-swatch" style="position:absolute;left:8px;top:50%;transform:translateY(-50%);width:12px;height:12px;border-radius:2px;pointer-events:none;background:#fd974f;"></span>
+                            <select id="bortle-class" onchange="aggiornaAI(); salvaBortle(); _bortleModificato();" style="width:auto !important; font-size:0.9em; padding-left:28px; border:2px solid #c47a3c; border-radius:4px; transition:border-color 0.3s, color 0.3s; background:#1c2230; color:#fd974f; font-weight:600;">
+                                <option value="1" data-i18n="bortle_1" style="background:#1a1a1a; color:#999;">1 — Cielo eccellente (buio totale)</option>
+                                <option value="2" data-i18n="bortle_2" style="background:#1e2230; color:#888;">2 — Cielo molto buio</option>
+                                <option value="3" data-i18n="bortle_3" style="background:#0d1928; color:#7aa0eb;">3 — Cielo rurale</option>
+                                <option value="4" data-i18n="bortle_4" style="background:#091a0a; color:#66cc66;">4 — Transizione rurale</option>
+                                <option value="5" selected data-i18n="bortle_5" style="background:#1c1a0a; color:#c8b84a;">5 — Periferia (cielo suburbano)</option>
+                                <option value="6" data-i18n="bortle_6" style="background:#251406; color:#fd974f;">6 — Periferia urbana</option>
+                                <option value="7" data-i18n="bortle_7" style="background:#1e0c0c; color:#f55050;">7 — Cielo urbano</option>
+                                <option value="8" data-i18n="bortle_8" style="background:#191919; color:#a0a0a0;">8 — Città (inquinamento elevato)</option>
+                                <option value="9" data-i18n="bortle_9" style="background:#1a1a1a; color:#ccc;">9 — Centro città (cielo arancione)</option>
+                            </select>
+                        </div>
+                        <div id="bortle-status-icon"
+                            onmouseenter="mostraTooltip(this, localStorage.getItem('ad_bortle_confirmed') ? 'bortle_status_confirmed' : 'bortle_status_unconfirmed')"
+                            onmouseleave="nascondiTooltip()"
+                            onclick="if(!localStorage.getItem('ad_bortle_confirmed')) confermaBortle();"
+                            style="width:22px;height:22px;border-radius:50%;background:#c47a3c;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+                        </div>
+                        <button id="bortle-confirm-btn" onclick="confermaBortle()"
+                            style="display:inline-flex; align-items:center; gap:5px; background:rgba(196,122,60,0.15); border:1px solid #c47a3c; color:#c47a3c; border-radius:4px; padding:5px 12px; font-size:0.82em; font-weight:700; cursor:pointer; transition:all 0.2s;">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                            <span data-i18n="bortle_confirm_btn">Conferma</span>
+                        </button>
+                        <span class="info-icon" style="font-size:1.1em;" onmouseenter="mostraTooltip(this, 'bortle_info_tip')" onmouseleave="nascondiTooltip()">ℹ️</span>
+                    </div>
                 </div>
             </div>
 
@@ -699,17 +727,19 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                 </div>
 
                 <!-- Legenda Inquinamento Luminoso \u2014 visibile solo con layer LP attivo -->
-                <div id="lp-legend" style="display:none; margin-top:10px; padding:10px 14px; background:#161b22; border:1px solid #ffaa00; border-radius:8px; font-size:0.78em;">
-                    <div style="font-weight:bold; color:#c49a3c; margin-bottom:6px;"> <svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-globe"/></svg> <span data-i18n="lp_legend_title">Scala Inquinamento Luminoso (Lorenz 2024)</span></div>
-                    <div style="display:flex; flex-wrap:wrap; gap:6px 14px;">
-                        <span><span style="display:inline-block;width:14px;height:14px;background:#000033;border:1px solid #555;border-radius:3px;vertical-align:middle;margin-right:4px;"></span><b style="color:#6e7a8a;" data-i18n="lp_b1">Bortle 1</b> \u2013 <span data-i18n="lp_b1_desc">Cielo pristino</span></span>
-                        <span><span style="display:inline-block;width:14px;height:14px;background:#000080;border:1px solid #555;border-radius:3px;vertical-align:middle;margin-right:4px;"></span><b style="color:#6688ff;" data-i18n="lp_b2">Bortle 2</b> \u2013 <span data-i18n="lp_b2_desc">Rurale vero</span></span>
-                        <span><span style="display:inline-block;width:14px;height:14px;background:#004d00;border:1px solid #555;border-radius:3px;vertical-align:middle;margin-right:4px;"></span><b style="color:#44cc44;" data-i18n="lp_b3">Bortle 3</b> \u2013 <span data-i18n="lp_b3_desc">Rurale</span></span>
-                        <span><span style="display:inline-block;width:14px;height:14px;background:#006600;border:1px solid #555;border-radius:3px;vertical-align:middle;margin-right:4px;"></span><b style="color:#66dd66;" data-i18n="lp_b4">Bortle 4</b> \u2013 <span data-i18n="lp_b4_desc">Transizione rurale</span></span>
-                        <span><span style="display:inline-block;width:14px;height:14px;background:#cccc00;border:1px solid #555;border-radius:3px;vertical-align:middle;margin-right:4px;"></span><b style="color:#c9d1d9;" data-i18n="lp_b5">Bortle 5</b> \u2013 <span data-i18n="lp_b5_desc">Suburbano</span></span>
-                        <span><span style="display:inline-block;width:14px;height:14px;background:#cc6600;border:1px solid #555;border-radius:3px;vertical-align:middle;margin-right:4px;"></span><b style="color:#ffaa44;" data-i18n="lp_b6">Bortle 6</b> \u2013 <span data-i18n="lp_b6_desc">Suburbano chiaro</span></span>
-                        <span><span style="display:inline-block;width:14px;height:14px;background:#cc0000;border:1px solid #555;border-radius:3px;vertical-align:middle;margin-right:4px;"></span><b style="color:#ff4444;" data-i18n="lp_b7">Bortle 7</b> \u2013 <span data-i18n="lp_b7_desc">Transizione urbana</span></span>
-                        <span><span style="display:inline-block;width:14px;height:14px;background:#ffffff;border:1px solid #555;border-radius:3px;vertical-align:middle;margin-right:4px;"></span><b style="color:#c9d1d9;" data-i18n="lp_b89">Bortle 8-9</b> \u2013 <span data-i18n="lp_b89_desc">Citt\u00e0 / Centro urbano</span></span>
+                <div id="lp-legend" style="display:none; margin-top:10px; padding:10px 14px; background:#161b22; border:1px solid #ffaa00; border-radius:8px;">
+                    <div style="font-weight:bold; color:#c49a3c; margin-bottom:8px;"> <svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-globe"/></svg> <span data-i18n="lp_legend_title">Scala Inquinamento Luminoso (Lorenz 2024)</span></div>
+                    <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center;">
+                        <span class="lp-zone-chip" style="background:#1a1a1a;" onmouseenter="mostraTooltip(this,'lp_b1')" onmouseleave="nascondiTooltip()" onclick="mostraTooltip(this,'lp_b1')">1</span>
+                        <span class="lp-zone-chip" style="background:#404040;" onmouseenter="mostraTooltip(this,'lp_b2')" onmouseleave="nascondiTooltip()" onclick="mostraTooltip(this,'lp_b2')">2</span>
+                        <span class="lp-zone-chip" style="position:relative;overflow:hidden;" onmouseenter="mostraTooltip(this,'lp_b3')" onmouseleave="nascondiTooltip()" onclick="mostraTooltip(this,'lp_b3')"><span style="position:absolute;left:0;top:0;width:50%;height:100%;background:#0d2b73;"></span><span style="position:absolute;right:0;top:0;width:50%;height:100%;background:#1b54d9;"></span><span style="position:relative;z-index:2;font-size:13px;font-weight:700;color:#fff;text-shadow:0 0 3px rgba(0,0,0,0.8);">3</span></span>
+                        <span class="lp-zone-chip" style="position:relative;overflow:hidden;" onmouseenter="mostraTooltip(this,'lp_b4')" onmouseleave="nascondiTooltip()" onclick="mostraTooltip(this,'lp_b4')"><span style="position:absolute;left:0;top:0;width:50%;height:100%;background:#065708;"></span><span style="position:absolute;right:0;top:0;width:50%;height:100%;background:#1aa226;"></span><span style="position:relative;z-index:2;font-size:13px;font-weight:700;color:#fff;text-shadow:0 0 3px rgba(0,0,0,0.8);">4</span></span>
+                        <span class="lp-zone-chip" style="background:#b6a726;" onmouseenter="mostraTooltip(this,'lp_b5')" onmouseleave="nascondiTooltip()" onclick="mostraTooltip(this,'lp_b5')">5</span>
+                        <span class="lp-zone-chip" style="background:#fd974f; color:#111;" onmouseenter="mostraTooltip(this,'lp_b6')" onmouseleave="nascondiTooltip()" onclick="mostraTooltip(this,'lp_b6')">6</span>
+                        <span class="lp-zone-chip" style="background:#fb9a8a; color:#111;" onmouseenter="mostraTooltip(this,'lp_b7')" onmouseleave="nascondiTooltip()" onclick="mostraTooltip(this,'lp_b7')">7</span>
+                        <span class="lp-zone-chip" style="background:#a1a1a1; color:#111;" onmouseenter="mostraTooltip(this,'lp_b8')" onmouseleave="nascondiTooltip()" onclick="mostraTooltip(this,'lp_b8')">8</span>
+                        <span class="lp-zone-chip" style="background:#f0f0f0; color:#111;" onmouseenter="mostraTooltip(this,'lp_b9')" onmouseleave="nascondiTooltip()" onclick="mostraTooltip(this,'lp_b9')">9</span>
+                        <span style="font-size:13px; color:#555; margin-left:6px;" data-i18n="lp_tap_hint">tocca per info</span>
                     </div>
                 </div>
             </div>
@@ -1005,6 +1035,11 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
         <!-- ═══ IMPOSTAZIONE SEQUENZA ═══ -->
 
         <div id="mode-smart-section">
+        <div id="bortle-warning-banner" style="display:none; margin-bottom:10px; padding:10px 14px; background:rgba(196,122,60,0.12); border:1px solid #c47a3c; border-left:4px solid #c47a3c; border-radius:6px; font-size:0.85em; color:#c47a3c; align-items:center; gap:10px; flex-wrap:wrap;">
+            <span>⚠️</span>
+            <span data-i18n="bortle_unconfirmed_banner" style="flex:1;">Indice Bortle non confermato per la tua zona — l'analisi potrebbe essere imprecisa.</span>
+            <button onclick="vaiABortle()" data-i18n="bortle_goto_btn" style="background:transparent; border:1px solid #c47a3c; color:#c47a3c; border-radius:4px; padding:3px 10px; font-size:0.82em; cursor:pointer; white-space:nowrap;">Vai al Bortle</button>
+        </div>
         <div class="panel" style="margin-top: 20px;">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
                 <h3 style="margin: 0;"><span data-i18n="seq_setup">Impostazione Sequenza</span> <span class="info-icon" onmouseenter="mostraTooltip(this, 'info_seq_opt')" onmouseleave="nascondiTooltip()">ℹ️</span></h3>
@@ -1138,6 +1173,11 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
         </div><!-- /mode-smart-section -->
         <!-- ═══ SEZIONE PRO ═══ -->
         <div id="mode-pro-section" style="display:none;">
+        <div id="bortle-warning-banner" style="display:none; margin-bottom:10px; padding:10px 14px; background:rgba(196,122,60,0.12); border:1px solid #c47a3c; border-left:4px solid #c47a3c; border-radius:6px; font-size:0.85em; color:#c47a3c; align-items:center; gap:10px; flex-wrap:wrap;">
+            <span>⚠️</span>
+            <span data-i18n="bortle_unconfirmed_banner" style="flex:1;">Indice Bortle non confermato per la tua zona — l'analisi potrebbe essere imprecisa.</span>
+            <button onclick="vaiABortle()" data-i18n="bortle_goto_btn" style="background:transparent; border:1px solid #c47a3c; color:#c47a3c; border-radius:4px; padding:3px 10px; font-size:0.82em; cursor:pointer; white-space:nowrap;">Vai al Bortle</button>
+        </div>
 
 
         <div style="display: flex; flex-direction: column; gap: 20px;">
@@ -1233,7 +1273,6 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
             </div>
         </div>
     </div>
-</div>
         </div><!-- /mode-pro-section -->
 
     </div>
@@ -1274,6 +1313,25 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
     </div>
 
     <div id="floating-tooltip" class="floating-tooltip"></div>
+    <!-- Modal Bortle non confermato -->
+    <div id="bortle-popup-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:5000; align-items:center; justify-content:center; padding:16px;">
+        <div style="background:#161b22; border:1px solid #c47a3c; border-top:4px solid #c47a3c; border-radius:10px; padding:22px 24px; max-width:380px; width:100%; text-align:left;">
+            <div style="font-size:1.3em; margin-bottom:10px;">⚠️</div>
+            <div style="font-weight:700; color:#c49a3c; margin-bottom:8px; font-size:1em;" data-i18n="bortle_popup_title">Indice Bortle non confermato</div>
+            <div style="font-size:0.88em; color:#6e7a8a; line-height:1.6; margin-bottom:18px;" data-i18n="bortle_popup_desc">Il Bortle influenza direttamente i calcoli di esposizione. Conferma o modifica il valore rilevato per la tua posizione prima di procedere con l'analisi.</div>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                <button onclick="vaiABortle()" data-i18n="bortle_goto_btn"
+                    style="flex:1; background:#c49a3c; color:#0d1117; border:none; border-radius:6px; padding:9px 14px; font-size:0.88em; font-weight:700; cursor:pointer;">
+                    Vai al Bortle
+                </button>
+                <button onclick="document.getElementById('bortle-popup-modal').style.display='none'" data-i18n="bortle_popup_skip"
+                    style="flex:1; background:transparent; color:#6e7a8a; border:1px solid #21293a; border-radius:6px; padding:9px 14px; font-size:0.88em; cursor:pointer;">
+                    Ignora per ora
+                </button>
+            </div>
+        </div>
+    </div>
+
 
     <div id="report-modal" class="modal">
         <div class="modal-content">
@@ -2182,6 +2240,36 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
             <!-- Changelog items -->
             <div style="display:flex; flex-direction:column; gap:10px;">
 
+                <!-- ── v6.4 nuove feature (sessione 2) ── -->
+                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #c49a3c; box-shadow:0 0 0 1px rgba(196,154,60,0.15);">
+                    <span style="flex-shrink:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c49a3c" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10"/></svg></span>
+                    <div>
+                        <div style="font-weight:700; color:#c49a3c; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v64_lp_legend_title">Legenda LP Lorenz 2024 — 9 livelli Bortle</div>
+                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v64_lp_legend_desc">Nuova legenda compatta con 9 chip colorati (Bortle 1–9) campionati dalla colorbar ufficiale Lorenz 2024. I chip B3 e B4 sono bicolori per distinguere le due sotto-zone. Hover/tap mostra tooltip con zona Lorenz, range SQM, Bortle approssimativo e consiglio filtri. Disponibile in 4 lingue.</div>
+                    </div>
+                </div>
+                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #4a8a6f;">
+                    <span style="flex-shrink:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4a8a6f" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg></span>
+                    <div>
+                        <div style="font-weight:700; color:#4a8a6f; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v64_bortle_auto_title">Autorilevamento Bortle da mappa LP</div>
+                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v64_bortle_auto_desc">Il Bortle viene rilevato automaticamente ad ogni selezione della posizione (GPS o ricerca). Il sistema campiona il colore del tile Lorenz 2024 alle coordinate esatte e mappa il colore al valore Bortle. Il dropdown si aggiorna con bordo arancione finché non si clicca Conferma — che diventa verde. Se non confermato, un banner avvisa nelle sezioni Smart/PRO e un popup appare alla prima navigazione.</div>
+                    </div>
+                </div>
+                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #00c6ff;">
+                    <span style="flex-shrink:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00c6ff" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
+                    <div>
+                        <div style="font-weight:700; color:#00c6ff; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v64_gps_title">Geolocalizzazione GPS</div>
+                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v64_gps_desc">Pulsante "Posizione attuale" affianco alla barra di ricerca per localizzarsi via GPS con reverse geocoding Nominatim. Il pulsante "Comincia" nella landing rileva automaticamente la posizione GPS al primo utilizzo. Se il luogo è già salvato, va direttamente al meteo senza richiedere nuovamente la posizione.</div>
+                    </div>
+                </div>
+                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #bb86fc;">
+                    <span style="flex-shrink:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#bb86fc" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg></span>
+                    <div>
+                        <div style="font-weight:700; color:#bb86fc; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v64_hdr_db_title">HDR automatico per 15 oggetti DSO</div>
+                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v64_hdr_db_desc">Campo hdr aggiunto nel database per M8, M13, M15, M20, M27, M31, M42, M45, M57, M81, M104, IC 434, NGC 3372, NGC 5139, NGC 6543. Il valore specifico per oggetto sovrascrive il generico di categoria. Tempi HDR ottimizzati per nucleo: da 3s (NGC 6543) a 30s (M31).</div>
+                    </div>
+                </div>
+
                 <!-- ── v6.4 ── -->
                 <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #c49a3c; box-shadow:0 0 0 1px rgba(196,154,60,0.15);">
                     <span style="flex-shrink:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c49a3c" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg></span>
@@ -2481,6 +2569,93 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
         data['bortle-class'] = document.getElementById('bortle-class').value;
         localStorage.setItem('ad_instrument', JSON.stringify(data));
     }
+
+    // ── Bortle UI — conferma, stato, avvisi ────────────────────────────────
+    const _BORTLE_COLORS = {
+        '1': {bg:'#1a1a1a', color:'#999',    swatch:'#1a1a1a'},
+        '2': {bg:'#1e2230', color:'#888',    swatch:'#404040'},
+        '3': {bg:'#0d1928', color:'#7aa0eb', swatch:'#1b54d9'},
+        '4': {bg:'#091a0a', color:'#66cc66', swatch:'#1aa226'},
+        '5': {bg:'#1c1a0a', color:'#c8b84a', swatch:'#b6a726'},
+        '6': {bg:'#251406', color:'#fd974f', swatch:'#fd974f'},
+        '7': {bg:'#1e0c0c', color:'#f55050', swatch:'#f55050'},
+        '8': {bg:'#191919', color:'#a0a0a0', swatch:'#a1a1a1'},
+        '9': {bg:'#1a1a1a', color:'#ccc',    swatch:'#f0f0f0'},
+    };
+
+    function _aggiornaBortleUI() {
+        let confermato = !!localStorage.getItem('ad_bortle_confirmed');
+        let sel = document.getElementById('bortle-class');
+        let btn = document.getElementById('bortle-confirm-btn');
+        let icon = document.getElementById('bortle-status-icon');
+        let swatch = document.getElementById('bortle-swatch');
+        let banners = document.querySelectorAll('#bortle-warning-banner');
+
+        // Aggiorna colore select e swatch in base al valore
+        if (sel) {
+            let v = sel.value || '5';
+            let c = _BORTLE_COLORS[v] || _BORTLE_COLORS['5'];
+            sel.style.background = c.bg;
+            sel.style.color = c.color;
+            sel.style.borderColor = confermato ? 'transparent' : '#c47a3c';
+            if (swatch) swatch.style.background = c.swatch;
+        }
+
+        // Icona status: triangolo arancione (non confermato) o cerchio verde (confermato)
+        if (icon) {
+            if (confermato) {
+                icon.style.background = '#4a8a6f';
+                icon.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>';
+            } else {
+                icon.style.background = '#c47a3c';
+                icon.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>';
+            }
+        }
+
+        if (btn) btn.style.display = confermato ? 'none' : 'inline-flex';
+        banners.forEach(b => { b.style.display = confermato ? 'none' : 'flex'; });
+    }
+
+    function _bortleModificato() {
+        localStorage.removeItem('ad_bortle_confirmed');
+        _aggiornaBortleUI();
+    }
+
+    function confermaBortle() {
+        localStorage.setItem('ad_bortle_confirmed', '1');
+        let icon = document.getElementById('bortle-status-icon');
+        if (icon) {
+            icon.style.background = '#4a8a6f';
+            icon.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>';
+        }
+        _aggiornaBortleUI();
+    }
+
+    function setBortleAutorilevato(valore) {
+        let sel = document.getElementById('bortle-class');
+        if (sel) { sel.value = String(valore); aggiornaAI(); salvaBortle(); }
+        localStorage.removeItem('ad_bortle_confirmed');
+        sessionStorage.removeItem('ad_bortle_popup_shown');
+        _aggiornaBortleUI();
+    }
+
+    function mostraPopupBortleNonConfermato() {
+        let modal = document.getElementById('bortle-popup-modal');
+        if (modal) modal.style.display = 'flex';
+    }
+
+    function vaiABortle() {
+        let modal = document.getElementById('bortle-popup-modal');
+        if (modal) modal.style.display = 'none';
+        _showView('dashboard-view');
+        setTimeout(() => {
+            let sel = document.getElementById('bortle-class');
+            if (sel) { sel.scrollIntoView({behavior:'smooth', block:'center'}); sel.focus(); }
+        }, 300);
+    }
+
+    // Inizializza stato al caricamento
+    document.addEventListener('DOMContentLoaded', () => { setTimeout(_aggiornaBortleUI, 500); });
     </script>
 
     <script>
@@ -2518,6 +2693,13 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
             if(id === 'dashboard-view') {
                 setTimeout(() => { if(window._leafletMap && window._leafletMap.invalidateSize) window._leafletMap.invalidateSize(); }, 100);
             }
+            // Bortle unconfirmed popup — once per session when navigating to planning
+            if(id === 'planning-view' && !localStorage.getItem('ad_bortle_confirmed') && !sessionStorage.getItem('ad_bortle_popup_shown')) {
+                sessionStorage.setItem('ad_bortle_popup_shown', '1');
+                setTimeout(() => mostraPopupBortleNonConfermato(), 600);
+            }
+            // Update warning banners visibility
+            _aggiornaBortleUI();
         }
 
         function vaiMeteo() {
