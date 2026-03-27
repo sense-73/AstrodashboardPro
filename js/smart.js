@@ -619,56 +619,13 @@ function toggleLock(id) {
                 html += _unkMsg;
             }
 
-            if (aS < totId * 0.9 || isImpraticabile) {
-                let reason = "";
+            // Classificazione target — usata sia nel ramo temporale che nei consigli comuni
+            let isEmissionTarget = ['sh2','lbn','snr','hii','planetaria'].includes(_catAI);
+            let isBroadbandTarget = ['galassia','vdb','ldn','aperto','globulare'].includes(_catAI);
 
-                // ── CASO IMPRATICABILE ─────────────────────────────────────
-                if (isImpraticabile) {
-                    if (lang === 'it') {
-                        reason = `<div style="padding:10px 12px; background:rgba(255,60,60,0.10); border-left:3px solid #ff4444; border-radius:4px; font-size:0.9em; color:#ffcccc; line-height:1.6; margin-bottom:10px;">`;
-                        reason += `<span class='adp-icon'><svg width='14' height='14' style='vertical-align:middle'><use href='#i-ban'/></svg></span> <b>Progetto non consigliato nelle condizioni attuali.</b><br>`;
-                        if (!isEmission && bortle >= 8)
-                            reason += `Un target a banda larga (${tipoNomeReport}) da Bortle ${bortle} richiede un tempo di integrazione stimato superiore a ${_sogliaBB}h. Questo tipo di soggetto è molto difficile da separare dal fondo cielo in condizioni di forte inquinamento luminoso. <b>Considera un sito più buio o scegli una nebulosa a emissione con filtro narrowband.</b>`;
-                        else if (isEmission && !usingNarrowband && bortle >= 6)
-                            reason += `Il target (${tipoNomeReport}) da Bortle ${bortle} senza filtro narrowband richiederebbe oltre ${_sogliaBB}h di integrazione. <b>Con un filtro Ha/OIII dual-band il tempo stimato scenderebbe a ${totIdConNB!==null?totIdConNB.toFixed(1):'?'} ore</b> — praticabile in più sessioni.<br>Senza filtro si sconsiglia di procedere: il segnale è troppo debole rispetto al fondo cielo.`;
-                        else
-                            reason += `Anche con filtro narrowband, questo target da Bortle ${bortle} richiederebbe oltre ${_sogliaNB}h di integrazione — un progetto di stagione intera. Valuta un sito più buio.`;
-                        reason += `</div>`;
-                    } else if (lang === 'en') {
-                        reason = `<div style="padding:10px 12px; background:rgba(255,60,60,0.10); border-left:3px solid #ff4444; border-radius:4px; font-size:0.9em; color:#ffcccc; line-height:1.6; margin-bottom:10px;">`;
-                        reason += `<span class='adp-icon'><svg width='14' height='14' style='vertical-align:middle'><use href='#i-ban'/></svg></span> <b>Project not recommended under current conditions.</b><br>`;
-                        if (!isEmission && bortle >= 8)
-                            reason += `A broadband target (${tipoNomeReport}) from Bortle ${bortle} requires an estimated integration time above ${_sogliaBB}h. This type of subject is very hard to separate from the sky background under heavy light pollution. <b>Consider a darker site or switch to an emission nebula with a narrowband filter.</b>`;
-                        else if (isEmission && !usingNarrowband && bortle >= 6)
-                            reason += `This target (${tipoNomeReport}) from Bortle ${bortle} without a narrowband filter would require over ${_sogliaBB}h of integration. <b>With a Ha/OIII dual-band filter the estimated time drops to ${totIdConNB!==null?totIdConNB.toFixed(1):'?'} hours</b> — feasible over multiple sessions.<br>Without a filter, proceeding is not recommended: the signal is too weak against the sky background.`;
-                        else
-                            reason += `Even with a narrowband filter, this target from Bortle ${bortle} would require over ${_sogliaNB}h of integration — a full-season project. Consider a darker site.`;
-                        reason += `</div>`;
-                    } else if (lang === 'es') {
-                        reason = `<div style="padding:10px 12px; background:rgba(255,60,60,0.10); border-left:3px solid #ff4444; border-radius:4px; font-size:0.9em; color:#ffcccc; line-height:1.6; margin-bottom:10px;">`;
-                        reason += `<span class='adp-icon'><svg width='14' height='14' style='vertical-align:middle'><use href='#i-ban'/></svg></span> <b>Proyecto no recomendado en las condiciones actuales.</b><br>`;
-                        if (!isEmission && bortle >= 8)
-                            reason += `Un objetivo de banda ancha (${tipoNomeReport}) desde Bortle ${bortle} requiere un tiempo de integración estimado superior a ${_sogliaBB}h. Este tipo de objetivo es muy difícil de separar del fondo del cielo con mucha contaminación lumínica. <b>Considera un lugar más oscuro o elige una nebulosa de emisión con filtro narrowband.</b>`;
-                        else if (isEmission && !usingNarrowband && bortle >= 6)
-                            reason += `Este objetivo (${tipoNomeReport}) desde Bortle ${bortle} sin filtro narrowband requeriría más de ${_sogliaBB}h de integración. <b>Con un filtro dual-band Ha/OIII el tiempo estimado baja a ${totIdConNB!==null?totIdConNB.toFixed(1):'?'} horas</b> — factible en varias sesiones.<br>Sin filtro no se recomienda proceder: la señal es demasiado débil frente al fondo del cielo.`;
-                        else
-                            reason += `Incluso con filtro narrowband, este objetivo desde Bortle ${bortle} requeriría más de ${_sogliaNB}h — un proyecto de temporada completa. Considera un lugar más oscuro.`;
-                        reason += `</div>`;
-                    } else {
-                        reason = `<div style="padding:10px 12px; background:rgba(255,60,60,0.10); border-left:3px solid #ff4444; border-radius:4px; font-size:0.9em; color:#ffcccc; line-height:1.6; margin-bottom:10px;">`;
-                        reason += `<span class='adp-icon'><svg width='14' height='14' style='vertical-align:middle'><use href='#i-ban'/></svg></span> <b>当前条件下不建议此项目。</b><br>`;
-                        if (!isEmission && bortle >= 8)
-                            reason += `在博特尔${bortle}下的宽带目标（${tipoNomeReport}）估计需要超过${_sogliaBB}小时的积分时间。在强光污染下，此类目标很难从天空背景中分离。<b>建议选择更暗的地点或改拍配合窄带滤镜的发射星云。</b>`;
-                        else if (isEmission && !usingNarrowband && bortle >= 6)
-                            reason += `在博特尔${bortle}下不使用窄带滤镜，此目标（${tipoNomeReport}）将需要超过${_sogliaBB}小时的积分。<b>使用Ha/OIII双波段滤镜，估计时间降至${totIdConNB!==null?totIdConNB.toFixed(1):'?'}小时</b>——可分多次完成。<br>不建议在没有滤镜的情况下进行：信号相对于天空背景太弱。`;
-                        else
-                            reason += `即使使用窄带滤镜，在博特尔${bortle}下此目标也需要超过${_sogliaNB}小时——整季项目，建议选择更暗的地点。`;
-                        reason += `</div>`;
-                    }
-                    html += `<div style="font-size:0.9em; line-height:1.5; color:#ddd; margin-bottom:15px;">${reason}</div>`;
-
-                } else {
-                // ── CASO NORMALE (insufficiente ma praticabile) ────────────
+            // ── Costruzione reason (sempre visibile) ──────────────────
+            let reason = "";
+            if (!isImpraticabile) {
                 if(lang === 'it') {
                     reason = `Trattandosi di <b>${tipoNomeReport}</b> di magnitudine <b>${mVal.toFixed(1)}</b> ripresa a <b>f/${fR.toFixed(1)}</b>`;
                     if (isMosaic && panels > 1) reason += ` divisa in <b>${panels} pannelli</b> (Mosaico)`;
@@ -683,7 +640,6 @@ function toggleLock(id) {
                         reason += ` <br><i style="color:#ff9944; font-size: 0.9em;">⚠️ Il filtro dual/quad-band non è adatto a questo tipo di target (${tipoNomeReport}): blocca la luce broadband riducendo drasticamente il segnale. Rimuovi il filtro o scegli una nebulosa a emissione.</i>`;
                     if(doingOscNB && isEmission)
                         reason += ` <br><i style="color:#44ccaa; font-size: 0.9em;">✅ Filtro dual/quad-band attivo: penalità Bortle ridotta per target a emissione.</i>`;
-                    reason += `<br><br>Il tempo utile di stanotte (> 30° sull'orizzonte) è di <b style="color:#ff4444;">${aS.toFixed(1)} ore</b> ed è insufficiente.`;
                 } else if(lang === 'en') {
                     reason = `Being a <b>${tipoNomeReport}</b> of magnitude <b>${mVal.toFixed(1)}</b> shot at <b>f/${fR.toFixed(1)}</b>`;
                     if (isMosaic && panels > 1) reason += ` split in <b>${panels} panels</b> (Mosaic)`;
@@ -698,7 +654,6 @@ function toggleLock(id) {
                         reason += ` <br><i style="color:#ff9944; font-size: 0.9em;">⚠️ The dual/quad-band filter is not suitable for this target type (${tipoNomeReport}): it blocks broadband light, drastically reducing signal. Remove the filter or choose an emission nebula.</i>`;
                     if(doingOscNB && isEmission)
                         reason += ` <br><i style="color:#44ccaa; font-size: 0.9em;">✅ Dual/quad-band filter active: reduced Bortle penalty for emission target.</i>`;
-                    reason += `<br><br>Tonight's useful time (> 30° altitude) is <b style="color:#ff4444;">${aS.toFixed(1)} hours</b>, which is insufficient.`;
                 } else if(lang === 'es') {
                     reason = `Tratándose de <b>${tipoNomeReport}</b> de magnitud <b>${mVal.toFixed(1)}</b> capturada a <b>f/${fR.toFixed(1)}</b>`;
                     if (isMosaic && panels > 1) reason += ` dividida en <b>${panels} paneles</b> (Mosaico)`;
@@ -713,7 +668,6 @@ function toggleLock(id) {
                         reason += ` <br><i style="color:#ff9944; font-size: 0.9em;">⚠️ El filtro dual/quad-band no es adecuado para este tipo de objetivo (${tipoNomeReport}). Quita el filtro o elige una nebulosa de emisión.</i>`;
                     if(doingOscNB && isEmission)
                         reason += ` <br><i style="color:#44ccaa; font-size: 0.9em;">✅ Filtro dual/quad-band activo: penalización Bortle reducida.</i>`;
-                    reason += `<br><br>El tiempo útil de esta noche (> 30° sobre el horizonte) es de <b style="color:#ff4444;">${aS.toFixed(1)} horas</b> y resulta insuficiente.`;
                 } else {
                     reason = `作为星等 <b>${mVal.toFixed(1)}</b> 的 <b>${tipoNomeReport}</b>，在 <b>f/${fR.toFixed(1)}</b> 下拍摄`;
                     if (isMosaic && panels > 1) reason += `，分为 <b>${panels} 个面板</b> (拼接)`;
@@ -728,82 +682,156 @@ function toggleLock(id) {
                         reason += ` <br><i style="color:#ff9944; font-size: 0.9em;">⚠️ 双/四波段滤镜不适合此目标（${tipoNomeReport}）。请移除滤镜或选择发射星云。</i>`;
                     if(doingOscNB && isEmission)
                         reason += ` <br><i style="color:#44ccaa; font-size: 0.9em;">✅ 双/四波段滤镜已启用：博特尔惩罚已降低。</i>`;
-                    reason += `<br><br>今晚的可用时间 (> 30° 高度) 只有 <b style="color:#ff4444;">${aS.toFixed(1)} 小时</b>，时间不足。`;
                 }
+                html += `<div style="font-size:0.9em; line-height:1.5; color:#ddd; margin-bottom:10px;">${reason}</div>`;
+            }
 
-                // ── Consiglio filtro anti-inquinamento (Bortle) ──────────
-                let isEmissionTarget = ['sh2','lbn','snr','hii','planetaria'].includes(_catAI);
-                let isBroadbandTarget = ['galassia','vdb','ldn','aperto','globulare'].includes(_catAI);
-                let filterTip = '';
-
-                // ── Consiglio filtro: se dual/quad-band OSC attivo, mostra messaggio dedicato
-                // altrimenti mostra i consigli standard in base al Bortle
-                if (doingOscNB) {
-                    if (!isEmissionTarget) {
-                        filterTip = lang==='it' ? '⚠️ <b>Attenzione filtro:</b> Il filtro dual/quad-band selezionato non è adatto a questo target. Blocca la luce broadband riducendo drasticamente il segnale. <b>Rimuovi il filtro.</b>'
-                                  : lang==='en' ? '⚠️ <b>Filter warning:</b> The selected dual/quad-band filter is not suitable for this target. It blocks broadband light, drastically reducing signal. <b>Remove the filter.</b>'
-                                  : lang==='es' ? '⚠️ <b>Advertencia filtro:</b> El filtro dual/quad-band no es adecuado para este objetivo. Bloquea la luz de banda ancha. <b>Quita el filtro.</b>'
-                                  :               '⚠️ <b>滤镜警告：</b>所选双/四波段滤镜不适合此目标。请移除滤镜。';
+            // ── Esito temporale + impraticabile (sempre dopo reason) ──────
+            if (aS < totId * 0.9 || isImpraticabile) {
+                if (isImpraticabile) {
+                    let impMsg = "";
+                    if (lang === 'it') {
+                        impMsg = `<div style="padding:10px 12px; background:rgba(255,60,60,0.10); border-left:3px solid #ff4444; border-radius:4px; font-size:0.9em; color:#ffcccc; line-height:1.6; margin-bottom:10px;">`;
+                        impMsg += `<span class='adp-icon'><svg width='14' height='14' style='vertical-align:middle'><use href='#i-ban'/></svg></span> <b>Progetto non consigliato nelle condizioni attuali.</b><br>`;
+                        if (!isEmission && bortle >= 8) impMsg += `Un target a banda larga (${tipoNomeReport}) da Bortle ${bortle} richiede un tempo stimato superiore a ${_sogliaBB}h. <b>Considera un sito più buio o scegli una nebulosa a emissione con filtro narrowband.</b>`;
+                        else if (isEmission && !usingNarrowband && bortle >= 6) impMsg += `Il target (${tipoNomeReport}) da Bortle ${bortle} senza filtro narrowband richiederebbe oltre ${_sogliaBB}h. <b>Con filtro Ha/OIII dual-band il tempo scenderebbe a ${totIdConNB!==null?totIdConNB.toFixed(1):'?'} ore</b>.<br>Senza filtro si sconsiglia di procedere.`;
+                        else impMsg += `Anche con filtro narrowband, questo target da Bortle ${bortle} richiederebbe oltre ${_sogliaNB}h — un progetto di stagione intera.`;
+                        impMsg += `</div>`;
+                    } else if (lang === 'en') {
+                        impMsg = `<div style="padding:10px 12px; background:rgba(255,60,60,0.10); border-left:3px solid #ff4444; border-radius:4px; font-size:0.9em; color:#ffcccc; line-height:1.6; margin-bottom:10px;">`;
+                        impMsg += `<span class='adp-icon'><svg width='14' height='14' style='vertical-align:middle'><use href='#i-ban'/></svg></span> <b>Project not recommended under current conditions.</b><br>`;
+                        if (!isEmission && bortle >= 8) impMsg += `A broadband target (${tipoNomeReport}) from Bortle ${bortle} requires estimated integration above ${_sogliaBB}h. <b>Consider a darker site or switch to an emission nebula with a narrowband filter.</b>`;
+                        else if (isEmission && !usingNarrowband && bortle >= 6) impMsg += `This target (${tipoNomeReport}) from Bortle ${bortle} without a narrowband filter would require over ${_sogliaBB}h. <b>With a Ha/OIII dual-band filter the time drops to ${totIdConNB!==null?totIdConNB.toFixed(1):'?'} hours</b>.<br>Without a filter, proceeding is not recommended.`;
+                        else impMsg += `Even with a narrowband filter, this target from Bortle ${bortle} would require over ${_sogliaNB}h — a full-season project.`;
+                        impMsg += `</div>`;
+                    } else if (lang === 'es') {
+                        impMsg = `<div style="padding:10px 12px; background:rgba(255,60,60,0.10); border-left:3px solid #ff4444; border-radius:4px; font-size:0.9em; color:#ffcccc; line-height:1.6; margin-bottom:10px;">`;
+                        impMsg += `<span class='adp-icon'><svg width='14' height='14' style='vertical-align:middle'><use href='#i-ban'/></svg></span> <b>Proyecto no recomendado en las condiciones actuales.</b><br>`;
+                        if (!isEmission && bortle >= 8) impMsg += `Un objetivo broadband (${tipoNomeReport}) desde Bortle ${bortle} requiere una integración estimada superior a ${_sogliaBB}h. <b>Considera un lugar más oscuro o cambia a una nebulosa de emisión con filtro narrowband.</b>`;
+                        else if (isEmission && !usingNarrowband && bortle >= 6) impMsg += `Este objetivo (${tipoNomeReport}) desde Bortle ${bortle} sin filtro narrowband requeriría más de ${_sogliaBB}h. <b>Con filtro Ha/OIII dual-band el tiempo bajaría a ${totIdConNB!==null?totIdConNB.toFixed(1):'?'} horas</b>.`;
+                        else impMsg += `Incluso con filtro narrowband, este objetivo desde Bortle ${bortle} requeriría más de ${_sogliaNB}h — un proyecto de toda la temporada.`;
+                        impMsg += `</div>`;
                     } else {
-                        filterTip = lang==='it' ? '✅ <b>Filtro dual/quad-band attivo</b> — ottima scelta per nebulose a emissione. Riduce il fondo cielo del 94–95%, ideale anche da cieli urbani e con la Luna.'
-                                  : lang==='en' ? '✅ <b>Dual/quad-band filter active</b> — excellent choice for emission nebulae. Reduces sky background by 94–95%, ideal even from urban skies and with the Moon.'
-                                  : lang==='es' ? '✅ <b>Filtro dual/quad-band activo</b> — excelente para nebulosas de emisión. Reduce el fondo del cielo un 94–95%, ideal incluso desde cielos urbanos y con la Luna.'
-                                  :               '✅ <b>双/四波段滤镜已启用</b> ——发射星云绝佳选择，天空背景降低94–95%，城市天空和月光下均可使用。';
+                        impMsg = `<div style="padding:10px 12px; background:rgba(255,60,60,0.10); border-left:3px solid #ff4444; border-radius:4px; font-size:0.9em; color:#ffcccc; line-height:1.6; margin-bottom:10px;">`;
+                        impMsg += `<span class='adp-icon'><svg width='14' height='14' style='vertical-align:middle'><use href='#i-ban'/></svg></span> <b>当前条件下不建议此项目。</b><br>`;
+                        if (!isEmission && bortle >= 8) impMsg += `博特尔${bortle}下的宽带目标（${tipoNomeReport}）估计需要超过${_sogliaBB}小时。<b>建议选择更暗的地点或改拍发射星云。</b>`;
+                        else if (isEmission && !usingNarrowband && bortle >= 6) impMsg += `此目标（${tipoNomeReport}）不使用窄带滤镜将需要超过${_sogliaBB}小时。<b>使用Ha/OIII双波段滤镜时间降至${totIdConNB!==null?totIdConNB.toFixed(1):'?'}小时</b>。`;
+                        else impMsg += `即使使用窄带滤镜，此目标在博特尔${bortle}下也需要超过${_sogliaNB}小时——整季项目。`;
+                        impMsg += `</div>`;
+                    }
+                    html += impMsg;
+                } else {
+                    // Tempo insufficiente ma praticabile
+                    const _timeMsg = lang==='it' ? `<div style="margin-top:8px; padding:8px 12px; background:rgba(255,80,80,0.08); border-left:3px solid #ff4444; border-radius:4px; font-size:0.88em; color:#ffaaaa;">⏱ Il tempo utile di stanotte (> 30° sull'orizzonte) è di <b>${aS.toFixed(1)} ore</b> ed è insufficiente per completare l'integrazione stimata di <b>${totId.toFixed(1)} ore</b>.</div>`
+                                   : lang==='en' ? `<div style="margin-top:8px; padding:8px 12px; background:rgba(255,80,80,0.08); border-left:3px solid #ff4444; border-radius:4px; font-size:0.88em; color:#ffaaaa;">⏱ Tonight's useful time (> 30° altitude) is <b>${aS.toFixed(1)} h</b>, insufficient to complete the estimated <b>${totId.toFixed(1)} h</b> integration.</div>`
+                                   : lang==='es' ? `<div style="margin-top:8px; padding:8px 12px; background:rgba(255,80,80,0.08); border-left:3px solid #ff4444; border-radius:4px; font-size:0.88em; color:#ffaaaa;">⏱ El tiempo útil de esta noche (> 30° sobre el horizonte) es de <b>${aS.toFixed(1)} h</b>, insuficiente para completar la integración estimada de <b>${totId.toFixed(1)} h</b>.</div>`
+                                   :               `<div style="margin-top:8px; padding:8px 12px; background:rgba(255,80,80,0.08); border-left:3px solid #ff4444; border-radius:4px; font-size:0.88em; color:#ffaaaa;">⏱ 今晚可用时间（> 30°）仅 <b>${aS.toFixed(1)} 小时</b>，不足以完成估计的 <b>${totId.toFixed(1)} 小时</b>积分。</div>`;
+                    html += _timeMsg;
+                    html += `<button class="btn-a-secondary btn-a-red" style="width:100%; padding:11px; font-size:1em; margin-top:10px;" onclick="apriMultiNight('smart')"><svg width="30" height="30" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" style="display:inline-block;vertical-align:middle;flex-shrink:0;"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M11 21h-5a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v3.5" /><path d="M16 3v4" /><path d="M8 3v4" /><path d="M4 11h11" /><path d="M17.8 20.817l-2.172 1.138a.392 .392 0 0 1 -.568 -.41l.415 -2.411l-1.757 -1.707a.389 .389 0 0 1 .217 -.665l2.428 -.352l1.086 -2.193a.392 .392 0 0 1 .702 0l1.086 2.193l2.428 .352a.39 .39 0 0 1 .217 .665l-1.757 1.707l.414 2.41a.39 .39 0 0 1 -.567 .411l-2.172 -1.138" /></svg> ${t("ai_plan_btn")}</button>`;
+                }
+            } else {
+                const _okMsg = lang==='it' ? "Il tempo a disposizione stanotte sopra i 30° è sufficiente a completare l'integrazione consigliata."
+                             : lang==='en' ? "Tonight's available time above 30° is enough to complete the recommended integration."
+                             : lang==='es' ? "El tiempo disponible esta noche por encima de 30° es suficiente para completar la integración recomendada."
+                             :               "今晚 > 30° 的可用时间足以完成推荐的曝光时间。";
+                html += `<div style="margin-top:5px; padding:10px; background:rgba(74,138,111,0.1); border-left:3px solid #4a8a6f; border-radius:4px; font-size:0.9em; color:#fff;"><svg width='14' height='14' style='vertical-align:middle;margin-right:4px'><use href='#i-check'/></svg><b>OK:</b> ${_okMsg}</div>`;
+            }
+
+                        // ── Consigli filtro e HDR — sempre visibili indipendentemente dal tempo ──
+            {
+                let _ftIsEmission = isEmissionTarget;
+                let _ftIsBroadband = isBroadbandTarget;
+                let filterTipCommon = '';
+
+                if (doingOscNB) {
+                    if (!_ftIsEmission) {
+                        filterTipCommon = lang==='it' ? '⚠️ <b>Attenzione filtro:</b> Il filtro dual/quad-band selezionato non è adatto a questo target. Blocca la luce broadband riducendo drasticamente il segnale. <b>Rimuovi il filtro.</b>'
+                                        : lang==='en' ? '⚠️ <b>Filter warning:</b> The selected dual/quad-band filter is not suitable for this target. It blocks broadband light, drastically reducing signal. <b>Remove the filter.</b>'
+                                        : lang==='es' ? '⚠️ <b>Advertencia filtro:</b> El filtro dual/quad-band no es adecuado para este objetivo. Bloquea la luz de banda ancha. <b>Quita el filtro.</b>'
+                                        :               '⚠️ <b>滤镜警告：</b>所选双/四波段滤镜不适合此目标。请移除滤镜。';
+                    } else {
+                        filterTipCommon = lang==='it' ? '✅ <b>Filtro dual/quad-band attivo</b> — ottima scelta per nebulose a emissione. Riduce il fondo cielo del 94–95%, ideale anche da cieli urbani e con la Luna.'
+                                        : lang==='en' ? '✅ <b>Dual/quad-band filter active</b> — excellent choice for emission nebulae. Reduces sky background by 94–95%, ideal even from urban skies and with the Moon.'
+                                        : lang==='es' ? '✅ <b>Filtro dual/quad-band activo</b> — excelente para nebulosas de emisión. Reduce el fondo del cielo un 94–95%, ideal incluso desde cielos urbanos y con la Luna.'
+                                        :               '✅ <b>双/四波段滤镜已启用</b> ——发射星云绝佳选择，天空背景降低94–95%，城市天空和月光下均可使用。';
                     }
                 } else if (bortle <= 3) {
-                    filterTip = lang==='it' ? '💡 <b>Filtri:</b> Cielo buio — nessun filtro antinquinamento necessario. Un filtro ridurrebbe il segnale.'
-                              : lang==='en' ? '💡 <b>Filters:</b> Dark sky — no light pollution filter needed. A filter would reduce your signal.'
-                              : lang==='es' ? '💡 <b>Filtros:</b> Cielo oscuro — no se necesita filtro anticontaminación. Un filtro reduciría la señal.'
-                              :               '💡 <b>滤镜：</b>暗天空——不需要光污染滤镜，使用滤镜会降低信号。';
+                    filterTipCommon = lang==='it' ? '💡 <b>Filtri:</b> Cielo buio — nessun filtro antinquinamento necessario. Un filtro ridurrebbe il segnale.'
+                                    : lang==='en' ? '💡 <b>Filters:</b> Dark sky — no light pollution filter needed. A filter would reduce your signal.'
+                                    : lang==='es' ? '💡 <b>Filtros:</b> Cielo oscuro — no se necesita filtro anticontaminación. Un filtro reduciría la señal.'
+                                    :               '💡 <b>滤镜：</b>暗天空——不需要光污染滤镜，使用滤镜会降低信号。';
                 } else if (bortle <= 5) {
-                    if (isEmissionTarget)
-                        filterTip = lang==='it' ? '💡 <b>Filtri:</b> Cielo suburbano — per nebulose a emissione un filtro antinquinamento broadband è utile (es. CLS, L-Pro, Quadband). Per altri target meglio aumentare il tempo di integrazione.'
-                                  : lang==='en' ? '💡 <b>Filters:</b> Suburban sky — for emission nebulae a broadband light pollution filter is helpful (e.g. CLS, L-Pro, Quadband). For other targets, increase integration time instead.'
-                                  : lang==='es' ? '💡 <b>Filtros:</b> Cielo suburbano — para nebulosas de emisión un filtro anticontaminación broadband es útil (p.ej. CLS, L-Pro, Quadband). Para otros objetivos, aumentar el tiempo de integración.'
-                                  :               '💡 <b>滤镜：</b>郊区天空——对于发射星云，宽带光污染滤镜很有帮助（如CLS、L-Pro、Quadband）。其他目标建议增加曝光时间。';
+                    if (_ftIsEmission)
+                        filterTipCommon = lang==='it' ? '💡 <b>Filtri:</b> Cielo suburbano — per nebulose a emissione un filtro antinquinamento broadband è utile (es. CLS, L-Pro, Quadband). Per altri target meglio aumentare il tempo di integrazione.'
+                                        : lang==='en' ? '💡 <b>Filters:</b> Suburban sky — for emission nebulae a broadband light pollution filter is helpful (e.g. CLS, L-Pro, Quadband). For other targets, increase integration time instead.'
+                                        : lang==='es' ? '💡 <b>Filtros:</b> Cielo suburbano — para nebulosas de emisión un filtro anticontaminación broadband es útil (p.ej. CLS, L-Pro, Quadband). Para otros objetivos, aumentar el tiempo de integración.'
+                                        :               '💡 <b>滤镜：</b>郊区天空——对于发射星云，宽带光污染滤镜很有帮助（如CLS、L-Pro、Quadband）。其他目标建议增加曝光时间。';
                     else
-                        filterTip = lang==='it' ? '💡 <b>Filtri:</b> Cielo suburbano — su galassie e ammassi i filtri antinquinamento hanno effetto limitato. Punta a più ore di integrazione.'
-                                  : lang==='en' ? '💡 <b>Filters:</b> Suburban sky — light pollution filters have limited effect on galaxies and clusters. Aim for more integration time.'
-                                  : lang==='es' ? '💡 <b>Filtros:</b> Cielo suburbano — los filtros anticontaminación tienen efecto limitado en galaxias y cúmulos. Aumenta el tiempo de integración.'
-                                  :               '💡 <b>滤镜：</b>郊区天空——光污染滤镜对星系和星团效果有限，建议增加曝光时间。';
+                        filterTipCommon = lang==='it' ? '💡 <b>Filtri:</b> Cielo suburbano — su galassie e ammassi i filtri antinquinamento hanno effetto limitato. Punta a più ore di integrazione.'
+                                        : lang==='en' ? '💡 <b>Filters:</b> Suburban sky — light pollution filters have limited effect on galaxies and clusters. Aim for more integration time.'
+                                        : lang==='es' ? '💡 <b>Filtros:</b> Cielo suburbano — los filtros anticontaminación tienen efecto limitado en galaxias y cúmulos. Aumenta el tiempo de integración.'
+                                        :               '💡 <b>滤镜：</b>郊区天空——光污染滤镜对星系和星团效果有限，建议增加曝光时间。';
                 } else if (bortle <= 7) {
-                    if (isEmissionTarget)
-                        filterTip = lang==='it' ? '💡 <b>Filtri:</b> Cielo urbano — <b>filtro antinquinamento broadband consigliato</b> per nebulose (es. CLS, UHC, L-Pro, Quadband). Migliora significativamente il contrasto.'
-                                  : lang==='en' ? '💡 <b>Filters:</b> Urban sky — <b>broadband light pollution filter recommended</b> for nebulae (e.g. CLS, UHC, L-Pro, Quadband). Significantly improves contrast.'
-                                  : lang==='es' ? '💡 <b>Filtros:</b> Cielo urbano — <b>filtro anticontaminación broadband recomendado</b> para nebulosas (p.ej. CLS, UHC, L-Pro, Quadband). Mejora significativamente el contraste.'
-                                  :               '💡 <b>滤镜：</b>城市天空——<b>强烈推荐宽带光污染滤镜</b>用于星云（如CLS、UHC、L-Pro、Quadband），可显著改善对比度。';
-                    else if (isBroadbandTarget)
-                        filterTip = lang==='it' ? '💡 <b>Filtri:</b> Cielo urbano — su galassie e ammassi un filtro antinquinamento broadband (es. L-Pro) aiuta, ma è necessaria molta integrazione (15–20h+).'
-                                  : lang==='en' ? '💡 <b>Filters:</b> Urban sky — for galaxies and clusters a broadband filter (e.g. L-Pro) helps, but long integration is still required (15–20h+).'
-                                  : lang==='es' ? '💡 <b>Filtros:</b> Cielo urbano — para galaxias y cúmulos un filtro broadband (p.ej. L-Pro) ayuda, pero sigue siendo necesaria mucha integración (15–20h+).'
-                                  :               '💡 <b>滤镜：</b>城市天空——对于星系和星团，宽带滤镜（如L-Pro）有所帮助，但仍需大量曝光时间（15-20小时以上）。';
+                    if (_ftIsEmission)
+                        filterTipCommon = lang==='it' ? '💡 <b>Filtri:</b> Cielo urbano — <b>filtro antinquinamento broadband consigliato</b> per nebulose (es. CLS, UHC, L-Pro, Quadband). Migliora significativamente il contrasto.'
+                                        : lang==='en' ? '💡 <b>Filters:</b> Urban sky — <b>broadband light pollution filter recommended</b> for nebulae (e.g. CLS, UHC, L-Pro, Quadband). Significantly improves contrast.'
+                                        : lang==='es' ? '💡 <b>Filtros:</b> Cielo urbano — <b>filtro anticontaminación broadband recomendado</b> para nebulosas (p.ej. CLS, UHC, L-Pro, Quadband). Mejora significativamente el contraste.'
+                                        :               '💡 <b>滤镜：</b>城市天空——<b>强烈推荐宽带光污染滤镜</b>用于星云（如CLS、UHC、L-Pro、Quadband），可显著改善对比度。';
+                    else if (_ftIsBroadband)
+                        filterTipCommon = lang==='it' ? '💡 <b>Filtri:</b> Cielo urbano — su galassie e ammassi un filtro antinquinamento broadband (es. L-Pro) aiuta, ma è necessaria molta integrazione (15–20h+).'
+                                        : lang==='en' ? '💡 <b>Filters:</b> Urban sky — for galaxies and clusters a broadband filter (e.g. L-Pro) helps, but long integration is still required (15–20h+).'
+                                        : lang==='es' ? '💡 <b>Filtros:</b> Cielo urbano — para galaxias y cúmulos un filtro broadband (p.ej. L-Pro) ayuda, pero sigue siendo necesaria mucha integración (15–20h+).'
+                                        :               '💡 <b>滤镜：</b>城市天空——对于星系和星团，宽带滤镜（如L-Pro）有所帮助，但仍需大量曝光时间（15-20小时以上）。';
                 } else {
-                    if (isEmissionTarget)
-                        filterTip = lang==='it' ? '💡 <b>Filtri:</b> Cielo da città — <b>filtro narrowband fortemente consigliato</b> per nebulose (es. dual-band Ha/OIII, Quadband, Tri-band). I filtri broadband sono insufficienti a questi livelli di inquinamento.'
-                                  : lang==='en' ? '💡 <b>Filters:</b> Heavy light pollution — <b>narrowband filter strongly recommended</b> for nebulae (e.g. dual-band Ha/OIII, Quadband, Tri-band). Broadband filters are insufficient at these pollution levels.'
-                                  : lang==='es' ? '💡 <b>Filtros:</b> Contaminación severa — <b>filtro narrowband muy recomendado</b> para nebulosas (p.ej. dual-band Ha/OIII, Quadband, Tri-band). Los filtros broadband son insuficientes a estos niveles.'
-                                  :               '💡 <b>滤镜：</b>严重光污染——<b>强烈推荐窄带滤镜</b>用于星云（如双波段Ha/OIII、Quadband、三波段）。宽带滤镜在此污染级别下效果不足。';
+                    if (_ftIsEmission)
+                        filterTipCommon = lang==='it' ? '💡 <b>Filtri:</b> Cielo da città — <b>filtro narrowband fortemente consigliato</b> per nebulose (es. dual-band Ha/OIII, Quadband, Tri-band). I filtri broadband sono insufficienti a questi livelli di inquinamento.'
+                                        : lang==='en' ? '💡 <b>Filters:</b> Heavy light pollution — <b>narrowband filter strongly recommended</b> for nebulae (e.g. dual-band Ha/OIII, Quadband, Tri-band). Broadband filters are insufficient at these pollution levels.'
+                                        : lang==='es' ? '💡 <b>Filtros:</b> Contaminación severa — <b>filtro narrowband muy recomendado</b> para nebulosas (p.ej. dual-band Ha/OIII, Quadband, Tri-band). Los filtros broadband son insuficientes a estos niveles.'
+                                        :               '💡 <b>滤镜：</b>严重光污染——<b>强烈推荐窄带滤镜</b>用于星云（如双波段Ha/OIII、Quadband、三波段）。宽带滤镜在此污染级别下效果不足。';
                     else
-                        filterTip = lang==='it' ? '💡 <b>Filtri:</b> Cielo da città — su galassie e ammassi i risultati restano difficili anche con filtro. Considera di spostarti in un sito più buio o di usare un filtro narrowband per nebulose nelle vicinanze.'
-                                  : lang==='en' ? '💡 <b>Filters:</b> Heavy light pollution — galaxies and clusters remain challenging even with filters. Consider a darker site or switch to nearby emission nebulae with narrowband filters.'
-                                  : lang==='es' ? '💡 <b>Filtros:</b> Contaminación severa — galaxias y cúmulos son difíciles incluso con filtros. Considera un lugar más oscuro o cambia a nebulosas de emisión con filtros narrowband.'
-                                  :               '💡 <b>滤镜：</b>严重光污染——即使使用滤镜，星系和星团仍然很困难，建议前往较暗的地点或改拍发射星云配合窄带滤镜。';
+                        filterTipCommon = lang==='it' ? '💡 <b>Filtri:</b> Cielo da città — su galassie e ammassi i risultati restano difficili anche con filtro. Considera di spostarti in un sito più buio o di usare un filtro narrowband per nebulose nelle vicinanze.'
+                                        : lang==='en' ? '💡 <b>Filters:</b> Heavy light pollution — galaxies and clusters remain challenging even with filters. Consider a darker site or switch to nearby emission nebulae with narrowband filters.'
+                                        : lang==='es' ? '💡 <b>Filtros:</b> Contaminación severa — galaxias y cúmulos son difíciles incluso con filtros. Considera un lugar más oscuro o cambia a nebulosas de emisión con filtros narrowband.'
+                                        :               '💡 <b>滤镜：</b>严重光污染——即使使用滤镜，星系和星团仍然很困难，建议前往较暗的地点或改拍发射星云配合窄带滤镜。';
                 }
-                if (filterTip)
-                    reason += `<br><br><div style="margin-top:8px; padding:10px 12px; background:rgba(255,170,0,0.08); border-left:3px solid #ffaa00; border-radius:4px; font-size:0.88em; color:#e0d8ff; line-height:1.6;">${filterTip}</div>`;
-                // ────────────────────────────────────────────────────────
 
-                html += `<div style="font-size:0.9em; line-height:1.5; color:#ddd; margin-bottom:15px;">${reason}</div>`;
-                html += `<button class="btn-a-secondary btn-a-red" style="width:100%; padding:11px; font-size:1em; margin-top:10px;" onclick="apriMultiNight('smart')"><svg width="30" height="30" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" style="display:inline-block;vertical-align:middle;flex-shrink:0;"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M11 21h-5a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v3.5" /><path d="M16 3v4" /><path d="M8 3v4" /><path d="M4 11h11" /><path d="M17.8 20.817l-2.172 1.138a.392 .392 0 0 1 -.568 -.41l.415 -2.411l-1.757 -1.707a.389 .389 0 0 1 .217 -.665l2.428 -.352l1.086 -2.193a.392 .392 0 0 1 .702 0l1.086 2.193l2.428 .352a.39 .39 0 0 1 .217 .665l-1.757 1.707l.414 2.41a.39 .39 0 0 1 -.567 .411l-2.172 -1.138" /></svg> ${t("ai_plan_btn")}</button>`;
-                } // chiude else (caso normale vs impraticabile)
-            } else {
-                let msgOk = lang === 'it' ? "Il tempo a disposizione stanotte sopra i 30° è sufficiente a completare l'integrazione consigliata." : 
-                            lang === 'en' ? "Tonight's available time above 30° is enough to complete the recommended integration." :
-                            lang === 'es' ? "El tiempo disponible esta noche por encima de 30° es suficiente para completar la integración recomendada." :
-                                            "今晚 > 30° 的可用时间足以完成推荐的曝光时间。";
-                html += `<div style="margin-top:5px; padding:10px; background:rgba(74,138,111,0.1); border-left:3px solid #4a8a6f; border-radius:4px; font-size:0.9em; color:#fff;"><svg width='14' height='14' style='vertical-align:middle;margin-right:4px'><use href='#i-check'/></svg><b>OK:</b> ${msgOk}</div>`;
+                if (filterTipCommon)
+                    html += `<div style="margin-top:8px; padding:10px 12px; background:rgba(255,170,0,0.08); border-left:3px solid #ffaa00; border-radius:4px; font-size:0.88em; color:#e0d8ff; line-height:1.6;">${filterTipCommon}</div>`;
+
+                // ── HDR note ─────────────────────────────────────────────
+                const _catHdrMapFinal = { planetaria: 30, globulare: 15 };
+                let _hdrExpFinal = _catHdrMapFinal[_catAI] || 0;
+                if (targetSelezionato && targetSelezionato.hdr) _hdrExpFinal = targetSelezionato.hdr;
+                if (_hdrExpFinal > 0) {
+                    const _hdrNoteByID = {
+                        m8:{it:`Il cuore della Nebulosa Laguna (la Clessidra) è molto più brillante del resto della nebulosa. Pose brevi da <b>${_hdrExpFinal}s</b> proteggono il dettaglio nella regione centrale senza bruciare le zone circostanti.`,en:`The core of the Lagoon Nebula (the Hourglass) is far brighter than the surrounding nebulosity. Short <b>${_hdrExpFinal}s</b> frames protect detail in the central region without burning out the surroundings.`,es:`El núcleo de la Nebulosa Laguna es mucho más brillante que el resto. Poses de <b>${_hdrExpFinal}s</b> protegen el detalle en la región central.`,zh:`礁湖星云核心远比周围亮。<b>${_hdrExpFinal}s</b>短帧保护中心区域细节，避免过曝。`},
+                        m13:{it:`Il nucleo di M13 è estremamente denso: le stelle centrali saturano rapidamente anche con pose moderate. Pose brevi da <b>${_hdrExpFinal}s</b> preservano la risoluzione stellare al centro dell'ammasso.`,en:`M13's core is extremely dense — central stars saturate quickly even at moderate exposures. Short <b>${_hdrExpFinal}s</b> frames preserve stellar resolution at the cluster centre.`,es:`El núcleo de M13 es muy denso; las estrellas centrales saturan rápidamente. Poses de <b>${_hdrExpFinal}s</b> preservan la resolución estelar.`,zh:`M13核心极为致密。<b>${_hdrExpFinal}s</b>短帧保持星团核心的恒星分辨率。`},
+                        m15:{it:`M15 è uno degli ammassi globulari più densi della Via Lattea — il nucleo potrebbe ospitare un buco nero intermedio. Pose brevi da <b>${_hdrExpFinal}s</b> sono necessarie per risolvere le stelle nella regione centrale ultra-densa.`,en:`M15 is one of the densest globular clusters in the Milky Way — its core may harbour an intermediate black hole. Short <b>${_hdrExpFinal}s</b> frames are needed to resolve individual stars in the ultra-dense central region.`,es:`M15 es uno de los cúmulos más densos de la Vía Láctea. Poses de <b>${_hdrExpFinal}s</b> resuelven estrellas en el núcleo ultra-denso.`,zh:`M15是银河系最致密的球状星团之一。<b>${_hdrExpFinal}s</b>短帧分辨超密核心中的单颗恒星。`},
+                        m20:{it:`Il cuore della Trifida è molto più luminoso dei suoi tre lobi. Pose brevi da <b>${_hdrExpFinal}s</b> proteggono il dettaglio nella zona centrale e bilanciano l'esposizione con la nebulosa riflessa più tenue.`,en:`The Trifid's core is far brighter than its three lobes. Short <b>${_hdrExpFinal}s</b> frames protect detail in the central emission zone and balance exposure with the fainter reflection nebula.`,es:`El núcleo de la Trifid es mucho más brillante que sus tres lóbulos. Poses de <b>${_hdrExpFinal}s</b> protegen el detalle central.`,zh:`三叶星云核心远比三个叶瓣明亮。<b>${_hdrExpFinal}s</b>短帧保护中央发射区细节。`},
+                        m27:{it:`La stella centrale di M27 è molto più brillante rispetto alla nebulosa circostante. Pose brevi da <b>${_hdrExpFinal}s</b> preservano il dettaglio nel cuore della Manubrio senza bruciare le estensioni esterne.`,en:`M27's central star is far brighter than the surrounding nebula. Short <b>${_hdrExpFinal}s</b> frames preserve detail at the Dumbbell's core without burning the outer extensions.`,es:`La estrella central de M27 es mucho más brillante que la nebulosa. Poses de <b>${_hdrExpFinal}s</b> preservan el detalle sin saturar.`,zh:`M27中央星远比周围星云明亮。<b>${_hdrExpFinal}s</b>短帧保留核心细节避免过曝。`},
+                        m31:{it:`Il nucleo galattico di M31 è straordinariamente brillante rispetto ai bracci spirali. Pose brevi da <b>${_hdrExpFinal}s</b> proteggono il dettaglio nucleare mantenendo visibili anche le zone più tenue dei bracci.`,en:`M31's galactic nucleus is extraordinarily bright compared to its spiral arms. Short <b>${_hdrExpFinal}s</b> frames protect nuclear detail while keeping the fainter arm regions visible.`,es:`El núcleo de M31 es muy brillante respecto a los brazos espirales. Poses de <b>${_hdrExpFinal}s</b> protegen el detalle nuclear.`,zh:`M31星系核远比旋臂明亮。<b>${_hdrExpFinal}s</b>短帧保护核心细节，同时保留较暗旋臂。`},
+                        m42:{it:`La regione del Trapezio in M42 è una delle zone più brillanti del cielo invernale. Pose brevi da <b>${_hdrExpFinal}s</b> preservano la struttura del Trapezio e il dettaglio nel cuore della nebulosa.`,en:`The Trapezium region in M42 is one of the brightest areas in the winter sky. Short <b>${_hdrExpFinal}s</b> frames preserve the Trapezium's structure and detail at the nebula's core.`,es:`La región del Trapecio en M42 es una de las más brillantes del cielo invernal. Poses de <b>${_hdrExpFinal}s</b> preservan la estructura del Trapecio.`,zh:`M42中的猎户四边形是冬季天空最亮区域之一。<b>${_hdrExpFinal}s</b>短帧保留四边形结构和星云核心细节。`},
+                        m45:{it:`Le stelle principali delle Pleiadi saturano rapidamente, bruciando la nebulosa di riflessione circostante. Pose brevi da <b>${_hdrExpFinal}s</b> preservano la struttura stellare e la nebulosità circostante.`,en:`The Pleiades' main stars saturate quickly, burning out the surrounding reflection nebula. Short <b>${_hdrExpFinal}s</b> frames preserve stellar structure and the reflection nebulosity.`,es:`Las estrellas de las Pléyades saturan rápidamente. Poses de <b>${_hdrExpFinal}s</b> preservan la estructura estelar y la nebulosidad.`,zh:`昴星团主星迅速饱和并淹没周围反射星云。<b>${_hdrExpFinal}s</b>短帧保留恒星结构和附近星云细节。`},
+                        m57:{it:`M57 presenta una stella centrale molto brillante rispetto all'anello nebulare. Pose brevi da <b>${_hdrExpFinal}s</b> catturano la stella centrale senza saturarla mantenendo visibile la struttura dell'anello.`,en:`M57 has a particularly bright central star relative to its nebular ring. Short <b>${_hdrExpFinal}s</b> frames capture the central star without saturating it, while keeping the ring visible.`,es:`M57 tiene una estrella central muy brillante. Poses de <b>${_hdrExpFinal}s</b> capturan la estrella sin saturarla.`,zh:`M57中央星相对于星云环格外明亮。<b>${_hdrExpFinal}s</b>短帧在不饱和中央星的同时保留环形结构。`},
+                        m81:{it:`Il nucleo di M81 è molto più luminoso rispetto ai bracci spirali. Pose brevi da <b>${_hdrExpFinal}s</b> preservano il dettaglio nucleare e le bande di polvere senza perdere i bracci più tenui.`,en:`M81's nucleus is far brighter than its spiral arms. Short <b>${_hdrExpFinal}s</b> frames preserve nuclear detail and dust lanes without losing the fainter arms.`,es:`El núcleo de M81 es mucho más brillante que los brazos. Poses de <b>${_hdrExpFinal}s</b> preservan el detalle nuclear y las bandas de polvo.`,zh:`M81星系核远比旋臂明亮。<b>${_hdrExpFinal}s</b>短帧保留核心细节和尘埃带。`},
+                        m104:{it:`Il Sombrero ha un nucleo eccezionalmente brillante. Pose brevi da <b>${_hdrExpFinal}s</b> proteggono il dettaglio nucleare e bilanciano l'esposizione con la caratteristica banda di polvere.`,en:`The Sombrero has an exceptionally bright nucleus. Short <b>${_hdrExpFinal}s</b> frames protect nuclear detail and balance exposure with its characteristic dust lane.`,es:`El Sombrero tiene un núcleo excepcionalmente brillante. Poses de <b>${_hdrExpFinal}s</b> protegen el detalle nuclear.`,zh:`草帽星系核心异常明亮。<b>${_hdrExpFinal}s</b>短帧保护核心细节，并平衡与特征尘埃带的曝光。`},
+                        ic434:{it:`La Testa di Cavallo si staglia su un fondo brillante ionizzato da σ Orionis. Pose brevi da <b>${_hdrExpFinal}s</b> gestiscono il forte contrasto tra la stella e la nebulosa di emissione di sfondo.`,en:`The Horsehead silhouettes against a bright background ionised by σ Orionis. Short <b>${_hdrExpFinal}s</b> frames handle the strong contrast between the bright star and the emission nebula background.`,es:`La Cabeza de Caballo se recorta sobre un fondo brillante. Poses de <b>${_hdrExpFinal}s</b> gestionan el contraste con la estrella brillante.`,zh:`马头星云映衬在被σ猎户座电离的明亮背景上。<b>${_hdrExpFinal}s</b>短帧处理亮星与发射星云的强烈对比。`},
+                        ngc3372:{it:`Eta Carinae è una delle stelle più luminose e variabili della Via Lattea. Pose brevi da <b>${_hdrExpFinal}s</b> sono necessarie per non bruciare la stella e preservare la Nebula Omuncolare e i pilastri di gas.`,en:`Eta Carinae is one of the most luminous and variable stars in the Milky Way. Short <b>${_hdrExpFinal}s</b> frames avoid burning out the star and preserve the Homunculus Nebula and gas pillars.`,es:`Eta Carinae es una de las estrellas más luminosas. Poses de <b>${_hdrExpFinal}s</b> evitan quemar la estrella y preservan la Nebulosa Homúnculo.`,zh:`船底η星是银河系中最亮的恒星之一。<b>${_hdrExpFinal}s</b>短帧避免烧毁该星并保留侏儒星云结构。`},
+                        ngc5139:{it:`Omega Centauri è il più grande ammasso globulare della Via Lattea. Pose brevi da <b>${_hdrExpFinal}s</b> permettono di risolvere le singole stelle nella regione centrale ultra-densa.`,en:`Omega Centauri is the largest globular cluster in the Milky Way. Short <b>${_hdrExpFinal}s</b> frames resolve individual stars in the ultra-dense central region.`,es:`Omega Centauri es el cúmulo globular más grande de la Vía Láctea. Poses de <b>${_hdrExpFinal}s</b> resuelven estrellas en el núcleo.`,zh:`半人马座ω是银河系最大球状星团。<b>${_hdrExpFinal}s</b>短帧分辨超密核心中的单颗恒星。`},
+                        ngc6543:{it:`NGC 6543 ha una delle stelle centrali più brillanti tra tutte le nebulose planetarie. Pose brevi da <b>${_hdrExpFinal}s</b> evitano la saturazione della stella centrale e preservano la struttura dell'Occhio di Gatto.`,en:`NGC 6543 has one of the brightest central stars among all planetary nebulae. Short <b>${_hdrExpFinal}s</b> frames avoid saturating the central star and preserve the Cat's Eye structure.`,es:`NGC 6543 tiene una de las estrellas centrales más brillantes entre las nebulosas planetarias. Poses de <b>${_hdrExpFinal}s</b> evitan saturar la estrella central.`,zh:`NGC 6543拥有行星状星云中最亮的中央星之一。<b>${_hdrExpFinal}s</b>短帧避免中央星饱和。`},
+                    };
+                    const _hdrNoteByCat = {
+                        globulare:{it:`Gli ammassi globulari presentano nuclei stellari molto densi con brillanza superficiale che supera di gran lunga quella delle stelle esterne. Pose brevi da <b>${_hdrExpFinal}s</b> preservano la risoluzione stellare al centro senza sacrificare la struttura dell'alone.`,en:`Globular clusters have very dense stellar cores with surface brightness far exceeding the outer stars. Short <b>${_hdrExpFinal}s</b> frames preserve stellar resolution at the centre without sacrificing the fainter halo structure.`,es:`Los cúmulos globulares tienen núcleos muy densos. Poses de <b>${_hdrExpFinal}s</b> preservan la resolución estelar sin sacrificar el halo.`,zh:`球状星团具有非常致密的恒星核心。<b>${_hdrExpFinal}s</b>短帧在不牺牲较暗晕结构的同时保持核心恒星分辨率。`},
+                        planetaria:{it:`Le nebulose planetarie presentano spesso una stella centrale molto più brillante rispetto alla nebulosa circostante. Pose brevi da <b>${_hdrExpFinal}s</b> preservano il dettaglio nel nucleo senza bruciare la struttura nebulare più tenue.`,en:`Planetary nebulae often have a central star far brighter than the surrounding nebula. Short <b>${_hdrExpFinal}s</b> frames preserve detail in the bright nucleus without burning out the fainter nebular structure.`,es:`Las nebulosas planetarias suelen tener una estrella central mucho más brillante. Poses de <b>${_hdrExpFinal}s</b> preservan el detalle nuclear sin quemar la estructura.`,zh:`行星状星云通常有一颗远比周围星云明亮的中央星。<b>${_hdrExpFinal}s</b>短帧保留明亮核心细节。`}
+                    };
+                    const _hdrFallback = {it:`Questo oggetto presenta forti differenze di luminosità interna. Pose brevi da <b>${_hdrExpFinal}s</b> gestiscono la dinamica elevata preservando i dettagli nelle zone più esposte.`,en:`This object has strong internal brightness differences. Short <b>${_hdrExpFinal}s</b> frames handle the high dynamic range, preserving detail in the brightest areas.`,es:`Este objeto presenta grandes diferencias de luminosidad interna. Poses de <b>${_hdrExpFinal}s</b> gestionan el alto rango dinámico.`,zh:`该天体内部存在强烈的亮度差异。<b>${_hdrExpFinal}s</b>短帧处理高动态范围，保留最亮区域的细节。`};
+                    const _tidFinal = targetSelezionato ? targetSelezionato.id : null;
+                    const _hdrTxt = (_tidFinal && _hdrNoteByID[_tidFinal]) ? (_hdrNoteByID[_tidFinal][lang]||_hdrNoteByID[_tidFinal].it) : (_hdrNoteByCat[_catAI]) ? (_hdrNoteByCat[_catAI][lang]||_hdrNoteByCat[_catAI].it) : (_hdrFallback[lang]||_hdrFallback.it);
+                    html += `<div style="margin-top:8px; padding:10px 12px; background:rgba(187,134,252,0.07); border-left:3px solid #bb86fc; border-radius:4px; font-size:0.88em; color:#e0d8ff; line-height:1.6;">✦ <b style="color:#bb86fc;">${lang==='it'?'Sequenza HDR attivata':lang==='en'?'HDR sequence activated':lang==='es'?'Secuencia HDR activada':'已启用HDR序列'}</b> — ${_hdrTxt}</div>`;
+                }
             }
-            panel.innerHTML = html;
+            // ────────────────────────────────────────────────────────────
+                        panel.innerHTML = html;
         }
 
         // Formatta secondi in modo leggibile: mostra secondi se < 60s
