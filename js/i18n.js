@@ -618,6 +618,11 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.es.bortle_status_unconfirmed = "Confirma el valor del índice Bortle para esta ubicación";
         i18n.zh.bortle_status_unconfirmed = "请确认此位置的博特尔指数值";
 
+        i18n.it.gps_locating = "Rilevamento posizione in corso…";
+        i18n.en.gps_locating = "Detecting location…";
+        i18n.es.gps_locating = "Detectando ubicación…";
+        i18n.zh.gps_locating = "正在检测位置…";
+
         // ── Legenda LP Lorenz — tooltip per zona ──────────────────────────
         i18n.it.lp_tap_hint = "tocca per info";
         i18n.en.lp_tap_hint = "tap for info";

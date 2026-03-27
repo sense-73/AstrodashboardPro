@@ -179,12 +179,35 @@
             document.getElementById('ricerca').value = nome.split(',')[0];
             document.getElementById('lat').value = latCorrente.toFixed(5); document.getElementById('lon').value = lonCorrente.toFixed(5);
             document.getElementById('dropdown-risultati').style.display = 'none';
-            map.flyTo([latCorrente, lonCorrente], 9);
             if (marker) map.removeLayer(marker);
-            marker = L.marker([latCorrente, lonCorrente]).addTo(map).bindPopup(`<b>${nome.split(',')[0]}</b>`).openPopup();
+            marker = L.marker([latCorrente, lonCorrente]).addTo(map).bindPopup(`<b>${nome.split(',')[0]}</b>`);
+            // Apri popup solo dopo che flyTo è completato — evita fumetto decentrato
+            map.once('moveend', function() { if (marker) marker.openPopup(); });
+            map.flyTo([latCorrente, lonCorrente], 9);
             aggiornaEffemeridi(new Date()); scaricaDatiPrevisionali();
             _rilevaBortleDaCoordinate(latCorrente, lonCorrente);
+            _nascondiToastGPS();
         }
+
+        // ── Toast localizzazione GPS ────────────────────────────────────────
+        function _mostraToastGPS() {
+            let toast = document.getElementById('gps-toast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'gps-toast';
+                toast.style.cssText = 'position:absolute;top:16px;left:50%;transform:translateX(-50%);z-index:2000;background:#161b22;border:1px solid #c49a3c;border-radius:8px;padding:10px 18px;display:flex;align-items:center;gap:10px;font-size:0.85em;color:#c9d1d9;box-shadow:0 4px 16px rgba(0,0,0,0.6);white-space:nowrap;';
+                let mapEl = document.getElementById('map');
+                if (mapEl) { mapEl.style.position = 'relative'; mapEl.appendChild(toast); }
+            }
+            toast.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c49a3c" stroke-width="2" style="animation:spin 1.2s linear infinite;flex-shrink:0"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg><span>${t('gps_locating')}</span>`;
+            toast.style.display = 'flex';
+        }
+
+        function _nascondiToastGPS() {
+            let toast = document.getElementById('gps-toast');
+            if (toast) toast.style.display = 'none';
+        }
+        // ───────────────────────────────────────────────────────────────────
 
         // ── Geolocalizzazione browser ──────────────────────────────────────
         function _risolviGPSNome(lat, lon, callback) {
@@ -218,32 +241,28 @@
         }
 
         function vaiMeteoConGeoloc() {
-            // Logica pulsante "Comincia":
-            // - Luogo salvato → vai direttamente al meteo
-            // - Nessun luogo salvato → richiedi GPS → se ok imposta luogo e vai al meteo
-            //                                       → se rifiuto → vai al meteo con barra ricerca
             let haLuogo = localStorage.getItem('ad_lat') && localStorage.getItem('ad_lon');
             if (haLuogo) {
                 vaiMeteo();
                 return;
             }
-            // Prima volta: tenta GPS
+            // Vai subito alla mappa — risposta immediata al click
+            vaiMeteo();
             if (!navigator.geolocation) {
-                vaiMeteo();
                 setTimeout(() => { let el = document.getElementById('ricerca'); if (el) { el.scrollIntoView({behavior:'smooth', block:'center'}); el.focus(); } }, 300);
                 return;
             }
+            // Mostra toast "in corso" dopo che la mappa è visibile
+            setTimeout(_mostraToastGPS, 200);
             navigator.geolocation.getCurrentPosition(
                 pos => {
                     let lat = pos.coords.latitude, lon = pos.coords.longitude;
                     _risolviGPSNome(lat, lon, nome => {
-                        selezionaLuogo(lat, lon, nome);
-                        vaiMeteo();
+                        selezionaLuogo(lat, lon, nome); // nasconde toast internamente
                     });
                 },
                 () => {
-                    // GPS rifiutato: vai al meteo con focus sulla barra ricerca
-                    vaiMeteo();
+                    _nascondiToastGPS();
                     setTimeout(() => { let el = document.getElementById('ricerca'); if (el) { el.scrollIntoView({behavior:'smooth', block:'center'}); el.focus(); } }, 300);
                 },
                 { timeout: 8000 }
