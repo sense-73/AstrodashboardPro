@@ -1226,6 +1226,11 @@ let lang = localStorage.getItem('ad_lang') || 'it';
 
         i18n.it.lp_layer = "Inquinamento Luminoso";
         i18n.en.lp_layer = "Light Pollution";
+
+        i18n.it.wind_layer = "Vento";
+        i18n.en.wind_layer = "Wind";
+        i18n.es.wind_layer = "Viento";
+        i18n.zh.wind_layer = "风速";
         i18n.es.lp_layer = "Contaminación Lumínica";
         i18n.zh.lp_layer = "光污染";
         // Legenda LP

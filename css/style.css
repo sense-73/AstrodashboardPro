@@ -86,7 +86,7 @@
         .meteo-item span { font-size: 1.4em; font-weight: bold; }
         .jet-unit { font-size: 0.6em; font-weight: normal; color: #ccc; }
         .disabled { opacity: 0.4; filter: grayscale(100%); background-color: var(--bg-panel); }
-        .m-bassa.active { border-color: #ff4444; } .m-media.active { border-color: var(--ok); } .m-alta.active { border-color: #4466ff; } .m-jet.active { border-color: #ff00ff; } .m-luna.active { border-color: #ffffaa; } .m-umidita.active { border-color: #00ffff;} .m-seeing { border-color: var(--accent); cursor: default;}
+        .m-bassa.active { border-color: #ff4444; } .m-media.active { border-color: var(--ok); } .m-alta.active { border-color: #4466ff; } .m-jet.active { border-color: #ff00ff; } .m-luna.active { border-color: #ffffaa; } .m-umidita.active { border-color: #00ffff;} .m-vento.active { border-color: #44ff88; } .m-seeing { border-color: var(--accent); cursor: default;}
 
         .dso-container { margin-top: 20px; text-align: left; padding: 20px; background-color: var(--bg-panel); border-radius: 8px;}
         .astro-section { width: 100%; display: block; }
@@ -483,6 +483,7 @@
         .m-jet.active    { box-shadow: 0 0 14px rgba(255, 0,  255, 0.35); }
         .m-luna.active   { box-shadow: 0 0 14px rgba(255, 255, 170, 0.35); }
         .m-umidita.active{ box-shadow: 0 0 14px rgba(0,  255, 255, 0.35); }
+        .m-vento.active  { box-shadow: 0 0 14px rgba(68, 255, 136, 0.35); }
 
         /* DSO card hover più fluida */
         .card-clickable {
