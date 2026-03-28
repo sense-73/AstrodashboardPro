@@ -534,7 +534,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
             <div style="text-align:center;"><div style="font-size:24px; font-weight:800; color:#c49a3c; line-height:1; margin-bottom:3px;">90</div><div style="font-size:10px; color:#6e7a8a;" data-i18n="land_stat_dso">oggetti DSO</div></div>
             <div style="text-align:center;"><div style="font-size:24px; font-weight:800; color:#c49a3c; line-height:1; margin-bottom:3px;">4</div><div style="font-size:10px; color:#6e7a8a;" data-i18n="land_stat_lang">lingue</div></div>
             <div style="text-align:center;"><div style="font-size:24px; font-weight:800; color:#c49a3c; line-height:1; margin-bottom:3px;">N.I.N.A.</div><div style="font-size:10px; color:#6e7a8a;" data-i18n="land_stat_export">export nativo</div></div>
-            <div style="text-align:center;"><div style="font-size:24px; font-weight:800; color:#c49a3c; line-height:1; margin-bottom:3px;">PWA</div><div style="font-size:10px; color:#6e7a8a;" data-i18n="land_stat_pwa">funziona offline</div></div>
+            <div style="text-align:center;"><div style="font-size:24px; font-weight:800; color:#c49a3c; line-height:1; margin-bottom:3px;">PWA</div><div style="font-size:10px; color:#6e7a8a;" data-i18n="land_stat_pwa">installabile su mobile</div></div>
         </div>
         <div style="height:1px; background:#21293a; margin:0 24px;"></div>
 
@@ -1073,7 +1073,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
             <div style="display:flex; justify-content: space-between; margin-bottom: 10px; padding:0 10px; font-size:0.8em; color:#6e7a8a;">
                 <span style="width:140px;" data-i18n="use_frame">Usa | Frame</span>
                 <span data-i18n="poses_sec">Pose x Sec.</span>
-                <span style="width:80px; text-align:right;" data-i18n="total">Totale</span>
+                <span style="width:80px; text-align:right;" data-i18n="total">Totale <span onmouseenter="mostraTooltip(this,'overhead_col_tip')" onmouseleave="nascondiTooltip()" style="color:#888;cursor:help;display:inline-flex;align-items:center;vertical-align:middle;"><svg width="13" height="13" style="vertical-align:middle"><use href="#i-settings"/></svg></span></span>
             </div>
             
             <div id="frames-container"></div>
@@ -2935,7 +2935,7 @@ const _STEPPER_STEPS = [
     },
     {
         id:'seq', labelKey:'stepper_seq',
-        icon:'<path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 6a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v4a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2l0 -4" /><path d="M12 2v2" /><path d="M9 12v9" /><path d="M15 12v9" /><path d="M5 16l4 -2" /><path d="M15 14l4 2" /><path d="M9 18h6" /><path d="M10 8v.01" /><path d="M14 8v.01" />',
+        icon:'<path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M 3.163,4.222 h 1.054 c 1.164,0 2.108,-0.945 2.108,-2.111 0,-0.583 0.472,-1.056 1.054,-1.056 h 6.325 c 0.582,0 1.054,0.473 1.054,1.056 0,1.166 0.944,2.111 2.108,2.111 h 1.054 c 1.164,0 2.108,0.945 2.108,2.111 v 4.455 m -11.769,7.155 h -5.098 c -1.164,0 -2.108,-0.945 -2.108,-2.111 v -9.499 c 0,-1.166 0.944,-2.111 2.108,-2.111" /><path d="M 7.379,10.555 a 3.163,3.166 0 1 0 6.325,0 3.163,3.166 0 0 0 -6.325,0" /><path d="M 13.702,16.941 a 1.086,1.087 0 1 0 2.172,0 1.086,1.087 0 0 0 -2.172,0" /><path d="M 14.788,13.679 v 2.175" /><path d="M 14.788,18.028 v 4.349" /><path d="M 18.046,13.679 v 5.164" /><path d="M 20.218,15.31 a 1.086,1.087 0 1 0 2.172,0 1.086,1.087 0 0 0 -2.172,0" /><path d="M 21.304,13.679 V 14.223" /><path d="M 21.195,22.821 l -1.179,0.619 a 0.2128,0.2131 0 0 1 -0.308,-0.223 l 0.225,-1.311 -0.954,-0.928 a 0.2112,0.2115 0 0 1 0.118,-0.361 l 1.318,-0.192 0.59,-1.192 a 0.2128,0.2131 0 0 1 0.381,0 l 0.59,1.192 1.318,0.192 a 0.2118,0.212 0 0 1 0.118,0.361 l -0.954,0.928 0.225,1.31 a 0.2118,0.212 0 0 1 -0.308,0.223 l -1.179,-0.619" /><path d="M 21.304,16.397 v 0.544" />',
         nav: () => { vaiSmart(); setTimeout(() => { let el=document.getElementById('btn-mode-smart'); if(el) el.scrollIntoView({behavior:'smooth',block:'center'}); }, 300); }
     },
     {

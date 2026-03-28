@@ -305,6 +305,14 @@ function aggiungiNotte() {
             
             let ditherOverheadSecs = parseInt(document.getElementById('dither-duration') ? document.getElementById('dither-duration').value : 15) || 15;
 
+            // Overhead per-frame identico a smart.js
+            let _sw = parseFloat((document.getElementById('sensor-width')||{}).value) || 23.5;
+            let _sh = parseFloat((document.getElementById('sensor-height')||{}).value) || 15.7;
+            let _px = parseFloat((document.getElementById('pixel-size')||{}).value) || 3.76;
+            let _mp = (_sw / (_px / 1000)) * (_sh / (_px / 1000)) / 1e6;
+            let biasOverhead  = Math.max(1.0, 0.8 + _mp * 0.05);
+            let lightOverhead = Math.max(1.5, 1.2 + _mp * 0.08);
+
             let totalSecs = 0;
 
             // Calcola il tempo in base alle pose inserite NELLA TABELLA DELLA NOTTE
@@ -313,13 +321,21 @@ function aggiungiNotte() {
                 if (chk && chk.checked) {
                     let count = parseInt(document.getElementById(`count-mn-${id}-${pid}`).value) || 0;
                     let exp = parseInt(document.getElementById(`exp-mn-${id}-${pid}`).value) || 0;
-                    
-                    if (count > 0 && exp > 0) {
-                        let tempoPose = count * exp;
-                        let dChkF = document.getElementById(`${pid}-dither`);
-                        let usaDitherF = dChkF ? dChkF.checked : false;
-                        let dFreqF = parseInt((document.getElementById(`${pid}-dfreq`) || {}).value) || 3;
-                        let tempoDither = (usaDitherF && dFreqF > 0) ? Math.floor(count / dFreqF) * ditherOverheadSecs : 0;
+
+                    if (count > 0) {
+                        let eEff;
+                        if (pid.includes('bias'))      eEff = biasOverhead;
+                        else if (pid.includes('dark')) eEff = exp + lightOverhead;
+                        else                           eEff = exp + lightOverhead;
+                        let tempoPose = count * eEff;
+                        // Dither solo per Light (non Bias/Dark)
+                        let tempoDither = 0;
+                        if (!pid.includes('bias') && !pid.includes('dark')) {
+                            let dChkF = document.getElementById(`${pid}-dither`);
+                            let usaDitherF = dChkF ? dChkF.checked : false;
+                            let dFreqF = parseInt((document.getElementById(`${pid}-dfreq`) || {}).value) || 3;
+                            tempoDither = (usaDitherF && dFreqF > 0) ? Math.floor(count / dFreqF) * ditherOverheadSecs : 0;
+                        }
                         totalSecs += (tempoPose + tempoDither);
                     }
                 }
@@ -348,13 +364,22 @@ function aggiungiNotte() {
 
             // Calcola anche le righe HDR della notte
             let possibiliHdr = isM ? ['m-l','m-r','m-g','m-b','m-ha','m-oiii','m-sii'] : ['c-light'];
+
             possibiliHdr.forEach(hdrPid => {
                 let chkHdr = document.getElementById(`chk-mn-${id}-${hdrPid}-hdr`);
                 if (chkHdr && chkHdr.checked) {
                     let countH = parseInt(document.getElementById(`count-mn-${id}-${hdrPid}-hdr`).value) || 0;
                     let expH   = parseInt(document.getElementById(`exp-mn-${id}-${hdrPid}-hdr`).value) || 0;
                     if (countH > 0 && expH > 0) {
-                        totalSecs += countH * expH;
+                        // Overhead per-frame come per i Light
+                        totalSecs += countH * (expH + lightOverhead);
+                        // Dither HDR: usa checkbox e freq del filtro principale
+                        let _hdrDChk = document.getElementById(`${hdrPid}-hdr-dither`);
+                        let _usaDither = _hdrDChk ? _hdrDChk.checked : true;
+                        if (_usaDither) {
+                            let _hdrDFreq = parseInt((document.getElementById(`${hdrPid}-hdr-dfreq`)||{}).value) || 4;
+                            totalSecs += Math.floor(countH / _hdrDFreq) * ditherOverheadSecs;
+                        }
                     }
                 }
             });

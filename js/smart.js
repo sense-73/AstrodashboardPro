@@ -319,7 +319,7 @@ function toggleLock(id) {
             header.id = 'smart-grid-header';
             header.style.cssText = 'display:grid; grid-template-columns: 2fr 0.7fr 0.9fr 0.7fr 0.7fr 0.7fr 1fr 0.9fr; gap:4px; font-size:0.75em; color:#aaa; text-align:center; border-bottom:1px solid #444; padding-bottom:5px; margin-bottom:6px;';
             header.innerHTML = '<div style="text-align:left;">Filtro</div><div>Pose</div><div>Secs</div>'
-                + '<div>Gain</div><div>Offset</div><div>Bin</div><div>Dither</div><div style="text-align:right;">Totale</div>';
+                + '<div>Gain</div><div>Offset</div><div>Bin</div><div>Dither</div><div style="text-align:right;">Totale <span onmouseenter="mostraTooltip(this,\'overhead_col_tip\')" onmouseleave="nascondiTooltip()" style="color:#888;cursor:help;display:inline-flex;align-items:center;vertical-align:middle;"><svg width=\'13\' height=\'13\' style=\'vertical-align:middle\'><use href=\'#i-settings\'/></svg></span></div>';
             c.appendChild(header);
 
             (isM ? framesMono : framesColor).forEach(f => {
@@ -902,11 +902,6 @@ function toggleLock(id) {
                     }
                 }
                 let rsLabel = formatSeconds(rs);
-                if (f.id.includes('bias') && c > 0 && e === 0) {
-                    rsLabel += ` <span onmouseenter="mostraTooltip(this,'bias_overhead_tip')" onmouseleave="nascondiTooltip()" style="color:#888;cursor:help;display:inline-flex;align-items:center;"><svg width='13' height='13' style='vertical-align:middle'><use href='#i-settings'/></svg></span>`;
-                } else if (!f.id.includes('bias') && c > 0) {
-                    rsLabel += ` <span onmouseenter="mostraTooltip(this,'light_overhead_tip')" onmouseleave="nascondiTooltip()" style="color:#888;cursor:help;display:inline-flex;align-items:center;"><svg width='13' height='13' style='vertical-align:middle'><use href='#i-settings'/></svg></span>`;
-                }
                 document.getElementById(`${f.id}-tot`).innerHTML = rsLabel;
             });
 

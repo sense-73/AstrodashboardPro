@@ -487,6 +487,11 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.es.mixed_filter_close = "OK, continuar de todas formas";
         i18n.zh.mixed_filter_close = "好的，继续";
 
+        i18n.it.overhead_col_tip  = "Il tempo per ogni riga include l'overhead tecnico per frame: readout sensore + download USB + salvataggio FITS su disco (~1.2s + 0.08s/MP). I Bias hanno exp=0 ma richiedono comunque questo overhead. Il dither viene aggiunto separatamente in base alla frequenza impostata per ogni filtro.";
+        i18n.en.overhead_col_tip  = "Time per row includes per-frame technical overhead: sensor readout + USB download + FITS save to disk (~1.2s + 0.08s/MP). Bias frames have exp=0 but still require this overhead. Dithering is added separately based on the frequency set for each filter.";
+        i18n.es.overhead_col_tip  = "El tiempo por fila incluye la sobrecarga técnica por fotograma: lectura del sensor + descarga USB + guardado FITS en disco (~1.2s + 0.08s/MP). Los Bias tienen exp=0 pero requieren igualmente este overhead. El dithering se añade por separado según la frecuencia de cada filtro.";
+        i18n.zh.overhead_col_tip  = "每行时间包含每帧技术开销：传感器读出 + USB传输 + FITS保存至磁盘（约1.2秒 + 0.08秒/百万像素）。偏置帧曝光=0但仍需此开销。抖动时间根据每个滤镜的频率单独计算。";
+
         i18n.it.bias_overhead_tip = "Tempo tecnico stimato per frame (readout sensore + salvataggio FITS). I Bias hanno exp=0 ma richiedono comunque questo overhead per file.";
         i18n.en.bias_overhead_tip = "Estimated technical overhead per frame (sensor readout + FITS save). Bias frames have exp=0 but still require this per-frame overhead.";
         i18n.es.bias_overhead_tip = "Sobrecarga técnica estimada por fotograma (lectura del sensor + guardado FITS). Los Bias tienen exp=0 pero requieren este tiempo.";
@@ -1759,10 +1764,10 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.es.land_stat_export   = "exportación nativa";
         i18n.zh.land_stat_export   = "原生导出";
 
-        i18n.it.land_stat_pwa      = "funziona offline";
-        i18n.en.land_stat_pwa      = "works offline";
-        i18n.es.land_stat_pwa      = "funciona sin conexión";
-        i18n.zh.land_stat_pwa      = "离线可用";
+        i18n.it.land_stat_pwa      = "installabile su mobile";
+        i18n.en.land_stat_pwa      = "installable on mobile";
+        i18n.es.land_stat_pwa      = "instalable en móvil";
+        i18n.zh.land_stat_pwa      = "可安装到手机";
 
         i18n.it.land_feat_sup      = "sezioni disponibili";
         i18n.en.land_feat_sup      = "available sections";

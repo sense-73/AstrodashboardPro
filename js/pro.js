@@ -345,7 +345,7 @@
                     <div>Offset</div>
                     <div>Bin</div>
                     <div>Dither (Freq.)</div>
-                    <div>Totale</div>
+                    <div>Totale <span onmouseenter="mostraTooltip(this,'overhead_col_tip')" onmouseleave="nascondiTooltip()" style="color:#888;cursor:help;display:inline-flex;align-items:center;vertical-align:middle;"><svg width='13' height='13' style='vertical-align:middle'><use href='#i-settings'/></svg></span></div>
                 </div>
             `;
 
@@ -443,7 +443,7 @@
                 let expCell = isDark
                     ? `<input type="number" id="pro-${f.id}-exp" value="${defaultExp}" min="0" oninput="calcolaNightFillBar()" style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box;">`
                     : `<div style="text-align:center; color:#666; font-size:0.85em;">
-                           0 <span onmouseenter="mostraTooltip(this,'bias_overhead_tip')" onmouseleave="nascondiTooltip()" style="cursor:help; color:#888;">⚙️</span>
+                           0
                            <span style="display:none" id="pro-${f.id}-exp">${biasOverhead}</span>
                        </div>`;
 
@@ -541,7 +541,7 @@
                     if (_totEl) {
                         let _rowSec = tempoPose + tempoDither;
                         _totEl.innerHTML = _rowSec > 0
-                            ? formatSeconds(_rowSec) + ` <span onmouseenter="mostraTooltip(this,'light_overhead_tip')" onmouseleave="nascondiTooltip()" style="color:#888;cursor:help;">⚙️</span>`
+                            ? formatSeconds(_rowSec)
                             : '—';
                     }
                     // Aggiorna totale riga HDR
@@ -559,9 +559,9 @@
                 let _exp = parseFloat((document.getElementById(`pro-${f.id}-exp`)||{}).value)||0;
                 if (_cnt <= 0) { _totEl.innerHTML = '—'; return; }
                 if (f.id.includes('bias')) {
-                    _totEl.innerHTML = formatSeconds(_cnt * biasOverhead) + ` <span onmouseenter="mostraTooltip(this,'bias_overhead_tip')" onmouseleave="nascondiTooltip()" style="color:#888;cursor:help;">⚙️</span>`;
+                    _totEl.innerHTML = formatSeconds(_cnt * biasOverhead);
                 } else {
-                    _totEl.innerHTML = formatSeconds(_cnt * (_exp + lightOverhead)) + ` <span onmouseenter="mostraTooltip(this,'light_overhead_tip')" onmouseleave="nascondiTooltip()" style="color:#888;cursor:help;">⚙️</span>`;
+                    _totEl.innerHTML = formatSeconds(_cnt * (_exp + lightOverhead));
                 }
             });
 
