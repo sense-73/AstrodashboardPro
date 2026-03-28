@@ -1659,6 +1659,31 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.zh.info_mn_nina = "<b>默认夜间时间</b><br><br><b>开始</b>时间自动设置为天文薄暮（太阳位于–18°）或目标升至地平线30°以上的时刻——取两者中较晚的一个。<br><br><b>结束</b>时间与次日清晨的天文晨光一致。<br><br>您可以根据实际需要自由调整这些时间。";
 
         // ── Landing page ──
+        i18n.it.stepper_pos        = "Localizzazione";
+        i18n.en.stepper_pos        = "Location";
+        i18n.es.stepper_pos        = "Localización";
+        i18n.zh.stepper_pos        = "定位";
+
+        i18n.it.stepper_dso        = "DSO";
+        i18n.en.stepper_dso        = "DSO";
+        i18n.es.stepper_dso        = "DSO";
+        i18n.zh.stepper_dso        = "深空天体";
+
+        i18n.it.stepper_fov        = "Setup ottico";
+        i18n.en.stepper_fov        = "Optical setup";
+        i18n.es.stepper_fov        = "Setup óptico";
+        i18n.zh.stepper_fov        = "光学设置";
+
+        i18n.it.stepper_seq        = "Sequenza";
+        i18n.en.stepper_seq        = "Sequence";
+        i18n.es.stepper_seq        = "Secuencia";
+        i18n.zh.stepper_seq        = "序列";
+
+        i18n.it.stepper_exp        = "Esportazione";
+        i18n.en.stepper_exp        = "Export";
+        i18n.es.stepper_exp        = "Exportación";
+        i18n.zh.stepper_exp        = "导出";
+
         i18n.it.land_badge         = "Suite completa per astrofotografi";
         i18n.en.land_badge         = "Complete astrophotography suite";
         i18n.es.land_badge         = "Suite completa para astrofotógrafos";
@@ -1739,55 +1764,105 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.es.land_stat_pwa      = "funciona sin conexión";
         i18n.zh.land_stat_pwa      = "离线可用";
 
-        i18n.it.land_feat_sup      = "cosa include";
-        i18n.en.land_feat_sup      = "what's included";
-        i18n.es.land_feat_sup      = "qué incluye";
-        i18n.zh.land_feat_sup      = "功能概览";
+        i18n.it.land_feat_sup      = "sezioni disponibili";
+        i18n.en.land_feat_sup      = "available sections";
+        i18n.es.land_feat_sup      = "secciones disponibles";
+        i18n.zh.land_feat_sup      = "可用功能";
 
         i18n.it.land_feat_title    = "Tutto quello che ti serve, in un'unica app";
         i18n.en.land_feat_title    = "Everything you need, in one app";
         i18n.es.land_feat_title    = "Todo lo que necesitas, en una sola app";
         i18n.zh.land_feat_title    = "一切所需，尽在一处";
 
-        i18n.it.land_f1_name       = "Meteo tattico";
-        i18n.en.land_f1_name       = "Tactical weather";
-        i18n.es.land_f1_name       = "Meteorología táctica";
+        i18n.it.land_f1_step       = "Passo 1";
+        i18n.en.land_f1_step       = "Step 1";
+        i18n.es.land_f1_step       = "Paso 1";
+        i18n.zh.land_f1_step       = "第1步";
+
+        i18n.it.land_f1_name       = "Meteo Tattico";
+        i18n.en.land_f1_name       = "Tactical Weather";
+        i18n.es.land_f1_name       = "Meteorología Táctica";
         i18n.zh.land_f1_name       = "战术天气";
 
-        i18n.it.land_f1_desc       = "Nuvole, jet stream, seeing e inquinamento luminoso su mappa con timeline 24h.";
-        i18n.en.land_f1_desc       = "Clouds, jet stream, seeing and light pollution on map with 24h timeline.";
-        i18n.es.land_f1_desc       = "Nubes, corriente en chorro, seeing e contaminación lumínica con línea de tiempo 24h.";
-        i18n.zh.land_f1_desc       = "云量、急流、视宁度和光污染地图，附24小时时间轴。";
+        i18n.it.land_f1_desc       = "Nuvole, jet stream, umidità e mappa LP con Bortle autorilevato";
+        i18n.en.land_f1_desc       = "Clouds, jet stream, humidity and light pollution map with auto-detected Bortle";
+        i18n.es.land_f1_desc       = "Nubes, corriente en chorro, humedad y mapa LP con Bortle autodetectado";
+        i18n.zh.land_f1_desc       = "云量、急流、湿度和光污染地图，自动检测博特尔指数";
 
-        i18n.it.land_f2_name       = "Planetario ibrido";
-        i18n.en.land_f2_name       = "Hybrid planetarium";
-        i18n.es.land_f2_name       = "Planetario híbrido";
+        i18n.it.land_f2_step       = "Passo 2";
+        i18n.en.land_f2_step       = "Step 2";
+        i18n.es.land_f2_step       = "Paso 2";
+        i18n.zh.land_f2_step       = "第2步";
+
+        i18n.it.land_f2_name       = "Planetario Ibrido";
+        i18n.en.land_f2_name       = "Hybrid Planetarium";
+        i18n.es.land_f2_name       = "Planetario Híbrido";
         i18n.zh.land_f2_name       = "混合星历";
 
-        i18n.it.land_f2_desc       = "Oggetti consigliati per orario, ricerca SIMBAD universale e simulatore FOV su DSS2.";
-        i18n.en.land_f2_desc       = "Targets recommended by time, universal SIMBAD search and FOV simulator on DSS2.";
-        i18n.es.land_f2_desc       = "Objetivos recomendados por horario, búsqueda SIMBAD universal y simulador FOV en DSS2.";
-        i18n.zh.land_f2_desc       = "按时间推荐目标、SIMBAD通用搜索及DSS2视场模拟器。";
+        i18n.it.land_f2_desc       = "90 DSO interni + ricerca SIMBAD su qualsiasi oggetto del cielo";
+        i18n.en.land_f2_desc       = "90 built-in DSOs + SIMBAD search for any sky object";
+        i18n.es.land_f2_desc       = "90 DSO integrados + búsqueda SIMBAD para cualquier objeto del cielo";
+        i18n.zh.land_f2_desc       = "90个内置深空天体 + SIMBAD搜索任意天体";
 
-        i18n.it.land_f3_name       = "Calcolatore Smart";
-        i18n.en.land_f3_name       = "Smart calculator";
-        i18n.es.land_f3_name       = "Calculadora Smart";
-        i18n.zh.land_f3_name       = "智能计算器";
+        i18n.it.land_f3_step       = "Passi 3–4";
+        i18n.en.land_f3_step       = "Steps 3–4";
+        i18n.es.land_f3_step       = "Pasos 3–4";
+        i18n.zh.land_f3_step       = "第3–4步";
 
-        i18n.it.land_f3_desc       = "Sequenza ottimale calcolata automaticamente in base a setup, DSO e finestra notturna.";
-        i18n.en.land_f3_desc       = "Optimal sequence automatically calculated based on setup, DSO and night window.";
-        i18n.es.land_f3_desc       = "Secuencia óptima calculada automáticamente según el setup, el DSO y la ventana nocturna.";
-        i18n.zh.land_f3_desc       = "根据设备、深空天体和夜间窗口自动计算最优序列。";
+        i18n.it.land_f3_name       = "Simulatore FOV";
+        i18n.en.land_f3_name       = "FOV Simulator";
+        i18n.es.land_f3_name       = "Simulador FOV";
+        i18n.zh.land_f3_name       = "视场模拟器";
 
-        i18n.it.land_f4_name       = "Calcolatore PRO";
-        i18n.en.land_f4_name       = "PRO calculator";
-        i18n.es.land_f4_name       = "Calculadora PRO";
-        i18n.zh.land_f4_name       = "PRO 计算器";
+        i18n.it.land_f3_desc       = "Inquadra su DSS reale, imposta il setup e verifica il campionamento";
+        i18n.en.land_f3_desc       = "Frame on real DSS imagery, configure your setup and check sampling";
+        i18n.es.land_f3_desc       = "Encuadra en imágenes DSS reales, configura el setup y verifica el muestreo";
+        i18n.zh.land_f3_desc       = "在真实DSS图像上构图，配置设备并检查采样";
 
-        i18n.it.land_f4_desc       = "Controllo totale, export N.I.N.A. Advanced Sequencer e pianificazione multinotte.";
-        i18n.en.land_f4_desc       = "Full control, N.I.N.A. Advanced Sequencer export and multi-night planning.";
-        i18n.es.land_f4_desc       = "Control total, exportación N.I.N.A. Advanced Sequencer y planificación multinoche.";
-        i18n.zh.land_f4_desc       = "全面控制，N.I.N.A.高级序列器导出及多夜规划。";
+        i18n.it.land_f4_step       = "Passo 5";
+        i18n.en.land_f4_step       = "Step 5";
+        i18n.es.land_f4_step       = "Paso 5";
+        i18n.zh.land_f4_step       = "第5步";
+
+        i18n.it.land_f4_name       = "Pianificazione Smart";
+        i18n.en.land_f4_name       = "Smart Planning";
+        i18n.es.land_f4_name       = "Planificación Smart";
+        i18n.zh.land_f4_name       = "智能规划";
+
+        i18n.it.land_f4_desc       = "Un assistente ti guida nella scelta di tempi e filtri in base al soggetto, setup e seeing";
+        i18n.en.land_f4_desc       = "An assistant guides you in choosing exposures and filters based on target, setup and seeing";
+        i18n.es.land_f4_desc       = "Un asistente te guía en la elección de tiempos y filtros según el objetivo, setup y seeing";
+        i18n.zh.land_f4_desc       = "助手根据目标、设备和视宁度指导您选择曝光时间和滤镜";
+
+        i18n.it.land_f5_step       = "Passo 5 PRO";
+        i18n.en.land_f5_step       = "Step 5 PRO";
+        i18n.es.land_f5_step       = "Paso 5 PRO";
+        i18n.zh.land_f5_step       = "第5步 PRO";
+
+        i18n.it.land_f5_name       = "Pianificazione PRO";
+        i18n.en.land_f5_name       = "PRO Planning";
+        i18n.es.land_f5_name       = "Planificación PRO";
+        i18n.zh.land_f5_name       = "PRO规划";
+
+        i18n.it.land_f5_desc       = "Controllo totale su pose, filtri, HDR e tempi per ogni canale";
+        i18n.en.land_f5_desc       = "Full control over frames, filters, HDR and times for each channel";
+        i18n.es.land_f5_desc       = "Control total sobre poses, filtros, HDR y tiempos por cada canal";
+        i18n.zh.land_f5_desc       = "完全控制每个通道的帧数、滤镜、HDR和曝光时间";
+
+        i18n.it.land_f6_step       = "Passo 6";
+        i18n.en.land_f6_step       = "Step 6";
+        i18n.es.land_f6_step       = "Paso 6";
+        i18n.zh.land_f6_step       = "第6步";
+
+        i18n.it.land_f6_name       = "Esportazione";
+        i18n.en.land_f6_name       = "Export";
+        i18n.es.land_f6_name       = "Exportación";
+        i18n.zh.land_f6_name       = "导出";
+
+        i18n.it.land_f6_desc       = "Sequenza N.I.N.A., report HTML e coordinate AsiAir";
+        i18n.en.land_f6_desc       = "N.I.N.A. sequence, HTML report and AsiAir coordinates";
+        i18n.es.land_f6_desc       = "Secuencia N.I.N.A., informe HTML y coordenadas AsiAir";
+        i18n.zh.land_f6_desc       = "N.I.N.A.序列、HTML报告和AsiAir坐标";
 
         i18n.it.land_privacy       = "Questa app non invia alcun dato a terzi. Tutto viene salvato localmente sul tuo dispositivo.";
         i18n.en.land_privacy       = "This app does not send any data to third parties. Everything is saved locally on your device.";

@@ -32,6 +32,7 @@
                 document.getElementById('target-description').innerText = getLocalizedText(targetSelezionato, 'desc');
                 document.getElementById('target-tips').innerText = getLocalizedText(targetSelezionato, 'tips');
             }
+            if (typeof renderStepper === 'function') renderStepper();
 }
 
 
