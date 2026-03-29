@@ -123,7 +123,6 @@
             _saveLayerState();
         }
         let marker = L.marker([latCorrente, lonCorrente]).addTo(map).bindPopup(`<b>${_savedName}</b>`, { autoPan: false });
-        map.once('moveend', function() { if (marker) marker.openPopup(); });
 
         // Salva zoom quando l'utente zooma/sposta la mappa
         map.on('zoomend moveend', _saveLayerState);
@@ -182,8 +181,8 @@
             document.getElementById('dropdown-risultati').style.display = 'none';
             if (marker) map.removeLayer(marker);
             marker = L.marker([latCorrente, lonCorrente]).addTo(map).bindPopup(`<b>${nome.split(',')[0]}</b>`, { autoPan: false });
-            // Apri popup solo dopo che flyTo è completato — evita fumetto decentrato
-            map.once('moveend', function() { if (marker) marker.openPopup(); });
+            // Apri popup dopo flyTo completo + margine extra per stabilità
+            map.once('moveend', function() { setTimeout(function() { if (marker) marker.openPopup(); }, 300); });
             map.flyTo([latCorrente, lonCorrente], 9);
             aggiornaEffemeridi(new Date()); scaricaDatiPrevisionali();
             _rilevaBortleDaCoordinate(latCorrente, lonCorrente);
@@ -397,7 +396,7 @@
             document.getElementById('val-seeing').style.color = altS > -6 ? "#ffaa00" : "#bb86fc";
             document.getElementById('val-basse').innerText = b+"%"; document.getElementById('val-medie').innerText = m+"%"; document.getElementById('val-alte').innerText = a+"%"; document.getElementById('val-jet').innerHTML = jet+' <span class="jet-unit">km/h</span>'; document.getElementById('val-luna').innerText = inqL+"%";
             let _vEl = document.getElementById('val-vento-layer');
-            if (_vEl) { let _vc = vs < 6 ? '#44ff88' : vs < 9 ? '#ffcc00' : vs < 16 ? '#ff8800' : '#ff2222'; _vEl.style.color = _vc; _vEl.innerText = Math.round(vs) + ' km/h'; }
+            if (_vEl) { let _vc = vs < 6 ? '#44ff88' : vs < 11 ? '#ffcc00' : vs < 21 ? '#ff8800' : '#ff2222'; _vEl.style.color = _vc; _vEl.innerText = Math.round(vs) + ' km/h'; }
 
             Object.values(layers).forEach(l => l.clearLayers());
 
@@ -433,7 +432,7 @@
             // Soglie: verde <15 km/h, giallo 15-30, arancione >30
             if (vs >= 5) { // mostra settore solo sopra 5 km/h
                 const vsKmh = Math.round(vs);
-                let windColor = vs < 6 ? '#44ff88' : vs < 9 ? '#ffcc00' : vs < 16 ? '#ff8800' : '#ff2222';
+                let windColor = vs < 6 ? '#44ff88' : vs < 11 ? '#ffcc00' : vs < 21 ? '#ff8800' : '#ff2222';
                 const R_WIND = R_NUV;
                 const HALF_ANG = 30; // settore ±30° = 60° totali
                 const STEPS = 32;
