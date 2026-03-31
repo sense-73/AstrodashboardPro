@@ -281,7 +281,7 @@
         }
 
         function scaricaDatiPrevisionali() {
-            fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latCorrente}&longitude=${lonCorrente}&hourly=cloud_cover_low,cloud_cover_mid,cloud_cover_high,wind_speed_250hPa,wind_speed_10m,wind_direction_10m,temperature_2m,relative_humidity_2m&forecast_days=3&timezone=auto`)
+            fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latCorrente}&longitude=${lonCorrente}&hourly=cloud_cover_low,cloud_cover_mid,cloud_cover_high,wind_speed_250hPa,wind_speed_10m,wind_direction_10m,temperature_2m,relative_humidity_2m&wind_speed_unit=kmh&forecast_days=3&timezone=auto`)
             .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
             .then(data => {
                 if (!data.hourly || !data.hourly.time) throw new Error('invalid_data');
