@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AstroDashboard v6.4 - Global Edition</title>
+    <title>AstroDashboard v6.5 - Global Edition</title>
     
     <link rel="manifest" href="manifest.json?v=3">
     <meta name="theme-color" content="#121212">
@@ -478,7 +478,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 19a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6l0 13" /><path d="M12 6l0 13" /><path d="M21 6l0 13" /></svg>
                     <span class="nav-manual-text" data-i18n="manual_btn" style="letter-spacing:.3px;">Guida</span>
                 </button>
-                <button onclick="mostraChangelogManuale()" title="Versione & novità" class="nav-version-btn" style="background:rgba(196,154,60,0.08); border:1px solid rgba(196,154,60,0.3); border-radius:5px; padding:3px 8px; color:#c49a3c; font-size:10px; font-weight:700; cursor:pointer; flex-shrink:0; letter-spacing:.5px;">v6.4</button>
+                <button onclick="mostraChangelogManuale()" title="Versione & novità" class="nav-version-btn" style="background:rgba(196,154,60,0.08); border:1px solid rgba(196,154,60,0.3); border-radius:5px; padding:3px 8px; color:#c49a3c; font-size:10px; font-weight:700; cursor:pointer; flex-shrink:0; letter-spacing:.5px;">v6.5</button>
             </div>
         </div>
 
@@ -634,7 +634,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c1.379 3.53-.923 7.947-6.712 7.947H11.23l-1.332 8.453h3.288c.524 0 .968-.382 1.05-.9l.87-5.505h2.163c4.298 0 7.066-2.076 7.953-6.36.41-1.99.073-3.466-.8-4.094z"/></svg>
                     Supporta il progetto
                 </a>
-                <span style="font-size:14px; color:#3d4852;">v6.4</span>
+                <span style="font-size:14px; color:#3d4852;">v6.5</span>
             </div>
         </div>
 
@@ -979,6 +979,22 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                             </div>
                         </div>
                     </div>
+                </div>
+                <div style="display:flex; align-items:center; justify-content:flex-start; gap:8px; margin-bottom:6px; flex-wrap:wrap;">
+                  <input type="file" id="hz-restore-chart-input" accept=".json" style="display:none" onchange="hzRestoreFromFile(this.files[0])">
+                  <button onclick="mostraOrizzonte()"
+                    style="display:inline-flex;align-items:center;gap:7px;background:transparent;border:1px solid rgba(226,75,74,0.35);border-radius:6px;padding:7px 18px;color:#6e7a8a;font-size:13px;cursor:pointer;transition:all .2s;"
+                    onmouseover="this.style.borderColor='rgba(226,75,74,0.7)';this.style.color='#E24B4A'" onmouseout="this.style.borderColor='rgba(226,75,74,0.35)';this.style.color='#6e7a8a'">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 8h.01"/><path d="M3 6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3h-12a3 3 0 0 1-3-3v-12"/><path d="M3 16l5-5c.928-.893 2.072-.893 3 0l5 5"/><path d="M14 14l1-1c.928-.893 2.072-.893 3 0l3 3"/></svg>
+                    <span data-i18n="hz_btn_fov">Crea Orizzonte personalizzato</span>
+                  </button>
+                  <button onclick="document.getElementById('hz-restore-chart-input').click()"
+                    style="display:inline-flex;align-items:center;gap:7px;background:transparent;border:1px solid rgba(196,154,60,0.3);border-radius:6px;padding:7px 18px;color:#6e7a8a;font-size:13px;cursor:pointer;transition:all .2s;"
+                    onmouseover="this.style.borderColor='rgba(196,154,60,0.6)';this.style.color='#c49a3c'" onmouseout="this.style.borderColor='rgba(196,154,60,0.3)';this.style.color='#6e7a8a'"
+                    title="Ripristina orizzonte da file backup">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                    <span data-i18n="hz_restore_btn">↩ Ripristina</span>
+                  </button>
                 </div>
                 <div class="chart-container"><canvas id="altitudeChart"></canvas></div>
             </div>
@@ -1546,6 +1562,21 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <li><strong>Coordinate FOV Personalizzate:</strong> Se hai spostato la mappa durante la simulazione FOV, le coordinate del centro aggiornato vengono usate in tutti gli export (N.I.N.A. Smart, PRO e Multinotte). Il badge "⚠ Offset attivo" ti avvisa quando le coordinate di export differiscono dal centro nominale del target.</li>
                 </ul>
             </div>
+
+            <div class="guide-section">
+                <h3><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none" viewBox="0 0 24 24"><path d="M3 17l4-8 4 4 4-6 4 10"/><line x1="3" y1="21" x2="21" y2="21"/></svg> 8. Orizzonte Personalizzato</h3>
+                <p>Il modulo Orizzonte Personalizzato genera un profilo di ostruzione azimutale preciso dalla tua postazione, riflettendo muri, tetti, colline e alberi che limitano la visibilità reale del cielo. Il profilo viene integrato nel grafico altitudine del simulatore FOV e può essere esportato direttamente nei formati nativi di N.I.N.A. e Stellarium.</p>
+                <ul>
+                    <li><strong>Foto panoramica consigliata:</strong> Usa una foto sferica 360°×180° (formato equirettangolare) scattata dalla posizione esatta del telescopio. Le app Google Photo Sphere (Pixel), GoPro Max o qualsiasi camera 360° producono il formato corretto. In alternativa unisci una serie di foto con Hugin o PTGui. Per Stellarium, rimuovi il cielo dalla foto (Photoshop, GIMP o remove.bg) e salva in PNG — la trasparenza permette di vedere le stelle attraverso il cielo rimosso.</li>
+                    <li><strong>Algoritmo di rilevamento (Sobel):</strong> L'algoritmo Sobel rileva automaticamente il bordo di massimo contrasto tra cielo e terreno in ogni colonna dell'immagine. Funziona anche su foto con cielo rimosso (nero o trasparente). Algoritmi alternativi: Gradiente (massimo salto di luminanza), Soglia (primo pixel sotto un valore) e Prima zona scura (transizione dopo una zona luminosa sostenuta). Passa il mouse sui label dei parametri per leggere la spiegazione di ognuno.</li>
+                    <li><strong>Calibrazione parametri:</strong> I tre parametri principali da regolare sono: <em>Altitudine centro</em> — abbassa finché la linea tratteggiata (0°) coincide con l'orizzonte reale lontano; <em>Az. partenza Nord</em> — regola finché i segni cardinali nell'anteprima coincidono con i riferimenti noti dalla bussola; <em>FOV verticale</em> — impostato automaticamente a 180° per le foto sferiche 2:1, altrimenti regola in base all'angolo verticale della tua panoramica.</li>
+                    <li><strong>Correzione manuale:</strong> Dopo il rilevamento automatico, clicca direttamente sull'anteprima per correggere la linea in qualsiasi punto. Il pennello ha un raggio di blend di ±30 pixel che interpola fluidamente la correzione con i valori adiacenti, evitando salti bruschi nel profilo.</li>
+                    <li><strong>Integrazione nel grafico FOV:</strong> Una volta applicato con il pulsante <em>Applica a FOV</em>, il profilo appare nel grafico altitudine come zona rossa — esattamente come N.I.N.A. La soglia varia nel tempo seguendo l'azimut del DSO: quando il target entra in una zona di ostruzione, il grafico lo mostra chiaramente prima che accada.</li>
+                    <li><strong>Export per N.I.N.A. (.hrz):</strong> Il file segue la convenzione astronomica standard: Azimut 0°=Nord, crescente verso Est; altitudine in gradi sopra l'orizzonte matematico. Il profilo è già corretto con le tue coordinate GPS — fondamentale inserirle anche nelle impostazioni dell'Osservatorio in N.I.N.A. altrimenti i calcoli di visibilità saranno imprecisi.</li>
+                    <li><strong>Export per Stellarium (.zip):</strong> Lo zip include la foto panoramica in PNG (con canale alfa), il file <em>landscape.ini</em> di tipo spherical con le coordinate della postazione e la rotazione corretta per l'allineamento Nord, e il file <em>horizon.txt</em> con il profilo az/alt. Estrai lo zip nella cartella <code>landscapes/</code> di Stellarium e seleziona il paesaggio nelle impostazioni.</li>
+                    <li><strong>Persistenza e backup:</strong> Il profilo viene salvato automaticamente in localStorage — al prossimo avvio dell'app sarà già attivo nel grafico FOV senza ricaricare la foto. Il pulsante <em>Backup (.json)</em> scarica un file di ripristino completo: se la cache viene svuotata, usa <em>↩ Ripristina</em> sopra il grafico per riacquisire il profilo in un clic, con applicazione automatica al FOV.</li>
+                </ul>
+            </div>
         </div>
 
         <div id="guide-en" style="display:none;">
@@ -1636,6 +1667,21 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <li><strong>Custom FOV Coordinates:</strong> If you moved the map during FOV simulation, the updated center coordinates are used in all exports (N.I.N.A. Smart, PRO and Multi-Night). The "⚠ Offset active" badge warns you when export coordinates differ from the target's nominal center.</li>
                 </ul>
             </div>
+
+            <div class="guide-section">
+                <h3><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none" viewBox="0 0 24 24"><path d="M3 17l4-8 4 4 4-6 4 10"/><line x1="3" y1="21" x2="21" y2="21"/></svg> 8. Custom Horizon</h3>
+                <p>The Custom Horizon module generates an accurate azimuthal obstruction profile from your observation site, capturing walls, rooftops, hills and trees that limit real sky visibility. The profile integrates into the FOV simulator altitude chart and can be exported directly in native N.I.N.A. and Stellarium formats.</p>
+                <ul>
+                    <li><strong>Recommended photo format:</strong> Use a 360°×180° spherical photo (equirectangular format) taken from your exact telescope position. Google Photo Sphere (Pixel), GoPro Max or any 360° camera produces the correct format. Alternatively stitch a photo series with Hugin or PTGui. For Stellarium, remove the sky from the photo (Photoshop, GIMP or remove.bg) and save as PNG — the transparency lets Stellarium show stars through it.</li>
+                    <li><strong>Detection algorithm (Sobel):</strong> The Sobel algorithm automatically detects the maximum contrast edge between sky and ground in each image column. Works even on photos with removed sky (black or transparent). Alternative algorithms: Gradient (maximum luminance jump), Threshold (first pixel below a value) and First Dark Band (transition after a sustained bright zone). Hover over parameter labels to read an explanation of each one.</li>
+                    <li><strong>Parameter calibration:</strong> The three main parameters to adjust are: <em>Center altitude</em> — lower until the dashed line (0°) aligns with the real far horizon; <em>North start Az.</em> — adjust until the cardinal markers in the preview match known compass references; <em>Vertical FOV</em> — automatically set to 180° for 2:1 spherical photos, otherwise adjust to match the vertical angle of your panorama.</li>
+                    <li><strong>Manual correction:</strong> After automatic detection, click directly on the preview to correct the line at any point. The brush has a ±30px blend radius that smoothly interpolates the correction with adjacent values, avoiding sharp jumps in the profile.</li>
+                    <li><strong>FOV chart integration:</strong> Once applied with the <em>Apply to FOV</em> button, the profile appears in the altitude chart as a red zone — exactly like N.I.N.A. The threshold varies over time following the DSO azimuth: when the target enters an obstruction zone, the chart shows it clearly before it happens.</li>
+                    <li><strong>N.I.N.A. export (.hrz):</strong> The file follows the standard astronomical convention: Azimuth 0°=North, increasing eastward; altitude in degrees above the mathematical horizon. The profile is already corrected with your GPS coordinates — it's essential to also enter them in N.I.N.A.'s Observatory settings, otherwise visibility calculations will be inaccurate.</li>
+                    <li><strong>Stellarium export (.zip):</strong> The zip includes the panoramic photo as PNG (with alpha channel), the <em>landscape.ini</em> file of spherical type with site coordinates and correct rotation for North alignment, and the <em>horizon.txt</em> file with the az/alt profile. Extract the zip into Stellarium's <code>landscapes/</code> folder and select the landscape in settings.</li>
+                    <li><strong>Persistence and backup:</strong> The profile is saved automatically to localStorage — on the next app launch it will already be active in the FOV chart without reloading the photo. The <em>Backup (.json)</em> button downloads a complete restore file: if the cache is cleared, use <em>↩ Restore</em> above the chart to recover the profile in one click, with automatic FOV application.</li>
+                </ul>
+            </div>
         </div>
 
         <div id="guide-es" style="display:none;">
@@ -1724,7 +1770,25 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <li><strong>Coordenadas FOV Personalizadas:</strong> Si desplazaste el mapa durante la simulación FOV, las coordenadas actualizadas se usan en todas las exportaciones. El badge "⚠ Offset activo" te avisa cuando las coordenadas de exportación difieren del centro nominal del objetivo.</li>
                 </ul>
             </div>
+
+            <div class="guide-section">
+                <h3><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none" viewBox="0 0 24 24"><path d="M3 17l4-8 4 4 4-6 4 10"/><line x1="3" y1="21" x2="21" y2="21"/></svg> 8. Horizonte personalizado</h3>
+                <p>El módulo de horizonte personalizado genera un perfil de obstrucción azimutal preciso desde tu emplazamiento de observación, capturando muros, tejados, colinas y árboles que limitan la visibilidad real del cielo. El perfil se integra en el gráfico de altitud del simulador FOV y puede exportarse directamente en los formatos nativos de N.I.N.A. y Stellarium.</p>
+                <ul>
+                    <li><strong>Formato de foto recomendado:</strong> Usa una foto esférica 360°×180° (formato equirectangular) tomada desde la posición exacta del telescopio. Google Photo Sphere (Pixel), GoPro Max o cualquier cámara 360° produce el formato correcto. Alternativamente une una serie de fotos con Hugin o PTGui. Para Stellarium, elimina el cielo de la foto (Photoshop, GIMP o remove.bg) y guarda en PNG — la transparencia permite ver las estrellas a través de él.</li>
+                    <li><strong>Algoritmo de detección (Sobel):</strong> El algoritmo Sobel detecta automáticamente el borde de máximo contraste entre cielo y suelo en cada columna de la imagen. Funciona incluso con fotos con cielo eliminado (negro o transparente). Algoritmos alternativos: Gradiente, Umbral y Primera zona oscura. Pasa el ratón sobre las etiquetas de parámetros para leer la explicación de cada uno.</li>
+                    <li><strong>Calibración de parámetros:</strong> Los tres parámetros principales son: <em>Altitud centro</em> — baja hasta que la línea punteada (0°) coincida con el horizonte real lejano; <em>Az. inicio Norte</em> — ajusta hasta que los marcadores cardinales en la vista previa coincidan con referencias conocidas de la brújula; <em>FOV vertical</em> — establecido automáticamente en 180° para fotos esféricas 2:1.</li>
+                    <li><strong>Corrección manual:</strong> Tras la detección automática, haz clic directamente en la vista previa para corregir la línea en cualquier punto. El pincel tiene un radio de mezcla de ±30px que interpola suavemente la corrección con los valores adyacentes.</li>
+                    <li><strong>Integración en el gráfico FOV:</strong> Una vez aplicado con el botón <em>Aplicar al FOV</em>, el perfil aparece en el gráfico de altitud como zona roja — exactamente como N.I.N.A. El umbral varía con el tiempo siguiendo el azimut del DSO.</li>
+                    <li><strong>Exportación para N.I.N.A. (.hrz):</strong> El archivo sigue la convención astronómica estándar: Azimut 0°=Norte, creciente hacia el Este. Es fundamental introducir también las coordenadas GPS en la configuración del Observatorio de N.I.N.A., de lo contrario los cálculos de visibilidad serán imprecisos.</li>
+                    <li><strong>Exportación para Stellarium (.zip):</strong> El zip incluye la foto panorámica en PNG (con canal alfa), el archivo <em>landscape.ini</em> de tipo spherical con las coordenadas del sitio y la rotación correcta para la alineación Norte, y el archivo <em>horizon.txt</em>. Extrae el zip en la carpeta <code>landscapes/</code> de Stellarium.</li>
+                    <li><strong>Persistencia y copia de seguridad:</strong> El perfil se guarda automáticamente en localStorage. El botón <em>Backup (.json)</em> descarga un archivo de restauración completo: si se borra la caché, usa <em>↩ Restaurar</em> sobre el gráfico para recuperar el perfil en un clic.</li>
+                </ul>
+    
+
         </div>
+        </div>
+
 
                 <div id="guide-zh" style="display:none;">
             <h2 style="font-size: 2.4em; border-bottom: 2px solid #c49a3c; padding-bottom: 15px; margin-bottom: 30px;"><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-book"/></svg> AstroDashboard PRO 用户手册</h2>
@@ -1812,15 +1876,264 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <li><strong>自定义视场坐标：</strong>如果在视场模拟过程中移动了地图，更新的中心坐标将用于所有导出（N.I.N.A. 智能、PRO 和多夜）。当导出坐标与目标名义中心不同时，"⚠ 偏移激活"徽章会提醒您。</li>
                 </ul>
             </div>
+
+            <div class="guide-section">
+                <h3><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none" viewBox="0 0 24 24"><path d="M3 17l4-8 4 4 4-6 4 10"/><line x1="3" y1="21" x2="21" y2="21"/></svg> 8. 自定义地平线</h3>
+                <p>自定义地平线模块从您的观测站生成精确的方位角遮挡轮廓，捕捉限制真实天空可见性的墙壁、屋顶、山丘和树木。该轮廓集成到FOV模拟器的高度图中，可直接以N.I.N.A.和Stellarium的原生格式导出。</p>
+                <ul>
+                    <li><strong>推荐照片格式：</strong>使用在望远镜精确位置拍摄的360°×180°球形照片（等距矩形格式）。Google Photo Sphere（Pixel）、GoPro Max或任何360°相机均可生成正确格式。对于Stellarium，请从照片中移除天空并保存为PNG——透明度让Stellarium能透过它显示星星。</li>
+                    <li><strong>检测算法（Sobel）：</strong>Sobel算法自动检测图像每列中天空与地面之间的最大对比度边缘。即使在天空已移除的照片上也能正常工作。将鼠标悬停在参数标签上可阅读每个参数的说明。</li>
+                    <li><strong>参数校准：</strong>需调整的三个主要参数：<em>中心高度角</em>——向下调整直到虚线（0°）与远处真实地平线对齐；<em>北向起始方位角</em>——调整直到预览中的方位标记与罗盘已知参考物对齐；<em>垂直视场角</em>——对于2:1球形照片自动设置为180°。</li>
+                    <li><strong>手动修正：</strong>自动检测后，直接点击预览图上的任意位置修正线条。笔刷具有±30像素的混合半径，可与相邻值平滑插值。</li>
+                    <li><strong>FOV图表集成：</strong>通过<em>应用到FOV</em>按钮应用后，轮廓以红色区域显示在高度图中——与N.I.N.A.完全一致。阈值随时间随DSO方位角变化。</li>
+                    <li><strong>N.I.N.A.导出（.hrz）：</strong>文件遵循标准天文惯例：方位角0°=北，向东增加。还必须在N.I.N.A.的天文台设置中输入GPS坐标，否则可见性计算将不准确。</li>
+                    <li><strong>Stellarium导出（.zip）：</strong>压缩包包含PNG格式全景照片（带透明通道）、spherical类型的landscape.ini（含站点坐标和北向旋转）以及horizon.txt文件。将压缩包解压到Stellarium的<code>landscapes/</code>文件夹中。</li>
+                    <li><strong>持久化与备份：</strong>轮廓自动保存到localStorage。使用<em>备份（.json）</em>下载恢复文件：若缓存被清除，点击<em>↩ 恢复</em>即可一键恢复并自动应用到FOV。</li>
+                </ul>
+            </div>
+        </div>
         </div>
     </div>
+<!-- ═══════════════════════════════════════════════════════════════
+     SEZIONE ORIZZONTE — da inserire in index.html
+     Posizione: dopo <div id="guide-view"> oppure come nuova sezione
+     ═══════════════════════════════════════════════════════════════ -->
+<div id="horizon-view" style="display:none; padding:16px; max-width:900px; margin:0 auto;">
+
+  <!-- Guide modal overlay -->
+  <div id="hz-guide-overlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.72); z-index:10000; align-items:center; justify-content:center;">
+    <div style="position:relative; width:100%; max-width:560px; margin:16px; border-radius:14px; overflow:hidden; box-shadow:0 24px 64px rgba(0,0,0,0.7);">
+      <iframe id="hz-guide-iframe" src="" style="width:100%; height:600px; border:none; display:block;" loading="lazy"></iframe>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; flex-wrap:wrap; gap:8px;">
+    <div style="flex:1; min-width:0;">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <h2 style="font-size:16px; font-weight:600; color:#e8e8f0; margin:0;" data-i18n="hz_title">Orizzonte panoramico</h2>
+        <button onclick="hzOpenGuide()" title="Apri guida" style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;background:rgba(55,138,221,0.10);border:1px solid rgba(55,138,221,0.3);border-radius:50%;color:#378ADD;font-size:11px;font-weight:700;cursor:pointer;flex-shrink:0;transition:all .15s;line-height:1;" onmouseover="this.style.background='rgba(55,138,221,0.22)'" onmouseout="this.style.background='rgba(55,138,221,0.10)'">?</button>
+      </div>
+      <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:6px; margin-top:4px;">
+        <p style="font-size:12px; color:#6e7a8a; margin:0;" data-i18n="hz_subtitle">Genera il profilo d'orizzonte da una foto · Export NINA, Stellarium, CSV</p>
+        <div style="display:flex; gap:10px; font-size:10px; color:rgba(255,255,255,0.45); align-items:center; flex-shrink:0;">
+          <span style="display:inline-flex; align-items:center; gap:3px;"><span style="display:inline-block; width:14px; height:2px; background:#E24B4A;"></span><span data-i18n="hz_legend_hz">Orizzonte</span></span>
+          <span style="display:inline-flex; align-items:center; gap:3px;"><span style="display:inline-block; width:14px; height:0; border-top:1px dashed rgba(200,200,200,0.5);"></span>0° alt</span>
+          <span style="display:inline-flex; align-items:center; gap:3px;"><span style="display:inline-block; width:14px; height:8px; background:rgba(55,138,221,0.18);"></span><span data-i18n="hz_legend_search">Ricerca</span></span>
+        </div>
+      </div>
+    </div>
+    <button onclick="hzReset()" data-i18n="hz_reset_btn" style="background:transparent; border:1px solid #21293a; border-radius:6px; padding:5px 12px; color:#6e7a8a; font-size:12px; cursor:pointer; flex-shrink:0;">↺ Reset</button>
+  </div>
+
+  <!-- Coordinate postazione -->
+  <div style="background:#161b22; border:0.5px solid #21293a; border-radius:10px; padding:16px 20px; margin-bottom:12px;">
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+      <span style="font-size:13px; font-weight:500; color:#e8e8f0;" data-i18n="hz_coords_title">Coordinate postazione</span>
+      <button id="hz-geo-btn" onclick="hzGeo()" data-i18n="hz_gps_btn" style="background:rgba(55,138,221,0.10); border:1px solid rgba(55,138,221,0.3); border-radius:6px; padding:5px 12px; color:#378ADD; font-size:12px; cursor:pointer;">📍 GPS</button>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:10px;">
+      <div>
+        <label style="display:block; font-size:11px; color:#6e7a8a; margin-bottom:3px;" data-i18n="hz_lat_label">Latitudine (°N)</label>
+        <input id="hz-lat" type="number" step="0.00001" placeholder="es. 45.46200" style="width:100%; background:#0d1117; border:1px solid #21293a; border-radius:6px; padding:6px 10px; color:#e8e8f0; font-size:13px;">
+      </div>
+      <div>
+        <label style="display:block; font-size:11px; color:#6e7a8a; margin-bottom:3px;" data-i18n="hz_lon_label">Longitudine (°E)</label>
+        <input id="hz-lon" type="number" step="0.00001" placeholder="es. 9.18600" style="width:100%; background:#0d1117; border:1px solid #21293a; border-radius:6px; padding:6px 10px; color:#e8e8f0; font-size:13px;">
+      </div>
+      <div>
+        <label style="display:block; font-size:11px; color:#6e7a8a; margin-bottom:3px;" data-i18n="hz_alt_label">Altitudine (m slm)</label>
+        <input id="hz-altitude" type="number" step="1" placeholder="es. 103" style="width:100%; background:#0d1117; border:1px solid #21293a; border-radius:6px; padding:6px 10px; color:#e8e8f0; font-size:13px;">
+      </div>
+      <div>
+        <label style="display:block; font-size:11px; color:#6e7a8a; margin-bottom:3px;" data-i18n="hz_name_label">Nome postazione</label>
+        <input id="hz-location-name" type="text" placeholder="es. Terrazza Nord" style="width:100%; background:#0d1117; border:1px solid #21293a; border-radius:6px; padding:6px 10px; color:#e8e8f0; font-size:13px;">
+      </div>
+    </div>
+  </div>
+
+  <!-- Area upload / anteprima unificata — stessa area, due stati -->
+  <div style="background:#161b22; border:0.5px solid #21293a; border-radius:10px; margin-bottom:12px; overflow:hidden;">
+    <input type="file" id="hz-file-input" accept="image/*" style="display:none">
+
+    <!-- STATO 1: Dropzone (nessuna foto) -->
+    <div id="hz-dropzone" style="padding:28px; text-align:center; cursor:pointer; transition:background .15s;"
+         onclick="document.getElementById('hz-file-input').click()">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#6e7a8a" stroke-width="1.5" style="display:block; margin:0 auto 10px;">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+      </svg>
+      <p style="font-weight:500; color:#e8e8f0; margin-bottom:4px;" data-i18n="hz_upload_title">Carica foto panoramica</p>
+      <p style="font-size:12px; color:#6e7a8a;" data-i18n="hz_upload_sub">Trascina o clicca — JPG/PNG equirettangolare 360° o parziale</p>
+    </div>
+
+    <!-- STATO 2: Canvas anteprima (foto caricata + rilevamento eseguito) -->
+    <div id="hz-preview-wrap" style="display:none; position:relative;">
+      <canvas id="hz-preview" style="width:100%; display:block; cursor:crosshair;"></canvas>
+      <!-- Badge foto sferica / nome file in basso a sinistra -->
+      <div style="position:absolute; bottom:0; left:0; right:0; background:linear-gradient(transparent,rgba(0,0,0,0.6)); padding:6px 10px; display:flex; justify-content:space-between; align-items:center;">
+        <span id="hz-img-name" style="font-size:10px; color:#c49a3c; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:60%;"></span>
+        <span onclick="document.getElementById('hz-file-input').click()" style="font-size:10px; color:rgba(255,255,255,0.4); cursor:pointer;" data-i18n="hz_change_photo">cambia foto</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Parametri rilevamento -->
+  <div id="hz-controls" style="display:none; background:#161b22; border:0.5px solid #21293a; border-radius:10px; padding:16px 20px; margin-bottom:12px;">
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+      <span style="font-size:13px; font-weight:500; color:#e8e8f0;" data-i18n="hz_params_title">Parametri rilevamento</span>
+      <select id="hz-method" style="background:#0d1117; border:1px solid #21293a; border-radius:6px; padding:5px 10px; color:#e8e8f0; font-size:12px; cursor:pointer;">
+        <option value="sobel" data-i18n="hz_method_sobel">Sobel (consigliato)</option>
+        <option value="gradient" data-i18n="hz_method_grad">Gradiente</option>
+        <option value="threshold" data-i18n="hz_method_thr">Soglia luminosità</option>
+        <option value="dark_band" data-i18n="hz_method_dark">Prima zona scura</option>
+      </select>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px;">
+      <div>
+        <label style="display:block; font-size:11px; color:#6e7a8a; margin-bottom:3px;cursor:default;" data-i18n="hz_param_vfov" onmouseenter="hzTipShow(event,'hz_param_vfov')" onmouseleave="hzTipHide()">FOV verticale</label>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <input id="hz-vfov" type="range" min="20" max="180" value="90" step="1" style="flex:1; accent-color:#E24B4A;">
+          <span id="hz-vfov-v" style="font-size:11px; font-weight:500; color:#e8e8f0; min-width:36px; text-align:right;">90°</span>
+        </div>
+      </div>
+      <div>
+        <label style="display:block; font-size:11px; color:#6e7a8a; margin-bottom:3px;cursor:default;" data-i18n="hz_param_calt" onmouseenter="hzTipShow(event,'hz_param_calt')" onmouseleave="hzTipHide()">Altitudine centro</label>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <input id="hz-calt" type="range" min="-30" max="60" value="10" step="1" style="flex:1; accent-color:#E24B4A;">
+          <span id="hz-calt-v" style="font-size:11px; font-weight:500; color:#e8e8f0; min-width:36px; text-align:right;">+10°</span>
+        </div>
+      </div>
+      <div>
+        <label style="display:block; font-size:11px; color:#6e7a8a; margin-bottom:3px;cursor:default;" data-i18n="hz_param_saz" onmouseenter="hzTipShow(event,'hz_param_saz')" onmouseleave="hzTipHide()">Az. partenza Nord</label>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <input id="hz-saz" type="range" min="0" max="359" value="0" step="1" style="flex:1; accent-color:#E24B4A;">
+          <span id="hz-saz-v" style="font-size:11px; font-weight:500; color:#e8e8f0; min-width:36px; text-align:right;">0°</span>
+        </div>
+      </div>
+      <div>
+        <label style="display:block; font-size:11px; color:#6e7a8a; margin-bottom:3px;cursor:default;" data-i18n="hz_param_hsp" onmouseenter="hzTipShow(event,'hz_param_hsp')" onmouseleave="hzTipHide()">Span orizzontale</label>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <input id="hz-hsp" type="range" min="90" max="360" value="360" step="1" style="flex:1; accent-color:#E24B4A;">
+          <span id="hz-hsp-v" style="font-size:11px; font-weight:500; color:#e8e8f0; min-width:36px; text-align:right;">360°</span>
+        </div>
+      </div>
+      <div>
+        <label style="display:block; font-size:11px; color:#6e7a8a; margin-bottom:3px;cursor:default;" data-i18n="hz_param_thr" onmouseenter="hzTipShow(event,'hz_param_thr')" onmouseleave="hzTipHide()">Soglia luminosità</label>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <input id="hz-thr" type="range" min="30" max="250" value="140" step="1" style="flex:1; accent-color:#E24B4A;">
+          <span id="hz-thr-v" style="font-size:11px; font-weight:500; color:#e8e8f0; min-width:36px; text-align:right;">140</span>
+        </div>
+      </div>
+      <div>
+        <label style="display:block; font-size:11px; color:#6e7a8a; margin-bottom:3px;cursor:default;" data-i18n="hz_param_sm" onmouseenter="hzTipShow(event,'hz_param_sm')" onmouseleave="hzTipHide()">Smoothing</label>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <input id="hz-sm" type="range" min="1" max="60" value="15" step="1" style="flex:1; accent-color:#E24B4A;">
+          <span id="hz-sm-v" style="font-size:11px; font-weight:500; color:#e8e8f0; min-width:36px; text-align:right;">15</span>
+        </div>
+      </div>
+      <div>
+        <label style="display:block; font-size:11px; color:#6e7a8a; margin-bottom:3px;cursor:default;" data-i18n="hz_param_stop" onmouseenter="hzTipShow(event,'hz_param_stop')" onmouseleave="hzTipHide()">Ricerca da (% alto)</label>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <input id="hz-stop" type="range" min="0" max="40" value="5" step="1" style="flex:1; accent-color:#378ADD;">
+          <span id="hz-stop-v" style="font-size:11px; font-weight:500; color:#378ADD; min-width:36px; text-align:right;">5%</span>
+        </div>
+      </div>
+      <div>
+        <label style="display:block; font-size:11px; color:#6e7a8a; margin-bottom:3px;cursor:default;" data-i18n="hz_param_sbot" onmouseenter="hzTipShow(event,'hz_param_sbot')" onmouseleave="hzTipHide()">Ricerca fino a (% alto)</label>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <input id="hz-sbot" type="range" min="50" max="100" value="80" step="1" style="flex:1; accent-color:#378ADD;">
+          <span id="hz-sbot-v" style="font-size:11px; font-weight:500; color:#378ADD; min-width:36px; text-align:right;">80%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottone rilevamento -->
+  <div id="hz-detect-bar" style="margin-bottom:12px; text-align:center;">
+    <div style="display:inline-flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:center;">
+      <button id="hz-run-btn" onclick="hzRun()"
+        disabled
+        style="display:inline-flex;align-items:center;gap:6px;background:#161b22;border:1px solid #21293a;border-radius:7px;padding:9px 22px;color:#3d4852;font-size:13px;font-weight:500;cursor:not-allowed;transition:all .2s;letter-spacing:.3px;opacity:0.5;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 17l4-8 4 4 4-6 4 10"/><line x1="3" y1="21" x2="21" y2="21"/></svg>
+        <span data-i18n="hz_detect_btn">Rileva orizzonte</span>
+      </button>
+      <button onclick="hzApplyToFov()" data-i18n="hz_apply_fov"
+        style="display:inline-flex;align-items:center;gap:6px;background:rgba(196,154,60,0.10);border:1px solid rgba(196,154,60,0.45);border-radius:7px;padding:9px 20px;color:#c49a3c;font-size:13px;font-weight:500;cursor:pointer;transition:background .15s;"
+        onmouseover="this.style.background='rgba(196,154,60,0.20)'" onmouseout="this.style.background='rgba(196,154,60,0.10)'">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        <span data-i18n="hz_apply_fov">Applica a FOV</span>
+      </button>
+    </div>
+    <p style="font-size:11px; color:#6e7a8a; margin-top:6px;" data-i18n="hz_detect_hint">Clicca sull'anteprima per correggere manualmente</p>
+  </div>
+
+  <!-- Grafico, statistiche ed export (visibili dopo il rilevamento) -->
+  <div id="hz-results" style="display:none;">
+
+    <!-- Grafico Az/Alt -->
+    <div style="background:#161b22; border:0.5px solid #21293a; border-radius:10px; padding:16px 20px; margin-bottom:12px;">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
+        <span style="font-size:13px; font-weight:500; color:#e8e8f0;" data-i18n="hz_chart_title">Profilo Az/Alt</span>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <div style="background:#0d1117; border-radius:6px; padding:6px 10px; min-width:64px;">
+            <div style="font-size:10px; color:#6e7a8a;">Min</div>
+            <div id="hz-stat-min" style="font-size:16px; font-weight:500; color:#e8e8f0;">—</div>
+          </div>
+          <div style="background:#0d1117; border-radius:6px; padding:6px 10px; min-width:64px;">
+            <div style="font-size:10px; color:#6e7a8a;">Max</div>
+            <div id="hz-stat-max" style="font-size:16px; font-weight:500; color:#e8e8f0;">—</div>
+          </div>
+          <div style="background:#0d1117; border-radius:6px; padding:6px 10px; min-width:64px;">
+            <div style="font-size:10px; color:#6e7a8a;">Media</div>
+            <div id="hz-stat-avg" style="font-size:16px; font-weight:500; color:#e8e8f0;">—</div>
+          </div>
+        </div>
+      </div>
+      <canvas id="hz-chart" height="170" style="width:100%; display:block;"></canvas>
+    </div>
+
+    <!-- Export -->
+    <div style="background:#161b22; border:0.5px solid #21293a; border-radius:10px; padding:16px 20px;">
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px; flex-wrap:wrap;">
+        <span style="font-size:13px; font-weight:500; color:#e8e8f0;" data-i18n="hz_export_title">Esporta orizzonte</span>
+        <span id="hz-pt-count" style="font-size:11px; padding:2px 8px; background:rgba(55,138,221,0.12); color:#378ADD; border-radius:4px;">— punti</span>
+        <span id="hz-saved-badge" style="display:none; font-size:11px; padding:2px 8px; background:rgba(55,170,100,0.15); color:#3da870; border-radius:4px;">✓ Salvato</span>
+      </div>
+      <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:10px;">
+<button onclick="hzExportNINA()" style="background:transparent; border:1px solid #21293a; border-radius:6px; padding:7px 14px; color:#e8e8f0; font-size:12px; cursor:pointer; transition:background .12s;" onmouseover="this.style.background='#21293a'" onmouseout="this.style.background='transparent'">NINA (.hrz)</button>
+        <button onclick="hzExportStellarium()" style="background:transparent; border:1px solid #21293a; border-radius:6px; padding:7px 14px; color:#e8e8f0; font-size:12px; cursor:pointer; transition:background .12s;" onmouseover="this.style.background='#21293a'" onmouseout="this.style.background='transparent'">Stellarium (.zip)</button>
+        <button onclick="hzExportCSV()" style="background:transparent; border:1px solid #21293a; border-radius:6px; padding:7px 14px; color:#e8e8f0; font-size:12px; cursor:pointer; transition:background .12s;" onmouseover="this.style.background='#21293a'" onmouseout="this.style.background='transparent'">CSV</button>
+        <button onclick="hzExportJSON()" style="background:transparent; border:1px solid #21293a; border-radius:6px; padding:7px 14px; color:#e8e8f0; font-size:12px; cursor:pointer; transition:background .12s;" onmouseover="this.style.background='#21293a'" onmouseout="this.style.background='transparent'">JSON</button>
+        <button onclick="hzExportBackup()" style="background:transparent; border:1px solid rgba(196,154,60,0.4); border-radius:6px; padding:7px 14px; color:#c49a3c; font-size:12px; cursor:pointer; transition:background .12s;" onmouseover="this.style.background='rgba(196,154,60,0.08)'" onmouseout="this.style.background='transparent'" title="Salva file di backup da ripristinare se la cache viene svuotata">Backup (.json)</button>
+      </div>
+      <p style="font-size:11px; color:#6e7a8a; margin-top:10px;" data-i18n="hz_export_note">Az 0°=Nord, crescente Est · Alt in gradi sopra l'orizzonte · Stellarium: estrai lo zip in Stellarium/landscapes/</p>
+      <div style="margin-top:10px; padding-top:10px; border-top:0.5px solid #21293a;">
+        <input type="file" id="hz-restore-input" accept=".json" style="display:none" onchange="hzRestoreFromFile(this.files[0])">
+        <button onclick="document.getElementById('hz-restore-input').click()" style="background:transparent; border:1px solid rgba(196,154,60,0.3); border-radius:6px; padding:5px 12px; color:#6e7a8a; font-size:11px; cursor:pointer;" onmouseover="this.style.color='#c49a3c'" onmouseout="this.style.color='#6e7a8a'">↩ Ripristina da backup</button>
+        <span style="font-size:10px; color:#3d4852; margin-left:8px;">Se la cache è stata svuotata, carica il file _backup.json salvato in precedenza</span>
+      </div>
+    </div>
+
+  </div><!-- /hz-results -->
+</div><!-- /horizon-view -->
+
+
+
     <div class="mobile-nav-fab">
+
         <div class="nav-fab-btn" onclick="scorriSu()"><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-up"/></svg></div>
         <div class="nav-fab-btn" onclick="scorriGiu()"><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-down"/></svg></div>
     </div>
 
     <!-- ═══ AstroDashboard JS Modules ═══ -->
-    <script src="js/i18n.js"></script>
+    <script src="js/horizon.js"></script>
+    <script>
+        function mostraOrizzonte() {
+            _showView('horizon-view');
+            if (window.hzInitSection) window.hzInitSection();
+        }
+    </script>
+        <script src="js/i18n.js"></script>
     <script src="js/globals.js"></script>
     <script src="js/userimg.js"></script>
     <script src="js/core.js"></script>
@@ -2227,7 +2540,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                 <div style="color:#c49a3c;"><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-rocket"/></svg></div>
                 <div>
                     <div style="font-size:0.75em; color:#c49a3c; text-transform:uppercase; letter-spacing:1px; font-weight:700;" data-i18n="cl_update_label">Aggiornamento</div>
-                    <div style="font-size:1.25em; font-weight:800; color:#c9d1d9; letter-spacing:.5px;">AstroDashboard PRO <span style="color:#c49a3c;">v6.4</span></div>
+                    <div style="font-size:1.25em; font-weight:800; color:#c9d1d9; letter-spacing:.5px;">AstroDashboard PRO <span style="color:#c49a3c;">v6.5</span></div>
                 </div>
                 <button onclick="chiudiChangelog()" style="
                     margin-left:auto; background:transparent; border:none;
@@ -2242,6 +2555,39 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
 
             <!-- Changelog items -->
             <div style="display:flex; flex-direction:column; gap:10px;">
+
+                <!-- ── v6.5 ── -->
+                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #378ADD; box-shadow:0 0 0 1px rgba(55,138,221,0.15);">
+                    <span style="flex-shrink:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#378ADD" stroke-width="2"><path d="M3 17l4-8 4 4 4-6 4 10"/><line x1="3" y1="21" x2="21" y2="21"/></svg></span>
+                    <div>
+                        <div style="font-weight:700; color:#378ADD; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v65_horizon_title">Modulo Orizzonte personalizzato</div>
+                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v65_horizon_desc">Nuovo modulo completo per generare il profilo di orizzonte da foto panoramica equirettangolare o sferica 360°. Algoritmo Sobel con rilevamento automatico, correzione manuale cliccando sull'anteprima, calibrazione parametri con tooltip contestuali. Export per NINA (.hrz), Stellarium (.zip con foto e ini), CSV, JSON. Salvataggio automatico in localStorage con backup/ripristino da file.</div>
+                    </div>
+                </div>
+
+                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #bb86fc; box-shadow:0 0 0 1px rgba(187,134,252,0.15);">
+                    <span style="flex-shrink:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#bb86fc" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span>
+                    <div>
+                        <div style="font-weight:700; color:#bb86fc; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v65_fov_horizon_title">Orizzonte nel grafico altitudine FOV</div>
+                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v65_fov_horizon_desc">Il profilo di orizzonte personalizzato appare nel grafico altitudine del simulatore FOV come zona rossa tratteggiata — esattamente come NINA. La soglia varia nel tempo seguendo l'azimut del DSO: quando il target entra in zona di ostruzione, il grafico lo mostra chiaramente.</div>
+                    </div>
+                </div>
+
+                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #5DCAA5; box-shadow:0 0 0 1px rgba(93,202,165,0.15);">
+                    <span style="flex-shrink:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#5DCAA5" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></span>
+                    <div>
+                        <div style="font-weight:700; color:#5DCAA5; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v65_stellarium_title">Export Stellarium corretto (foto sferica + alfa)</div>
+                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v65_stellarium_desc">Lo zip Stellarium include la foto panoramica originale in PNG (con canale alfa per il cielo rimosso), landscape.ini con tipo spherical, coordinate postazione e rotazione corretta per l'allineamento Nord. Per foto sferiche 2:1 i parametri maptex_top/bottom vengono impostati automaticamente a ±90°.</div>
+                    </div>
+                </div>
+
+                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #c49a3c; box-shadow:0 0 0 1px rgba(196,154,60,0.15);">
+                    <span style="flex-shrink:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c49a3c" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></span>
+                    <div>
+                        <div style="font-weight:700; color:#c49a3c; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v65_guide_title">Guida interattiva integrata</div>
+                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v65_guide_desc">Pannello guida a 5 slide con illustrazioni SVG, accessibile dal pulsante ? nel titolo della sezione. Spiega il flusso completo: dalla foto panoramica al profilo finale. Tooltip contestuali sui parametri di rilevamento in 4 lingue. Guida caricata come iframe separato per non appesantire il file principale.</div>
+                    </div>
+                </div>
 
                 <!-- ── v6.4 nuove feature (sessione 2) ── -->
                 <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #c49a3c; box-shadow:0 0 0 1px rgba(196,154,60,0.15);">
@@ -2496,7 +2842,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
 
     <script>
         (function() {
-            const CURRENT_VERSION = '6.4';
+            const CURRENT_VERSION = '6.5';
             const STORAGE_KEY = 'ad_last_version';
 
             function mostraChangelogManuale() {
@@ -2685,7 +3031,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
     </script>
 <script>
         function _showView(id) {
-            ['landing-view','dashboard-view','planning-view','guide-view'].forEach(v => {
+            ['landing-view','dashboard-view','planning-view','guide-view','horizon-view'].forEach(v => {
                 let el = document.getElementById(v);
                 if(el) el.style.display = (v === id) ? 'block' : 'none';
             });

@@ -1,0 +1,225 @@
+<!-- ═══════════════════════════════════════════════════════════════
+     SEZIONE ORIZZONTE — da inserire in index.html
+     Posizione: dopo <div id="guide-view"> oppure come nuova sezione
+     ═══════════════════════════════════════════════════════════════ -->
+<div id="horizon-view" style="display:none; padding:16px; max-width:900px; margin:0 auto;">
+
+  <!-- Header -->
+  <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; flex-wrap:wrap; gap:8px;">
+    <div>
+      <h2 style="font-size:16px; font-weight:600; color:#e8e8f0; margin:0;">Orizzonte panoramico</h2>
+      <p style="font-size:12px; color:#6e7a8a; margin:4px 0 0;">Genera il profilo d'orizzonte da una foto · Export NINA, Stellarium, KStars</p>
+    </div>
+    <button onclick="hzReset()" style="background:transparent; border:1px solid #21293a; border-radius:6px; padding:5px 12px; color:#6e7a8a; font-size:12px; cursor:pointer;">↺ Reset</button>
+  </div>
+
+  <!-- Upload panoramica -->
+  <div style="background:#161b22; border:0.5px solid #21293a; border-radius:10px; padding:16px 20px; margin-bottom:12px;">
+    <input type="file" id="hz-file-input" accept="image/*" style="display:none">
+    <div id="hz-dropzone" style="border:1px dashed rgba(255,255,255,0.15); border-radius:8px; padding:28px; text-align:center; cursor:pointer; transition:background .15s;">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#6e7a8a" stroke-width="1.5" style="display:block; margin:0 auto 10px;">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+      </svg>
+      <p style="font-weight:500; color:#e8e8f0; margin-bottom:4px;">Carica foto panoramica</p>
+      <p style="font-size:12px; color:#6e7a8a;">Trascina o clicca — JPG/PNG equirettangolare 360° o parziale</p>
+      <p id="hz-img-name" style="font-size:11px; color:#c49a3c; margin-top:6px;"></p>
+    </div>
+  </div>
+
+  <!-- Coordinate postazione -->
+  <div style="background:#161b22; border:0.5px solid #21293a; border-radius:10px; padding:16px 20px; margin-bottom:12px;">
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+      <span style="font-size:13px; font-weight:500; color:#e8e8f0;">Coordinate postazione</span>
+      <button id="hz-geo-btn" onclick="hzGeo()" style="background:rgba(55,138,221,0.10); border:1px solid rgba(55,138,221,0.3); border-radius:6px; padding:5px 12px; color:#378ADD; font-size:12px; cursor:pointer;">📍 GPS</button>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:10px;">
+      <div>
+        <label style="display:block; font-size:11px; color:#6e7a8a; margin-bottom:3px;">Latitudine (°N)</label>
+        <input id="hz-lat" type="number" step="0.00001" placeholder="es. 45.46200" style="width:100%; background:#0d1117; border:1px solid #21293a; border-radius:6px; padding:6px 10px; color:#e8e8f0; font-size:13px;">
+      </div>
+      <div>
+        <label style="display:block; font-size:11px; color:#6e7a8a; margin-bottom:3px;">Longitudine (°E)</label>
+        <input id="hz-lon" type="number" step="0.00001" placeholder="es. 9.18600" style="width:100%; background:#0d1117; border:1px solid #21293a; border-radius:6px; padding:6px 10px; color:#e8e8f0; font-size:13px;">
+      </div>
+      <div>
+        <label style="display:block; font-size:11px; color:#6e7a8a; margin-bottom:3px;">Altitudine (m)</label>
+        <input id="hz-altitude" type="number" step="1" placeholder="es. 250" style="width:100%; background:#0d1117; border:1px solid #21293a; border-radius:6px; padding:6px 10px; color:#e8e8f0; font-size:13px;">
+      </div>
+      <div>
+        <label style="display:block; font-size:11px; color:#6e7a8a; margin-bottom:3px;">Nome postazione</label>
+        <input id="hz-location-name" type="text" placeholder="es. Osservatorio Nord" style="width:100%; background:#0d1117; border:1px solid #21293a; border-radius:6px; padding:6px 10px; color:#e8e8f0; font-size:13px;">
+      </div>
+    </div>
+  </div>
+
+  <!-- Parametri rilevamento -->
+  <div id="hz-controls" style="display:none; background:#161b22; border:0.5px solid #21293a; border-radius:10px; padding:16px 20px; margin-bottom:12px;">
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+      <span style="font-size:13px; font-weight:500; color:#e8e8f0;">Parametri rilevamento</span>
+      <select id="hz-method" style="background:#0d1117; border:1px solid #21293a; border-radius:6px; padding:5px 10px; color:#e8e8f0; font-size:12px; cursor:pointer;">
+        <option value="sobel">Sobel (consigliato)</option>
+        <option value="gradient">Gradiente</option>
+        <option value="threshold">Soglia luminosità</option>
+        <option value="dark_band">Prima zona scura</option>
+      </select>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px;">
+      <div>
+        <label style="display:block; font-size:11px; color:#6e7a8a; margin-bottom:3px;">FOV verticale</label>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <input id="hz-vfov" type="range" min="20" max="150" value="90" step="1" style="flex:1; accent-color:#E24B4A;">
+          <span id="hz-vfov-v" style="font-size:11px; font-weight:500; color:#e8e8f0; min-width:36px; text-align:right;">90°</span>
+        </div>
+      </div>
+      <div>
+        <label style="display:block; font-size:11px; color:#6e7a8a; margin-bottom:3px;">Altitudine centro</label>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <input id="hz-calt" type="range" min="-30" max="60" value="10" step="1" style="flex:1; accent-color:#E24B4A;">
+          <span id="hz-calt-v" style="font-size:11px; font-weight:500; color:#e8e8f0; min-width:36px; text-align:right;">+10°</span>
+        </div>
+      </div>
+      <div>
+        <label style="display:block; font-size:11px; color:#6e7a8a; margin-bottom:3px;">Az. partenza Nord</label>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <input id="hz-saz" type="range" min="0" max="359" value="0" step="1" style="flex:1; accent-color:#E24B4A;">
+          <span id="hz-saz-v" style="font-size:11px; font-weight:500; color:#e8e8f0; min-width:36px; text-align:right;">0°</span>
+        </div>
+      </div>
+      <div>
+        <label style="display:block; font-size:11px; color:#6e7a8a; margin-bottom:3px;">Span orizzontale</label>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <input id="hz-hsp" type="range" min="90" max="360" value="360" step="1" style="flex:1; accent-color:#E24B4A;">
+          <span id="hz-hsp-v" style="font-size:11px; font-weight:500; color:#e8e8f0; min-width:36px; text-align:right;">360°</span>
+        </div>
+      </div>
+      <div>
+        <label style="display:block; font-size:11px; color:#6e7a8a; margin-bottom:3px;">Soglia luminosità</label>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <input id="hz-thr" type="range" min="30" max="250" value="140" step="1" style="flex:1; accent-color:#E24B4A;">
+          <span id="hz-thr-v" style="font-size:11px; font-weight:500; color:#e8e8f0; min-width:36px; text-align:right;">140</span>
+        </div>
+      </div>
+      <div>
+        <label style="display:block; font-size:11px; color:#6e7a8a; margin-bottom:3px;">Smoothing</label>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <input id="hz-sm" type="range" min="1" max="60" value="15" step="1" style="flex:1; accent-color:#E24B4A;">
+          <span id="hz-sm-v" style="font-size:11px; font-weight:500; color:#e8e8f0; min-width:36px; text-align:right;">15</span>
+        </div>
+      </div>
+      <div>
+        <label style="display:block; font-size:11px; color:#6e7a8a; margin-bottom:3px;">Ricerca da (% alto)</label>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <input id="hz-stop" type="range" min="0" max="40" value="5" step="1" style="flex:1; accent-color:#378ADD;">
+          <span id="hz-stop-v" style="font-size:11px; font-weight:500; color:#378ADD; min-width:36px; text-align:right;">5%</span>
+        </div>
+      </div>
+      <div>
+        <label style="display:block; font-size:11px; color:#6e7a8a; margin-bottom:3px;">Ricerca fino a (% alto)</label>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <input id="hz-sbot" type="range" min="50" max="100" value="80" step="1" style="flex:1; accent-color:#378ADD;">
+          <span id="hz-sbot-v" style="font-size:11px; font-weight:500; color:#378ADD; min-width:36px; text-align:right;">80%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottone rilevamento -->
+  <div id="hz-detect-bar" style="display:none; margin-bottom:12px; text-align:center;">
+    <button onclick="hzRun()" style="background:#E24B4A; border:none; border-radius:8px; padding:10px 28px; color:#fff; font-size:14px; font-weight:600; cursor:pointer; letter-spacing:.3px;">
+      Rileva orizzonte
+    </button>
+    <p style="font-size:11px; color:#6e7a8a; margin-top:6px;">Clicca sull'anteprima per correggere manualmente</p>
+  </div>
+
+  <!-- Risultati -->
+  <div id="hz-results" style="display:none;">
+
+    <!-- Anteprima panoramica -->
+    <div style="background:#161b22; border:0.5px solid #21293a; border-radius:10px; padding:16px 20px; margin-bottom:12px;">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; flex-wrap:wrap; gap:6px;">
+        <span style="font-size:13px; font-weight:500; color:#e8e8f0;">Anteprima</span>
+        <div style="display:flex; gap:10px; font-size:11px; color:#6e7a8a; align-items:center;">
+          <span style="display:inline-flex; align-items:center; gap:4px;"><span style="display:inline-block; width:14px; height:2px; background:#E24B4A;"></span>Orizzonte</span>
+          <span style="display:inline-flex; align-items:center; gap:4px;"><span style="display:inline-block; width:14px; height:1px; border-top:1px dashed rgba(200,200,200,0.4);"></span>0° alt</span>
+          <span style="display:inline-flex; align-items:center; gap:4px;"><span style="display:inline-block; width:14px; height:8px; background:rgba(55,138,221,0.15);"></span>Zona ricerca</span>
+        </div>
+      </div>
+      <canvas id="hz-preview" style="width:100%; display:block; border-radius:6px; cursor:crosshair;"></canvas>
+    </div>
+
+    <!-- Grafico e statistiche -->
+    <div style="background:#161b22; border:0.5px solid #21293a; border-radius:10px; padding:16px 20px; margin-bottom:12px;">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
+        <span style="font-size:13px; font-weight:500; color:#e8e8f0;">Profilo Az/Alt</span>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <div style="background:#0d1117; border-radius:6px; padding:6px 10px; min-width:64px;">
+            <div style="font-size:10px; color:#6e7a8a;">Min</div>
+            <div id="hz-stat-min" style="font-size:16px; font-weight:500; color:#e8e8f0;">—</div>
+          </div>
+          <div style="background:#0d1117; border-radius:6px; padding:6px 10px; min-width:64px;">
+            <div style="font-size:10px; color:#6e7a8a;">Max</div>
+            <div id="hz-stat-max" style="font-size:16px; font-weight:500; color:#e8e8f0;">—</div>
+          </div>
+          <div style="background:#0d1117; border-radius:6px; padding:6px 10px; min-width:64px;">
+            <div style="font-size:10px; color:#6e7a8a;">Media</div>
+            <div id="hz-stat-avg" style="font-size:16px; font-weight:500; color:#e8e8f0;">—</div>
+          </div>
+        </div>
+      </div>
+      <canvas id="hz-chart" height="170" style="width:100%; display:block;"></canvas>
+    </div>
+
+    <!-- Export -->
+    <div style="background:#161b22; border:0.5px solid #21293a; border-radius:10px; padding:16px 20px;">
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px; flex-wrap:wrap;">
+        <span style="font-size:13px; font-weight:500; color:#e8e8f0;">Esporta orizzonte</span>
+        <span id="hz-pt-count" style="font-size:11px; padding:2px 8px; background:rgba(55,138,221,0.12); color:#378ADD; border-radius:4px;">— punti</span>
+      </div>
+      <div style="display:flex; flex-wrap:wrap; gap:8px;">
+        <button onclick="hzExportNINA()" style="background:transparent; border:1px solid #21293a; border-radius:6px; padding:7px 14px; color:#e8e8f0; font-size:12px; cursor:pointer; transition:background .12s;" onmouseover="this.style.background='#21293a'" onmouseout="this.style.background='transparent'">NINA (.hrz)</button>
+        <button onclick="hzExportStellarium()" style="background:transparent; border:1px solid #21293a; border-radius:6px; padding:7px 14px; color:#e8e8f0; font-size:12px; cursor:pointer; transition:background .12s;" onmouseover="this.style.background='#21293a'" onmouseout="this.style.background='transparent'">Stellarium (.zip ✓)</button>
+        <button onclick="hzExportKstars()" style="background:transparent; border:1px solid #21293a; border-radius:6px; padding:7px 14px; color:#e8e8f0; font-size:12px; cursor:pointer; transition:background .12s;" onmouseover="this.style.background='#21293a'" onmouseout="this.style.background='transparent'">KStars (.hrz)</button>
+        <button onclick="hzExportCartes()" style="background:transparent; border:1px solid #21293a; border-radius:6px; padding:7px 14px; color:#e8e8f0; font-size:12px; cursor:pointer; transition:background .12s;" onmouseover="this.style.background='#21293a'" onmouseout="this.style.background='transparent'">Cartes du Ciel (.hor)</button>
+        <button onclick="hzExportCSV()" style="background:transparent; border:1px solid #21293a; border-radius:6px; padding:7px 14px; color:#e8e8f0; font-size:12px; cursor:pointer; transition:background .12s;" onmouseover="this.style.background='#21293a'" onmouseout="this.style.background='transparent'">CSV</button>
+        <button onclick="hzExportJSON()" style="background:transparent; border:1px solid #21293a; border-radius:6px; padding:7px 14px; color:#e8e8f0; font-size:12px; cursor:pointer; transition:background .12s;" onmouseover="this.style.background='#21293a'" onmouseout="this.style.background='transparent'">JSON</button>
+      </div>
+      <p style="font-size:11px; color:#6e7a8a; margin-top:10px;">Az 0°=Nord, crescente Est · Alt in gradi sopra l'orizzonte · Stellarium: estrai lo zip in Stellarium/landscapes/</p>
+    </div>
+
+  </div><!-- /hz-results -->
+</div><!-- /horizon-view -->
+
+<!-- ═══════════════════════════════════════════════════════════════
+     ISTRUZIONI DI INTEGRAZIONE
+     ═══════════════════════════════════════════════════════════════
+
+1. Copia il file js/horizon.js nella cartella js/ dell'app.
+
+2. Aggiungi il blocco HTML sopra in index.html, dentro il tag <body>,
+   dopo <div id="guide-view">.
+
+3. Aggiungi il tag script PRIMA della chiusura </body>:
+   <script src="js/horizon.js"></script>
+
+4. Aggiungi il bottone nel menu di navigazione (cerca dove ci sono
+   gli altri bottoni nav nell'header):
+   <button onclick="mostraOrizzonte()" ...>Orizzonte</button>
+
+5. Aggiungi la funzione JavaScript di navigazione (nel blocco script
+   finale di index.html o in core.js):
+
+   function mostraOrizzonte() {
+     document.querySelectorAll('[id$="-view"]').forEach(el => el.style.display = 'none');
+     document.getElementById('horizon-view').style.display = '';
+     if (window.hzInitSection) window.hzInitSection();
+   }
+
+6. Funzionamento Stellarium: il tasto "Stellarium (.zip ✓)" genera
+   automaticamente uno zip con la struttura corretta:
+     cartella/
+       landscape.ini   ← con le tue coordinate
+       horizon.txt     ← profilo az/alt
+   Estrai lo zip in: ~/.stellarium/landscapes/ (Linux/Mac)
+                     %AppData%\Stellarium\landscapes\ (Windows)
+   Poi seleziona il paesaggio in Stellarium → Opzioni paesaggio.
+   ═══════════════════════════════════════════════════════════════ -->

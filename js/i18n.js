@@ -1566,10 +1566,10 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         // ⚠️ AGGIORNARE VERSIONE QUI quando si rilascia una nuova versione:
         // cl_close_btn = testo del pulsante nel modal changelog (NON è hardcoded in index.html)
         // Aggiornare anche: title tag, badge navbar (>vX.X</button>), landing (>vX.X</span>), modal badge, pulsante "Inizia a usare" in index.html
-        i18n.it.cl_close_btn = "Inizia a usare v6.4 🚀";
-        i18n.en.cl_close_btn = "Start using v6.4 🚀";
-        i18n.es.cl_close_btn = "Empezar a usar v6.4 🚀";
-        i18n.zh.cl_close_btn = "开始使用 v6.4 🚀";
+        i18n.it.cl_close_btn = "Inizia a usare v6.5 🚀";
+        i18n.en.cl_close_btn = "Start using v6.5 🚀";
+        i18n.es.cl_close_btn = "Empezar a usar v6.5 🚀";
+        i18n.zh.cl_close_btn = "开始使用 v6.5 🚀";
 
         i18n.it.cl1_title           = "Database telescopi e sensori ampliato";
         i18n.en.cl1_title           = "Expanded telescope and sensor database";
@@ -2137,3 +2137,276 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.en.cl_v62_nina_desc = "Complete rewrite of the JSON export engine for N.I.N.A. Advanced Sequencer. The generated file now works correctly: structure verified against real files, \$id order compliant with the .NET deserializer, ExposureCount and LoopCondition aligned.";
         i18n.es.cl_v62_nina_desc = "Reescritura completa del motor de exportación JSON para N.I.N.A. Advanced Sequencer. El archivo generado ahora funciona correctamente: estructura verificada con archivos reales, orden de \$id conforme al deserializador .NET, ExposureCount y LoopCondition alineados.";
         i18n.zh.cl_v62_nina_desc = "完全重写N.I.N.A. Advanced Sequencer的JSON导出引擎。生成的文件现在可以正常工作：结构经过真实文件验证，\$id顺序符合.NET反序列化器要求，ExposureCount和LoopCondition已对齐。";
+
+        // ─── Modulo Orizzonte ───────────────────────────────────────────────
+        i18n.it.hz_btn_fov        = "Crea Orizzonte personalizzato";
+        i18n.en.hz_btn_fov        = "Create custom Horizon";
+        i18n.es.hz_btn_fov        = "Crear horizonte personalizado";
+        i18n.zh.hz_btn_fov        = "创建自定义地平线";
+
+        i18n.it.hz_title          = "Orizzonte panoramico";
+        i18n.en.hz_title          = "Panoramic Horizon";
+        i18n.es.hz_title          = "Horizonte panorámico";
+        i18n.zh.hz_title          = "全景地平线";
+
+        i18n.it.hz_subtitle       = "Genera il profilo d'orizzonte da una foto · Export NINA, Stellarium, CSV";
+        i18n.en.hz_subtitle       = "Generate horizon profile from a photo · Export NINA, Stellarium, CSV";
+        i18n.es.hz_subtitle       = "Genera el perfil de horizonte desde una foto · Exportar NINA, Stellarium, CSV";
+        i18n.zh.hz_subtitle       = "从照片生成地平线轮廓 · 导出 NINA、Stellarium、CSV";
+
+        i18n.it.hz_upload_title   = "Carica foto panoramica";
+        i18n.en.hz_upload_title   = "Load panoramic photo";
+        i18n.es.hz_upload_title   = "Cargar foto panorámica";
+        i18n.zh.hz_upload_title   = "加载全景照片";
+
+        i18n.it.hz_upload_sub     = "Trascina o clicca — JPG/PNG equirettangolare 360° o parziale";
+        i18n.en.hz_upload_sub     = "Drag or click — equirectangular JPG/PNG, 360° or partial";
+        i18n.es.hz_upload_sub     = "Arrastra o haz clic — JPG/PNG equirectangular, 360° o parcial";
+        i18n.zh.hz_upload_sub     = "拖放或点击 — 等距矩形 JPG/PNG，360° 或局部";
+
+        i18n.it.hz_coords_title   = "Coordinate postazione";
+        i18n.en.hz_coords_title   = "Site coordinates";
+        i18n.es.hz_coords_title   = "Coordenadas del sitio";
+        i18n.zh.hz_coords_title   = "观测站坐标";
+
+        i18n.it.hz_gps_btn        = "📍 GPS";
+        i18n.en.hz_gps_btn        = "📍 GPS";
+        i18n.es.hz_gps_btn        = "📍 GPS";
+        i18n.zh.hz_gps_btn        = "📍 GPS定位";
+
+        i18n.it.hz_lat_label      = "Latitudine (°N)";
+        i18n.en.hz_lat_label      = "Latitude (°N)";
+        i18n.es.hz_lat_label      = "Latitud (°N)";
+        i18n.zh.hz_lat_label      = "纬度 (°N)";
+
+        i18n.it.hz_lon_label      = "Longitudine (°E)";
+        i18n.en.hz_lon_label      = "Longitude (°E)";
+        i18n.es.hz_lon_label      = "Longitud (°E)";
+        i18n.zh.hz_lon_label      = "经度 (°E)";
+
+        i18n.it.hz_alt_label      = "Altitudine (m slm)";
+        i18n.en.hz_alt_label      = "Altitude (m asl)";
+        i18n.es.hz_alt_label      = "Altitud (m snm)";
+        i18n.zh.hz_alt_label      = "海拔高度 (m)";
+
+        i18n.it.hz_name_label     = "Nome postazione";
+        i18n.en.hz_name_label     = "Site name";
+        i18n.es.hz_name_label     = "Nombre del sitio";
+        i18n.zh.hz_name_label     = "站点名称";
+
+        i18n.it.hz_params_title   = "Parametri rilevamento";
+        i18n.en.hz_params_title   = "Detection parameters";
+        i18n.es.hz_params_title   = "Parámetros de detección";
+        i18n.zh.hz_params_title   = "检测参数";
+
+        i18n.it.hz_method_sobel   = "Sobel (consigliato)";
+        i18n.en.hz_method_sobel   = "Sobel (recommended)";
+        i18n.es.hz_method_sobel   = "Sobel (recomendado)";
+        i18n.zh.hz_method_sobel   = "Sobel（推荐）";
+
+        i18n.it.hz_method_grad    = "Gradiente";
+        i18n.en.hz_method_grad    = "Gradient";
+        i18n.es.hz_method_grad    = "Gradiente";
+        i18n.zh.hz_method_grad    = "梯度";
+
+        i18n.it.hz_method_thr     = "Soglia luminosità";
+        i18n.en.hz_method_thr     = "Brightness threshold";
+        i18n.es.hz_method_thr     = "Umbral de brillo";
+        i18n.zh.hz_method_thr     = "亮度阈值";
+
+        i18n.it.hz_method_dark    = "Prima zona scura";
+        i18n.en.hz_method_dark    = "First dark band";
+        i18n.es.hz_method_dark    = "Primera zona oscura";
+        i18n.zh.hz_method_dark    = "首个暗带";
+
+        i18n.it.hz_detect_btn     = "Rileva orizzonte";
+        i18n.en.hz_detect_btn     = "Detect horizon";
+        i18n.es.hz_detect_btn     = "Detectar horizonte";
+        i18n.zh.hz_detect_btn     = "检测地平线";
+
+        i18n.it.hz_detect_hint    = "Clicca sull'anteprima per correggere manualmente";
+        i18n.en.hz_detect_hint    = "Click on the preview to correct manually";
+        i18n.es.hz_detect_hint    = "Haz clic en la vista previa para corregir manualmente";
+        i18n.zh.hz_detect_hint    = "点击预览图手动修正";
+
+        i18n.it.hz_preview_title  = "Anteprima";
+        i18n.en.hz_preview_title  = "Preview";
+        i18n.es.hz_preview_title  = "Vista previa";
+        i18n.zh.hz_preview_title  = "预览";
+
+        i18n.it.hz_chart_title    = "Profilo Az/Alt";
+        i18n.en.hz_chart_title    = "Az/Alt Profile";
+        i18n.es.hz_chart_title    = "Perfil Az/Alt";
+        i18n.zh.hz_chart_title    = "方位角/高度角轮廓";
+
+        i18n.it.hz_export_title   = "Esporta orizzonte";
+        i18n.en.hz_export_title   = "Export horizon";
+        i18n.es.hz_export_title   = "Exportar horizonte";
+        i18n.zh.hz_export_title   = "导出地平线";
+
+        i18n.it.hz_filename_label = "Nome file (senza estensione)";
+        i18n.en.hz_filename_label = "File name (without extension)";
+        i18n.es.hz_filename_label = "Nombre de archivo (sin extensión)";
+        i18n.zh.hz_filename_label = "文件名（不含扩展名）";
+
+        i18n.it.hz_export_note    = "Az 0°=Nord, crescente verso Est · Alt in gradi sopra l'orizzonte · Stellarium: estrai lo zip in Stellarium/landscapes/";
+        i18n.en.hz_export_note    = "Az 0°=North, increasing East · Alt in degrees above horizon · Stellarium: extract zip into Stellarium/landscapes/";
+        i18n.es.hz_export_note    = "Az 0°=Norte, creciente hacia el Este · Alt en grados sobre el horizonte · Stellarium: extrae el zip en Stellarium/landscapes/";
+        i18n.zh.hz_export_note    = "方位角 0°=北，向东增加 · 高度角单位为度 · Stellarium：将zip解压至 Stellarium/landscapes/";
+
+        i18n.it.hz_reset_btn      = "↺ Reset";
+        i18n.en.hz_reset_btn      = "↺ Reset";
+        i18n.es.hz_reset_btn      = "↺ Restablecer";
+        i18n.zh.hz_reset_btn      = "↺ 重置";
+
+        i18n.it.hz_sphere_detected = "· 📐 Foto sferica 360° rilevata";
+        i18n.en.hz_sphere_detected = "· 📐 360° spherical photo detected";
+        i18n.es.hz_sphere_detected = "· 📐 Foto esférica 360° detectada";
+        i18n.zh.hz_sphere_detected = "· 📐 已检测到360°球形照片";
+
+
+        i18n.it.hz_param_vfov     = "FOV verticale";
+        i18n.en.hz_param_vfov     = "Vertical FOV";
+        i18n.es.hz_param_vfov     = "FOV vertical";
+        i18n.zh.hz_param_vfov     = "垂直视场角";
+
+        i18n.it.hz_param_calt     = "Altitudine centro";
+        i18n.en.hz_param_calt     = "Center altitude";
+        i18n.es.hz_param_calt     = "Altitud del centro";
+        i18n.zh.hz_param_calt     = "中心高度角";
+
+        i18n.it.hz_param_saz      = "Az. partenza Nord";
+        i18n.en.hz_param_saz      = "North start azimuth";
+        i18n.es.hz_param_saz      = "Az. inicio Norte";
+        i18n.zh.hz_param_saz      = "北方起始方位角";
+
+        i18n.it.hz_param_hsp      = "Span orizzontale";
+        i18n.en.hz_param_hsp      = "Horizontal span";
+        i18n.es.hz_param_hsp      = "Amplitud horizontal";
+        i18n.zh.hz_param_hsp      = "水平跨度";
+
+        i18n.it.hz_param_thr      = "Soglia luminosità";
+        i18n.en.hz_param_thr      = "Brightness threshold";
+        i18n.es.hz_param_thr      = "Umbral de brillo";
+        i18n.zh.hz_param_thr      = "亮度阈值";
+
+        i18n.it.hz_param_sm       = "Smoothing";
+        i18n.en.hz_param_sm       = "Smoothing";
+        i18n.es.hz_param_sm       = "Suavizado";
+        i18n.zh.hz_param_sm       = "平滑度";
+
+        i18n.it.hz_param_stop     = "Ricerca da (% alto)";
+        i18n.en.hz_param_stop     = "Search from (% top)";
+        i18n.es.hz_param_stop     = "Buscar desde (% arriba)";
+        i18n.zh.hz_param_stop     = "搜索起点 (% 顶部)";
+
+        i18n.it.hz_param_sbot     = "Ricerca fino a (% alto)";
+        i18n.en.hz_param_sbot     = "Search to (% top)";
+        i18n.es.hz_param_sbot     = "Buscar hasta (% arriba)";
+        i18n.zh.hz_param_sbot     = "搜索终点 (% 顶部)";
+
+        i18n.it.hz_apply_fov      = "Applica a FOV";
+        i18n.en.hz_apply_fov      = "Apply to FOV";
+        i18n.es.hz_apply_fov      = "Aplicar al FOV";
+        i18n.zh.hz_apply_fov      = "应用到FOV";
+
+        i18n.it.hz_legend_hz      = "Orizzonte";
+        i18n.en.hz_legend_hz      = "Horizon";
+        i18n.es.hz_legend_hz      = "Horizonte";
+        i18n.zh.hz_legend_hz      = "地平线";
+
+        i18n.it.hz_legend_search  = "Ricerca";
+        i18n.en.hz_legend_search  = "Search";
+        i18n.es.hz_legend_search  = "Búsqueda";
+        i18n.zh.hz_legend_search  = "搜索区";
+
+        i18n.it.hz_change_photo   = "cambia foto";
+        i18n.en.hz_change_photo   = "change photo";
+        i18n.es.hz_change_photo   = "cambiar foto";
+        i18n.zh.hz_change_photo   = "更换照片";
+
+        i18n.it.hz_param_vfov     = "FOV verticale";
+        i18n.en.hz_param_vfov     = "Vertical FOV";
+        i18n.es.hz_param_vfov     = "FOV vertical";
+        i18n.zh.hz_param_vfov     = "垂直视场角";
+
+        i18n.it.hz_param_calt     = "Altitudine centro";
+        i18n.en.hz_param_calt     = "Center altitude";
+        i18n.es.hz_param_calt     = "Altitud centro";
+        i18n.zh.hz_param_calt     = "中心高度角";
+
+        i18n.it.hz_param_saz      = "Az. partenza Nord";
+        i18n.en.hz_param_saz      = "North start Az.";
+        i18n.es.hz_param_saz      = "Az. inicio Norte";
+        i18n.zh.hz_param_saz      = "北向起始方位角";
+
+        i18n.it.hz_param_hsp      = "Span orizzontale";
+        i18n.en.hz_param_hsp      = "Horizontal span";
+        i18n.es.hz_param_hsp      = "Span horizontal";
+        i18n.zh.hz_param_hsp      = "水平跨度";
+
+        i18n.it.hz_param_thr      = "Soglia luminosità";
+        i18n.en.hz_param_thr      = "Brightness threshold";
+        i18n.es.hz_param_thr      = "Umbral de brillo";
+        i18n.zh.hz_param_thr      = "亮度阈值";
+
+        i18n.it.hz_param_sm       = "Smoothing";
+        i18n.en.hz_param_sm       = "Smoothing";
+        i18n.es.hz_param_sm       = "Suavizado";
+        i18n.zh.hz_param_sm       = "平滑度";
+
+        i18n.it.hz_param_stop     = "Ricerca da (% alto)";
+        i18n.en.hz_param_stop     = "Search from (% top)";
+        i18n.es.hz_param_stop     = "Buscar desde (% sup)";
+        i18n.zh.hz_param_stop     = "从顶部搜索 (%)";
+
+        i18n.it.hz_param_sbot     = "Ricerca fino a (% alto)";
+        i18n.en.hz_param_sbot     = "Search to (% top)";
+        i18n.es.hz_param_sbot     = "Buscar hasta (% sup)";
+        i18n.zh.hz_param_sbot     = "搜索至 (% 顶)";
+
+        i18n.it.hz_restore_btn    = "↩ Ripristina";
+        i18n.en.hz_restore_btn    = "↩ Restore";
+        i18n.es.hz_restore_btn    = "↩ Restaurar";
+        i18n.zh.hz_restore_btn    = "↩ 恢复";
+
+        // ─── Changelog v6.5 ─────────────────────────────────────────────────
+        i18n.it.cl_v65_horizon_title      = "Modulo Orizzonte personalizzato";
+        i18n.en.cl_v65_horizon_title      = "Custom Horizon module";
+        i18n.es.cl_v65_horizon_title      = "Módulo de horizonte personalizado";
+        i18n.zh.cl_v65_horizon_title      = "自定义地平线模块";
+
+        i18n.it.cl_v65_horizon_desc       = "Nuovo modulo completo per generare il profilo di orizzonte da foto panoramica equirettangolare o sferica 360°. Algoritmo Sobel con rilevamento automatico, correzione manuale cliccando sull'anteprima, calibrazione parametri con tooltip contestuali. Export per NINA (.hrz), Stellarium (.zip con foto e ini), CSV, JSON. Salvataggio automatico in localStorage con backup/ripristino da file.";
+        i18n.en.cl_v65_horizon_desc       = "New complete module to generate the horizon profile from an equirectangular or 360° spherical panoramic photo. Sobel algorithm with automatic detection, manual correction by clicking the preview, parameter calibration with contextual tooltips. Export for NINA (.hrz), Stellarium (.zip with photo and ini), CSV, JSON. Auto-save to localStorage with file backup/restore.";
+        i18n.es.cl_v65_horizon_desc       = "Nuevo módulo completo para generar el perfil de horizonte desde una foto panorámica equirectangular o esférica 360°. Algoritmo Sobel con detección automática, corrección manual haciendo clic en la vista previa, calibración de parámetros con tooltips contextuales. Exportación para NINA (.hrz), Stellarium (.zip con foto e ini), CSV, JSON. Guardado automático en localStorage con copia de seguridad/restauración desde archivo.";
+        i18n.zh.cl_v65_horizon_desc       = "全新完整模块，可从等距矩形或360°球形全景照片生成地平线轮廓。Sobel算法自动检测，点击预览图手动修正，参数校准含上下文工具提示。支持导出至NINA（.hrz）、Stellarium（含照片和ini的.zip）、CSV、JSON。自动保存至localStorage，支持文件备份/恢复。";
+
+        i18n.it.cl_v65_fov_horizon_title  = "Orizzonte nel grafico altitudine FOV";
+        i18n.en.cl_v65_fov_horizon_title  = "Horizon in FOV altitude chart";
+        i18n.es.cl_v65_fov_horizon_title  = "Horizonte en el gráfico de altitud FOV";
+        i18n.zh.cl_v65_fov_horizon_title  = "FOV高度图中的地平线";
+
+        i18n.it.cl_v65_fov_horizon_desc   = "Il profilo di orizzonte personalizzato appare nel grafico altitudine del simulatore FOV come zona rossa tratteggiata — esattamente come NINA. La soglia varia nel tempo seguendo l'azimut del DSO: quando il target entra in zona di ostruzione, il grafico lo mostra chiaramente.";
+        i18n.en.cl_v65_fov_horizon_desc   = "The custom horizon profile appears in the FOV simulator altitude chart as a dashed red zone — exactly like NINA. The threshold varies over time following the DSO's azimuth: when the target enters an obstruction zone, the chart shows it clearly.";
+        i18n.es.cl_v65_fov_horizon_desc   = "El perfil de horizonte personalizado aparece en el gráfico de altitud del simulador FOV como una zona roja discontinua, exactamente como NINA. El umbral varía con el tiempo siguiendo el azimut del DSO: cuando el objetivo entra en una zona de obstrucción, el gráfico lo muestra claramente.";
+        i18n.zh.cl_v65_fov_horizon_desc   = "自定义地平线轮廓以红色虚线区域显示在FOV模拟器的高度图中——与NINA完全一致。阈值随时间随DSO方位角变化：当目标进入遮挡区域时，图表会清晰显示。";
+
+        i18n.it.cl_v65_stellarium_title   = "Export Stellarium corretto (foto sferica + alfa)";
+        i18n.en.cl_v65_stellarium_title   = "Corrected Stellarium export (spherical photo + alpha)";
+        i18n.es.cl_v65_stellarium_title   = "Exportación Stellarium corregida (foto esférica + alfa)";
+        i18n.zh.cl_v65_stellarium_title   = "修正的Stellarium导出（球形照片+透明通道）";
+
+        i18n.it.cl_v65_stellarium_desc    = "Lo zip Stellarium include la foto panoramica originale in PNG (con canale alfa per il cielo rimosso), landscape.ini con tipo spherical, coordinate postazione e rotazione corretta per l'allineamento Nord. Per foto sferiche 2:1 i parametri maptex_top/bottom vengono impostati automaticamente a ±90°.";
+        i18n.en.cl_v65_stellarium_desc    = "The Stellarium zip includes the original panoramic photo as PNG (with alpha channel for the removed sky), landscape.ini with spherical type, site coordinates and correct rotation for North alignment. For 2:1 spherical photos, maptex_top/bottom parameters are automatically set to ±90°.";
+        i18n.es.cl_v65_stellarium_desc    = "El zip de Stellarium incluye la foto panorámica original en PNG (con canal alfa para el cielo eliminado), landscape.ini de tipo spherical, coordenadas del sitio y rotación correcta para la alineación Norte. Para fotos esféricas 2:1, los parámetros maptex_top/bottom se configuran automáticamente a ±90°.";
+        i18n.zh.cl_v65_stellarium_desc    = "Stellarium压缩包包含PNG格式原始全景照片（带已移除天空的透明通道）、spherical类型的landscape.ini、站点坐标及正确的北向旋转。对于2:1球形照片，maptex_top/bottom参数自动设置为±90°。";
+
+        i18n.it.cl_v65_guide_title        = "Guida interattiva integrata";
+        i18n.en.cl_v65_guide_title        = "Integrated interactive guide";
+        i18n.es.cl_v65_guide_title        = "Guía interactiva integrada";
+        i18n.zh.cl_v65_guide_title        = "集成交互式指南";
+
+        i18n.it.cl_v65_guide_desc         = "Pannello guida a 5 slide con illustrazioni SVG, accessibile dal pulsante ? nel titolo della sezione. Spiega il flusso completo: dalla foto panoramica al profilo finale. Tooltip contestuali sui parametri di rilevamento in 4 lingue. Guida caricata come iframe separato per non appesantire il file principale.";
+        i18n.en.cl_v65_guide_desc         = "5-slide guide panel with SVG illustrations, accessible from the ? button in the section title. Explains the complete workflow: from panoramic photo to final profile. Contextual tooltips on detection parameters in 4 languages. Guide loaded as a separate iframe to keep the main file lightweight.";
+        i18n.es.cl_v65_guide_desc         = "Panel guía de 5 diapositivas con ilustraciones SVG, accesible desde el botón ? en el título de la sección. Explica el flujo completo: de la foto panorámica al perfil final. Tooltips contextuales en los parámetros de detección en 4 idiomas. Guía cargada como iframe separado para no sobrecargar el archivo principal.";
+        i18n.zh.cl_v65_guide_desc         = "5张幻灯片指南面板，带SVG插图，可通过章节标题中的?按钮访问。解释完整流程：从全景照片到最终轮廓。检测参数上的上下文工具提示，支持4种语言。指南作为独立iframe加载，不增加主文件负担。";

@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guida Orizzonte — AstroDashboard PRO</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#0d1117;--surf:#161b22;--surf2:#1c2333;
+  --border:#21293a;--text:#e8e8f0;--muted:#6e7a8a;--hint:#3d4852;
+  --red:#E24B4A;--amber:#c49a3c;--blue:#378ADD;
+  --amber-bg:rgba(196,154,60,0.10);--blue-bg:rgba(55,138,221,0.10);
+  --red-bg:rgba(226,75,74,0.10);
+}
+body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,sans-serif;
+  min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px;}
+
+.panel{background:var(--surf);border:0.5px solid var(--border);border-radius:14px;
+  width:100%;max-width:540px;overflow:hidden;}
+
+.top-bar{display:flex;align-items:center;justify-content:space-between;
+  padding:14px 20px;border-bottom:0.5px solid var(--border);}
+.top-title{font-size:13px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:8px;}
+.top-close{background:transparent;border:none;color:var(--muted);font-size:18px;
+  cursor:pointer;padding:2px 6px;border-radius:4px;line-height:1;}
+.top-close:hover{color:var(--text);}
+
+.progress-bar{display:flex;gap:5px;padding:14px 20px 0;}
+.prog-seg{flex:1;height:2px;border-radius:2px;background:var(--border);transition:background .35s;}
+.prog-seg.done{background:var(--amber);}
+.prog-seg.active{background:var(--blue);}
+
+.slides{position:relative;overflow:hidden;}
+.slide{display:none;padding:20px 20px 0;animation:fadeIn .25s ease;}
+.slide.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateX(10px)}to{opacity:1;transform:translateX(0)}}
+
+.slide-num{font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;}
+.slide-title{font-size:16px;font-weight:600;color:var(--text);margin-bottom:8px;line-height:1.35;}
+.slide-desc{font-size:12px;color:var(--muted);line-height:1.65;margin-bottom:16px;}
+
+.visual{background:var(--surf2);border:0.5px solid var(--border);border-radius:10px;
+  margin-bottom:16px;overflow:hidden;}
+
+.tip-box{background:var(--blue-bg);border:0.5px solid rgba(55,138,221,0.25);border-radius:7px;
+  padding:9px 12px;font-size:11px;color:#7ab;line-height:1.55;margin-bottom:16px;display:flex;gap:8px;}
+.tip-icon{flex-shrink:0;margin-top:1px;}
+
+.steps{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;}
+.step{display:flex;align-items:flex-start;gap:10px;font-size:12px;color:var(--muted);line-height:1.5;}
+.step-n{flex-shrink:0;width:20px;height:20px;border-radius:50%;background:var(--amber-bg);
+  border:1px solid rgba(196,154,60,0.35);color:var(--amber);font-size:10px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;}
+.step b{color:var(--text);}
+
+.footer{display:flex;align-items:center;justify-content:space-between;
+  padding:14px 20px;border-top:0.5px solid var(--border);}
+.counter{font-size:11px;color:var(--muted);}
+.nav-btns{display:flex;gap:8px;}
+.btn{display:inline-flex;align-items:center;gap:5px;border-radius:6px;
+  padding:7px 16px;font-size:12px;cursor:pointer;border:1px solid;transition:all .15s;}
+.btn-prev{background:transparent;border-color:var(--border);color:var(--muted);}
+.btn-prev:hover{border-color:#444;color:var(--text);}
+.btn-next{background:var(--amber-bg);border-color:rgba(196,154,60,0.45);color:var(--amber);font-weight:500;}
+.btn-next:hover{background:rgba(196,154,60,0.20);}
+.btn-done{background:rgba(55,138,221,0.12);border-color:rgba(55,138,221,0.45);color:var(--blue);font-weight:500;}
+.btn-done:hover{background:rgba(55,138,221,0.22);}
+
+.tag{display:inline-block;font-size:10px;padding:2px 7px;border-radius:4px;font-weight:500;margin-right:4px;}
+.tag-red{background:var(--red-bg);color:var(--red);border:0.5px solid rgba(226,75,74,0.3);}
+.tag-blue{background:var(--blue-bg);color:var(--blue);border:0.5px solid rgba(55,138,221,0.3);}
+.tag-amber{background:var(--amber-bg);color:var(--amber);border:0.5px solid rgba(196,154,60,0.3);}
+</style>
+</head>
+<body>
+
+<div class="panel">
+
+  <!-- Top bar -->
+  <div class="top-bar">
+    <div class="top-title">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2">
+        <path d="M3 17l4-8 4 4 4-6 4 10"/><line x1="3" y1="21" x2="21" y2="21"/>
+      </svg>
+      <span data-g="guide_title">Guida · Orizzonte personalizzato</span>
+    </div>
+    <button class="top-close" onclick="if(window.parent&&window.parent.hzCloseGuide){window.parent.hzCloseGuide();}else{this.closest('.panel').style.display='none'}">✕</button>
+  </div>
+
+  <!-- Progress segments -->
+  <div class="progress-bar" id="progBar">
+    <div class="prog-seg active"></div>
+    <div class="prog-seg"></div>
+    <div class="prog-seg"></div>
+    <div class="prog-seg"></div>
+    <div class="prog-seg"></div>
+  </div>
+
+  <!-- ═══ SLIDE 1 ═══ -->
+  <div class="slide active" id="s1">
+    <div style="padding-top:16px;">
+      <div class="slide-num" data-g="s1_num">Passo 1 di 5</div>
+      <div class="slide-title" data-g="s1_title">Cos'è l'orizzonte personalizzato?</div>
+      <div class="slide-desc">
+        <span data-g="s1_desc">Un profilo di orizzonte descrive la quota minima osservabile in ogni direzione azimutale. Serve a NINA per calcolare la visibilità reale dei target e a Stellarium per visualizzare il tuo cielo notturno esattamente come appare dalla tua postazione.</span>
+      </div>
+    </div>
+
+    <div class="visual">
+      <svg viewBox="0 0 500 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;">
+        <!-- Sky -->
+        <rect width="500" height="160" fill="#0a0f18"/>
+        <!-- Stars -->
+        <circle cx="60" cy="20" r="1" fill="white" opacity=".7"/>
+        <circle cx="120" cy="35" r="1.5" fill="white" opacity=".9"/>
+        <circle cx="200" cy="15" r="1" fill="white" opacity=".6"/>
+        <circle cx="280" cy="28" r="1" fill="white" opacity=".8"/>
+        <circle cx="350" cy="18" r="1.5" fill="white" opacity=".7"/>
+        <circle cx="430" cy="32" r="1" fill="white" opacity=".9"/>
+        <circle cx="470" cy="12" r="1" fill="white" opacity=".5"/>
+        <circle cx="90" cy="50" r="1" fill="white" opacity=".4"/>
+        <circle cx="160" cy="45" r="1" fill="white" opacity=".6"/>
+        <circle cx="320" cy="42" r="1" fill="white" opacity=".5"/>
+        <!-- Ground silhouette -->
+        <path d="M0,110 L60,108 L90,95 L110,92 L130,90 L160,88 L180,105 L210,102 L230,85 L260,60 L280,55 L300,62 L320,90 L340,92 L360,88 L390,86 L420,95 L450,105 L480,108 L500,110 L500,160 L0,160Z" fill="#1a2a15"/>
+        <!-- Buildings -->
+        <rect x="230" y="62" width="18" height="40" fill="#243020"/>
+        <rect x="255" y="68" width="14" height="34" fill="#1f2a1a"/>
+        <rect x="272" y="58" width="22" height="44" fill="#243020"/>
+        <!-- Horizon line -->
+        <path d="M0,110 L60,108 L90,95 L110,92 L130,90 L160,88 L180,105 L210,102 L230,85 L260,60 L280,55 L300,62 L320,90 L340,92 L360,88 L390,86 L420,95 L450,105 L480,108 L500,110" fill="none" stroke="#E24B4A" stroke-width="2"/>
+        <!-- Cardinal labels -->
+        <text x="8" y="145" fill="#6e7a8a" font-size="10" font-family="system-ui">N</text>
+        <text x="120" y="145" fill="#6e7a8a" font-size="10" font-family="system-ui">NE</text>
+        <text x="243" y="145" fill="#6e7a8a" font-size="10" font-family="system-ui">E</text>
+        <text x="365" y="145" fill="#6e7a8a" font-size="10" font-family="system-ui">SE</text>
+        <text x="485" y="145" fill="#6e7a8a" font-size="10" font-family="system-ui">S</text>
+        <!-- Altitude annotation -->
+        <line x1="280" y1="55" x2="280" y2="20" stroke="#c49a3c" stroke-width="1" stroke-dasharray="3,3"/>
+        <text x="284" y="18" fill="#c49a3c" font-size="9" font-family="system-ui">alt max ~28°</text>
+        <!-- 0° line -->
+        <line x1="0" y1="110" x2="500" y2="110" stroke="rgba(200,200,200,0.2)" stroke-width="1" stroke-dasharray="4,4"/>
+        <text x="4" y="108" fill="rgba(200,200,200,0.4)" font-size="8" font-family="system-ui">0°</text>
+      </svg>
+    </div>
+
+    <div class="tip-box">
+      <svg class="tip-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span data-g="s1_tip">La linea rossa segue il profilo reale della tua postazione — muri, tetti, colline, alberi. Tutto ciò che è <b style="color:#e8e8f0">sopra la linea è osservabile</b>, sotto è ostruito.</span>
+    </div>
+  </div>
+
+  <!-- ═══ SLIDE 2 ═══ -->
+  <div class="slide" id="s2">
+    <div style="padding-top:16px;">
+      <div class="slide-num" data-g="s2_num">Passo 2 di 5</div>
+      <div class="slide-title" data-g="s2_title">Prepara la foto panoramica</div>
+      <div class="slide-desc">
+        <span data-g="s2_desc">Scatta una foto sferica dalla tua postazione di osservazione. Le foto Google Pixel in modalità Photo Sphere, GoPro Max o qualsiasi camera 360° producono il formato ideale.</span>
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-n">1</div>
+        <div><span data-g="s2_step1">Posizionati esattamente nel punto da cui osservi. <b>Altezza dell'occhio</b> = altezza del telescopio.</span></div>
+      </div>
+      <div class="step">
+        <div class="step-n">2</div>
+        <div><span data-g="s2_step2">Scatta una <b>foto sferica 360°×180°</b> (formato equirettangolare). In alternativa usa una serie di foto unite con Hugin o PTGui.</span></div>
+      </div>
+      <div class="step">
+        <div class="step-n">3</div>
+        <div><span data-g="s2_step3"><b>Rimuovi il cielo</b> con un editor (Photoshop, GIMP, remove.bg). Il cielo trasparente permette a Stellarium di mostrare le stelle attraverso di esso.</span></div>
+      </div>
+      <div class="step">
+        <div class="step-n">4</div>
+        <div><span data-g="s2_step4">Salva in formato <b>PNG</b> per mantenere la trasparenza, oppure JPG se non devi usarla in Stellarium.</span></div>
+      </div>
+    </div>
+
+    <div class="visual">
+      <svg viewBox="0 0 500 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;">
+        <rect width="500" height="110" fill="#0a0f18"/>
+        <!-- Equirectangular grid -->
+        <rect x="10" y="15" width="220" height="80" rx="4" fill="#161b22" stroke="#21293a" stroke-width="1"/>
+        <text x="120" y="10" fill="#6e7a8a" font-size="9" font-family="system-ui" text-anchor="middle">Foto originale (JPG)</text>
+        <!-- Grid lines -->
+        <line x1="10" y1="55" x2="230" y2="55" stroke="#21293a" stroke-width="0.5"/>
+        <line x1="120" y1="15" x2="120" y2="95" stroke="#21293a" stroke-width="0.5"/>
+        <!-- Sky area -->
+        <rect x="11" y="16" width="218" height="38" rx="2" fill="#1a2535" opacity=".8"/>
+        <text x="120" y="39" fill="#378ADD" font-size="9" font-family="system-ui" text-anchor="middle" opacity=".6">cielo</text>
+        <!-- Ground area -->
+        <rect x="11" y="56" width="218" height="38" rx="2" fill="#1a2a15" opacity=".8"/>
+        <text x="120" y="78" fill="#639922" font-size="9" font-family="system-ui" text-anchor="middle" opacity=".7">terreno / edifici</text>
+
+        <!-- Arrow -->
+        <text x="255" y="60" fill="#c49a3c" font-size="18" font-family="system-ui">→</text>
+
+        <!-- PNG with alpha -->
+        <rect x="275" y="15" width="215" height="80" rx="4" fill="#161b22" stroke="#21293a" stroke-width="1"/>
+        <text x="382" y="10" fill="#6e7a8a" font-size="9" font-family="system-ui" text-anchor="middle">PNG con cielo rimosso (α)</text>
+        <!-- Checkerboard alpha pattern for sky -->
+        <pattern id="checker" width="6" height="6" patternUnits="userSpaceOnUse">
+          <rect width="3" height="3" fill="#1c1c2e"/>
+          <rect x="3" y="3" width="3" height="3" fill="#1c1c2e"/>
+          <rect x="3" y="0" width="3" height="3" fill="#252538"/>
+          <rect x="0" y="3" width="3" height="3" fill="#252538"/>
+        </pattern>
+        <rect x="276" y="16" width="213" height="38" rx="2" fill="url(#checker)"/>
+        <text x="382" y="39" fill="#6e7a8a" font-size="9" font-family="system-ui" text-anchor="middle" opacity=".5">trasparente</text>
+        <!-- Ground with terrain -->
+        <rect x="276" y="56" width="213" height="38" rx="2" fill="#1a2a15" opacity=".8"/>
+        <text x="382" y="78" fill="#639922" font-size="9" font-family="system-ui" text-anchor="middle" opacity=".7">terreno / edifici</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- ═══ SLIDE 3 ═══ -->
+  <div class="slide" id="s3">
+    <div style="padding-top:16px;">
+      <div class="slide-num" data-g="s3_num">Passo 3 di 5</div>
+      <div class="slide-title" data-g="s3_title">Carica e calibra</div>
+      <div class="slide-desc">
+        <span data-g="s3_desc">Trascina la foto nel pannello. Per foto sferiche 2:1 il FOV viene impostato automaticamente a 180°. Poi usa i tre parametri principali per calibrare la posizione.</span>
+      </div>
+    </div>
+
+    <div class="visual">
+      <svg viewBox="0 0 500 175" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;">
+        <rect width="500" height="175" fill="#0d1117"/>
+        <!-- Photo preview mock -->
+        <rect x="10" y="10" width="480" height="90" rx="6" fill="#1a2a15"/>
+        <!-- Horizon line wavy -->
+        <path d="M10,60 Q80,55 120,58 Q160,61 200,55 Q240,49 270,40 Q300,31 330,38 Q360,45 400,50 Q440,55 490,52" fill="none" stroke="#E24B4A" stroke-width="2"/>
+        <!-- Zero line -->
+        <line x1="10" y1="65" x2="490" y2="65" stroke="rgba(200,200,200,0.25)" stroke-width="1" stroke-dasharray="4,3"/>
+        <text x="14" y="63" fill="rgba(200,200,200,0.5)" font-size="8" font-family="system-ui">0°</text>
+        <!-- Cardinals -->
+        <text x="55" y="22" fill="rgba(220,220,220,0.7)" font-size="10" font-family="system-ui" font-weight="bold">N</text>
+        <text x="180" y="22" fill="rgba(220,220,220,0.7)" font-size="10" font-family="system-ui" font-weight="bold">E</text>
+        <text x="310" y="22" fill="rgba(220,220,220,0.7)" font-size="10" font-family="system-ui" font-weight="bold">S</text>
+        <text x="430" y="22" fill="rgba(220,220,220,0.7)" font-size="10" font-family="system-ui" font-weight="bold">O</text>
+
+        <!-- Annotation: calt -->
+        <line x1="490" y1="52" x2="490" y2="65" stroke="#c49a3c" stroke-width="1"/>
+        <line x1="485" y1="52" x2="495" y2="52" stroke="#c49a3c" stroke-width="1"/>
+        <line x1="485" y1="65" x2="495" y2="65" stroke="#c49a3c" stroke-width="1"/>
+        <text x="496" y="60" fill="#c49a3c" font-size="8" font-family="system-ui">calt</text>
+
+        <!-- Params below -->
+        <!-- Alt centro -->
+        <rect x="10" y="110" width="148" height="32" rx="5" fill="#161b22" stroke="#21293a" stroke-width="1"/>
+        <text x="18" y="122" fill="#6e7a8a" font-size="9" font-family="system-ui">Altitudine centro</text>
+        <rect x="18" y="127" width="100" height="3" rx="1" fill="#21293a"/>
+        <rect x="18" y="127" width="38" height="3" rx="1" fill="#c49a3c"/>
+        <text x="125" y="133" fill="#c49a3c" font-size="9" font-family="system-ui">-10°</text>
+        <text x="18" y="154" fill="#3d4852" font-size="8" font-family="system-ui">↕ sposta 0° sull'orizzonte reale</text>
+
+        <!-- Az Nord -->
+        <rect x="168" y="110" width="148" height="32" rx="5" fill="#161b22" stroke="#21293a" stroke-width="1"/>
+        <text x="176" y="122" fill="#6e7a8a" font-size="9" font-family="system-ui">Az. partenza Nord</text>
+        <rect x="176" y="127" width="100" height="3" rx="1" fill="#21293a"/>
+        <rect x="176" y="127" width="76" height="3" rx="1" fill="#378ADD"/>
+        <text x="283" y="133" fill="#378ADD" font-size="9" font-family="system-ui">276°</text>
+        <text x="176" y="154" fill="#3d4852" font-size="8" font-family="system-ui">↔ allinea N con la bussola</text>
+
+        <!-- Smoothing -->
+        <rect x="326" y="110" width="148" height="32" rx="5" fill="#161b22" stroke="#21293a" stroke-width="1"/>
+        <text x="334" y="122" fill="#6e7a8a" font-size="9" font-family="system-ui">Smoothing</text>
+        <rect x="334" y="127" width="100" height="3" rx="1" fill="#21293a"/>
+        <rect x="334" y="127" width="25" height="3" rx="1" fill="#5DCAA5"/>
+        <text x="441" y="133" fill="#5DCAA5" font-size="9" font-family="system-ui">15</text>
+        <text x="334" y="154" fill="#3d4852" font-size="8" font-family="system-ui">〜 leviga la curva rilevata</text>
+      </svg>
+    </div>
+
+    <div class="tip-box">
+      <svg class="tip-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span data-g="s3_tip">Posiziona il mouse sui label dei parametri per leggere la spiegazione di ognuno.</span>
+    </div>
+  </div>
+
+  <!-- ═══ SLIDE 4 ═══ -->
+  <div class="slide" id="s4">
+    <div style="padding-top:16px;">
+      <div class="slide-num" data-g="s4_num">Passo 4 di 5</div>
+      <div class="slide-title" data-g="s4_title">Correggi e rileva</div>
+      <div class="slide-desc">
+        <span data-g="s4_desc">Premi <span class="tag tag-blue">Rileva orizzonte</span> per il rilevamento automatico. Se la linea non è precisa in qualche zona, clicca direttamente sull'anteprima per correggerla manualmente con un pennello morbido.</span>
+      </div>
+    </div>
+
+    <div class="visual">
+      <svg viewBox="0 0 500 145" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;">
+        <rect width="500" height="145" fill="#0d1117"/>
+
+        <!-- Left: auto detected (imprecise) -->
+        <rect x="10" y="10" width="225" height="80" rx="6" fill="#1a2a15"/>
+        <text x="122" y="8" fill="#6e7a8a" font-size="9" font-family="system-ui" text-anchor="middle">Rilevamento automatico</text>
+        <path d="M10,52 Q40,38 70,55 Q90,65 110,48 Q130,31 150,50 Q170,62 200,55 Q215,51 235,50" fill="none" stroke="#E24B4A" stroke-width="2"/>
+        <!-- Imprecise zone highlight -->
+        <rect x="95" y="28" width="60" height="35" rx="3" fill="none" stroke="#c49a3c" stroke-width="1.5" stroke-dasharray="3,2"/>
+        <text x="125" y="77" fill="#c49a3c" font-size="8" font-family="system-ui" text-anchor="middle">zona imprecisa</text>
+
+        <!-- Arrow -->
+        <text x="248" y="58" fill="#c49a3c" font-size="18">→</text>
+        <text x="238" y="74" fill="#6e7a8a" font-size="8" font-family="system-ui">click</text>
+
+        <!-- Right: corrected -->
+        <rect x="268" y="10" width="225" height="80" rx="6" fill="#1a2a15"/>
+        <text x="380" y="8" fill="#6e7a8a" font-size="9" font-family="system-ui" text-anchor="middle">Dopo correzione manuale</text>
+        <path d="M268,52 Q298,38 328,55 Q348,65 368,52 Q388,40 408,50 Q428,57 458,55 Q473,53 493,52" fill="none" stroke="#E24B4A" stroke-width="2"/>
+        <!-- Cursor icon -->
+        <circle cx="368" cy="52" r="6" fill="none" stroke="#378ADD" stroke-width="1.5"/>
+        <circle cx="368" cy="52" r="2" fill="#378ADD"/>
+        <text x="375" y="47" fill="#378ADD" font-size="8" font-family="system-ui">±30px blend</text>
+
+        <!-- Bottom: chart preview -->
+        <rect x="10" y="100" width="480" height="36" rx="5" fill="#161b22" stroke="#21293a" stroke-width="1"/>
+        <text x="18" y="112" fill="#6e7a8a" font-size="8" font-family="system-ui">Profilo Az/Alt</text>
+        <polyline points="10,128 50,126 90,124 130,118 150,108 170,105 200,108 230,118 270,120 310,119 350,121 390,124 430,126 490,128" fill="none" stroke="#E24B4A" stroke-width="1.5" transform="translate(18,-12)"/>
+        <text x="430" y="130" fill="#6e7a8a" font-size="8" font-family="system-ui">Min 2.6° Max 78.8°</text>
+      </svg>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-n">1</div>
+        <div><span data-g="s4_step1">Clicca <b>Rileva orizzonte</b> — la linea rossa appare sull'anteprima.</span></div>
+      </div>
+      <div class="step">
+        <div class="step-n">2</div>
+        <div><span data-g="s4_step2">Se una zona è errata, <b>clicca direttamente sulla foto</b> nel punto corretto — la correzione si propaga con interpolazione fluida.</span></div>
+      </div>
+      <div class="step">
+        <div class="step-n">3</div>
+        <div><span data-g="s4_step3">Verifica il grafico Az/Alt in basso: Min dovrebbe essere ~0–5°, Max corrisponde all'ostruzione più alta.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SLIDE 5 ═══ -->
+  <div class="slide" id="s5">
+    <div style="padding-top:16px;">
+      <div class="slide-num" data-g="s5_num">Passo 5 di 5</div>
+      <div class="slide-title" data-g="s5_title">Applica ed esporta</div>
+      <div class="slide-desc">
+        <span data-g="s5_desc">Una volta soddisfatto del profilo, applicalo al grafico FOV e salvalo in tutti i formati che ti servono.</span>
+      </div>
+    </div>
+
+    <div class="visual">
+      <svg viewBox="0 0 500 120" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;">
+        <rect width="500" height="120" fill="#0d1117"/>
+
+        <!-- Applica a FOV -->
+        <rect x="15" y="15" width="135" height="90" rx="7" fill="#161b22" stroke="#21293a" stroke-width="1"/>
+        <text x="82" y="32" fill="#c49a3c" font-size="9" font-family="system-ui" text-anchor="middle" font-weight="600">Applica a FOV</text>
+        <!-- Mini chart with horizon -->
+        <rect x="22" y="38" width="121" height="55" rx="3" fill="#0d1117"/>
+        <polyline points="22,85 40,84 55,82 70,76 85,68 100,65 115,68 130,76 143,82" fill="rgba(187,134,252,0.15)" stroke="#bb86fc" stroke-width="1.5" transform="translate(0,0)"/>
+        <polyline points="22,90 40,89 55,88 70,87 85,86 100,86 115,87 130,88 143,89" fill="rgba(226,75,74,0.1)" stroke="#E24B4A" stroke-width="1" stroke-dasharray="2,2"/>
+        <text x="82" y="104" fill="#6e7a8a" font-size="8" font-family="system-ui" text-anchor="middle">grafico altitudine</text>
+
+        <!-- Arrow -->
+        <text x="158" y="63" fill="#21293a" font-size="22">→</text>
+
+        <!-- Export formats -->
+        <g transform="translate(175,15)">
+          <!-- NINA -->
+          <rect x="0" y="0" width="75" height="36" rx="5" fill="#161b22" stroke="#21293a" stroke-width="1"/>
+          <text x="37" y="13" fill="#378ADD" font-size="9" font-family="system-ui" text-anchor="middle" font-weight="600">NINA</text>
+          <text x="37" y="27" fill="#6e7a8a" font-size="8" font-family="system-ui" text-anchor="middle">.hrz</text>
+          <!-- Stellarium -->
+          <rect x="82" y="0" width="75" height="36" rx="5" fill="#161b22" stroke="#21293a" stroke-width="1"/>
+          <text x="119" y="13" fill="#5DCAA5" font-size="9" font-family="system-ui" text-anchor="middle" font-weight="600">Stellarium</text>
+          <text x="119" y="27" fill="#6e7a8a" font-size="8" font-family="system-ui" text-anchor="middle">.zip (foto+ini)</text>
+          <!-- CSV -->
+          <rect x="164" y="0" width="75" height="36" rx="5" fill="#161b22" stroke="#21293a" stroke-width="1"/>
+          <text x="201" y="13" fill="#c49a3c" font-size="9" font-family="system-ui" text-anchor="middle" font-weight="600">CSV / JSON</text>
+          <text x="201" y="27" fill="#6e7a8a" font-size="8" font-family="system-ui" text-anchor="middle">uso custom</text>
+
+          <!-- Backup -->
+          <rect x="0" y="44" width="155" height="32" rx="5" fill="#1a1f14" stroke="rgba(196,154,60,0.25)" stroke-width="1"/>
+          <text x="77" y="57" fill="#c49a3c" font-size="9" font-family="system-ui" text-anchor="middle" font-weight="600">Backup .json</text>
+          <text x="77" y="69" fill="#6e7a8a" font-size="8" font-family="system-ui" text-anchor="middle">ripristino se cache svuotata</text>
+
+          <!-- localStorage -->
+          <rect x="164" y="44" width="155" height="32" rx="5" fill="#111827" stroke="rgba(55,138,221,0.2)" stroke-width="1"/>
+          <text x="241" y="57" fill="#378ADD" font-size="9" font-family="system-ui" text-anchor="middle" font-weight="600">Auto-save</text>
+          <text x="241" y="69" fill="#6e7a8a" font-size="8" font-family="system-ui" text-anchor="middle">persiste tra le sessioni</text>
+        </g>
+
+        <!-- Bottom note -->
+        <text x="250" y="115" fill="#3d4852" font-size="8" font-family="system-ui" text-anchor="middle">Nome file = campo "Nome postazione"</text>
+      </svg>
+    </div>
+
+    <div class="tip-box">
+      <svg class="tip-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span data-g="s5_tip">Il profilo viene salvato automaticamente — al prossimo avvio dell'app sarà già applicato al grafico FOV senza dover ricaricare la foto.</span>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <span class="counter" id="counter">1 / 5</span>
+    <div class="nav-btns">
+      <button class="btn btn-prev" id="btnPrev" onclick="nav(-1)" style="display:none" data-g="btn_prev">← Indietro</button>
+      <button class="btn btn-next" id="btnNext" onclick="nav(1)" data-g="btn_next">Avanti →</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+let cur = 1;
+const total = 5;
+
+// ─── Traduzioni ──────────────────────────────────────────────────────────────
+const T = {
+  it: {
+    guide_title: 'Guida · Orizzonte personalizzato',
+    s1_num:'Passo 1 di 5', s1_title:'Cos\'è l\'orizzonte personalizzato?',
+    s1_desc:'Un profilo di orizzonte descrive la quota minima osservabile in ogni direzione azimutale. Serve a NINA per calcolare la visibilità reale dei target e a Stellarium per visualizzare il tuo cielo notturno esattamente come appare dalla tua postazione.',
+    s1_tip:'La linea rossa segue il profilo reale della tua postazione — muri, tetti, colline, alberi. Tutto ciò che è <b style="color:#e8e8f0">sopra la linea è osservabile</b>, sotto è ostruito.',
+    s2_num:'Passo 2 di 5', s2_title:'Prepara la foto panoramica',
+    s2_desc:'Scatta una foto sferica dalla tua postazione di osservazione. Le foto Google Pixel in modalità Photo Sphere, GoPro Max o qualsiasi camera 360° producono il formato ideale.',
+    s2_step1:'Posizionati esattamente nel punto da cui osservi. <b>Altezza dell\'occhio</b> = altezza del telescopio.',
+    s2_step2:'Scatta una <b>foto sferica 360°×180°</b> (formato equirettangolare). In alternativa usa una serie di foto unite con Hugin o PTGui.',
+    s2_step3:'<b>Rimuovi il cielo</b> con un editor (Photoshop, GIMP, remove.bg). Il cielo trasparente permette a Stellarium di mostrare le stelle attraverso di esso.',
+    s2_step4:'Salva in formato <b>PNG</b> per mantenere la trasparenza, oppure JPG se non devi usarla in Stellarium.',
+    s3_num:'Passo 3 di 5', s3_title:'Carica e calibra',
+    s3_desc:'Trascina la foto nel pannello. Per foto sferiche 2:1 il FOV viene impostato automaticamente a 180°. Poi usa i tre parametri principali per calibrare la posizione.',
+    s3_tip:'Posiziona il mouse sui label dei parametri per leggere la spiegazione di ognuno.',
+    s4_num:'Passo 4 di 5', s4_title:'Correggi e rileva',
+    s4_desc:'Premi <span class="tag tag-blue">Rileva orizzonte</span> per il rilevamento automatico. Se la linea non è precisa in qualche zona, clicca direttamente sull\'anteprima per correggerla manualmente con un pennello morbido.',
+    s4_step1:'Clicca <b>Rileva orizzonte</b> — la linea rossa appare sull\'anteprima.',
+    s4_step2:'Se una zona è errata, <b>clicca direttamente sulla foto</b> nel punto corretto — la correzione si propaga con interpolazione fluida.',
+    s4_step3:'Verifica il grafico Az/Alt in basso: Min dovrebbe essere ~0–5°, Max corrisponde all\'ostruzione più alta.',
+    s5_num:'Passo 5 di 5', s5_title:'Applica ed esporta',
+    s5_desc:'Una volta soddisfatto del profilo, applicalo al grafico FOV e salvalo in tutti i formati che ti servono.',
+    s5_tip:'Il profilo viene salvato automaticamente — al prossimo avvio dell\'app sarà già applicato al grafico FOV senza dover ricaricare la foto.',
+    btn_prev:'← Indietro', btn_next:'Avanti →', btn_close:'✓ Chiudi',
+  },
+  en: {
+    guide_title: 'Guide · Custom Horizon',
+    s1_num:'Step 1 of 5', s1_title:'What is a custom horizon?',
+    s1_desc:'A horizon profile describes the minimum observable altitude in each azimuth direction. NINA uses it to calculate the real visibility of targets, and Stellarium uses it to display your night sky exactly as it appears from your location.',
+    s1_tip:'The red line follows the real profile of your site — walls, rooftops, hills, trees. Everything <b style="color:#e8e8f0">above the line is observable</b>; below it is obstructed.',
+    s2_num:'Step 2 of 5', s2_title:'Prepare the panoramic photo',
+    s2_desc:'Take a spherical photo from your observation site. Google Pixel Photo Sphere, GoPro Max, or any 360° camera produces the ideal format.',
+    s2_step1:'Stand exactly at the point where you observe. <b>Eye height</b> = telescope height.',
+    s2_step2:'Take a <b>360°×180° spherical photo</b> (equirectangular format). Alternatively, stitch a series of photos with Hugin or PTGui.',
+    s2_step3:'<b>Remove the sky</b> with an editor (Photoshop, GIMP, remove.bg). A transparent sky lets Stellarium show stars through it.',
+    s2_step4:'Save as <b>PNG</b> to keep transparency, or JPG if you don\'t need it in Stellarium.',
+    s3_num:'Step 3 of 5', s3_title:'Load and calibrate',
+    s3_desc:'Drag the photo into the panel. For 2:1 spherical photos, FOV is automatically set to 180°. Then use the three main parameters to calibrate the position.',
+    s3_tip:'Hover over the parameter labels to read an explanation of each one.',
+    s4_num:'Step 4 of 5', s4_title:'Correct and detect',
+    s4_desc:'Press <span class="tag tag-blue">Detect horizon</span> for automatic detection. If the line is inaccurate in some area, click directly on the preview to correct it manually with a soft brush.',
+    s4_step1:'Click <b>Detect horizon</b> — the red line appears on the preview.',
+    s4_step2:'If an area is wrong, <b>click directly on the photo</b> at the correct point — the correction spreads with smooth interpolation.',
+    s4_step3:'Check the Az/Alt chart below: Min should be ~0–5°, Max corresponds to the highest obstruction.',
+    s5_num:'Step 5 of 5', s5_title:'Apply and export',
+    s5_desc:'Once happy with the profile, apply it to the FOV chart and save it in all the formats you need.',
+    s5_tip:'The profile is saved automatically — on the next app launch it will already be applied to the FOV chart without reloading the photo.',
+    btn_prev:'← Back', btn_next:'Next →', btn_close:'✓ Close',
+  },
+  es: {
+    guide_title: 'Guía · Horizonte personalizado',
+    s1_num:'Paso 1 de 5', s1_title:'¿Qué es el horizonte personalizado?',
+    s1_desc:'Un perfil de horizonte describe la altitud mínima observable en cada dirección azimutal. NINA lo usa para calcular la visibilidad real de los objetivos y Stellarium para mostrar tu cielo nocturno exactamente como aparece desde tu emplazamiento.',
+    s1_tip:'La línea roja sigue el perfil real de tu emplazamiento — muros, tejados, colinas, árboles. Todo lo que está <b style="color:#e8e8f0">por encima de la línea es observable</b>; por debajo está obstruido.',
+    s2_num:'Paso 2 de 5', s2_title:'Prepara la foto panorámica',
+    s2_desc:'Toma una foto esférica desde tu punto de observación. Las fotos Google Pixel en modo Photo Sphere, GoPro Max o cualquier cámara 360° producen el formato ideal.',
+    s2_step1:'Colócate exactamente en el punto desde donde observas. <b>Altura de los ojos</b> = altura del telescopio.',
+    s2_step2:'Toma una <b>foto esférica 360°×180°</b> (formato equirectangular). Alternativamente une una serie de fotos con Hugin o PTGui.',
+    s2_step3:'<b>Elimina el cielo</b> con un editor (Photoshop, GIMP, remove.bg). El cielo transparente permite a Stellarium mostrar las estrellas a través de él.',
+    s2_step4:'Guarda en formato <b>PNG</b> para mantener la transparencia, o JPG si no lo vas a usar en Stellarium.',
+    s3_num:'Paso 3 de 5', s3_title:'Carga y calibra',
+    s3_desc:'Arrastra la foto al panel. Para fotos esféricas 2:1 el FOV se establece automáticamente en 180°. Luego usa los tres parámetros principales para calibrar la posición.',
+    s3_tip:'Pasa el ratón sobre las etiquetas de los parámetros para leer la explicación de cada uno.',
+    s4_num:'Paso 4 de 5', s4_title:'Corrige y detecta',
+    s4_desc:'Pulsa <span class="tag tag-blue">Detectar horizonte</span> para la detección automática. Si la línea no es precisa en alguna zona, haz clic directamente sobre la vista previa para corregirla manualmente con un pincel suave.',
+    s4_step1:'Haz clic en <b>Detectar horizonte</b> — la línea roja aparece en la vista previa.',
+    s4_step2:'Si una zona es incorrecta, <b>haz clic directamente en la foto</b> en el punto correcto — la corrección se propaga con interpolación suave.',
+    s4_step3:'Verifica el gráfico Az/Alt abajo: Min debería ser ~0–5°, Max corresponde a la obstrucción más alta.',
+    s5_num:'Paso 5 de 5', s5_title:'Aplica y exporta',
+    s5_desc:'Una vez satisfecho con el perfil, aplícalo al gráfico FOV y guárdalo en todos los formatos que necesites.',
+    s5_tip:'El perfil se guarda automáticamente — en el próximo inicio de la app ya estará aplicado al gráfico FOV sin necesidad de recargar la foto.',
+    btn_prev:'← Atrás', btn_next:'Siguiente →', btn_close:'✓ Cerrar',
+  },
+  zh: {
+    guide_title: '指南 · 自定义地平线',
+    s1_num:'第 1 步，共 5 步', s1_title:'什么是自定义地平线？',
+    s1_desc:'地平线轮廓描述了每个方位角方向上的最小可观测高度角。NINA 使用它来计算目标的真实可见性，Stellarium 使用它来精确显示您观测站的夜空。',
+    s1_tip:'红线跟随您观测站的真实轮廓 — 墙壁、屋顶、山丘、树木。<b style="color:#e8e8f0">线以上均可观测</b>，线以下被遮挡。',
+    s2_num:'第 2 步，共 5 步', s2_title:'准备全景照片',
+    s2_desc:'从您的观测位置拍摄一张球形照片。Google Pixel Photo Sphere 模式、GoPro Max 或任何 360° 相机均可生成理想格式。',
+    s2_step1:'请站在您实际观测的位置。<b>眼睛高度</b> = 望远镜高度。',
+    s2_step2:'拍摄一张 <b>360°×180° 球形照片</b>（等距矩形格式）。也可以用 Hugin 或 PTGui 拼接一系列照片。',
+    s2_step3:'用编辑器（Photoshop、GIMP、remove.bg）<b>移除天空</b>。透明天空可让 Stellarium 透过它显示星星。',
+    s2_step4:'保存为 <b>PNG</b> 以保持透明度，如果不用于 Stellarium 也可保存为 JPG。',
+    s3_num:'第 3 步，共 5 步', s3_title:'加载并校准',
+    s3_desc:'将照片拖入面板。对于 2:1 球形照片，FOV 会自动设置为 180°。然后使用三个主要参数来校准位置。',
+    s3_tip:'将鼠标悬停在参数标签上，可以阅读每个参数的说明。',
+    s4_num:'第 4 步，共 5 步', s4_title:'修正并检测',
+    s4_desc:'按 <span class="tag tag-blue">检测地平线</span> 进行自动检测。如果某区域线条不准确，直接点击预览图进行手动修正，系统会用软笔刷平滑过渡。',
+    s4_step1:'点击 <b>检测地平线</b> — 红线出现在预览图上。',
+    s4_step2:'如果某区域有误，<b>直接点击照片</b>上的正确位置 — 修正会通过平滑插值传播。',
+    s4_step3:'查看下方 Az/Alt 图表：最小值应约为 0–5°，最大值对应最高遮挡物。',
+    s5_num:'第 5 步，共 5 步', s5_title:'应用并导出',
+    s5_desc:'对轮廓满意后，将其应用到 FOV 图表，并以您需要的所有格式保存。',
+    s5_tip:'轮廓会自动保存 — 下次启动应用时，无需重新加载照片，它已自动应用到 FOV 图表。',
+    btn_prev:'← 返回', btn_next:'下一步 →', btn_close:'✓ 关闭',
+  },
+};
+
+function getLang() {
+  try {
+    // Prova dal parent (se in iframe nell'app)
+    if (window.parent && window.parent !== window) {
+      const pl = window.parent.localStorage.getItem('ad_lang');
+      if (pl) return pl;
+    }
+  } catch(e) {}
+  return localStorage.getItem('ad_lang') || 'it';
+}
+
+function applyLang() {
+  const lang = getLang();
+  const t = T[lang] || T.it;
+  // Applica tutti gli elementi data-g
+  document.querySelectorAll('[data-g]').forEach(el => {
+    const key = el.getAttribute('data-g');
+    if (t[key] !== undefined) el.innerHTML = t[key];
+  });
+}
+
+function nav(dir) {
+  document.getElementById('s'+cur).classList.remove('active');
+  cur = Math.max(1, Math.min(total, cur + dir));
+  document.getElementById('s'+cur).classList.add('active');
+  updateUI();
+}
+
+function updateUI() {
+  const lang = getLang();
+  const t = T[lang] || T.it;
+  document.getElementById('counter').textContent = cur + ' / ' + total;
+  document.getElementById('btnPrev').style.display = cur === 1 ? 'none' : '';
+  document.getElementById('btnPrev').innerHTML = t.btn_prev;
+  const btnNext = document.getElementById('btnNext');
+  if (cur === total) {
+    btnNext.innerHTML = t.btn_close;
+    btnNext.className = 'btn btn-done';
+    btnNext.onclick = () => {
+      if (window.parent && window.parent.hzCloseGuide) {
+        window.parent.hzCloseGuide();
+      } else {
+        document.querySelector('.panel').style.display = 'none';
+      }
+    };
+  } else {
+    btnNext.innerHTML = t.btn_next;
+    btnNext.className = 'btn btn-next';
+    btnNext.onclick = () => nav(1);
+  }
+  const segs = document.querySelectorAll('.prog-seg');
+  segs.forEach((s,i) => {
+    s.className = 'prog-seg';
+    if (i < cur-1) s.classList.add('done');
+    else if (i === cur-1) s.classList.add('active');
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => { applyLang(); updateUI(); });
+</script>
+</body>
+</html>

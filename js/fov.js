@@ -661,10 +661,93 @@
         // ─────────────────────────────────────────────────────────────────────────
 
         function disegnaGraficoAltezza() {
-            if (!targetSelezionato) return; if (chartAltezza) chartAltezza.destroy();
-            let lbl = [], dat = [], d = new Date(), sd = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 18, 0, 0);
-            for (let i = 0; i <= 12; i++) { let fd = new Date(sd.getTime() + i*3600000); lbl.push(fd.getHours() + "h"); dat.push(Math.max(0, calcolaAltAz(targetSelezionato.ra, targetSelezionato.dec, latCorrente, lonCorrente, fd).alt)); }
-            chartAltezza = new Chart(document.getElementById('altitudeChart').getContext('2d'), { type: 'line', data: { labels: lbl, datasets: [{ label: 'Alt (°)', data: dat, borderColor: '#bb86fc', backgroundColor: 'rgba(187, 134, 252, 0.3)', tension: 0.4, fill: true, pointRadius: 2, borderWidth: 2 }] }, options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 90, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#aaa', font: { size: 10 }, stepSize: 30 } }, x: { grid: { display: false }, ticks: { color: '#aaa', font: { size: 10 }, maxRotation: 0 } } }, plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false } }, layout: { padding: 0 } } });
+            if (!targetSelezionato) return;
+            if (chartAltezza) chartAltezza.destroy();
+
+            let lbl = [], dat = [], datHz = [];
+            let d = new Date(), sd = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 18, 0, 0);
+
+            // Costruisce array orizzonte az→alt per lookup rapido (360 slot interi)
+            function hzAtAz(az) {
+                const prof = window.hzProfile;
+                if (!prof || !prof.length) return 0;
+                const az360 = ((az % 360) + 360) % 360;
+                // Trova i due punti più vicini e interpola
+                const sorted = prof;
+                let lo = sorted[sorted.length - 1], hi = sorted[0];
+                for (let i = 0; i < sorted.length; i++) {
+                    if (sorted[i].az <= az360) lo = sorted[i];
+                    if (sorted[i].az >= az360) { hi = sorted[i]; break; }
+                }
+                if (lo.az === hi.az) return lo.alt;
+                const span = ((hi.az - lo.az) + 360) % 360 || 1;
+                const frac = ((az360 - lo.az) + 360) % 360 / span;
+                return lo.alt + (hi.alt - lo.alt) * frac;
+            }
+
+            for (let i = 0; i <= 12; i++) {
+                let fd = new Date(sd.getTime() + i * 3600000);
+                lbl.push(fd.getHours() + 'h');
+                const pos = calcolaAltAz(targetSelezionato.ra, targetSelezionato.dec, latCorrente, lonCorrente, fd);
+                dat.push(Math.max(0, pos.alt));
+                datHz.push(hzAtAz(pos.az));
+            }
+
+            const hasHz = window.hzProfile && window.hzProfile.length > 0;
+
+            const datasets = [
+                {
+                    label: 'Alt (°)',
+                    data: dat,
+                    borderColor: '#bb86fc',
+                    backgroundColor: 'rgba(187,134,252,0.3)',
+                    tension: 0.4,
+                    fill: true,
+                    pointRadius: 2,
+                    borderWidth: 2,
+                    order: 1,
+                },
+            ];
+
+            if (hasHz) {
+                datasets.unshift({
+                    label: 'Orizzonte',
+                    data: datHz,
+                    borderColor: 'rgba(226,75,74,0.7)',
+                    backgroundColor: 'rgba(13,17,23,0.85)',
+                    tension: 0.3,
+                    fill: 'origin',
+                    pointRadius: 0,
+                    borderWidth: 1,
+                    borderDash: [3, 3],
+                    order: 0,
+                });
+            }
+
+            chartAltezza = new Chart(document.getElementById('altitudeChart').getContext('2d'), {
+                type: 'line',
+                data: { labels: lbl, datasets },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true, max: 90,
+                            grid: { color: 'rgba(255,255,255,0.05)' },
+                            ticks: { color: '#aaa', font: { size: 10 }, stepSize: 30 },
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#aaa', font: { size: 10 }, maxRotation: 0 },
+                        },
+                    },
+                    plugins: {
+                        legend: { display: hasHz, labels: { color: '#aaa', font: { size: 10 }, boxWidth: 12 } },
+                        tooltip: { mode: 'index', intersect: false },
+                    },
+                    layout: { padding: 0 },
+                },
+            });
         }
 
 
