@@ -2391,6 +2391,16 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.es.cl_v65_fov_horizon_desc   = "El perfil de horizonte personalizado aparece en el gráfico de altitud del simulador FOV como una zona roja discontinua, exactamente como NINA. El umbral varía con el tiempo siguiendo el azimut del DSO: cuando el objetivo entra en una zona de obstrucción, el gráfico lo muestra claramente.";
         i18n.zh.cl_v65_fov_horizon_desc   = "自定义地平线轮廓以红色虚线区域显示在FOV模拟器的高度图中——与NINA完全一致。阈值随时间随DSO方位角变化：当目标进入遮挡区域时，图表会清晰显示。";
 
+        i18n.it.chart_legend_horizon      = "Orizzonte";
+        i18n.en.chart_legend_horizon      = "Horizon";
+        i18n.es.chart_legend_horizon      = "Horizonte";
+        i18n.zh.chart_legend_horizon      = "地平线";
+
+        i18n.it.chart_legend_dso          = "DSO";
+        i18n.en.chart_legend_dso          = "DSO";
+        i18n.es.chart_legend_dso          = "DSO";
+        i18n.zh.chart_legend_dso          = "深空天体";
+
         i18n.it.cl_v65_stellarium_title   = "Export Stellarium corretto (foto sferica + alfa)";
         i18n.en.cl_v65_stellarium_title   = "Corrected Stellarium export (spherical photo + alpha)";
         i18n.es.cl_v65_stellarium_title   = "Exportación Stellarium corregida (foto esférica + alfa)";

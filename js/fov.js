@@ -697,7 +697,7 @@
 
             const datasets = [
                 {
-                    label: 'Alt (°)',
+                    label: t('chart_legend_dso'),
                     data: dat,
                     borderColor: '#bb86fc',
                     backgroundColor: 'rgba(187,134,252,0.3)',
@@ -711,7 +711,7 @@
 
             if (hasHz) {
                 datasets.unshift({
-                    label: 'Orizzonte',
+                    label: t('chart_legend_horizon'),
                     data: datHz,
                     borderColor: 'rgba(226,75,74,0.7)',
                     backgroundColor: 'rgba(13,17,23,0.85)',

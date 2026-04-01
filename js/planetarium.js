@@ -314,7 +314,7 @@
 
                         // STEP 2 — Ottieni sitelinks + descrizione localizzata da Wikidata
                         let langs = [...new Set([wLang,'en'])];
-                        fetch(`https://www.wikidata.org/w/api.php?action=wbgetentities&ids=${entityId}&props=descriptions|sitelinks&languages=${langs.join('|')}&sitefilter=${langs.map(l=>l+'wiki').join('|')}&format=json&origin=*`)
+                        return fetch(`https://www.wikidata.org/w/api.php?action=wbgetentities&ids=${entityId}&props=descriptions|sitelinks&languages=${langs.join('|')}&sitefilter=${langs.map(l=>l+'wiki').join('|')}&format=json&origin=*`)
                         .then(r=>r.json()).then(we=>{
                             let entity = we.entities && we.entities[entityId];
                             if (!entity) throw new Error('no entity');

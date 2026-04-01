@@ -1161,20 +1161,43 @@ function toggleLock(id) {
                 // eeS include overhead per-frame + dither frazionario
                 let eeS = eS + _lightOvhG + (uD && dF > 0 ? dD / dF : 0);
                 document.getElementById(`${f.id}-exp`).value = eS;
-                let _mainComputedCount = Math.floor((rSMain * w[f.id]) / eeS);
-                // Verifica discreta (stessa formula di calcolaTempi) per evitare sforamenti
+
+                // Se la riga HDR è attiva e non completamente lockata, riserva il suo
+                // costo nel denominatore prima di calcolare le pose light — altrimenti
+                // i frame HDR vengono aggiunti sopra il budget causando sforamento.
+                let _hdrRowGen = document.getElementById(`${f.id}-hdr-row`);
+                let _hdrActive = _hdrRowGen && _hdrRowGen.style.display !== 'none';
+                let _hdrCountLock = _hdrActive ? document.getElementById(`${f.id}-hdr-count-lock`) : null;
+                let _hdrCountIsLocked = _hdrCountLock && _hdrCountLock.classList.contains('locked');
+                let _hdrEeS = 0;
+                if (_hdrActive && !_hdrCountIsLocked) {
+                    // Costo stimato per frame HDR: exp + overhead + quota dither HDR
+                    let _hdrExpVal = parseInt((document.getElementById(`${f.id}-hdr-exp`) || {}).value) || _hdrExpG;
+                    let _hdrDChk   = document.getElementById(`${f.id}-hdr-dither`);
+                    let _hdrDF     = parseInt((document.getElementById(`${f.id}-hdr-dfreq`) || {}).value) || 4;
+                    let _hdrUD     = _hdrDChk && _hdrDChk.checked;
+                    // Peso HDR nel denominatore: 0.3 frame HDR per ogni frame light
+                    _hdrEeS = 0.3 * (_hdrExpVal + _lightOvhG + (_hdrUD && _hdrDF > 0 ? dD / _hdrDF : 0));
+                }
+
+                let _mainComputedCount = Math.floor((rSMain * w[f.id]) / (eeS + _hdrEeS));
+                // Verifica discreta (stessa formula di calcolaTempi) per evitare sforamenti residui
                 {
                     let _budget = rSMain * w[f.id];
-                    let _ditherSec = uD && dF > 0 ? Math.floor(_mainComputedCount / dF) * dD : 0;
-                    let _actualTime = _mainComputedCount * (eS + _lightOvhG) + _ditherSec;
+                    let _hdrC = _hdrActive && !_hdrCountIsLocked ? Math.max(5, Math.ceil(_mainComputedCount * 0.3)) : 0;
+                    let _hdrExpVal = _hdrActive ? parseInt((document.getElementById(`${f.id}-hdr-exp`) || {}).value) || _hdrExpG : 0;
+                    let _hdrDChk   = _hdrActive ? document.getElementById(`${f.id}-hdr-dither`) : null;
+                    let _hdrDF     = parseInt((document.getElementById(`${f.id}-hdr-dfreq`) || {}).value) || 4;
+                    let _ditherSec   = uD && dF > 0 ? Math.floor(_mainComputedCount / dF) * dD : 0;
+                    let _ditherHdrSec = _hdrActive && _hdrDChk && _hdrDChk.checked && _hdrDF > 0 ? Math.floor(_hdrC / _hdrDF) * dD : 0;
+                    let _actualTime = _mainComputedCount * (eS + _lightOvhG) + _ditherSec
+                                    + _hdrC * (_hdrExpVal + _lightOvhG) + _ditherHdrSec;
                     if (_actualTime > _budget) _mainComputedCount = Math.max(0, _mainComputedCount - 1);
                 }
                 document.getElementById(`${f.id}-count`).value = _mainComputedCount;
                 // Suggerisci count HDR (30% del count principale, min 5) — rispetta il lucchetto
-                let _hdrRowGen = document.getElementById(`${f.id}-hdr-row`);
-                if (_hdrRowGen && _hdrRowGen.style.display !== 'none') {
-                    let _hdrCountLock = document.getElementById(`${f.id}-hdr-count-lock`);
-                    if (!_hdrCountLock || !_hdrCountLock.classList.contains('locked')) {
+                if (_hdrActive) {
+                    if (!_hdrCountIsLocked) {
                         document.getElementById(`${f.id}-hdr-count`).value = Math.max(5, Math.ceil(_mainComputedCount * 0.3));
                     }
                 }
