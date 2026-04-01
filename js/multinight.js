@@ -813,7 +813,7 @@ function aggiungiNotte() {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('sw.js').then(() => {
                     // SW registrato
-                }).catch(err => console.error('Errore App:', err));
+                }).catch(err => { if (DEBUG) console.error('Errore App:', err); });
 
                 // Ascolta messaggio SW_UPDATED → mostra banner
                 navigator.serviceWorker.addEventListener('message', event => {

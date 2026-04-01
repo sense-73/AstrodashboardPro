@@ -229,7 +229,7 @@
                             mfEl.style.color = '#ffaa00'; mfEl.title = t('meridian_flip_ok');
                         }
                     }
-                } catch(e) { console.warn('[MF]', e); mfEl.innerText = '--:--'; }
+                } catch(e) { if (DEBUG) console.warn('[MF]', e); mfEl.innerText = '--:--'; }
             })();
             // ─────────────────────────────────────────────────────────────────────
             

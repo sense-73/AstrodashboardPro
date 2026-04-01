@@ -1,6 +1,11 @@
 // globals.js — Variabili globali di stato condivise tra tutti i moduli
 // ============================================================
 
+// ── Flag di debug ─────────────────────────────────────────────
+// false = nessun messaggio in console (produzione)
+// true  = tutti i console.log/warn/error visibili (sviluppo)
+const DEBUG = false;
+
 // ── Stato applicazione ────────────────────────────────────────
 let _savedLat = parseFloat(localStorage.getItem('ad_lat')), _savedLon = parseFloat(localStorage.getItem('ad_lon'));
 let latCorrente = (!isNaN(_savedLat) ? _savedLat : 46.062), lonCorrente = (!isNaN(_savedLon) ? _savedLon : 13.235);

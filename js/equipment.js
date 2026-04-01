@@ -135,11 +135,25 @@
         ];
 
 
+        // ── Helper: legge e deserializza JSON dal localStorage in modo sicuro ──
+        // Se il valore è assente o corrotto (JSON non valido), rimuove la chiave
+        // e restituisce il fallback — l'app continua senza bloccarsi.
+        function _lsGetJSON(key, fallback) {
+            try {
+                const raw = localStorage.getItem(key);
+                if (raw === null) return fallback;
+                return JSON.parse(raw) ?? fallback;
+            } catch(e) {
+                localStorage.removeItem(key);
+                return fallback;
+            }
+        }
+
         function popolaMenuAttrezzatura() {
             const selTel = document.getElementById('preset-telescope'); 
             selTel.innerHTML = '<option value="" data-i18n="select_opt">-- Seleziona --</option>';
             
-            let customTels = JSON.parse(localStorage.getItem('ad_custom_telescopes')) || [];
+            let customTels = _lsGetJSON('ad_custom_telescopes', []);
             
             let allTels = [...customTels, ...dbTelescopiBase];
             allTels.forEach(t => { 
@@ -152,7 +166,7 @@
             const selCam = document.getElementById('preset-sensor'); 
             selCam.innerHTML = '<option value="" data-i18n="select_opt">-- Seleziona --</option>';
             // Sensori custom salvati
-            let customCams = JSON.parse(localStorage.getItem('ad_custom_cameras')) || [];
+            let customCams = _lsGetJSON('ad_custom_cameras', []);
             if (customCams.length) {
                 let grpCustom = document.createElement('optgroup');
                 grpCustom.label = '⭐ ' + (lang==='it'?'I miei sensori':lang==='en'?'My sensors':lang==='es'?'Mis sensores':'我的传感器');
@@ -239,7 +253,7 @@
             document.getElementById('save-telescope-name').style.borderColor = '#555';
             document.getElementById('save-telescope-modal').style.display = 'none';
 
-            let customTels = JSON.parse(localStorage.getItem('ad_custom_telescopes')) || [];
+            let customTels = _lsGetJSON('ad_custom_telescopes', []);
             customTels.push({ nome: nome, focale: parseInt(f), diametro: parseInt(d) });
             localStorage.setItem('ad_custom_telescopes', JSON.stringify(customTels));
 
@@ -248,7 +262,7 @@
         }
 
         function apriEliminaTelescopio() {
-            let customTels = JSON.parse(localStorage.getItem('ad_custom_telescopes')) || [];
+            let customTels = _lsGetJSON('ad_custom_telescopes', []);
             let list  = document.getElementById('delete-telescope-list');
             let empty = document.getElementById('delete-telescope-empty');
             list.innerHTML = '';
@@ -277,7 +291,7 @@
         }
 
         function eliminaTelescopioCustom(idx) {
-            let customTels = JSON.parse(localStorage.getItem('ad_custom_telescopes')) || [];
+            let customTels = _lsGetJSON('ad_custom_telescopes', []);
             customTels.splice(idx, 1);
             localStorage.setItem('ad_custom_telescopes', JSON.stringify(customTels));
             popolaMenuAttrezzatura();
@@ -317,7 +331,7 @@
             }
             document.getElementById('save-camera-name').style.borderColor = '#555';
             document.getElementById('save-camera-modal').style.display = 'none';
-            let customCams = JSON.parse(localStorage.getItem('ad_custom_cameras')) || [];
+            let customCams = _lsGetJSON('ad_custom_cameras', []);
             customCams.push({ nome, w: parseFloat(w), h: parseFloat(h), p: parseFloat(p) });
             localStorage.setItem('ad_custom_cameras', JSON.stringify(customCams));
             popolaMenuAttrezzatura();
@@ -326,7 +340,7 @@
         }
 
         function apriEliminaCamera() {
-            let customCams = JSON.parse(localStorage.getItem('ad_custom_cameras')) || [];
+            let customCams = _lsGetJSON('ad_custom_cameras', []);
             let list  = document.getElementById('delete-camera-list');
             let empty = document.getElementById('delete-camera-empty');
             list.innerHTML = '';
@@ -351,7 +365,7 @@
         }
 
         function eliminaCameraCustom(idx) {
-            let customCams = JSON.parse(localStorage.getItem('ad_custom_cameras')) || [];
+            let customCams = _lsGetJSON('ad_custom_cameras', []);
             customCams.splice(idx, 1);
             localStorage.setItem('ad_custom_cameras', JSON.stringify(customCams));
             popolaMenuAttrezzatura();

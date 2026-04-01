@@ -551,12 +551,12 @@
             const { tx, ty, px, py } = _pixelInTile(lat, lon, zoom, tileSize);
             const url = `https://djlorenz.github.io/astronomy/image_tiles/tiles2024/tile_${zoom}_${tx}_${ty}.png`;
 
-            console.log('[Bortle] Carico tile:', url, 'pixel:', px, py);
+            if (DEBUG) console.log('[Bortle] Carico tile:', url, 'pixel:', px, py);
 
             const img = new Image();
             img.crossOrigin = 'anonymous';
             img.onload = function() {
-                console.log('[Bortle] Tile caricato, dimensioni:', img.width, img.height);
+                if (DEBUG) console.log('[Bortle] Tile caricato, dimensioni:', img.width, img.height);
                 try {
                     const canvas = document.createElement('canvas');
                     canvas.width = tileSize;
@@ -565,19 +565,19 @@
                     ctx.drawImage(img, 0, 0, tileSize, tileSize);
                     const pixel = ctx.getImageData(px, py, 1, 1).data;
                     const r = pixel[0], g = pixel[1], b = pixel[2], a = pixel[3];
-                    console.log('[Bortle] Pixel rgba:', r, g, b, a);
-                    if (a < 10) { console.warn('[Bortle] Pixel trasparente, skip'); return; }
+                    if (DEBUG) console.log('[Bortle] Pixel rgba:', r, g, b, a);
+                    if (a < 10) { if (DEBUG) console.warn('[Bortle] Pixel trasparente, skip'); return; }
                     const bortle = _rgbToBortle(r, g, b);
-                    console.log('[Bortle] Bortle rilevato:', bortle);
+                    if (DEBUG) console.log('[Bortle] Bortle rilevato:', bortle);
                     if (typeof setBortleAutorilevato === 'function') {
                         setBortleAutorilevato(bortle);
                     }
                 } catch(e) {
-                    console.warn('[Bortle] Canvas sampling fallito:', e.message);
+                    if (DEBUG) console.warn('[Bortle] Canvas sampling fallito:', e.message);
                 }
             };
             img.onerror = function() {
-                console.error('[Bortle] Tile non disponibile:', url);
+                if (DEBUG) console.error('[Bortle] Tile non disponibile:', url);
             };
             img.src = url;
         }

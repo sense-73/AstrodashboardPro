@@ -407,7 +407,7 @@
       localStorage.setItem(LS_KEY, JSON.stringify(data));
       const badge = document.getElementById('hz-saved-badge');
       if (badge) { badge.style.display = ''; setTimeout(() => { badge.style.display = 'none'; }, 3000); }
-    } catch(e) { console.warn('HorizonDetector: localStorage non disponibile', e); }
+    } catch(e) { if (DEBUG) console.warn('HorizonDetector: localStorage non disponibile', e); }
   }
 
   function loadFromLocalStorage() {
@@ -1001,7 +1001,7 @@
   // Ripristino automatico da localStorage all'avvio
   document.addEventListener('DOMContentLoaded', () => {
     if (loadFromLocalStorage()) {
-      console.log('AstroDashboard: orizzonte ripristinato da localStorage');
+      if (DEBUG) console.log('AstroDashboard: orizzonte ripristinato da localStorage');
     }
   });
 

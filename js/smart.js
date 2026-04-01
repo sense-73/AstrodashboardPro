@@ -995,21 +995,29 @@ function toggleLock(id) {
                 else cS += cnt * (exp + (cnt > 0 ? _lightOvhG : 0));
             });
             let rS = aS - cS; if (rS <= 0) { mostraAvviso(t("alert_calib"), "warn"); return; }
-            // Sottrai il tempo HDR lockato dal budget disponibile per i frame principali
+            // Sottrai il tempo HDR lockato dal budget disponibile per i frame principali.
+            // Si entra in questo percorso SOLO se il conteggio HDR è lockato — l'utente
+            // ha fissato quante pose HDR vuole, e il generatore deve rispettarlo.
+            // Se solo l'esposizione è lockata (non il conteggio), il peso HDR viene
+            // già gestito da _hdrEeS nel ciclo successivo, usando il valore lockato.
             let hdrLockedSec = 0;
             fL.forEach(f => {
                 if (f.id.includes('dark') || f.id.includes('bias')) return;
                 let _hdrRowRs = document.getElementById(`${f.id}-hdr-row`);
                 if (!_hdrRowRs || _hdrRowRs.style.display === 'none') return;
                 let _hdrCLock = document.getElementById(`${f.id}-hdr-count-lock`);
-                let _hdrELock = document.getElementById(`${f.id}-hdr-exp-lock`);
                 let _hdrCLocked = _hdrCLock && _hdrCLock.classList.contains('locked');
-                let _hdrELocked = _hdrELock && _hdrELock.classList.contains('locked');
-                // Sottrai solo se almeno un valore è lockato (l'utente ha dati personalizzati)
-                if (_hdrCLocked || _hdrELocked) {
+                // Solo il lock sul CONTEGGIO attiva la sottrazione dal budget
+                if (_hdrCLocked) {
                     let _hdrC = parseInt((document.getElementById(`${f.id}-hdr-count`)||{}).value)||0;
                     let _hdrE = parseInt((document.getElementById(`${f.id}-hdr-exp`)||{}).value)||0;
                     hdrLockedSec += _hdrC * (_hdrE + _lightOvhG);
+                    // Includi anche il dither HDR nel budget sottratto
+                    let _hdrDChk  = document.getElementById(`${f.id}-hdr-dither`);
+                    let _hdrDFreq = parseInt((document.getElementById(`${f.id}-hdr-dfreq`)||{}).value)||4;
+                    if (_hdrDChk && _hdrDChk.checked && _hdrDFreq > 0) {
+                        hdrLockedSec += Math.floor(_hdrC / _hdrDFreq) * dD;
+                    }
                 }
             });
             let rSMain = Math.max(0, rS - hdrLockedSec);
