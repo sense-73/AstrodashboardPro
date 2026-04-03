@@ -361,26 +361,71 @@
     setText('hz-stat-avg', s.mean.toFixed(1) + '°');
   }
 
-  // ─── Correzione manuale (click su anteprima) ──────────────────────────────
+  // ─── Correzione manuale (drag continuo su anteprima) ─────────────────────
   function attachClickHandler() {
     const cv = document.getElementById('hz-preview');
     if (!cv) return;
-    cv.onclick = function (e) {
-      if (!HZ.rowMap) return;
-      const rect = cv.getBoundingClientRect();
-      const mx = (e.clientX - rect.left) * (cv.width / rect.width);
-      const my = (e.clientY - rect.top) * (cv.height / rect.height);
-      const ox = Math.round(mx / (cv.width / HZ.srcW));
-      const oy = my / (cv.height / HZ.srcH);
+
+    let isDrawing = false;
+    let lastOx = null, lastOy = null;
+    let rafPending = false;
+
+    function applyPoint(ox, oy) {
       const r = 30;
       for (let dx = -r; dx <= r; dx++) {
         const xi = Math.min(Math.max(ox + dx, 0), HZ.srcW - 1);
         const w = Math.cos((dx / r) * (Math.PI / 2));
         HZ.rowMap[xi] = HZ.rowMap[xi] * (1 - w) + oy * w;
       }
-      HZ.profile = buildProfile(HZ.rowMap, HZ.srcW, HZ.srcH, HZ.opts);
-      renderPreview(); renderChart(); updateStats();
-    };
+    }
+
+    function getImageCoords(e) {
+      const rect = cv.getBoundingClientRect();
+      const mx = (e.clientX - rect.left) * (cv.width / rect.width);
+      const my = (e.clientY - rect.top) * (cv.height / rect.height);
+      return {
+        ox: Math.round(mx / (cv.width / HZ.srcW)),
+        oy: my / (cv.height / HZ.srcH)
+      };
+    }
+
+    function scheduleRender() {
+      if (rafPending) return;
+      rafPending = true;
+      requestAnimationFrame(() => {
+        HZ.profile = buildProfile(HZ.rowMap, HZ.srcW, HZ.srcH, HZ.opts);
+        renderPreview(); renderChart(); updateStats();
+        rafPending = false;
+      });
+    }
+
+    cv.addEventListener('mousedown', function (e) {
+      if (!HZ.rowMap) return;
+      isDrawing = true;
+      const { ox, oy } = getImageCoords(e);
+      lastOx = ox; lastOy = oy;
+      applyPoint(ox, oy);
+      scheduleRender();
+    });
+
+    cv.addEventListener('mousemove', function (e) {
+      if (!isDrawing || !HZ.rowMap) return;
+      const { ox, oy } = getImageCoords(e);
+      // Interpola tra l'ultimo punto e quello corrente per evitare buchi
+      const steps = Math.max(1, Math.abs(ox - lastOx));
+      for (let i = 1; i <= steps; i++) {
+        const t = i / steps;
+        const ix = Math.round(lastOx + (ox - lastOx) * t);
+        const iy = lastOy + (oy - lastOy) * t;
+        applyPoint(ix, iy);
+      }
+      lastOx = ox; lastOy = oy;
+      scheduleRender();
+    });
+
+    function stopDrawing() { isDrawing = false; lastOx = null; lastOy = null; }
+    cv.addEventListener('mouseup', stopDrawing);
+    cv.addEventListener('mouseleave', stopDrawing);
   }
 
   // ─── Legge il nome file dal campo "nome postazione" ──────────────────────
