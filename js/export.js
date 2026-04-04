@@ -225,6 +225,32 @@
                     type: imageType,
                     doDither, ditherFreq
                 });
+
+                // ── Riga HDR companion: aggiunta come blocco LIGHT separato ──
+                if (isLight) {
+                    let _hdrRow = document.getElementById(`${f.id}-hdr-row`);
+                    if (_hdrRow && _hdrRow.style.display !== 'none') {
+                        let _hdrC = parseInt((document.getElementById(`${f.id}-hdr-count`) || {}).value) || 0;
+                        let _hdrE = parseInt((document.getElementById(`${f.id}-hdr-exp`)   || {}).value) || 0;
+                        if (_hdrC > 0 && _hdrE > 0) {
+                            let _hdrBin    = parseInt((document.getElementById(`${f.id}-hdr-bin`)    || {}).value) || binVal;
+                            let _hdrGainV  = parseInt((document.getElementById(`${f.id}-hdr-gain`)   || {}).value);
+                            let _hdrOffV   = parseInt((document.getElementById(`${f.id}-hdr-offset`) || {}).value);
+                            let _hdrDChk   = document.getElementById(`${f.id}-hdr-dither`);
+                            let _hdrDFreqE = document.getElementById(`${f.id}-hdr-dfreq`);
+                            let _hdrDither = _hdrDChk ? _hdrDChk.checked : false;
+                            let _hdrDFreq  = parseInt(_hdrDFreqE ? _hdrDFreqE.value : 4) || 4;
+                            esposizioni.push({
+                                count: _hdrC, exp: _hdrE, bin: _hdrBin,
+                                gain:   isNaN(_hdrGainV) ? -1 : _hdrGainV,
+                                offset: isNaN(_hdrOffV)  ? -1 : _hdrOffV,
+                                filter: filterName || null,
+                                type: 'LIGHT',
+                                doDither: _hdrDither, ditherFreq: _hdrDFreq
+                            });
+                        }
+                    }
+                }
             });
 
             if (esposizioni.length === 0) { mostraAvviso(t("alert_no_frames"), "warn"); return; }
