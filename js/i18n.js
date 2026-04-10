@@ -1566,10 +1566,10 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         // ⚠️ AGGIORNARE VERSIONE QUI quando si rilascia una nuova versione:
         // cl_close_btn = testo del pulsante nel modal changelog (NON è hardcoded in index.html)
         // Aggiornare anche: title tag, badge navbar (>vX.X</button>), landing (>vX.X</span>), modal badge, pulsante "Inizia a usare" in index.html
-        i18n.it.cl_close_btn = "Inizia a usare v6.5 🚀";
-        i18n.en.cl_close_btn = "Start using v6.5 🚀";
-        i18n.es.cl_close_btn = "Empezar a usar v6.5 🚀";
-        i18n.zh.cl_close_btn = "开始使用 v6.5 🚀";
+        i18n.it.cl_close_btn = "Inizia a usare v6.6 🚀";
+        i18n.en.cl_close_btn = "Start using v6.6 🚀";
+        i18n.es.cl_close_btn = "Empezar a usar v6.6 🚀";
+        i18n.zh.cl_close_btn = "开始使用 v6.6 🚀";
 
         i18n.it.cl1_title           = "Database telescopi e sensori ampliato";
         i18n.en.cl1_title           = "Expanded telescope and sensor database";
