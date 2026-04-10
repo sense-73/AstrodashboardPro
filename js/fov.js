@@ -235,12 +235,15 @@
             
             let nS = atStart.night || atStart.sunset; let nE = atEnd.nightEnd || atEnd.sunrise;
             let cur = new Date(nS.getTime()); let maxA = -90; let firstAbove30 = null; let lastAbove30 = null;
+            const _hasHz = window.hzProfile && window.hzProfile.length > 0;
 
-            // Scansione nottata a 10 min: prima e ultima volta sopra i 30°
+            // Scansione nottata a 10 min: prima e ultima volta sopra i 30° (e sopra l'orizzonte personalizzato)
             while(cur <= nE) {
-                let a = calcolaAltAz(targetSelezionato.ra, targetSelezionato.dec, latCorrente, lonCorrente, cur).alt;
+                let pos = calcolaAltAz(targetSelezionato.ra, targetSelezionato.dec, latCorrente, lonCorrente, cur);
+                let a = pos.alt;
                 if(a > maxA) maxA = a;
-                if(a >= 30) {
+                let hzLimit = _hasHz ? hzAtAzGlobal(pos.az) : 0;
+                if(a >= 30 && a > hzLimit) {
                     if(!firstAbove30) firstAbove30 = new Date(cur);
                     lastAbove30 = new Date(cur);
                 }
@@ -662,37 +665,38 @@
         }
         // ─────────────────────────────────────────────────────────────────────────
 
-        function disegnaGraficoAltezza() {
+        // ── Lookup orizzonte personalizzato (globale) ────────────────────────────
+        function hzAtAzGlobal(az) {
+            const prof = window.hzProfile;
+            if (!prof || !prof.length) return 0;
+            const az360 = ((az % 360) + 360) % 360;
+            const sorted = prof;
+            let lo = sorted[sorted.length - 1], hi = sorted[0];
+            for (let i = 0; i < sorted.length; i++) {
+                if (sorted[i].az <= az360) lo = sorted[i];
+                if (sorted[i].az >= az360) { hi = sorted[i]; break; }
+            }
+            if (lo.az === hi.az) return lo.alt;
+            const span = ((hi.az - lo.az) + 360) % 360 || 1;
+            const frac = ((az360 - lo.az) + 360) % 360 / span;
+            return lo.alt + (hi.alt - lo.alt) * frac;
+        }
+
+                function disegnaGraficoAltezza() {
             if (!targetSelezionato) return;
             if (chartAltezza) chartAltezza.destroy();
 
             let lbl = [], dat = [], datHz = [];
             let d = getSessionDate(), sd = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 18, 0, 0);
 
-            // Costruisce array orizzonte az→alt per lookup rapido (360 slot interi)
-            function hzAtAz(az) {
-                const prof = window.hzProfile;
-                if (!prof || !prof.length) return 0;
-                const az360 = ((az % 360) + 360) % 360;
-                // Trova i due punti più vicini e interpola
-                const sorted = prof;
-                let lo = sorted[sorted.length - 1], hi = sorted[0];
-                for (let i = 0; i < sorted.length; i++) {
-                    if (sorted[i].az <= az360) lo = sorted[i];
-                    if (sorted[i].az >= az360) { hi = sorted[i]; break; }
-                }
-                if (lo.az === hi.az) return lo.alt;
-                const span = ((hi.az - lo.az) + 360) % 360 || 1;
-                const frac = ((az360 - lo.az) + 360) % 360 / span;
-                return lo.alt + (hi.alt - lo.alt) * frac;
-            }
+            // Usa la funzione globale hzAtAzGlobal per la lookup orizzonte
 
             for (let i = 0; i <= 12; i++) {
                 let fd = new Date(sd.getTime() + i * 3600000);
                 lbl.push(fd.getHours() + 'h');
                 const pos = calcolaAltAz(targetSelezionato.ra, targetSelezionato.dec, latCorrente, lonCorrente, fd);
                 dat.push(Math.max(0, pos.alt));
-                datHz.push(hzAtAz(pos.az));
+                datHz.push(hzAtAzGlobal(pos.az));
             }
 
             const hasHz = window.hzProfile && window.hzProfile.length > 0;
@@ -797,10 +801,13 @@
             let nE = atEnd.nightEnd || atEnd.sunrise;
             let cur = new Date(nS.getTime()); let maxA = -90;
             let firstAbove30 = null, lastAbove30 = null;
+            const _hasHz2 = window.hzProfile && window.hzProfile.length > 0;
             while (cur <= nE) {
-                let a = calcolaAltAz(targetSelezionato.ra, targetSelezionato.dec, latCorrente, lonCorrente, cur).alt;
+                let pos = calcolaAltAz(targetSelezionato.ra, targetSelezionato.dec, latCorrente, lonCorrente, cur);
+                let a = pos.alt;
                 if (a > maxA) maxA = a;
-                if (a >= 30) { if (!firstAbove30) firstAbove30 = new Date(cur); lastAbove30 = new Date(cur); }
+                let hzLimit2 = _hasHz2 ? hzAtAzGlobal(pos.az) : 0;
+                if (a >= 30 && a > hzLimit2) { if (!firstAbove30) firstAbove30 = new Date(cur); lastAbove30 = new Date(cur); }
                 cur.setMinutes(cur.getMinutes() + 10);
             }
 
