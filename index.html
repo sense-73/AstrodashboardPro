@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AstroDashboard v6.5 - Global Edition</title>
+    <title>AstroDashboard v6.6 - Global Edition</title>
     
     <link rel="manifest" href="manifest.json?v=3">
     <meta name="theme-color" content="#121212">
@@ -478,7 +478,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 19a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6l0 13" /><path d="M12 6l0 13" /><path d="M21 6l0 13" /></svg>
                     <span class="nav-manual-text" data-i18n="manual_btn" style="letter-spacing:.3px;">Guida</span>
                 </button>
-                <button onclick="mostraChangelogManuale()" title="Versione & novità" class="nav-version-btn" style="background:rgba(196,154,60,0.08); border:1px solid rgba(196,154,60,0.3); border-radius:5px; padding:3px 8px; color:#c49a3c; font-size:10px; font-weight:700; cursor:pointer; flex-shrink:0; letter-spacing:.5px;">v6.5</button>
+                <button onclick="mostraChangelogManuale()" title="Versione & novità" class="nav-version-btn" style="background:rgba(196,154,60,0.08); border:1px solid rgba(196,154,60,0.3); border-radius:5px; padding:3px 8px; color:#c49a3c; font-size:10px; font-weight:700; cursor:pointer; flex-shrink:0; letter-spacing:.5px;">v6.6</button>
             </div>
         </div>
 
@@ -634,7 +634,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c1.379 3.53-.923 7.947-6.712 7.947H11.23l-1.332 8.453h3.288c.524 0 .968-.382 1.05-.9l.87-5.505h2.163c4.298 0 7.066-2.076 7.953-6.36.41-1.99.073-3.466-.8-4.094z"/></svg>
                     Supporta il progetto
                 </a>
-                <span style="font-size:14px; color:#3d4852;">v6.5</span>
+                <span style="font-size:14px; color:#3d4852;">v6.6</span>
             </div>
         </div>
 
@@ -766,6 +766,19 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
         <div class="container dso-container" style="flex-direction: column;">
             <h3><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-telescope"/></svg> <span data-i18n="hybrid_planetarium">Planetario Predittivo Ibrido</span> <span class="info-icon" onmouseenter="mostraTooltip(this, 'info_planetarium')" onmouseleave="nascondiTooltip()">ℹ️</span></h3>
             
+            <!-- ── Selezione data sessione (Planetario) ── -->
+            <div style="display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap; margin-bottom:10px; padding:7px 12px; background:rgba(255,255,255,0.04); border:1px solid #21293a; border-radius:8px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c49a3c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                <label style="color:#c9d1d9; font-size:0.88em; white-space:nowrap;" data-i18n="session_date">Data sessione:</label>
+                <input type="date" id="session-date-picker" style="background:#c8cfd6; color:#1a2533; border:1.5px solid #9aaab8; border-radius:7px; padding:6px 12px; font-size:1.6em; font-weight:600; cursor:pointer; width:auto;" onchange="onSessionDateChange(this.value)">
+                <button onclick="resetSessionDateToday()" style="background:transparent; border:1px solid #2a3347; border-radius:6px; color:#8899aa; font-size:0.82em; padding:4px 12px; cursor:pointer;" data-i18n="today_btn">Oggi</button>
+            </div>
+            <!-- ── Warning meteo date future ── -->
+            <div id="future-date-meteo-warn" style="display:none; align-items:flex-start; gap:8px; margin-bottom:10px; padding:7px 12px; background:rgba(196,154,60,0.07); border:1px solid rgba(196,154,60,0.25); border-radius:8px; font-size:0.82em; color:#c49a3c;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><path d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+                <span data-i18n="future_date_meteo_warn">Dati meteo non disponibili per date future. Calcoli astronomici (luna, finestra sessione, altitudine DSO) aggiornati per la data selezionata.</span>
+            </div>
+
             <div class="timeline-container" style="margin-top: 10px; margin-bottom: 20px; padding: 10px; background-color: #222;">
                 <div id="astro-time-display" class="time-display" style="color: #44ff44;">Caricamento Timeline Astro...</div>
                 <div class="range-wrapper">
@@ -1008,6 +1021,16 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
             <div class="twilight-item"><span class="icon"><svg width="32" height="32" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-sunrise"/></svg></span><span class="label" data-i18n="sunrise">Alba</span><b id="info-sunrise">--:--</b></div>
         </div>
         
+        <!-- ── Data sessione nella sezione Smart (sincronizzata con Planetario) ── -->
+        <div style="display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap; margin-bottom:10px; padding:7px 12px; background:rgba(255,255,255,0.04); border:1px solid #21293a; border-radius:8px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c49a3c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <label style="color:#c9d1d9; font-size:0.88em; white-space:nowrap;" data-i18n="session_date">Data sessione:</label>
+            <input type="date" id="session-date-picker-smart" style="background:#c8cfd6; color:#1a2533; border:1.5px solid #9aaab8; border-radius:7px; padding:6px 12px; font-size:1.6em; font-weight:600; cursor:pointer; width:auto;" onchange="onSessionDateChange(this.value)">
+            <button onclick="resetSessionDateToday()" style="background:transparent; border:1px solid #2a3347; border-radius:6px; color:#8899aa; font-size:0.82em; padding:4px 12px; cursor:pointer;" data-i18n="today_btn">Oggi</button>
+        </div>
+        <!-- ── Label data centrata sopra inizio/fine sessione ── -->
+        <div id="session-date-centered-label" style="text-align:center; font-size:0.88em; font-weight:600; color:#c49a3c; margin-bottom:8px; letter-spacing:0.2px;"></div>
+
         <div class="panel" style="margin-bottom: 20px; text-align: center; display: flex; justify-content: space-around; flex-wrap: wrap;">
             <div class="input-group" style="margin: 0;"><label style="width: auto; margin-right: 10px; color:#c9d1d9;" data-i18n="session_start">Inizio Sessione:</label><input type="time" id="time-start" onchange="calcolaTempi()"></div>
             <div class="input-group" style="margin: 0; flex-direction:column; align-items:flex-start; gap:4px;">
@@ -2539,7 +2562,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                 <div style="color:#c49a3c;"><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-rocket"/></svg></div>
                 <div>
                     <div style="font-size:0.75em; color:#c49a3c; text-transform:uppercase; letter-spacing:1px; font-weight:700;" data-i18n="cl_update_label">Aggiornamento</div>
-                    <div style="font-size:1.25em; font-weight:800; color:#c9d1d9; letter-spacing:.5px;">AstroDashboard PRO <span style="color:#c49a3c;">v6.5</span></div>
+                    <div style="font-size:1.25em; font-weight:800; color:#c9d1d9; letter-spacing:.5px;">AstroDashboard PRO <span style="color:#c49a3c;">v6.6</span></div>
                 </div>
                 <button onclick="chiudiChangelog()" style="
                     margin-left:auto; background:transparent; border:none;
@@ -2554,6 +2577,23 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
 
             <!-- Changelog items -->
             <div style="display:flex; flex-direction:column; gap:10px;">
+
+                <!-- ── v6.6 ── -->
+                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #c49a3c; box-shadow:0 0 0 1px rgba(196,154,60,0.2);">
+                    <span style="flex-shrink:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c49a3c" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>
+                    <div>
+                        <div style="font-weight:700; color:#c49a3c; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v66_date_title">Pianificazione su data futura</div>
+                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v66_date_desc">Nuovo selettore data sessione nel Planetario Predittivo e nella sezione Smart/PRO. Permette di pianificare sessioni future: finestra notte astronomica, altitudine DSO, fase lunare e orari di sessione vengono ricalcolati per la data scelta. Lo slider astro resta attivo e mostra i DSO visibili ora per ora nella notte futura. Warning automatico quando il meteo non è disponibile. Pulsante "Oggi" per tornare alla data corrente. Campo data con sfondo azzurro per date future.</div>
+                    </div>
+                </div>
+
+                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #5DCAA5; box-shadow:0 0 0 1px rgba(93,202,165,0.15);">
+                    <span style="flex-shrink:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#5DCAA5" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M3 12h1m16 0h1M12 3v1m0 16v1m-6.4-3.6.7-.7m11.4.7-.7-.7M5.6 6.4l.7.7m11.4-.7-.7.7"/></svg></span>
+                    <div>
+                        <div style="font-weight:700; color:#5DCAA5; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v66_sensor_title">Algoritmo correttivo sensore mono/colore</div>
+                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v66_sensor_desc">La stima delle ore di integrazione ora tiene conto del tipo di sensore. Sensore mono con LRGB: −25% rispetto a OSC (efficienza piena su tutti i canali). Mono solo RGB: −15%. OSC con filtro dual/quad-band: +15% (perdita Bayer parzialmente compensata dal filtro). Correzione QE aggiuntiva basata sulla lookup table del sensore selezionato (riferimento QE 0.80). Il fattore correttivo applicato è mostrato nel pannello stima con la motivazione in 4 lingue.</div>
+                    </div>
+                </div>
 
                 <!-- ── v6.5 ── -->
                 <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #378ADD; box-shadow:0 0 0 1px rgba(55,138,221,0.15);">
@@ -3164,6 +3204,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
 
         function _selectLang(l) {
             changeLanguage(l);
+            if (typeof _refreshSessionDateUI === 'function') _refreshSessionDateUI();
             const flag = document.getElementById('lang-flag-active');
             if (flag && _langFlags[l]) flag.innerHTML = _langFlags[l];
             ['it','en','es','zh'].forEach(lg => {
@@ -3392,6 +3433,98 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
+
+
+    <script>
+    // ── Gestione data sessione globale ────────────────────────────
+    (function() {
+        const _months_it = ['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'];
+        const _months_en = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        const _months_es = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+        const _months_zh = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+
+        function _todayISO() {
+            const t = new Date();
+            return t.getFullYear() + '-' + String(t.getMonth()+1).padStart(2,'0') + '-' + String(t.getDate()).padStart(2,'0');
+        }
+        function _getLang() { return (typeof lang !== 'undefined' ? lang : null) || document.documentElement.lang || 'it'; }
+        function _fmtDate(iso) {
+            const d = new Date(iso + 'T12:00:00');
+            const lg = _getLang();
+            const m = lg==='en' ? _months_en : lg==='es' ? _months_es : lg==='zh' ? _months_zh : _months_it;
+            return d.getDate() + ' ' + m[d.getMonth()] + ' ' + d.getFullYear();
+        }
+        function _sessionLabel(iso) {
+            const isToday = (iso === _todayISO());
+            const lg = _getLang();
+            if (isToday) return lg==='en'?'Tonight':lg==='es'?'Esta noche':lg==='zh'?'今晚':'Stanotte';
+            const ds = _fmtDate(iso);
+            return lg==='en'?'Session of '+ds:lg==='es'?'Sesión del '+ds:lg==='zh'?ds+' 夜间':'Sessione del '+ds;
+        }
+        function _todayLabel() {
+            const lg = _getLang();
+            return lg==='en'?'Today':lg==='es'?'Hoy':lg==='zh'?'今天':'Oggi';
+        }
+        function _dateLabel() {
+            const lg = _getLang();
+            return lg==='en'?'Session date:':lg==='es'?'Fecha sesión:':lg==='zh'?'会话日期：':'Data sessione:';
+        }
+        function _warnLabel() {
+            const lg = _getLang();
+            return lg==='en'?'Weather data unavailable for future dates. Astronomical calculations (moon, session window, DSO altitude) updated for the selected date.'
+                  :lg==='es'?'Datos meteorológicos no disponibles para fechas futuras. Cálculos astronómicos actualizados para la fecha seleccionada.'
+                  :lg==='zh'?'未来日期无天气数据。天文计算（月亮、会话窗口、天体高度）已按所选日期更新。'
+                  :'Dati meteo non disponibili per date future. Calcoli astronomici (luna, finestra sessione, altitudine DSO) aggiornati per la data selezionata.';
+        }
+        function _applyTranslations() {
+            document.querySelectorAll('[data-i18n="session_date"]').forEach(el => { el.textContent = _dateLabel(); });
+            document.querySelectorAll('[data-i18n="today_btn"]').forEach(el => { el.textContent = _todayLabel(); });
+            document.querySelectorAll('[data-i18n="future_date_meteo_warn"]').forEach(el => { el.textContent = _warnLabel(); });
+        }
+        function _updateBadges(iso) {
+            const isToday = (iso === _todayISO());
+            // Colore campo data: bianco/chiaro per oggi, azzurrino per date future
+            const styleToday = 'background:#c8cfd6; color:#1a2533; border:1.5px solid #9aaab8; border-radius:7px; padding:6px 12px; font-size:1.6em; font-weight:600; cursor:pointer; width:auto;';
+            const styleFuture = 'background:#1a3a5c; color:#e0f0ff; border:2px solid #c49a3c; border-radius:7px; padding:6px 12px; font-size:1.6em; font-weight:600; cursor:pointer; width:auto;';
+            ['session-date-picker','session-date-picker-smart'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.style.cssText = isToday ? styleToday : styleFuture;
+            });
+            const warn = document.getElementById('future-date-meteo-warn');
+            if (warn) warn.style.display = isToday ? 'none' : 'flex';
+            // Label centrata nella sezione Smart
+            const lbl = document.getElementById('session-date-centered-label');
+            if (lbl) lbl.textContent = _sessionLabel(iso);
+        }
+        window.onSessionDateChange = function(iso) {
+            ['session-date-picker','session-date-picker-smart'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el && el.value !== iso) el.value = iso;
+            });
+            _updateBadges(iso);
+            if (typeof setSessionDate === 'function') setSessionDate(iso);
+        };
+        window.resetSessionDateToday = function() {
+            window.onSessionDateChange(_todayISO());
+        };
+        // Esposto globalmente per i18n (chiamato da changeLanguage in smart.js)
+        window._refreshSessionDateUI = function() {
+            _applyTranslations();
+            const pickers = document.querySelectorAll('#session-date-picker,#session-date-picker-smart');
+            const iso = pickers.length ? pickers[0].value : _todayISO();
+            _updateBadges(iso);
+        };
+        document.addEventListener('DOMContentLoaded', function() {
+            const iso = _todayISO();
+            ['session-date-picker','session-date-picker-smart'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = iso;
+            });
+            _applyTranslations();
+            _updateBadges(iso);
+        });
+    })();
+    </script>
 
 </body>
 </html>

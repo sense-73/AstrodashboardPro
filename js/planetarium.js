@@ -2,9 +2,28 @@
 // ============================================================
 
         function cambiaOraAstro() {
-            if (!datiMeteo) return;
-            let step = parseInt(document.getElementById('astroSlider').value), dOra = new Date(datiMeteo.time[indicePartenza + step]);
-            document.getElementById('astro-time-display').innerHTML = "<svg width=\"22\" height=\"22\" style=\"display:inline-block;vertical-align:middle;flex-shrink:0\" stroke=\"currentColor\" fill=\"none\"><use href=\"#i-eye-spark\"/></svg> " + (step === 0 ? t("now") + " (" + new Date().toLocaleTimeString('it-IT', {hour: '2-digit', minute:'2-digit'}) + ")" : dOra.toLocaleDateString(lang==='it'?'it-IT':'en-US', { weekday: 'short', day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }));
+            let step = parseInt(document.getElementById('astroSlider').value);
+            let dOra;
+            if (!isSessionDateToday()) {
+                // Data futura: ignora datiMeteo (che contiene oggi) e costruisce l'ora dalla data sessione
+                let base = getSessionDate();
+                base.setHours(18, 0, 0, 0);
+                base = new Date(base.getTime() + step * 3600000);
+                dOra = base;
+            } else if (datiMeteo && datiMeteo.time && datiMeteo.time[indicePartenza + step]) {
+                dOra = new Date(datiMeteo.time[indicePartenza + step]);
+            } else {
+                let base = new Date();
+                base.setHours(18, 0, 0, 0);
+                dOra = new Date(base.getTime() + step * 3600000);
+            }
+            let _dispOra;
+            if (isSessionDateToday() && step === 0) {
+                _dispOra = t("now") + " (" + new Date().toLocaleTimeString('it-IT', {hour: '2-digit', minute:'2-digit'}) + ")";
+            } else {
+                _dispOra = dOra.toLocaleDateString(lang==='it'?'it-IT':'en-US', { weekday: 'short', day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
+            }
+            document.getElementById('astro-time-display').innerHTML = "<svg width=\"22\" height=\"22\" style=\"display:inline-block;vertical-align:middle;flex-shrink:0\" stroke=\"currentColor\" fill=\"none\"><use href=\"#i-eye-spark\"/></svg> " + _dispOra;
             
             let pL = document.getElementById('planets-list'), dL = document.getElementById('dso-list'); pL.innerHTML = ''; dL.innerHTML = '';
             if (SunCalc.getPosition(dOra, latCorrente, lonCorrente).altitude * (180/Math.PI) > -6) { pL.innerHTML = dL.innerHTML = `<p style="color:#aaa; padding:10px;">${t("too_bright")}</p>`; return; }

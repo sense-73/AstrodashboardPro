@@ -19,7 +19,7 @@ let lang = localStorage.getItem('ad_lang') || 'it';
                 "sensor": "Sensore:", "width": "Larg. W (mm):", "height": "Alet. H (mm):", "fov_calc": "Campo Inquadrato Calcolato",
                 "fov_sim": "Simulatore FOV Realistico (DSS2)", "smart_calc": "Calcolatore Sessione Smart",
                 "sunset": "Tramonto", "night_start": "Inizio Notte Astr.", "night_end": "Fine Notte Astr.", "sunrise": "Alba",
-                "session_start": "Inizio Sessione:", "session_end": "Fine Sessione:", "sensor_type": "Tipo Sensore:",
+                "session_date": "Data sessione:", "today_btn": "Oggi", "future_date_meteo_warn": "Dati meteo non disponibili per date future. Calcoli astronomici aggiornati per la data selezionata.", "session_start": "Inizio Sessione:", "session_end": "Fine Sessione:", "sensor_type": "Tipo Sensore:",
                 "seq_setup": "Impostazione Sequenza", "gen_seq_btn": "Genera Sequenza Ottimale", "use_frame": "Usa | Frame", "poses_sec": "Pose x Sec.",
                 "total": "Totale", "every": "Ogni", "avail_window": "Finestra Disponibile", "acq_time": "Tempo Acquisizione", "res_time": "Tempo Residuo", "time_overflow": "Sforamento tempo!",
                 "nina_export_title": "Esportazione N.I.N.A. Advanced Sequencer", "seq_start": "Avvio Sequenza", "cool_cam": "Raffredda Camera a",
@@ -102,7 +102,7 @@ let lang = localStorage.getItem('ad_lang') || 'it';
                 "sensor": "Sensor:", "width": "Width (mm):", "height": "Height (mm):", "fov_calc": "Calculated Field of View",
                 "fov_sim": "Realistic FOV Simulator (DSS2)", "smart_calc": "Smart Session Calculator",
                 "sunset": "Sunset", "night_start": "Astr. Night Starts", "night_end": "Astr. Night Ends", "sunrise": "Sunrise",
-                "session_start": "Session Start:", "session_end": "Session End:", "sensor_type": "Sensor Type:",
+                "session_date": "Session date:", "today_btn": "Today", "future_date_meteo_warn": "Weather data unavailable for future dates. Astronomical calculations updated for the selected date.", "session_start": "Session Start:", "session_end": "Session End:", "sensor_type": "Sensor Type:",
                 "seq_setup": "Sequence Setup", "gen_seq_btn": "Generate Optimal Sequence", "use_frame": "Use | Frame", "poses_sec": "Exposures x Sec",
                 "total": "Total", "every": "Every", "avail_window": "Available Window", "acq_time": "Acquisition Time", "res_time": "Residual Time", "time_overflow": "Time Overflow!",
                 "nina_export_title": "N.I.N.A. Advanced Sequencer Export", "seq_start": "Sequence Start", "cool_cam": "Cool Camera to",
@@ -185,7 +185,7 @@ let lang = localStorage.getItem('ad_lang') || 'it';
                 "sensor": "Sensor:", "width": "Ancho (mm):", "height": "Alto (mm):", "fov_calc": "Campo de Visión (FOV)",
                 "fov_sim": "Simulador FOV Realista (DSS2)", "smart_calc": "Calculadora de Sesión Smart",
                 "sunset": "Atardecer", "night_start": "Inicio Noche Oscura", "night_end": "Fin Noche Oscura", "sunrise": "Amanecer",
-                "session_start": "Inicio Sesión:", "session_end": "Fin Sesión:", "sensor_type": "Tipo de Sensor:",
+                "session_date": "Fecha sesión:", "today_btn": "Hoy", "future_date_meteo_warn": "Datos meteorológicos no disponibles para fechas futuras. Cálculos astronómicos actualizados para la fecha seleccionada.", "session_start": "Inicio Sesión:", "session_end": "Fin Sesión:", "sensor_type": "Tipo de Sensor:",
                 "seq_setup": "Configuración de Secuencia", "gen_seq_btn": "Generar Secuencia Óptima", "use_frame": "Usar | Frame", "poses_sec": "Tomas x Seg",
                 "total": "Total", "every": "Cada", "avail_window": "Tiempo Disponible", "acq_time": "Tiempo de Captura", "res_time": "Tiempo Restante", "time_overflow": "¡Tiempo excedido!",
                 "nina_export_title": "Exportar Secuencia a N.I.N.A.", "seq_start": "Inicio Secuencia", "cool_cam": "Enfriar Cámara a",
@@ -268,7 +268,7 @@ let lang = localStorage.getItem('ad_lang') || 'it';
                 "sensor": "传感器:", "width": "宽度 (mm):", "height": "高度 (mm):", "fov_calc": "视场 (FOV) 计算",
                 "fov_sim": "真实视场模拟器 (DSS2)", "smart_calc": "智能序列计算",
                 "sunset": "日落", "night_start": "天文黑夜开始", "night_end": "天文黑夜结束", "sunrise": "日出",
-                "session_start": "拍摄开始:", "session_end": "拍摄结束:", "sensor_type": "相机类型:",
+                "session_date": "会话日期：", "today_btn": "今天", "future_date_meteo_warn": "未来日期无天气数据。天文计算已按所选日期更新。", "session_start": "拍摄开始:", "session_end": "拍摄结束:", "sensor_type": "相机类型:",
                 "seq_setup": "序列设置", "gen_seq_btn": "生成最佳曝光序列", "use_frame": "使用 | 帧类型", "poses_sec": "曝光数 x 秒",
                 "total": "总计", "every": "每隔", "avail_window": "可用拍摄窗口", "acq_time": "总曝光时间", "res_time": "剩余时间", "time_overflow": "时间溢出！",
                 "nina_export_title": "N.I.N.A. 高级序列导出", "seq_start": "序列开始前", "cool_cam": "相机降温至",
@@ -2371,6 +2371,27 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.zh.hz_restore_btn    = "↩ 恢复";
 
         // ─── Changelog v6.5 ─────────────────────────────────────────────────
+
+        i18n.it.cl_v66_date_title   = "Pianificazione su data futura";
+        i18n.en.cl_v66_date_title   = "Future date planning";
+        i18n.es.cl_v66_date_title   = "Planificación en fecha futura";
+        i18n.zh.cl_v66_date_title   = "未来日期规划";
+
+        i18n.it.cl_v66_date_desc    = "Nuovo selettore data sessione nel Planetario e nelle sezioni Smart/PRO. Finestra notte astronomica, altitudine DSO, fase lunare e orari di sessione vengono ricalcolati per la data scelta. Lo slider astro resta attivo e mostra i DSO visibili ora per ora. Warning automatico se il meteo non è disponibile. Campo data con sfondo blu per date future.";
+        i18n.en.cl_v66_date_desc    = "New session date picker in the Planetarium and Smart/PRO sections. Astronomical night window, DSO altitude, moon phase and session times are recalculated for the selected date. The astro slider stays active and shows visible DSOs hour by hour. Automatic warning when weather is unavailable. Date field turns blue for future dates.";
+        i18n.es.cl_v66_date_desc    = "Nuevo selector de fecha de sesión en el Planetario y en las secciones Smart/PRO. La ventana nocturna astronómica, altitud DSO, fase lunar y horarios de sesión se recalculan para la fecha elegida. El slider astro permanece activo. Aviso automático si el tiempo no está disponible. Campo de fecha azul para fechas futuras.";
+        i18n.zh.cl_v66_date_desc    = "行星仪和Smart/PRO部分新增会话日期选择器。天文夜窗口、DSO高度、月相和会话时间均按所选日期重新计算。天文滑块保持激活状态，逐小时显示可见天体。天气不可用时自动警告。未来日期显示蓝色背景。";
+
+        i18n.it.cl_v66_sensor_title = "Algoritmo correttivo sensore mono/colore";
+        i18n.en.cl_v66_sensor_title = "Mono/colour sensor correction algorithm";
+        i18n.es.cl_v66_sensor_title = "Algoritmo de corrección sensor mono/color";
+        i18n.zh.cl_v66_sensor_title = "单色/彩色传感器校正算法";
+
+        i18n.it.cl_v66_sensor_desc  = "La stima delle ore di integrazione ora considera il tipo di sensore. Mono LRGB: −25% vs OSC. Mono solo RGB: −15%. OSC con filtro dual/quad-band: +15%. Correzione QE aggiuntiva dalla lookup table del sensore. Il fattore correttivo è mostrato nel pannello stima in 4 lingue.";
+        i18n.en.cl_v66_sensor_desc  = "Integration time estimates now account for sensor type. Mono LRGB: −25% vs OSC. Mono RGB only: −15%. OSC with dual/quad-band filter: +15%. Additional QE correction from the sensor lookup table. The correction factor is shown in the estimate panel in 4 languages.";
+        i18n.es.cl_v66_sensor_desc  = "La estimación de horas de integración ahora considera el tipo de sensor. Mono LRGB: −25% vs OSC. Mono solo RGB: −15%. OSC con filtro dual/quad-band: +15%. Corrección QE adicional desde la tabla del sensor. El factor se muestra en el panel en 4 idiomas.";
+        i18n.zh.cl_v66_sensor_desc  = "积分时间估算现已考虑传感器类型。单色LRGB：比OSC减少25%。单色仅RGB：减少15%。OSC+双/四波段滤镜：增加15%。额外QE校正来自传感器查找表。校正系数以4种语言显示在估算面板中。";
+
         i18n.it.cl_v65_horizon_title      = "Modulo Orizzonte personalizzato";
         i18n.en.cl_v65_horizon_title      = "Custom Horizon module";
         i18n.es.cl_v65_horizon_title      = "Módulo de horizonte personalizado";

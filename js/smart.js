@@ -562,12 +562,10 @@ function toggleLock(id) {
             let lpApplied = (bortle !== 5); // flag per il messaggio
 
             // 7. FATTORE SENSORE (correzione Bayer + QE)
-            // bayerFact: mono con L=0.75, mono solo RGB=0.85, mono solo NB=0.75, OSC=1.00, OSC dual/quad=1.15
-            // qeFact: corregge la QE del sensore rispetto al riferimento 0.80
             let _sp = getSensorParams();
             let _qeFact = 0.80 / (_sp.qe || 0.80);
             let _bayerFact = 1.00;
-            let _sensorNote = ''; // label per il messaggio
+            let _sensorNote = '';
             if (isM) {
                 let _lCount  = parseInt((document.getElementById('m-l-count')  ||{}).value) || 0;
                 let _haCount = parseInt((document.getElementById('m-ha-count') ||{}).value) || 0;
@@ -579,10 +577,10 @@ function toggleLock(id) {
                 let _hasNB   = (_haCount > 0 || _o3Count > 0 || _s2Count > 0);
                 let _hasRGB  = (_rCount  > 0 || _gCount  > 0 || _bCount  > 0);
                 if (_lCount > 0 || (_hasNB && !_hasRGB)) {
-                    _bayerFact = 0.75; // LRGB oppure puro narrowband
+                    _bayerFact = 0.75;
                     _sensorNote = 'mono-lrgb';
                 } else {
-                    _bayerFact = 0.85; // solo RGB senza L
+                    _bayerFact = 0.85;
                     _sensorNote = 'mono-rgb';
                 }
             } else {
@@ -675,7 +673,6 @@ function toggleLock(id) {
                         reason += ` <br><i style="color:#ff9944; font-size: 0.9em;">⚠️ Il filtro dual/quad-band non è adatto a questo tipo di target (${tipoNomeReport}): blocca la luce broadband riducendo drasticamente il segnale. Rimuovi il filtro o scegli una nebulosa a emissione.</i>`;
                     if(doingOscNB && isEmission)
                         reason += ` <br><i style="color:#44ccaa; font-size: 0.9em;">✅ Filtro dual/quad-band attivo: penalità Bortle ridotta per target a emissione.</i>`;
-                    // Nota correttivo sensore
                     if(_sensorNote === 'mono-lrgb') reason += ` <br><i style="color:#aaa; font-size: 0.9em;">🔭 Correttivo sensore mono (LRGB/NB): −25% integrazione vs OSC (fattore ${sensorFact.toFixed(2)}).</i>`;
                     else if(_sensorNote === 'mono-rgb') reason += ` <br><i style="color:#aaa; font-size: 0.9em;">🔭 Correttivo sensore mono (solo RGB): −15% integrazione vs OSC (fattore ${sensorFact.toFixed(2)}).</i>`;
                     else if(_sensorNote === 'osc-nb') reason += ` <br><i style="color:#aaa; font-size: 0.9em;">🔭 Correttivo sensore OSC con filtro NB: +15% integrazione per perdita Bayer (fattore ${sensorFact.toFixed(2)}).</i>`;
@@ -694,7 +691,6 @@ function toggleLock(id) {
                         reason += ` <br><i style="color:#ff9944; font-size: 0.9em;">⚠️ The dual/quad-band filter is not suitable for this target type (${tipoNomeReport}): it blocks broadband light, drastically reducing signal. Remove the filter or choose an emission nebula.</i>`;
                     if(doingOscNB && isEmission)
                         reason += ` <br><i style="color:#44ccaa; font-size: 0.9em;">✅ Dual/quad-band filter active: reduced Bortle penalty for emission target.</i>`;
-                    // Sensor correction note
                     if(_sensorNote === 'mono-lrgb') reason += ` <br><i style="color:#aaa; font-size: 0.9em;">🔭 Mono sensor correction (LRGB/NB): −25% integration vs OSC (factor ${sensorFact.toFixed(2)}).</i>`;
                     else if(_sensorNote === 'mono-rgb') reason += ` <br><i style="color:#aaa; font-size: 0.9em;">🔭 Mono sensor correction (RGB only): −15% integration vs OSC (factor ${sensorFact.toFixed(2)}).</i>`;
                     else if(_sensorNote === 'osc-nb') reason += ` <br><i style="color:#aaa; font-size: 0.9em;">🔭 OSC sensor correction with NB filter: +15% integration for Bayer loss (factor ${sensorFact.toFixed(2)}).</i>`;
@@ -713,7 +709,6 @@ function toggleLock(id) {
                         reason += ` <br><i style="color:#ff9944; font-size: 0.9em;">⚠️ El filtro dual/quad-band no es adecuado para este tipo de objetivo (${tipoNomeReport}). Quita el filtro o elige una nebulosa de emisión.</i>`;
                     if(doingOscNB && isEmission)
                         reason += ` <br><i style="color:#44ccaa; font-size: 0.9em;">✅ Filtro dual/quad-band activo: penalización Bortle reducida.</i>`;
-                    // Nota corrección sensor
                     if(_sensorNote === 'mono-lrgb') reason += ` <br><i style="color:#aaa; font-size: 0.9em;">🔭 Corrección sensor mono (LRGB/NB): −25% integración vs OSC (factor ${sensorFact.toFixed(2)}).</i>`;
                     else if(_sensorNote === 'mono-rgb') reason += ` <br><i style="color:#aaa; font-size: 0.9em;">🔭 Corrección sensor mono (solo RGB): −15% integración vs OSC (factor ${sensorFact.toFixed(2)}).</i>`;
                     else if(_sensorNote === 'osc-nb') reason += ` <br><i style="color:#aaa; font-size: 0.9em;">🔭 Corrección sensor OSC con filtro NB: +15% integración por pérdida Bayer (factor ${sensorFact.toFixed(2)}).</i>`;
@@ -732,7 +727,6 @@ function toggleLock(id) {
                         reason += ` <br><i style="color:#ff9944; font-size: 0.9em;">⚠️ 双/四波段滤镜不适合此目标（${tipoNomeReport}）。请移除滤镜或选择发射星云。</i>`;
                     if(doingOscNB && isEmission)
                         reason += ` <br><i style="color:#44ccaa; font-size: 0.9em;">✅ 双/四波段滤镜已启用：博特尔惩罚已降低。</i>`;
-                    // 传感器校正说明
                     if(_sensorNote === 'mono-lrgb') reason += ` <br><i style="color:#aaa; font-size: 0.9em;">🔭 单色传感器校正（LRGB/NB）：比OSC减少25%积分时间（系数 ${sensorFact.toFixed(2)}）。</i>`;
                     else if(_sensorNote === 'mono-rgb') reason += ` <br><i style="color:#aaa; font-size: 0.9em;">🔭 单色传感器校正（仅RGB）：比OSC减少15%积分时间（系数 ${sensorFact.toFixed(2)}）。</i>`;
                     else if(_sensorNote === 'osc-nb') reason += ` <br><i style="color:#aaa; font-size: 0.9em;">🔭 OSC+NB滤镜传感器校正：拜耳损失+15%积分时间（系数 ${sensorFact.toFixed(2)}）。</i>`;
@@ -777,18 +771,20 @@ function toggleLock(id) {
                     html += impMsg;
                 } else {
                     // Tempo insufficiente ma praticabile
-                    const _timeMsg = lang==='it' ? `<div style="margin-top:8px; padding:8px 12px; background:rgba(255,80,80,0.08); border-left:3px solid #ff4444; border-radius:4px; font-size:0.88em; color:#ffaaaa;">⏱ Il tempo utile di stanotte (> 30° sull'orizzonte) è di <b>${aS.toFixed(1)} ore</b> ed è insufficiente per completare l'integrazione stimata di <b>${totId.toFixed(1)} ore</b>.</div>`
-                                   : lang==='en' ? `<div style="margin-top:8px; padding:8px 12px; background:rgba(255,80,80,0.08); border-left:3px solid #ff4444; border-radius:4px; font-size:0.88em; color:#ffaaaa;">⏱ Tonight's useful time (> 30° altitude) is <b>${aS.toFixed(1)} h</b>, insufficient to complete the estimated <b>${totId.toFixed(1)} h</b> integration.</div>`
-                                   : lang==='es' ? `<div style="margin-top:8px; padding:8px 12px; background:rgba(255,80,80,0.08); border-left:3px solid #ff4444; border-radius:4px; font-size:0.88em; color:#ffaaaa;">⏱ El tiempo útil de esta noche (> 30° sobre el horizonte) es de <b>${aS.toFixed(1)} h</b>, insuficiente para completar la integración estimada de <b>${totId.toFixed(1)} h</b>.</div>`
-                                   :               `<div style="margin-top:8px; padding:8px 12px; background:rgba(255,80,80,0.08); border-left:3px solid #ff4444; border-radius:4px; font-size:0.88em; color:#ffaaaa;">⏱ 今晚可用时间（> 30°）仅 <b>${aS.toFixed(1)} 小时</b>，不足以完成估计的 <b>${totId.toFixed(1)} 小时</b>积分。</div>`;
+                    const _nightLbl = sessionDateLabel(lang);
+                const _timeMsg = lang==='it' ? `<div style="margin-top:8px; padding:8px 12px; background:rgba(255,80,80,0.08); border-left:3px solid #ff4444; border-radius:4px; font-size:0.88em; color:#ffaaaa;">⏱ Il tempo utile ${_nightLbl} (> 30° sull'orizzonte) è di <b>${aS.toFixed(1)} ore</b> ed è insufficiente per completare l'integrazione stimata di <b>${totId.toFixed(1)} ore</b>.</div>`
+                                   : lang==='en' ? `<div style="margin-top:8px; padding:8px 12px; background:rgba(255,80,80,0.08); border-left:3px solid #ff4444; border-radius:4px; font-size:0.88em; color:#ffaaaa;">⏱ Useful time ${_nightLbl} (> 30° altitude) is <b>${aS.toFixed(1)} h</b>, insufficient to complete the estimated <b>${totId.toFixed(1)} h</b> integration.</div>`
+                                   : lang==='es' ? `<div style="margin-top:8px; padding:8px 12px; background:rgba(255,80,80,0.08); border-left:3px solid #ff4444; border-radius:4px; font-size:0.88em; color:#ffaaaa;">⏱ El tiempo útil ${_nightLbl} (> 30° sobre el horizonte) es de <b>${aS.toFixed(1)} h</b>, insuficiente para completar la integración estimada de <b>${totId.toFixed(1)} h</b>.</div>`
+                                   :               `<div style="margin-top:8px; padding:8px 12px; background:rgba(255,80,80,0.08); border-left:3px solid #ff4444; border-radius:4px; font-size:0.88em; color:#ffaaaa;">⏱ ${_nightLbl}可用时间（> 30°）仅 <b>${aS.toFixed(1)} 小时</b>，不足以完成估计的 <b>${totId.toFixed(1)} 小时</b>积分。</div>`;
                     html += _timeMsg;
                     html += `<button class="btn-a-secondary btn-a-red" style="width:100%; padding:11px; font-size:1em; margin-top:10px;" onclick="apriMultiNight('smart')"><svg width="30" height="30" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" style="display:inline-block;vertical-align:middle;flex-shrink:0;"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M11 21h-5a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v3.5" /><path d="M16 3v4" /><path d="M8 3v4" /><path d="M4 11h11" /><path d="M17.8 20.817l-2.172 1.138a.392 .392 0 0 1 -.568 -.41l.415 -2.411l-1.757 -1.707a.389 .389 0 0 1 .217 -.665l2.428 -.352l1.086 -2.193a.392 .392 0 0 1 .702 0l1.086 2.193l2.428 .352a.39 .39 0 0 1 .217 .665l-1.757 1.707l.414 2.41a.39 .39 0 0 1 -.567 .411l-2.172 -1.138" /></svg> ${t("ai_plan_btn")}</button>`;
                 }
             } else {
-                const _okMsg = lang==='it' ? "Il tempo a disposizione stanotte sopra i 30° è sufficiente a completare l'integrazione consigliata."
-                             : lang==='en' ? "Tonight's available time above 30° is enough to complete the recommended integration."
-                             : lang==='es' ? "El tiempo disponible esta noche por encima de 30° es suficiente para completar la integración recomendada."
-                             :               "今晚 > 30° 的可用时间足以完成推荐的曝光时间。";
+                const _nightLbl2 = sessionDateLabel(lang);
+                const _okMsg = lang==='it' ? `Il tempo a disposizione ${_nightLbl2} sopra i 30° è sufficiente a completare l'integrazione consigliata.`
+                             : lang==='en' ? `Available time ${_nightLbl2} above 30° is enough to complete the recommended integration.`
+                             : lang==='es' ? `El tiempo disponible ${_nightLbl2} por encima de 30° es suficiente para completar la integración recomendada.`
+                             :               `${_nightLbl2} > 30° 的可用时间足以完成推荐的曝光时间。`;
                 html += `<div style="margin-top:5px; padding:10px; background:rgba(74,138,111,0.1); border-left:3px solid #4a8a6f; border-radius:4px; font-size:0.9em; color:#fff;"><svg width='14' height='14' style='vertical-align:middle;margin-right:4px'><use href='#i-check'/></svg><b>OK:</b> ${_okMsg}</div>`;
             }
 
@@ -1021,7 +1017,7 @@ function toggleLock(id) {
         function generaSequenzaOttimale() {
             if (!targetSelezionato) { mostraAvviso(t("alert_planetarium"), "warn"); return; }
             let tS = document.getElementById('time-start').value, tE = document.getElementById('time-end').value; if(!tS || !tE) { mostraAvviso(t("alert_times"), "warn"); return; }
-            if (tS === tE) { mostraAvviso(lang==='it'?"L'oggetto non è visibile stanotte — finestra di sessione zero.":lang==='en'?"Object not visible tonight — session window is zero.":lang==='es'?"El objeto no es visible esta noche — ventana cero.":"今晚目标不可见——会话窗口为零。", "warn"); return; }
+            if (tS === tE) { const _nlbl = sessionDateLabel(lang); mostraAvviso(lang==='it'?`L'oggetto non è visibile ${_nlbl} — finestra di sessione zero.`:lang==='en'?`Object not visible ${_nlbl} — session window is zero.`:lang==='es'?`El objeto no es visible ${_nlbl} — ventana cero.`:`${_nlbl}目标不可见——会话窗口为零。`, "warn"); return; }
             let dS = new Date(`1970-01-01T${tS}:00`), dE = new Date(`1970-01-01T${tE}:00`); if (dE <= dS) dE.setDate(dE.getDate() + 1);
             let aS = (dE - dS) / 1000;
             
@@ -1420,3 +1416,16 @@ function toggleLock(id) {
             document.addEventListener('change', handler, true);
         })();
 
+
+
+        // ── Listener cambio data sessione ─────────────────────────────────────
+        document.addEventListener('sessionDateChanged', function() {
+            // Ricalcola stima AI se c'è un target selezionato
+            if (typeof aggiornaAI === 'function' && targetSelezionato) {
+                aggiornaAI();
+            }
+            // Ricalcola tempi se le finestre sono già impostate
+            if (typeof calcolaTempi === 'function') {
+                calcolaTempi();
+            }
+        });

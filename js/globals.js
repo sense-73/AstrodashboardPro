@@ -6,6 +6,47 @@
 // true  = tutti i console.log/warn/error visibili (sviluppo)
 const DEBUG = false;
 
+// ── Data sessione (pianificazione) ────────────────────────────
+// sessionDate è la data di riferimento per tutti i calcoli astronomici.
+// Di default è oggi. Può essere modificata dall'utente per pianificare sessioni future.
+let _sessionDateObj = new Date();
+
+function getSessionDate() {
+    return new Date(_sessionDateObj.getTime());
+}
+
+function setSessionDate(dateOrString) {
+    if (typeof dateOrString === 'string') {
+        // Formato YYYY-MM-DD: costruisce la data a mezzogiorno locale per evitare offset fuso
+        const parts = dateOrString.split('-');
+        _sessionDateObj = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]), 12, 0, 0);
+    } else {
+        _sessionDateObj = new Date(dateOrString.getTime());
+    }
+    // Propaga il cambio data a tutti i moduli tramite evento custom
+    document.dispatchEvent(new CustomEvent('sessionDateChanged', { detail: { date: getSessionDate() } }));
+}
+
+function isSessionDateToday() {
+    const today = new Date();
+    return _sessionDateObj.getFullYear() === today.getFullYear() &&
+           _sessionDateObj.getMonth()    === today.getMonth()    &&
+           _sessionDateObj.getDate()     === today.getDate();
+}
+
+function sessionDateLabel(lang) {
+    if (isSessionDateToday()) {
+        return lang === 'it' ? 'stanotte' : lang === 'es' ? 'esta noche' : lang === 'zh' ? '今晚' : 'tonight';
+    }
+    const d = getSessionDate();
+    const opts = { day: '2-digit', month: 'short', year: 'numeric' };
+    const locale = lang === 'it' ? 'it-IT' : lang === 'es' ? 'es-ES' : lang === 'zh' ? 'zh-CN' : 'en-GB';
+    return lang === 'it' ? 'la notte del ' + d.toLocaleDateString(locale, opts)
+         : lang === 'es' ? 'la noche del ' + d.toLocaleDateString(locale, opts)
+         : lang === 'zh' ? d.toLocaleDateString(locale, opts) + ' 夜间'
+         : 'the night of ' + d.toLocaleDateString(locale, opts);
+}
+
 // ── Stato applicazione ────────────────────────────────────────
 let _savedLat = parseFloat(localStorage.getItem('ad_lat')), _savedLon = parseFloat(localStorage.getItem('ad_lon'));
 let latCorrente = (!isNaN(_savedLat) ? _savedLat : 46.062), lonCorrente = (!isNaN(_savedLon) ? _savedLon : 13.235);

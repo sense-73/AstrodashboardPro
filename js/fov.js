@@ -180,7 +180,7 @@
             let wl = document.getElementById('target-wiki'); if(targetSelezionato.link) { wl.href = targetSelezionato.link; wl.style.display = 'inline-block'; } else wl.style.display = 'none';
             
             // CALCOLO ASTRONOMICO E REGOLA DEI 30 GRADI
-            let dOggi = new Date(); if (dOggi.getHours() < 12) dOggi.setDate(dOggi.getDate() - 1); 
+            let dOggi = getSessionDate(); if (isSessionDateToday() && dOggi.getHours() < 12) dOggi.setDate(dOggi.getDate() - 1); 
             let atStart = SunCalc.getTimes(dOggi, latCorrente, lonCorrente);
             let dDomani = new Date(dOggi.getTime() + 86400000); let atEnd = SunCalc.getTimes(dDomani, latCorrente, lonCorrente);
             let ft = (x) => x && !isNaN(x) ? x.toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'}) : '--:--';
@@ -253,10 +253,12 @@
             if (firstAbove30 && firstAbove30 > _rawStart) {
                 _rawStart = new Date(firstAbove30.getTime());
             }
-            let _adesso = new Date();
-            _adesso.setSeconds(0, 0);
-            if (_adesso > _rawStart && _adesso < nE) {
-                _rawStart = new Date(_adesso.getTime());
+            if (isSessionDateToday()) {
+                let _adesso = new Date();
+                _adesso.setSeconds(0, 0);
+                if (_adesso > _rawStart && _adesso < nE) {
+                    _rawStart = new Date(_adesso.getTime());
+                }
             }
             let _rawEnd = new Date(nE.getTime());
             if (lastAbove30 && lastAbove30 < _rawEnd) {
@@ -665,7 +667,7 @@
             if (chartAltezza) chartAltezza.destroy();
 
             let lbl = [], dat = [], datHz = [];
-            let d = new Date(), sd = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 18, 0, 0);
+            let d = getSessionDate(), sd = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 18, 0, 0);
 
             // Costruisce array orizzonte az→alt per lookup rapido (360 slot interi)
             function hzAtAz(az) {
@@ -772,3 +774,13 @@
                 }
             });
         }
+
+        // ── Listener cambio data sessione ─────────────────────────────────────
+        document.addEventListener('sessionDateChanged', function() {
+            if (targetSelezionato) {
+                selezionaTarget(targetSelezionato);
+            }
+            if (typeof disegnaGraficoAltezza === 'function') {
+                disegnaGraficoAltezza();
+            }
+        });

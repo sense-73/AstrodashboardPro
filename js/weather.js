@@ -184,7 +184,7 @@
             // Apri popup dopo flyTo completo + margine extra per stabilità
             map.once('moveend', function() { setTimeout(function() { if (marker) marker.openPopup(); }, 300); });
             map.flyTo([latCorrente, lonCorrente], 9);
-            aggiornaEffemeridi(new Date()); scaricaDatiPrevisionali();
+            aggiornaEffemeridi(getSessionDate()); scaricaDatiPrevisionali();
             _rilevaBortleDaCoordinate(latCorrente, lonCorrente);
             _nascondiToastGPS();
         }
@@ -278,6 +278,14 @@
             let f = faseLuna.phase, i = '🌑', n = 'new_moon';
             if(f>0.03&&f<=0.22){i='🌒';n='waxing_crescent';}else if(f>0.22&&f<=0.28){i='🌓';n='first_quarter';}else if(f>0.28&&f<=0.47){i='🌔';n='waxing_gibbous';}else if(f>0.47&&f<=0.53){i='🌕';n='full_moon';}else if(f>0.53&&f<=0.72){i='🌖';n='waning_gibbous';}else if(f>0.72&&f<=0.78){i='🌗';n='last_quarter';}else if(f>0.78&&f<=0.97){i='🌘';n='waning_crescent';}
             document.getElementById('moon-emoji').innerText = i; document.getElementById('moon-phase-name').innerText = t(n);
+            // Per date future aggiorna val-luna con illuminazione stimata a mezzanotte
+            if (!isSessionDateToday()) {
+                let midnightRef = new Date(data.getFullYear(), data.getMonth(), data.getDate(), 23, 0, 0);
+                let moonPos = SunCalc.getMoonPosition(midnightRef, latCorrente, lonCorrente);
+                let inqLFutura = moonPos.altitude > 0 ? Math.max(0, Math.round(faseLuna.fraction * Math.sin(moonPos.altitude) * 100)) : 0;
+                let valLunaEl = document.getElementById('val-luna');
+                if (valLunaEl) valLunaEl.innerText = inqLFutura + '%';
+            }
         }
 
         function scaricaDatiPrevisionali() {
@@ -362,9 +370,14 @@
         };
 
         function cambiaOraMeteo() {
-            if (!datiMeteo) return;
+            if (!isSessionDateToday() || !datiMeteo) return;
             let step = parseInt(document.getElementById('timeSlider').value), i = indicePartenza + step, dOra = new Date(datiMeteo.time[i]);
-            let tOra = step === 0 ? t("now") + " (" + new Date().toLocaleTimeString('it-IT', {hour: '2-digit', minute:'2-digit'}) + ")" : dOra.toLocaleDateString(lang==='it'?'it-IT':'en-US', { weekday: 'short', day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
+            let tOra;
+            if (isSessionDateToday() && step === 0) {
+                tOra = t("now") + " (" + new Date().toLocaleTimeString('it-IT', {hour: '2-digit', minute:'2-digit'}) + ")";
+            } else {
+                tOra = dOra.toLocaleDateString(lang==='it'?'it-IT':'en-US', { weekday: 'short', day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
+            }
             if (step > 0 && dOra.getHours() === 0) aggiornaEffemeridi(dOra);
 
             let b = datiMeteo.cloud_cover_low[i], m = datiMeteo.cloud_cover_mid[i], a = datiMeteo.cloud_cover_high[i], jet = Math.round(datiMeteo.wind_speed_250hPa[i]), vs = datiMeteo.wind_speed_10m[i], wdir = datiMeteo.wind_direction_10m ? datiMeteo.wind_direction_10m[i] : 0, temp = datiMeteo.temperature_2m[i], um = datiMeteo.relative_humidity_2m[i];
@@ -582,3 +595,20 @@
             img.src = url;
         }
         // ─────────────────────────────────────────────────────────────────────
+
+
+        // ── Listener cambio data sessione ─────────────────────────────────────
+        document.addEventListener('sessionDateChanged', function(e) {
+            aggiornaEffemeridi(e.detail.date);
+            let isFuture = !isSessionDateToday();
+            // Solo lo slider meteo va disabilitato per date future (nessun dato previsionale)
+            let sliderMeteo = document.getElementById('timeSlider');
+            if (sliderMeteo) sliderMeteo.disabled = isFuture;
+            // Lo slider astro rimane sempre attivo: funziona con getSessionDate() anche senza meteo
+            let sliderAstro = document.getElementById('astroSlider');
+            if (sliderAstro) {
+                sliderAstro.disabled = false;
+                sliderAstro.value = 0;
+                if (typeof cambiaOraAstro === 'function') cambiaOraAstro();
+            }
+        });
