@@ -561,8 +561,43 @@ function toggleLock(id) {
             let lpFact = (usingNarrowband) ? (_lpFactNB[bortle]||1.0) : (_lpFactBB[bortle]||1.0);
             let lpApplied = (bortle !== 5); // flag per il messaggio
 
-            // 7. CALCOLO FINALE 
-            let totId = subT * sFact * mFact * lpFact * fFact;
+            // 7. FATTORE SENSORE (correzione Bayer + QE)
+            // bayerFact: mono con L=0.75, mono solo RGB=0.85, mono solo NB=0.75, OSC=1.00, OSC dual/quad=1.15
+            // qeFact: corregge la QE del sensore rispetto al riferimento 0.80
+            let _sp = getSensorParams();
+            let _qeFact = 0.80 / (_sp.qe || 0.80);
+            let _bayerFact = 1.00;
+            let _sensorNote = ''; // label per il messaggio
+            if (isM) {
+                let _lCount  = parseInt((document.getElementById('m-l-count')  ||{}).value) || 0;
+                let _haCount = parseInt((document.getElementById('m-ha-count') ||{}).value) || 0;
+                let _o3Count = parseInt((document.getElementById('m-oiii-count')||{}).value) || 0;
+                let _s2Count = parseInt((document.getElementById('m-sii-count') ||{}).value) || 0;
+                let _rCount  = parseInt((document.getElementById('m-r-count')  ||{}).value) || 0;
+                let _gCount  = parseInt((document.getElementById('m-g-count')  ||{}).value) || 0;
+                let _bCount  = parseInt((document.getElementById('m-b-count')  ||{}).value) || 0;
+                let _hasNB   = (_haCount > 0 || _o3Count > 0 || _s2Count > 0);
+                let _hasRGB  = (_rCount  > 0 || _gCount  > 0 || _bCount  > 0);
+                if (_lCount > 0 || (_hasNB && !_hasRGB)) {
+                    _bayerFact = 0.75; // LRGB oppure puro narrowband
+                    _sensorNote = 'mono-lrgb';
+                } else {
+                    _bayerFact = 0.85; // solo RGB senza L
+                    _sensorNote = 'mono-rgb';
+                }
+            } else {
+                if (doingOscNB) {
+                    _bayerFact = 1.15;
+                    _sensorNote = 'osc-nb';
+                } else {
+                    _bayerFact = 1.00;
+                    _sensorNote = 'osc';
+                }
+            }
+            let sensorFact = _bayerFact * _qeFact;
+
+            // 8. CALCOLO FINALE
+            let totId = subT * sFact * mFact * lpFact * fFact * sensorFact;
             let isMosaic = document.getElementById('capture-mode').value === 'mosaic';
             let panels = 1;
             if (isMosaic) {
@@ -640,6 +675,11 @@ function toggleLock(id) {
                         reason += ` <br><i style="color:#ff9944; font-size: 0.9em;">⚠️ Il filtro dual/quad-band non è adatto a questo tipo di target (${tipoNomeReport}): blocca la luce broadband riducendo drasticamente il segnale. Rimuovi il filtro o scegli una nebulosa a emissione.</i>`;
                     if(doingOscNB && isEmission)
                         reason += ` <br><i style="color:#44ccaa; font-size: 0.9em;">✅ Filtro dual/quad-band attivo: penalità Bortle ridotta per target a emissione.</i>`;
+                    // Nota correttivo sensore
+                    if(_sensorNote === 'mono-lrgb') reason += ` <br><i style="color:#aaa; font-size: 0.9em;">🔭 Correttivo sensore mono (LRGB/NB): −25% integrazione vs OSC (fattore ${sensorFact.toFixed(2)}).</i>`;
+                    else if(_sensorNote === 'mono-rgb') reason += ` <br><i style="color:#aaa; font-size: 0.9em;">🔭 Correttivo sensore mono (solo RGB): −15% integrazione vs OSC (fattore ${sensorFact.toFixed(2)}).</i>`;
+                    else if(_sensorNote === 'osc-nb') reason += ` <br><i style="color:#aaa; font-size: 0.9em;">🔭 Correttivo sensore OSC con filtro NB: +15% integrazione per perdita Bayer (fattore ${sensorFact.toFixed(2)}).</i>`;
+                    else if(_qeFact !== 1.0) reason += ` <br><i style="color:#aaa; font-size: 0.9em;">🔭 Correttivo QE sensore applicato (fattore ${sensorFact.toFixed(2)}).</i>`;
                 } else if(lang === 'en') {
                     reason = `Being a <b>${tipoNomeReport}</b> of magnitude <b>${mVal.toFixed(1)}</b> shot at <b>f/${fR.toFixed(1)}</b>`;
                     if (isMosaic && panels > 1) reason += ` split in <b>${panels} panels</b> (Mosaic)`;
@@ -654,6 +694,11 @@ function toggleLock(id) {
                         reason += ` <br><i style="color:#ff9944; font-size: 0.9em;">⚠️ The dual/quad-band filter is not suitable for this target type (${tipoNomeReport}): it blocks broadband light, drastically reducing signal. Remove the filter or choose an emission nebula.</i>`;
                     if(doingOscNB && isEmission)
                         reason += ` <br><i style="color:#44ccaa; font-size: 0.9em;">✅ Dual/quad-band filter active: reduced Bortle penalty for emission target.</i>`;
+                    // Sensor correction note
+                    if(_sensorNote === 'mono-lrgb') reason += ` <br><i style="color:#aaa; font-size: 0.9em;">🔭 Mono sensor correction (LRGB/NB): −25% integration vs OSC (factor ${sensorFact.toFixed(2)}).</i>`;
+                    else if(_sensorNote === 'mono-rgb') reason += ` <br><i style="color:#aaa; font-size: 0.9em;">🔭 Mono sensor correction (RGB only): −15% integration vs OSC (factor ${sensorFact.toFixed(2)}).</i>`;
+                    else if(_sensorNote === 'osc-nb') reason += ` <br><i style="color:#aaa; font-size: 0.9em;">🔭 OSC sensor correction with NB filter: +15% integration for Bayer loss (factor ${sensorFact.toFixed(2)}).</i>`;
+                    else if(_qeFact !== 1.0) reason += ` <br><i style="color:#aaa; font-size: 0.9em;">🔭 Sensor QE correction applied (factor ${sensorFact.toFixed(2)}).</i>`;
                 } else if(lang === 'es') {
                     reason = `Tratándose de <b>${tipoNomeReport}</b> de magnitud <b>${mVal.toFixed(1)}</b> capturada a <b>f/${fR.toFixed(1)}</b>`;
                     if (isMosaic && panels > 1) reason += ` dividida en <b>${panels} paneles</b> (Mosaico)`;
@@ -668,6 +713,11 @@ function toggleLock(id) {
                         reason += ` <br><i style="color:#ff9944; font-size: 0.9em;">⚠️ El filtro dual/quad-band no es adecuado para este tipo de objetivo (${tipoNomeReport}). Quita el filtro o elige una nebulosa de emisión.</i>`;
                     if(doingOscNB && isEmission)
                         reason += ` <br><i style="color:#44ccaa; font-size: 0.9em;">✅ Filtro dual/quad-band activo: penalización Bortle reducida.</i>`;
+                    // Nota corrección sensor
+                    if(_sensorNote === 'mono-lrgb') reason += ` <br><i style="color:#aaa; font-size: 0.9em;">🔭 Corrección sensor mono (LRGB/NB): −25% integración vs OSC (factor ${sensorFact.toFixed(2)}).</i>`;
+                    else if(_sensorNote === 'mono-rgb') reason += ` <br><i style="color:#aaa; font-size: 0.9em;">🔭 Corrección sensor mono (solo RGB): −15% integración vs OSC (factor ${sensorFact.toFixed(2)}).</i>`;
+                    else if(_sensorNote === 'osc-nb') reason += ` <br><i style="color:#aaa; font-size: 0.9em;">🔭 Corrección sensor OSC con filtro NB: +15% integración por pérdida Bayer (factor ${sensorFact.toFixed(2)}).</i>`;
+                    else if(_qeFact !== 1.0) reason += ` <br><i style="color:#aaa; font-size: 0.9em;">🔭 Corrección QE de sensor aplicada (factor ${sensorFact.toFixed(2)}).</i>`;
                 } else {
                     reason = `作为星等 <b>${mVal.toFixed(1)}</b> 的 <b>${tipoNomeReport}</b>，在 <b>f/${fR.toFixed(1)}</b> 下拍摄`;
                     if (isMosaic && panels > 1) reason += `，分为 <b>${panels} 个面板</b> (拼接)`;
@@ -682,6 +732,11 @@ function toggleLock(id) {
                         reason += ` <br><i style="color:#ff9944; font-size: 0.9em;">⚠️ 双/四波段滤镜不适合此目标（${tipoNomeReport}）。请移除滤镜或选择发射星云。</i>`;
                     if(doingOscNB && isEmission)
                         reason += ` <br><i style="color:#44ccaa; font-size: 0.9em;">✅ 双/四波段滤镜已启用：博特尔惩罚已降低。</i>`;
+                    // 传感器校正说明
+                    if(_sensorNote === 'mono-lrgb') reason += ` <br><i style="color:#aaa; font-size: 0.9em;">🔭 单色传感器校正（LRGB/NB）：比OSC减少25%积分时间（系数 ${sensorFact.toFixed(2)}）。</i>`;
+                    else if(_sensorNote === 'mono-rgb') reason += ` <br><i style="color:#aaa; font-size: 0.9em;">🔭 单色传感器校正（仅RGB）：比OSC减少15%积分时间（系数 ${sensorFact.toFixed(2)}）。</i>`;
+                    else if(_sensorNote === 'osc-nb') reason += ` <br><i style="color:#aaa; font-size: 0.9em;">🔭 OSC+NB滤镜传感器校正：拜耳损失+15%积分时间（系数 ${sensorFact.toFixed(2)}）。</i>`;
+                    else if(_qeFact !== 1.0) reason += ` <br><i style="color:#aaa; font-size: 0.9em;">🔭 已应用传感器QE校正（系数 ${sensorFact.toFixed(2)}）。</i>`;
                 }
                 html += `<div style="font-size:0.9em; line-height:1.5; color:#ddd; margin-bottom:10px;">${reason}</div>`;
             }
