@@ -3505,6 +3505,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (typeof setSessionDate === 'function') setSessionDate(iso);
         };
         window.resetSessionDateToday = function() {
+            localStorage.removeItem('adp_session_date');
             window.onSessionDateChange(_todayISO());
         };
         // Esposto globalmente per i18n (chiamato da changeLanguage in smart.js)
@@ -3515,13 +3516,29 @@ document.addEventListener('DOMContentLoaded', function() {
             _updateBadges(iso);
         };
         document.addEventListener('DOMContentLoaded', function() {
-            const iso = _todayISO();
-            ['session-date-picker','session-date-picker-smart'].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.value = iso;
-            });
+            // Legge la data salvata in localStorage
+            const saved = localStorage.getItem('adp_session_date');
+            const todayStr = _todayISO();
+            let iso = todayStr;
+            if (saved) {
+                const today = new Date(todayStr + 'T12:00:00');
+                const savedD = new Date(saved + 'T12:00:00');
+                if (savedD >= today) iso = saved;
+                else localStorage.removeItem('adp_session_date');
+            }
             _applyTranslations();
-            _updateBadges(iso);
+            // Usa onSessionDateChange per propagare la data a tutti i moduli
+            // (aggiorna picker, badge, setSessionDate in globals.js e lancia sessionDateChanged)
+            if (iso !== todayStr) {
+                // Data futura: propaga dopo che tutti i moduli sono pronti
+                setTimeout(function() { window.onSessionDateChange(iso); }, 300);
+            } else {
+                ['session-date-picker','session-date-picker-smart'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.value = iso;
+                });
+                _updateBadges(iso);
+            }
         });
     })();
     </script>

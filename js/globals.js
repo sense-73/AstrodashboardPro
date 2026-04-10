@@ -9,7 +9,24 @@ const DEBUG = false;
 // ── Data sessione (pianificazione) ────────────────────────────
 // sessionDate è la data di riferimento per tutti i calcoli astronomici.
 // Di default è oggi. Può essere modificata dall'utente per pianificare sessioni future.
-let _sessionDateObj = new Date();
+// La data viene persistita in localStorage per sopravvivere al riavvio della pagina.
+const _SESSION_DATE_KEY = 'adp_session_date';
+
+function _initSessionDate() {
+    const saved = localStorage.getItem(_SESSION_DATE_KEY);
+    if (saved) {
+        const parts = saved.split('-');
+        if (parts.length === 3) {
+            const d = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]), 12, 0, 0);
+            // Se la data salvata è nel passato, torna a oggi
+            const today = new Date(); today.setHours(0,0,0,0);
+            if (d >= today) return d;
+        }
+    }
+    return new Date();
+}
+
+let _sessionDateObj = _initSessionDate();
 
 function getSessionDate() {
     return new Date(_sessionDateObj.getTime());
@@ -20,8 +37,13 @@ function setSessionDate(dateOrString) {
         // Formato YYYY-MM-DD: costruisce la data a mezzogiorno locale per evitare offset fuso
         const parts = dateOrString.split('-');
         _sessionDateObj = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]), 12, 0, 0);
+        localStorage.setItem(_SESSION_DATE_KEY, dateOrString);
     } else {
         _sessionDateObj = new Date(dateOrString.getTime());
+        const iso = _sessionDateObj.getFullYear() + '-'
+            + String(_sessionDateObj.getMonth()+1).padStart(2,'0') + '-'
+            + String(_sessionDateObj.getDate()).padStart(2,'0');
+        localStorage.setItem(_SESSION_DATE_KEY, iso);
     }
     // Propaga il cambio data a tutti i moduli tramite evento custom
     document.dispatchEvent(new CustomEvent('sessionDateChanged', { detail: { date: getSessionDate() } }));
