@@ -537,10 +537,32 @@ function toggleLock(id) {
             let sFact = (doingN && !isEmission) ? 2.0 : 1.0;
 
             // 5. INQUINAMENTO LUNARE EFFETTIVO
-            // Usa val-luna (già calcolato da weather.js: fase × sin(altitudine))
-            // Ignora le ore in cui la Luna è sotto l'orizzonte — nessuna penalità ingiustificata.
-            let lunaEl = document.getElementById('val-luna');
-            let inqLuna = lunaEl ? (parseInt(lunaEl.innerText) || 0) : 0;
+            // Per oggi: legge val-luna aggiornato da weather.js in tempo reale.
+            // Per date future: calcola direttamente con SunCalc (deterministico).
+            let inqLuna = 0;
+            if (!isSessionDateToday() && typeof SunCalc !== 'undefined') {
+                let _sd = getSessionDate();
+                let _atS = SunCalc.getTimes(_sd, latCorrente, lonCorrente);
+                let _nS  = _atS.night || _atS.dusk;
+                let _sdNext = new Date(_sd.getTime() + 86400000);
+                let _atE = SunCalc.getTimes(_sdNext, latCorrente, lonCorrente);
+                let _nE  = _atE.nightEnd || _atE.dawn || _atE.sunrise;
+                let _mFase = SunCalc.getMoonIllumination(_sd);
+                let _lunaSum = 0, _lunaCount = 0;
+                if (_nS && _nE && _nS < _nE) {
+                    let _cur = new Date(_nS.getTime());
+                    while (_cur <= _nE) {
+                        let _mPos = SunCalc.getMoonPosition(_cur, latCorrente, lonCorrente);
+                        if (_mPos.altitude > 0) _lunaSum += _mFase.fraction * Math.sin(_mPos.altitude);
+                        _lunaCount++;
+                        _cur = new Date(_cur.getTime() + 1800000);
+                    }
+                }
+                inqLuna = _lunaCount > 0 ? Math.max(0, Math.round((_lunaSum / _lunaCount) * 100)) : 0;
+            } else {
+                let lunaEl = document.getElementById('val-luna');
+                inqLuna = lunaEl ? (parseInt(lunaEl.innerText) || 0) : 0;
+            }
             let mFact = 1.0;
             if(!doingN) {
                 if(inqLuna > 30 && inqLuna <= 70) mFact = 1.5;
