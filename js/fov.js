@@ -776,11 +776,55 @@
         }
 
         // ── Listener cambio data sessione ─────────────────────────────────────
+        // Ricalcola orari sessione e grafico senza scroll né side effects UI
+        function ricalcolaSessionePerData() {
+            if (!targetSelezionato) return;
+
+            // Stessa logica astronomica di selezionaTarget ma senza scroll/toggleSensorMode
+            let dOggi = getSessionDate();
+            if (isSessionDateToday() && dOggi.getHours() < 12) dOggi.setDate(dOggi.getDate() - 1);
+            let atStart = SunCalc.getTimes(dOggi, latCorrente, lonCorrente);
+            let dDomani = new Date(dOggi.getTime() + 86400000);
+            let atEnd   = SunCalc.getTimes(dDomani, latCorrente, lonCorrente);
+            let ft = (x) => x && !isNaN(x) ? x.toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'}) : '--:--';
+
+            document.getElementById('info-sunset').innerText    = ft(atStart.sunset);
+            document.getElementById('info-nightstart').innerText = ft(atStart.night);
+            document.getElementById('info-nightend').innerText  = ft(atEnd.nightEnd);
+            document.getElementById('info-sunrise').innerText   = ft(atEnd.sunrise);
+
+            let nS = atStart.night || atStart.sunset;
+            let nE = atEnd.nightEnd || atEnd.sunrise;
+            let cur = new Date(nS.getTime()); let maxA = -90;
+            let firstAbove30 = null, lastAbove30 = null;
+            while (cur <= nE) {
+                let a = calcolaAltAz(targetSelezionato.ra, targetSelezionato.dec, latCorrente, lonCorrente, cur).alt;
+                if (a > maxA) maxA = a;
+                if (a >= 30) { if (!firstAbove30) firstAbove30 = new Date(cur); lastAbove30 = new Date(cur); }
+                cur.setMinutes(cur.getMinutes() + 10);
+            }
+
+            let _rawStart = new Date(nS.getTime());
+            if (firstAbove30 && firstAbove30 > _rawStart) _rawStart = new Date(firstAbove30.getTime());
+            if (isSessionDateToday()) {
+                let _adesso = new Date(); _adesso.setSeconds(0, 0);
+                if (_adesso > _rawStart && _adesso < nE) _rawStart = new Date(_adesso.getTime());
+            }
+            let _rawEnd = new Date(nE.getTime());
+            if (lastAbove30 && lastAbove30 < _rawEnd) _rawEnd = new Date(lastAbove30.getTime());
+
+            if (!firstAbove30) {
+                document.getElementById('time-start').value = ft(nS);
+                document.getElementById('time-end').value   = ft(nS);
+            } else {
+                document.getElementById('time-start').value = ft(_rawStart);
+                document.getElementById('time-end').value   = ft(_rawEnd);
+            }
+
+            disegnaGraficoAltezza();
+            if (typeof calcolaTempi === 'function') calcolaTempi();
+        }
+
         document.addEventListener('sessionDateChanged', function() {
-            if (targetSelezionato) {
-                selezionaTarget(targetSelezionato);
-            }
-            if (typeof disegnaGraficoAltezza === 'function') {
-                disegnaGraficoAltezza();
-            }
+            ricalcolaSessionePerData();
         });

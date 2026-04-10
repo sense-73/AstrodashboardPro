@@ -320,20 +320,24 @@
         }
 
         function applicaGradienteGiornoNotte() {
-            if (!datiMeteo) return;
-            let maxSteps = 23; // Il range del nostro slider
+            let maxSteps = 23;
             let stops = [];
-            for(let i=0; i<=maxSteps; i++) {
-                let d = new Date(datiMeteo.time[indicePartenza + i]);
+            for (let i = 0; i <= maxSteps; i++) {
+                let d;
+                if (!isSessionDateToday() || !datiMeteo || !datiMeteo.time[indicePartenza + i]) {
+                    // Data futura o meteo non disponibile: costruisce ore dalla data sessione (base 18:00)
+                    let base = getSessionDate();
+                    base.setHours(18, 0, 0, 0);
+                    d = new Date(base.getTime() + i * 3600000);
+                } else {
+                    d = new Date(datiMeteo.time[indicePartenza + i]);
+                }
                 let times = SunCalc.getTimes(d, latCorrente, lonCorrente);
                 let pct = (i / maxSteps) * 100;
-                
-                // Colori: Giorno (Azzurro), Tramonto (Arancione), Notte (Nero), Alba (Viola)
                 let color = "#0a0f1d";
-                if (d > times.sunrise && d < times.sunset) color = "#5c9fb8";          // Giorno
-                else if (d >= times.sunset && d < times.dusk)   color = "#d97b2b";     // Tramonto
-                else if (d >= times.dawn   && d <= times.sunrise) color = "#5c2d8a";   // Alba
-                
+                if (d > times.sunrise && d < times.sunset) color = "#5c9fb8";
+                else if (d >= times.sunset && d < times.dusk)   color = "#d97b2b";
+                else if (d >= times.dawn   && d <= times.sunrise) color = "#5c2d8a";
                 stops.push(`${color} ${pct}%`);
             }
             let grad = `linear-gradient(to right, ${stops.join(', ')})`;
@@ -706,6 +710,8 @@
                 if (btnSeeing) { btnSeeing.style.opacity = ''; btnSeeing.style.pointerEvents = ''; }
             }
 
+            // Aggiorna gradiente giorno/notte per la nuova data
+            applicaGradienteGiornoNotte();
             // Ripristina layer meteo a today (scarica nuovi dati se necessario)
             if (!isFuture && datiMeteo) cambiaOraMeteo();
         });
