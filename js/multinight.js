@@ -90,7 +90,6 @@
                     narrowL.forEach(id => total += 1);
                     if (hL) w['m-l'] = 1 / total;
                     broadL.filter(id => id !== 'm-l').forEach(id => w[id] = (1/3) / total);
-                    narrowL.forEach(id => total += 1); // già sommati sopra
                     narrowL.forEach(id => w[id] = 1 / total);
                 }
             }
@@ -120,6 +119,13 @@
             let _dFreqG = (_catG === 'sh2') ? 3 : 4;
             let dD = parseInt(document.getElementById('dither-duration') ? document.getElementById('dither-duration').value : 15) || 15;
 
+            // Overhead per-frame identico a ricalcolaOreNotte
+            let _swA = parseFloat((document.getElementById('sensor-width')||{}).value) || 23.5;
+            let _shA = parseFloat((document.getElementById('sensor-height')||{}).value) || 15.7;
+            let _pxA = parseFloat((document.getElementById('pixel-size')||{}).value) || 3.76;
+            let _mpA = (_swA / (_pxA / 1000)) * (_shA / (_pxA / 1000)) / 1e6;
+            let lightOverheadA = Math.max(1.5, 1.2 + _mpA * 0.08);
+
             // ── Calcola e compila pose per ogni filtro attivo ──
             aL.forEach(pid => {
                 let _baseExp = (_catExpMap[_catG] !== undefined) ? _catExpMap[_catG] : 180;
@@ -133,7 +139,8 @@
                 let uD = dChkF && dChkF.checked;
                 let dFrqEl = document.getElementById(`${pid}-dfreq`);
                 let dF = parseInt(dFrqEl ? dFrqEl.value : _dFreqG) || _dFreqG;
-                let eeS = eS + (uD && dF > 0 ? dD / dF : 0);
+                // eeS include lightOverhead (allineato a ricalcolaOreNotte) + dither medio
+                let eeS = eS + lightOverheadA + (uD && dF > 0 ? dD / dF : 0);
 
                 let countEl = document.getElementById(`count-mn-${notteId}-${pid}`);
                 let expEl   = document.getElementById(`exp-mn-${notteId}-${pid}`);
@@ -341,8 +348,30 @@ function aggiungiNotte() {
                 }
             });
 
+            // Calcola anche le righe HDR della notte (PRIMA di display e check finestra)
+            let possibiliHdr = isM ? ['m-l','m-r','m-g','m-b','m-ha','m-oiii','m-sii'] : ['c-light'];
+
+            possibiliHdr.forEach(hdrPid => {
+                let chkHdr = document.getElementById(`chk-mn-${id}-${hdrPid}-hdr`);
+                if (chkHdr && chkHdr.checked) {
+                    let countH = parseInt(document.getElementById(`count-mn-${id}-${hdrPid}-hdr`).value) || 0;
+                    let expH   = parseInt(document.getElementById(`exp-mn-${id}-${hdrPid}-hdr`).value) || 0;
+                    if (countH > 0 && expH > 0) {
+                        totalSecs += countH * (expH + lightOverhead);
+                        let _hdrDChk = document.getElementById(`${hdrPid}-hdr-dither`);
+                        let _usaDither = _hdrDChk ? _hdrDChk.checked : true;
+                        if (_usaDither) {
+                            let _hdrDFreq = parseInt((document.getElementById(`${hdrPid}-hdr-dfreq`)||{}).value) || 4;
+                            totalSecs += Math.floor(countH / _hdrDFreq) * ditherOverheadSecs;
+                        }
+                    }
+                }
+            });
+
             let orePose = (totalSecs / 3600).toFixed(1);
-            document.getElementById(`ore-mn-${id}`).value = orePose + "h";
+            let oreEl = document.getElementById(`ore-mn-${id}`);
+            oreEl.value = orePose + "h";
+            oreEl.dataset.secs = totalSecs;
             
             // Controlliamo se le pose inserite superano il tempo fisico (Inizio - Fine Notte)
             let tS = document.getElementById(`start-mn-${id}`).value;
@@ -362,28 +391,6 @@ function aggiungiNotte() {
                 }
             }
 
-            // Calcola anche le righe HDR della notte
-            let possibiliHdr = isM ? ['m-l','m-r','m-g','m-b','m-ha','m-oiii','m-sii'] : ['c-light'];
-
-            possibiliHdr.forEach(hdrPid => {
-                let chkHdr = document.getElementById(`chk-mn-${id}-${hdrPid}-hdr`);
-                if (chkHdr && chkHdr.checked) {
-                    let countH = parseInt(document.getElementById(`count-mn-${id}-${hdrPid}-hdr`).value) || 0;
-                    let expH   = parseInt(document.getElementById(`exp-mn-${id}-${hdrPid}-hdr`).value) || 0;
-                    if (countH > 0 && expH > 0) {
-                        // Overhead per-frame come per i Light
-                        totalSecs += countH * (expH + lightOverhead);
-                        // Dither HDR: usa checkbox e freq del filtro principale
-                        let _hdrDChk = document.getElementById(`${hdrPid}-hdr-dither`);
-                        let _usaDither = _hdrDChk ? _hdrDChk.checked : true;
-                        if (_usaDither) {
-                            let _hdrDFreq = parseInt((document.getElementById(`${hdrPid}-hdr-dfreq`)||{}).value) || 4;
-                            totalSecs += Math.floor(countH / _hdrDFreq) * ditherOverheadSecs;
-                        }
-                    }
-                }
-            });
-
             calcolaTotaleNotti();
         }
 
@@ -391,7 +398,7 @@ function aggiungiNotte() {
             let container = document.getElementById('mn-nights-container'); if(!container) return;
             let inputs = container.querySelectorAll('input[type="text"][id^="ore-mn-"]');
             let totSec = 0;
-            inputs.forEach(i => { totSec += (parseFloat(i.value.replace('h','')) || 0) * 3600; });
+            inputs.forEach(i => { totSec += parseFloat(i.dataset.secs) || 0; });
 
             let totH = Math.floor(totSec / 3600);
             let totM = Math.floor((totSec % 3600) / 60);
