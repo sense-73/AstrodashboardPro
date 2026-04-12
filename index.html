@@ -771,7 +771,8 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c49a3c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
                 <label style="color:#c9d1d9; font-size:0.88em; white-space:nowrap;" data-i18n="session_date">Data sessione:</label>
                 <input type="date" id="session-date-picker" style="background:#c8cfd6; color:#1a2533; border:1.5px solid #9aaab8; border-radius:7px; padding:6px 12px; font-size:1.6em; font-weight:600; cursor:pointer; width:auto;" onchange="onSessionDateChange(this.value)">
-                <button onclick="resetSessionDateToday()" style="background:transparent; border:1px solid #2a3347; border-radius:6px; color:#8899aa; font-size:0.82em; padding:4px 12px; cursor:pointer;" data-i18n="today_btn">Oggi</button>
+                <button onclick="resetSessionDateToday()" style="display:flex;flex-direction:column;align-items:center;gap:1px;padding:5px 12px;border-radius:7px;cursor:pointer;border:1px solid #2a3347;background:transparent;" data-i18n-parent="today_btn"><span style="font-size:0.85em;font-weight:600;color:#8899aa;" data-i18n="today_btn">Oggi</span><span class="today-btn-date" style="font-size:0.72em;color:#6e7a8a;"></span></button>
+                <div id="session-day-btns" style="display:flex;gap:6px;flex-shrink:0;"></div>
             </div>
             <!-- ── Warning meteo date future ── -->
             <div id="future-date-meteo-warn" style="display:none; align-items:flex-start; gap:8px; margin-bottom:10px; padding:7px 12px; background:rgba(196,154,60,0.07); border:1px solid rgba(196,154,60,0.25); border-radius:8px; font-size:0.82em; color:#c49a3c;">
@@ -1026,7 +1027,8 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c49a3c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
             <label style="color:#c9d1d9; font-size:0.88em; white-space:nowrap;" data-i18n="session_date">Data sessione:</label>
             <input type="date" id="session-date-picker-smart" style="background:#c8cfd6; color:#1a2533; border:1.5px solid #9aaab8; border-radius:7px; padding:6px 12px; font-size:1.6em; font-weight:600; cursor:pointer; width:auto;" onchange="onSessionDateChange(this.value)">
-            <button onclick="resetSessionDateToday()" style="background:transparent; border:1px solid #2a3347; border-radius:6px; color:#8899aa; font-size:0.82em; padding:4px 12px; cursor:pointer;" data-i18n="today_btn">Oggi</button>
+            <button onclick="resetSessionDateToday()" style="display:flex;flex-direction:column;align-items:center;gap:1px;padding:5px 12px;border-radius:7px;cursor:pointer;border:1px solid #2a3347;background:transparent;" data-i18n-parent="today_btn"><span style="font-size:0.85em;font-weight:600;color:#8899aa;" data-i18n="today_btn">Oggi</span><span class="today-btn-date" style="font-size:0.72em;color:#6e7a8a;"></span></button>
+            <div id="session-day-btns-smart" style="display:flex;gap:6px;flex-shrink:0;"></div>
         </div>
         <!-- ── Label data centrata sopra inizio/fine sessione ── -->
         <div id="session-date-centered-label" style="text-align:center; font-size:0.88em; font-weight:600; color:#c49a3c; margin-bottom:8px; letter-spacing:0.2px;"></div>
@@ -3480,9 +3482,20 @@ document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('[data-i18n="session_date"]').forEach(el => { el.textContent = _dateLabel(); });
             document.querySelectorAll('[data-i18n="today_btn"]').forEach(el => { el.textContent = _todayLabel(); });
             document.querySelectorAll('[data-i18n="future_date_meteo_warn"]').forEach(el => { el.textContent = _warnLabel(); });
+            // Rigenera pulsanti giorno solo se i container sono presenti nel DOM
+            if (document.getElementById('session-day-btns')) {
+                const _pickers = document.querySelectorAll('#session-date-picker,#session-date-picker-smart');
+                const _curIso = (_pickers.length && _pickers[0].value) ? _pickers[0].value : _todayISO();
+                _buildDayBtns(_curIso);
+            }
         }
         function _updateBadges(iso) {
             const isToday = (iso === _todayISO());
+            // Calcola giorni di distanza da oggi
+            const _t0 = new Date(_todayISO()+'T12:00:00');
+            const _s0 = new Date(iso+'T12:00:00');
+            const _diffDays = Math.round((_s0 - _t0) / 86400000);
+            const _beyondMeteo = _diffDays > 2; // oltre oggi+2 non ci sono dati meteo
             // Colore campo data: bianco/chiaro per oggi, azzurrino per date future
             const styleToday = 'background:#c8cfd6; color:#1a2533; border:1.5px solid #9aaab8; border-radius:7px; padding:6px 12px; font-size:1.6em; font-weight:600; cursor:pointer; width:auto;';
             const styleFuture = 'background:#1a3a5c; color:#e0f0ff; border:2px solid #c49a3c; border-radius:7px; padding:6px 12px; font-size:1.6em; font-weight:600; cursor:pointer; width:auto;';
@@ -3491,10 +3504,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (el) el.style.cssText = isToday ? styleToday : styleFuture;
             });
             const warn = document.getElementById('future-date-meteo-warn');
-            if (warn) warn.style.display = isToday ? 'none' : 'flex';
+            if (warn) warn.style.display = _beyondMeteo ? 'flex' : 'none';
             // Label centrata nella sezione Smart
             const lbl = document.getElementById('session-date-centered-label');
             if (lbl) lbl.textContent = _sessionLabel(iso);
+            // Pulsanti giorno
+            _buildDayBtns(iso);
         }
         window.onSessionDateChange = function(iso) {
             ['session-date-picker','session-date-picker-smart'].forEach(id => {
@@ -3508,6 +3523,51 @@ document.addEventListener('DOMContentLoaded', function() {
             localStorage.removeItem('adp_session_date');
             window.onSessionDateChange(_todayISO());
         };
+
+        // ── Pulsanti giorno (oggi+1, oggi+2 con meteo) ───────────────
+        const _DAY_NAMES = {
+            it: ['Domenica','Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'],
+            en: ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
+            es: ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'],
+            zh: ['周日','周一','周二','周三','周四','周五','周六']
+        };
+        const _MONTH_NAMES = {
+            it: ['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'],
+            en: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+            es: ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
+            zh: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月']
+        };
+
+        function _buildDayBtns(iso) {
+            if (!iso) iso = _todayISO();
+            const lg = _getLang();
+            const days = _DAY_NAMES[lg] || _DAY_NAMES.it;
+            const months = _MONTH_NAMES[lg] || _MONTH_NAMES.it;
+            const today = new Date(_todayISO() + 'T12:00:00');
+            // Popola la data sotto il pulsante "Oggi"
+            const todayStr = today.getDate()+' '+months[today.getMonth()];
+            document.querySelectorAll('.today-btn-date').forEach(el => { el.textContent = todayStr; });
+
+            ['session-day-btns','session-day-btns-smart'].forEach(id => {
+                const container = document.getElementById(id);
+                if (!container) return;
+                container.innerHTML = '';
+                for (let i = 1; i <= 2; i++) {
+                    const d = new Date(today.getTime() + i * 86400000);
+                    const dISO = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+                    const isActive = (iso === dISO);
+                    const dayName = days[d.getDay()];
+                    const dateStr = d.getDate() + ' ' + months[d.getMonth()];
+                    const btn = document.createElement('button');
+                    btn.style.cssText = isActive
+                        ? 'display:flex;flex-direction:column;align-items:center;gap:1px;padding:5px 12px;border-radius:7px;cursor:pointer;border:2px solid #c49a3c;background:#1a3a5c;'
+                        : 'display:flex;flex-direction:column;align-items:center;gap:1px;padding:5px 12px;border-radius:7px;cursor:pointer;border:1px solid #2a3347;background:transparent;';
+                    btn.innerHTML = `<span style="font-size:0.85em;font-weight:600;color:${isActive?'#e0f0ff':'#c9d1d9'};">${dayName}</span><span style="font-size:0.72em;color:${isActive?'#a0c8e8':'#6e7a8a'};">${dateStr}</span>`;
+                    btn.onclick = () => window.onSessionDateChange(dISO);
+                    container.appendChild(btn);
+                }
+            });
+        }
         // Esposto globalmente per i18n (chiamato da changeLanguage in smart.js)
         window._refreshSessionDateUI = function() {
             _applyTranslations();

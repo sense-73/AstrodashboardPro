@@ -389,12 +389,63 @@
         };
 
         function cambiaOraMeteo() {
-            // Per date future: orario dalla data sessione + step ore, luna calcolata ora per ora
+            // Per date future entro copertura meteo (oggi+1, oggi+2): usa datiMeteo
+            // Per date oltre: solo dati lunari
             if (!isSessionDateToday()) {
                 let step = parseInt(document.getElementById('timeSlider').value);
                 let base = getSessionDate();
                 base.setHours(18, 0, 0, 0);
                 let dOra = new Date(base.getTime() + step * 3600000);
+                // Cerca l'indice in datiMeteo corrispondente a dOra
+                let _meteoIdx = -1;
+                if (datiMeteo && datiMeteo.time) {
+                    const _dOraMs = dOra.getTime();
+                    _meteoIdx = datiMeteo.time.findIndex(t => Math.abs(new Date(t).getTime() - _dOraMs) < 1800000);
+                }
+                if (_meteoIdx >= 0) {
+                    // Dati meteo disponibili per questa data/ora
+                    let b = datiMeteo.cloud_cover_low[_meteoIdx], m = datiMeteo.cloud_cover_mid[_meteoIdx], a = datiMeteo.cloud_cover_high[_meteoIdx];
+                    let jet = Math.round(datiMeteo.wind_speed_250hPa[_meteoIdx]);
+                    let vs = datiMeteo.wind_speed_10m[_meteoIdx], wdir = datiMeteo.wind_direction_10m ? datiMeteo.wind_direction_10m[_meteoIdx] : 0;
+                    let temp = datiMeteo.temperature_2m[_meteoIdx], um = datiMeteo.relative_humidity_2m[_meteoIdx];
+                    let altS = SunCalc.getPosition(dOra, latCorrente, lonCorrente).altitude * (180/Math.PI);
+                    let mP = SunCalc.getMoonPosition(dOra, latCorrente, lonCorrente);
+                    let inqL = (altS < -6 && mP.altitude > 0) ? Math.max(0, Math.round((SunCalc.getMoonIllumination(dOra).fraction * Math.sin(mP.altitude)) * 100)) : 0;
+                    let maxC = Math.max(b, m, a), icM = "☁️", dsM = "overcast";
+                    if (maxC < 15) { icM = "☀️"; dsM = "clear"; } else if (maxC < 40) { icM = "🌤️"; dsM = "partly_cloudy"; } else if (maxC < 75) { icM = "⛅"; dsM = "mostly_cloudy"; }
+                    if (altS < -6) { if (maxC < 15) icM = "✨"; else if (maxC < 40) icM = "🌙"; }
+                    let tOra = dOra.toLocaleDateString(lang==='it'?'it-IT':'en-US', { weekday: 'short', day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
+                    let tdEl = document.getElementById('time-display');
+                    if (tdEl) tdEl.innerHTML = `<span style="font-size:1.5em;vertical-align:middle;margin-right:5px;">${icM}</span> ${tOra} <br><span style="font-size:0.75em;color:#aaa;text-transform:uppercase;">${t("weather")}: <b style="color:#fff;">${t(dsM)}</b></span>`;
+                    document.getElementById('val-basse').innerText = b+"%"; document.getElementById('val-medie').innerText = m+"%"; document.getElementById('val-alte').innerText = a+"%";
+                    document.getElementById('val-jet').innerHTML = jet+' <span class="jet-unit">km/h</span>';
+                    document.getElementById('val-luna').innerText = inqL+"%";
+                    let _vEl = document.getElementById('val-vento-layer');
+                    if (_vEl) { let _vc = vs < 6 ? '#44ff88' : vs < 11 ? '#ffcc00' : vs < 21 ? '#ff8800' : '#ff2222'; _vEl.style.color = _vc; _vEl.innerText = Math.round(vs)+' km/h'; }
+                    // Seeing
+                    let scS = Math.max(1, 5 - Math.round(maxC/20) - (jet>100?1:0) - (um>85?1:0));
+                    let seeEl = document.getElementById('val-seeing'); if(seeEl){ seeEl.innerText = altS > -6 ? t("daytime") : Math.max(1,scS)+"/5"; seeEl.style.color = altS > -6 ? "#ffaa00" : "#bb86fc"; }
+                    // Layer meteo attivi per previsione
+                    ['basse','medie','alte','jet','umidita','vento'].forEach(n => {
+                        let btn = document.getElementById('btn-'+n);
+                        if (btn) { btn.style.opacity=''; btn.style.pointerEvents=''; btn.style.cursor=''; }
+                    });
+                    let btnSeeing = document.getElementById('btn-seeing');
+                    if (btnSeeing) { btnSeeing.style.opacity=''; btnSeeing.style.pointerEvents=''; }
+                    // Ridisegna i layer sulla mappa per la data futura
+                    Object.values(layers).forEach(l => l.clearLayers());
+                    const R_NUV = 50000, R_JET = 60000, R_UMID = 75000, R_LUNA = 100000, PCT = 0.92;
+                    L.circle([latCorrente,lonCorrente],{radius:R_NUV,color:'#ff4444',fillColor:'#ff4444',fillOpacity:(b/100)*0.7,weight:1}).addTo(layers.basse);
+                    _meteoIcon(_offsetLatLon(latCorrente,lonCorrente,R_NUV*PCT,270),_SVG.basse.paths,_SVG.basse.filled).addTo(layers.basse);
+                    L.circle([latCorrente,lonCorrente],{radius:R_NUV,color:'#44ff44',fillColor:'#44ff44',fillOpacity:(m/100)*0.7,weight:1}).addTo(layers.medie);
+                    _meteoIcon(_offsetLatLon(latCorrente,lonCorrente,R_NUV*PCT,315),_SVG.medie.paths,_SVG.medie.filled).addTo(layers.medie);
+                    L.circle([latCorrente,lonCorrente],{radius:R_NUV,color:'#4444ff',fillColor:'#4444ff',fillOpacity:(a/100)*0.7,weight:1}).addTo(layers.alte);
+                    _meteoIcon(_offsetLatLon(latCorrente,lonCorrente,R_NUV*PCT,0),_SVG.alte.paths,_SVG.alte.filled).addTo(layers.alte);
+                    if(jet>50){L.circle([latCorrente,lonCorrente],{radius:R_JET,color:'#ff00ff',fillColor:'#ff00ff',fillOpacity:(jet/200)*0.5,weight:2,dashArray:'10, 10'}).addTo(layers.jet);_meteoIcon(_offsetLatLon(latCorrente,lonCorrente,R_JET*PCT,45),_SVG.jet.paths,_SVG.jet.filled).addTo(layers.jet);}
+                    if(inqL>0){L.circle([latCorrente,lonCorrente],{radius:R_LUNA,color:'#ffffaa',fillColor:'#ffffaa',fillOpacity:(inqL/100)*0.4,weight:0}).addTo(layers.luna);_meteoIcon(_offsetLatLon(latCorrente,lonCorrente,R_LUNA*PCT,45),_SVG.luna.paths,_SVG.luna.filled).addTo(layers.luna);}
+                    if(um>60){L.circle([latCorrente,lonCorrente],{radius:R_UMID,color:'#00ffff',fillColor:'#00ffff',fillOpacity:((um-60)/100)*0.5,weight:1,dashArray:'5, 5'}).addTo(layers.umidita);_meteoIcon(_offsetLatLon(latCorrente,lonCorrente,R_UMID*PCT,45),_SVG.umidita.paths,_SVG.umidita.filled).addTo(layers.umidita);}
+                    return;
+                }
                 let tOra = dOra.toLocaleDateString(lang==='it'?'it-IT':'en-US', { weekday: 'short', day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
                 // Calcolo inquinamento lunare per quest'ora specifica
                 let mPFut = SunCalc.getMoonPosition(dOra, latCorrente, lonCorrente);
@@ -649,6 +700,11 @@
         document.addEventListener('sessionDateChanged', function(e) {
             aggiornaEffemeridi(e.detail.date);
             let isFuture = !isSessionDateToday();
+            // Calcola se la data è entro la copertura meteo (oggi+2)
+            const _today0 = new Date(); _today0.setHours(0,0,0,0);
+            const _sel0 = new Date(e.detail.date); _sel0.setHours(0,0,0,0);
+            const _diffDays = Math.round((_sel0 - _today0) / 86400000);
+            const _hasMeteo = _diffDays <= 2;
 
             // Slider meteo: resta attivo anche per date future (mostra orario senza dati)
             let sliderMeteo = document.getElementById('timeSlider');
@@ -666,13 +722,13 @@
                 if (typeof cambiaOraAstro === 'function') cambiaOraAstro();
             }
 
-            // Layer meteo: disabilitati per date future, riabilitati per oggi
+            // Layer meteo: disabilitati solo oltre la copertura previsionale (>oggi+2)
             // Luna e LP rimangono sempre gestibili
             const _meteoOnlyLayers = ['basse','medie','alte','jet','umidita','vento'];
             _meteoOnlyLayers.forEach(n => {
                 let btn = document.getElementById('btn-' + n);
                 if (!btn) return;
-                if (isFuture) {
+                if (!_hasMeteo) {
                     // Rimuovi dal layer se attivo, metti non cliccabile
                     if (layers[n] && map.hasLayer(layers[n])) map.removeLayer(layers[n]);
                     btn.classList.remove('active');
@@ -681,15 +737,14 @@
                     btn.style.pointerEvents = 'none';
                     btn.style.cursor = 'not-allowed';
                 } else {
-                    // Ripristina cliccabilità
                     btn.style.opacity = '';
                     btn.style.pointerEvents = '';
                     btn.style.cursor = '';
                 }
             });
 
-            // Azzera valori meteo per date future
-            if (isFuture) {
+            // Azzera valori meteo solo oltre la copertura previsionale
+            if (!_hasMeteo) {
                 ['val-basse','val-medie','val-alte'].forEach(id => {
                     let el = document.getElementById(id); if (el) el.innerText = '--%';
                 });
@@ -705,13 +760,12 @@
                 let btnSeeing = document.getElementById('btn-seeing');
                 if (btnSeeing) { btnSeeing.style.opacity = '0.35'; btnSeeing.style.pointerEvents = 'none'; }
             } else {
-                // Ripristina seeing a oggi
                 let btnSeeing = document.getElementById('btn-seeing');
                 if (btnSeeing) { btnSeeing.style.opacity = ''; btnSeeing.style.pointerEvents = ''; }
             }
 
             // Aggiorna gradiente giorno/notte per la nuova data
             applicaGradienteGiornoNotte();
-            // Ripristina layer meteo a today (scarica nuovi dati se necessario)
-            if (!isFuture && datiMeteo) cambiaOraMeteo();
+            // Aggiorna slider meteo (funziona per oggi e previsioni)
+            if (datiMeteo || _hasMeteo) cambiaOraMeteo();
         });
