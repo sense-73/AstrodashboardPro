@@ -152,7 +152,42 @@
             info.innerHTML = `<h4 title="${finalName}">${finalName}</h4><p>Alt: <b>${Math.round(alt)}°</b></p><span class="dso-direction ${altClass}">${getPuntoCardinale(az)}</span>`;
             div.appendChild(info);
 
-            if (c) div.onclick = () => apriPianificazione(tObj);
+            if (c) {
+                // Singolo click → pianificazione (desktop e touch)
+                div.onclick = (e) => {
+                    if (_longPressActivated) { _longPressActivated = false; return; }
+                    apriPianificazione(tObj);
+                };
+
+                // ── DESKTOP: hover apre galleria dopo 400ms (ignorato su touch) ──
+                div.addEventListener('mouseenter', () => {
+                    if (_isTouchDevice()) return;
+                    clearTimeout(_dsoCloseTimer);
+                    clearTimeout(_dsoOpenTimer);
+                    if (_dsoGalleryVisible) { chiudiGalleriaDso(); apriGalleriaDso(tObj, div); }
+                    else { _dsoOpenTimer = setTimeout(() => apriGalleriaDso(tObj, div), 400); }
+                });
+                div.addEventListener('mouseleave', () => {
+                    if (_isTouchDevice()) return;
+                    clearTimeout(_dsoOpenTimer);
+                    _dsoCloseTimer = setTimeout(() => chiudiGalleriaDso(), 300);
+                });
+
+                // ── MOBILE: long press (500ms) apre galleria, click singolo pianifica ──
+                let _lpTimer = null;
+                div.addEventListener('touchstart', (e) => {
+                    _longPressActivated = false;
+                    _lpTimer = setTimeout(() => {
+                        _longPressActivated = true;
+                        apriGalleriaDso(tObj, div);
+                        // Vibrazione feedback se disponibile
+                        if (navigator.vibrate) navigator.vibrate(40);
+                    }, 500);
+                }, { passive: true });
+                div.addEventListener('touchend',   () => clearTimeout(_lpTimer));
+                div.addEventListener('touchmove',  () => clearTimeout(_lpTimer));
+                div.addEventListener('touchcancel',() => clearTimeout(_lpTimer));
+            }
 
             // ── Controlla IndexedDB: foto utente ha priorità massima ──
             if (typeof UserImgDB !== 'undefined' && tObj.id) {
@@ -382,6 +417,275 @@
                 inp.value = '';
                 mostraAvviso('❌ SIMBAD non raggiungibile. Controlla la connessione.', 'error');
             });
+        }
+
+        // --- GALLERIA FOTO DSO (NASA Images API) ---
+
+        let _dsoOpenTimer       = null;
+        let _dsoCloseTimer      = null;
+        let _longPressActivated = false;
+        let _dsoGalleryVisible    = false;
+        const _dsoGalleryCache    = {};
+        window._dsoGalleryTarget  = null;
+
+        function _inizializzaGalleriaDso() {
+            if (document.getElementById('dso-gallery-popup')) return;
+
+            const css = `
+                #dso-gallery-popup {
+                    display: none; position: fixed; z-index: 9999;
+                    width: 300px; background: #141414;
+                    border: 2px solid #ffaa00; border-radius: 14px;
+                    overflow: hidden; box-shadow: 0 -8px 32px rgba(0,0,0,0.85);
+                    pointer-events: auto;
+                }
+                #dso-gallery-popup.visible { display: block; }
+                #dso-gallery-popup::after {
+                    content: ''; position: absolute; bottom: -12px; left: 50%;
+                    transform: translateX(-50%);
+                    border-left: 10px solid transparent; border-right: 10px solid transparent;
+                    border-top: 10px solid #ffaa00;
+                }
+                #dso-gallery-header {
+                    padding: 10px 12px; background: #1a1a1a;
+                    border-bottom: 1px solid #252525;
+                    display: flex; align-items: flex-start; justify-content: space-between;
+                }
+                #dso-gallery-title { color: #fff; font-size: 13px; font-weight: 600; }
+                #dso-gallery-sub   { color: #666; font-size: 10px; margin-top: 2px; }
+                #dso-gallery-close {
+                    color: #555; cursor: pointer; font-size: 13px;
+                    width: 22px; height: 22px; background: #222; border-radius: 4px;
+                    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+                }
+                #dso-gallery-close:hover { color: #fff; }
+                #dso-gallery-grid {
+                    display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+                    padding: 8px 10px; height: 284px; overflow-y: auto;
+                    scrollbar-width: thin; scrollbar-color: #333 transparent;
+                }
+                #dso-gallery-grid::-webkit-scrollbar { width: 4px; }
+                #dso-gallery-grid::-webkit-scrollbar-track { background: transparent; }
+                #dso-gallery-grid::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
+                #dso-gallery-sheet-grid {
+                    display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+                    padding: 10px 14px; max-height: 50vh; overflow-y: auto;
+                    scrollbar-width: thin; scrollbar-color: #333 transparent;
+                }
+                .dso-gallery-cell {
+                    aspect-ratio: 1; border-radius: 8px; overflow: hidden;
+                    background: #1a1a1a; border: 1px solid #2a2a2a;
+                    position: relative; cursor: pointer;
+                }
+                .dso-gallery-cell img { width: 100%; height: 100%; object-fit: cover; display: block; }
+                .dso-gallery-cell-label {
+                    position: absolute; bottom: 0; left: 0; right: 0;
+                    background: linear-gradient(transparent, rgba(0,0,0,0.85));
+                    padding: 14px 6px 5px; font-size: 9px; color: rgba(255,255,255,0.7);
+                    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+                }
+                .dso-gallery-loading {
+                    grid-column: 1/-1; display: flex; align-items: center;
+                    justify-content: center; color: #555; font-size: 12px; min-height: 160px;
+                }
+                .dso-gallery-empty {
+                    grid-column: 1/-1; display: flex; flex-direction: column;
+                    align-items: center; justify-content: center; color: #444;
+                    font-size: 11px; gap: 8px; min-height: 160px;
+                }
+                #dso-gallery-footer, #dso-gallery-sheet-footer {
+                    padding: 4px 10px 10px; display: flex; gap: 6px;
+                }
+                #dso-gallery-sheet-footer { padding: 4px 14px 14px; }
+                .dso-gal-btn {
+                    flex: 1; font-size: 11px; padding: 6px 0; border-radius: 6px;
+                    border: 1px solid #2a2a2a; color: #666; background: transparent; cursor: pointer;
+                }
+                .dso-gal-btn.gold { border-color: #332800; color: #cc8800; background: #1a1400; }
+                .dso-gal-btn.gold:hover { color: #ffaa00; }
+                #dso-gallery-sheet {
+                    display: none; position: fixed; bottom: 0; left: 0; right: 0;
+                    z-index: 9999; background: #141414;
+                    border-top: 2px solid #ffaa00; border-radius: 16px 16px 0 0;
+                    transform: translateY(100%); transition: transform 0.3s ease;
+                    padding-bottom: env(safe-area-inset-bottom, 0px);
+                }
+                #dso-gallery-sheet.visible { display: block; transform: translateY(0); }
+                #dso-gallery-sheet-handle {
+                    width: 36px; height: 4px; background: #333; border-radius: 2px;
+                    margin: 10px auto 0;
+                }
+                #dso-gallery-sheet-header {
+                    padding: 10px 16px 6px; display: flex;
+                    align-items: center; justify-content: space-between;
+                    border-bottom: 1px solid #252525;
+                }
+                #dso-gallery-sheet-title { color: #fff; font-size: 14px; font-weight: 600; }
+                #dso-gallery-sheet-close { color: #666; font-size: 16px; cursor: pointer; padding: 4px 8px; }
+                #dso-gallery-overlay {
+                    display: none; position: fixed; inset: 0;
+                    background: rgba(0,0,0,0.55); z-index: 9998;
+                }
+                #dso-gallery-overlay.visible { display: block; }
+                .dso-gallery-btn {
+                    position: absolute; top: 4px; right: 26px;
+                    width: 20px; height: 20px; background: rgba(0,0,0,0.6);
+                    border: 1px solid #333; border-radius: 4px; color: #aaa;
+                    font-size: 11px; cursor: pointer; z-index: 2;
+                    display: none; align-items: center; justify-content: center; padding: 0;
+                }
+                @media (hover: none) { .dso-gallery-btn { display: flex !important; } }
+            `;
+            const style = document.createElement('style');
+            style.id = 'dso-gallery-style';
+            style.textContent = css;
+            document.head.appendChild(style);
+
+            const popup = document.createElement('div');
+            popup.id = 'dso-gallery-popup';
+            popup.innerHTML = `
+                <div id="dso-gallery-header">
+                    <div>
+                        <div id="dso-gallery-title"></div>
+                        <div id="dso-gallery-sub"></div>
+                    </div>
+                    <div id="dso-gallery-close" onclick="chiudiGalleriaDso()">&#x2715;</div>
+                </div>
+                <div id="dso-gallery-grid"></div>
+                <div id="dso-gallery-footer">
+                    <button class="dso-gal-btn" onclick="window.open('https://www.astrobin.com/search/?q='+encodeURIComponent((window._dsoGalleryTarget||{}).name||''),'_blank')">AstroBin</button>
+                    <button class="dso-gal-btn gold" onclick="chiudiGalleriaDso(); if(window._dsoGalleryTarget) apriPianificazione(window._dsoGalleryTarget);">Pianifica</button>
+                </div>`;
+            popup.addEventListener('mouseenter', () => { _dsoGalleryVisible = true; clearTimeout(_dsoCloseTimer); clearTimeout(_dsoOpenTimer); });
+            popup.addEventListener('mouseleave', () => { _dsoCloseTimer = setTimeout(chiudiGalleriaDso, 300); });
+            document.body.appendChild(popup);
+
+            const sheet = document.createElement('div');
+            sheet.id = 'dso-gallery-sheet';
+            sheet.innerHTML = `
+                <div id="dso-gallery-sheet-handle"></div>
+                <div id="dso-gallery-sheet-header">
+                    <div id="dso-gallery-sheet-title"></div>
+                    <span id="dso-gallery-sheet-close" onclick="chiudiGalleriaDso()">&#x2715;</span>
+                </div>
+                <div id="dso-gallery-sheet-grid"></div>
+                <div id="dso-gallery-sheet-footer">
+                    <button class="dso-gal-btn" onclick="window.open('https://www.astrobin.com/search/?q='+encodeURIComponent((window._dsoGalleryTarget||{}).name||''),'_blank')">AstroBin</button>
+                    <button class="dso-gal-btn gold" onclick="chiudiGalleriaDso(); if(window._dsoGalleryTarget) apriPianificazione(window._dsoGalleryTarget);">Pianifica</button>
+                </div>`;
+            document.body.appendChild(sheet);
+
+            const ov = document.createElement('div');
+            ov.id = 'dso-gallery-overlay';
+            ov.onclick = chiudiGalleriaDso;
+            document.body.appendChild(ov);
+        }
+
+        function _isTouchDevice() {
+            return window.matchMedia('(hover: none)').matches || ('ontouchstart' in window);
+        }
+
+        function apriGalleriaDso(dsoObj, anchorEl) {
+            _inizializzaGalleriaDso();
+            window._dsoGalleryTarget = dsoObj;
+            _dsoGalleryVisible = true;
+
+            const name     = getLocalizedName(dsoObj);
+            const subParts = [];
+            if (dsoObj.type) subParts.push(mapTypeTrans(dsoObj.type));
+            if (dsoObj.mag && dsoObj.mag !== 'N/D') subParts.push('mag ' + dsoObj.mag);
+            const sub = subParts.join(' · ');
+
+            if (_isTouchDevice()) {
+                document.getElementById('dso-gallery-sheet-title').textContent = name;
+                document.getElementById('dso-gallery-sheet-grid').innerHTML = '<div class="dso-gallery-loading">&#9203; Caricamento...</div>';
+                document.getElementById('dso-gallery-sheet').classList.add('visible');
+                document.getElementById('dso-gallery-overlay').classList.add('visible');
+                _fetchGalleryImages(dsoObj.name, 'dso-gallery-sheet-grid');
+            } else {
+                document.getElementById('dso-gallery-title').textContent = name;
+                document.getElementById('dso-gallery-sub').textContent   = sub;
+                document.getElementById('dso-gallery-grid').innerHTML    = '<div class="dso-gallery-loading">&#9203; Caricamento...</div>';
+
+                const popup = document.getElementById('dso-gallery-popup');
+                popup.classList.add('visible');
+
+                const rect   = anchorEl.getBoundingClientRect();
+                const popupW = 300;
+                const popupH = 320;
+                let   left   = rect.left + rect.width / 2 - popupW / 2;
+                if (left < 8) left = 8;
+                if (left + popupW > window.innerWidth - 8) left = window.innerWidth - popupW - 8;
+                let   top    = rect.top - popupH - 14;
+                if (top < 8) top = rect.bottom + 14;
+                popup.style.left = left + 'px';
+                popup.style.top  = top  + 'px';
+
+                _fetchGalleryImages(dsoObj.name, 'dso-gallery-grid');
+            }
+        }
+
+        async function _fetchGalleryImages(dsoName, gridId) {
+            const gridEl = document.getElementById(gridId);
+            if (!gridEl) return;
+
+            if (_dsoGalleryCache[dsoName]) {
+                _renderGalleryImages(_dsoGalleryCache[dsoName], gridEl);
+                return;
+            }
+
+            try {
+                const r     = await fetch(`https://images-api.nasa.gov/search?q=${encodeURIComponent(dsoName)}&media_type=image`);
+                const data  = await r.json();
+                const items = (data.collection && data.collection.items) || [];
+                const photos = items.slice(0, 16).map(item => ({
+                    thumb:   item.links && item.links[0] ? item.links[0].href : null,
+                    credit:  item.data  && item.data[0]  ? (item.data[0].photographer || item.data[0].center || 'NASA') : 'NASA',
+                    nasa_id: item.data  && item.data[0]  ? item.data[0].nasa_id : null,
+                })).filter(p => p.thumb);
+
+                _dsoGalleryCache[dsoName] = photos;
+                _renderGalleryImages(photos, gridEl);
+            } catch(e) {
+                const gridEl2 = document.getElementById(gridId);
+                if (gridEl2) gridEl2.innerHTML = '<div class="dso-gallery-empty">&#9888;<br>Immagini non disponibili</div>';
+            }
+        }
+
+        function _renderGalleryImages(photos, gridEl) {
+            if (!gridEl) return;
+            if (!photos || photos.length === 0) {
+                gridEl.innerHTML = '<div class="dso-gallery-empty">&#128300;<br>Nessuna immagine trovata</div>';
+                return;
+            }
+            gridEl.innerHTML = '';
+            photos.forEach(p => {
+                const cell = document.createElement('div');
+                cell.className = 'dso-gallery-cell';
+                const img  = document.createElement('img');
+                img.src    = p.thumb;
+                img.loading = 'lazy';
+                img.onerror = () => { img.style.display = 'none'; };
+                const lbl  = document.createElement('div');
+                lbl.className   = 'dso-gallery-cell-label';
+                lbl.textContent = p.credit;
+                cell.appendChild(img);
+                cell.appendChild(lbl);
+                if (p.nasa_id) cell.onclick = () => window.open(`https://images.nasa.gov/details/${p.nasa_id}`, '_blank');
+                gridEl.appendChild(cell);
+            });
+        }
+
+        function chiudiGalleriaDso() {
+            _dsoGalleryVisible = false;
+            clearTimeout(_dsoOpenTimer);
+            clearTimeout(_dsoCloseTimer);
+            const popup = document.getElementById('dso-gallery-popup');
+            const sheet = document.getElementById('dso-gallery-sheet');
+            const ov    = document.getElementById('dso-gallery-overlay');
+            if (popup) popup.classList.remove('visible');
+            if (sheet) sheet.classList.remove('visible');
+            if (ov)    ov.classList.remove('visible');
         }
 
         // --- GESTIONE TOOLTIP FLUTTUANTE ---
