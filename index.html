@@ -679,8 +679,26 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     </div>
                     <ul id="dropdown-risultati"></ul>
                 </div>
-                <div class="input-group"><label for="lat" data-i18n="lat">Latitudine:</label><input type="text" id="lat" readonly value="46.06200"></div>
-                <div class="input-group"><label for="lon" data-i18n="lon">Longitudine:</label><input type="text" id="lon" readonly value="13.23500"></div>
+                <div class="input-group" style="flex-direction:column; gap:7px;">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <label for="lat" data-i18n="lat" style="width:90px; flex-shrink:0;">Latitudine:</label>
+                        <input type="text" id="lat" value="46.06200" style="flex:1;" placeholder="es. 44.49400">
+                    </div>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <label for="lon" data-i18n="lon" style="width:90px; flex-shrink:0;">Longitudine:</label>
+                        <input type="text" id="lon" value="13.23500" style="flex:1;" placeholder="es. 11.34280">
+                    </div>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <div style="width:90px; flex-shrink:0;"></div>
+                        <button onclick="applicaCoordinateManuali()"
+                            style="flex:1; background:transparent; border:1px solid #c49a3c; color:#c49a3c; border-radius:6px; padding:6px 0; font-size:0.82em; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; transition:all .2s;"
+                            onmouseover="this.style.background='rgba(196,154,60,0.15)'"
+                            onmouseout="this.style.background='transparent'">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                            <span data-i18n="apply_coords">Applica</span>
+                        </button>
+                    </div>
+                </div>
                 <div class="input-group" style="margin-top: 6px; align-items: center; flex-wrap:wrap; gap:8px;">
                     <label style="width: auto; color:#c49a3c;" data-i18n="bortle_label">Bortle:</label>
                     <div style="display:inline-flex; align-items:center; gap:8px; flex-wrap:wrap;">

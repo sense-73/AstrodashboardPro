@@ -189,6 +189,51 @@
             _nascondiToastGPS();
         }
 
+        function _parseCoord(str) {
+            if (!str) return NaN;
+            str = str.trim().replace(',', '.');
+            // Formato decimale con cardinale: 44.494N / 11.343E / 44.494S / 11.343W
+            let mCard = str.match(/^([+-]?\d+\.?\d*)\s*([NSEWnsew])$/);
+            if (mCard) {
+                let v = parseFloat(mCard[1]);
+                let d = mCard[2].toUpperCase();
+                return (d === 'S' || d === 'W') ? -v : v;
+            }
+            // Formato DMS: 44°29'38"N  oppure  44° 29' 38" N  oppure  44 29 38 N
+            let mDms = str.match(/^(\d+)[°\s]+(\d+)['\s]+(\d+\.?\d*)["\s]*([NSEWnsew]?)$/);
+            if (mDms) {
+                let v = parseInt(mDms[1]) + parseInt(mDms[2]) / 60 + parseFloat(mDms[3]) / 3600;
+                let d = mDms[4].toUpperCase();
+                return (d === 'S' || d === 'W') ? -v : v;
+            }
+            // Formato DM: 44°29.638'N  oppure  44 29.638 N
+            let mDm = str.match(/^(\d+)[°\s]+(\d+\.?\d*)['\s]*([NSEWnsew]?)$/);
+            if (mDm) {
+                let v = parseInt(mDm[1]) + parseFloat(mDm[2]) / 60;
+                let d = mDm[3].toUpperCase();
+                return (d === 'S' || d === 'W') ? -v : v;
+            }
+            // Formato decimale puro: 44.494 / -11.343
+            let v = parseFloat(str);
+            return isNaN(v) ? NaN : v;
+        }
+
+        function applicaCoordinateManuali() {
+            let latVal = _parseCoord(document.getElementById('lat').value);
+            let lonVal = _parseCoord(document.getElementById('lon').value);
+            if (isNaN(latVal) || isNaN(lonVal) || latVal < -90 || latVal > 90 || lonVal < -180 || lonVal > 180) {
+                mostraAvviso(lang === 'it'
+                    ? 'Coordinate non valide. Formati accettati: 44.494 · 44,494 · 44°29\'38"N · 44°29.6\'N · 44.494N'
+                    : 'Invalid coordinates. Accepted: 44.494 · 44,494 · 44°29\'38"N · 44°29.6\'N · 44.494N', 'warn');
+                return;
+            }
+            // Aggiorna i campi con il valore decimale normalizzato
+            document.getElementById('lat').value = latVal.toFixed(5);
+            document.getElementById('lon').value = lonVal.toFixed(5);
+            let nome = `${latVal.toFixed(5)}, ${lonVal.toFixed(5)}`;
+            selezionaLuogo(latVal, lonVal, nome);
+        }
+
         // ── Toast localizzazione GPS ────────────────────────────────────────
         function _mostraToastGPS() {
             let toast = document.getElementById('gps-toast');

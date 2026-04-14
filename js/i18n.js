@@ -8,7 +8,7 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         const i18n = {
             it: {
                 "manual_btn": "Apri Manuale", "pos_title": "Posizione", "find_place": "Trova Luogo:", "search_place": "Es. Monte Lussari...",
-                "lat": "Latitudine:", "lon": "Longitudine:", "env_data": "Dati Ambientali",
+                "lat": "Latitudine:", "lon": "Longitudine:", "apply_coords": "Applica", "env_data": "Dati Ambientali",
                 "low_clouds": "Nuvole Basse", "mid_clouds": "Nuvole Medie", "high_clouds": "Nuvole Alte", "moon_poll": "Inq. Lunare",
                 "humidity": "Umidità", "seeing_est": "Stima Seeing", "now": "Adesso",
                 "hybrid_planetarium": "Planetario Predittivo Ibrido", "solar_system": "Sistema Solare",
@@ -91,7 +91,7 @@ let lang = localStorage.getItem('ad_lang') || 'it';
             },
             en: {
                 "manual_btn": "Open Manual", "pos_title": "Location", "find_place": "Find Place:", "search_place": "E.g. Yellowstone...",
-                "lat": "Latitude:", "lon": "Longitude:", "env_data": "Env Data",
+                "lat": "Latitude:", "lon": "Longitude:", "apply_coords": "Apply", "env_data": "Env Data",
                 "low_clouds": "Low Clouds", "mid_clouds": "Mid Clouds", "high_clouds": "High Clouds", "moon_poll": "Moon Poll.",
                 "humidity": "Humidity", "seeing_est": "Seeing Est.", "now": "Now",
                 "hybrid_planetarium": "Hybrid Predictive Planetarium", "solar_system": "Solar System",
@@ -174,7 +174,7 @@ let lang = localStorage.getItem('ad_lang') || 'it';
             },
             es: {
                 "manual_btn": "Abrir Manual", "pos_title": "Ubicación", "find_place": "Buscar Lugar:", "search_place": "Ej. Atacama...",
-                "lat": "Latitud:", "lon": "Longitud:", "env_data": "Datos Ambientales",
+                "lat": "Latitud:", "lon": "Longitud:", "apply_coords": "Aplicar", "env_data": "Datos Ambientales",
                 "low_clouds": "Nubes Bajas", "mid_clouds": "Nubes Medias", "high_clouds": "Nubes Altas", "moon_poll": "Ilum. Lunar",
                 "humidity": "Humedad", "seeing_est": "Est. Seeing", "now": "Ahora",
                 "hybrid_planetarium": "Planetario Híbrido", "solar_system": "Sistema Solar",
@@ -257,7 +257,7 @@ let lang = localStorage.getItem('ad_lang') || 'it';
             },
             zh: {
                 "manual_btn": "打开手册", "pos_title": "位置", "find_place": "查找地点:", "search_place": "例如: 丽江...",
-                "lat": "纬度:", "lon": "经度:", "env_data": "环境数据",
+                "lat": "纬度:", "lon": "经度:", "apply_coords": "应用", "env_data": "环境数据",
                 "low_clouds": "低云", "mid_clouds": "中云", "high_clouds": "高云", "moon_poll": "月光影响",
                 "humidity": "湿度", "seeing_est": "视宁度预估", "now": "现在",
                 "hybrid_planetarium": "混合预测星图", "solar_system": "太阳系",
