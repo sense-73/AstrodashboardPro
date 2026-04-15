@@ -230,7 +230,9 @@
             // Aggiorna i campi con il valore decimale normalizzato
             document.getElementById('lat').value = latVal.toFixed(5);
             document.getElementById('lon').value = lonVal.toFixed(5);
-            let nome = `${latVal.toFixed(5)}, ${lonVal.toFixed(5)}`;
+            let row = document.getElementById('apply-coords-row');
+            if (row) row.style.display = 'none';
+            let nome = `${latVal.toFixed(5)} / ${lonVal.toFixed(5)}`;
             selezionaLuogo(latVal, lonVal, nome);
         }
 
