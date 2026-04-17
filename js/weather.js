@@ -305,25 +305,46 @@
             if (btnEl) btnEl.style.borderColor = col;
         }
 
-        // ── Calcolo seeing scientifico ─────────────────────────────────────
+        // ── Widget Seeing diurno — mostra il sole al posto della stella ──────
+        function _aggiornaWidgetSeeingGiorno() {
+            const seeEl = document.getElementById('val-seeing');
+            const lblEl = document.getElementById('val-seeing-label');
+            const svgEl = document.getElementById('seeing-star-svg');
+            const btnEl = document.getElementById('btn-seeing');
+            if (!seeEl) return;
+            seeEl.innerText   = t('daytime');
+            seeEl.style.color = '#ffaa00';
+            if (lblEl) { lblEl.innerText = ''; }
+            if (btnEl) btnEl.style.borderColor = '#ffaa00';
+            if (svgEl) svgEl.innerHTML = `
+                <rect width="36" height="36" fill="#060a0f" rx="5"/>
+                <circle cx="18" cy="18" r="7" fill="#ffaa00" opacity="0.18"/>
+                <circle cx="18" cy="18" r="4.5" fill="#ffaa00" opacity="0.55"/>
+                <circle cx="18" cy="18" r="2.5" fill="#ffe066" opacity="1"/>
+                <line x1="18" y1="3"  x2="18" y2="7"  stroke="#ffaa00" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
+                <line x1="18" y1="29" x2="18" y2="33" stroke="#ffaa00" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
+                <line x1="3"  y1="18" x2="7"  y2="18" stroke="#ffaa00" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
+                <line x1="29" y1="18" x2="33" y2="18" stroke="#ffaa00" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
+                <line x1="7.5"  y1="7.5"  x2="10.3" y2="10.3" stroke="#ffaa00" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
+                <line x1="25.7" y1="25.7" x2="28.5" y2="28.5" stroke="#ffaa00" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
+                <line x1="28.5" y1="7.5"  x2="25.7" y2="10.3" stroke="#ffaa00" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
+                <line x1="10.3" y1="25.7" x2="7.5"  y2="28.5" stroke="#ffaa00" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>`;
+        }
+
+
         // Scala Antoniadi: 1=pessimo, 5=ottimo
-        // Parametri: jet (km/h a 250hPa), raffica (km/h a 10m), li (Lifted Index), cape (J/kg)
         function _calcolaSeeing(jet, raffica, li, cape) {
-            let scS = 3; // base neutra
-            // Lifted Index: positivo = atmosfera stabile = seeing migliore
-            if      (li >= 5)  scS += 2;
-            else if (li >= 1)  scS += 1;
-            else if (li < -3)  scS -= 2;
-            else if (li <  0)  scS -= 1;
-            // CAPE: energia convettiva disponibile (turbolenza)
+            let scS = 3;
+            if      (li >= 5)    scS += 2;
+            else if (li >= 1)    scS += 1;
+            else if (li < -3)    scS -= 2;
+            else if (li <  0)    scS -= 1;
             if      (cape > 500) scS -= 2;
             else if (cape > 200) scS -= 1;
-            // Jet stream a 250hPa: turbolenza negli strati alti
-            if      (jet > 150) scS -= 2;
-            else if (jet > 100) scS -= 1;
-            else if (jet <  40) scS += 1; // jet calma = bonus stabilità
-            // Raffiche a bassa quota: turbolenza locale
-            if (raffica > 40)   scS -= 1;
+            if      (jet > 150)  scS -= 2;
+            else if (jet > 100)  scS -= 1;
+            else if (jet <  40)  scS += 1;
+            if (raffica > 40)    scS -= 1;
             return Math.max(1, Math.min(5, scS));
         }
 
@@ -490,6 +511,7 @@
                 document.getElementById('astroSlider').disabled = false; document.getElementById('astroSlider').value = 0; 
                 applicaGradienteGiornoNotte();
                 cambiaOraMeteo(); cambiaOraAstro();
+                if (typeof mostraNightPopup === 'function') mostraNightPopup();
             }).catch(() => {
                 mostraAvviso('❌ Dati meteo non disponibili. Controlla la connessione e riprova.', 'error');
             });
@@ -601,9 +623,11 @@
                     document.getElementById('val-luna').innerText = inqL+"%";
                     let _vEl = document.getElementById('val-vento-layer');
                     if (_vEl) { let _vc = vs < 6 ? '#44ff88' : vs < 11 ? '#ffcc00' : vs < 21 ? '#ff8800' : '#ff2222'; _vEl.style.color = _vc; _vEl.innerText = Math.round(vs)+' km/h'; }
-                    // Seeing — scala Antoniadi 1=pessimo, 5=ottimo
+                    let _uEl = document.getElementById('val-umidita-layer');
+                    if (_uEl) _uEl.innerText = um + '%';
+                    // Seeing
                     let scS = _calcolaSeeing(jet, raffica, li, cape);
-                    if (altS > -6) { let seeEl = document.getElementById('val-seeing'); if(seeEl){ seeEl.innerText = t("daytime"); seeEl.style.color = "#ffaa00"; } } else { aggiornaWidgetSeeing(scS); }
+                    if (altS > -6) { _aggiornaWidgetSeeingGiorno(); } else { aggiornaWidgetSeeing(scS); }
                     // Layer meteo attivi per previsione
                     ['basse','medie','alte','jet','umidita','vento'].forEach(n => {
                         let btn = document.getElementById('btn-'+n);
@@ -686,7 +710,7 @@
             let inqL = (altS < -6 && mP.altitude > 0) ? Math.max(0, Math.round((SunCalc.getMoonIllumination(dOra).fraction * Math.sin(mP.altitude)) * 100)) : 0;
             let scS = _calcolaSeeing(jet, raffica, li, cape);
             
-            if (altS > -6) { let seeEl = document.getElementById('val-seeing'); if(seeEl){ seeEl.innerText = t("daytime"); seeEl.style.color = "#ffaa00"; } } else { aggiornaWidgetSeeing(Math.max(1, scS)); }
+            if (altS > -6) { _aggiornaWidgetSeeingGiorno(); } else { aggiornaWidgetSeeing(Math.max(1, scS)); }
             document.getElementById('val-basse').innerText = b+"%"; document.getElementById('val-medie').innerText = m+"%"; document.getElementById('val-alte').innerText = a+"%"; document.getElementById('val-jet').innerHTML = jet+' <span class="jet-unit">km/h</span>'; document.getElementById('val-luna').innerText = inqL+"%";
             let _vEl = document.getElementById('val-vento-layer');
             if (_vEl) { let _vc = vs < 6 ? '#44ff88' : vs < 11 ? '#ffcc00' : vs < 21 ? '#ff8800' : '#ff2222'; _vEl.style.color = _vc; _vEl.innerText = Math.round(vs) + ' km/h'; }
