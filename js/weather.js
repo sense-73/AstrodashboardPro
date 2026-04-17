@@ -239,17 +239,18 @@
 
         // ── Widget Seeing con colori e stella ──────────────────────────────
 
-        const _SEEING_COLORS = { 1:'#2ecc71', 2:'#f1c40f', 3:'#e67e22', 4:'#e74c3c', 5:'#8e44ad' };
+        const _SEEING_COLORS = { 1:'#8e44ad', 2:'#e74c3c', 3:'#e67e22', 4:'#f1c40f', 5:'#2ecc71' };
 
         function _seeingSvg(v, col) {
             let c = col;
-            if (v === 1) return `<rect width="36" height="36" fill="#060a0f" rx="5"/>
+            // Scala Antoniadi corretta: 1=pessimo(blob), 5=ottimo(stella nitida)
+            if (v === 5) return `<rect width="36" height="36" fill="#060a0f" rx="5"/>
                 <circle cx="18" cy="18" r="12" fill="none" stroke="${c}" stroke-width="0.5" opacity="0.22"/>
                 <circle cx="18" cy="18" r="8" fill="none" stroke="${c}" stroke-width="0.6" opacity="0.35"/>
                 <circle cx="18" cy="18" r="4.5" fill="none" stroke="${c}" stroke-width="0.8" opacity="0.5"/>
                 <circle cx="18" cy="18" r="2.5" fill="${c}" opacity="0.65"/>
                 <circle cx="18" cy="18" r="1.2" fill="#ffffff" opacity="1"/>`;
-            if (v === 2) return `<rect width="36" height="36" fill="#060a0f" rx="5"/>
+            if (v === 4) return `<rect width="36" height="36" fill="#060a0f" rx="5"/>
                 <circle cx="18" cy="18" r="11" fill="none" stroke="${c}" stroke-width="0.6" opacity="0.18" stroke-dasharray="4 2"/>
                 <circle cx="18" cy="18" r="7" fill="none" stroke="${c}" stroke-width="0.7" opacity="0.28" stroke-dasharray="5 2"/>
                 <circle cx="18" cy="18" r="4" fill="${c}" opacity="0.2"/>
@@ -261,13 +262,13 @@
                 <circle cx="18" cy="18" r="6" fill="${c}" opacity="0.2"/>
                 <circle cx="17.8" cy="18.2" r="3.8" fill="${c}" opacity="0.42"/>
                 <circle cx="18.2" cy="17.8" r="2" fill="#ffddaa" opacity="0.6"/>`;
-            if (v === 4) return `<rect width="36" height="36" fill="#060a0f" rx="5"/>
+            if (v === 2) return `<rect width="36" height="36" fill="#060a0f" rx="5"/>
                 <circle cx="18" cy="18" r="14" fill="${c}" opacity="0.04"/>
                 <circle cx="18" cy="18" r="11" fill="${c}" opacity="0.08"/>
                 <circle cx="18" cy="18" r="8" fill="${c}" opacity="0.14"/>
                 <ellipse cx="17.5" cy="18.5" rx="5.5" ry="4.5" fill="${c}" opacity="0.3" transform="rotate(-15 18 18)"/>
                 <ellipse cx="18.5" cy="17.5" rx="3" ry="3.5" fill="${c}" opacity="0.35" transform="rotate(20 18 18)"/>`;
-            // v === 5
+            // v === 1: blob massimo (pessimo)
             return `<rect width="36" height="36" fill="#060a0f" rx="5"/>
                 <circle cx="18" cy="18" r="16" fill="${c}" opacity="0.03"/>
                 <circle cx="18" cy="18" r="13" fill="${c}" opacity="0.06"/>
@@ -302,6 +303,28 @@
             if (lblEl) { lblEl.innerText = t('seeing_' + v + '_label'); lblEl.style.color = col; lblEl.style.opacity = '0.75'; }
             if (svgEl) svgEl.innerHTML = _seeingSvg(v, col);
             if (btnEl) btnEl.style.borderColor = col;
+        }
+
+        // ── Calcolo seeing scientifico ─────────────────────────────────────
+        // Scala Antoniadi: 1=pessimo, 5=ottimo
+        // Parametri: jet (km/h a 250hPa), raffica (km/h a 10m), li (Lifted Index), cape (J/kg)
+        function _calcolaSeeing(jet, raffica, li, cape) {
+            let scS = 3; // base neutra
+            // Lifted Index: positivo = atmosfera stabile = seeing migliore
+            if      (li >= 5)  scS += 2;
+            else if (li >= 1)  scS += 1;
+            else if (li < -3)  scS -= 2;
+            else if (li <  0)  scS -= 1;
+            // CAPE: energia convettiva disponibile (turbolenza)
+            if      (cape > 500) scS -= 2;
+            else if (cape > 200) scS -= 1;
+            // Jet stream a 250hPa: turbolenza negli strati alti
+            if      (jet > 150) scS -= 2;
+            else if (jet > 100) scS -= 1;
+            else if (jet <  40) scS += 1; // jet calma = bonus stabilità
+            // Raffiche a bassa quota: turbolenza locale
+            if (raffica > 40)   scS -= 1;
+            return Math.max(1, Math.min(5, scS));
         }
 
         function apriScalaSeeing() {
@@ -457,7 +480,7 @@
         }
 
         function scaricaDatiPrevisionali() {
-            fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latCorrente}&longitude=${lonCorrente}&hourly=cloud_cover_low,cloud_cover_mid,cloud_cover_high,wind_speed_250hPa,wind_speed_10m,wind_direction_10m,temperature_2m,relative_humidity_2m&forecast_days=3&timezone=auto`)
+            fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latCorrente}&longitude=${lonCorrente}&hourly=cloud_cover_low,cloud_cover_mid,cloud_cover_high,wind_speed_250hPa,wind_speed_10m,wind_direction_10m,temperature_2m,relative_humidity_2m,lifted_index,cape,wind_gusts_10m&forecast_days=3&timezone=auto`)
             .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
             .then(data => {
                 if (!data.hourly || !data.hourly.time) throw new Error('invalid_data');
@@ -561,6 +584,9 @@
                     let jet = Math.round(datiMeteo.wind_speed_250hPa[_meteoIdx]);
                     let vs = datiMeteo.wind_speed_10m[_meteoIdx], wdir = datiMeteo.wind_direction_10m ? datiMeteo.wind_direction_10m[_meteoIdx] : 0;
                     let temp = datiMeteo.temperature_2m[_meteoIdx], um = datiMeteo.relative_humidity_2m[_meteoIdx];
+                    let li = datiMeteo.lifted_index ? (datiMeteo.lifted_index[_meteoIdx] || 0) : 0;
+                    let cape = datiMeteo.cape ? (datiMeteo.cape[_meteoIdx] || 0) : 0;
+                    let raffica = datiMeteo.wind_gusts_10m ? (datiMeteo.wind_gusts_10m[_meteoIdx] || vs) : vs;
                     let altS = SunCalc.getPosition(dOra, latCorrente, lonCorrente).altitude * (180/Math.PI);
                     let mP = SunCalc.getMoonPosition(dOra, latCorrente, lonCorrente);
                     let inqL = (altS < -6 && mP.altitude > 0) ? Math.max(0, Math.round((SunCalc.getMoonIllumination(dOra).fraction * Math.sin(mP.altitude)) * 100)) : 0;
@@ -575,9 +601,9 @@
                     document.getElementById('val-luna').innerText = inqL+"%";
                     let _vEl = document.getElementById('val-vento-layer');
                     if (_vEl) { let _vc = vs < 6 ? '#44ff88' : vs < 11 ? '#ffcc00' : vs < 21 ? '#ff8800' : '#ff2222'; _vEl.style.color = _vc; _vEl.innerText = Math.round(vs)+' km/h'; }
-                    // Seeing
-                    let scS = Math.max(1, 5 - Math.round(maxC/20) - (jet>100?1:0) - (um>85?1:0));
-                    if (altS > -6) { let seeEl = document.getElementById('val-seeing'); if(seeEl){ seeEl.innerText = t("daytime"); seeEl.style.color = "#ffaa00"; } } else { aggiornaWidgetSeeing(Math.max(1,scS)); }
+                    // Seeing — scala Antoniadi 1=pessimo, 5=ottimo
+                    let scS = _calcolaSeeing(jet, raffica, li, cape);
+                    if (altS > -6) { let seeEl = document.getElementById('val-seeing'); if(seeEl){ seeEl.innerText = t("daytime"); seeEl.style.color = "#ffaa00"; } } else { aggiornaWidgetSeeing(scS); }
                     // Layer meteo attivi per previsione
                     ['basse','medie','alte','jet','umidita','vento'].forEach(n => {
                         let btn = document.getElementById('btn-'+n);
@@ -633,6 +659,9 @@
             if (step > 0 && dOra.getHours() === 0) aggiornaEffemeridi(dOra);
 
             let b = datiMeteo.cloud_cover_low[i], m = datiMeteo.cloud_cover_mid[i], a = datiMeteo.cloud_cover_high[i], jet = Math.round(datiMeteo.wind_speed_250hPa[i]), vs = datiMeteo.wind_speed_10m[i], wdir = datiMeteo.wind_direction_10m ? datiMeteo.wind_direction_10m[i] : 0, temp = datiMeteo.temperature_2m[i], um = datiMeteo.relative_humidity_2m[i];
+            let li = datiMeteo.lifted_index ? (datiMeteo.lifted_index[i] || 0) : 0;
+            let cape = datiMeteo.cape ? (datiMeteo.cape[i] || 0) : 0;
+            let raffica = datiMeteo.wind_gusts_10m ? (datiMeteo.wind_gusts_10m[i] || vs) : vs;
             let altS = SunCalc.getPosition(dOra, latCorrente, lonCorrente).altitude * (180/Math.PI), mP = SunCalc.getMoonPosition(dOra, latCorrente, lonCorrente);
             
             let maxC = Math.max(b, m, a), icM = "☁️", dsM = "overcast";
@@ -655,7 +684,7 @@
             document.getElementById('val-umidita-layer').innerText = um + "%";
             
             let inqL = (altS < -6 && mP.altitude > 0) ? Math.max(0, Math.round((SunCalc.getMoonIllumination(dOra).fraction * Math.sin(mP.altitude)) * 100)) : 0;
-            let scS = 5; if(jet>120)scS-=3;else if(jet>80)scS-=2;else if(jet>50)scS-=1; if(vs>15)scS-=1; if(vs>30)scS-=1;
+            let scS = _calcolaSeeing(jet, raffica, li, cape);
             
             if (altS > -6) { let seeEl = document.getElementById('val-seeing'); if(seeEl){ seeEl.innerText = t("daytime"); seeEl.style.color = "#ffaa00"; } } else { aggiornaWidgetSeeing(Math.max(1, scS)); }
             document.getElementById('val-basse').innerText = b+"%"; document.getElementById('val-medie').innerText = m+"%"; document.getElementById('val-alte').innerText = a+"%"; document.getElementById('val-jet').innerHTML = jet+' <span class="jet-unit">km/h</span>'; document.getElementById('val-luna').innerText = inqL+"%";
