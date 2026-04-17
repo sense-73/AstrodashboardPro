@@ -279,14 +279,15 @@
         }
 
         function aggiornaWidgetSeeing(val) {
-            // val: numero 1-5 oppure stringa '--'
-            let seeEl  = document.getElementById('val-seeing');
-            let svgEl  = document.getElementById('seeing-star-svg');
-            let btnEl  = document.getElementById('btn-seeing');
+            let seeEl   = document.getElementById('val-seeing');
+            let lblEl   = document.getElementById('val-seeing-label');
+            let svgEl   = document.getElementById('seeing-star-svg');
+            let btnEl   = document.getElementById('btn-seeing');
             if (!seeEl) return;
             if (val === '--') {
                 seeEl.innerText = '--/5';
                 seeEl.style.color = '#c49a3c';
+                if (lblEl) { lblEl.innerText = '--'; lblEl.style.color = '#6e7a8a'; }
                 if (svgEl) svgEl.innerHTML = `<rect width="36" height="36" fill="#060a0f" rx="5"/>
                     <circle cx="18" cy="18" r="6" fill="none" stroke="#c49a3c" stroke-width="0.6" opacity="0.3"/>
                     <circle cx="18" cy="18" r="3" fill="#c49a3c" opacity="0.4"/>
@@ -296,8 +297,9 @@
             }
             let v   = Math.max(1, Math.min(5, parseInt(val)));
             let col = _SEEING_COLORS[v] || '#c49a3c';
-            seeEl.innerText    = v + '/5';
-            seeEl.style.color  = col;
+            seeEl.innerText   = v + '/5';
+            seeEl.style.color = col;
+            if (lblEl) { lblEl.innerText = t('seeing_' + v + '_label'); lblEl.style.color = col; lblEl.style.opacity = '0.75'; }
             if (svgEl) svgEl.innerHTML = _seeingSvg(v, col);
             if (btnEl) btnEl.style.borderColor = col;
         }
