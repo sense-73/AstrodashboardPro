@@ -8,7 +8,7 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         const i18n = {
             it: {
                 "manual_btn": "Apri Manuale", "pos_title": "Posizione", "find_place": "Trova Luogo:", "search_place": "Es. Monte Lussari...",
-                "lat": "Latitudine:", "lon": "Longitudine:", "apply_coords": "Applica coordinate", "env_data": "Dati Ambientali",
+                "lat": "Latitudine:", "lon": "Longitudine:", "apply_coords": "Applica", "env_data": "Dati Ambientali",
                 "low_clouds": "Nuvole Basse", "mid_clouds": "Nuvole Medie", "high_clouds": "Nuvole Alte", "moon_poll": "Inq. Lunare",
                 "humidity": "Umidità", "seeing_est": "Stima Seeing", "now": "Adesso",
                 "hybrid_planetarium": "Planetario Predittivo Ibrido", "solar_system": "Sistema Solare",
@@ -91,7 +91,7 @@ let lang = localStorage.getItem('ad_lang') || 'it';
             },
             en: {
                 "manual_btn": "Open Manual", "pos_title": "Location", "find_place": "Find Place:", "search_place": "E.g. Yellowstone...",
-                "lat": "Latitude:", "lon": "Longitude:", "apply_coords": "Apply coordinates", "env_data": "Env Data",
+                "lat": "Latitude:", "lon": "Longitude:", "apply_coords": "Apply", "env_data": "Env Data",
                 "low_clouds": "Low Clouds", "mid_clouds": "Mid Clouds", "high_clouds": "High Clouds", "moon_poll": "Moon Poll.",
                 "humidity": "Humidity", "seeing_est": "Seeing Est.", "now": "Now",
                 "hybrid_planetarium": "Hybrid Predictive Planetarium", "solar_system": "Solar System",
@@ -174,7 +174,7 @@ let lang = localStorage.getItem('ad_lang') || 'it';
             },
             es: {
                 "manual_btn": "Abrir Manual", "pos_title": "Ubicación", "find_place": "Buscar Lugar:", "search_place": "Ej. Atacama...",
-                "lat": "Latitud:", "lon": "Longitud:", "apply_coords": "Aplicar coordenadas", "env_data": "Datos Ambientales",
+                "lat": "Latitud:", "lon": "Longitud:", "apply_coords": "Aplicar", "env_data": "Datos Ambientales",
                 "low_clouds": "Nubes Bajas", "mid_clouds": "Nubes Medias", "high_clouds": "Nubes Altas", "moon_poll": "Ilum. Lunar",
                 "humidity": "Humedad", "seeing_est": "Est. Seeing", "now": "Ahora",
                 "hybrid_planetarium": "Planetario Híbrido", "solar_system": "Sistema Solar",
@@ -257,7 +257,7 @@ let lang = localStorage.getItem('ad_lang') || 'it';
             },
             zh: {
                 "manual_btn": "打开手册", "pos_title": "位置", "find_place": "查找地点:", "search_place": "例如: 丽江...",
-                "lat": "纬度:", "lon": "经度:", "apply_coords": "应用坐标", "env_data": "环境数据",
+                "lat": "纬度:", "lon": "经度:", "apply_coords": "应用", "env_data": "环境数据",
                 "low_clouds": "低云", "mid_clouds": "中云", "high_clouds": "高云", "moon_poll": "月光影响",
                 "humidity": "湿度", "seeing_est": "视宁度预估", "now": "现在",
                 "hybrid_planetarium": "混合预测星图", "solar_system": "太阳系",
@@ -2441,3 +2441,52 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.en.cl_v65_guide_desc         = "5-slide guide panel with SVG illustrations, accessible from the ? button in the section title. Explains the complete workflow: from panoramic photo to final profile. Contextual tooltips on detection parameters in 4 languages. Guide loaded as a separate iframe to keep the main file lightweight.";
         i18n.es.cl_v65_guide_desc         = "Panel guía de 5 diapositivas con ilustraciones SVG, accesible desde el botón ? en el título de la sección. Explica el flujo completo: de la foto panorámica al perfil final. Tooltips contextuales en los parámetros de detección en 4 idiomas. Guía cargada como iframe separado para no sobrecargar el archivo principal.";
         i18n.zh.cl_v65_guide_desc         = "5张幻灯片指南面板，带SVG插图，可通过章节标题中的?按钮访问。解释完整流程：从全景照片到最终轮廓。检测参数上的上下文工具提示，支持4种语言。指南作为独立iframe加载，不增加主文件负担。";
+
+        i18n.it.seeing_1_label = "Perfetto";
+        i18n.it.seeing_2_label = "Leggermente ondulato";
+        i18n.it.seeing_3_label = "Moderato";
+        i18n.it.seeing_4_label = "Turbolento";
+        i18n.it.seeing_5_label = "Pessimo";
+        i18n.it.seeing_1_desc  = "Disco di Airy e anelli stabili";
+        i18n.it.seeing_2_desc  = "Anelli parzialmente mossi, brevi momenti di calma";
+        i18n.it.seeing_3_desc  = "Disco e anelli fusi, alone più ampio";
+        i18n.it.seeing_4_desc  = "Blob diffuso irregolare, nessun anello";
+        i18n.it.seeing_5_desc  = "Blob enorme e turbolento, inutilizzabile";
+        i18n.it.seeing_scale_title = "Scala Seeing — Antoniadi";
+
+        i18n.en.seeing_1_label = "Perfect";
+        i18n.en.seeing_2_label = "Slight undulations";
+        i18n.en.seeing_3_label = "Moderate";
+        i18n.en.seeing_4_label = "Turbulent";
+        i18n.en.seeing_5_label = "Very bad";
+        i18n.en.seeing_1_desc  = "Airy disk and rings stable";
+        i18n.en.seeing_2_desc  = "Rings partially blurred, brief moments of calm";
+        i18n.en.seeing_3_desc  = "Disk and rings merged, wider halo";
+        i18n.en.seeing_4_desc  = "Irregular diffuse blob, no rings";
+        i18n.en.seeing_5_desc  = "Huge turbulent blob, unusable";
+        i18n.en.seeing_scale_title = "Seeing Scale — Antoniadi";
+
+        i18n.es.seeing_1_label = "Perfecto";
+        i18n.es.seeing_2_label = "Ligeramente ondulado";
+        i18n.es.seeing_3_label = "Moderado";
+        i18n.es.seeing_4_label = "Turbulento";
+        i18n.es.seeing_5_label = "Pésimo";
+        i18n.es.seeing_1_desc  = "Disco de Airy y anillos estables";
+        i18n.es.seeing_2_desc  = "Anillos parcialmente borrosos, momentos de calma";
+        i18n.es.seeing_3_desc  = "Disco y anillos fusionados, halo más amplio";
+        i18n.es.seeing_4_desc  = "Blob difuso irregular, sin anillos";
+        i18n.es.seeing_5_desc  = "Blob enorme y turbulento, inutilizable";
+        i18n.es.seeing_scale_title = "Escala Seeing — Antoniadi";
+
+        i18n.zh.seeing_1_label = "完美";
+        i18n.zh.seeing_2_label = "轻微波动";
+        i18n.zh.seeing_3_label = "中等";
+        i18n.zh.seeing_4_label = "湍流";
+        i18n.zh.seeing_5_label = "极差";
+        i18n.zh.seeing_1_desc  = "艾里斑和衍射环稳定清晰";
+        i18n.zh.seeing_2_desc  = "衍射环部分模糊，偶有平静时刻";
+        i18n.zh.seeing_3_desc  = "艾里斑与衍射环融合，弥散晕更大";
+        i18n.zh.seeing_4_desc  = "不规则弥散斑，无衍射环";
+        i18n.zh.seeing_5_desc  = "巨大湍流斑，无法使用";
+        i18n.zh.seeing_scale_title = "视宁度标尺 — Antoniadi";
+

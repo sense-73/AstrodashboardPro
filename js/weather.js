@@ -236,6 +236,110 @@
             selezionaLuogo(latVal, lonVal, nome);
         }
 
+
+        // ── Widget Seeing con colori e stella ──────────────────────────────
+
+        const _SEEING_COLORS = { 1:'#2ecc71', 2:'#f1c40f', 3:'#e67e22', 4:'#e74c3c', 5:'#8e44ad' };
+
+        function _seeingSvg(v, col) {
+            let c = col;
+            if (v === 1) return `<rect width="36" height="36" fill="#060a0f" rx="5"/>
+                <circle cx="18" cy="18" r="12" fill="none" stroke="${c}" stroke-width="0.5" opacity="0.22"/>
+                <circle cx="18" cy="18" r="8" fill="none" stroke="${c}" stroke-width="0.6" opacity="0.35"/>
+                <circle cx="18" cy="18" r="4.5" fill="none" stroke="${c}" stroke-width="0.8" opacity="0.5"/>
+                <circle cx="18" cy="18" r="2.5" fill="${c}" opacity="0.65"/>
+                <circle cx="18" cy="18" r="1.2" fill="#ffffff" opacity="1"/>`;
+            if (v === 2) return `<rect width="36" height="36" fill="#060a0f" rx="5"/>
+                <circle cx="18" cy="18" r="11" fill="none" stroke="${c}" stroke-width="0.6" opacity="0.18" stroke-dasharray="4 2"/>
+                <circle cx="18" cy="18" r="7" fill="none" stroke="${c}" stroke-width="0.7" opacity="0.28" stroke-dasharray="5 2"/>
+                <circle cx="18" cy="18" r="4" fill="${c}" opacity="0.2"/>
+                <circle cx="18.2" cy="17.8" r="2.8" fill="${c}" opacity="0.55"/>
+                <circle cx="18" cy="18" r="1.3" fill="#ffffff" opacity="0.9"/>`;
+            if (v === 3) return `<rect width="36" height="36" fill="#060a0f" rx="5"/>
+                <circle cx="18" cy="18" r="12" fill="${c}" opacity="0.05"/>
+                <circle cx="18" cy="18" r="9" fill="${c}" opacity="0.1"/>
+                <circle cx="18" cy="18" r="6" fill="${c}" opacity="0.2"/>
+                <circle cx="17.8" cy="18.2" r="3.8" fill="${c}" opacity="0.42"/>
+                <circle cx="18.2" cy="17.8" r="2" fill="#ffddaa" opacity="0.6"/>`;
+            if (v === 4) return `<rect width="36" height="36" fill="#060a0f" rx="5"/>
+                <circle cx="18" cy="18" r="14" fill="${c}" opacity="0.04"/>
+                <circle cx="18" cy="18" r="11" fill="${c}" opacity="0.08"/>
+                <circle cx="18" cy="18" r="8" fill="${c}" opacity="0.14"/>
+                <ellipse cx="17.5" cy="18.5" rx="5.5" ry="4.5" fill="${c}" opacity="0.3" transform="rotate(-15 18 18)"/>
+                <ellipse cx="18.5" cy="17.5" rx="3" ry="3.5" fill="${c}" opacity="0.35" transform="rotate(20 18 18)"/>`;
+            // v === 5
+            return `<rect width="36" height="36" fill="#060a0f" rx="5"/>
+                <circle cx="18" cy="18" r="16" fill="${c}" opacity="0.03"/>
+                <circle cx="18" cy="18" r="13" fill="${c}" opacity="0.06"/>
+                <circle cx="18" cy="18" r="10" fill="${c}" opacity="0.1"/>
+                <circle cx="18" cy="18" r="7" fill="${c}" opacity="0.15"/>
+                <ellipse cx="16" cy="19" rx="5.5" ry="4.5" fill="${c}" opacity="0.22" transform="rotate(-20 18 18)"/>
+                <ellipse cx="20" cy="17" rx="4.5" ry="3.8" fill="${c}" opacity="0.2" transform="rotate(30 18 18)"/>
+                <ellipse cx="18" cy="20" rx="3.5" ry="3" fill="${c}" opacity="0.22"/>`;
+        }
+
+        function aggiornaWidgetSeeing(val) {
+            // val: numero 1-5 oppure stringa '--'
+            let seeEl  = document.getElementById('val-seeing');
+            let svgEl  = document.getElementById('seeing-star-svg');
+            let btnEl  = document.getElementById('btn-seeing');
+            if (!seeEl) return;
+            if (val === '--') {
+                seeEl.innerText = '--/5';
+                seeEl.style.color = '#c49a3c';
+                if (svgEl) svgEl.innerHTML = `<rect width="36" height="36" fill="#060a0f" rx="5"/>
+                    <circle cx="18" cy="18" r="6" fill="none" stroke="#c49a3c" stroke-width="0.6" opacity="0.3"/>
+                    <circle cx="18" cy="18" r="3" fill="#c49a3c" opacity="0.4"/>
+                    <circle cx="18" cy="18" r="1.5" fill="#fff" opacity="0.7"/>`;
+                if (btnEl) btnEl.style.borderColor = '';
+                return;
+            }
+            let v   = Math.max(1, Math.min(5, parseInt(val)));
+            let col = _SEEING_COLORS[v] || '#c49a3c';
+            seeEl.innerText    = v + '/5';
+            seeEl.style.color  = col;
+            if (svgEl) svgEl.innerHTML = _seeingSvg(v, col);
+            if (btnEl) btnEl.style.borderColor = col;
+        }
+
+        function apriScalaSeeing() {
+            let modal = document.getElementById('seeing-scale-modal');
+            if (!modal) return;
+            let list  = document.getElementById('seeing-scale-list');
+            if (list && !list.children.length) _renderScalaSeeing(list);
+            modal.style.display = 'flex';
+        }
+
+        function chiudiScalaSeeing() {
+            let modal = document.getElementById('seeing-scale-modal');
+            if (modal) modal.style.display = 'none';
+        }
+
+        function _renderScalaSeeing(list) {
+            let labels = [
+                [1, _SEEING_COLORS[1], t('seeing_1_label'), t('seeing_1_desc')],
+                [2, _SEEING_COLORS[2], t('seeing_2_label'), t('seeing_2_desc')],
+                [3, _SEEING_COLORS[3], t('seeing_3_label'), t('seeing_3_desc')],
+                [4, _SEEING_COLORS[4], t('seeing_4_label'), t('seeing_4_desc')],
+                [5, _SEEING_COLORS[5], t('seeing_5_label'), t('seeing_5_desc')],
+            ];
+            list.innerHTML = '';
+            labels.forEach(([v, col, lbl, desc]) => {
+                let row = document.createElement('div');
+                row.style.cssText = `display:flex; align-items:center; gap:10px; background:#0a0e14; border-radius:8px; padding:8px 10px; border-left:3px solid ${col};`;
+                row.innerHTML = `
+                    <svg width="52" height="52" viewBox="0 0 36 36" style="flex-shrink:0; border-radius:6px;">${_seeingSvg(v, col)}</svg>
+                    <div style="flex:1; min-width:0;">
+                        <div style="display:flex; justify-content:space-between; align-items:baseline;">
+                            <span style="font-size:12px; font-weight:500; color:${col};">${lbl}</span>
+                            <span style="font-size:11px; color:${col}; font-weight:700;">${v}/5</span>
+                        </div>
+                        <div style="font-size:10px; color:#556; margin-top:2px; line-height:1.4;">${desc}</div>
+                    </div>`;
+                list.appendChild(row);
+            });
+        }
+
         // ── Toast localizzazione GPS ────────────────────────────────────────
         function _mostraToastGPS() {
             let toast = document.getElementById('gps-toast');
@@ -471,7 +575,7 @@
                     if (_vEl) { let _vc = vs < 6 ? '#44ff88' : vs < 11 ? '#ffcc00' : vs < 21 ? '#ff8800' : '#ff2222'; _vEl.style.color = _vc; _vEl.innerText = Math.round(vs)+' km/h'; }
                     // Seeing
                     let scS = Math.max(1, 5 - Math.round(maxC/20) - (jet>100?1:0) - (um>85?1:0));
-                    let seeEl = document.getElementById('val-seeing'); if(seeEl){ seeEl.innerText = altS > -6 ? t("daytime") : Math.max(1,scS)+"/5"; seeEl.style.color = altS > -6 ? "#ffaa00" : "#bb86fc"; }
+                    if (altS > -6) { let seeEl = document.getElementById('val-seeing'); if(seeEl){ seeEl.innerText = t("daytime"); seeEl.style.color = "#ffaa00"; } } else { aggiornaWidgetSeeing(Math.max(1,scS)); }
                     // Layer meteo attivi per previsione
                     ['basse','medie','alte','jet','umidita','vento'].forEach(n => {
                         let btn = document.getElementById('btn-'+n);
@@ -551,8 +655,7 @@
             let inqL = (altS < -6 && mP.altitude > 0) ? Math.max(0, Math.round((SunCalc.getMoonIllumination(dOra).fraction * Math.sin(mP.altitude)) * 100)) : 0;
             let scS = 5; if(jet>120)scS-=3;else if(jet>80)scS-=2;else if(jet>50)scS-=1; if(vs>15)scS-=1; if(vs>30)scS-=1;
             
-            document.getElementById('val-seeing').innerText = altS > -6 ? t("daytime") : Math.max(1, scS) + "/5";
-            document.getElementById('val-seeing').style.color = altS > -6 ? "#ffaa00" : "#bb86fc";
+            if (altS > -6) { let seeEl = document.getElementById('val-seeing'); if(seeEl){ seeEl.innerText = t("daytime"); seeEl.style.color = "#ffaa00"; } } else { aggiornaWidgetSeeing(Math.max(1, scS)); }
             document.getElementById('val-basse').innerText = b+"%"; document.getElementById('val-medie').innerText = m+"%"; document.getElementById('val-alte').innerText = a+"%"; document.getElementById('val-jet').innerHTML = jet+' <span class="jet-unit">km/h</span>'; document.getElementById('val-luna').innerText = inqL+"%";
             let _vEl = document.getElementById('val-vento-layer');
             if (_vEl) { let _vc = vs < 6 ? '#44ff88' : vs < 11 ? '#ffcc00' : vs < 21 ? '#ff8800' : '#ff2222'; _vEl.style.color = _vc; _vEl.innerText = Math.round(vs) + ' km/h'; }
@@ -802,8 +905,7 @@
                 let umid = document.getElementById('val-umidita-layer');
                 if (umid) umid.innerText = '--%';
                 // Seeing non prevedibile per date future
-                let seeing = document.getElementById('val-seeing');
-                if (seeing) { seeing.innerText = '--/5'; seeing.style.color = '#6e7a8a'; }
+                aggiornaWidgetSeeing('--');
                 let btnSeeing = document.getElementById('btn-seeing');
                 if (btnSeeing) { btnSeeing.style.opacity = '0.35'; btnSeeing.style.pointerEvents = 'none'; }
             } else {

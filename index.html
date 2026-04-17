@@ -679,26 +679,8 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     </div>
                     <ul id="dropdown-risultati"></ul>
                 </div>
-                <div class="input-group" style="flex-direction:column; gap:7px;">
-                    <div style="display:flex; align-items:center; gap:8px;">
-                        <label for="lat" data-i18n="lat" style="width:90px; flex-shrink:0;">Latitudine:</label>
-                        <input type="text" id="lat" value="46.06200" style="flex:1;" placeholder="es. 44.49400" oninput="document.getElementById('apply-coords-row').style.display='flex'">
-                    </div>
-                    <div style="display:flex; align-items:center; gap:8px;">
-                        <label for="lon" data-i18n="lon" style="width:90px; flex-shrink:0;">Longitudine:</label>
-                        <input type="text" id="lon" value="13.23500" style="flex:1;" placeholder="es. 11.34280" oninput="document.getElementById('apply-coords-row').style.display='flex'">
-                    </div>
-                    <div id="apply-coords-row" style="display:none; align-items:center; gap:8px;">
-                        <div style="width:90px; flex-shrink:0;"></div>
-                        <button onclick="applicaCoordinateManuali()"
-                            style="flex:1; background:transparent; border:1px solid #c49a3c; color:#c49a3c; border-radius:6px; padding:6px 0; font-size:0.82em; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; transition:all .2s;"
-                            onmouseover="this.style.background='rgba(196,154,60,0.15)'"
-                            onmouseout="this.style.background='transparent'">
-                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                            <span data-i18n="apply_coords">Applica coordinate</span>
-                        </button>
-                    </div>
-                </div>
+                <div class="input-group"><label for="lat" data-i18n="lat">Latitudine:</label><input type="text" id="lat" readonly value="46.06200"></div>
+                <div class="input-group"><label for="lon" data-i18n="lon">Longitudine:</label><input type="text" id="lon" readonly value="13.23500"></div>
                 <div class="input-group" style="margin-top: 6px; align-items: center; flex-wrap:wrap; gap:8px;">
                     <label style="width: auto; color:#c49a3c;" data-i18n="bortle_label">Bortle:</label>
                     <div style="display:inline-flex; align-items:center; gap:8px; flex-wrap:wrap;">
@@ -744,7 +726,17 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <div class="meteo-item m-umidita disabled" id="btn-umidita" onclick="toggleLayer('umidita')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;margin:0 auto 4px;flex-shrink:0"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4.072 20.3a2.999 2.999 0 0 0 3.856 0a3.002 3.002 0 0 0 .67-3.798l-2.095-3.227a.6.6 0 0 0-1.005 0l-2.098 3.227a3.003 3.003 0 0 0 .671 3.798"/><path d="M16.072 20.3a2.999 2.999 0 0 0 3.856 0a3.002 3.002 0 0 0 .67-3.798l-2.095-3.227a.6.6 0 0 0-1.005 0l-2.098 3.227a3.003 3.003 0 0 0 .671 3.798"/><path d="M10.072 10.3a2.999 2.999 0 0 0 3.856 0a3.002 3.002 0 0 0 .67-3.798l-2.095-3.227a.6.6 0 0 0-1.005 0l-2.098 3.227a3.003 3.003 0 0 0 .671 3.798"/></svg><h4 data-i18n="humidity">Umidità</h4><span id="val-umidita-layer" style="color:#00ffff;">--%</span></div>
                     <div class="meteo-item m-vento disabled" id="btn-vento" onclick="toggleLayer('vento')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;margin:0 auto 4px;flex-shrink:0"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 8c.291-1.711 1.611-3 3.284-3c2.057 0 3.716 1.75 3.716 3.778c0 2.954-2.804 4.222-5 4.222h-4"/><path d="M13 17.778c0-2.028 1.659-3.778 3.716-3.778c1.673 0 2.993 1.289 3.284 3"/><path d="M3 12h14.5c1.93 0 3.5 1.57 3.5 3.5s-1.57 3.5-3.5 3.5h-.5"/></svg><h4 data-i18n="wind_layer">Vento</h4><span id="val-vento-layer" style="color:#44ff88;">-- km/h</span></div>
                     <div class="meteo-item disabled" id="btn-lp" onclick="toggleLayerLP()" style="border-color:#c49a3c; color:#c49a3c;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;margin:0 auto 4px;flex-shrink:0"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 12h1m8-9v1m8 8h1m-15.4-6.4l.7.7m12.1-.7l-.7.7"/><path d="M9 16a5 5 0 1 1 6 0a3.5 3.5 0 0 0-1 3a2 2 0 0 1-4 0a3.5 3.5 0 0 0-1-3"/><path d="M9.7 17l4.6 0"/></svg><h4 data-i18n="lp_layer">Inq. Luminoso</h4><span>Atlas</span></div>
-                    <div class="meteo-item m-seeing active" id="btn-seeing"><h4 data-i18n="seeing_est">Stima Seeing</h4><span id="val-seeing" style="color:#c49a3c;">--/5</span></div>
+                    <div class="meteo-item m-seeing active" id="btn-seeing" onclick="apriScalaSeeing()" style="cursor:pointer; position:relative;">
+                        <h4 data-i18n="seeing_est">Stima Seeing</h4>
+                        <svg id="seeing-star-svg" width="36" height="36" viewBox="0 0 36 36" style="margin:2px auto 1px; display:block;">
+                            <rect width="36" height="36" fill="#060a0f" rx="5"/>
+                            <circle cx="18" cy="18" r="10" fill="none" stroke="#c49a3c" stroke-width="0.5" opacity="0.2"/>
+                            <circle cx="18" cy="18" r="6" fill="none" stroke="#c49a3c" stroke-width="0.6" opacity="0.3"/>
+                            <circle cx="18" cy="18" r="3" fill="#c49a3c" opacity="0.5"/>
+                            <circle cx="18" cy="18" r="1.5" fill="#fff" opacity="0.8"/>
+                        </svg>
+                        <span id="val-seeing" style="color:#c49a3c; font-size:1em; font-weight:700;">--/5</span>
+                    </div>
                 </div>
 
                 <!-- Legenda Inquinamento Luminoso \u2014 visibile solo con layer LP attivo -->
@@ -3621,5 +3613,19 @@ document.addEventListener('DOMContentLoaded', function() {
     })();
     </script>
 
+
+    <!-- ── Modale Scala Seeing ── -->
+    <div id="seeing-scale-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:10000; align-items:center; justify-content:center;">
+        <div style="background:#0d1017; border:1px solid #252830; border-radius:14px; padding:20px; width:min(380px,92vw); max-height:90vh; overflow-y:auto;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+                <span style="font-size:13px; font-weight:600; color:#c49a3c;" data-i18n="seeing_scale_title">Scala Seeing — Antoniadi</span>
+                <div onclick="chiudiScalaSeeing()" style="cursor:pointer; color:#555; background:#1a1a1a; border:1px solid #333; border-radius:5px; width:24px; height:24px; display:flex; align-items:center; justify-content:center; font-size:13px;">✕</div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:5px;" id="seeing-scale-list">
+                <!-- generato da JS -->
+            </div>
+            <div style="margin-top:10px; font-size:9px; color:#3a4450; text-align:center;">Scala Antoniadi I–V · pattern di diffrazione simulati</div>
+        </div>
+    </div>
 </body>
 </html>
