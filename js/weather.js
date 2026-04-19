@@ -352,7 +352,8 @@
             let modal = document.getElementById('seeing-scale-modal');
             if (!modal) return;
             let list  = document.getElementById('seeing-scale-list');
-            if (list && !list.children.length) _renderScalaSeeing(list);
+            // Ricostruisce sempre la lista per riflettere la lingua corrente.
+            if (list) _renderScalaSeeing(list);
             modal.style.display = 'flex';
         }
 
