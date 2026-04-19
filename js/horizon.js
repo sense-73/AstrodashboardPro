@@ -480,8 +480,8 @@
       show('hz-results');
       document.getElementById('hz-pt-count').textContent = HZ.profile.length + ' punti';
       renderChart(); updateStats();
-      // Aggiorna il grafico FOV se disponibile
-      if (typeof disegnaGraficoAltezza === 'function') disegnaGraficoAltezza();
+      // Aggiorna il grafico FOV se disponibile (e ricalcola gli orari)
+      refreshFovChart();
       return true;
     } catch(e) { return false; }
   }
@@ -931,12 +931,25 @@
     });
   }
 
+  // ─── Helper interna ───────────────────────────────────────────────────────
+  // Ridisegna il grafico FOV E ricalcola gli orari di inizio/fine sessione.
+  // L'orizzonte può modificare la finestra utile della sessione (vincolo
+  // a >= 30° AND a > hzLimit), quindi rimuoverlo o aggiungerlo deve sempre
+  // triggerare un ricalcolo, non solo un redraw.
+  function refreshFovChart() {
+    if (typeof ricalcolaSessionePerData === 'function') {
+      ricalcolaSessionePerData();
+    } else if (typeof disegnaGraficoAltezza === 'function') {
+      disegnaGraficoAltezza();
+    }
+  }
+
   // ─── API pubblica ─────────────────────────────────────────────────────────
   window.hzRun = function () {
     readCoords();
     runDetection();
     saveToLocalStorage();
-    if (typeof disegnaGraficoAltezza === 'function') disegnaGraficoAltezza();
+    refreshFovChart();
   };
 
   window.hzReset = function () {
@@ -951,15 +964,23 @@
     setText('hz-img-name', '');
     setRunBtnActive(false);
     localStorage.removeItem(LS_KEY);
-    if (typeof disegnaGraficoAltezza === 'function') disegnaGraficoAltezza();
+    refreshFovChart();
   };
 
   // Applica al grafico FOV e torna alla sezione pianificazione
   window.hzApplyToFov = function () {
     if (!HZ.profile.length) { alert('Nessun profilo rilevato. Esegui prima il rilevamento orizzonte.'); return; }
     saveToLocalStorage();
-    if (typeof disegnaGraficoAltezza === 'function') disegnaGraficoAltezza();
+    refreshFovChart();
     if (typeof _showView === 'function') _showView('planning-view');
+  };
+
+  // Rimuove l'orizzonte dal grafico FOV (senza toccare la UI del modulo orizzonte).
+  // Usato dal pulsante "Reset orizzonte" nella sezione FOV.
+  window.hzRemoveFromFov = function () {
+    HZ.profile = [];
+    localStorage.removeItem(LS_KEY);
+    refreshFovChart();
   };
 
   // Backup completo scaricabile
@@ -987,8 +1008,8 @@
         }
         localStorage.setItem(LS_KEY, JSON.stringify(data));
         if (loadFromLocalStorage()) {
-          // Applica automaticamente al grafico FOV
-          if (typeof disegnaGraficoAltezza === 'function') disegnaGraficoAltezza();
+          // Applica automaticamente al grafico FOV (e ricalcola gli orari)
+          refreshFovChart();
           alert('✓ Orizzonte ripristinato: ' + (data.locationName || 'senza nome') + ' · ' + data.profile.length + ' punti — applicato al FOV');
         }
       } catch(e) { alert('Errore nel leggere il file di backup.'); }

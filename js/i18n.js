@@ -2365,10 +2365,15 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.es.hz_param_sbot     = "Buscar hasta (% sup)";
         i18n.zh.hz_param_sbot     = "搜索至 (% 顶)";
 
-        i18n.it.hz_restore_btn    = "↩ Ripristina";
-        i18n.en.hz_restore_btn    = "↩ Restore";
-        i18n.es.hz_restore_btn    = "↩ Restaurar";
-        i18n.zh.hz_restore_btn    = "↩ 恢复";
+        i18n.it.hz_restore_btn    = "File orizzonte";
+        i18n.en.hz_restore_btn    = "Horizon file";
+        i18n.es.hz_restore_btn    = "Archivo horizonte";
+        i18n.zh.hz_restore_btn    = "地平线文件";
+
+        i18n.it.hz_remove_fov_btn = "Reset orizzonte";
+        i18n.en.hz_remove_fov_btn = "Reset horizon";
+        i18n.es.hz_remove_fov_btn = "Reset horizonte";
+        i18n.zh.hz_remove_fov_btn = "重置地平线";
 
         // ─── Changelog v6.5 ─────────────────────────────────────────────────
 

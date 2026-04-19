@@ -239,18 +239,18 @@
 
         // ── Widget Seeing con colori e stella ──────────────────────────────
 
-        const _SEEING_COLORS = { 1:'#8e44ad', 2:'#e74c3c', 3:'#e67e22', 4:'#f1c40f', 5:'#2ecc71' };
+        const _SEEING_COLORS = { 1:'#2ecc71', 2:'#f1c40f', 3:'#e67e22', 4:'#e74c3c', 5:'#8e44ad' };
 
         function _seeingSvg(v, col) {
             let c = col;
-            // Scala Antoniadi corretta: 1=pessimo(blob), 5=ottimo(stella nitida)
-            if (v === 5) return `<rect width="36" height="36" fill="#060a0f" rx="5"/>
+            // Scala Antoniadi: 1=Perfetto(stella nitida), 5=Pessimo(blob massimo)
+            if (v === 1) return `<rect width="36" height="36" fill="#060a0f" rx="5"/>
                 <circle cx="18" cy="18" r="12" fill="none" stroke="${c}" stroke-width="0.5" opacity="0.22"/>
                 <circle cx="18" cy="18" r="8" fill="none" stroke="${c}" stroke-width="0.6" opacity="0.35"/>
                 <circle cx="18" cy="18" r="4.5" fill="none" stroke="${c}" stroke-width="0.8" opacity="0.5"/>
                 <circle cx="18" cy="18" r="2.5" fill="${c}" opacity="0.65"/>
                 <circle cx="18" cy="18" r="1.2" fill="#ffffff" opacity="1"/>`;
-            if (v === 4) return `<rect width="36" height="36" fill="#060a0f" rx="5"/>
+            if (v === 2) return `<rect width="36" height="36" fill="#060a0f" rx="5"/>
                 <circle cx="18" cy="18" r="11" fill="none" stroke="${c}" stroke-width="0.6" opacity="0.18" stroke-dasharray="4 2"/>
                 <circle cx="18" cy="18" r="7" fill="none" stroke="${c}" stroke-width="0.7" opacity="0.28" stroke-dasharray="5 2"/>
                 <circle cx="18" cy="18" r="4" fill="${c}" opacity="0.2"/>
@@ -262,13 +262,13 @@
                 <circle cx="18" cy="18" r="6" fill="${c}" opacity="0.2"/>
                 <circle cx="17.8" cy="18.2" r="3.8" fill="${c}" opacity="0.42"/>
                 <circle cx="18.2" cy="17.8" r="2" fill="#ffddaa" opacity="0.6"/>`;
-            if (v === 2) return `<rect width="36" height="36" fill="#060a0f" rx="5"/>
+            if (v === 4) return `<rect width="36" height="36" fill="#060a0f" rx="5"/>
                 <circle cx="18" cy="18" r="14" fill="${c}" opacity="0.04"/>
                 <circle cx="18" cy="18" r="11" fill="${c}" opacity="0.08"/>
                 <circle cx="18" cy="18" r="8" fill="${c}" opacity="0.14"/>
                 <ellipse cx="17.5" cy="18.5" rx="5.5" ry="4.5" fill="${c}" opacity="0.3" transform="rotate(-15 18 18)"/>
                 <ellipse cx="18.5" cy="17.5" rx="3" ry="3.5" fill="${c}" opacity="0.35" transform="rotate(20 18 18)"/>`;
-            // v === 1: blob massimo (pessimo)
+            // v === 5: blob massimo (Pessimo)
             return `<rect width="36" height="36" fill="#060a0f" rx="5"/>
                 <circle cx="18" cy="18" r="16" fill="${c}" opacity="0.03"/>
                 <circle cx="18" cy="18" r="13" fill="${c}" opacity="0.06"/>
