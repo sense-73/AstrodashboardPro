@@ -94,11 +94,12 @@ function _npAnalisiNotte() {
     const avgTransp = Math.round(sumTransp / oreTotali);
     const avgMoon  = Math.round(sumMoon / oreTotali);
 
-    // Classificazione in 4 categorie
+    // Classificazione in 5 categorie
     let categoria;
     if      (pct >= 85 && avgSee >= 4) categoria = 'perfetta';
-    else if (pct >= 60)                categoria = 'promettente';
-    else if (pct >= 30)                categoria = 'incerta';
+    else if (pct >= 70)                categoria = 'promettente';
+    else if (pct >= 50)                categoria = 'incerta';
+    else if (pct >= 31)                categoria = 'non_vale_la_pena';
     else                               categoria = 'lascia_perdere';
 
     return {
@@ -158,10 +159,11 @@ function _npPopolaPopup(analisi, dsoList) {
 
     // Config per categoria — usa t() per la traduzione
     const cfgMap = {
-        perfetta:       { emoji: '🌟', label: t('np_perfetta'),       color: '#2ecc71', tagline: t('np_perfetta_tag') },
-        promettente:    { emoji: '✨', label: t('np_promettente'),     color: '#c49a3c', tagline: t('np_promettente_tag') },
-        incerta:        { emoji: '🌥️', label: t('np_incerta'),        color: '#e67e22', tagline: t('np_incerta_tag') },
-        lascia_perdere: { emoji: '☁️', label: t('np_lascia_perdere'), color: '#e74c3c', tagline: t('np_lascia_perdere_tag') }
+        perfetta:         { emoji: '🌟', label: t('np_perfetta'),         color: '#2ecc71', tagline: t('np_perfetta_tag') },
+        promettente:      { emoji: '✨', label: t('np_promettente'),       color: '#c49a3c', tagline: t('np_promettente_tag') },
+        incerta:          { emoji: '🌥️', label: t('np_incerta'),          color: '#e67e22', tagline: t('np_incerta_tag') },
+        non_vale_la_pena: { emoji: '☁️', label: t('np_non_vale'),         color: '#c0392b', tagline: t('np_non_vale_tag') },
+        lascia_perdere:   { emoji: '🌫️', label: t('np_lascia_perdere'),   color: '#7f1f1f', tagline: t('np_lascia_perdere_tag') }
     };
     const cfg = cfgMap[categoria];
 
