@@ -4,7 +4,7 @@
 
 // CACHE_NAME usa un timestamp fisso aggiornato ad ogni deploy
 // Non serve più incrementare manualmente — basta cambiare questa data
-const CACHE_TIMESTAMP = '20260419-003';
+const CACHE_TIMESTAMP = '20260420-001';
 const CACHE_NAME = 'astrodash-' + CACHE_TIMESTAMP;
 const APP_VERSION = CACHE_TIMESTAMP;
 
@@ -24,6 +24,8 @@ const FILES_TO_CACHE = [
     './js/pro.js',
     './js/export.js',
     './js/multinight.js',
+    './js/night_popup.js',
+    './js/horizon.js',
     './js/report.js',
     './js/userimg.js',
     './manifest.json',

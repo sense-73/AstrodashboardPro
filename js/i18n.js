@@ -2496,7 +2496,7 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.zh.seeing_scale_title = "视宁度标尺 — Antoniadi";
 
         // ── Night Popup ──────────────────────────────────────────────────
-        i18n.it.np_title            = "Analisi Notturna";
+        i18n.it.np_title            = "🔭 Analisi Notturna";
         i18n.it.np_sky_label        = "☁️ Cielo libero";
         i18n.it.np_seeing_label     = "👁 Seeing medio";
         i18n.it.np_moon_label       = "🌙 Luna";
@@ -2515,8 +2515,9 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.it.np_fov_small        = "piccolo, alta focale";
         i18n.it.np_max              = "max";
         i18n.it.np_warning          = "⚠️ Stima approssimativa. Verifica sempre i dati meteo aggiornati.";
+        i18n.it.np_targets          = "Target consigliati";
 
-        i18n.en.np_title            = "Night Analysis";
+        i18n.en.np_title            = "🔭 Night Analysis";
         i18n.en.np_sky_label        = "☁️ Clear Sky";
         i18n.en.np_seeing_label     = "👁 Avg Seeing";
         i18n.en.np_moon_label       = "🌙 Moon";
@@ -2535,8 +2536,9 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.en.np_fov_small        = "small, high focal length";
         i18n.en.np_max              = "max";
         i18n.en.np_warning          = "⚠️ Approximate estimate. Always check updated weather data.";
+        i18n.en.np_targets          = "Suggested Targets";
 
-        i18n.es.np_title            = "Análisis Nocturno";
+        i18n.es.np_title            = "🔭 Análisis Nocturno";
         i18n.es.np_sky_label        = "☁️ Cielo despejado";
         i18n.es.np_seeing_label     = "👁 Seeing medio";
         i18n.es.np_moon_label       = "🌙 Luna";
@@ -2555,8 +2557,9 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.es.np_fov_small        = "pequeño, focal larga";
         i18n.es.np_max              = "máx";
         i18n.es.np_warning          = "⚠️ Estimación aproximada. Verifica siempre los datos meteorológicos actualizados.";
+        i18n.es.np_targets          = "Objetivos sugeridos";
 
-        i18n.zh.np_title            = "夜间分析";
+        i18n.zh.np_title            = "🔭 夜间分析";
         i18n.zh.np_sky_label        = "☁️ 晴空率";
         i18n.zh.np_seeing_label     = "👁 平均视宁度";
         i18n.zh.np_moon_label       = "🌙 月光";
@@ -2575,4 +2578,5 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.zh.np_fov_small        = "目标偏小，需长焦";
         i18n.zh.np_max              = "最高";
         i18n.zh.np_warning          = "⚠️ 仅供参考。请始终核实最新气象数据。";
+        i18n.zh.np_targets          = "推荐目标";
 
