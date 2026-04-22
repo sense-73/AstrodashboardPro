@@ -561,6 +561,10 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.en.gps_btn_label      = "Current location";
         i18n.es.gps_btn_label      = "Ubicación actual";
         i18n.zh.gps_btn_label      = "当前位置";
+        i18n.it.apply_coords_btn   = "✓ Applica coordinate";
+        i18n.en.apply_coords_btn   = "✓ Apply coordinates";
+        i18n.es.apply_coords_btn   = "✓ Aplicar coordenadas";
+        i18n.zh.apply_coords_btn   = "✓ 应用坐标";
 
         i18n.it.gps_btn_tip        = "Usa la posizione GPS del dispositivo";
         i18n.en.gps_btn_tip        = "Use the device GPS position";

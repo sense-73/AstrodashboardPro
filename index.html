@@ -679,8 +679,9 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     </div>
                     <ul id="dropdown-risultati"></ul>
                 </div>
-                <div class="input-group"><label for="lat" data-i18n="lat">Latitudine:</label><input type="text" id="lat" readonly value="46.06200"></div>
-                <div class="input-group"><label for="lon" data-i18n="lon">Longitudine:</label><input type="text" id="lon" readonly value="13.23500"></div>
+                <div class="input-group"><label for="lat" data-i18n="lat">Latitudine:</label><input type="text" id="lat" value="46.06200" oninput="document.getElementById('apply-coords-row').style.display='flex';"></div>
+                <div class="input-group"><label for="lon" data-i18n="lon">Longitudine:</label><input type="text" id="lon" value="13.23500" oninput="document.getElementById('apply-coords-row').style.display='flex';"></div>
+                <div id="apply-coords-row" style="display:none; align-items:center; gap:8px; margin-top:4px;"><button onclick="applicaCoordinateManuali()" style="flex:1; padding:7px 12px; border-radius:6px; border:1px solid #c49a3c; background:rgba(196,154,60,0.12); color:#c49a3c; cursor:pointer; font-size:12px; font-weight:600; transition:all .2s;" onmouseover="this.style.background='rgba(196,154,60,0.25)'" onmouseout="this.style.background='rgba(196,154,60,0.12)'" data-i18n="apply_coords_btn">✓ Applica coordinate</button></div>
                 <div class="input-group" style="margin-top: 6px; align-items: center; flex-wrap:wrap; gap:8px;">
                     <label style="width: auto; color:#c49a3c;" data-i18n="bortle_label">Bortle:</label>
                     <div style="display:inline-flex; align-items:center; gap:8px; flex-wrap:wrap;">
