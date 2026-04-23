@@ -39,7 +39,7 @@ function _npAnalisiNotte() {
     let sumSeeing = 0, sumTransp = 0, sumMoon = 0;
 
     for (let i = 0; i < datiMeteo.time.length; i++) {
-        const ora = new Date(datiMeteo.time[i]);
+        const ora = parseMeteoTime(datiMeteo.time[i]);
         if (ora < nightStart || ora > nightEnd) continue;
         oreTotali++;
 

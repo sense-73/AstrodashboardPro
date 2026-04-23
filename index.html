@@ -3120,7 +3120,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
             // Ricalcola indicePartenza all'ora attuale (potrebbe essere cambiata da quando i dati sono stati scaricati)
             if (typeof datiMeteo !== 'undefined' && datiMeteo && datiMeteo.time) {
                 const adesso = new Date();
-                const nuovoIndice = Math.max(0, datiMeteo.time.findIndex(x => new Date(x).getTime() >= adesso.getTime() - 3600000));
+                const nuovoIndice = Math.max(0, datiMeteo.time.findIndex(x => parseMeteoTime(x).getTime() >= adesso.getTime() - 3600000));
                 if (typeof indicePartenza !== 'undefined') indicePartenza = nuovoIndice;
                 const slider = document.getElementById('timeSlider');
                 if (slider) { slider.value = 0; }

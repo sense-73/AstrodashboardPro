@@ -507,7 +507,7 @@
             .then(data => {
                 if (!data.hourly || !data.hourly.time) throw new Error('invalid_data');
                 datiMeteo = data.hourly; let adesso = new Date();
-                indicePartenza = Math.max(0, datiMeteo.time.findIndex(x => new Date(x).getTime() >= adesso.getTime() - 3600000));
+                indicePartenza = Math.max(0, datiMeteo.time.findIndex(x => parseMeteoTime(x).getTime() >= adesso.getTime() - 3600000));
                 document.getElementById('timeSlider').disabled = false; document.getElementById('timeSlider').value = 0; 
                 document.getElementById('astroSlider').disabled = false; document.getElementById('astroSlider').value = 0; 
                 applicaGradienteGiornoNotte();
@@ -529,7 +529,7 @@
                     base.setHours(18, 0, 0, 0);
                     d = new Date(base.getTime() + i * 3600000);
                 } else {
-                    d = new Date(datiMeteo.time[indicePartenza + i]);
+                    d = parseMeteoTime(datiMeteo.time[indicePartenza + i]);
                 }
                 let times = SunCalc.getTimes(d, latCorrente, lonCorrente);
                 let pct = (i / maxSteps) * 100;
@@ -599,7 +599,7 @@
                 let _meteoIdx = -1;
                 if (datiMeteo && datiMeteo.time) {
                     const _dOraMs = dOra.getTime();
-                    _meteoIdx = datiMeteo.time.findIndex(t => Math.abs(new Date(t).getTime() - _dOraMs) < 1800000);
+                    _meteoIdx = datiMeteo.time.findIndex(t => Math.abs(parseMeteoTime(t).getTime() - _dOraMs) < 1800000);
                 }
                 if (_meteoIdx >= 0) {
                     // Dati meteo disponibili per questa data/ora
@@ -674,7 +674,7 @@
                 return;
             }
             if (!datiMeteo) return;
-            let step = parseInt(document.getElementById('timeSlider').value), i = indicePartenza + step, dOra = new Date(datiMeteo.time[i]);
+            let step = parseInt(document.getElementById('timeSlider').value), i = indicePartenza + step, dOra = parseMeteoTime(datiMeteo.time[i]);
             let tOra;
             if (step === 0) {
                 tOra = t("now") + " (" + new Date().toLocaleTimeString('it-IT', {hour: '2-digit', minute:'2-digit'}) + ")";
@@ -696,7 +696,7 @@
             document.getElementById('time-display').innerHTML = `<span style="font-size: 1.5em; vertical-align: middle; margin-right: 5px;">${icM}</span> ${tOra} <br><span style="font-size: 0.75em; color: #aaa; text-transform: uppercase;">${t("weather")}: <b style="color: #fff;">${t(dsM)}</b></span>`;
             
             // Calcolo Meteo Attuale (fisso, non influenzato dallo slider)
-            let dOra0 = new Date(datiMeteo.time[indicePartenza]);
+            let dOra0 = parseMeteoTime(datiMeteo.time[indicePartenza]);
             let b0 = datiMeteo.cloud_cover_low[indicePartenza], m0 = datiMeteo.cloud_cover_mid[indicePartenza], a0 = datiMeteo.cloud_cover_high[indicePartenza];
             let altS0 = SunCalc.getPosition(dOra0, latCorrente, lonCorrente).altitude * (180/Math.PI);
             let maxC0 = Math.max(b0, m0, a0), icM0 = "☁️", dsM0 = "overcast";

@@ -56,6 +56,19 @@ function isSessionDateToday() {
            _sessionDateObj.getDate()     === today.getDate();
 }
 
+// ── Parser sicuro per stringhe temporali Open-Meteo ──────────
+// new Date("YYYY-MM-DDTHH:MM") si comporta diversamente su iOS
+// Safari rispetto a Chrome desktop: può essere interpretata come
+// UTC invece che locale, o restituire NaN (bug noto).
+// Il costruttore per componenti è invece sempre locale su tutti
+// i browser, senza ambiguità di fuso.
+function parseMeteoTime(str) {
+    const [datePart, timePart] = str.split('T');
+    const [y, mo, d] = datePart.split('-').map(Number);
+    const [h, m]     = timePart.split(':').map(Number);
+    return new Date(y, mo - 1, d, h, m, 0, 0);
+}
+
 function sessionDateLabel(lang) {
     if (isSessionDateToday()) {
         return lang === 'it' ? 'stanotte' : lang === 'es' ? 'esta noche' : lang === 'zh' ? '今晚' : 'tonight';
