@@ -87,7 +87,8 @@ let lang = localStorage.getItem('ad_lang') || 'it';
                 "mn_target_tpt": "Obiettivo Progetto (TPT)",
                 "mn_target_ai_label": "Analisi Consigliata",
                 "mn_planned_time": "Tempo Pianificato",
-                "mn_completed": "% completato"
+                "mn_completed": "% completato", 
+		"export_nina_desc": "Genera il file sequenza per N.I.N.A.",
             },
             en: {
                 "manual_btn": "Open Manual", "pos_title": "Location", "find_place": "Find Place:", "search_place": "E.g. Yellowstone...",
@@ -170,7 +171,8 @@ let lang = localStorage.getItem('ad_lang') || 'it';
                 "mn_target_tpt": "Project Goal (TPT)",
                 "mn_target_ai_label": "Recommended Target",
                 "mn_planned_time": "Planned Time",
-                "mn_completed": "% completed"
+                "mn_completed": "% completed", 
+		"export_nina_desc": "Generate the sequence file for N.I.N.A.",
             },
             es: {
                 "manual_btn": "Abrir Manual", "pos_title": "Ubicación", "find_place": "Buscar Lugar:", "search_place": "Ej. Atacama...",
@@ -253,7 +255,8 @@ let lang = localStorage.getItem('ad_lang') || 'it';
                 "mn_target_tpt": "Objetivo del Proyecto (TPT)",
                 "mn_target_ai_label": "Objetivo Recomendado",
                 "mn_planned_time": "Tiempo Planificado",
-                "mn_completed": "% completado"
+                "mn_completed": "% completado",
+		"export_nina_desc": "Genera el archivo de secuencia para N.I.N.A.",
             },
             zh: {
                 "manual_btn": "打开手册", "pos_title": "位置", "find_place": "查找地点:", "search_place": "例如: 丽江...",
@@ -336,7 +339,8 @@ let lang = localStorage.getItem('ad_lang') || 'it';
                 "mn_target_tpt": "项目目标 (TPT)",
                 "mn_target_ai_label": "推荐目标",
                 "mn_planned_time": "已计划时间",
-                "mn_completed": "% 已完成"
+                "mn_completed": "% 已完成",
+		"export_nina_desc": "为 N.I.N.A. 生成序列文件",
             }
         };
 
