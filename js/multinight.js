@@ -126,6 +126,12 @@
             let _mpA = (_swA / (_pxA / 1000)) * (_shA / (_pxA / 1000)) / 1e6;
             let lightOverheadA = Math.max(1.5, 1.2 + _mpA * 0.08);
 
+            // ── Budget AF: sottrai dal tempo disponibile ──
+            let _afDurMn = parseInt((document.getElementById('af-duration') || {}).value) || 0;
+            let _afCntMn = parseInt((document.getElementById('af-count') || {}).value) || 0;
+            let _afBudgetMn = _afDurMn * _afCntMn;
+            aS = Math.max(0, aS - _afBudgetMn);
+
             // ── Calcola e compila pose per ogni filtro attivo ──
             aL.forEach(pid => {
                 let _baseExp = (_catExpMap[_catG] !== undefined) ? _catExpMap[_catG] : 180;
@@ -368,6 +374,11 @@ function aggiungiNotte() {
                 }
             });
 
+            // ── Budget AF: aggiunge al tempo totale della notte ──
+            let _afDurRic = parseInt((document.getElementById('af-duration') || {}).value) || 0;
+            let _afCntRic = parseInt((document.getElementById('af-count') || {}).value) || 0;
+            totalSecs += _afDurRic * _afCntRic;
+
             let orePose = (totalSecs / 3600).toFixed(1);
             let oreEl = document.getElementById(`ore-mn-${id}`);
             oreEl.value = orePose + "h";
@@ -552,9 +563,12 @@ function aggiungiNotte() {
             let afStartEl  = document.getElementById('pro-af-start');
             let afFilterEl = document.getElementById('pro-af-filter');
             let afHfrEl    = document.getElementById('pro-af-hfr');
+            let afTempEl   = document.getElementById('pro-af-temp');
             let doAfStart  = isPro && afStartEl  && afStartEl.checked;
             let doAfFilter = isPro && afFilterEl && afFilterEl.checked;
             let doAfHfr    = isPro && afHfrEl    && afHfrEl.checked;
+            let doAfTemp   = isPro && afTempEl   && afTempEl.checked;
+            let _afTempDeltaT = parseFloat((document.getElementById('pro-af-temp-val') || {value:'2'}).value) || 2;
             // Orari sessione dalla notte corrente
             let _tSraw = document.getElementById(`start-mn-${notteId}`) ? document.getElementById(`start-mn-${notteId}`).value : '';
             let _tEraw = document.getElementById(`end-mn-${notteId}`)   ? document.getElementById(`end-mn-${notteId}`).value   : '';
@@ -602,6 +616,7 @@ function aggiungiNotte() {
             let dsoTriggers = [];
             if (doAfHfr) { let hfrRid = nextId(); dsoTriggers.push({ "$id": nextId(), "$type": "NINA.Sequencer.Trigger.Autofocus.AutofocusAfterHFRIncreaseTrigger, NINA.Sequencer", "Amount": 10.0, "SampleSize": 10, "Parent": {"$ref": _dsoCId}, "TriggerRunner": { "$id": hfrRid, "$type": "NINA.Sequencer.Container.SequentialContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Name": null, "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition",[]), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem",[{"$id":nextId(),"$type":"NINA.Sequencer.SequenceItem.Autofocus.RunAutofocus, NINA.Sequencer","Parent":{"$ref":hfrRid},"ErrorBehavior":0,"Attempts":1}]), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger",[]), "Parent": null, "ErrorBehavior": 0, "Attempts": 1 } }); }
             if (doAfFilter) { let afFRid = nextId(); dsoTriggers.push({ "$id": nextId(), "$type": "NINA.Sequencer.Trigger.Autofocus.AutofocusAfterFilterChange, NINA.Sequencer", "Parent": {"$ref": _dsoCId}, "TriggerRunner": { "$id": afFRid, "$type": "NINA.Sequencer.Container.SequentialContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Name": null, "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition",[]), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem",[{"$id":nextId(),"$type":"NINA.Sequencer.SequenceItem.Autofocus.RunAutofocus, NINA.Sequencer","Parent":{"$ref":afFRid},"ErrorBehavior":0,"Attempts":1}]), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger",[]), "Parent": null, "ErrorBehavior": 0, "Attempts": 1 } }); }
+            if (doAfTemp) { let afTRid = nextId(); dsoTriggers.push({ "$id": nextId(), "$type": "NINA.Sequencer.Trigger.Autofocus.AutofocusAfterTemperatureChangeTrigger, NINA.Sequencer", "Amount": _afTempDeltaT, "Parent": {"$ref": _dsoCId}, "TriggerRunner": { "$id": afTRid, "$type": "NINA.Sequencer.Container.SequentialContainer, NINA.Sequencer", "Strategy": { "$type": "NINA.Sequencer.Container.ExecutionStrategy.SequentialStrategy, NINA.Sequencer" }, "Name": null, "Conditions": makeObs("NINA.Sequencer.Conditions.ISequenceCondition",[]), "IsExpanded": true, "Items": makeObs("NINA.Sequencer.SequenceItem.ISequenceItem",[{"$id":nextId(),"$type":"NINA.Sequencer.SequenceItem.Autofocus.RunAutofocus, NINA.Sequencer","Parent":{"$ref":afTRid},"ErrorBehavior":0,"Attempts":1}]), "Triggers": makeObs("NINA.Sequencer.Trigger.ISequenceTrigger",[]), "Parent": null, "ErrorBehavior": 0, "Attempts": 1 } }); }
 
             // TimeCondition (Loop Until Time = fine sessione) + DSO container
             let _timeCond = { "$id": nextId(), "$type": "NINA.Sequencer.Conditions.TimeCondition, NINA.Sequencer", "Hours": _endH, "Minutes": _endM, "MinutesOffset": 0, "Seconds": 0, "SelectedProvider": { "$type": "NINA.Sequencer.Utility.DateTimeProvider.TimeProvider, NINA.Sequencer" }, "Parent": {"$ref": _dsoCId} };

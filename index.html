@@ -1155,9 +1155,67 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <span class="info-icon" style="margin-left: 8px; color: #c49a3c; font-size: 1.1em;" onmouseenter="mostraTooltip(this, 'info_dither')" onmouseleave="nascondiTooltip()">ℹ️</span>
                 </div>
                 <div class="calc-inputs" style="font-size: 0.85em; color: #6e7a8a; display: flex; align-items: center; gap: 6px;">
-                    <input type="number" id="dither-duration" value="15" min="0" oninput="calcolaTempi()" style="width: 45px !important; padding: 5px !important; text-align: center;"> s
+                    <input type="number" id="dither-duration" value="15" min="0" oninput="calcolaTempi(); let _pd=document.getElementById('pro-dither-duration'); if(_pd) _pd.value=this.value; if(typeof calcolaNightFillBar==='function') calcolaNightFillBar();" style="width: 45px !important; padding: 5px !important; text-align: center;"> s
                 </div>
                 <div class="calc-total" id="dither-tot" style="color: #c49a3c;">0m</div>
+            </div>
+
+            <!-- ── Budget Autofocus (collassabile) ── -->
+            <div class="calc-row" id="af-budget-row"
+                 style="border-left-color: #00aaff; margin-top: 6px; background: #1a2235; cursor: pointer; flex-wrap: wrap;"
+                 onclick="toggleAFPanel()">
+                <div style="display:flex; align-items:center; width: 140px;">
+                    <label style="color: #00aaff; cursor:pointer;" data-i18n="pro_af_title">Autofocus</label>
+                    <span class="info-icon" style="margin-left: 8px; color: #00aaff; font-size: 1.1em;"
+                          onmouseenter="mostraTooltip(this, 'info_af')" onmouseleave="nascondiTooltip()"
+                          onclick="event.stopPropagation()">ℹ️</span>
+                </div>
+                <div class="calc-inputs" style="font-size: 0.85em; color: #6e7a8a; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                    <span data-i18n="af_duration_lbl">Durata AF</span>
+                    <input type="number" id="af-duration" value="120" min="30" max="600" step="10"
+                           oninput="calcolaTempi(); calcolaNightFillBar(); aggiornaStimaAF(); let _pad=document.getElementById('pro-af-duration'); if(_pad) _pad.value=this.value;"
+                           onclick="event.stopPropagation()"
+                           style="width: 50px !important; padding: 5px !important; text-align: center;"> s
+                    &nbsp;×&nbsp;
+                    <span data-i18n="af_count_lbl">N. AF</span>
+                    <input type="number" id="af-count" value="0" min="0" step="1"
+                           oninput="calcolaTempi(); calcolaNightFillBar(); let _pac=document.getElementById('pro-af-count'); if(_pac) _pac.value=this.value;"
+                           onclick="event.stopPropagation()"
+                           style="width: 40px !important; padding: 5px !important; text-align: center;">
+                </div>
+                <div style="display:flex; align-items:center; gap:6px; margin-left:auto;">
+                    <div class="calc-total" id="af-tot" style="color: #00aaff; margin-left:0;">0m</div>
+                    <span id="af-panel-toggle" style="color:#00aaff; font-size:0.75em; flex-shrink:0;">▼</span>
+                </div>
+            </div>
+            <!-- Pannello stima AF (nascosto di default) -->
+            <div id="af-stima-panel" style="display:none; background:#111d2e; border-left:3px solid #00aaff44;
+                 border-radius:0 0 6px 6px; padding:10px 14px; margin-top:1px; font-size:0.82em;">
+                <div style="color:#6e7a8a; margin-bottom:8px; font-size:0.9em;"
+                     data-i18n="af_stima_title">Stima automatica</div>
+                <div style="color:#4a5a6a; font-size:0.78em; font-weight:600; letter-spacing:0.03em;
+                            text-transform:uppercase; margin-bottom:5px;" data-i18n="af_triggers_lbl">Trigger AF attivati</div>
+                <div style="display:flex; flex-wrap:wrap; gap:5px; margin-bottom:10px;">
+                    <span id="af-chip-avvio"
+                          style="background:#1a2235; border:1px solid #2d3a50; border-radius:4px; padding:3px 8px; color:#6e7a8a;"></span>
+                    <span id="af-chip-filtro"
+                          style="background:#1a2235; border:1px solid #2d3a50; border-radius:4px; padding:3px 8px; color:#6e7a8a; display:none;"></span>
+                    <span id="af-chip-termici"
+                          style="background:#1a2235; border:1px solid #2d3a50; border-radius:4px; padding:3px 8px; color:#6e7a8a; display:none;"></span>
+                    <span id="af-chip-meteo"
+                          style="background:#1a2235; border:1px solid #2d3a50; border-radius:4px; padding:3px 8px; color:#6e7a8a; display:none;"></span>
+                </div>
+                <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                    <span id="af-chip-confidenza" style="font-size:0.85em; color:#6e7a8a;"></span>
+                    <button id="af-stima-btn"
+                            onclick="applicaSimaAF()"
+                            style="background:transparent; border:1px solid #00aaff55; color:#00aaff;
+                                   border-radius:4px; padding:3px 10px; font-size:0.85em; cursor:pointer; white-space:nowrap;"
+                            data-i18n="af_stima_btn">Genera stima</button>
+                </div>
+                <div id="af-stima-spiegazione"
+                     style="margin-top:9px; color:#4a5a6a; font-size:1.0em; line-height:1.6;
+                            font-style:italic; border-top:1px solid #1a2a3a; padding-top:8px; display:none;"></div>
             </div>
         </div>
 
@@ -1169,10 +1227,11 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
             
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px;">
                 <div style="background: #222; padding: 15px; border-radius: 8px;">
-                    <h4 style="margin: 0 0 10px 0; color: #c49a3c;" data-i18n="pro_af_title">Autofocus</h4>
-                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: #6e7a8a; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="smart-af-start" checked style="transform: scale(1.2);"> <span data-i18n="pro_af_start">All'avvio sequenza</span></label>
-                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: #6e7a8a; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="smart-af-filter" style="transform: scale(1.2);"> <span data-i18n="pro_af_filter">Al cambio filtro</span></label>
-                    <label style="display: flex; align-items: center; gap: 8px; color: #6e7a8a; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="smart-af-hfr" style="transform: scale(1.2);"> <span data-i18n="pro_af_hfr">Alla variazione dell'HFR</span></label>
+                    <h4 style="margin: 0 0 10px 0; color: #c49a3c; display:flex; align-items:center; gap:6px;"><span data-i18n="pro_af_title">Autofocus</span><span class="info-icon" onmouseenter="mostraTooltip(this, 'info_af_triggers')" onmouseleave="nascondiTooltip()">ℹ️</span></h4>
+                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: #6e7a8a; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="smart-af-start" checked style="transform: scale(1.2);" onchange="window._afModoManuale=false; window._sequenzaGenerata ? generaSequenzaOttimale() : calcolaTempi()"> <span data-i18n="pro_af_start">All'avvio sequenza</span></label>
+                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: #6e7a8a; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="smart-af-filter" style="transform: scale(1.2);" onchange="window._afModoManuale=false; window._sequenzaGenerata ? generaSequenzaOttimale() : calcolaTempi()"> <span data-i18n="pro_af_filter">Al cambio filtro</span></label>
+                    <label style="display: flex; align-items: center; gap: 8px; color: #6e7a8a; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="smart-af-hfr" style="transform: scale(1.2);" onchange="window._afModoManuale=false; window._sequenzaGenerata ? generaSequenzaOttimale() : calcolaTempi()"> <span data-i18n="pro_af_hfr">Alla variazione dell'HFR</span></label>
+                    <label style="display: flex; align-items: center; gap: 8px; margin-top: 10px; color: #6e7a8a; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="smart-af-temp" style="transform: scale(1.2);" onchange="window._afModoManuale=false; window._sequenzaGenerata ? generaSequenzaOttimale() : calcolaTempi()"> <span data-i18n="pro_af_temp_lbl">Variazione</span> ΔT <input type="number" id="smart-af-temp-val" value="2" min="0.5" max="10" step="0.5" onclick="event.stopPropagation()" oninput="window._afModoManuale=false; window._sequenzaGenerata ? generaSequenzaOttimale() : calcolaTempi()" style="width: 40px!important; padding: 3px!important; text-align: center;"> °C</label>
                 </div>
                 <div style="background: #222; padding: 15px; border-radius: 8px;">
                     <h4 style="margin: 0 0 10px 0; color: #c49a3c;" data-i18n="pro_preflight">Pre-Flight</h4>
@@ -1299,6 +1358,54 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                 </div>
                 <button id="btn-pro-multinight" class="btn-a-secondary btn-a-red" style="display: none; width: 100%; margin-top: 10px; padding: 11px;" onclick="apriMultiNight('pro');"><svg width="30" height="30" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" style="display:inline-block;vertical-align:middle;flex-shrink:0;"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M11 21h-5a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v3.5" /><path d="M16 3v4" /><path d="M8 3v4" /><path d="M4 11h11" /><path d="M17.8 20.817l-2.172 1.138a.392 .392 0 0 1 -.568 -.41l.415 -2.411l-1.757 -1.707a.389 .389 0 0 1 .217 -.665l2.428 -.352l1.086 -2.193a.392 .392 0 0 1 .702 0l1.086 2.193l2.428 .352a.39 .39 0 0 1 .217 .665l-1.757 1.707l.414 2.41a.39 .39 0 0 1 -.567 .411l-2.172 -1.138" /></svg> <span data-i18n="pro_overflow">Sforamento! Dividi in Multi-Notte</span></button>
 
+                <!-- ── Riga Dithering PRO ───────────────────────────────── -->
+                <div class="calc-row" style="border-left-color: #c49a3c; margin-top: 14px; background: #2a2a2a;">
+                    <div style="display:flex; align-items:center; width: 140px;">
+                        <label style="color: #c49a3c;" data-i18n="dither_setting">Impostazione tempo dither</label>
+                        <span class="info-icon" style="margin-left: 8px; color: #c49a3c; font-size: 1.1em;" onmouseenter="mostraTooltip(this, 'info_dither')" onmouseleave="nascondiTooltip()">ℹ️</span>
+                    </div>
+                    <div class="calc-inputs" style="font-size: 0.85em; color: #6e7a8a; display: flex; align-items: center; gap: 6px;">
+                        <input type="number" id="pro-dither-duration" value="15" min="0"
+                               oninput="calcolaNightFillBar(); let _sd=document.getElementById('dither-duration'); if(_sd) _sd.value=this.value;"
+                               style="width: 45px !important; padding: 5px !important; text-align: center;"> s
+                    </div>
+                    <div class="calc-total" id="pro-dither-tot" style="color: #c49a3c;">0m</div>
+                </div>
+
+                <!-- ── Riga Budget Autofocus PRO (collassabile) ───────────── -->
+                <div class="calc-row" id="pro-af-budget-row"
+                     style="border-left-color: #00aaff; margin-top: 6px; background: #1a2235; cursor: pointer; flex-wrap: wrap;"
+                     onclick="toggleProAFPanel()">
+                    <div style="display:flex; align-items:center; width: 140px;">
+                        <label style="color: #00aaff; cursor:pointer;" data-i18n="pro_af_title">Autofocus</label>
+                        <span class="info-icon" style="margin-left: 8px; color: #00aaff; font-size: 1.1em;"
+                              onmouseenter="mostraTooltip(this, 'info_af')" onmouseleave="nascondiTooltip()"
+                              onclick="event.stopPropagation()">ℹ️</span>
+                    </div>
+                    <div class="calc-inputs" style="font-size: 0.85em; color: #6e7a8a; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                        <span data-i18n="af_duration_lbl">Durata AF</span>
+                        <input type="number" id="pro-af-duration" value="120" min="30" max="600" step="10"
+                               oninput="calcolaNightFillBar(); let _sad=document.getElementById('af-duration'); if(_sad){_sad.value=this.value; if(typeof calcolaTempi==='function') calcolaTempi();}"
+                               onclick="event.stopPropagation()"
+                               style="width: 50px !important; padding: 5px !important; text-align: center;"> s
+                        &nbsp;×&nbsp;
+                        <span data-i18n="af_count_lbl">N. AF</span>
+                        <input type="number" id="pro-af-count" value="0" min="0" step="1"
+                               oninput="calcolaNightFillBar(); let _sac=document.getElementById('af-count'); if(_sac){_sac.value=this.value; if(typeof calcolaTempi==='function') calcolaTempi();}"
+                               onclick="event.stopPropagation()"
+                               style="width: 40px !important; padding: 5px !important; text-align: center;">
+                    </div>
+                    <div style="display:flex; align-items:center; gap:6px; margin-left:auto;">
+                        <div class="calc-total" id="pro-af-tot" style="color: #00aaff; margin-left:0;">0m</div>
+                        <span id="pro-af-panel-toggle" style="color:#00aaff; font-size:0.75em; flex-shrink:0;">▼</span>
+                    </div>
+                </div>
+                <!-- Pannello stima AF PRO (nascosto di default) -->
+                <div id="pro-af-stima-panel" style="display:none; background:#111d2e; border-left:3px solid #00aaff44;
+                     border-radius:0 0 6px 6px; padding:10px 14px; margin-top:1px; font-size:0.82em; color:#6e7a8a;">
+                    <span style="font-size:0.85em; color:#4a5a6a;">I trigger AF si configurano nel pannello N.I.N.A. Export qui sotto — i valori sono sincronizzati con la sezione Smart.</span>
+                </div>
+
     <div style="display:flex; flex-direction:column; gap:20px;">
                             <div class="panel" style="display: flex; flex-direction: column; gap: 15px;">
                                     <h3 style="margin-top:0; border-bottom: 1px solid #21293a; padding-bottom: 5px;"><svg width="30" height="30" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-chip"/></svg> <span data-i18n="nina_export_title">Esportazione N.I.N.A. Advanced Sequencer</span> <span class="info-icon" onmouseenter="mostraTooltip(this, 'info_nina')" onmouseleave="nascondiTooltip()">ℹ️</span></h3>
@@ -1306,10 +1413,11 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                                     <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:10px;">
 
                                         <div style="background: #222; padding: 12px; border-radius: 5px;">
-                                            <h4 style="margin: 0 0 10px 0; color: #c49a3c;" data-i18n="pro_af_title">Autofocus</h4>
-                                            <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: #6e7a8a; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="pro-af-start" checked style="transform: scale(1.2);"> <span data-i18n="pro_af_start">All'avvio sequenza</span></label>
-                                            <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: #6e7a8a; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="pro-af-filter" checked style="transform: scale(1.2);"> <span data-i18n="pro_af_filter">Al cambio filtro</span></label>
-                                            <label style="display: flex; align-items: center; gap: 8px; color: #6e7a8a; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="pro-af-hfr" style="transform: scale(1.2);"> <span data-i18n="pro_af_hfr">Alla variazione dell'HFR</span></label>
+                                            <h4 style="margin: 0 0 10px 0; color: #c49a3c; display:flex; align-items:center; gap:6px;"><span data-i18n="pro_af_title">Autofocus</span><span class="info-icon" onmouseenter="mostraTooltip(this, 'info_af_triggers')" onmouseleave="nascondiTooltip()">ℹ️</span></h4>
+                                            <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: #6e7a8a; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="pro-af-start" checked style="transform: scale(1.2);" onchange="calcolaNightFillBar()"> <span data-i18n="pro_af_start">All'avvio sequenza</span></label>
+                                            <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: #6e7a8a; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="pro-af-filter" checked style="transform: scale(1.2);" onchange="calcolaNightFillBar()"> <span data-i18n="pro_af_filter">Al cambio filtro</span></label>
+                                            <label style="display: flex; align-items: center; gap: 8px; color: #6e7a8a; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="pro-af-hfr" style="transform: scale(1.2);" onchange="calcolaNightFillBar()"> <span data-i18n="pro_af_hfr">Alla variazione dell'HFR</span></label>
+                                            <label style="display: flex; align-items: center; gap: 8px; margin-top: 10px; color: #6e7a8a; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="pro-af-temp" style="transform: scale(1.2);" onchange="calcolaNightFillBar()"> <span data-i18n="pro_af_temp_lbl">Variazione</span> ΔT <input type="number" id="pro-af-temp-val" value="2" min="0.5" max="10" step="0.5" onclick="event.stopPropagation()" oninput="calcolaNightFillBar()" style="width: 40px!important; padding: 3px!important; text-align: center;"> °C</label>
                                         </div>
 
                                         <div style="background: #222; padding: 12px; border-radius: 5px;">
@@ -1583,7 +1691,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                 <ul>
                     <li><strong>Calcolatore di Sequenze:</strong> La griglia mostra tutti i filtri del tuo setup (Light per OSC, oppure L/R/G/B/Ha/OIII/SII per Mono). Per ogni filtro imposti: numero di pose, secondi di esposizione, Gain, Offset, Binning e frequenza di Dithering (con checkbox indipendente per filtro). La <strong>barra di riempimento</strong> confronta il tuo TPT (Tempo Totale Pianificato) con la finestra notturna: 🟢 verde se tutto entra, 🟡 arancione se il margine è stretto, 🔴 rossa se sfori — in quel caso appare automaticamente il pulsante "Progettazione Multinotte".</li>
                     <li><strong>Triggers Pre-Flight:</strong> Prima dell'imaging configuri: <em>Raffredda Camera</em> (imposti la temperatura target), <em>Slew &amp; Center</em> con Plate Solving (N.I.N.A. punta e risolve la posizione), <em>Rotatore Automatico</em> (ruota la camera all'angolo impostato nel simulatore FOV), <em>Avvia Autoguida</em> e <em>Meridian Flip</em> automatico.</li>
-                    <li><strong>Autofocus Avanzato:</strong> Tre modalità indipendenti: all'avvio della sequenza, al cambio di filtro (ideale per filtri con offset di fuoco diversi) e alla variazione dell'HFR (il metodo più intelligente: N.I.N.A. misura il deterioramento del fuoco in tempo reale e interviene solo quando necessario, evitando autofocus inutili).</li>
+                    <li><strong>Autofocus Avanzato:</strong> Tre modalità indipendenti: all'avvio della sequenza, al cambio di filtro (ideale per filtri con offset di fuoco diversi) e alla variazione dell'HFR (il metodo più intelligente: N.I.N.A. misura il deterioramento del fuoco in tempo reale e interviene solo quando necessario, evitando autofocus inutili). Ogni trigger attivo contribuisce al <strong>budget autofocus</strong>: il sistema stima automaticamente il numero di procedure AF nella finestra notturna in base ai trigger selezionati, al tipo di OTA e alla curva di temperatura prevista da Open-Meteo. Il tempo totale stimato viene sottratto dal budget disponibile, esattamente come il dithering. Puoi accettare la stima con un click o impostare il numero manualmente.</li>
                     <li><strong>Triggers Post-Flight:</strong> Warm Up Camera, Park Montatura, Chiudi Cover/Cap motorizzato, Accendi Flat Panel — tutto automatico al termine della sequenza.</li>
                     <li><strong>Mappatura Filtri PRO:</strong> Come nella sezione Smart, ogni filtro ha il suo campo nome N.I.N.A. La modifica in un pannello si sincronizza automaticamente nell'altro.</li>
                 </ul>
@@ -1688,7 +1796,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                 <ul>
                     <li><strong>Sequence Builder:</strong> The grid shows all filters for your setup (Light for OSC, or L/R/G/B/Ha/OIII/SII for Mono). For each filter you set: frame count, exposure time, Gain, Offset, Binning and Dithering frequency (with independent per-filter checkbox). The <strong>fill bar</strong> compares your TPT (Total Planned Time) against the night window: 🟢 green if everything fits, 🟡 orange if the margin is tight, 🔴 red if you overflow — the "Multi-Night Planning" button then appears automatically.</li>
                     <li><strong>Pre-Flight Triggers:</strong> Before imaging you configure: <em>Cool Camera</em> (set target temperature), <em>Slew &amp; Center</em> with Plate Solving, <em>Auto Rotator</em> (rotates to the angle set in the FOV simulator), <em>Start Autoguiding</em> and automatic <em>Meridian Flip</em>.</li>
-                    <li><strong>Advanced Autofocus:</strong> Three independent modes: at sequence start, on filter change (ideal for filters with different focus offsets), and on HFR increase (the smartest method: N.I.N.A. measures focus degradation in real time and intervenes only when necessary, avoiding unnecessary refocus runs).</li>
+                    <li><strong>Advanced Autofocus:</strong> Three independent modes: at sequence start, on filter change (ideal for filters with different focus offsets), and on HFR increase (the smartest method: N.I.N.A. measures focus degradation in real time and intervenes only when necessary, avoiding unnecessary refocus runs). Every active trigger contributes to the <strong>autofocus budget</strong>: the system automatically estimates the number of AF routines in the night window based on the selected triggers, OTA type, and the temperature curve forecast by Open-Meteo. The estimated total time is subtracted from the available budget, exactly like dithering. You can accept the estimate with one click or set the count manually.</li>
                     <li><strong>Post-Flight Triggers:</strong> Warm Up Camera, Park Mount, Close motorized Cover/Cap, Turn On Flat Panel — all automatic at sequence end.</li>
                     <li><strong>PRO Filter Mapping:</strong> As in the Smart section, each filter has its N.I.N.A. name field. Changes in one panel sync automatically to the other.</li>
                 </ul>
@@ -1793,7 +1901,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                 <ul>
                     <li><strong>Constructor de Secuencias:</strong> La cuadrícula muestra todos los filtros (Light para OSC, o L/R/G/B/Ha/OIII/SII para Mono). Para cada filtro configuras: número de tomas, tiempo de exposición, Gain, Offset, Binning y frecuencia de Dithering (con checkbox independiente por filtro). La <strong>barra de relleno</strong> compara tu TPT con la ventana nocturna: 🟢 verde si todo cabe, 🟡 naranja si el margen es ajustado, 🔴 rojo si hay desbordamiento.</li>
                     <li><strong>Disparadores Pre-Vuelo:</strong> Antes del imaging configuras: Enfriar Cámara, Slew &amp; Center con Plate Solving, Rotador Automático, Iniciar Autoguiado y Meridian Flip automático.</li>
-                    <li><strong>Autofocus Avanzado:</strong> Tres modos independientes: al inicio de la secuencia, al cambiar de filtro y al incremento del HFR (N.I.N.A. mide el deterioro del enfoque en tiempo real e interviene solo cuando es necesario, evitando enfocados innecesarios).</li>
+                    <li><strong>Autofocus Avanzado:</strong> Tres modos independientes: al inicio de la secuencia, al cambiar de filtro y al incremento del HFR (N.I.N.A. mide el deterioro del enfoque en tiempo real e interviene solo cuando es necesario, evitando enfocados innecesarios). Cada disparador activo contribuye al <strong>presupuesto de autofocus</strong>: el sistema estima automáticamente el número de procedimientos AF en la ventana nocturna según los disparadores seleccionados, el tipo de OTA y la curva de temperatura prevista por Open-Meteo. El tiempo total estimado se resta del presupuesto disponible, igual que el dithering. Puedes aceptar la estimación con un clic o introducir el número manualmente.</li>
                     <li><strong>Disparadores Post-Vuelo:</strong> Calentar Cámara, Aparcar Montura, Cerrar Tapa motorizada, Encender Panel Flat — todo automático al terminar la secuencia.</li>
                 </ul>
             </div>
@@ -2548,12 +2656,24 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                 style="width:100%; background:#1c2230; border:1px solid #555; border-radius:8px; color:#c9d1d9; font-size:1em; padding:10px 12px; outline:none; box-sizing:border-box;"
                 placeholder="es. Mio Telescopio 8&quot;"
                 onkeydown="if(event.key==='Enter') confermaSalvaTelescopio()">
+            <label style="display:block; font-size:0.85em; color:#ccc; margin-bottom:6px; margin-top:14px;" data-i18n="af_ota_type_lbl">Tipo telescopio:</label>
+            <select id="save-telescope-ota-type"
+                    style="width:100%; background:#1c2230; border:1px solid #555; border-radius:8px; color:#c9d1d9; font-size:0.9em; padding:8px 12px; outline:none; box-sizing:border-box;">
+                <option value="apo"    data-i18n="af_ota_apo">Rifrattore APO / ED</option>
+                <option value="achro"  data-i18n="af_ota_achro">Rifrattore acromatico</option>
+                <option value="newton" data-i18n="af_ota_newton">Newton / Riflettore</option>
+                <option value="sct"    data-i18n="af_ota_sct">SCT / Cassegrain / RC</option>
+            </select>
             <div style="display:flex; gap:10px; margin-top:18px;">
                 <button class="btn-smart" style="flex:1; background:transparent; border:1px solid #555; color:#6e7a8a;" onclick="document.getElementById('save-telescope-modal').style.display='none'" data-i18n="save_tel_cancel">Annulla</button>
                 <button class="btn-smart" style="flex:2; background:linear-gradient(135deg,#c49a3c,#a07828);" onclick="confermaSalvaTelescopio()"><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-save"/></svg> <span data-i18n="save_tel_confirm">Salva</span></button>
             </div>
         </div>
     </div>
+
+    <!-- Campi nascosti per il calcolo budget AF (aggiornati da equipment.js) -->
+    <input type="hidden" id="af-ota-type" value="apo">
+    <input type="hidden" id="af-delta-t"  value="2.0">
 
     <!-- MODAL: Elimina Telescopio -->
     <div id="delete-telescope-modal" class="modal" style="display:none;">
@@ -3113,6 +3233,34 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
             }
             // Update warning banners visibility
             _aggiornaBortleUI();
+        }
+
+        // ── AF Budget: toggle pannello stima collassabile ─────────────
+        function toggleAFPanel() {
+            const panel  = document.getElementById('af-stima-panel');
+            const toggle = document.getElementById('af-panel-toggle');
+            if (!panel) return;
+            const aperto = panel.style.display !== 'none';
+            panel.style.display = aperto ? 'none' : 'block';
+            if (toggle) toggle.textContent = aperto ? '▼' : '▲';
+            if (!aperto) aggiornaStimaAF();
+        }
+
+        // ── AF Budget: applica il totale stimato al campo af-count ────
+        function applicaSimaAF() {
+            if (typeof stimaAFNotturni !== 'function') return;
+            // Il pulsante "Usa stima" riporta sempre in modalità automatica
+            window._afModoManuale = false;
+            const s = stimaAFNotturni();
+            const totale = s.afTotale + Math.round((s.afMeteoMin + s.afMeteoMax) / 2);
+            const el = document.getElementById('af-count');
+            if (el) {
+                el.value = Math.max(0, totale);
+                if (typeof calcolaTempi === 'function') calcolaTempi();
+                if (typeof calcolaNightFillBar === 'function') calcolaNightFillBar();
+                // Rigenera automaticamente la sequenza ottimale con il nuovo budget AF
+                if (typeof generaSequenzaOttimale === 'function') generaSequenzaOttimale();
+            }
         }
 
         function vaiMeteo() {

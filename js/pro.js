@@ -337,6 +337,15 @@
             container.innerHTML = '';
 
             container.innerHTML = `
+                <div style="display:flex; align-items:center; justify-content:flex-end; margin-bottom:8px;">
+                    <button id="btn-hdr-globale"
+                        onclick="toggleHdrGlobale()"
+                        style="background:#1a0d2e; color:#7c4dff; border:1px solid #7c4dff; border-radius:5px; padding:4px 14px; font-size:0.78em; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:6px; letter-spacing:0.3px;">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <span id="btn-hdr-globale-label">Attiva HDR</span>
+                    </button>
+                    <span class="info-icon" style="font-size:1.0em; margin-left:4px; cursor:help;" onmouseenter="mostraTooltip(this,'info_hdr_row')" onmouseleave="nascondiTooltip()">ℹ️</span>
+                </div>
                 <div style="display: grid; grid-template-columns: 1fr 0.8fr 0.8fr 0.65fr 0.65fr 0.65fr 1fr 0.9fr; gap: 5px; font-size: 0.8em; color: #aaa; text-align: center; border-bottom: 1px solid #444; padding-bottom: 5px;">
                     <div style="text-align: left;">Filtro</div>
                     <div>Pose</div>
@@ -376,18 +385,17 @@
                     <div id="pro-${f.id}-tot" style="text-align: center; color: #aaa; font-size: 0.82em;">—</div>
                 `;
                 container.appendChild(row);
-                // ── Riga companion Light HDR (sempre visibile, toggle ON/OFF) ───
+                // ── Riga companion Light HDR (nascosta di default, attivabile globalmente) ───
                 let hdrRowPro = document.createElement('div');
                 hdrRowPro.id = `pro-${f.id}-hdr-row`;
-                hdrRowPro.dataset.hdrActive = '1';
-                hdrRowPro.style.cssText = 'display: grid; grid-template-columns: 1fr 0.8fr 0.8fr 0.65fr 0.65fr 0.65fr 1fr 0.9fr; gap: 5px; align-items: center; background: #160d24; padding: 8px 10px; border-radius: 4px; border-left: 3px solid #7c4dff; margin-top: 3px; margin-bottom: 8px;';
+                hdrRowPro.dataset.hdrActive = '0';
+                hdrRowPro.style.cssText = 'display: none; grid-template-columns: 1fr 0.8fr 0.8fr 0.65fr 0.65fr 0.65fr 1fr 0.9fr; gap: 5px; align-items: center; background: #160d24; padding: 8px 10px; border-radius: 4px; border-left: 3px solid #7c4dff; margin-top: 3px; margin-bottom: 8px;';
                 hdrRowPro.innerHTML = `
                     <div style="display:flex;align-items:center;gap:6px;flex-wrap:nowrap;">
                         <span style="color:#bb86fc;font-weight:bold;font-size:0.82em;white-space:nowrap;">✦ Light HDR</span>
-                        <span class="info-icon" style="font-size:1.0em;margin-left:2px;cursor:help;" onmouseenter="mostraTooltip(this,'info_hdr_row')" onmouseleave="nascondiTooltip()">ℹ️</span>
                         <button id="pro-${f.id}-hdr-toggle"
                             onclick="toggleHdrRowPro('${f.id}')"
-                            style="background:#7c4dff;color:#fff;border:none;border-radius:3px;padding:2px 8px;font-size:0.7em;font-weight:700;cursor:pointer;letter-spacing:0.5px;flex-shrink:0;">ON</button>
+                            style="background:#444;color:#888;border:none;border-radius:3px;padding:2px 8px;font-size:0.7em;font-weight:700;cursor:pointer;letter-spacing:0.5px;flex-shrink:0;">OFF</button>
                     </div>
                     <input type="number" id="pro-${f.id}-hdr-count" value="0" min="0" oninput="calcolaNightFillBar()"
                         style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box; background:#1a0d2e; border:1px solid #3a2050; color:#bb86fc;">
@@ -466,6 +474,9 @@
         }
 
         function calcolaNightFillBar() {
+            // Aggiorna la stima AF dai trigger attivi prima di calcolare i totali
+            if (typeof aggiornaStimaAF === 'function') aggiornaStimaAF();
+
             let tS = document.getElementById('time-start').value;
             let tE = document.getElementById('time-end').value;
             if(!tS || !tE) return;
@@ -476,7 +487,9 @@
             let secDisponibili = (dE - dS) / 1000;
 
             let secUsati = 0;
-            let ditherOverheadSecs = 15;
+            let ditherTotSec = 0;
+            let _dithDurEl = document.getElementById('pro-dither-duration') || document.getElementById('dither-duration');
+            let ditherOverheadSecs = _dithDurEl ? (parseInt(_dithDurEl.value) || 15) : 15;
             let isMono = document.getElementById('sensor-type').value === 'mono';
             let frameList = isMono ? framesMono : framesColor;
 
@@ -520,6 +533,7 @@
                     if (usaDither && dFreq > 0) {
                         tempoDither = Math.floor(count / dFreq) * ditherOverheadSecs;
                     }
+                    ditherTotSec += tempoDither;
                     // HDR companion row
                     let _hdrTime = 0;
                     let _hdrRowFill = document.getElementById(`pro-${f.id}-hdr-row`);
@@ -531,7 +545,9 @@
                             let _hdrDith = document.getElementById(`pro-${f.id}-hdr-dither`);
                             let _hdrDFreqEl = document.getElementById(`pro-${f.id}-hdr-dfreq`);
                             if (_hdrDith && _hdrDith.checked && _hdrDFreqEl) {
-                                _hdrTime += Math.floor(_hdrC / (parseInt(_hdrDFreqEl.value)||4)) * ditherOverheadSecs;
+                                let _hdrDitherSec = Math.floor(_hdrC / (parseInt(_hdrDFreqEl.value)||4)) * ditherOverheadSecs;
+                                _hdrTime += _hdrDitherSec;
+                                ditherTotSec += _hdrDitherSec;
                             }
                         }
                     }
@@ -564,6 +580,18 @@
                     _totEl.innerHTML = formatSeconds(_cnt * (_exp + lightOverhead));
                 }
             });
+
+            // ── Budget Autofocus PRO ─────────────────────────────────────
+            let _proAfDur = parseInt((document.getElementById('pro-af-duration')||{}).value)||0;
+            let _proAfCnt = parseInt((document.getElementById('pro-af-count')||{}).value)||0;
+            let _proAfSec = _proAfDur * _proAfCnt;
+            secUsati += _proAfSec;
+
+            // ── Aggiorna totali dither e AF PRO ──────────────────────────
+            let _pDitherTotEl = document.getElementById('pro-dither-tot');
+            if (_pDitherTotEl) _pDitherTotEl.innerText = ditherTotSec > 0 ? formatSeconds(ditherTotSec) : '0m';
+            let _pAfTotEl = document.getElementById('pro-af-tot');
+            if (_pAfTotEl) _pAfTotEl.innerText = _proAfSec > 0 ? formatSeconds(_proAfSec) : '0m';
 
             mnTptSecondi = secUsati; // aggiorna TPT PRO (usato se multinotte aperto da PRO)
             let pct = (secUsati / Math.max(1, secDisponibili)) * 100;
@@ -694,6 +722,7 @@
             let doFlip   = document.getElementById('pro-flip')   ? document.getElementById('pro-flip').checked   : false;
             let doAfStart  = document.getElementById('pro-af-start')  ? document.getElementById('pro-af-start').checked  : false;
             let doAfFilter = document.getElementById('pro-af-filter') ? document.getElementById('pro-af-filter').checked : false;
+            let doAfTemp   = document.getElementById('pro-af-temp')   ? document.getElementById('pro-af-temp').checked   : false;
             let doAfHfr    = document.getElementById('pro-af-hfr')    ? document.getElementById('pro-af-hfr').checked    : false;
             // Orari sessione (time-start / time-end)
             let _tS = document.getElementById('time-start') ? document.getElementById('time-start').value : '';
@@ -989,7 +1018,7 @@
                 "Conditions": condCol([{ "$id": nid(), "$type": "NINA.Sequencer.Conditions.TimeCondition, NINA.Sequencer", "Hours": _endH, "Minutes": _endM, "MinutesOffset": 0, "Seconds": 0, "SelectedProvider": { "$type": "NINA.Sequencer.Utility.DateTimeProvider.TimeProvider, NINA.Sequencer" }, "Parent": { "$ref": dsoId } }]),
                 "IsExpanded": true,
                 "Items": itemCol([...dsoPreItems, imagingContainer]),
-                "Triggers": (() => { let _t = []; if (doAfHfr) { let hfrRid = nid(); _t.push({ "$id": nid(), "$type": "NINA.Sequencer.Trigger.Autofocus.AutofocusAfterHFRIncreaseTrigger, NINA.Sequencer", "Amount": 10.0, "SampleSize": 10, "Parent": { "$ref": dsoId }, "TriggerRunner": { "$id": hfrRid, "$type": "NINA.Sequencer.Container.SequentialContainer, NINA.Sequencer", "Strategy": seqStrat(), "Name": null, "Conditions": condCol(), "IsExpanded": true, "Items": itemCol([{ "$id": nid(), "$type": "NINA.Sequencer.SequenceItem.Autofocus.RunAutofocus, NINA.Sequencer", "Parent": { "$ref": hfrRid }, "ErrorBehavior": 0, "Attempts": 1 }]), "Triggers": trigCol(), "Parent": null, "ErrorBehavior": 0, "Attempts": 1 } }); } if (doAfFilter) { let afFRid = nid(); _t.push({ "$id": nid(), "$type": "NINA.Sequencer.Trigger.Autofocus.AutofocusAfterFilterChange, NINA.Sequencer", "Parent": { "$ref": dsoId }, "TriggerRunner": { "$id": afFRid, "$type": "NINA.Sequencer.Container.SequentialContainer, NINA.Sequencer", "Strategy": seqStrat(), "Name": null, "Conditions": condCol(), "IsExpanded": true, "Items": itemCol([{ "$id": nid(), "$type": "NINA.Sequencer.SequenceItem.Autofocus.RunAutofocus, NINA.Sequencer", "Parent": { "$ref": afFRid }, "ErrorBehavior": 0, "Attempts": 1 }]), "Triggers": trigCol(), "Parent": null, "ErrorBehavior": 0, "Attempts": 1 } }); } return trigCol(_t); })(),
+                "Triggers": (() => { let _t = []; if (doAfHfr) { let hfrRid = nid(); _t.push({ "$id": nid(), "$type": "NINA.Sequencer.Trigger.Autofocus.AutofocusAfterHFRIncreaseTrigger, NINA.Sequencer", "Amount": 10.0, "SampleSize": 10, "Parent": { "$ref": dsoId }, "TriggerRunner": { "$id": hfrRid, "$type": "NINA.Sequencer.Container.SequentialContainer, NINA.Sequencer", "Strategy": seqStrat(), "Name": null, "Conditions": condCol(), "IsExpanded": true, "Items": itemCol([{ "$id": nid(), "$type": "NINA.Sequencer.SequenceItem.Autofocus.RunAutofocus, NINA.Sequencer", "Parent": { "$ref": hfrRid }, "ErrorBehavior": 0, "Attempts": 1 }]), "Triggers": trigCol(), "Parent": null, "ErrorBehavior": 0, "Attempts": 1 } }); } if (doAfTemp) { let afTRid = nid(); let _afDeltaT = parseFloat((document.getElementById('af-delta-t') || {}).value) || 2.0; _t.push({ "$id": nid(), "$type": "NINA.Sequencer.Trigger.Autofocus.AutofocusAfterTemperatureChangeTrigger, NINA.Sequencer", "Amount": _afDeltaT, "Parent": { "$ref": dsoId }, "TriggerRunner": { "$id": afTRid, "$type": "NINA.Sequencer.Container.SequentialContainer, NINA.Sequencer", "Strategy": seqStrat(), "Name": null, "Conditions": condCol(), "IsExpanded": true, "Items": itemCol([{ "$id": nid(), "$type": "NINA.Sequencer.SequenceItem.Autofocus.RunAutofocus, NINA.Sequencer", "Parent": { "$ref": afTRid }, "ErrorBehavior": 0, "Attempts": 1 }]), "Triggers": trigCol(), "Parent": null, "ErrorBehavior": 0, "Attempts": 1 } }); } if (doAfFilter) { let afFRid = nid(); _t.push({ "$id": nid(), "$type": "NINA.Sequencer.Trigger.Autofocus.AutofocusAfterFilterChange, NINA.Sequencer", "Parent": { "$ref": dsoId }, "TriggerRunner": { "$id": afFRid, "$type": "NINA.Sequencer.Container.SequentialContainer, NINA.Sequencer", "Strategy": seqStrat(), "Name": null, "Conditions": condCol(), "IsExpanded": true, "Items": itemCol([{ "$id": nid(), "$type": "NINA.Sequencer.SequenceItem.Autofocus.RunAutofocus, NINA.Sequencer", "Parent": { "$ref": afFRid }, "ErrorBehavior": 0, "Attempts": 1 }]), "Triggers": trigCol(), "Parent": null, "ErrorBehavior": 0, "Attempts": 1 } }); } return trigCol(_t); })(),
                 "Parent": { "$ref": "TARGET_REF" },
                 "ErrorBehavior": 0, "Attempts": 1
             };
@@ -1086,4 +1115,48 @@
             btn.style.color = isActive ? '#fff' : '#888';
             row.querySelectorAll('input, select').forEach(el => { el.disabled = !isActive; });
             calcolaNightFillBar();
+        }
+
+        // ── Toggle globale HDR: mostra/nasconde tutte le righe HDR ────────────
+        function toggleHdrGlobale() {
+            let btn = document.getElementById('btn-hdr-globale');
+            let lbl = document.getElementById('btn-hdr-globale-label');
+            let righeHdr = document.querySelectorAll('[id$="-hdr-row"]');
+            if (!righeHdr.length) return;
+
+            // Legge lo stato attuale dal primo elemento trovato
+            let attivo = righeHdr[0].style.display !== 'none';
+            let nuovoStato = !attivo;
+
+            righeHdr.forEach(row => {
+                if (nuovoStato) {
+                    row.style.display = 'grid';
+                    row.dataset.hdrActive = '1';
+                    row.style.opacity = '1';
+                    let toggleBtn = row.querySelector('button');
+                    if (toggleBtn) { toggleBtn.textContent = 'ON'; toggleBtn.style.background = '#7c4dff'; toggleBtn.style.color = '#fff'; }
+                    row.querySelectorAll('input, select').forEach(el => { el.disabled = false; });
+                } else {
+                    row.style.display = 'none';
+                    row.dataset.hdrActive = '0';
+                    let toggleBtn = row.querySelector('button');
+                    if (toggleBtn) { toggleBtn.textContent = 'OFF'; toggleBtn.style.background = '#444'; toggleBtn.style.color = '#888'; }
+                    row.querySelectorAll('input, select').forEach(el => { el.disabled = true; });
+                }
+            });
+
+            // Aggiorna il pulsante globale
+            if (btn) { btn.style.background = nuovoStato ? '#7c4dff' : '#1a0d2e'; btn.style.color = nuovoStato ? '#fff' : '#7c4dff'; btn.style.borderColor = '#7c4dff'; }
+            if (lbl) lbl.textContent = nuovoStato ? 'Disattiva HDR' : 'Attiva HDR';
+            calcolaNightFillBar();
+        }
+
+        // ── Toggle pannello AF collassabile nella sezione PRO ────────────────
+        function toggleProAFPanel() {
+            let panel = document.getElementById('pro-af-stima-panel');
+            let arrow = document.getElementById('pro-af-panel-toggle');
+            if (!panel) return;
+            let aperto = panel.style.display !== 'none';
+            panel.style.display = aperto ? 'none' : 'block';
+            if (arrow) arrow.textContent = aperto ? '▼' : '▲';
         }

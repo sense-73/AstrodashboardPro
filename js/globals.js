@@ -545,3 +545,194 @@ function resetFiltriEsegui() {
     if (typeof calcolaTempi === 'function') calcolaTempi();
     if (typeof calcolaNightFillBar === 'function') calcolaNightFillBar();
 }
+
+// ── STIMA AUTOFOCUS NOTTURNI ──────────────────────────────────────────────────
+// Calcola il numero stimato di procedure AF nella finestra notturna.
+// Regole:
+//   - Il calcolo si applica SOLO per i trigger selezionati dall'utente
+//   - Ogni trigger è indipendente: calcola solo ciò che è attivo
+//   - Se nessun trigger → afTotale = 0, warnings popolati
+//   - Restituisce anche dati per i warning contestuali
+// ─────────────────────────────────────────────────────────────────────────────
+function stimaAFNotturni() {
+    const ris = {
+        afAvvio:    0,   // trigger avvio: sempre 1 se attivo
+        afFiltro:   0,   // trigger filtro: (n_filtri_attivi - 1)
+        afTermici:  0,   // trigger temperatura: superamenti ΔT sulla curva
+        afMeteoMin: 0,   // trigger HFR: range basso
+        afMeteoMax: 0,   // trigger HFR: range alto
+        afTotale:   0,   // somma componenti deterministiche
+        confidenza: 'high', // 'high' | 'medium' | 'low'
+        // Dati per i warning contestuali (calcolati sempre, usati da aggiornaStimaAF)
+        warnNoTrigger:   false,
+        warnThermal:     false,   // escursione significativa senza trigger temp
+        warnThermalN:    0,       // n AF termici che sarebbero scattati
+        warnThermalDelta: 0,      // escursione prevista in °C
+        warnFilter:      false,   // mono con filtri senza trigger filtro
+        warnFilterN:     0,       // n filtri attivi
+        suggestHfrStable: false,  // HFR attivo ma meteo stabile
+        otaType:  'apo',
+        deltaT:   2.0
+    };
+
+    const _el = id => document.getElementById(id);
+
+    // ── Lettura trigger attivi ────────────────────────────────────
+    const trigAvvio  = _el('smart-af-start')  ? _el('smart-af-start').checked  : false;
+    const trigFiltro = _el('smart-af-filter') ? _el('smart-af-filter').checked : false;
+    const trigTemp   = _el('smart-af-temp')   ? _el('smart-af-temp').checked   : false;
+    const trigHfr    = _el('smart-af-hfr')    ? _el('smart-af-hfr').checked    : false;
+
+    // ── Lettura OTA dalla mappa (serve anche per i warning) ───────
+    const selTel = _el('preset-telescope');
+    if (selTel && selTel.selectedIndex > 0 && window._telOtaMap) {
+        const nomeTel = selTel.options[selTel.selectedIndex].textContent.replace('⭐ ', '').trim();
+        const ota = window._telOtaMap[nomeTel];
+        if (ota) { ris.otaType = ota.otaType; ris.deltaT = ota.deltaT; }
+    }
+    const { otaType, deltaT } = ris;
+
+    // ── Helper: finestra notturna ─────────────────────────────────
+    function _nightWindow() {
+        const tS = (_el('time-start') || {}).value;
+        const tE = (_el('time-end')   || {}).value;
+        if (!tS || !tE) return null;
+        const sd = getSessionDate();
+        const [sh, sm] = tS.split(':').map(Number);
+        const [eh, em] = tE.split(':').map(Number);
+        let nStart = new Date(sd); nStart.setHours(sh, sm, 0, 0);
+        let nEnd   = new Date(sd); nEnd.setHours(eh, em, 0, 0);
+        if (nEnd <= nStart) nEnd.setDate(nEnd.getDate() + 1);
+        return { nStart, nEnd };
+    }
+
+    // ── Helper: conteggio AF termici (usato sia per calcolo che per warning) ──
+    function _contaAFTermici(dt) {
+        if (dt >= 10) return 0; // sentinella photo/special
+        if (!datiMeteo || !datiMeteo.time || !datiMeteo.temperature_2m) return 0;
+        const win = _nightWindow();
+        if (!win) return 0;
+        let tRif = null, count = 0;
+        for (let i = 0; i < datiMeteo.time.length; i++) {
+            const ora = parseMeteoTime(datiMeteo.time[i]);
+            if (ora < win.nStart || ora > win.nEnd) continue;
+            const temp = datiMeteo.temperature_2m[i];
+            if (temp === undefined || temp === null) continue;
+            if (tRif === null) { tRif = temp; continue; }
+            if (Math.abs(temp - tRif) >= dt) { count++; tRif = temp; }
+        }
+        return count;
+    }
+
+    // ── Helper: escursione termica notturna ───────────────────────
+    function _escursioneTermica() {
+        if (!datiMeteo || !datiMeteo.temperature_2m) return 0;
+        const win = _nightWindow();
+        if (!win) return 0;
+        let tMin = null, tMax = null;
+        datiMeteo.time.forEach((ts, i) => {
+            const ora = parseMeteoTime(ts);
+            if (ora < win.nStart || ora > win.nEnd) return;
+            const tmp = datiMeteo.temperature_2m[i];
+            if (tmp === null || tmp === undefined) return;
+            if (tMin === null || tmp < tMin) tMin = tmp;
+            if (tMax === null || tmp > tMax) tMax = tmp;
+        });
+        return (tMin !== null && tMax !== null) ? Math.round((tMax - tMin) * 10) / 10 : 0;
+    }
+
+    // ── Helper: conteggio filtri attivi ───────────────────────────
+    function _filtriAttivi() {
+        if (typeof framesMono === 'undefined') return 0;
+        const isPro = _el('mode-pro-section') &&
+                      _el('mode-pro-section').style.display !== 'none';
+        const pfx = isPro ? 'pro-' : '';
+        let count = 0;
+        framesMono.forEach(f => {
+            if (f.id.includes('dark') || f.id.includes('bias')) return;
+            const cntEl = _el(`${pfx}${f.id}-count`);
+            if (cntEl && parseInt(cntEl.value) > 0) count++;
+        });
+        return count;
+    }
+
+    // ── 1. Trigger: all'avvio sequenza ────────────────────────────
+    if (trigAvvio) ris.afAvvio = 1;
+
+    // ── 2. Trigger: al cambio filtro (solo mono) ──────────────────
+    if (trigFiltro) {
+        const isMono = (_el('sensor-type') || {}).value === 'mono';
+        if (isMono) ris.afFiltro = Math.max(0, _filtriAttivi() - 1);
+    }
+
+    // ── 3. Trigger: al cambio di temperatura ─────────────────────
+    if (trigTemp) {
+        ris.afTermici = _contaAFTermici(deltaT);
+    }
+
+    // ── 4. Trigger: alla variazione HFR ──────────────────────────
+    if (trigHfr && datiMeteo && datiMeteo.time) {
+        const win = _nightWindow();
+        if (win) {
+            let scoreAcc = 0, oreContate = 0;
+            for (let i = indicePartenza; i < datiMeteo.time.length - 1; i++) {
+                const ora = parseMeteoTime(datiMeteo.time[i]);
+                if (ora < win.nStart || ora > win.nEnd) continue;
+                const b   = datiMeteo.cloud_cover_low   ? (datiMeteo.cloud_cover_low[i]   || 0) : 0;
+                const m   = datiMeteo.cloud_cover_mid   ? (datiMeteo.cloud_cover_mid[i]   || 0) : 0;
+                const bN  = datiMeteo.cloud_cover_low   ? (datiMeteo.cloud_cover_low[i+1] || 0) : 0;
+                const mN  = datiMeteo.cloud_cover_mid   ? (datiMeteo.cloud_cover_mid[i+1] || 0) : 0;
+                const li  = datiMeteo.lifted_index      ? (datiMeteo.lifted_index[i]      || 0) : 0;
+                const jet = datiMeteo.wind_speed_250hPa ? (datiMeteo.wind_speed_250hPa[i] || 0) : 0;
+                let s = 0;
+                if (Math.abs((b + m) - (bN + mN)) > 30) s += 0.4;
+                if (li < -2)  s += 0.3;
+                if (jet > 80) s += 0.3;
+                scoreAcc += s;
+                oreContate++;
+            }
+            const afHfr = oreContate > 0 ? Math.round(scoreAcc / 0.6) : 0;
+            ris.afMeteoMin = 0;
+            ris.afMeteoMax = Math.max(0, afHfr);
+            // Suggerimento: HFR attivo ma notte stabile
+            if (ris.afMeteoMax === 0) ris.suggestHfrStable = true;
+        }
+    }
+
+    // ── 5. Totale e confidenza ────────────────────────────────────
+    ris.afTotale = ris.afAvvio + ris.afFiltro + ris.afTermici;
+
+    if (trigHfr && ris.afMeteoMax > 0) {
+        ris.confidenza = 'low';
+    } else if (ris.afTermici > 0) {
+        ris.confidenza = 'medium';
+    } else {
+        ris.confidenza = 'high';
+    }
+
+    // ── 6. Warning contestuali (calcolati sempre) ─────────────────
+    const nessunTrigger = !trigAvvio && !trigFiltro && !trigTemp && !trigHfr;
+    ris.warnNoTrigger = nessunTrigger;
+
+    // Warning termica: escursione significativa ma trigger temp non attivo
+    if (!trigTemp && deltaT < 10) {
+        const afStimati = _contaAFTermici(deltaT);
+        const escurs    = _escursioneTermica();
+        if (afStimati > 0) {
+            ris.warnThermal      = true;
+            ris.warnThermalN     = afStimati;
+            ris.warnThermalDelta = escurs;
+        }
+    }
+
+    // Warning filtro: mono con filtri ma trigger filtro non attivo
+    if (!trigFiltro) {
+        const isMono = (_el('sensor-type') || {}).value === 'mono';
+        if (isMono) {
+            const nF = _filtriAttivi();
+            if (nF > 1) { ris.warnFilter = true; ris.warnFilterN = nF; }
+        }
+    }
+
+    return ris;
+}

@@ -438,7 +438,26 @@
         }
         // ──────────────────────────────────────────────────────────────────
 
-        function applicaPresetTelescopio() { let v = document.getElementById('preset-telescope').value; if(v){ let p = v.split(','); document.getElementById('focal-length').value = p[0]; document.getElementById('aperture').value = p[1] || 100; aggiornaFOV(); } }
+        function applicaPresetTelescopio() {
+            let selEl = document.getElementById('preset-telescope');
+            let v = selEl ? selEl.value : '';
+            if (v) {
+                let p = v.split(',');
+                document.getElementById('focal-length').value = p[0];
+                document.getElementById('aperture').value = p[1] || 100;
+                // Propaga otaType e deltaT dalla mappa globale ai campi nascosti AF
+                let selOpt  = selEl.options[selEl.selectedIndex];
+                let nomeTel = selOpt ? selOpt.textContent.replace('⭐ ', '').trim() : '';
+                let ota     = (window._telOtaMap && window._telOtaMap[nomeTel]) || {};
+                let otaTypeEl = document.getElementById('af-ota-type');
+                let deltaTEl  = document.getElementById('af-delta-t');
+                if (otaTypeEl) otaTypeEl.value = ota.otaType || 'apo';
+                if (deltaTEl)  deltaTEl.value  = ota.deltaT  || 2.0;
+                aggiornaFOV();
+                if (typeof calcolaTempi === 'function') calcolaTempi();
+                if (typeof aggiornaStimaAF === 'function') aggiornaStimaAF();
+            }
+        }
         
 
         // --- MOTORE MOSAICO ---

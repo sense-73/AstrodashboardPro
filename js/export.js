@@ -180,6 +180,8 @@
             let doAfStart = document.getElementById('smart-af-start') ? document.getElementById('smart-af-start').checked : false;
             let doAfFilter= document.getElementById('smart-af-filter') ? document.getElementById('smart-af-filter').checked : false;
             let doAfHfr   = document.getElementById('smart-af-hfr')    ? document.getElementById('smart-af-hfr').checked    : false;
+            let doAfTemp  = document.getElementById('smart-af-temp')   ? document.getElementById('smart-af-temp').checked   : false;
+            let afTempDeltaT = parseFloat((document.getElementById('smart-af-temp-val') || {value:'2'}).value) || 2;
             let doGuide   = document.getElementById('nina-guide')  ? document.getElementById('nina-guide').checked  : false;
             let doFlip    = document.getElementById('nina-flip')   ? document.getElementById('nina-flip').checked   : false;
             let doWarm    = document.getElementById('nina-warm')   ? document.getElementById('nina-warm').checked   : false;
@@ -299,6 +301,10 @@
             if (doAfFilter) {
                 let tId = nxid(), rId = nxid(), afId = nxid();
                 imagingTriggers.push({ "$id": tId, "$type": "NINA.Sequencer.Trigger.Autofocus.AutofocusAfterFilterChange, NINA.Sequencer", "Parent": { "$ref": imagingContId }, "TriggerRunner": { "$id": rId, "$type": "NINA.Sequencer.Container.SequentialContainer, NINA.Sequencer", "Strategy": seqStrategy, "Name": null, "Conditions": obsCol("condition",[]), "IsExpanded": true, "Items": obsCol("item",[{ "$id": afId, "$type": "NINA.Sequencer.SequenceItem.Autofocus.RunAutofocus, NINA.Sequencer", "Parent": { "$ref": rId }, "ErrorBehavior": 0, "Attempts": 1 }]), "Triggers": obsCol("trigger",[]), "Parent": null, "ErrorBehavior": 0, "Attempts": 1 } });
+            }
+            if (doAfTemp) {
+                let tId = nxid(), rId = nxid(), afId = nxid();
+                imagingTriggers.push({ "$id": tId, "$type": "NINA.Sequencer.Trigger.Autofocus.AutofocusAfterTemperatureChangeTrigger, NINA.Sequencer", "Amount": afTempDeltaT, "Parent": { "$ref": imagingContId }, "TriggerRunner": { "$id": rId, "$type": "NINA.Sequencer.Container.SequentialContainer, NINA.Sequencer", "Strategy": seqStrategy, "Name": null, "Conditions": obsCol("condition",[]), "IsExpanded": true, "Items": obsCol("item",[{ "$id": afId, "$type": "NINA.Sequencer.SequenceItem.Autofocus.RunAutofocus, NINA.Sequencer", "Parent": { "$ref": rId }, "ErrorBehavior": 0, "Attempts": 1 }]), "Triggers": obsCol("trigger",[]), "Parent": null, "ErrorBehavior": 0, "Attempts": 1 } });
             }
 
             // ── "Target Imaging Instructions" container ───────────────

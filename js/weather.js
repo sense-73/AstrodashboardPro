@@ -9,6 +9,16 @@
         let map = L.map('map', { center: [latCorrente, lonCorrente], zoom: 8, layers: [mappaScura], zoomControl: false });
         window._leafletMap = map;
         L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+        // ── Overlay temperatura sulla mappa ───────────────────────────────────
+        (function() {
+            let _ov = document.createElement('div');
+            _ov.id = 'meteo-temp-overlay';
+            _ov.style.cssText = 'display:none;position:absolute;top:12px;right:12px;z-index:1000;background:rgba(10,14,20,0.82);border:1.5px solid #22304a;border-radius:10px;padding:6px 14px;text-align:center;pointer-events:none;font-family:\'Audiowide\',sans-serif;backdrop-filter:blur(4px);';
+            _ov.innerHTML = '<div id="val-temp-meteo" style="font-size:30px;font-weight:700;color:#44dd88;line-height:1.1;">--°C</div>';
+            let _mapEl = document.getElementById('map');
+            if (_mapEl) { _mapEl.style.position = 'relative'; _mapEl.appendChild(_ov); }
+        })();
         let layers = { basse: L.layerGroup().addTo(map), medie: L.layerGroup(), alte: L.layerGroup(), jet: L.layerGroup(), luna: L.layerGroup(), umidita: L.layerGroup(), vento: L.layerGroup() };
         // Layer LP: tile Lorenz 2024 con formato custom tile_{z}_{x}_{y}.png
         let LorenzLP = L.TileLayer.extend({
@@ -387,6 +397,24 @@
             });
         }
 
+        // ── Helper temperatura overlay ────────────────────────────────────────
+        function _aggiornaTemp(temp) {
+            let ov = document.getElementById('meteo-temp-overlay');
+            let vl = document.getElementById('val-temp-meteo');
+            if (!ov || !vl) return;
+            let t = Math.round(temp);
+            let col = t <= 0 ? '#4499ff' : t <= 10 ? '#44ccdd' : t <= 18 ? '#44dd88' : t <= 25 ? '#ffdd44' : t <= 32 ? '#ff8844' : '#ff3333';
+            vl.style.color = col;
+            ov.style.borderColor = col + '66';
+            vl.innerText = t + '°C';
+            ov.style.display = 'block';
+        }
+        function _nascondiTemp() {
+            let ov = document.getElementById('meteo-temp-overlay');
+            if (ov) ov.style.display = 'none';
+        }
+        // ─────────────────────────────────────────────────────────────────────
+
         // ── Toast localizzazione GPS ────────────────────────────────────────
         function _mostraToastGPS() {
             let toast = document.getElementById('gps-toast');
@@ -626,6 +654,7 @@
                     if (_vEl) { let _vc = vs < 6 ? '#44ff88' : vs < 11 ? '#ffcc00' : vs < 21 ? '#ff8800' : '#ff2222'; _vEl.style.color = _vc; _vEl.innerText = Math.round(vs)+' km/h'; }
                     let _uEl = document.getElementById('val-umidita-layer');
                     if (_uEl) _uEl.innerText = um + '%';
+                    _aggiornaTemp(temp);
                     // Seeing
                     let scS = _calcolaSeeing(jet, raffica, li, cape);
                     if (altS > -6) { _aggiornaWidgetSeeingGiorno(); } else { aggiornaWidgetSeeing(scS); }
@@ -671,6 +700,7 @@
                 }
                 let tdEl = document.getElementById('time-display');
                 if (tdEl) tdEl.innerHTML = `<span style="font-size:1.5em;vertical-align:middle;margin-right:5px;">🌙</span> ${tOra} <br><span style="font-size:0.75em;color:#aaa;">${lang==='it'?'Dati meteo non disponibili':lang==='en'?'Weather data unavailable':lang==='es'?'Datos no disponibles':'天气数据不可用'}</span>`;
+                _nascondiTemp();
                 return;
             }
             if (!datiMeteo) return;
@@ -715,6 +745,7 @@
             document.getElementById('val-basse').innerText = b+"%"; document.getElementById('val-medie').innerText = m+"%"; document.getElementById('val-alte').innerText = a+"%"; document.getElementById('val-jet').innerHTML = jet+' <span class="jet-unit">km/h</span>'; document.getElementById('val-luna').innerText = inqL+"%";
             let _vEl = document.getElementById('val-vento-layer');
             if (_vEl) { let _vc = vs < 6 ? '#44ff88' : vs < 11 ? '#ffcc00' : vs < 21 ? '#ff8800' : '#ff2222'; _vEl.style.color = _vc; _vEl.innerText = Math.round(vs) + ' km/h'; }
+            _aggiornaTemp(temp);
 
             Object.values(layers).forEach(l => l.clearLayers());
 
@@ -964,6 +995,7 @@
                 aggiornaWidgetSeeing('--');
                 let btnSeeing = document.getElementById('btn-seeing');
                 if (btnSeeing) { btnSeeing.style.opacity = '0.35'; btnSeeing.style.pointerEvents = 'none'; }
+                _nascondiTemp();
             } else {
                 let btnSeeing = document.getElementById('btn-seeing');
                 if (btnSeeing) { btnSeeing.style.opacity = ''; btnSeeing.style.pointerEvents = ''; }

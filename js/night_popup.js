@@ -163,7 +163,7 @@ function _npPopolaPopup(analisi, dsoList) {
         promettente:      { emoji: '✨', label: t('np_promettente'),       color: '#c49a3c', tagline: t('np_promettente_tag') },
         incerta:          { emoji: '🌥️', label: t('np_incerta'),          color: '#e67e22', tagline: t('np_incerta_tag') },
         non_vale_la_pena: { emoji: '☁️', label: t('np_non_vale'),         color: '#c0392b', tagline: t('np_non_vale_tag') },
-        lascia_perdere:   { emoji: '🌫️', label: t('np_lascia_perdere'),   color: '#7f1f1f', tagline: t('np_lascia_perdere_tag') }
+        lascia_perdere:   { emoji: '🌩️', label: t('np_lascia_perdere'),   color: '#7f1f1f', tagline: t('np_lascia_perdere_tag') }
     };
     const cfg = cfgMap[categoria];
 

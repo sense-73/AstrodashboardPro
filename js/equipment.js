@@ -2,42 +2,40 @@
 // ============================================================
 
         const dbTelescopiBase = [
-            // Obiettivi Fotografici
-            { nome: "Samyang 135mm f/2", focale: 135, diametro: 67 },
-            // Explore Scientific
-            { nome: "Comethunter", focale: 731, diametro: 152 },
-            // ZWO
-            { nome: "ZWO Seestar S50", focale: 250, diametro: 50 },
-            { nome: "ZWO FF65 APO", focale: 416, diametro: 65 },
-            // William Optics
-            { nome: "WO RedCat 51", focale: 250, diametro: 51 },
-            { nome: "WO RedCat 71", focale: 350, diametro: 71 },
-            { nome: "WO ZenithStar 81", focale: 559, diametro: 81 },
-            // Askar
-            { nome: "Askar FMA180", focale: 180, diametro: 40 },
-            { nome: "Askar FRA300 Pro", focale: 300, diametro: 60 },
-            { nome: "Askar FRA400", focale: 400, diametro: 72 },
-            { nome: "Askar FRA500", focale: 500, diametro: 90 },
-            { nome: "Askar 107PHQ", focale: 749, diametro: 107 },
-            // Sky-Watcher (Rifrattori & Newton)
-            { nome: "SW Evoguide 50ED", focale: 242, diametro: 50 },
-            { nome: "SW 72ED Evostar", focale: 420, diametro: 72 },
-            { nome: "SW 80ED Evostar", focale: 600, diametro: 80 },
-            { nome: "SW Esprit 80ED", focale: 400, diametro: 80 },
-            { nome: "SW Esprit 100ED", focale: 550, diametro: 100 },
-            { nome: "SW Esprit 120ED", focale: 840, diametro: 120 },
-            { nome: "SW Explorer 130 PDS", focale: 650, diametro: 130 },
-            { nome: "SW Explorer 150PDS", focale: 750, diametro: 150 },
-            { nome: "SW Quattro 150P", focale: 600, diametro: 150 },
-            { nome: "SW Quattro 200P", focale: 800, diametro: 200 },
-            // Celestron
-            { nome: "Celestron RASA 8", focale: 400, diametro: 203 },
-            { nome: "Celestron RASA 11", focale: 620, diametro: 279 },
-            { nome: "Celestron EdgeHD 8", focale: 2032, diametro: 203 },
-            { nome: "Celestron EdgeHD 8 @ f/7", focale: 1422, diametro: 203 },
-            { nome: "Celestron C8 SCT", focale: 2032, diametro: 203 },
-            { nome: "Celestron C8 @ f/6.3", focale: 1280, diametro: 203 }
+            { nome: "Samyang 135mm f/2",         focale: 135,  diametro: 67,  otaType: "photo",   deltaT: 10  },
+            { nome: "Comethunter",               focale: 731,  diametro: 152, otaType: "achro",   deltaT: 3.0 },
+            { nome: "ZWO Seestar S50",           focale: 250,  diametro: 50,  otaType: "special", deltaT: 10  },
+            { nome: "ZWO FF65 APO",              focale: 416,  diametro: 65,  otaType: "apo",     deltaT: 2.0 },
+            { nome: "WO RedCat 51",              focale: 250,  diametro: 51,  otaType: "apo",     deltaT: 2.0 },
+            { nome: "WO RedCat 71",              focale: 350,  diametro: 71,  otaType: "apo",     deltaT: 2.0 },
+            { nome: "WO ZenithStar 81",          focale: 559,  diametro: 81,  otaType: "apo",     deltaT: 2.0 },
+            { nome: "Askar FMA180",              focale: 180,  diametro: 40,  otaType: "apo",     deltaT: 2.0 },
+            { nome: "Askar FRA300 Pro",          focale: 300,  diametro: 60,  otaType: "apo",     deltaT: 2.0 },
+            { nome: "Askar FRA400",              focale: 400,  diametro: 72,  otaType: "apo",     deltaT: 2.0 },
+            { nome: "Askar FRA500",              focale: 500,  diametro: 90,  otaType: "apo",     deltaT: 2.0 },
+            { nome: "Askar 107PHQ",              focale: 749,  diametro: 107, otaType: "apo",     deltaT: 2.0 },
+            { nome: "SW Evoguide 50ED",          focale: 242,  diametro: 50,  otaType: "apo",     deltaT: 2.5 },
+            { nome: "SW 72ED Evostar",           focale: 420,  diametro: 72,  otaType: "apo",     deltaT: 2.5 },
+            { nome: "SW 80ED Evostar",           focale: 600,  diametro: 80,  otaType: "apo",     deltaT: 2.5 },
+            { nome: "SW Esprit 80ED",            focale: 400,  diametro: 80,  otaType: "apo",     deltaT: 2.0 },
+            { nome: "SW Esprit 100ED",           focale: 550,  diametro: 100, otaType: "apo",     deltaT: 2.0 },
+            { nome: "SW Esprit 120ED",           focale: 840,  diametro: 120, otaType: "apo",     deltaT: 2.0 },
+            { nome: "SW Explorer 130 PDS",       focale: 650,  diametro: 130, otaType: "newton",  deltaT: 4.0 },
+            { nome: "SW Explorer 150PDS",        focale: 750,  diametro: 150, otaType: "newton",  deltaT: 4.0 },
+            { nome: "SW Quattro 150P",           focale: 600,  diametro: 150, otaType: "newton",  deltaT: 4.0 },
+            { nome: "SW Quattro 200P",           focale: 800,  diametro: 200, otaType: "newton",  deltaT: 4.0 },
+            { nome: "Celestron RASA 8",          focale: 400,  diametro: 203, otaType: "sct",     deltaT: 1.0 },
+            { nome: "Celestron RASA 11",         focale: 620,  diametro: 279, otaType: "sct",     deltaT: 1.0 },
+            { nome: "Celestron EdgeHD 8",        focale: 2032, diametro: 203, otaType: "sct",     deltaT: 0.8 },
+            { nome: "Celestron EdgeHD 8 @ f/7",  focale: 1422, diametro: 203, otaType: "sct",     deltaT: 0.8 },
+            { nome: "Celestron C8 SCT",          focale: 2032, diametro: 203, otaType: "sct",     deltaT: 0.8 },
+            { nome: "Celestron C8 @ f/6.3",      focale: 1280, diametro: 203, otaType: "sct",     deltaT: 0.8 }
         ];
+
+        // ── Mappa globale nome→{otaType,deltaT} per lookup rapido ──────────────
+        // Viene aggiornata da popolaMenuAttrezzatura() ad ogni caricamento/modifica.
+        // Non tocca il value delle option né il localStorage — zero impatto su tutto il resto.
+        window._telOtaMap = {};
 
         const dbCamereBase = [
 
@@ -160,7 +158,9 @@
                 let opt = document.createElement('option'); 
                 opt.value = t.focale + ',' + t.diametro; 
                 opt.textContent = (customTels.some(ct => ct.nome === t.nome) ? "⭐ " : "") + t.nome; 
-                selTel.appendChild(opt); 
+                selTel.appendChild(opt);
+                // Aggiorna la mappa globale nome→{otaType,deltaT}
+                window._telOtaMap[t.nome] = { otaType: t.otaType || 'apo', deltaT: t.deltaT || 2.0 };
             });
 
             const selCam = document.getElementById('preset-sensor'); 
@@ -191,13 +191,25 @@
         }
 
         function applicaPresetTelescopio() { 
-            let v = document.getElementById('preset-telescope').value; 
+            let selEl = document.getElementById('preset-telescope');
+            let v = selEl.value; 
             if(v){ 
                 let p = v.split(','); 
                 document.getElementById('focal-length').value = p[0]; 
-                document.getElementById('aperture').value = p[1] || 100; 
+                document.getElementById('aperture').value = p[1] || 100;
+                // Legge otaType e deltaT dalla mappa globale usando il nome dell'option
+                let selOpt  = selEl.options[selEl.selectedIndex];
+                let nomeTel = selOpt ? selOpt.textContent.replace('⭐ ', '').trim() : '';
+                let ota     = (window._telOtaMap && window._telOtaMap[nomeTel]) || {};
+                let otaType = ota.otaType || 'apo';
+                let deltaT  = ota.deltaT  || 2.0;
+                let otaTypeEl = document.getElementById('af-ota-type');
+                let deltaTEl  = document.getElementById('af-delta-t');
+                if (otaTypeEl) otaTypeEl.value = otaType;
+                if (deltaTEl)  deltaTEl.value  = deltaT;
                 aggiornaFOV();
                 calcolaTempi();
+                if (typeof aggiornaStimaAF === 'function') aggiornaStimaAF();
             } 
         }
 
@@ -399,9 +411,19 @@
                     let el = document.getElementById(id);
                     if (el && data[id] !== undefined) el.value = data[id];
                 });
+                // Propaga otaType e deltaT dalla mappa usando il nome dell'option selezionata
+                let selEl   = document.getElementById('preset-telescope');
+                let selOpt  = selEl ? selEl.options[selEl.selectedIndex] : null;
+                let nomeTel = selOpt ? selOpt.textContent.replace('⭐ ', '').trim() : '';
+                let ota     = (window._telOtaMap && window._telOtaMap[nomeTel]) || {};
+                let otaTypeEl = document.getElementById('af-ota-type');
+                let deltaTEl  = document.getElementById('af-delta-t');
+                if (otaTypeEl) otaTypeEl.value = ota.otaType || 'apo';
+                if (deltaTEl)  deltaTEl.value  = ota.deltaT  || 2.0;
                 // Ricalcola FOV e tempi con i valori ripristinati
                 if (typeof aggiornaFOV === 'function') aggiornaFOV();
                 if (typeof calcolaTempi === 'function') calcolaTempi();
+                if (typeof aggiornaStimaAF === 'function') aggiornaStimaAF();
             } catch(e) { localStorage.removeItem('ad_instrument'); }
         }
 

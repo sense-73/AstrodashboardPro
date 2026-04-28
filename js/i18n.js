@@ -1570,10 +1570,10 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         // ⚠️ AGGIORNARE VERSIONE QUI quando si rilascia una nuova versione:
         // cl_close_btn = testo del pulsante nel modal changelog (NON è hardcoded in index.html)
         // Aggiornare anche: title tag, badge navbar (>vX.X</button>), landing (>vX.X</span>), modal badge, pulsante "Inizia a usare" in index.html
-        i18n.it.cl_close_btn = "Inizia a usare v6.6 🚀";
-        i18n.en.cl_close_btn = "Start using v6.6 🚀";
-        i18n.es.cl_close_btn = "Empezar a usar v6.6 🚀";
-        i18n.zh.cl_close_btn = "开始使用 v6.6 🚀";
+        i18n.it.cl_close_btn = "Inizia a usare v7.0 🚀";
+        i18n.en.cl_close_btn = "Start using v7.0 🚀";
+        i18n.es.cl_close_btn = "Empezar a usar v7.0 🚀";
+        i18n.zh.cl_close_btn = "开始使用 v7.0 🚀";
 
         i18n.it.cl1_title           = "Database telescopi e sensori ampliato";
         i18n.en.cl1_title           = "Expanded telescope and sensor database";
@@ -2591,4 +2591,181 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.zh.np_max              = "最高";
         i18n.zh.np_warning          = "⚠️ 仅供参考。请始终核实最新气象数据。";
         i18n.zh.np_targets          = "推荐目标";
+// ── AUTOFOCUS BUDGET — nuove chiavi v6.7 ─────────────────────────────
 
+// Tooltip riga budget AF
+i18n.it.info_af = "Stima il tempo perso in procedure di autofocus durante la notte. Il sistema calcola automaticamente il numero di AF in base ai trigger attivi e alle condizioni meteo previste. La stima tiene conto anche del tipo di setup ottico. Il totale viene sottratto dal tempo disponibile esattamente come il dithering.";
+i18n.en.info_af = "Estimates time lost to autofocus routines during the night. The system automatically calculates the number of AF runs based on active triggers and forecast weather conditions. The estimate also takes into account the optical setup type. The total is subtracted from your available time, just like dithering.";
+i18n.es.info_af = "Estima el tiempo perdido en procedimientos de autofocus durante la noche. El sistema calcula automáticamente el número de AF según los disparadores activos y las condiciones meteorológicas previstas. La estimación también tiene en cuenta el tipo de configuración óptica. El total se resta del tiempo disponible, igual que el dithering.";
+i18n.zh.info_af = "估算整夜自动对焦程序所耗时间。系统根据已启用的触发器和天气预报自动计算AF次数。估算还考虑了光学系统类型。总时间从可用时间中扣除，与抖动处理方式相同。";
+
+i18n.it.af_duration_lbl = "Durata AF";
+i18n.en.af_duration_lbl = "AF duration";
+i18n.es.af_duration_lbl = "Duración AF";
+i18n.zh.af_duration_lbl = "AF时长";
+
+i18n.it.af_count_lbl = "N. AF";
+i18n.en.af_count_lbl = "AF runs";
+i18n.es.af_count_lbl = "N.º AF";
+i18n.zh.af_count_lbl = "AF次数";
+
+i18n.it.af_stima_title = "Stima automatica";
+i18n.en.af_stima_title = "Auto estimate";
+i18n.es.af_stima_title = "Estimación auto";
+i18n.zh.af_stima_title = "自动估算";
+
+i18n.it.af_stima_btn = "Usa stima";
+i18n.en.af_stima_btn = "Use estimate";
+i18n.es.af_stima_btn = "Usar estimación";
+i18n.zh.af_stima_btn = "应用估算";
+
+i18n.it.af_thermal_lbl = "AF termici (ΔT)";
+i18n.en.af_thermal_lbl = "Thermal AF (ΔT)";
+i18n.es.af_thermal_lbl = "AF térmicos (ΔT)";
+i18n.zh.af_thermal_lbl = "热致AF (ΔT)";
+
+i18n.it.af_filter_lbl = "AF cambio filtro";
+i18n.en.af_filter_lbl = "Filter-change AF";
+i18n.es.af_filter_lbl = "AF cambio filtro";
+i18n.zh.af_filter_lbl = "换镜AF";
+
+i18n.it.af_confidence_high = "Alta affidabilità";
+i18n.en.af_confidence_high = "High confidence";
+i18n.es.af_confidence_high = "Alta fiabilidad";
+i18n.zh.af_confidence_high = "高可信度";
+
+i18n.it.af_confidence_low = "Bassa affidabilità";
+i18n.en.af_confidence_low = "Low confidence";
+i18n.es.af_confidence_low = "Baja fiabilidad";
+i18n.zh.af_confidence_low = "低可信度";
+
+i18n.it.af_ota_type_lbl = "Tipo telescopio";
+i18n.en.af_ota_type_lbl = "Telescope type";
+i18n.es.af_ota_type_lbl = "Tipo de telescopio";
+i18n.zh.af_ota_type_lbl = "望远镜类型";
+
+i18n.it.af_ota_apo    = "Rifrattore APO / ED";
+i18n.en.af_ota_apo    = "APO / ED Refractor";
+i18n.es.af_ota_apo    = "Refractor APO / ED";
+i18n.zh.af_ota_apo    = "APO / ED 折射镜";
+
+i18n.it.af_ota_achro  = "Rifrattore acromatico";
+i18n.en.af_ota_achro  = "Achromatic Refractor";
+i18n.es.af_ota_achro  = "Refractor acromático";
+i18n.zh.af_ota_achro  = "消色差折射镜";
+
+i18n.it.af_ota_newton = "Newton / Riflettore";
+i18n.en.af_ota_newton = "Newtonian / Reflector";
+i18n.es.af_ota_newton = "Newton / Reflector";
+i18n.zh.af_ota_newton = "牛顿 / 反射镜";
+
+i18n.it.af_ota_sct    = "SCT / Cassegrain / RC";
+i18n.en.af_ota_sct    = "SCT / Cassegrain / RC";
+i18n.es.af_ota_sct    = "SCT / Cassegrain / RC";
+i18n.zh.af_ota_sct    = "SCT / 卡塞格林 / RC";
+
+// ── Pulsante genera file sequenza N.I.N.A. ───────────────────────────────────
+i18n.it.genera_nina_btn = "Genera il file sequenza per N.I.N.A.";
+i18n.en.genera_nina_btn = "Generate N.I.N.A. sequence file";
+i18n.es.genera_nina_btn = "Generar archivo de secuencia para N.I.N.A.";
+i18n.zh.genera_nina_btn = "生成 N.I.N.A. 序列文件";
+
+// ── Changelog v7.0 ───────────────────────────────────────────────────────────
+
+i18n.it.cl_v70_1_title = "Fix calcolo Seeing";
+i18n.en.cl_v70_1_title = "Seeing calculation fix";
+i18n.es.cl_v70_1_title = "Corrección del cálculo de Seeing";
+i18n.zh.cl_v70_1_title = "视宁度计算修复";
+
+i18n.it.cl_v70_1_desc = "Corretti i bug nel calcolo dell'indice Seeing che causavano valori errati in alcune condizioni meteo. L'indice è ora più preciso e coerente con i dati atmosferici reali.";
+i18n.en.cl_v70_1_desc = "Fixed bugs in the Seeing index calculation that caused incorrect values under certain weather conditions. The index is now more accurate and consistent with real atmospheric data.";
+i18n.es.cl_v70_1_desc = "Corregidos errores en el cálculo del índice Seeing que causaban valores incorrectos en ciertas condiciones meteorológicas. El índice es ahora más preciso y consistente con los datos atmosféricos reales.";
+i18n.zh.cl_v70_1_desc = "修复了视宁度指数计算中在某些天气条件下导致错误数值的缺陷，指数现在更加精确，与实际大气数据更为一致。";
+
+i18n.it.cl_v70_2_title = "Galleria foto DSO nel Planetario Ibrido";
+i18n.en.cl_v70_2_title = "DSO photo gallery in the Hybrid Planetarium";
+i18n.es.cl_v70_2_title = "Galería de fotos DSO en el Planetario Híbrido";
+i18n.zh.cl_v70_2_title = "混合星图中的DSO照片库";
+
+i18n.it.cl_v70_2_desc = "Popup preview al passaggio del mouse su ogni oggetto: fino a 16 foto dall'archivio NASA Images con crediti fotografici. Click per aprire la scheda originale. Bottom sheet su mobile. Pulsante AstroBin nel footer per confrontare con immagini amatoriali.";
+i18n.en.cl_v70_2_desc = "Hover popup on every object card: up to 16 photos from the NASA Images archive with credits. Click to open the original page. Bottom sheet on mobile. AstroBin button in the footer to compare with amateur astrophotos.";
+i18n.es.cl_v70_2_desc = "Popup de vista previa al pasar el cursor sobre cada objeto: hasta 16 fotos del archivo NASA Images con créditos. Clic para abrir la página original. Bottom sheet en móvil. Botón AstroBin en el pie para comparar con astrofotografías de aficionados.";
+i18n.zh.cl_v70_2_desc = "鼠标悬停在每个天体卡片上时弹出预览：来自NASA图像档案的多达16张带署名的照片，点击可打开原始页面。手机上以底部抽屉形式呈现。页脚AstroBin按钮可与业余天文摄影作品对比。";
+
+i18n.it.cl_v70_3_title = "Accessori ottici: Barlow e Riduttori di focale";
+i18n.en.cl_v70_3_title = "Optical accessories: Barlow and Focal Reducers";
+i18n.es.cl_v70_3_title = "Accesorios ópticos: Barlow y Reductores de focal";
+i18n.zh.cl_v70_3_title = "光学附件：巴罗镜与焦距缩短镜";
+
+i18n.it.cl_v70_3_desc = "Nuovo pulsante Accessorio accanto al campo focale. Seleziona Barlow (1.5×–5×) o Riduttore (0.63×–0.85×) o valore personalizzato. La focale effettiva si propaga automaticamente a FOV, campionamento, f/ratio e tempi di posa Smart.";
+i18n.en.cl_v70_3_desc = "New Accessory button next to the focal length field. Select Barlow (1.5×–5×) or Reducer (0.63×–0.85×) or a custom value. The effective focal length propagates automatically to FOV, sampling, f/ratio and Smart exposure times.";
+i18n.es.cl_v70_3_desc = "Nuevo botón Accesorio junto al campo de distancia focal. Selecciona Barlow (1.5×–5×) o Reductor (0.63×–0.85×) o valor personalizado. La focal efectiva se propaga automáticamente a FOV, muestreo, f/ratio y tiempos de exposición Smart.";
+i18n.zh.cl_v70_3_desc = "焦距输入框旁新增附件按钮。可选择巴罗镜（1.5×–5×）、焦距缩短镜（0.63×–0.85×）或自定义倍率。等效焦距自动传递至视场角、采样率、焦比和智能曝光时间。";
+
+i18n.it.cl_v70_4_title = "Filtri anti-inquinamento e narrowband OSC";
+i18n.en.cl_v70_4_title = "Light pollution and narrowband OSC filters";
+i18n.es.cl_v70_4_title = "Filtros anticontaminación y narrowband OSC";
+i18n.zh.cl_v70_4_title = "防光污染与OSC窄带滤镜";
+
+i18n.it.cl_v70_4_desc = "Supporto completo a filtri CLS, L-Pro, Dual-Band (Ha+OIII) e Quad-Band per sensori OSC. Il calcolo usa la formula fisica dello swamping (RN, QE, bandwidth, f-ratio) per stimare la posa minima ottimale. Disponibile e sincronizzato tra Smart e PRO.";
+i18n.en.cl_v70_4_desc = "Full support for CLS, L-Pro, Dual-Band (Ha+OIII) and Quad-Band filters for OSC sensors. The calculation uses the physical swamping formula (RN, QE, bandwidth, f-ratio) to estimate the optimal minimum exposure. Available and synced between Smart and PRO.";
+i18n.es.cl_v70_4_desc = "Soporte completo para filtros CLS, L-Pro, Dual-Band (Ha+OIII) y Quad-Band para sensores OSC. El cálculo usa la fórmula física de swamping (RN, QE, ancho de banda, f-ratio) para estimar la exposición mínima óptima. Disponible y sincronizado entre Smart y PRO.";
+i18n.zh.cl_v70_4_desc = "全面支持CLS、L-Pro、双波段（Ha+OIII）和四波段滤镜用于OSC传感器。计算采用物理swamping公式（读出噪声、量子效率、带宽、焦比）估算最优最短曝光时间，在Smart和PRO模式间同步共享。";
+
+i18n.it.cl_v70_5_title = "Temperatura in tempo reale sulla mappa";
+i18n.en.cl_v70_5_title = "Real-time temperature overlay on the map";
+i18n.es.cl_v70_5_title = "Temperatura en tiempo real sobre el mapa";
+i18n.zh.cl_v70_5_title = "地图实时温度叠加显示";
+
+i18n.it.cl_v70_5_desc = "Pannello overlay fisso in alto a destra sulla mappa. Scala colori adattiva: blu (≤0°C) → ciano → verde → giallo → arancione → rosso (≥33°C). Segue lo slider orario fino a 72h in avanti. Si nasconde automaticamente quando i dati non sono disponibili.";
+i18n.en.cl_v70_5_desc = "Fixed overlay panel in the top-right corner of the map. Adaptive colour scale: blue (≤0°C) → cyan → green → yellow → orange → red (≥33°C). Follows the hourly slider up to 72h ahead. Hides automatically when data is unavailable.";
+i18n.es.cl_v70_5_desc = "Panel superpuesto fijo en la esquina superior derecha del mapa. Escala de colores adaptativa: azul (≤0°C) → cian → verde → amarillo → naranja → rojo (≥33°C). Sigue el deslizador horario hasta 72h. Se oculta automáticamente cuando no hay datos disponibles.";
+i18n.zh.cl_v70_5_desc = "固定在地图右上角的叠加面板。自适应色标：蓝色（≤0°C）→ 青色 → 绿色 → 黄色 → 橙色 → 红色（≥33°C）。跟随时间滑块显示未来72小时数据，无数据时自动隐藏。";
+
+i18n.it.cl_v70_6_title = "Budget Autofocus nel calcolo dei tempi";
+i18n.en.cl_v70_6_title = "Autofocus budget in time calculation";
+i18n.es.cl_v70_6_title = "Presupuesto de Autofocus en el cálculo de tiempos";
+i18n.zh.cl_v70_6_title = "自动对焦时间预算纳入计算";
+
+i18n.it.cl_v70_6_desc = "Il costo delle procedure AF (durata × numero interventi) viene sottratto dal tempo disponibile esattamente come il dithering. Trigger configurabili: avvio sequenza, cambio filtro, variazione HFR. Budget AF visibile e sincronizzato in tempo reale tra Smart e PRO.";
+i18n.en.cl_v70_6_desc = "The cost of AF routines (duration × number of procedures) is subtracted from available time exactly like dithering. Configurable triggers: sequence start, filter change, HFR increase. AF budget visible and synced in real time between Smart and PRO.";
+i18n.es.cl_v70_6_desc = "El coste de las rutinas AF (duración × número de procedimientos) se resta del tiempo disponible exactamente como el dithering. Disparadores configurables: inicio de secuencia, cambio de filtro, aumento de HFR. Presupuesto AF visible y sincronizado en tiempo real entre Smart y PRO.";
+i18n.zh.cl_v70_6_desc = "AF程序的时间成本（时长×次数）像抖动一样从可用时间中扣除。可配置触发器：序列开始、滤镜切换、HFR增大。AF时间预算在Smart和PRO之间实时显示并同步。";
+
+i18n.it.cl_v70_7_title = "Sezione PRO potenziata";
+i18n.en.cl_v70_7_title = "Enhanced PRO section";
+i18n.es.cl_v70_7_title = "Sección PRO mejorada";
+i18n.zh.cl_v70_7_title = "PRO模式全面增强";
+
+i18n.it.cl_v70_7_desc = "Righe HDR nascoste di default con pulsante globale Attiva HDR. Dithering e budget AF ora visibili nella sezione PRO e sincronizzati con Smart. Lucchetto pose per ogni filtro Light della griglia PRO.";
+i18n.en.cl_v70_7_desc = "HDR rows hidden by default with a global Activate HDR button. Dithering and AF budget now visible in the PRO section and synced with Smart. Frame count lock for every Light filter in the PRO grid.";
+i18n.es.cl_v70_7_desc = "Filas HDR ocultas por defecto con botón global Activar HDR. Dithering y presupuesto AF ahora visibles en la sección PRO y sincronizados con Smart. Bloqueo de poses para cada filtro Light de la cuadrícula PRO.";
+i18n.zh.cl_v70_7_desc = "HDR行默认隐藏，新增全局【启用HDR】按钮。抖动和AF预算现在在PRO模式中可见，并与Smart同步。PRO网格中每个Light滤镜均可锁定帧数。";
+
+i18n.it.cl_v70_8_title = "Sezione Smart: lucchetto pose intelligente";
+i18n.en.cl_v70_8_title = "Smart section: intelligent frame count lock";
+i18n.es.cl_v70_8_title = "Sección Smart: bloqueo inteligente de poses";
+i18n.zh.cl_v70_8_title = "Smart模式：智能帧数锁定";
+
+i18n.it.cl_v70_8_desc = "Blocca il numero di pose di un filtro specifico. Il budget residuo viene redistribuito automaticamente tra i filtri liberi con pesi normalizzati. Bordo rosso se le pose bloccate eccedono il budget totale disponibile.";
+i18n.en.cl_v70_8_desc = "Lock the frame count for a specific filter. The remaining budget is automatically redistributed among free filters using normalised weights. Red border if locked frames exceed the total available budget.";
+i18n.es.cl_v70_8_desc = "Bloquea el número de poses de un filtro específico. El presupuesto restante se redistribuye automáticamente entre los filtros libres con pesos normalizados. Borde rojo si las poses bloqueadas exceden el presupuesto total disponible.";
+i18n.zh.cl_v70_8_desc = "锁定特定滤镜的帧数。剩余预算自动按归一化权重分配给未锁定的滤镜。若锁定帧数超出总可用预算，该字段显示红色边框警示。";
+
+// ── Tooltip AF triggers ──────────────────────────────────────────────────────
+i18n.it.info_af_triggers = "I trigger AF controllano quando N.I.N.A. esegue una procedura di autofocus durante la sequenza. All'avvio: messa a fuoco iniziale prima della prima posa. Al cambio filtro: compensa l'offset focale tra filtri diversi (es. Ha vs OIII). Alla variazione HFR: N.I.N.A. monitora il diametro delle stelle e rifocalizza solo quando il fuoco degrada. Alla variazione di temperatura: rifocalizza automaticamente al superamento del delta °C impostato. Ogni trigger attivo incrementa il budget autofocus: il tempo stimato per le procedure AF viene sottratto dal tempo di acquisizione disponibile, esattamente come il dithering.";
+i18n.en.info_af_triggers = "AF triggers control when N.I.N.A. runs an autofocus routine during the sequence. At start: ensures correct initial focus before the first exposure. On filter change: compensates focus offset between different filters (e.g. Ha vs OIII). On HFR increase: N.I.N.A. monitors star diameter and refocuses only when focus degrades. On temperature change: automatically refocuses when the set delta °C threshold is exceeded. Each active trigger increases the autofocus budget: the estimated time for AF procedures is subtracted from available imaging time, just like dithering.";
+i18n.es.info_af_triggers = "Los disparadores AF controlan cuando N.I.N.A. ejecuta una rutina de autofocus durante la secuencia. Al inicio: asegura el enfoque inicial correcto antes de la primera exposición. Al cambiar filtro: compensa el offset de enfoque entre filtros (ej. Ha vs OIII). Al aumentar HFR: monitorea el diámetro estelar y reenfoca solo cuando se degrada. Al cambiar temperatura: reenfoca automáticamente al superar el delta °C configurado. Cada disparador activo incrementa el presupuesto de autofocus: el tiempo estimado para los procedimientos AF se resta del tiempo de imagen disponible, igual que el dithering.";
+i18n.zh.info_af_triggers = "AF触发器控制N.I.N.A.在序列中何时执行自动对焦。序列开始时：确保首次曝光前正确对焦。切换滤镜时：补偿不同滤镜间的焦点偏移（如Ha与OIII）。HFR增大时：监测星点直径，仅在对焦恶化时重新对焦。温度变化时：超过设定的温差阈值时自动重新对焦。每个已启用的触发器都会增加自动对焦预算：AF程序的估算时间从可用拍摄时间中扣除，与抖动处理方式相同。";
+
+// ── Etichetta riga dithering PRO ─────────────────────────────────────────────
+i18n.it.dither_setting = "Tempo dither";
+i18n.en.dither_setting = "Dither time";
+i18n.es.dither_setting = "Tiempo dither";
+i18n.zh.dither_setting = "抖动时间";
+
+// ── Warning sequenza non ancora generata ─────────────────────────────────────
+i18n.it.af_seq_not_generated = "Genera prima la sequenza ottimale per ricalcolare le pose automaticamente.";
+i18n.en.af_seq_not_generated = "Generate the optimal sequence first to automatically recalculate frames.";
+i18n.es.af_seq_not_generated = "Genera primero la secuencia optima para recalcular las poses automaticamente.";
+i18n.zh.af_seq_not_generated = "请先生成最优序列，之后修改AF参数将自动重新计算帧数。";

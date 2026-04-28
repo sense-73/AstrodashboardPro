@@ -1,5 +1,7 @@
 // smart.js — Calcolatore Smart: AI predittivo, sequenza ottimale, filtri NINA
 // ============================================================
+        window._sequenzaGenerata = false;
+        window._afModoManuale    = false;  // true = utente ha scritto af-count a mano
 function toggleLock(id) {
             let el = document.getElementById(id + '-lock');
             if (!el) return;
@@ -338,6 +340,14 @@ function toggleLock(id) {
                     ? `<div style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="${f.id}-check" checked style="transform:scale(1.2);cursor:pointer;" onchange="calcolaTempi()"><label id="${f.id}-label" style="color:#fff;font-weight:bold;font-size:0.9em;cursor:pointer;" onclick="document.getElementById('${f.id}-check').click()">${savedLabelName}</label></div>`
                     : `<div style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:18px;"></span><label id="${f.id}-label" style="color:#aaa;font-size:0.9em;">${savedLabelName}</label></div>`;
 
+                // Cella pose: con lucchetto per i Light, plain per Dark/Bias
+                let countCell = isL
+                    ? `<div style="display:flex;align-items:center;gap:3px;">
+                           <input type="number" id="${f.id}-count" value="${f.dC}" min="0" oninput="calcolaTempi()" style="width:100%!important;text-align:center;padding:3px!important;flex:1;">
+                           <span id="${f.id}-count-lock" onclick="toggleLock('${f.id}-count')" title="Blocca pose" style="cursor:pointer;opacity:0.4;user-select:none;line-height:1;display:inline-flex;align-items:center;" data-locked="0"><svg width="15" height="15" style="vertical-align:middle"><use href="#i-lock-open"/></svg></span>
+                       </div>`
+                    : `<input type="number" id="${f.id}-count" value="${f.dC}" min="0" oninput="calcolaTempi()" style="width:100%!important;text-align:center;padding:3px!important;">`;
+
                 // Valore default exp: Dark = segue il primo Light, Bias = 0
                 let defGain = isBs ? '0' : 'Auto';
                 let expInput = isDk
@@ -364,7 +374,7 @@ function toggleLock(id) {
 
                 r.innerHTML = `
                     ${nameCell}
-                    <input type="number" id="${f.id}-count" value="${f.dC}" min="0" oninput="calcolaTempi()" style="width:100%!important;text-align:center;padding:3px!important;">
+                    ${countCell}
                     ${expInput}
                     <input type="text" id="${f.id}-gain" value="${defGain}" style="width:100%!important;text-align:center;padding:3px!important;">
                     <input type="text" id="${f.id}-offset" value="Auto" style="width:100%!important;text-align:center;padding:3px!important;">
@@ -1006,6 +1016,19 @@ function toggleLock(id) {
             let ditherTotEl = document.getElementById('dither-tot');
             if (ditherTotEl) ditherTotEl.innerText = formatSeconds(dSec);
 
+            // ── Budget Autofocus ──────────────────────────────────────────
+            // Prima aggiorna la stima (scrive af-count dai trigger), poi legge il valore
+            aggiornaStimaAF();
+            let afSec = 0;
+            let afDurEl   = document.getElementById('af-duration');
+            let afCountEl = document.getElementById('af-count');
+            let afDur   = afDurEl   ? (parseInt(afDurEl.value)   || 0) : 0;
+            let afCount = afCountEl ? (parseInt(afCountEl.value) || 0) : 0;
+            afSec = afDur * afCount;
+            tSec += afSec;
+            let afTotEl = document.getElementById('af-tot');
+            if (afTotEl) afTotEl.innerText = formatSeconds(afSec);
+
             document.getElementById('calc-total').innerText = formatSeconds(tSec);
             let rS = aS - tSec, rD = document.getElementById('calc-residual'), wD = document.getElementById('calc-warning');
             let _smartMnBtn = document.getElementById('btn-smart-overflow-mn');
@@ -1040,6 +1063,9 @@ function toggleLock(id) {
             if (!targetSelezionato) { mostraAvviso(t("alert_planetarium"), "warn"); return; }
             let tS = document.getElementById('time-start').value, tE = document.getElementById('time-end').value; if(!tS || !tE) { mostraAvviso(t("alert_times"), "warn"); return; }
             if (tS === tE) { const _nlbl = sessionDateLabel(lang); mostraAvviso(lang==='it'?`L'oggetto non è visibile ${_nlbl} — finestra di sessione zero.`:lang==='en'?`Object not visible ${_nlbl} — session window is zero.`:lang==='es'?`El objeto no es visible ${_nlbl} — ventana cero.`:`${_nlbl}目标不可见——会话窗口为零。`, "warn"); return; }
+            // Aggiorna la stima AF dai trigger attivi PRIMA di calcolare le pose,
+            // così il budget AF sottratto dalla finestra è sempre aggiornato
+            if (typeof aggiornaStimaAF === 'function') aggiornaStimaAF();
             let dS = new Date(`1970-01-01T${tS}:00`), dE = new Date(`1970-01-01T${tE}:00`); if (dE <= dS) dE.setDate(dE.getDate() + 1);
             let aS = (dE - dS) / 1000;
             
@@ -1068,6 +1094,10 @@ function toggleLock(id) {
                 else cS += cnt * (exp + (cnt > 0 ? _lightOvhG : 0));
             });
             let rS = aS - cS; if (rS <= 0) { mostraAvviso(t("alert_calib"), "warn"); return; }
+            // Sottrai il budget autofocus (costo fisso totale, non per-posa come il dither)
+            let _afDurG   = parseInt((document.getElementById('af-duration') || {}).value) || 0;
+            let _afCountG = parseInt((document.getElementById('af-count')    || {}).value) || 0;
+            rS = Math.max(0, rS - (_afDurG * _afCountG));
             // Sottrai il tempo HDR lockato dal budget disponibile per i frame principali.
             // Si entra in questo percorso SOLO se il conteggio HDR è lockato — l'utente
             // ha fissato quante pose HDR vuole, e il generatore deve rispettarlo.
@@ -1221,6 +1251,41 @@ function toggleLock(id) {
             }
             // ────────────────────────────────────────────────────────────────────────────────────────────────
 
+            // ── Pass 1: sottrai dal budget i filtri con count bloccato ────────────
+            // Per ogni filtro Light con lucchetto pose attivo, calcola il tempo
+            // che consuma (pose × exp + overhead + dither) e sottrailo da rSMain.
+            // Il residuo viene redistribuito tra i filtri liberi con pesi normalizzati.
+            let countLockedSec = 0;
+            aL.forEach(f => {
+                let _cLockP1 = document.getElementById(`${f.id}-count-lock`);
+                if (!_cLockP1 || !_cLockP1.classList.contains('locked')) return;
+                let _lcP1 = parseInt(document.getElementById(`${f.id}-count`).value) || 0;
+                // Calcola eS per questo filtro (rispettando il lucchetto exp se presente)
+                let _baseExpP1 = (_catExpMap[_catG] !== undefined) ? _catExpMap[_catG] : 180;
+                let _eSP1 = f.id === 'm-l' ? _lumBase
+                           : (f.id.includes('ha') || f.id.includes('oiii') || f.id.includes('sii')) ? Math.max(_baseExpP1, 300)
+                           : _baseExpP1;
+                let _expLockP1 = document.getElementById(`${f.id}-lock`);
+                if (_expLockP1 && _expLockP1.classList.contains('locked'))
+                    _eSP1 = parseInt(document.getElementById(`${f.id}-exp`).value) || _eSP1;
+                // Dither per questo filtro
+                let _dChkP1 = document.getElementById(`${f.id}-dither`);
+                let _dFrqP1 = parseInt((document.getElementById(`${f.id}-dfreq`)||{}).value) || _dFreqG;
+                let _ditherP1 = (_dChkP1 && _dChkP1.checked && _dFrqP1 > 0) ? Math.floor(_lcP1 / _dFrqP1) * dD : 0;
+                countLockedSec += _lcP1 * (_eSP1 + _lightOvhG) + _ditherP1;
+            });
+
+            let rSUnlocked = Math.max(0, rSMain - countLockedSec);
+            let _countLockOverflow = countLockedSec > rSMain;
+
+            // Normalizza i pesi solo sui filtri NON bloccati nel count
+            let _totalUnlockedW = 0;
+            aL.forEach(f => {
+                let _cL = document.getElementById(`${f.id}-count-lock`);
+                if (!_cL || !_cL.classList.contains('locked')) _totalUnlockedW += (w[f.id] || 0);
+            });
+            // ─────────────────────────────────────────────────────────────────────
+
             aL.forEach(f => {
                 let _baseExp = (_catExpMap[_catG] !== undefined) ? _catExpMap[_catG] : 180;
                 let eS;
@@ -1261,21 +1326,35 @@ function toggleLock(id) {
                     _hdrEeS = 0.3 * (_hdrExpVal + _lightOvhG + (_hdrUD && _hdrDF > 0 ? dD / _hdrDF : 0));
                 }
 
-                let _mainComputedCount = Math.floor((rSMain * w[f.id]) / (eeS + _hdrEeS));
-                // Verifica discreta (stessa formula di calcolaTempi) per evitare sforamenti residui
-                {
-                    let _budget = rSMain * w[f.id];
-                    let _hdrC = _hdrActive && !_hdrCountIsLocked ? Math.max(5, Math.ceil(_mainComputedCount * 0.3)) : 0;
-                    let _hdrExpVal = _hdrActive ? parseInt((document.getElementById(`${f.id}-hdr-exp`) || {}).value) || _hdrExpG : 0;
-                    let _hdrDChk   = _hdrActive ? document.getElementById(`${f.id}-hdr-dither`) : null;
-                    let _hdrDF     = parseInt((document.getElementById(`${f.id}-hdr-dfreq`) || {}).value) || 4;
-                    let _ditherSec   = uD && dF > 0 ? Math.floor(_mainComputedCount / dF) * dD : 0;
-                    let _ditherHdrSec = _hdrActive && _hdrDChk && _hdrDChk.checked && _hdrDF > 0 ? Math.floor(_hdrC / _hdrDF) * dD : 0;
-                    let _actualTime = _mainComputedCount * (eS + _lightOvhG) + _ditherSec
-                                    + _hdrC * (_hdrExpVal + _lightOvhG) + _ditherHdrSec;
-                    if (_actualTime > _budget) _mainComputedCount = Math.max(0, _mainComputedCount - 1);
+                // ── Pass 2: conta pose rispettando lock e budget redistribuito ──
+                let _cLockP2 = document.getElementById(`${f.id}-count-lock`);
+                let _countIsLockedP2 = _cLockP2 && _cLockP2.classList.contains('locked');
+                let _countEl2 = document.getElementById(`${f.id}-count`);
+
+                let _mainComputedCount;
+                if (_countIsLockedP2) {
+                    // Count bloccato: usa il valore inserito dall'utente
+                    _mainComputedCount = parseInt(_countEl2.value) || 0;
+                    // Feedback visivo: bordo rosso se le pose bloccate sforano il budget
+                    if (_countEl2) _countEl2.style.outline = _countLockOverflow ? '2px solid #ff4444' : '';
+                } else {
+                    // Count libero: usa budget residuo con pesi normalizzati
+                    let _budgetF = (_totalUnlockedW > 0) ? rSUnlocked * (w[f.id] / _totalUnlockedW) : 0;
+                    _mainComputedCount = Math.floor(_budgetF / (eeS + _hdrEeS));
+                    // Verifica discreta per evitare sforamenti residui
+                    {
+                        let _ditherSec2   = uD && dF > 0 ? Math.floor(_mainComputedCount / dF) * dD : 0;
+                        let _hdrC2 = _hdrActive && !_hdrCountIsLocked ? Math.max(5, Math.ceil(_mainComputedCount * 0.3)) : 0;
+                        let _hdrExpVal2 = _hdrActive ? parseInt((document.getElementById(`${f.id}-hdr-exp`) || {}).value) || _hdrExpG : 0;
+                        let _hdrDChk2   = _hdrActive ? document.getElementById(`${f.id}-hdr-dither`) : null;
+                        let _hdrDF2     = parseInt((document.getElementById(`${f.id}-hdr-dfreq`) || {}).value) || 4;
+                        let _ditherHdrSec2 = _hdrActive && _hdrDChk2 && _hdrDChk2.checked && _hdrDF2 > 0 ? Math.floor(_hdrC2 / _hdrDF2) * dD : 0;
+                        let _actualTime2 = _mainComputedCount * (eS + _lightOvhG) + _ditherSec2
+                                         + _hdrC2 * (_hdrExpVal2 + _lightOvhG) + _ditherHdrSec2;
+                        if (_actualTime2 > _budgetF) _mainComputedCount = Math.max(0, _mainComputedCount - 1);
+                    }
+                    if (_countEl2) { _countEl2.value = _mainComputedCount; _countEl2.style.outline = ''; }
                 }
-                document.getElementById(`${f.id}-count`).value = _mainComputedCount;
                 // Suggerisci count HDR (30% del count principale, min 5) — rispetta il lucchetto
                 if (_hdrActive) {
                     if (!_hdrCountIsLocked) {
@@ -1298,6 +1377,9 @@ function toggleLock(id) {
                 } 
             });
             calcolaTempi();
+            window._sequenzaGenerata = true;
+            // NON resettiamo _afModoManuale qui: se l'utente ha inserito il numero
+            // manualmente, vogliamo che rimanga tale anche dopo la rigenerazione.
         }
 
         function aggiornaFiltriNina() {
@@ -1361,10 +1443,15 @@ function toggleLock(id) {
             const pairs = [
                 ['smart-af-start',    'pro-af-start'],
                 ['smart-af-filter',   'pro-af-filter'],
+                ['smart-af-hfr',      'pro-af-hfr'],
                 ['smart-af-time',     'pro-af-time'],
                 ['smart-af-time-val', 'pro-af-time-val'],
                 ['smart-af-temp',     'pro-af-temp'],
                 ['smart-af-temp-val', 'pro-af-temp-val'],
+                // Budget AF e dithering: sync bidirezionale Smart ↔ PRO
+                ['af-duration',       'pro-af-duration'],
+                ['af-count',          'pro-af-count'],
+                ['dither-duration',   'pro-dither-duration'],
             ];
 
             function syncEl(from, to) {
@@ -1450,4 +1537,260 @@ function toggleLock(id) {
             if (typeof calcolaTempi === 'function') {
                 calcolaTempi();
             }
+            // La sequenza precedente non è più valida con la nuova data
+            window._sequenzaGenerata = false;
+            window._afModoManuale    = false;
         });
+
+        // ── Gestione modifiche ai campi AF ───────────────────────────────────
+
+        // Chiamata quando l'utente modifica af-duration (non af-count).
+        // Se la sequenza è già stata generata, rigenera. Altrimenti warning.
+        function _onAfBudgetChange() {
+            if (!window._sequenzaGenerata) {
+                mostraAvviso(t('af_seq_not_generated'), 'warn');
+                return;
+            }
+            let _tS = (document.getElementById('time-start') || {}).value;
+            let _tE = (document.getElementById('time-end')   || {}).value;
+            if (targetSelezionato && _tS && _tE) {
+                generaSequenzaOttimale();
+            }
+        }
+
+        // Chiamata quando l'utente scrive direttamente in af-count.
+        // Attiva la modalità manuale: la stima automatica non sovrascriverà più.
+        function _onAfCountManuale() {
+            window._afModoManuale = true;
+            if (!window._sequenzaGenerata) {
+                mostraAvviso(t('af_seq_not_generated'), 'warn');
+                return;
+            }
+            let _tS = (document.getElementById('time-start') || {}).value;
+            let _tE = (document.getElementById('time-end')   || {}).value;
+            if (targetSelezionato && _tS && _tE) {
+                generaSequenzaOttimale();
+            }
+        }
+
+        // Listener su af-duration e af-count — attaccati dopo il DOM
+        document.addEventListener('DOMContentLoaded', function() {
+            let _durEl = document.getElementById('af-duration');
+            if (_durEl) _durEl.addEventListener('input', _onAfBudgetChange);
+            let _cntEl = document.getElementById('af-count');
+            if (_cntEl) _cntEl.addEventListener('input', _onAfCountManuale);
+        });
+
+        // ── Aggiorna i chip del pannello stima AF ────────────────────────────
+        // Chiama stimaAFNotturni() e aggiorna le pillole visive nel pannello.
+        // Scrive automaticamente af-count in base ai trigger attivi.
+        function aggiornaStimaAF() {
+            if (typeof stimaAFNotturni !== 'function') return;
+
+            const s = stimaAFNotturni();
+
+            // ── Scrive af-count automaticamente dalla somma dei trigger ──
+            // Solo se l'utente NON ha inserito il numero manualmente
+            if (!window._afModoManuale) {
+                let _afTotCalc = s.afTotale + s.afMeteoMax; // avvio + filtro + termici + HFR
+                let _afCountEl = document.getElementById('af-count');
+                if (_afCountEl) _afCountEl.value = _afTotCalc;
+                let _proAfCountEl = document.getElementById('pro-af-count');
+                if (_proAfCountEl) _proAfCountEl.value = _afTotCalc;
+            }
+
+            const _chip = (id, txt, show) => {
+                let el = document.getElementById(id);
+                if (!el) return;
+                el.style.display = show ? 'inline-block' : 'none';
+                if (show) el.textContent = txt;
+            };
+
+            // Chip avvio
+            _chip('af-chip-avvio',   t('pro_af_start')   + ': ' + s.afAvvio,   true);
+            // Chip filtro (solo se >0)
+            _chip('af-chip-filtro',  t('af_filter_lbl')  + ': ' + s.afFiltro,  s.afFiltro > 0);
+            // Chip termici (solo se trigger temp attivo)
+            const trigTempOn = document.getElementById('smart-af-temp') &&
+                               document.getElementById('smart-af-temp').checked;
+            _chip('af-chip-termici', t('af_thermal_lbl') + ': ' + s.afTermici, trigTempOn);
+            // Chip meteo/HFR (solo se trigger HFR attivo e stima > 0)
+            const mostraMeteo = s.afMeteoMax > 0;
+            _chip('af-chip-meteo',
+                t('pro_af_hfr') + ': ' + s.afMeteoMin + '–' + s.afMeteoMax,
+                mostraMeteo);
+
+            // Badge confidenza
+            let confEl = document.getElementById('af-chip-confidenza');
+            if (confEl) {
+                const colore = s.confidenza === 'high'   ? '#44ff88'
+                             : s.confidenza === 'medium' ? '#ffaa00'
+                             :                             '#ff6644';
+                const label  = s.confidenza === 'high'   ? t('af_confidence_high')
+                             : s.confidenza === 'medium' ? '⚠ ' + t('af_thermal_lbl')
+                             :                             '⚠ ' + t('af_confidence_low');
+                confEl.style.color = colore;
+                confEl.textContent = label;
+            }
+
+            // ── Warning contestuali ───────────────────────────────────────────
+            const warnEl   = document.getElementById('af-warning-box');
+            const suggestEl = document.getElementById('af-suggest-box');
+            const warnings  = [];
+            const suggests  = [];
+
+            if (s.warnNoTrigger) {
+                warnings.push(t('af_warn_no_trigger'));
+            } else {
+                // Warning termica: escursione significativa senza trigger temp
+                if (s.warnThermal) {
+                    const _ota = t('af_ota_' + (s.otaType || 'apo')) || s.otaType;
+                    warnings.push(
+                        t('af_warn_thermal')
+                            .replace('{delta}', s.warnThermalDelta)
+                            .replace('{ota}',   _ota)
+                            .replace('{dt}',    s.deltaT)
+                            .replace('{n}',     s.warnThermalN)
+                    );
+                }
+                // Warning filtro: mono con filtri senza trigger filtro
+                if (s.warnFilter) {
+                    warnings.push(
+                        t('af_warn_filter').replace('{n}', s.warnFilterN)
+                    );
+                }
+                // Suggerimento: HFR attivo ma meteo stabile
+                if (s.suggestHfrStable) {
+                    suggests.push(t('af_suggest_hfr_stable'));
+                }
+            }
+
+            if (warnEl) {
+                warnEl.textContent = warnings.join(' — ');
+                warnEl.style.display = warnings.length > 0 ? 'block' : 'none';
+            }
+            if (suggestEl) {
+                suggestEl.textContent = suggests.join(' — ');
+                suggestEl.style.display = suggests.length > 0 ? 'block' : 'none';
+            }
+
+            // ── Testo spiegazione ragionamento ────────────────────────────
+            const _lg = typeof lang !== 'undefined' ? lang : 'it';
+            const parti = [];
+
+            // Riga configurazione OTA (sempre presente)
+            const _otaLblExp = t('af_ota_' + (s.otaType || 'apo')) || s.otaType;
+            const _configLine = s.deltaT < 10
+                ? (_lg === 'it' ? `Configurazione: ${_otaLblExp} (soglia ΔT ${s.deltaT}°C). `
+                 : _lg === 'en' ? `Configuration: ${_otaLblExp} (ΔT threshold ${s.deltaT}°C). `
+                 : _lg === 'es' ? `Configuración: ${_otaLblExp} (umbral ΔT ${s.deltaT}°C). `
+                 :                `配置：${_otaLblExp}（ΔT阈值${s.deltaT}°C）。`)
+                : '';
+
+            // 1. Avvio
+            if (s.afAvvio > 0) {
+                parti.push(_lg === 'it' ? '1 AF all\'avvio sequenza'
+                         : _lg === 'en' ? '1 AF at sequence start'
+                         : _lg === 'es' ? '1 AF al inicio de secuencia'
+                         :                '1次序列启动AF');
+            }
+
+            // 2. Cambio filtro
+            if (s.afFiltro > 0 && typeof framesMono !== 'undefined') {
+                const isPro2 = document.getElementById('mode-pro-section') &&
+                               document.getElementById('mode-pro-section').style.display !== 'none';
+                const pfx2 = isPro2 ? 'pro-' : '';
+                let nomiAttivi = [];
+                framesMono.forEach(f => {
+                    if (f.id.includes('dark') || f.id.includes('bias')) return;
+                    const cntEl = document.getElementById(`${pfx2}${f.id}-count`);
+                    if (cntEl && parseInt(cntEl.value) > 0) nomiAttivi.push(f.name);
+                });
+                parti.push(_lg === 'it' ? `${s.afFiltro} AF cambio filtro (${nomiAttivi.length} filtri: ${nomiAttivi.join(', ')})`
+                         : _lg === 'en' ? `${s.afFiltro} filter-change AF (${nomiAttivi.length} filters: ${nomiAttivi.join(', ')})`
+                         : _lg === 'es' ? `${s.afFiltro} AF cambio filtro (${nomiAttivi.length} filtros: ${nomiAttivi.join(', ')})`
+                         :                `${s.afFiltro}次换镜AF（${nomiAttivi.length}个：${nomiAttivi.join('、')}）`);
+            }
+
+            // 3. Termici — solo se trigger temperatura attivo
+            const _trigTempAct = document.getElementById('smart-af-temp') &&
+                                 document.getElementById('smart-af-temp').checked;
+            if (_trigTempAct && s.deltaT < 10) {
+                let _tMin = null, _tMax = null;
+                if (typeof datiMeteo !== 'undefined' && datiMeteo &&
+                    datiMeteo.temperature_2m && datiMeteo.time) {
+                    const _tSv = (document.getElementById('time-start') || {}).value;
+                    const _tEv = (document.getElementById('time-end')   || {}).value;
+                    if (_tSv && _tEv && typeof getSessionDate === 'function' && typeof parseMeteoTime === 'function') {
+                        const _sd = getSessionDate();
+                        const [_sh, _sm] = _tSv.split(':').map(Number);
+                        const [_eh, _em] = _tEv.split(':').map(Number);
+                        let _nS = new Date(_sd); _nS.setHours(_sh, _sm, 0, 0);
+                        let _nE = new Date(_sd); _nE.setHours(_eh, _em, 0, 0);
+                        if (_nE <= _nS) _nE.setDate(_nE.getDate() + 1);
+                        datiMeteo.time.forEach((ts, i) => {
+                            const ora = parseMeteoTime(ts);
+                            if (ora < _nS || ora > _nE) return;
+                            const tmp = datiMeteo.temperature_2m[i];
+                            if (tmp === null || tmp === undefined) return;
+                            if (_tMin === null || tmp < _tMin) _tMin = tmp;
+                            if (_tMax === null || tmp > _tMax) _tMax = tmp;
+                        });
+                    }
+                }
+                const _escurs = (_tMin !== null && _tMax !== null) ? (_tMax - _tMin) : null;
+                if (s.afTermici > 0) {
+                    const _tempStr = (_tMin !== null && _tMax !== null)
+                        ? (_lg === 'it' ? ` (da ${Math.round(_tMax)}°C a ${Math.round(_tMin)}°C)`
+                         : _lg === 'en' ? ` (from ${Math.round(_tMax)}°C to ${Math.round(_tMin)}°C)`
+                         : _lg === 'es' ? ` (de ${Math.round(_tMax)}°C a ${Math.round(_tMin)}°C)`
+                         :                `（${Math.round(_tMax)}°C至${Math.round(_tMin)}°C）`)
+                        : '';
+                    parti.push((_lg === 'it' ? `${s.afTermici} AF termico`
+                               : _lg === 'en' ? `${s.afTermici} thermal AF`
+                               : _lg === 'es' ? `${s.afTermici} AF térmico`
+                               :                `${s.afTermici}次热致AF`) + _tempStr);
+                } else if (_escurs !== null) {
+                    parti.push(_lg === 'it' ? `0 AF termici (escursione ${_escurs.toFixed(1)}°C < soglia ${s.deltaT}°C)`
+                             : _lg === 'en' ? `0 thermal AF (range ${_escurs.toFixed(1)}°C < threshold ${s.deltaT}°C)`
+                             : _lg === 'es' ? `0 AF térmicos (rango ${_escurs.toFixed(1)}°C < umbral ${s.deltaT}°C)`
+                             :                `0次热致AF（${_escurs.toFixed(1)}°C < ${s.deltaT}°C）`);
+                }
+            }
+
+            // 4. HFR/meteo
+            if (s.afMeteoMax > 0) {
+                parti.push(_lg === 'it' ? `0–${s.afMeteoMax} AF probabili da variabilità atmosferica`
+                         : _lg === 'en' ? `0–${s.afMeteoMax} probable AF from atmospheric variability`
+                         : _lg === 'es' ? `0–${s.afMeteoMax} AF probables por variabilidad atmosférica`
+                         :                `0–${s.afMeteoMax}次概率AF`);
+            }
+
+            // Totale
+            const afDurV = parseInt((document.getElementById('af-duration') || {}).value) || 0;
+            const totMin = afDurV > 0 ? Math.round((s.afTotale * afDurV) / 60) : 0;
+            const _totLine = afDurV > 0 && s.afTotale > 0
+                ? (' — ' + (_lg === 'it' ? `Totale: ${s.afTotale} AF × ${afDurV}s = ${totMin}m sottratti`
+                           : _lg === 'en' ? `Total: ${s.afTotale} AF × ${afDurV}s = ${totMin}m subtracted`
+                           : _lg === 'es' ? `Total: ${s.afTotale} AF × ${afDurV}s = ${totMin}m restados`
+                           :                `合计：${s.afTotale}×${afDurV}s=${totMin}m`))
+                : '';
+
+            const _intro = _lg === 'it' ? 'Stima: '
+                         : _lg === 'en' ? 'Estimate: '
+                         : _lg === 'es' ? 'Estimación: '
+                         :                '估算：';
+
+            const testo = parti.length > 0
+                ? _configLine + _intro + parti.join(' · ') + _totLine
+                : _configLine + (_lg === 'it' ? 'Nessun trigger AF attivo.'
+                               : _lg === 'en' ? 'No active AF triggers.'
+                               : _lg === 'es' ? 'Sin disparadores AF activos.'
+                               :                '无激活AF触发器。');
+
+            let spiegEl = document.getElementById('af-stima-spiegazione');
+            if (spiegEl) {
+                spiegEl.textContent = testo;
+                spiegEl.style.display = 'block';
+            }
+        }
