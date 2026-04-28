@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AstroDashboard v6.6 - Global Edition</title>
+    <title>AstroDashboard v7.0 - Global Edition</title>
     
     <link rel="manifest" href="manifest.json?v=3">
     <meta name="theme-color" content="#121212">
@@ -478,7 +478,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 19a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6l0 13" /><path d="M12 6l0 13" /><path d="M21 6l0 13" /></svg>
                     <span class="nav-manual-text" data-i18n="manual_btn" style="letter-spacing:.3px;">Guida</span>
                 </button>
-                <button onclick="mostraChangelogManuale()" title="Versione & novità" class="nav-version-btn" style="background:rgba(196,154,60,0.08); border:1px solid rgba(196,154,60,0.3); border-radius:5px; padding:3px 8px; color:#c49a3c; font-size:10px; font-weight:700; cursor:pointer; flex-shrink:0; letter-spacing:.5px;">v6.6</button>
+                <button onclick="mostraChangelogManuale()" title="Versione & novità" class="nav-version-btn" style="background:rgba(196,154,60,0.08); border:1px solid rgba(196,154,60,0.3); border-radius:5px; padding:3px 8px; color:#c49a3c; font-size:10px; font-weight:700; cursor:pointer; flex-shrink:0; letter-spacing:.5px;">v7.0</button>
             </div>
         </div>
 
@@ -634,7 +634,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c1.379 3.53-.923 7.947-6.712 7.947H11.23l-1.332 8.453h3.288c.524 0 .968-.382 1.05-.9l.87-5.505h2.163c4.298 0 7.066-2.076 7.953-6.36.41-1.99.073-3.466-.8-4.094z"/></svg>
                     Supporta il progetto
                 </a>
-                <span style="font-size:14px; color:#3d4852;">v6.6</span>
+                <span style="font-size:14px; color:#3d4852;">v7.0</span>
             </div>
         </div>
 
@@ -2707,7 +2707,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                 <div style="color:#c49a3c;"><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-rocket"/></svg></div>
                 <div>
                     <div style="font-size:0.75em; color:#c49a3c; text-transform:uppercase; letter-spacing:1px; font-weight:700;" data-i18n="cl_update_label">Aggiornamento</div>
-                    <div style="font-size:1.25em; font-weight:800; color:#c9d1d9; letter-spacing:.5px;">AstroDashboard PRO <span style="color:#c49a3c;">v6.6</span></div>
+                    <div style="font-size:1.25em; font-weight:800; color:#c9d1d9; letter-spacing:.5px;">AstroDashboard PRO <span style="color:#c49a3c;">v7.0</span></div>
                 </div>
                 <button onclick="chiudiChangelog()" style="
                     margin-left:auto; background:transparent; border:none;
@@ -2722,6 +2722,64 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
 
             <!-- Changelog items -->
             <div style="display:flex; flex-direction:column; gap:10px;">
+
+                <!-- ── v7.0 ── -->
+                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #c49a3c; box-shadow:0 0 0 1px rgba(196,154,60,0.2);">
+                    <span style="flex-shrink:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c49a3c" stroke-width="2"><path d="M4 10a2 2 0 1 0 4 0a2 2 0 0 0-4 0"/><path d="M6 4v4M6 12v8M12 4v9.5"/><path d="M16 7a2 2 0 1 0 4 0a2 2 0 0 0-4 0"/><path d="M18 4v1M18 9v4M22 22l-5-5M17 22l5-5"/></svg></span>
+                    <div>
+                        <div style="font-weight:700; color:#c49a3c; font-size:0.9em; margin-bottom:3px;">Budget Autofocus intelligente</div>
+                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;">Stima automatica del numero di procedure AF in base ai trigger attivi (avvio sequenza, cambio filtro, variazione HFR, variazione temperatura ΔT). Il budget viene sottratto dalla finestra notturna esattamente come il dithering.</div>
+                    </div>
+                </div>
+                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #44ff88; box-shadow:0 0 0 1px rgba(68,255,136,0.15);">
+                    <span style="flex-shrink:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#44ff88" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span>
+                    <div>
+                        <div style="font-weight:700; color:#44ff88; font-size:0.9em; margin-bottom:3px;">Trigger AF reattivi</div>
+                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;">Attivando o disattivando un trigger AF, le pose vengono ricalcolate automaticamente in tempo reale senza dover premere nuovamente "Genera sequenza".</div>
+                    </div>
+                </div>
+                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #00c6ff; box-shadow:0 0 0 1px rgba(0,198,255,0.15);">
+                    <span style="flex-shrink:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00c6ff" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg></span>
+                    <div>
+                        <div style="font-weight:700; color:#00c6ff; font-size:0.9em; margin-bottom:3px;">Stima AF per tipo di setup ottico</div>
+                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;">L'algoritmo distingue tra rifrattore e riflettore per stimare la frequenza degli interventi termici. I riflettori, più sensibili alle variazioni di temperatura, generano un numero maggiore di AF stimati.</div>
+                    </div>
+                </div>
+                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #bb86fc; box-shadow:0 0 0 1px rgba(187,134,252,0.15);">
+                    <span style="flex-shrink:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#bb86fc" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></span>
+                    <div>
+                        <div style="font-weight:700; color:#bb86fc; font-size:0.9em; margin-bottom:3px;">Chip e badge AF contestuali</div>
+                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;">Nel pannello stima vengono mostrate pillole informative per ogni trigger attivo (avvio, filtri, termici, HFR) con badge di confidenza e spiegazione dettagliata del ragionamento.</div>
+                    </div>
+                </div>
+                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #ff6644; box-shadow:0 0 0 1px rgba(255,102,68,0.15);">
+                    <span style="flex-shrink:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ff6644" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
+                    <div>
+                        <div style="font-weight:700; color:#ff6644; font-size:0.9em; margin-bottom:3px;">Warning e suggerimenti AF intelligenti</div>
+                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;">Avvisi automatici se l'escursione termica è significativa senza trigger temperatura attivo, se il trigger cambio filtro manca con sensore mono, o se il trigger HFR è superfluo con meteo stabile.</div>
+                    </div>
+                </div>
+                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #5DCAA5; box-shadow:0 0 0 1px rgba(93,202,165,0.15);">
+                    <span style="flex-shrink:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#5DCAA5" stroke-width="2"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/></svg></span>
+                    <div>
+                        <div style="font-weight:700; color:#5DCAA5; font-size:0.9em; margin-bottom:3px;">Temperatura nella sezione meteo</div>
+                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;">Aggiunta visualizzazione della curva di temperatura prevista durante la notte nella dashboard meteo, utile per valutare l'escursione termica e pianificare i trigger AF.</div>
+                    </div>
+                </div>
+                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #ffaa00; box-shadow:0 0 0 1px rgba(255,170,0,0.15);">
+                    <span style="flex-shrink:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffaa00" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
+                    <div>
+                        <div style="font-weight:700; color:#ffaa00; font-size:0.9em; margin-bottom:3px;">Popup analisi notturna</div>
+                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;">Nuovo popup previsionale con categoria della notte (Eccellente, Buona, Discreta, Lascia perdere 🌩️) basata su dati meteo previsionali, con consigli operativi e icone dedicate per ogni livello.</div>
+                    </div>
+                </div>
+                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #44ff44; box-shadow:0 0 0 1px rgba(68,255,68,0.15); margin-bottom:8px;">
+                    <span style="flex-shrink:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#44ff44" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>
+                    <div>
+                        <div style="font-weight:700; color:#44ff44; font-size:0.9em; margin-bottom:3px;">Internazionalizzazione completa</div>
+                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;">Tutti i nuovi elementi (trigger AF, stima, warning, popup notturno) tradotti nelle quattro lingue supportate: Italiano, English, Español, 中文.</div>
+                    </div>
+                </div>
 
                 <!-- ── v6.6 ── -->
                 <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #c49a3c; box-shadow:0 0 0 1px rgba(196,154,60,0.2);">
@@ -3026,7 +3084,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
 
     <script>
         (function() {
-            const CURRENT_VERSION = '6.6';
+            const CURRENT_VERSION = '7.0';
             const STORAGE_KEY = 'ad_last_version';
 
             function mostraChangelogManuale() {
