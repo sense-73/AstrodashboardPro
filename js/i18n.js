@@ -472,6 +472,11 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.es.meridian_flip_ok = "El Meridian Flip no interfiere con la sesión planificada.";
         i18n.zh.meridian_flip_ok = "子午翻转不影响计划的拍摄时间段。";
 
+        i18n.it.mf_warning = "Meridian Flip attivato — sottratti {TIME} dalla finestra temporale";
+        i18n.en.mf_warning = "Meridian Flip active — {TIME} subtracted from session window";
+        i18n.es.mf_warning = "Meridian Flip activo — {TIME} restados de la ventana temporal";
+        i18n.zh.mf_warning = "中天翻转已启用 — 从拍摄窗口扣除{TIME}";
+
         i18n.it.mixed_filter_title = "Mix LRGB + Banda Stretta";
         i18n.en.mixed_filter_title = "LRGB + Narrowband Mix";
         i18n.es.mixed_filter_title = "Mezcla LRGB + Banda Estrecha";

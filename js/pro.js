@@ -486,6 +486,38 @@
             if (dE <= dS) dE.setDate(dE.getDate() + 1);
             let secDisponibili = (dE - dS) / 1000;
 
+            // ── Sottrazione Meridian Flip dalla Finestra Disponibile (PRO) ──
+            let _proFlipSec = 0;
+            const _proFlipChk    = document.getElementById('pro-flip');
+            const _proFlipDur    = document.getElementById('pro-flip-duration');
+            const _proFlipWarnRow  = document.getElementById('pro-flip-warning-row');
+            const _proFlipWarnText = document.getElementById('pro-flip-warning-text');
+            if (_proFlipChk && _proFlipChk.checked && _proFlipDur) {
+                const _mfEl2 = document.getElementById('info-meridianflip');
+                const _flipOutside2 = t('meridian_flip_outside');
+                if (_mfEl2 && _mfEl2.innerText && _mfEl2.innerText !== '--:--' && _mfEl2.innerText !== _flipOutside2) {
+                    const _hhmm2 = _mfEl2.innerText.trim();
+                    const _base2 = '1970-01-01T';
+                    let _sDate2 = new Date(_base2 + tS + ':00');
+                    let _eDate2 = new Date(_base2 + tE + ':00');
+                    let _fDate2 = new Date(_base2 + _hhmm2 + ':00');
+                    if (_eDate2 <= _sDate2) _eDate2.setDate(_eDate2.getDate() + 1);
+                    if (_fDate2 < _sDate2)  _fDate2.setDate(_fDate2.getDate() + 1);
+                    if (_fDate2 >= _sDate2 && _fDate2 <= _eDate2) {
+                        _proFlipSec = parseInt(_proFlipDur.value) || 0;
+                    }
+                }
+            }
+            secDisponibili = Math.max(0, secDisponibili);
+            if (_proFlipWarnRow && _proFlipWarnText) {
+                if (_proFlipSec > 0) {
+                    _proFlipWarnText.innerText = t('mf_warning').replace('{TIME}', formatSeconds(_proFlipSec));
+                    _proFlipWarnRow.style.display = 'flex';
+                } else {
+                    _proFlipWarnRow.style.display = 'none';
+                }
+            }
+
             let secUsati = 0;
             let ditherTotSec = 0;
             let _dithDurEl = document.getElementById('pro-dither-duration') || document.getElementById('dither-duration');
@@ -592,6 +624,10 @@
             if (_pDitherTotEl) _pDitherTotEl.innerText = ditherTotSec > 0 ? formatSeconds(ditherTotSec) : '0m';
             let _pAfTotEl = document.getElementById('pro-af-tot');
             if (_pAfTotEl) _pAfTotEl.innerText = _proAfSec > 0 ? formatSeconds(_proAfSec) : '0m';
+
+            // ── Aggiunta Meridian Flip al Tempo Acquisizione ──────────────
+            // (_proFlipSec è già stato calcolato sopra, prima del display Finestra)
+            secUsati += _proFlipSec;
 
             mnTptSecondi = secUsati; // aggiorna TPT PRO (usato se multinotte aperto da PRO)
             let pct = (secUsati / Math.max(1, secDisponibili)) * 100;

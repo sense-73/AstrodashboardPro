@@ -959,6 +959,39 @@ function toggleLock(id) {
                 document.getElementById('mosaic-total-badge').innerText = `Target: ${panels} Pannelli`;
                 aS = aS / panels;
             }
+
+            // ── Sottrazione Meridian Flip dalla Finestra Disponibile ──────
+            let flipSec = 0;
+            const _ninaFlipChk  = document.getElementById('nina-flip');
+            const _ninaFlipDur  = document.getElementById('nina-flip-duration');
+            const _flipWarnRow  = document.getElementById('flip-warning-row');
+            const _flipWarnText = document.getElementById('flip-warning-text');
+            if (_ninaFlipChk && _ninaFlipChk.checked && _ninaFlipDur) {
+                const _mfEl = document.getElementById('info-meridianflip');
+                const _flipOutside = t('meridian_flip_outside');
+                if (_mfEl && _mfEl.innerText && _mfEl.innerText !== '--:--' && _mfEl.innerText !== _flipOutside) {
+                    const _hhmm = _mfEl.innerText.trim();
+                    const _base = '1970-01-01T';
+                    let _sDate = new Date(_base + tS + ':00');
+                    let _eDate = new Date(_base + tE + ':00');
+                    let _fDate = new Date(_base + _hhmm + ':00');
+                    if (_eDate <= _sDate) _eDate.setDate(_eDate.getDate() + 1);
+                    if (_fDate < _sDate)  _fDate.setDate(_fDate.getDate() + 1);
+                    if (_fDate >= _sDate && _fDate <= _eDate) {
+                        flipSec = parseInt(_ninaFlipDur.value) || 0;
+                    }
+                }
+            }
+            aS = Math.max(0, aS);
+            if (_flipWarnRow && _flipWarnText) {
+                if (flipSec > 0) {
+                    _flipWarnText.innerText = t('mf_warning').replace('{TIME}', formatSeconds(flipSec));
+                    _flipWarnRow.style.display = 'flex';
+                } else {
+                    _flipWarnRow.style.display = 'none';
+                }
+            }
+
             document.getElementById('calc-available').innerHTML = isMosaic ? `<span style="font-size:0.6em; color:#ffaa00;">${t("time_per_panel")}<br></span>${formatSeconds(aS)}` : formatSeconds(aS);
 
             let fL = document.getElementById('sensor-type').value === 'mono' ? framesMono : framesColor, tSec = 0, tLF = 0;
@@ -1029,6 +1062,10 @@ function toggleLock(id) {
             let afTotEl = document.getElementById('af-tot');
             if (afTotEl) afTotEl.innerText = formatSeconds(afSec);
 
+            // ── Aggiunta Meridian Flip al Tempo Acquisizione ──────────────
+            // (flipSec è già stato calcolato sopra, prima del display Finestra)
+            tSec += flipSec;
+
             document.getElementById('calc-total').innerText = formatSeconds(tSec);
             let rS = aS - tSec, rD = document.getElementById('calc-residual'), wD = document.getElementById('calc-warning');
             let _smartMnBtn = document.getElementById('btn-smart-overflow-mn');
@@ -1098,6 +1135,30 @@ function toggleLock(id) {
             let _afDurG   = parseInt((document.getElementById('af-duration') || {}).value) || 0;
             let _afCountG = parseInt((document.getElementById('af-count')    || {}).value) || 0;
             rS = Math.max(0, rS - (_afDurG * _afCountG));
+
+            // ── Sottrai il budget Meridian Flip se trigger attivo e flip nella finestra ──
+            // (stessa logica di calcolaTempi: il flip è un overhead fisso da escludere
+            //  dal tempo distribuibile tra le pose)
+            let _flipSecG = 0;
+            const _ninaFlipChkG = document.getElementById('nina-flip');
+            const _ninaFlipDurG = document.getElementById('nina-flip-duration');
+            if (_ninaFlipChkG && _ninaFlipChkG.checked && _ninaFlipDurG) {
+                const _mfElG = document.getElementById('info-meridianflip');
+                const _flipOutsideG = t('meridian_flip_outside');
+                if (_mfElG && _mfElG.innerText && _mfElG.innerText !== '--:--' && _mfElG.innerText !== _flipOutsideG) {
+                    const _hhmmG = _mfElG.innerText.trim();
+                    const _baseG = '1970-01-01T';
+                    let _sDateG = new Date(_baseG + tS + ':00');
+                    let _eDateG = new Date(_baseG + tE + ':00');
+                    let _fDateG = new Date(_baseG + _hhmmG + ':00');
+                    if (_eDateG <= _sDateG) _eDateG.setDate(_eDateG.getDate() + 1);
+                    if (_fDateG < _sDateG)  _fDateG.setDate(_fDateG.getDate() + 1);
+                    if (_fDateG >= _sDateG && _fDateG <= _eDateG) {
+                        _flipSecG = parseInt(_ninaFlipDurG.value) || 0;
+                    }
+                }
+            }
+            rS = Math.max(0, rS - _flipSecG);
             // Sottrai il tempo HDR lockato dal budget disponibile per i frame principali.
             // Si entra in questo percorso SOLO se il conteggio HDR è lockato — l'utente
             // ha fissato quante pose HDR vuole, e il generatore deve rispettarlo.

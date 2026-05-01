@@ -1217,6 +1217,9 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                      style="margin-top:9px; color:#4a5a6a; font-size:1.0em; line-height:1.6;
                             font-style:italic; border-top:1px solid #1a2a3a; padding-top:8px; display:none;"></div>
             </div>
+
+            <!-- ── Warning Meridian Flip ── -->
+            <div class="calc-row" id="flip-warning-row" style="display:none; border-left-color: #ffaa00; margin-top: 6px; background: #1a1a0d; color:#ffaa00; font-size:0.9em;"><div style="display:flex; align-items:center; gap:8px; flex:1;">⚠ <span id="flip-warning-text"></span></div></div>
         </div>
 
         <!-- ═══ ANALISI STRATEGICA ═══ -->
@@ -1239,7 +1242,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                         <input type="checkbox" id="nina-cool" checked style="transform: scale(1.2);"> <span data-i18n="cool_cam">Raffredda Camera a</span> <input type="number" id="nina-temp" value="-10" style="width: 60px!important; padding: 4px!important;"> °C
                     </label>
                     <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; width: 100%; cursor: pointer; color: #6e7a8a; font-size: 0.9em;">
-                        <input type="checkbox" id="nina-flip" checked style="transform: scale(1.2);"> <span data-i18n="meridian_flip">Attiva Meridian Flip</span>
+                        <input type="checkbox" id="nina-flip" checked style="transform: scale(1.2);" onchange="calcolaTempi(); calcolaNightFillBar(); let _pfd=document.getElementById('pro-flip-duration'); if(_pfd) _pfd.value=document.getElementById('nina-flip-duration').value;"> <span data-i18n="meridian_flip">Attiva Meridian Flip</span> <input type="number" id="nina-flip-duration" value="300" min="0" max="3600" step="10" oninput="calcolaTempi(); calcolaNightFillBar(); let _pfd=document.getElementById('pro-flip-duration'); if(_pfd) _pfd.value=this.value;" style="width: 60px!important; padding: 4px!important;"> sec
                     </label>
                     <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; width: 100%; cursor: pointer; color: #6e7a8a; font-size: 0.9em;">
                         <input type="checkbox" id="nina-slew" checked style="transform: scale(1.2);"> <span data-i18n="slew_center">Slew & Center (Plate Solve)</span>
@@ -1405,6 +1408,8 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                      border-radius:0 0 6px 6px; padding:10px 14px; margin-top:1px; font-size:0.82em; color:#6e7a8a;">
                     <span style="font-size:0.85em; color:#4a5a6a;">I trigger AF si configurano nel pannello N.I.N.A. Export qui sotto — i valori sono sincronizzati con la sezione Smart.</span>
                 </div>
+                <!-- ── Warning Meridian Flip PRO ── -->
+                <div class="calc-row" id="pro-flip-warning-row" style="display:none; border-left-color: #ffaa00; margin-top: 6px; background: #1a1a0d; color:#ffaa00; font-size:0.9em;"><div style="display:flex; align-items:center; gap:8px; flex:1;">⚠ <span id="pro-flip-warning-text"></span></div></div>
 
     <div style="display:flex; flex-direction:column; gap:20px;">
                             <div class="panel" style="display: flex; flex-direction: column; gap: 15px;">
@@ -1426,7 +1431,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                                             <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: #6e7a8a; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="pro-slew" checked style="transform: scale(1.2);"> Slew & Center (Solve)</label>
                                             <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: #6e7a8a; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="pro-rotate" style="transform: scale(1.2);"> <span data-i18n="pro_auto_rotator">Rotatore Automatico</span></label>
                                             <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: #6e7a8a; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="pro-guide" checked style="transform: scale(1.2);"> <span data-i18n="pro_start_guide">Avvia Autoguida</span></label>
-                                            <label style="display: flex; align-items: center; gap: 8px; color: #6e7a8a; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="pro-flip" checked style="transform: scale(1.2);"> Meridian Flip</label>
+                                            <label style="display: flex; align-items: center; gap: 8px; color: #6e7a8a; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="pro-flip" checked style="transform: scale(1.2);" onchange="calcolaNightFillBar(); calcolaTempi(); let _sfd=document.getElementById('nina-flip-duration'); if(_sfd) _sfd.value=document.getElementById('pro-flip-duration').value;"> Meridian Flip <input type="number" id="pro-flip-duration" value="300" min="0" max="3600" step="10" oninput="calcolaNightFillBar(); calcolaTempi(); let _sfd=document.getElementById('nina-flip-duration'); if(_sfd) _sfd.value=this.value;" style="width: 50px!important; padding:4px!important;"> sec</label>
                                         </div>
 
                                         <div style="background: #222; padding: 12px; border-radius: 5px;">
