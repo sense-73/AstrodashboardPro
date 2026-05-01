@@ -23,7 +23,7 @@ function _initSessionDate() {
             if (d >= today) return d;
         }
     }
-    return new Date();
+    const _today = new Date(); _today.setHours(12, 0, 0, 0); return _today;
 }
 
 let _sessionDateObj = _initSessionDate();
