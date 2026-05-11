@@ -4,7 +4,7 @@
 
 // CACHE_NAME usa un timestamp fisso aggiornato ad ogni deploy
 // Non serve più incrementare manualmente — basta cambiare questa data
-const CACHE_TIMESTAMP = '20260511-004';
+const CACHE_TIMESTAMP = '20260511-013';
 const CACHE_NAME = 'astrodash-' + CACHE_TIMESTAMP;
 const APP_VERSION = CACHE_TIMESTAMP;
 
@@ -103,21 +103,24 @@ self.addEventListener('fetch', event => {
         return;
     }
 
-    // 3. File JS, CSS e PNG → Network First (aggiornamenti immediati)
-    //    Altri asset statici → Cache First (cambiano raramente)
+    // 3. File JS, CSS, PNG e RIV → Cache First
+    //    La cache è sempre aggiornata durante l'install del nuovo SW.
+    //    Cache First = caricamento immediato senza round-trip di rete.
     const isJsOrCss = url.pathname.endsWith('.js') || url.pathname.endsWith('.css') || url.pathname.endsWith('.riv');
     const isPng     = url.pathname.endsWith('.png') || url.pathname.endsWith('.jpg') || url.pathname.endsWith('.webp');
 
     if (isJsOrCss || isPng) {
         event.respondWith(
-            fetch(event.request)
-                .then(response => {
+            caches.match(event.request).then(cached => {
+                if (cached) return cached;
+                // Non in cache (primo avvio o risorsa non elencata) → rete
+                return fetch(event.request).then(response => {
                     if (!response || response.status !== 200) return response;
                     let clone = response.clone();
                     caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
                     return response;
-                })
-                .catch(() => caches.match(event.request))
+                });
+            })
         );
         return;
     }
