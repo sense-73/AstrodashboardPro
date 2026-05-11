@@ -1718,7 +1718,7 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.es.land_title2        = "perfecta";
         i18n.zh.land_title2        = "拍摄之夜";
 
-        i18n.it.land_sub           = "Meteo tattico, planetario predittivo, calcolo ottico e generazione automatica di sequenze per N.I.N.A. — tutto in un'unica app.";
+        i18n.it.land_sub           = "Meteo predittivo, analisi della tua location, guida e consigli tattici per le pose, orizzonte personalizzato e sequenze N.I.N.A. pronte all'uso — tutto in un'unica app.";
         i18n.en.land_sub           = "Tactical weather, predictive planetarium, optical calculator and automatic sequence generation for N.I.N.A. — all in one app.";
         i18n.es.land_sub           = "Meteorología táctica, planetario predictivo, cálculo óptico y generación automática de secuencias para N.I.N.A. — todo en una sola app.";
         i18n.zh.land_sub           = "战术天气、预测星历、光学计算和自动生成 N.I.N.A. 序列 — 一体化应用。";
@@ -1838,20 +1838,30 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.es.land_f3_desc       = "Encuadra en imágenes DSS reales, configura el setup y verifica el muestreo";
         i18n.zh.land_f3_desc       = "在真实DSS图像上构图，配置设备并检查采样";
 
+        i18n.it.land_fhz_name      = "Creazione Orizzonte";
+        i18n.en.land_fhz_name      = "Horizon Creator";
+        i18n.es.land_fhz_name      = "Creación de Horizonte";
+        i18n.zh.land_fhz_name      = "地平线创建";
+
+        i18n.it.land_fhz_desc      = "Plugin interno di generazione del tuo orizzonte da una foto panoramica. Il file è pronto per N.I.N.A. (.hrz) e Stellarium — e si integra direttamente nel grafico FOV dell'app.";
+        i18n.en.land_fhz_desc      = "Built-in plugin to generate your horizon from a panoramic photo. The file is ready for N.I.N.A. (.hrz) and Stellarium — and integrates directly into the app FOV chart.";
+        i18n.es.land_fhz_desc      = "Plugin interno para generar tu horizonte desde una foto panorámica. El archivo está listo para N.I.N.A. (.hrz) y Stellarium — y se integra directamente en el gráfico FOV de la app.";
+        i18n.zh.land_fhz_desc      = "内置插件，从全景照片生成地平线。文件可直接用于 N.I.N.A.（.hrz）和 Stellarium，并集成到应用的 FOV 图表中。";
+
         i18n.it.land_f4_step       = "Passo 5";
         i18n.en.land_f4_step       = "Step 5";
         i18n.es.land_f4_step       = "Paso 5";
         i18n.zh.land_f4_step       = "第5步";
 
-        i18n.it.land_f4_name       = "Pianificazione Smart";
-        i18n.en.land_f4_name       = "Smart Planning";
-        i18n.es.land_f4_name       = "Planificación Smart";
-        i18n.zh.land_f4_name       = "智能规划";
+        i18n.it.land_f4_name       = "Pianificazione";
+        i18n.en.land_f4_name       = "Planning";
+        i18n.es.land_f4_name       = "Planificación";
+        i18n.zh.land_f4_name       = "规划";
 
-        i18n.it.land_f4_desc       = "Un assistente ti guida nella scelta di tempi e filtri in base al soggetto, setup e seeing";
-        i18n.en.land_f4_desc       = "An assistant guides you in choosing exposures and filters based on target, setup and seeing";
-        i18n.es.land_f4_desc       = "Un asistente te guía en la elección de tiempos y filtros según el objetivo, setup y seeing";
-        i18n.zh.land_f4_desc       = "助手根据目标、设备和视宁度指导您选择曝光时间和滤镜";
+        i18n.it.land_f4_desc       = "Modalità Smart con guida automatica su pose e filtri in base al soggetto e al seeing, o modalità PRO per il controllo totale su ogni canale, HDR e tempi.";
+        i18n.en.land_f4_desc       = "Smart mode with automatic guidance on exposures and filters based on target and seeing, or PRO mode for full control over each channel, HDR and times.";
+        i18n.es.land_f4_desc       = "Modo Smart con guía automática sobre poses y filtros según el objetivo y el seeing, o modo PRO para control total sobre cada canal, HDR y tiempos.";
+        i18n.zh.land_f4_desc       = "Smart 模式根据目标和视宁度自动指导曝光和滤镜选择，或 PRO 模式完全控制每个通道、HDR 和曝光时间。";
 
         i18n.it.land_f5_step       = "Passo 5 PRO";
         i18n.en.land_f5_step       = "Step 5 PRO";
@@ -2774,3 +2784,116 @@ i18n.it.af_seq_not_generated = "Genera prima la sequenza ottimale per ricalcolar
 i18n.en.af_seq_not_generated = "Generate the optimal sequence first to automatically recalculate frames.";
 i18n.es.af_seq_not_generated = "Genera primero la secuencia optima para recalcular las poses automaticamente.";
 i18n.zh.af_seq_not_generated = "请先生成最优序列，之后修改AF参数将自动重新计算帧数。";
+
+// ══════════════════════════════════════════════════════════════════
+// ── SISTEMA PROFILI ─────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════════
+i18n.it.prof_btn              = "Profilo";
+i18n.en.prof_btn              = "Profile";
+i18n.es.prof_btn              = "Perfil";
+i18n.zh.prof_btn              = "配置";
+
+i18n.it.info_profile          = "Salva e carica configurazioni complete: posizione GPS, setup ottico, sensore, filtri, trigger e orizzonte personalizzato. Utile per passare rapidamente da un setup all'altro (es. refrattor da remoto vs newton da terrazza).";
+i18n.en.info_profile          = "Save and load complete configurations: GPS location, optical setup, sensor, filters, triggers and custom horizon. Useful for quickly switching between setups (e.g. remote refractor vs rooftop newton).";
+i18n.es.info_profile          = "Guarda y carga configuraciones completas: posición GPS, setup óptico, sensor, filtros, triggers y horizonte personalizado. Útil para cambiar rápidamente entre configuraciones (ej. refractor remoto vs newton en terraza).";
+i18n.zh.info_profile          = "保存和加载完整配置：GPS位置、光学设置、传感器、滤镜、触发器和自定义地平线。适用于快速切换不同设备方案（如远程折射镜 vs 天台牛顿镜）。";
+
+i18n.it.prof_title            = "Gestione Profili";
+i18n.en.prof_title            = "Profile Manager";
+i18n.es.prof_title            = "Gestor de Perfiles";
+i18n.zh.prof_title            = "配置管理";
+
+i18n.it.prof_select_label     = "Profili salvati";
+i18n.en.prof_select_label     = "Saved profiles";
+i18n.es.prof_select_label     = "Perfiles guardados";
+i18n.zh.prof_select_label     = "已保存配置";
+
+i18n.it.prof_select_placeholder = "-- Seleziona profilo --";
+i18n.en.prof_select_placeholder = "-- Select profile --";
+i18n.es.prof_select_placeholder = "-- Seleccionar perfil --";
+i18n.zh.prof_select_placeholder = "-- 选择配置 --";
+
+i18n.it.prof_new_label        = "Nuovo profilo";
+i18n.en.prof_new_label        = "New profile";
+i18n.es.prof_new_label        = "Nuevo perfil";
+i18n.zh.prof_new_label        = "新建配置";
+
+i18n.it.prof_name_placeholder = "Nome profilo (es. Newton Terrazza)";
+i18n.en.prof_name_placeholder = "Profile name (e.g. Newton Rooftop)";
+i18n.es.prof_name_placeholder = "Nombre del perfil (ej. Newton Terraza)";
+i18n.zh.prof_name_placeholder = "配置名称（例如：牛顿天台）";
+
+i18n.it.prof_save             = "Salva";
+i18n.en.prof_save             = "Save";
+i18n.es.prof_save             = "Guardar";
+i18n.zh.prof_save             = "保存";
+
+i18n.it.prof_use              = "Usa";
+i18n.en.prof_use              = "Use";
+i18n.es.prof_use              = "Usar";
+i18n.zh.prof_use              = "使用";
+
+i18n.it.prof_delete           = "Elimina";
+i18n.en.prof_delete           = "Delete";
+i18n.es.prof_delete           = "Eliminar";
+i18n.zh.prof_delete           = "删除";
+
+i18n.it.prof_export           = "Esporta JSON";
+i18n.en.prof_export           = "Export JSON";
+i18n.es.prof_export           = "Exportar JSON";
+i18n.zh.prof_export           = "导出JSON";
+
+i18n.it.prof_import           = "Importa JSON";
+i18n.en.prof_import           = "Import JSON";
+i18n.es.prof_import           = "Importar JSON";
+i18n.zh.prof_import           = "导入JSON";
+
+i18n.it.prof_load_ok          = "Profilo caricato";
+i18n.en.prof_load_ok          = "Profile loaded";
+i18n.es.prof_load_ok          = "Perfil cargado";
+i18n.zh.prof_load_ok          = "配置已加载";
+
+i18n.it.prof_save_ok          = "Profilo salvato";
+i18n.en.prof_save_ok          = "Profile saved";
+i18n.es.prof_save_ok          = "Perfil guardado";
+i18n.zh.prof_save_ok          = "配置已保存";
+
+i18n.it.prof_delete_ok        = "Profilo eliminato";
+i18n.en.prof_delete_ok        = "Profile deleted";
+i18n.es.prof_delete_ok        = "Perfil eliminado";
+i18n.zh.prof_delete_ok        = "配置已删除";
+
+i18n.it.prof_import_ok        = "Profilo importato";
+i18n.en.prof_import_ok        = "Profile imported";
+i18n.es.prof_import_ok        = "Perfil importado";
+i18n.zh.prof_import_ok        = "配置已导入";
+
+i18n.it.prof_overwrite_confirm = "Il profilo esiste già. Sovrascrivere?";
+i18n.en.prof_overwrite_confirm = "Profile already exists. Overwrite?";
+i18n.es.prof_overwrite_confirm = "El perfil ya existe. Sobreescribir?";
+i18n.zh.prof_overwrite_confirm = "配置已存在，是否覆盖？";
+
+i18n.it.prof_delete_confirm   = "Eliminare il profilo?";
+i18n.en.prof_delete_confirm   = "Delete this profile?";
+i18n.es.prof_delete_confirm   = "Eliminar este perfil?";
+i18n.zh.prof_delete_confirm   = "删除此配置？";
+
+i18n.it.prof_no_profiles      = "Nessun profilo salvato";
+i18n.en.prof_no_profiles      = "No saved profiles";
+i18n.es.prof_no_profiles      = "No hay perfiles guardados";
+i18n.zh.prof_no_profiles      = "暂无已保存配置";
+
+i18n.it.prof_invalid_name     = "Inserisci un nome per il profilo";
+i18n.en.prof_invalid_name     = "Enter a profile name";
+i18n.es.prof_invalid_name     = "Introduce un nombre para el perfil";
+i18n.zh.prof_invalid_name     = "请输入配置名称";
+
+i18n.it.prof_import_error     = "File non valido";
+i18n.en.prof_import_error     = "Invalid file";
+i18n.es.prof_import_error     = "Archivo no valido";
+i18n.zh.prof_import_error     = "文件无效";
+
+i18n.it.prof_saved_at         = "salvato il";
+i18n.en.prof_saved_at         = "saved on";
+i18n.es.prof_saved_at         = "guardado el";
+i18n.zh.prof_saved_at         = "保存于";

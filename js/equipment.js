@@ -156,7 +156,7 @@
             let allTels = [...customTels, ...dbTelescopiBase];
             allTels.forEach(t => { 
                 let opt = document.createElement('option'); 
-                opt.value = t.focale + ',' + t.diametro; 
+                opt.value = t.focale + ',' + t.diametro + ',' + t.nome; 
                 opt.textContent = (customTels.some(ct => ct.nome === t.nome) ? "⭐ " : "") + t.nome; 
                 selTel.appendChild(opt);
                 // Aggiorna la mappa globale nome→{otaType,deltaT}
@@ -172,7 +172,7 @@
                 grpCustom.label = '⭐ ' + (lang==='it'?'I miei sensori':lang==='en'?'My sensors':lang==='es'?'Mis sensores':'我的传感器');
                 customCams.forEach(c => {
                     let opt = document.createElement('option');
-                    opt.value = `${c.w},${c.h},${c.p}`;
+                    opt.value = `${c.w},${c.h},${c.p},${c.nome}`;
                     opt.textContent = '⭐ ' + c.nome;
                     grpCustom.appendChild(opt);
                 });
@@ -183,7 +183,7 @@
             grpBase.label = lang==='it'?'Database sensori':lang==='en'?'Sensor database':lang==='es'?'Base de datos':'传感器数据库';
             dbCamereBase.forEach(c => { 
                 let opt = document.createElement('option'); 
-                opt.value = `${c.w},${c.h},${c.p}`; 
+                opt.value = `${c.w},${c.h},${c.p},${c.nome}`; 
                 opt.textContent = c.nome; 
                 grpBase.appendChild(opt);
             });
@@ -270,7 +270,7 @@
             localStorage.setItem('ad_custom_telescopes', JSON.stringify(customTels));
 
             popolaMenuAttrezzatura();
-            document.getElementById('preset-telescope').value = `${f},${d}`;
+            document.getElementById('preset-telescope').value = `${f},${d},${nome}`;
         }
 
         function apriEliminaTelescopio() {
@@ -347,7 +347,7 @@
             customCams.push({ nome, w: parseFloat(w), h: parseFloat(h), p: parseFloat(p) });
             localStorage.setItem('ad_custom_cameras', JSON.stringify(customCams));
             popolaMenuAttrezzatura();
-            document.getElementById('preset-sensor').value = `${w},${h},${p}`;
+            document.getElementById('preset-sensor').value = `${w},${h},${p},${nome}`;
             salvaImpostazioniStrumento();
         }
 

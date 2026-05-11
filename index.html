@@ -50,6 +50,19 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
     .nav-manual-text { display: inline; }
     @media (max-width: 480px) { .nav-manual-text { display: none !important; } }
 
+    /* Profilo: testo troncato su mobile se troppo lungo */
+    .profile-btn-label { display: inline; }
+    @media (max-width: 480px) {
+        .profile-btn-label {
+            display: inline-block !important;
+            max-width: 70px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            vertical-align: middle;
+        }
+    }
+
     /* Filtro OSC dual/quad: va a capo su smartphone */
     @media (max-width: 540px) {
         #filter-osc-wrap,
@@ -511,8 +524,8 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
             <h1 style="font-size:clamp(32px,6vw,46px); font-weight:800; color:#c9d1d9; line-height:1.1; letter-spacing:-1px; margin-bottom:8px;">
                 <span data-i18n="land_title1">Pianifica la notte</span><br><span style="color:#c49a3c;" data-i18n="land_title2">perfetta</span>
             </h1>
-            <p style="font-size:18px; color:#6e7a8a; max-width:460px; line-height:1.7; margin:0 auto 32px;" data-i18n="land_sub">
-                Meteo tattico, planetario predittivo, calcolo ottico e generazione automatica di sequenze per N.I.N.A. — tutto in un'unica app.
+            <p style="font-size:18px; color:#6e7a8a; max-width:520px; line-height:1.7; margin:0 auto 32px;" data-i18n="land_sub">
+                Meteo predittivo, analisi della tua location, guida e consigli tattici per le pose, orizzonte personalizzato e sequenze N.I.N.A. pronte all'uso — tutto in un'unica app.
             </p>
 
             <!-- Pulsante unico Comincia -->
@@ -548,9 +561,8 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <div style="width:36px;height:36px;border-radius:8px;margin-bottom:14px;display:flex;align-items:center;justify-content:center;background:rgba(0,198,255,.1);border:1px solid rgba(0,198,255,.2);">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00c6ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M20 8h-2a2 2 0 0 0 -2 2a2 2 0 1 1 -4 0v-1a2 2 0 0 0 -2 -2h-1a2 2 0 0 1 -2 -2v-.5" /><path d="M3 12h3a2 2 0 0 1 2 2v.5a1.5 1.5 0 0 0 1.5 1.5a1.5 1.5 0 0 1 1.5 1.5v3.25" /><path d="M15 20.5v-3.5a2 2 0 0 1 2 -2h3.5" /><path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /></svg>
                     </div>
-                    <div style="font-size:11px;font-weight:600;color:#00c6ff;letter-spacing:.5px;margin-bottom:5px;" data-i18n="land_f1_step">Passo 1</div>
-                    <div style="font-size:15px;font-weight:700;color:#c9d1d9;margin-bottom:8px;" data-i18n="land_f1_name">Meteo Tattico</div>
-                    <div style="font-size:12px;color:#6e7a8a;line-height:1.6;" data-i18n="land_f1_desc">Nuvole, jet stream, umidità e mappa LP con Bortle autorilevato</div>
+                    <div style="font-size:18px;font-weight:700;color:#c9d1d9;margin-bottom:8px;" data-i18n="land_f1_name">Meteo Tattico</div>
+                    <div style="font-size:14px;color:#8b949e;line-height:1.6;" data-i18n="land_f1_desc">Nuvole, jet stream, umidità e mappa LP con Bortle autorilevato</div>
                 </div>
 
                 <div onclick="vaiPlanetario()" style="background:#161b22;border:1px solid #21293a;border-radius:10px;padding:18px 16px;cursor:pointer;transition:border-color .2s;position:relative;overflow:hidden;" onmouseover="this.style.borderColor='rgba(168,85,247,.35)'" onmouseout="this.style.borderColor='#21293a'">
@@ -558,9 +570,8 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <div style="width:36px;height:36px;border-radius:8px;margin-bottom:14px;display:flex;align-items:center;justify-content:center;background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.2);">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M21 12a9 9 0 1 0 -9.968 8.948" /><path d="M3.6 9h16.8" /><path d="M3.6 15h6.4" /><path d="M11.5 3a17 17 0 0 0 -1.886 13.802" /><path d="M12.5 3a16.98 16.98 0 0 1 2.549 8.01" /><path d="M17.8 20.817l-2.172 1.138a.392 .392 0 0 1 -.568 -.41l.415 -2.411l-1.757 -1.707a.389 .389 0 0 1 .217 -.665l2.428 -.352l1.086 -2.193a.392 .392 0 0 1 .702 0l1.086 2.193l2.428 .352a.39 .39 0 0 1 .217 .665l-1.757 1.707l.414 2.41a.39 .39 0 0 1 -.567 .411l-2.172 -1.138" /></svg>
                     </div>
-                    <div style="font-size:11px;font-weight:600;color:#a855f7;letter-spacing:.5px;margin-bottom:5px;" data-i18n="land_f2_step">Passo 2</div>
-                    <div style="font-size:15px;font-weight:700;color:#c9d1d9;margin-bottom:8px;" data-i18n="land_f2_name">Planetario Ibrido</div>
-                    <div style="font-size:12px;color:#6e7a8a;line-height:1.6;" data-i18n="land_f2_desc">90 DSO interni + ricerca SIMBAD su qualsiasi oggetto del cielo</div>
+                    <div style="font-size:18px;font-weight:700;color:#c9d1d9;margin-bottom:8px;" data-i18n="land_f2_name">Planetario Ibrido</div>
+                    <div style="font-size:14px;color:#8b949e;line-height:1.6;" data-i18n="land_f2_desc">90 DSO interni + ricerca SIMBAD su qualsiasi oggetto del cielo</div>
                 </div>
 
                 <div onclick="setActiveStep('fov'); _showView('planning-view'); setTimeout(()=>{let el=document.getElementById('scope-preset');if(el)el.scrollIntoView({behavior:'smooth',block:'center'});},200)" style="background:#161b22;border:1px solid #21293a;border-radius:10px;padding:18px 16px;cursor:pointer;transition:border-color .2s;position:relative;overflow:hidden;" onmouseover="this.style.borderColor='rgba(34,197,94,.35)'" onmouseout="this.style.borderColor='#21293a'">
@@ -568,29 +579,26 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <div style="width:36px;height:36px;border-radius:8px;margin-bottom:14px;display:flex;align-items:center;justify-content:center;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2);">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M11 12a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M4 8v-2a2 2 0 0 1 2 -2h2" /><path d="M4 16v2a2 2 0 0 0 2 2h2" /><path d="M16 4h2a2 2 0 0 1 2 2v2" /><path d="M16 20h2a2 2 0 0 0 2 -2v-2" /></svg>
                     </div>
-                    <div style="font-size:11px;font-weight:600;color:#22c55e;letter-spacing:.5px;margin-bottom:5px;" data-i18n="land_f3_step">Passi 3–4</div>
-                    <div style="font-size:15px;font-weight:700;color:#c9d1d9;margin-bottom:8px;" data-i18n="land_f3_name">Simulatore FOV</div>
-                    <div style="font-size:12px;color:#6e7a8a;line-height:1.6;" data-i18n="land_f3_desc">Inquadra su DSS reale, imposta il setup e verifica il campionamento</div>
+                    <div style="font-size:18px;font-weight:700;color:#c9d1d9;margin-bottom:8px;" data-i18n="land_f3_name">Simulatore FOV</div>
+                    <div style="font-size:14px;color:#8b949e;line-height:1.6;" data-i18n="land_f3_desc">Inquadra su DSS reale, imposta il setup e verifica il campionamento</div>
                 </div>
 
-                <div onclick="vaiSmart();setTimeout(()=>{let el=document.getElementById('btn-mode-smart');if(el)el.scrollIntoView({behavior:'smooth',block:'center'});},300)" style="background:#161b22;border:1px solid #21293a;border-radius:10px;padding:18px 16px;cursor:pointer;transition:border-color .2s;position:relative;overflow:hidden;" onmouseover="this.style.borderColor='rgba(0,198,255,.35)'" onmouseout="this.style.borderColor='#21293a'">
-                    <div style="position:absolute;top:0;left:0;right:0;height:3px;background:#00c6ff;border-radius:10px 10px 0 0;"></div>
-                    <div style="width:36px;height:36px;border-radius:8px;margin-bottom:14px;display:flex;align-items:center;justify-content:center;background:rgba(0,198,255,.1);border:1px solid rgba(0,198,255,.2);">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M17.964 2.733c.156 .563 .312 1 .484 1.353c.342 .71 .758 1.125 1.47 1.467c.353 .17 .79 .326 1.352 .484c.98 .276 .97 1.668 -.013 1.93a8.3 8.3 0 0 0 -1.34 .481c-.71 .342 -1.127 .757 -1.463 1.453a8 8 0 0 0 -.486 1.352c-.258 .988 -1.658 1 -1.932 .015c-.156 -.565 -.312 -1.002 -.484 -1.354c-.342 -.71 -.758 -1.124 -1.458 -1.46a8 8 0 0 0 -1.374 -.495a.4 .4 0 0 1 -.06 -.02l-.044 -.017l-.045 -.02l-.049 -.025l-.035 -.02a.4 .4 0 0 1 -.049 -.03l-.032 -.023l-.043 -.034l-.033 -.028l-.036 -.035l-.034 -.035l-.028 -.033l-.035 -.043l-.022 -.032a.4 .4 0 0 1 -.032 -.049l-.02 -.035l-.025 -.05l-.02 -.044l-.017 -.043a.4 .4 0 0 1 -.02 -.06l-.01 -.034a.5 .5 0 0 1 -.02 -.098l-.006 -.065l-.005 -.035v-.05a.4 .4 0 0 1 .003 -.085a.5 .5 0 0 1 .013 -.093a.5 .5 0 0 1 .024 -.103a.4 .4 0 0 1 .02 -.06l.017 -.044l.02 -.045l.025 -.049l.02 -.035a.4 .4 0 0 1 .03 -.049l.023 -.032l.034 -.043l.028 -.033l.035 -.036l.035 -.034q .015 -.015 .033 -.028l.043 -.035l.032 -.022a.4 .4 0 0 1 .049 -.032l.035 -.02l.05 -.025l.044 -.02l.043 -.017a.4 .4 0 0 1 .06 -.02l.027 -.008a8.3 8.3 0 0 0 1.339 -.48c.71 -.342 1.127 -.757 1.47 -1.466c.17 -.354 .327 -.792 .483 -1.355c.272 -.976 1.657 -.976 1.928 0" fill="#00c6ff"/><path d="M10.965 6.737q .219 .801 .503 1.574c.856 2.28 1.945 3.363 4.23 4.22q .708 .265 1.571 .506c.976 .272 .974 1.656 -.002 1.927q -.798 .221 -1.568 .504c-2.288 .858 -3.376 1.94 -4.229 4.216a19 19 0 0 0 -.505 1.579c-.268 .983 -1.662 .983 -1.93 0a19 19 0 0 0 -.503 -1.574c-.856 -2.281 -1.944 -3.363 -4.226 -4.219a20 20 0 0 0 -1.594 -.513a.4 .4 0 0 1 -.054 -.018l-.044 -.017l-.043 -.02a.3 .3 0 0 1 -.048 -.024l-.036 -.02a.4 .4 0 0 1 -.048 -.03l-.032 -.024l-.044 -.034l-.033 -.029l-.037 -.034l-.034 -.037l-.03 -.033l-.033 -.044l-.023 -.032a.4 .4 0 0 1 -.03 -.048l-.021 -.036a.3 .3 0 0 1 -.024 -.048l-.02 -.043l-.017 -.044a.4 .4 0 0 1 -.018 -.054a.2 .2 0 0 1 -.01 -.039a.4 .4 0 0 1 -.014 -.059l-.007 -.04l-.007 -.056l-.003 -.044l-.002 -.05v-.05q 0 -.023 .004 -.044q .001 -.03 .007 -.057l.007 -.04a.4 .4 0 0 1 .017 -.076l.007 -.021a.4 .4 0 0 1 .018 -.054l.017 -.044l.02 -.043a.3 .3 0 0 1 .024 -.048l.02 -.036a.4 .4 0 0 1 .03 -.048l.024 -.032l.034 -.044l.029 -.033l.034 -.037l.037 -.034l.033 -.03l.044 -.033l.032 -.023a.4 .4 0 0 1 .048 -.03l.036 -.021a.3 .3 0 0 1 .048 -.024l.043 -.02l.044 -.017a.4 .4 0 0 1 .054 -.018l.021 -.007a20 20 0 0 0 1.568 -.504c2.287 -.858 3.375 -1.94 4.229 -4.216a19 19 0 0 0 .505 -1.579c.268 -.983 1.662 -.983 1.93 0" fill="#00c6ff"/></svg>
+                <div onclick="mostraOrizzonte()" style="background:#161b22;border:1px solid #21293a;border-radius:10px;padding:18px 16px;cursor:pointer;transition:border-color .2s;position:relative;overflow:hidden;" onmouseover="this.style.borderColor='rgba(46,204,113,.35)'" onmouseout="this.style.borderColor='#21293a'">
+                    <div style="position:absolute;top:0;left:0;right:0;height:3px;background:#2ecc71;border-radius:10px 10px 0 0;"></div>
+                    <div style="width:36px;height:36px;border-radius:8px;margin-bottom:14px;display:flex;align-items:center;justify-content:center;background:rgba(46,204,113,.1);border:1px solid rgba(46,204,113,.2);">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2ecc71" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 8h.01"/><path d="M3 6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3h-12a3 3 0 0 1-3-3v-12"/><path d="M3 16l5-5c.928-.893 2.072-.893 3 0l5 5"/><path d="M14 14l1-1c.928-.893 2.072-.893 3 0l3 3"/></svg>
                     </div>
-                    <div style="font-size:11px;font-weight:600;color:#00c6ff;letter-spacing:.5px;margin-bottom:5px;" data-i18n="land_f4_step">Passo 5</div>
-                    <div style="font-size:15px;font-weight:700;color:#c9d1d9;margin-bottom:8px;" data-i18n="land_f4_name">Pianificazione Smart</div>
-                    <div style="font-size:12px;color:#6e7a8a;line-height:1.6;" data-i18n="land_f4_desc">Un assistente ti guida nella scelta di tempi e filtri in base al soggetto, setup e seeing</div>
+                    <div style="font-size:18px;font-weight:700;color:#c9d1d9;margin-bottom:8px;" data-i18n="land_fhz_name">Creazione Orizzonte</div>
+                    <div style="font-size:14px;color:#8b949e;line-height:1.6;" data-i18n="land_fhz_desc">Plugin interno di generazione del tuo orizzonte da una foto panoramica. Il file è pronto per N.I.N.A. (.hrz) e Stellarium — e si integra direttamente nel grafico FOV dell'app.</div>
                 </div>
 
-                <div onclick="vaiPro();setTimeout(()=>{let el=document.getElementById('btn-mode-pro');if(el)el.scrollIntoView({behavior:'smooth',block:'center'});},300)" style="background:#161b22;border:1px solid #21293a;border-radius:10px;padding:18px 16px;cursor:pointer;transition:border-color .2s;position:relative;overflow:hidden;" onmouseover="this.style.borderColor='rgba(196,154,60,.4)'" onmouseout="this.style.borderColor='#21293a'">
+                <div onclick="vaiSmart();setTimeout(()=>{let el=document.getElementById('btn-mode-smart');if(el)el.scrollIntoView({behavior:'smooth',block:'center'});},300)" style="background:#161b22;border:1px solid #21293a;border-radius:10px;padding:18px 16px;cursor:pointer;transition:border-color .2s;position:relative;overflow:hidden;" onmouseover="this.style.borderColor='rgba(196,154,60,.4)'" onmouseout="this.style.borderColor='#21293a'">
                     <div style="position:absolute;top:0;left:0;right:0;height:3px;background:#c49a3c;border-radius:10px 10px 0 0;"></div>
                     <div style="width:36px;height:36px;border-radius:8px;margin-bottom:14px;display:flex;align-items:center;justify-content:center;background:rgba(196,154,60,.1);border:1px solid rgba(196,154,60,.2);">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c49a3c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 10a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M6 4v4" /><path d="M6 12v8" /><path d="M12 4v9.5" /><path d="M16 7a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M18 4v1" /><path d="M17.8 20.817l-2.172 1.138a.392 .392 0 0 1 -.568 -.41l.415 -2.411l-1.757 -1.707a.389 .389 0 0 1 .217 -.665l2.428 -.352l1.086 -2.193a.392 .392 0 0 1 .702 0l1.086 2.193l2.428 .352a.39 .39 0 0 1 .217 .665l-1.757 1.707l.414 2.41a.39 .39 0 0 1 -.567 .411l-2.172 -1.138" /><path d="M18 9v1" /></svg>
                     </div>
-                    <div style="font-size:11px;font-weight:600;color:#c49a3c;letter-spacing:.5px;margin-bottom:5px;" data-i18n="land_f5_step">Passo 5 PRO</div>
-                    <div style="font-size:15px;font-weight:700;color:#c9d1d9;margin-bottom:8px;" data-i18n="land_f5_name">Pianificazione PRO</div>
-                    <div style="font-size:12px;color:#6e7a8a;line-height:1.6;" data-i18n="land_f5_desc">Controllo totale su pose, filtri, HDR e tempi per ogni canale</div>
+                    <div style="font-size:18px;font-weight:700;color:#c9d1d9;margin-bottom:8px;" data-i18n="land_f4_name">Pianificazione</div>
+                    <div style="font-size:14px;color:#8b949e;line-height:1.6;" data-i18n="land_f4_desc">Modalità Smart con guida automatica su pose e filtri in base al soggetto e al seeing, o modalità PRO per il controllo totale su ogni canale, HDR e tempi.</div>
                 </div>
 
                 <div onclick="setActiveStep('exp'); _showView('planning-view'); setTimeout(()=>{let el=document.getElementById('btn-export-nina');if(el)el.scrollIntoView({behavior:'smooth',block:'center'});},200)" style="background:#161b22;border:1px solid rgba(196,154,60,.2);border-radius:10px;padding:18px 16px;cursor:pointer;transition:border-color .2s;position:relative;overflow:hidden;" onmouseover="this.style.borderColor='rgba(196,154,60,.5)'" onmouseout="this.style.borderColor='rgba(196,154,60,.2)'">
@@ -598,9 +606,8 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <div style="width:36px;height:36px;border-radius:8px;margin-bottom:14px;display:flex;align-items:center;justify-content:center;background:rgba(196,154,60,.1);border:1px solid rgba(196,154,60,.25);">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c49a3c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" /><path d="M7 11l5 5l5 -5" /><path d="M12 4l0 12" /></svg>
                     </div>
-                    <div style="font-size:11px;font-weight:600;color:#c49a3c;letter-spacing:.5px;margin-bottom:5px;" data-i18n="land_f6_step">Passo 6</div>
-                    <div style="font-size:15px;font-weight:700;color:#c49a3c;margin-bottom:8px;" data-i18n="land_f6_name">Esportazione</div>
-                    <div style="font-size:12px;color:#6e7a8a;line-height:1.6;" data-i18n="land_f6_desc">Sequenza N.I.N.A., report HTML e coordinate AsiAir</div>
+                    <div style="font-size:18px;font-weight:700;color:#c49a3c;margin-bottom:8px;" data-i18n="land_f6_name">Esportazione</div>
+                    <div style="font-size:14px;color:#8b949e;line-height:1.6;" data-i18n="land_f6_desc">Sequenza N.I.N.A., report HTML e coordinate AsiAir</div>
                     <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:12px;">
                         <span style="font-size:10px;font-weight:700;padding:3px 8px;border-radius:4px;background:rgba(0,198,255,.12);color:#00c6ff;border:1px solid rgba(0,198,255,.25);">N.I.N.A.</span>
                         <span style="font-size:10px;font-weight:700;padding:3px 8px;border-radius:4px;background:rgba(255,255,255,.07);color:#c9d1d9;border:1px solid #2d3a50;">HTML</span>
@@ -856,7 +863,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
 
         <div class="planning-grid">
             <div class="panel">
-                <h3><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-camera"/></svg> <span data-i18n="optical_setup">Setup Ottico</span> <span class="info-icon" onmouseenter="mostraTooltip(this, 'info_setup')" onmouseleave="nascondiTooltip()">ℹ️</span></h3>
+                <h3><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-camera"/></svg> <span data-i18n="optical_setup">Setup Ottico</span> <span class="info-icon" onmouseenter="mostraTooltip(this, 'info_setup')" onmouseleave="nascondiTooltip()">ℹ️</span> <span id="profile-btn" onclick="apriModalProfilo()" style="cursor:pointer; font-size:0.72em; font-weight:500; color:#8b949e; border:1px solid #21293a; border-radius:6px; padding:3px 10px; margin-left:8px; transition:all .2s; vertical-align:middle;" onmouseover="this.style.borderColor='rgba(196,154,60,0.4)';this.style.color='#c49a3c'" onmouseout="this.style.borderColor='#21293a';this.style.color='#8b949e'" onmouseenter="_profileMouseEnter(this)" onmouseleave="nascondiTooltip()" ontouchstart="_profileTouchStart(this)" ontouchend="_profileTouchEnd()" ontouchcancel="_profileTouchEnd()">👤 <span class="profile-btn-label" data-i18n="prof_btn">Profilo</span></span></h3>
                 <div class="input-group" style="display:flex; align-items:flex-start; gap:5px;">
                     <label data-i18n="telescope" style="padding-top:6px;">Telescopio:</label>
                     <div style="display:flex; flex-direction:column; gap:6px; flex:1; min-width:0;">
@@ -1679,6 +1686,19 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
             </div>
 
             <div class="guide-section">
+                <h3><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> 3a. Profili di Configurazione</h3>
+                <p>Il sistema Profili permette di memorizzare e ripristinare istantaneamente configurazioni complete: posizione GPS, telescopio, sensore (incluse le attrezzature personalizzate), tutti i parametri Smart e PRO, filtri, trigger, lingua e orizzonte personalizzato. Ideale per chi usa più strumenti o cambia postazione di osservazione.</p>
+                <ul>
+                    <li><strong>Dove si trova:</strong> Il pulsante 👤 è nell'intestazione della sezione Setup Ottico, accanto all'icona ℹ️. Su desktop mostra il testo "Profilo" (o il nome del profilo attivo); su mobile mostra l'icona con il nome troncato se troppo lungo.</li>
+                    <li><strong>Salvare un profilo:</strong> Configura il setup completo (posizione, telescopio, sensore, parametri di sessione), poi clicca 👤 → digita un nome nel campo "Nuovo profilo" (es. "Newton Terrazza") → clicca <em>Salva</em>. Il profilo viene memorizzato nel browser e il nome compare nel pulsante. Se il nome è già esistente, viene richiesta conferma di sovrascrittura.</li>
+                    <li><strong>Caricare un profilo:</strong> Clicca 👤 → seleziona il profilo dal menu a tendina → clicca <em>✔ Usa</em>. La pagina si ricarica automaticamente con tutte le impostazioni del profilo selezionato, incluse attrezzatura personalizzata e orizzonte personalizzato.</li>
+                    <li><strong>Esportare un profilo (backup):</strong> Seleziona un profilo dal menu a tendina → clicca <em>⬇ Esporta JSON</em>. Il file scaricato contiene l'intera configurazione: conservalo come backup o trasferiscilo su un altro dispositivo.</li>
+                    <li><strong>Importare un profilo da file:</strong> Clicca <em>Importa JSON</em> e seleziona il file precedentemente esportato. Il profilo viene aggiunto alla lista; se il nome coincide con uno esistente, quest'ultimo viene sovrascrit­to automaticamente. Dopo l'importazione selezionalo dal menu e clicca <em>✔ Usa</em> per applicarlo.</li>
+                    <li><strong>Su mobile — Pressione lunga:</strong> Su dispositivi touch il tocco normale apre il popup di gestione profili. Per leggere la descrizione del campo, tieni premuto il pulsante 👤 per circa 600 ms: il tooltip informativo appare e si chiude automaticamente dopo 4 secondi.</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
                 <h3><svg width="20" height="20" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-stars"/></svg> 4. Calcolatore Sessione Smart</h3>
                 <p>In modalità Smart il sistema è il tuo assistente esperto. Analizzi il target, comunichi le caratteristiche del tuo setup e lasci che l'algoritmo generi una sequenza bilanciata e ottimizzata per le condizioni di quella specifica notte.</p>
                 <ul>
@@ -1780,6 +1800,19 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <li><strong>Realistic FOV Simulator (DSS2):</strong> Loads the real deep sky image from the DSS2 archive and overlays your sensor rectangle at the correct scale and orientation. What you see is exactly what you'll get in your final image.</li>
                     <li><strong>FOV Rotation &amp; Position Angle (PA):</strong> The rotation slider (0–360°) rotates the sensor rectangle on the map. The chosen angle is saved in the sequence and sent to N.I.N.A.'s auto-rotator during export. If you drag the map to offset the FOV center from the original target, updated coordinates are shown in real time in the "FOV Center" box with an active offset indicator — and you can always return to the exact center with the ⌖ Reset button.</li>
                     <li><strong>Mosaic Mode:</strong> When the target is larger than your field of view, enable mosaic and set the grid (e.g. 2×2, 3×2) with the desired overlap percentage. The system automatically calculates the time per panel and generates the strategic report. For N.I.N.A. use the Framing Assistant with the center coordinates.</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
+                <h3><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> 3a. Configuration Profiles</h3>
+                <p>The Profile system lets you instantly save and restore complete configurations: GPS location, telescope, sensor (including custom equipment), all Smart and PRO parameters, filters, triggers, language and custom horizon. Ideal for users who work with multiple instruments or switch observation sites.</p>
+                <ul>
+                    <li><strong>Where to find it:</strong> The 👤 button is in the Setup Ottico section header, next to the ℹ️ icon. On desktop it shows the text "Profile" (or the active profile name); on mobile it shows the icon with a truncated name if too long.</li>
+                    <li><strong>Saving a profile:</strong> Configure your complete setup (location, telescope, sensor, session parameters), then click 👤 → type a name in the "New profile" field (e.g. "Newton Rooftop") → click <em>Save</em>. The profile is stored in the browser and the name appears in the button. If the name already exists, you will be asked to confirm overwrite.</li>
+                    <li><strong>Loading a profile:</strong> Click 👤 → select the profile from the dropdown menu → click <em>✔ Use</em>. The page automatically reloads with all the settings from the selected profile, including custom equipment and custom horizon.</li>
+                    <li><strong>Exporting a profile (backup):</strong> Select a profile from the dropdown → click <em>⬇ Export JSON</em>. The downloaded file contains the complete configuration: keep it as a backup or transfer it to another device.</li>
+                    <li><strong>Importing a profile from file:</strong> Click <em>Import JSON</em> and select a previously exported file. The profile is added to the list; if the name matches an existing one, it is automatically overwritten. After importing, select it from the menu and click <em>✔ Use</em> to apply it.</li>
+                    <li><strong>On mobile — Long press:</strong> On touch devices a normal tap opens the profile management popup. To read the field description, hold the 👤 button for about 600 ms: the info tooltip appears and closes automatically after 4 seconds.</li>
                 </ul>
             </div>
 
@@ -1889,6 +1922,19 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
             </div>
 
             <div class="guide-section">
+                <h3><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> 3a. Perfiles de Configuración</h3>
+                <p>El sistema de Perfiles permite guardar y restaurar instantáneamente configuraciones completas: posición GPS, telescopio, sensor (incluido equipo personalizado), todos los parámetros Smart y PRO, filtros, triggers, idioma y horizonte personalizado. Ideal para quienes usan varios instrumentos o cambian de ubicación de observación.</p>
+                <ul>
+                    <li><strong>Dónde encontrarlo:</strong> El botón 👤 está en el encabezado de la sección Setup Óptico, junto al icono ℹ️. En escritorio muestra el texto "Perfil" (o el nombre del perfil activo); en móvil muestra el icono con el nombre truncado si es demasiado largo.</li>
+                    <li><strong>Guardar un perfil:</strong> Configura tu setup completo (ubicación, telescopio, sensor, parámetros de sesión), luego haz clic en 👤 → escribe un nombre en el campo "Nuevo perfil" (ej. "Newton Terraza") → haz clic en <em>Guardar</em>. El perfil se almacena en el navegador y el nombre aparece en el botón. Si el nombre ya existe, se pedirá confirmación de sobreescritura.</li>
+                    <li><strong>Cargar un perfil:</strong> Haz clic en 👤 → selecciona el perfil del menú desplegable → haz clic en <em>✔ Usar</em>. La página se recarga automáticamente con todos los ajustes del perfil seleccionado, incluido equipo personalizado y horizonte personalizado.</li>
+                    <li><strong>Exportar un perfil (copia de seguridad):</strong> Selecciona un perfil del menú → haz clic en <em>⬇ Exportar JSON</em>. El archivo descargado contiene la configuración completa: guárdalo como copia de seguridad o transfierelo a otro dispositivo.</li>
+                    <li><strong>Importar un perfil desde archivo:</strong> Haz clic en <em>Importar JSON</em> y selecciona un archivo exportado previamente. El perfil se añade a la lista; si el nombre coincide con uno existente, se sobreescribe automáticamente. Tras la importación, selecciónalo del menú y haz clic en <em>✔ Usar</em> para aplicarlo.</li>
+                    <li><strong>En móvil — Pulsación larga:</strong> En dispositivos táctiles un toque normal abre el popup de gestión de perfiles. Para leer la descripción del campo, mantén pulsado el botón 👤 durante unos 600 ms: el tooltip informativo aparece y se cierra automáticamente tras 4 segundos.</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
                 <h3><svg width="20" height="20" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-stars"/></svg> 4. Calculadora de Sesión Smart</h3>
                 <p>En modo Smart el sistema es tu asistente experto. Analizas el objetivo, compartes las características de tu equipo y dejas que el algoritmo genere una secuencia equilibrada y optimizada para las condiciones de esa noche específica.</p>
                 <ul>
@@ -1991,6 +2037,19 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <li><strong>真实视场模拟器 (DSS2)：</strong>从DSS2档案加载真实深空图像，并以正确比例和方向叠加您的传感器矩形。您看到的就是最终图像中将获得的内容。</li>
                     <li><strong>视场旋转与位置角 (PA)：</strong>旋转滑块（0–360°）在地图上旋转传感器矩形。选定角度保存在序列中，并在导出时发送给 N.I.N.A. 的自动旋转器。如果您拖动地图将视场中心偏离原始目标，更新的坐标将实时显示在"视场中心"框中，并有偏移激活指示 — 您随时可以通过 ⌖ 重置按钮返回精确中心。</li>
                     <li><strong>拼接模式：</strong>当目标大于您的视场时，启用拼接并设置网格（如2×2、3×2）和所需重叠百分比。系统自动计算每个面板的可用时间并生成策略报告。</li>
+                </ul>
+            </div>
+
+            <div class="guide-section">
+                <h3><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> 3a. 配置文件管理</h3>
+                <p>配置文件系统允许您即时保存和恢复完整配置：GPS位置、望远镜、传感器（包括自定义设备）、所有智能和专业参数、滤镜、触发器、语言以及自定义地平线。非常适合使用多台仪器或更换观测地点的用户。</p>
+                <ul>
+                    <li><strong>位置：</strong>👤 按钮位于光学设置部分的标题栏中，紧靠 ℹ️ 图标。在桌面端显示文字"配置"（或当前配置文件名称）；在移动端显示图标，名称过长时自动截断显示。</li>
+                    <li><strong>保存配置文件：</strong>完整配置您的设置（位置、望远镜、传感器、拍摄参数）后，点击 👤 → 在"新建配置"字段输入名称（如"牛顿天台"）→ 点击<em>保存</em>。配置文件存储在浏览器中，名称将显示在按钮上。若名称已存在，系统将请求确认是否覆盖。</li>
+                    <li><strong>加载配置文件：</strong>点击 👤 → 从下拉菜单选择配置文件 → 点击 <em>✔ 使用</em>。页面将自动重新加载，应用所选配置文件的全部设置，包括自定义设备和自定义地平线。</li>
+                    <li><strong>导出配置文件（备份）：</strong>从下拉菜单选择配置文件 → 点击 <em>⬇ 导出JSON</em>。下载的文件包含完整配置：可作为备份保存或传输至其他设备。</li>
+                    <li><strong>从文件导入配置：</strong>点击<em>导入JSON</em>并选择之前导出的文件。配置文件将添加到列表中；若名称与已有配置相同，将自动覆盖。导入后从菜单选择并点击 <em>✔ 使用</em> 即可应用。</li>
+                    <li><strong>移动端——长按操作：</strong>在触摸设备上，普通点击将打开配置管理弹窗。如需查看字段说明，请长按 👤 按钮约600毫秒：信息提示框将出现并在4秒后自动关闭。</li>
                 </ul>
             </div>
 
@@ -3530,6 +3589,45 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
         </div>
     </div>
 
+    <!-- ═══ MODAL PROFILO ═══ -->
+    <div id="modal-profilo" class="modal" style="display:none;">
+        <div class="modal-content" style="width:min(500px, 92vw); border:1.5px solid rgba(196,154,60,0.5); box-sizing:border-box;">
+            <span class="close-btn" onclick="chiudiModalProfilo()">&times;</span>
+            <div style="display:flex; align-items:center; gap:12px; margin-bottom:18px;">
+                <div style="width:36px; height:36px; background:rgba(196,154,60,0.12); border:1px solid rgba(196,154,60,0.3); border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:18px;">👤</div>
+                <div style="font-size:15px; color:#c49a3c; font-weight:700;" data-i18n="prof_title">Gestione Profili</div>
+            </div>
+            <!-- Dropdown profili salvati -->
+            <div style="margin-bottom:10px;">
+                <label style="display:block; font-size:11px; color:#6e7a8a; margin-bottom:4px;" data-i18n="prof_select_label">Profili salvati</label>
+                <select id="profile-select" onchange="aggiornaAzioniProfilo()" style="width:100%; background:#0d1117; border:1px solid #21293a; border-radius:6px; padding:8px 10px; color:#e8e8f0; font-size:13px; cursor:pointer;">
+                    <option value="" data-i18n="prof_select_placeholder">-- Seleziona profilo --</option>
+                </select>
+            </div>
+            <!-- Azioni sul profilo selezionato -->
+            <div id="profile-actions" style="display:none; margin-bottom:14px; gap:8px; justify-content:flex-end; flex-wrap:wrap;">
+                <button class="btn-a-secondary" style="padding:7px 18px; border-color:#c49a3c; color:#c49a3c; font-weight:600;" onclick="applicaProfiloSelezionato()">✔ <span data-i18n="prof_use">Usa</span></button>
+                <button class="btn-a-secondary" style="padding:6px 14px; font-size:0.82em; border-color:#6e7a8a; color:#8b949e;" onclick="esportaProfiloSelezionato()">⬇ <span data-i18n="prof_export">Esporta JSON</span></button>
+                <button class="btn-a-secondary" style="padding:6px 14px; font-size:0.82em; border-color:#f44336; color:#f44336;" onclick="eliminaProfiloSelezionato()">🗑 <span data-i18n="prof_delete">Elimina</span></button>
+            </div>
+            <!-- Separatore -->
+            <div style="border-top:1px solid #21293a; margin:14px 0;"></div>
+            <!-- Nuovo profilo: nome + Salva -->
+            <div style="margin-bottom:14px;">
+                <label style="display:block; font-size:11px; color:#6e7a8a; margin-bottom:4px;" data-i18n="prof_new_label">Nuovo profilo</label>
+                <div style="display:flex; gap:8px;">
+                    <input id="profile-name-input" type="text" data-i18n-placeholder="prof_name_placeholder" placeholder="Nome profilo (es. Newton Terrazza)" style="flex:1; min-width:0; background:#0d1117; border:1px solid #21293a; border-radius:6px; padding:7px 10px; color:#e8e8f0; font-size:13px;">
+                    <button class="btn-a-secondary" style="padding:7px 16px; border-color:#c49a3c; color:#c49a3c; font-weight:600; white-space:nowrap;" onclick="salvaProfiloDaModal()"><span data-i18n="prof_save">Salva</span></button>
+                </div>
+            </div>
+            <!-- Import -->
+            <div style="display:flex; gap:8px; justify-content:flex-end;">
+                <input type="file" id="profile-import-input" accept=".json" style="display:none;" onchange="importaProfiloDaFile(this)">
+                <button class="btn-a-secondary" style="padding:6px 14px; font-size:0.82em; border-color:#6e7a8a; color:#8b949e;" onclick="document.getElementById('profile-import-input').click()"><span data-i18n="prof_import">Importa JSON</span></button>
+            </div>
+        </div>
+    </div>
+
     <!-- ═══ MODAL RESET FILTRI ═══ -->
     <div id="modal-reset-filtri" class="modal" style="display:none;">
         <div class="modal-content" style="max-width:460px; border:1.5px solid #c49a3c;">
@@ -3988,5 +4086,130 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
     </div>
 <script src="js/night_popup.js"></script>
+<script>
+// ══════════════════════════════════════════════════════════════════
+// ── GESTIONE MODALE PROFILO ─────────────────────────────────────
+// ══════════════════════════════════════════════════════════════════
+
+// ── Long-press tooltip per il pulsante profilo ───────────────
+let _profileLongPressTimer = null;
+let _profileIsTouching     = false;
+
+function _profileTouchStart(el) {
+    _profileIsTouching = true;
+    _profileLongPressTimer = setTimeout(function() {
+        mostraTooltip(el, 'info_profile');
+        setTimeout(nascondiTooltip, 4000);
+    }, 600);
+}
+function _profileTouchEnd() {
+    if (_profileLongPressTimer) {
+        clearTimeout(_profileLongPressTimer);
+        _profileLongPressTimer = null;
+    }
+    // Mantieni il blocco per 400ms — il mouseenter sintetico arriva entro questo tempo
+    setTimeout(function() { _profileIsTouching = false; }, 400);
+}
+function _profileMouseEnter(el) {
+    if (_profileIsTouching) return; // su mobile ignora mouseenter
+    mostraTooltip(el, 'info_profile');
+}
+
+function apriModalProfilo() {
+    document.getElementById('modal-profilo').style.display = 'block';
+    popolaDropdownProfili();
+    document.getElementById('profile-name-input').value = '';
+}
+
+function chiudiModalProfilo() {
+    document.getElementById('modal-profilo').style.display = 'none';
+}
+
+function popolaDropdownProfili() {
+    const sel = document.getElementById('profile-select');
+    if (!sel) return;
+    const profili = ProfileManager.list();
+    const attivo = ProfileManager.getActive();
+    const placeholderText = typeof t === 'function' ? t('prof_select_placeholder') : '-- Seleziona profilo --';
+
+    // Ricostruisci le opzioni
+    sel.innerHTML = '<option value="">' + placeholderText + '</option>';
+    profili.forEach(function(p) {
+        const opt = document.createElement('option');
+        opt.value = p.name;
+        const savedDate = p.savedAt ? new Date(p.savedAt).toLocaleDateString() : '';
+        opt.textContent = p.name + (savedDate ? ' (' + savedDate + ')' : '');
+        if (p.name === attivo) opt.selected = true;
+        sel.appendChild(opt);
+    });
+
+    // Mostra/nascondi pulsanti azione
+    aggiornaAzioniProfilo();
+}
+
+function aggiornaAzioniProfilo() {
+    const sel = document.getElementById('profile-select');
+    const actions = document.getElementById('profile-actions');
+    if (!sel || !actions) return;
+    actions.style.display = sel.value ? 'flex' : 'none';
+}
+
+function applicaProfiloSelezionato() {
+    const sel = document.getElementById('profile-select');
+    if (!sel || !sel.value) return;
+    const name = sel.value;
+    ProfileManager.load(name);
+    mostraAvviso((typeof t === 'function' ? t('prof_load_ok') : 'Profilo caricato') + ': ' + name, 'ok');
+    chiudiModalProfilo();
+}
+
+function salvaProfiloDaModal() {
+    const inp = document.getElementById('profile-name-input');
+    const name = (inp ? inp.value : '').trim();
+    if (!name) {
+        mostraAvviso(typeof t === 'function' ? t('prof_invalid_name') : 'Inserisci un nome', 'warn');
+        return;
+    }
+    if (ProfileManager.exists(name)) {
+        if (!confirm(typeof t === 'function' ? t('prof_overwrite_confirm') : 'Profilo esistente. Sovrascrivere?')) return;
+    }
+    ProfileManager.save(name);
+    mostraAvviso((typeof t === 'function' ? t('prof_save_ok') : 'Profilo salvato') + ': ' + name, 'ok');
+    inp.value = '';
+    popolaDropdownProfili();
+}
+
+function esportaProfiloSelezionato() {
+    const sel = document.getElementById('profile-select');
+    if (!sel || !sel.value) return;
+    ProfileManager.exportJSON(sel.value);
+}
+
+function eliminaProfiloSelezionato() {
+    const sel = document.getElementById('profile-select');
+    if (!sel || !sel.value) return;
+    const name = sel.value;
+    if (!confirm(typeof t === 'function' ? t('prof_delete_confirm') : 'Eliminare il profilo?')) return;
+    ProfileManager.remove(name);
+    mostraAvviso((typeof t === 'function' ? t('prof_delete_ok') : 'Profilo eliminato') + ': ' + name, 'ok');
+    popolaDropdownProfili();
+}
+
+function importaProfiloDaFile(input) {
+    if (!input.files || !input.files[0]) return;
+    ProfileManager.importJSON(input.files[0]).then(function(name) {
+        mostraAvviso((typeof t === 'function' ? t('prof_import_ok') : 'Profilo importato') + ': ' + name, 'ok');
+        popolaDropdownProfili();
+    }).catch(function() {
+        mostraAvviso(typeof t === 'function' ? t('prof_import_error') : 'File non valido', 'warn');
+    });
+    input.value = '';
+}
+
+// Init: mostra nome profilo attivo nel pulsante al caricamento
+document.addEventListener('DOMContentLoaded', function() {
+    if (typeof ProfileManager !== 'undefined') ProfileManager.init();
+});
+</script>
 </body>
 </html>

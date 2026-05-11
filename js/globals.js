@@ -480,6 +480,192 @@ function caricaPreferenze() {
     if (_lon && !isNaN(parseFloat(_lon))) lonCorrente = parseFloat(_lon);
 }
 
+// ══════════════════════════════════════════════════════════════════
+// ── SISTEMA PROFILI ─────────────────────────────────────────────
+// Gestione profili utente (salvataggio/caricamento/export/import).
+// I profili vivono in localStorage con prefisso "adp_" così non
+// vengono cancellati dal Reset Generale (che filtra solo "ad_*").
+// ══════════════════════════════════════════════════════════════════
+
+const ProfileManager = (() => {
+    const PROFILES_KEY  = 'adp_profiles';       // [{name, savedAt, data}]
+    const ACTIVE_KEY    = 'adp_active_profile';  // nome del profilo attivo
+    const HORIZON_KEY   = 'adp_horizon_profile'; // chiave orizzonte (horizon.js)
+    const EXCLUDE_KEYS  = ['ad_session_date', 'adp_session_date'];
+
+    // ── Helpers ─────────────────────────────────────────────────
+    function _readProfiles() {
+        try {
+            const raw = localStorage.getItem(PROFILES_KEY);
+            return raw ? JSON.parse(raw) : [];
+        } catch(e) { return []; }
+    }
+    function _writeProfiles(arr) {
+        try { localStorage.setItem(PROFILES_KEY, JSON.stringify(arr)); } catch(e) {}
+    }
+
+    // ── Snapshot: cattura tutto lo stato corrente ────────────────
+    function _snapshot() {
+        // 1) Assicura che localStorage sia aggiornato dal DOM
+        if (typeof salvaPreferenze === 'function') salvaPreferenze();
+        // 2) Cattura tutte le chiavi ad_*
+        const data = {};
+        Object.keys(localStorage).forEach(k => {
+            if (k.startsWith('ad_') && !EXCLUDE_KEYS.includes(k)) {
+                data[k] = localStorage.getItem(k);
+            }
+        });
+        // 3) Lingua
+        const lang = localStorage.getItem('ad_lang');
+        if (lang) data['ad_lang'] = lang;
+        // 4) Orizzonte personalizzato
+        const hz = localStorage.getItem(HORIZON_KEY);
+        if (hz) data[HORIZON_KEY] = hz;
+        return data;
+    }
+
+    // ── Ripristina: sovrascrive lo stato da snapshot + reload ──────
+    function _restore(data) {
+        if (!data || typeof data !== 'object') return;
+        // 1) Rimuovi tutte le chiavi ad_* correnti (tranne session date)
+        Object.keys(localStorage).forEach(k => {
+            if (k.startsWith('ad_') && !EXCLUDE_KEYS.includes(k)) {
+                localStorage.removeItem(k);
+            }
+        });
+        // Rimuovi orizzonte corrente
+        localStorage.removeItem(HORIZON_KEY);
+        // 2) Scrivi le chiavi del profilo
+        Object.keys(data).forEach(k => {
+            localStorage.setItem(k, data[k]);
+        });
+        // 3) Ricarica la pagina — il flusso di init normale
+        //    applica correttamente tutte le impostazioni
+        location.reload();
+    }
+
+    // ── API pubblica ────────────────────────────────────────────
+
+    function list() {
+        return _readProfiles().map(p => ({ name: p.name, savedAt: p.savedAt }));
+    }
+
+    function save(name) {
+        if (!name || !name.trim()) return false;
+        name = name.trim();
+        const profiles = _readProfiles();
+        const idx = profiles.findIndex(p => p.name === name);
+        const entry = {
+            name: name,
+            savedAt: new Date().toISOString(),
+            data: _snapshot()
+        };
+        if (idx >= 0) {
+            profiles[idx] = entry;   // sovrascrive
+        } else {
+            profiles.push(entry);    // aggiunge
+        }
+        _writeProfiles(profiles);
+        localStorage.setItem(ACTIVE_KEY, name);
+        _updateBtnLabel(name);
+        return true;
+    }
+
+    function load(name) {
+        const profiles = _readProfiles();
+        const p = profiles.find(p => p.name === name);
+        if (!p) return false;
+        _restore(p.data);
+        localStorage.setItem(ACTIVE_KEY, name);
+        _updateBtnLabel(name);
+        return true;
+    }
+
+    function remove(name) {
+        let profiles = _readProfiles();
+        profiles = profiles.filter(p => p.name !== name);
+        _writeProfiles(profiles);
+        // Se era il profilo attivo, pulisci
+        if (getActive() === name) {
+            localStorage.removeItem(ACTIVE_KEY);
+            _updateBtnLabel(null);
+        }
+        return true;
+    }
+
+    function getActive() {
+        return localStorage.getItem(ACTIVE_KEY) || null;
+    }
+
+    function exists(name) {
+        return _readProfiles().some(p => p.name === name);
+    }
+
+    // ── Export: scarica il profilo corrente come file JSON ───────
+    function exportJSON(name) {
+        const profiles = _readProfiles();
+        const p = name ? profiles.find(pr => pr.name === name) : null;
+        const toExport = p || {
+            name: name || 'AstroDashboard_Profile',
+            savedAt: new Date().toISOString(),
+            data: _snapshot()
+        };
+        const blob = new Blob([JSON.stringify(toExport, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = (toExport.name || 'profile').replace(/[^a-zA-Z0-9_-]/g, '_') + '.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+
+    // ── Import: carica da file JSON ─────────────────────────────
+    function importJSON(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => {
+                try {
+                    const obj = JSON.parse(reader.result);
+                    if (!obj.name || !obj.data) {
+                        reject(new Error('Formato profilo non valido'));
+                        return;
+                    }
+                    const profiles = _readProfiles();
+                    const idx = profiles.findIndex(p => p.name === obj.name);
+                    if (idx >= 0) {
+                        profiles[idx] = obj;
+                    } else {
+                        profiles.push(obj);
+                    }
+                    _writeProfiles(profiles);
+                    resolve(obj.name);
+                } catch(e) { reject(e); }
+            };
+            reader.onerror = () => reject(reader.error);
+            reader.readAsText(file);
+        });
+    }
+
+    // ── Aggiorna label del pulsante profilo ──────────────────────
+    function _updateBtnLabel(name) {
+        const btn = document.getElementById('profile-btn');
+        if (!btn) return;
+        const label = btn.querySelector('.profile-btn-label');
+        if (label) {
+            label.textContent = name || (typeof t === 'function' ? t('prof_btn') : 'Profilo');
+        }
+    }
+
+    // Init: al caricamento pagina, mostra nome attivo
+    function init() {
+        _updateBtnLabel(getActive());
+    }
+
+    return { list, save, load, remove, getActive, exists, exportJSON, importJSON, init };
+})();
+
 function apriModalResetGenerale() {
     let m = document.getElementById('modal-reset-generale');
     if (m) { m.style.display = 'block'; if (typeof t === 'function') aggiornaTestoModal(); }

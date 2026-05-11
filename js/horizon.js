@@ -1032,6 +1032,7 @@
     dlText(getExportName() + '.json', JSON.stringify(out, null, 2), 'application/json');
   };
   window.hzInitSection = initSection;
+  window.hzLoadFromLocalStorage = loadFromLocalStorage; // usato da ProfileManager
 
   window.hzOpenGuide = function () {
     const overlay = document.getElementById('hz-guide-overlay');
