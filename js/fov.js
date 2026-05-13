@@ -256,10 +256,10 @@
             if (firstAbove30 && firstAbove30 > _rawStart) {
                 _rawStart = new Date(firstAbove30.getTime());
             }
-            if (isSessionDateToday()) {
+            {
                 let _adesso = new Date();
                 _adesso.setSeconds(0, 0);
-                if (_adesso > _rawStart && _adesso < nE) {
+                if (_adesso > _rawStart && _adesso >= nS && _adesso < nE) {
                     _rawStart = new Date(_adesso.getTime());
                 }
             }
@@ -337,7 +337,7 @@
                 }, 100); 
             }
             
-            disegnaGraficoAltezza(); toggleSensorMode(); calcolaTempi(); window.scrollTo(0,0);
+            disegnaGraficoAltezza(); toggleSensorMode(); calcolaTempi(); aggiornaBottoneAccessorio(); window.scrollTo(0,0);
         }
 
         function tornaDashboard() {
@@ -419,17 +419,20 @@
             let fattore = getAccessorioFattore();
             let nome    = localStorage.getItem('ad_accessorio_nome') || '';
             let btn     = document.getElementById('accessorio-btn');
+            let label   = btn ? btn.querySelector('#accessorio-btn-label') : null;
             let activeSpan = document.getElementById('accessorio-active-label');
-            if (!btn) return;
+            if (!btn || !label) return;
             if (fattore === 1.0 || !nome) {
                 btn.style.color        = '#6e7a8a';
                 btn.style.borderColor  = '#6e7a8a';
-                btn.querySelector('#accessorio-btn-label').textContent = t('acc_none');
+                label.setAttribute('data-i18n', 'acc_none');
+                label.textContent = t('acc_none');
                 if (activeSpan) activeSpan.style.display = 'none';
             } else {
                 btn.style.color        = '#ffaa00';
                 btn.style.borderColor  = '#ffaa00';
-                btn.querySelector('#accessorio-btn-label').textContent = nome;
+                label.removeAttribute('data-i18n');
+                label.textContent = nome;
                 if (activeSpan) {
                     activeSpan.textContent  = t('acc_active');
                     activeSpan.style.display = 'inline';
@@ -832,9 +835,9 @@
 
             let _rawStart = new Date(nS.getTime());
             if (firstAbove30 && firstAbove30 > _rawStart) _rawStart = new Date(firstAbove30.getTime());
-            if (isSessionDateToday()) {
+            {
                 let _adesso = new Date(); _adesso.setSeconds(0, 0);
-                if (_adesso > _rawStart && _adesso < nE) _rawStart = new Date(_adesso.getTime());
+                if (_adesso > _rawStart && _adesso >= nS && _adesso < nE) _rawStart = new Date(_adesso.getTime());
             }
             let _rawEnd = new Date(nE.getTime());
             if (lastAbove30 && lastAbove30 < _rawEnd) _rawEnd = new Date(lastAbove30.getTime());

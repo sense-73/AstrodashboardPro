@@ -521,6 +521,10 @@ const ProfileManager = (() => {
         // 4) Orizzonte personalizzato
         const hz = localStorage.getItem(HORIZON_KEY);
         if (hz) data[HORIZON_KEY] = hz;
+        // 5) Nomi filtri NINA (prefisso nina_filter_)
+        Object.keys(localStorage).forEach(k => {
+            if (k.startsWith('nina_filter_')) data[k] = localStorage.getItem(k);
+        });
         return data;
     }
 
@@ -535,6 +539,10 @@ const ProfileManager = (() => {
         });
         // Rimuovi orizzonte corrente
         localStorage.removeItem(HORIZON_KEY);
+        // Rimuovi nomi filtri NINA correnti
+        Object.keys(localStorage).forEach(k => {
+            if (k.startsWith('nina_filter_')) localStorage.removeItem(k);
+        });
         // 2) Scrivi le chiavi del profilo
         Object.keys(data).forEach(k => {
             localStorage.setItem(k, data[k]);
