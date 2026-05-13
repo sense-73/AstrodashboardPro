@@ -2897,3 +2897,84 @@ i18n.it.prof_saved_at         = "salvato il";
 i18n.en.prof_saved_at         = "saved on";
 i18n.es.prof_saved_at         = "guardado el";
 i18n.zh.prof_saved_at         = "保存于";
+
+// ── Pannello conferma salvataggio profilo ────────────────────
+i18n.it.prof_confirm_title    = "Riepilogo configurazione:";
+i18n.en.prof_confirm_title    = "Configuration summary:";
+i18n.es.prof_confirm_title    = "Resumen de configuracion:";
+i18n.zh.prof_confirm_title    = "配置摘要：";
+
+i18n.it.prof_confirm_location = "Posizione";
+i18n.en.prof_confirm_location = "Location";
+i18n.es.prof_confirm_location = "Ubicacion";
+i18n.zh.prof_confirm_location = "位置";
+
+i18n.it.prof_confirm_bortle   = "Bortle";
+i18n.en.prof_confirm_bortle   = "Bortle";
+i18n.es.prof_confirm_bortle   = "Bortle";
+i18n.zh.prof_confirm_bortle   = "Bortle";
+
+i18n.it.prof_confirm_telescope = "Telescopio";
+i18n.en.prof_confirm_telescope = "Telescope";
+i18n.es.prof_confirm_telescope = "Telescopio";
+i18n.zh.prof_confirm_telescope = "望远镜";
+
+i18n.it.prof_confirm_sensor   = "Sensore";
+i18n.en.prof_confirm_sensor   = "Sensor";
+i18n.es.prof_confirm_sensor   = "Sensor";
+i18n.zh.prof_confirm_sensor   = "传感器";
+
+i18n.it.prof_confirm_accessory = "Accessorio";
+i18n.en.prof_confirm_accessory = "Accessory";
+i18n.es.prof_confirm_accessory = "Accesorio";
+i18n.zh.prof_confirm_accessory = "附件";
+
+i18n.it.prof_confirm_horizon  = "Orizzonte";
+i18n.en.prof_confirm_horizon  = "Horizon";
+i18n.es.prof_confirm_horizon  = "Horizonte";
+i18n.zh.prof_confirm_horizon  = "地平线";
+
+i18n.it.prof_confirm_filters  = "Filtri NINA";
+i18n.en.prof_confirm_filters  = "NINA Filters";
+i18n.es.prof_confirm_filters  = "Filtros NINA";
+i18n.zh.prof_confirm_filters  = "NINA滤镜";
+
+i18n.it.prof_confirm_footer   = "Verifica che i valori siano corretti prima di salvare.";
+i18n.en.prof_confirm_footer   = "Check that the values are correct before saving.";
+i18n.es.prof_confirm_footer   = "Verifica que los valores sean correctos antes de guardar.";
+i18n.zh.prof_confirm_footer   = "保存前请确认各项数值正确。";
+
+i18n.it.prof_confirm_save     = "Conferma";
+i18n.en.prof_confirm_save     = "Confirm";
+i18n.es.prof_confirm_save     = "Confirmar";
+i18n.zh.prof_confirm_save     = "确认";
+
+i18n.it.prof_confirm_cancel   = "Annulla";
+i18n.en.prof_confirm_cancel   = "Cancel";
+i18n.es.prof_confirm_cancel   = "Cancelar";
+i18n.zh.prof_confirm_cancel   = "取消";
+
+i18n.it.prof_warn_bortle      = "non confermato";
+i18n.en.prof_warn_bortle      = "not confirmed";
+i18n.es.prof_warn_bortle      = "no confirmado";
+i18n.zh.prof_warn_bortle      = "未确认";
+
+i18n.it.prof_warn_filters     = "nomi di default";
+i18n.en.prof_warn_filters     = "default names";
+i18n.es.prof_warn_filters     = "nombres por defecto";
+i18n.zh.prof_warn_filters     = "默认名称";
+
+i18n.it.prof_warn_horizon     = "non presente";
+i18n.en.prof_warn_horizon     = "not present";
+i18n.es.prof_warn_horizon     = "no presente";
+i18n.zh.prof_warn_horizon     = "未设置";
+
+i18n.it.prof_acc_none         = "Nessuno";
+i18n.en.prof_acc_none         = "None";
+i18n.es.prof_acc_none         = "Ninguno";
+i18n.zh.prof_acc_none         = "无";
+
+i18n.it.prof_hz_present       = "personalizzato";
+i18n.en.prof_hz_present       = "custom";
+i18n.es.prof_hz_present       = "personalizado";
+i18n.zh.prof_hz_present       = "已自定义";

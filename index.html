@@ -3621,9 +3621,22 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                 </div>
             </div>
             <!-- Import -->
+            <div id="profile-save-section">
             <div style="display:flex; gap:8px; justify-content:flex-end;">
                 <input type="file" id="profile-import-input" accept=".json" style="display:none;" onchange="importaProfiloDaFile(this)">
                 <button class="btn-a-secondary" style="padding:6px 14px; font-size:0.82em; border-color:#6e7a8a; color:#8b949e;" onclick="document.getElementById('profile-import-input').click()"><span data-i18n="prof_import">Importa JSON</span></button>
+            </div>
+            </div>
+            <!-- Pannello conferma salvataggio (nascosto) -->
+            <div id="profile-confirm-panel" style="display:none;">
+                <div style="border-top:1px solid #21293a; margin:14px 0;"></div>
+                <div style="font-size:12px; color:#c49a3c; font-weight:600; margin-bottom:10px;" data-i18n="prof_confirm_title">Riepilogo configurazione:</div>
+                <div id="profile-confirm-list" style="font-size:12px; color:#c9d1d9; background:#0d1117; border:1px solid #21293a; border-radius:6px; padding:10px 12px; margin-bottom:10px; line-height:1.8;"></div>
+                <div style="font-size:11px; color:#ffaa00; margin-bottom:12px;" data-i18n="prof_confirm_footer">Verifica che i valori siano corretti prima di salvare.</div>
+                <div style="display:flex; gap:8px; justify-content:flex-end; flex-wrap:wrap;">
+                    <button class="btn-a-secondary" style="padding:6px 14px; font-size:0.82em; border-color:#6e7a8a; color:#8b949e;" onclick="annullaSalvaProfilo()"><span data-i18n="prof_confirm_cancel">Annulla</span></button>
+                    <button class="btn-a-secondary" style="padding:7px 18px; border-color:#c49a3c; color:#c49a3c; font-weight:600;" onclick="confermaSalvaProfilo()">✔ <span data-i18n="prof_confirm_save">Conferma</span></button>
+                </div>
             </div>
         </div>
     </div>
@@ -4163,6 +4176,9 @@ function applicaProfiloSelezionato() {
     chiudiModalProfilo();
 }
 
+// ── Nome profilo pendente (per conferma) ──────────────────────
+let _pendingProfileName = '';
+
 function salvaProfiloDaModal() {
     const inp = document.getElementById('profile-name-input');
     const name = (inp ? inp.value : '').trim();
@@ -4173,10 +4189,99 @@ function salvaProfiloDaModal() {
     if (ProfileManager.exists(name)) {
         if (!confirm(typeof t === 'function' ? t('prof_overwrite_confirm') : 'Profilo esistente. Sovrascrivere?')) return;
     }
-    ProfileManager.save(name);
-    mostraAvviso((typeof t === 'function' ? t('prof_save_ok') : 'Profilo salvato') + ': ' + name, 'ok');
-    inp.value = '';
+    _pendingProfileName = name;
+    // Costruisci riepilogo
+    document.getElementById('profile-confirm-list').innerHTML = _buildProfileSummary();
+    // Mostra pannello conferma, nascondi sezione salvataggio
+    document.getElementById('profile-save-section').style.display = 'none';
+    document.getElementById('profile-confirm-panel').style.display = 'block';
+}
+
+function confermaSalvaProfilo() {
+    if (!_pendingProfileName) return;
+    ProfileManager.save(_pendingProfileName);
+    mostraAvviso((typeof t === 'function' ? t('prof_save_ok') : 'Profilo salvato') + ': ' + _pendingProfileName, 'ok');
+    const inp = document.getElementById('profile-name-input');
+    if (inp) inp.value = '';
+    _pendingProfileName = '';
+    // Ripristina vista
+    document.getElementById('profile-confirm-panel').style.display = 'none';
+    document.getElementById('profile-save-section').style.display = 'block';
     popolaDropdownProfili();
+}
+
+function annullaSalvaProfilo() {
+    _pendingProfileName = '';
+    document.getElementById('profile-confirm-panel').style.display = 'none';
+    document.getElementById('profile-save-section').style.display = 'block';
+}
+
+function _buildProfileSummary() {
+    var T = typeof t === 'function' ? t : function(k) { return k; };
+    var warn = ' <span style="color:#ffaa00; font-size:11px;">⚠ ';
+    var warnEnd = '</span>';
+    var lines = [];
+
+    // Location
+    var lat = localStorage.getItem('ad_lat') || localStorage.getItem('ad_location-lat') || '--';
+    var lon = localStorage.getItem('ad_lon') || localStorage.getItem('ad_location-lon') || '--';
+    lines.push('<strong>' + T('prof_confirm_location') + ':</strong> ' + lat + ', ' + lon);
+
+    // Bortle
+    var bortleSel = document.getElementById('bortle-class');
+    var bortleVal = bortleSel ? bortleSel.value : (localStorage.getItem('ad_bortle') || '5');
+    var bortleText = bortleVal;
+    var bortleConfirmed = localStorage.getItem('ad_bortle_confirmed') === '1';
+    if (!bortleConfirmed) bortleText += warn + T('prof_warn_bortle') + warnEnd;
+    lines.push('<strong>' + T('prof_confirm_bortle') + ':</strong> ' + bortleText);
+
+    // Telescope
+    var telSel = document.getElementById('preset-telescope');
+    var telName = (telSel && telSel.selectedIndex > 0) ? telSel.options[telSel.selectedIndex].textContent : '--';
+    lines.push('<strong>' + T('prof_confirm_telescope') + ':</strong> ' + telName);
+
+    // Sensor
+    var senSel = document.getElementById('preset-sensor');
+    var senName = (senSel && senSel.selectedIndex > 0) ? senSel.options[senSel.selectedIndex].textContent : '--';
+    lines.push('<strong>' + T('prof_confirm_sensor') + ':</strong> ' + senName);
+
+    // Accessory
+    var accNome = localStorage.getItem('ad_accessorio_nome') || '';
+    var accFatt = parseFloat(localStorage.getItem('ad_accessorio_fattore') || '1.0');
+    var accText = (accFatt !== 1.0 && accNome) ? accNome : T('prof_acc_none');
+    lines.push('<strong>' + T('prof_confirm_accessory') + ':</strong> ' + accText);
+
+    // Horizon
+    var hzRaw = localStorage.getItem('adp_horizon_profile');
+    var hzPresent = !!hzRaw;
+    var hzText = '';
+    if (hzPresent) {
+        try {
+            var hzData = JSON.parse(hzRaw);
+            var hzName = hzData.locationName || '';
+            hzText = T('prof_hz_present') + (hzName ? ' — ' + hzName : '');
+        } catch(e) { hzText = T('prof_hz_present'); }
+    } else {
+        hzText = warn + T('prof_warn_horizon') + warnEnd;
+    }
+    lines.push('<strong>' + T('prof_confirm_horizon') + ':</strong> ' + hzText);
+
+    // NINA Filters
+    var filtersCustom = false;
+    var filterList = [];
+    if (typeof framesMono !== 'undefined') {
+        framesMono.forEach(function(f) {
+            var saved = localStorage.getItem('nina_filter_' + f.id);
+            var name = saved || f.name;
+            if (saved && saved !== f.name) filtersCustom = true;
+            filterList.push(name);
+        });
+    }
+    var filterText = filterList.join(', ');
+    if (!filtersCustom) filterText += warn + T('prof_warn_filters') + warnEnd;
+    lines.push('<strong>' + T('prof_confirm_filters') + ':</strong> ' + filterText);
+
+    return lines.join('<br>');
 }
 
 function esportaProfiloSelezionato() {
