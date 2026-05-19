@@ -1625,10 +1625,10 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.es.cl5_title           = "Estimación de f-ratio actualizada en tiempo real";
         i18n.zh.cl5_title           = "实时更新焦比估算";
 
-        i18n.it.cl5_desc            = "Il pannello AI ricalcola immediatamente le ore stimate al cambio di telescopio o sensore.";
-        i18n.en.cl5_desc            = "The AI panel immediately recalculates estimated hours when the telescope or sensor changes.";
-        i18n.es.cl5_desc            = "El panel IA recalcula inmediatamente las horas estimadas al cambiar telescopio o sensor.";
-        i18n.zh.cl5_desc            = "更换望远镜或传感器时，AI面板立即重新计算估计小时数。";
+        i18n.it.cl5_desc            = "Il pannello assistente ricalcola immediatamente le ore stimate al cambio di telescopio o sensore.";
+        i18n.en.cl5_desc            = "The advisor panel immediately recalculates estimated hours when the telescope or sensor changes.";
+        i18n.es.cl5_desc            = "El panel asistente recalcula inmediatamente las horas estimadas al cambiar telescopio o sensor.";
+        i18n.zh.cl5_desc            = "更换望远镜或传感器时，助手面板立即重新计算估计小时数。";
 
         i18n.it.cl6_title           = "Fix penalità lunare";
         i18n.en.cl6_title           = "Lunar penalty fix";

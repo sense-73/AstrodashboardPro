@@ -554,7 +554,7 @@
                 <div id="dso-gallery-grid"></div>
                 <div id="dso-gallery-footer">
                     <button class="dso-gal-btn" onclick="window.open('https://www.astrobin.com/search/?q='+encodeURIComponent((window._dsoGalleryTarget||{}).name||''),'_blank')">AstroBin</button>
-                    <button class="dso-gal-btn gold" onclick="chiudiGalleriaDso(); if(window._dsoGalleryTarget) apriPianificazione(window._dsoGalleryTarget);">Pianifica</button>
+                    <button class="dso-gal-btn gold" onclick="chiudiGalleriaDso(); if(window._dsoGalleryTarget) apriPianificazione(window._dsoGalleryTarget);">${t('plan_target_btn')}</button>
                 </div>`;
             popup.addEventListener('mouseenter', () => { _dsoGalleryVisible = true; clearTimeout(_dsoCloseTimer); clearTimeout(_dsoOpenTimer); });
             popup.addEventListener('mouseleave', () => { _dsoCloseTimer = setTimeout(chiudiGalleriaDso, 300); });
@@ -571,7 +571,7 @@
                 <div id="dso-gallery-sheet-grid"></div>
                 <div id="dso-gallery-sheet-footer">
                     <button class="dso-gal-btn" onclick="window.open('https://www.astrobin.com/search/?q='+encodeURIComponent((window._dsoGalleryTarget||{}).name||''),'_blank')">AstroBin</button>
-                    <button class="dso-gal-btn gold" onclick="chiudiGalleriaDso(); if(window._dsoGalleryTarget) apriPianificazione(window._dsoGalleryTarget);">Pianifica</button>
+                    <button class="dso-gal-btn gold" onclick="chiudiGalleriaDso(); if(window._dsoGalleryTarget) apriPianificazione(window._dsoGalleryTarget);">${t('plan_target_btn')}</button>
                 </div>`;
             document.body.appendChild(sheet);
 
