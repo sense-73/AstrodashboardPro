@@ -322,10 +322,9 @@
             };
             dsoItems.push(imagingCont);
 
-            // ── Condizioni DSO (TimeCondition + AboveHorizon) ─────────
+            // ── Condizioni DSO (TimeCondition) ────────────────────────
             let dsoConds = [];
             dsoConds.push({ "$id": nxid(), "$type": "NINA.Sequencer.Conditions.TimeCondition, NINA.Sequencer", "Hours": _endH, "Minutes": _endM, "MinutesOffset": 0, "Seconds": 0, "SelectedProvider": { "$type": "NINA.Sequencer.Utility.DateTimeProvider.TimeProvider, NINA.Sequencer" }, "Parent": { "$ref": dsoId } });
-            dsoConds.push({ "$id": nxid(), "$type": "NINA.Sequencer.Conditions.AboveHorizonCondition, NINA.Sequencer", "HasDsoParent": true, "Data": { "$id": nxid(), "$type": "NINA.Sequencer.SequenceItem.Utility.WaitLoopData, NINA.Sequencer", "Coordinates": coords(ra, _fovDecDeg), "Offset": 30.0, "Comparator": 3 }, "Parent": { "$ref": dsoId } });
 
             // ── ExposureInfoList (metadati) ───────────────────────────
             let expInfoList = esposizioni.map(e => ({

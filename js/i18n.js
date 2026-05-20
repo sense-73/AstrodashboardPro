@@ -2978,3 +2978,8 @@ i18n.it.prof_hz_present       = "personalizzato";
 i18n.en.prof_hz_present       = "custom";
 i18n.es.prof_hz_present       = "personalizado";
 i18n.zh.prof_hz_present       = "已自定义";
+
+i18n.it.alert_no_frames       = "Nessuna posa programmata. Aggiungi almeno una posa prima di esportare.";
+i18n.en.alert_no_frames       = "No exposures planned. Add at least one exposure before exporting.";
+i18n.es.alert_no_frames       = "Sin exposiciones programadas. Añade al menos una exposición antes de exportar.";
+i18n.zh.alert_no_frames       = "未安排曝光。导出前请至少添加一次曝光。";

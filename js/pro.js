@@ -1002,14 +1002,13 @@
                 });
             }
 
-            // Container "Target Imaging Instructions" con AboveHorizonCondition (offset 30°)
-            let _aboveH = { "$id": nid(), "$type": "NINA.Sequencer.Conditions.AboveHorizonCondition, NINA.Sequencer", "HasDsoParent": true, "Data": { "$id": nid(), "$type": "NINA.Sequencer.SequenceItem.Utility.WaitLoopData, NINA.Sequencer", "Coordinates": makeCoords(), "Offset": 30.0, "Comparator": 3 }, "Parent": { "$ref": imagingContId } };
+            // Container "Target Imaging Instructions"
             let imagingContainer = {
                 "$id": imagingContId,
                 "$type": "NINA.Sequencer.Container.SequentialContainer, NINA.Sequencer",
                 "Strategy": seqStrat(),
                 "Name": "Target Imaging Instructions",
-                "Conditions": condCol([_aboveH]),
+                "Conditions": condCol([]),
                 "IsExpanded": true,
                 "Items": itemCol(filterBlocks),
                 "Triggers": trigCol(imagingTriggers),
