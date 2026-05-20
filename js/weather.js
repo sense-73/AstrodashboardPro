@@ -615,6 +615,70 @@
             umidita: { filled: false, paths: ['M4.072 20.3a2.999 2.999 0 0 0 3.856 0a3.002 3.002 0 0 0 .67-3.798l-2.095-3.227a.6.6 0 0 0-1.005 0l-2.098 3.227a3.003 3.003 0 0 0 .671 3.798','M16.072 20.3a2.999 2.999 0 0 0 3.856 0a3.002 3.002 0 0 0 .67-3.798l-2.095-3.227a.6.6 0 0 0-1.005 0l-2.098 3.227a3.003 3.003 0 0 0 .671 3.798','M10.072 10.3a2.999 2.999 0 0 0 3.856 0a3.002 3.002 0 0 0 .67-3.798l-2.095-3.227a.6.6 0 0 0-1.005 0l-2.098 3.227a3.003 3.003 0 0 0 .671 3.798'] }
         };
 
+        // ── Disegno layer vento (settore direzionale) ─────────────────────────
+        // Unificato per giorno corrente e giorni di previsione.
+        // R_BASE: raggio base del settore (tipicamente R_NUV = 50000 m).
+        function _disegnaLayerVento(vs, wdir, R_BASE) {
+            // Soglie: verde <15 km/h, giallo 15-30, arancione >30
+            if (vs < 5) return; // mostra settore solo sopra 5 km/h
+            const vsKmh = Math.round(vs);
+            let windColor = vs < 6 ? '#44ff88' : vs < 11 ? '#ffcc00' : vs < 21 ? '#ff8800' : '#ff2222';
+            const R_WIND = R_BASE;
+            const HALF_ANG = 30; // settore ±30° = 60° totali
+            const STEPS = 32;
+
+            // Genera punti lungo l'arco (senza centro = solo arco esterno)
+            function _arcPoints(lat, lon, r, bearing, halfAngle, steps) {
+                let pts = [];
+                for (let s = 0; s <= steps; s++) {
+                    let ang = bearing - halfAngle + (s / steps) * halfAngle * 2;
+                    pts.push(_offsetLatLon(lat, lon, r, ang));
+                }
+                return pts;
+            }
+
+            // Genera punti del settore (slice) con centro
+            function _slicePoints(lat, lon, r, bearing, halfAngle, steps) {
+                let pts = [[lat, lon]];
+                for (let s = 0; s <= steps; s++) {
+                    let ang = bearing - halfAngle + (s / steps) * halfAngle * 2;
+                    pts.push(_offsetLatLon(lat, lon, r, ang));
+                }
+                pts.push([lat, lon]);
+                return pts;
+            }
+
+            // Singolo strato periferico: solo la fascia esterna del settore
+            const outerArc = _arcPoints(latCorrente, lonCorrente, R_WIND, wdir, HALF_ANG, STEPS);
+            const innerArc = _arcPoints(latCorrente, lonCorrente, R_WIND * 0.89, wdir, HALF_ANG, STEPS).reverse();
+            L.polygon([...outerArc, ...innerArc], {
+                color: 'transparent', weight: 0,
+                fillColor: windColor, fillOpacity: 0.55
+            }).addTo(layers.vento);
+
+            // Solo arco esterno — nessun raggio, contorno sfumato
+            const arcPts = _arcPoints(latCorrente, lonCorrente, R_WIND, wdir, HALF_ANG, STEPS);
+            L.polyline(arcPts, {
+                color: windColor, weight: 2.5, opacity: 0.75,
+                smoothFactor: 1
+            }).addTo(layers.vento);
+
+            // Sigla cardinale e velocità — ore 6 (sotto centro mappa)
+            const cardDir = (d) => {
+                const dirs = ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSO','SO','OSO','O','ONO','NO','NNO'];
+                return dirs[Math.round(d / 22.5) % 16];
+            };
+            const labelLatLon = _offsetLatLon(latCorrente, lonCorrente, R_WIND * 0.52, 180);
+            const windHtml = `<div style="text-align:center;line-height:1.3;pointer-events:none;font-family:'Audiowide',sans-serif;">
+                <div style="font-size:36px;color:${windColor};text-shadow:0 0 6px rgba(0,0,0,0.9),0 0 2px rgba(0,0,0,1);">${cardDir(wdir)}</div>
+                <div style="font-size:26px;color:${windColor};opacity:0.9;text-shadow:0 0 5px rgba(0,0,0,0.9),0 0 2px rgba(0,0,0,1);">${vsKmh} km/h</div>
+            </div>`;
+            L.marker(labelLatLon, {
+                icon: L.divIcon({ html: windHtml, className: '', iconSize: [120, 70], iconAnchor: [60, 8] }),
+                interactive: false, keyboard: false
+            }).addTo(layers.vento);
+        }
+
         function cambiaOraMeteo() {
             // Per date future entro copertura meteo (oggi+1, oggi+2): usa datiMeteo
             // Per date oltre: solo dati lunari
@@ -677,6 +741,8 @@
                     if(jet>50){L.circle([latCorrente,lonCorrente],{radius:R_JET,color:'#ff00ff',fillColor:'#ff00ff',fillOpacity:(jet/200)*0.5,weight:2,dashArray:'10, 10'}).addTo(layers.jet);_meteoIcon(_offsetLatLon(latCorrente,lonCorrente,R_JET*PCT,45),_SVG.jet.paths,_SVG.jet.filled).addTo(layers.jet);}
                     if(inqL>0){L.circle([latCorrente,lonCorrente],{radius:R_LUNA,color:'#ffffaa',fillColor:'#ffffaa',fillOpacity:(inqL/100)*0.4,weight:0}).addTo(layers.luna);_meteoIcon(_offsetLatLon(latCorrente,lonCorrente,R_LUNA*PCT,45),_SVG.luna.paths,_SVG.luna.filled).addTo(layers.luna);}
                     if(um>60){L.circle([latCorrente,lonCorrente],{radius:R_UMID,color:'#00ffff',fillColor:'#00ffff',fillOpacity:((um-60)/100)*0.5,weight:1,dashArray:'5, 5'}).addTo(layers.umidita);_meteoIcon(_offsetLatLon(latCorrente,lonCorrente,R_UMID*PCT,45),_SVG.umidita.paths,_SVG.umidita.filled).addTo(layers.umidita);}
+                    // Layer vento (unificato con ramo giorno corrente)
+                    _disegnaLayerVento(vs, wdir, R_NUV);
                     return;
                 }
                 let tOra = dOra.toLocaleDateString(lang==='it'?'it-IT':'en-US', { weekday: 'short', day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
@@ -778,65 +844,7 @@
             }
 
             // ── Layer vento a bassa quota ──────────────────────────────────────────
-            // Soglie: verde <15 km/h, giallo 15-30, arancione >30
-            if (vs >= 5) { // mostra settore solo sopra 5 km/h
-                const vsKmh = Math.round(vs);
-                let windColor = vs < 6 ? '#44ff88' : vs < 11 ? '#ffcc00' : vs < 21 ? '#ff8800' : '#ff2222';
-                const R_WIND = R_NUV;
-                const HALF_ANG = 30; // settore ±30° = 60° totali
-                const STEPS = 32;
-
-                // Genera punti lungo l'arco (senza centro = solo arco esterno)
-                function _arcPoints(lat, lon, r, bearing, halfAngle, steps) {
-                    let pts = [];
-                    for (let s = 0; s <= steps; s++) {
-                        let ang = bearing - halfAngle + (s / steps) * halfAngle * 2;
-                        pts.push(_offsetLatLon(lat, lon, r, ang));
-                    }
-                    return pts;
-                }
-
-                // Genera punti del settore (slice) con centro
-                function _slicePoints(lat, lon, r, bearing, halfAngle, steps) {
-                    let pts = [[lat, lon]];
-                    for (let s = 0; s <= steps; s++) {
-                        let ang = bearing - halfAngle + (s / steps) * halfAngle * 2;
-                        pts.push(_offsetLatLon(lat, lon, r, ang));
-                    }
-                    pts.push([lat, lon]);
-                    return pts;
-                }
-
-                // Singolo strato periferico: solo la fascia esterna del settore
-                const outerArc = _arcPoints(latCorrente, lonCorrente, R_WIND, wdir, HALF_ANG, STEPS);
-                const innerArc = _arcPoints(latCorrente, lonCorrente, R_WIND * 0.89, wdir, HALF_ANG, STEPS).reverse();
-                L.polygon([...outerArc, ...innerArc], {
-                    color: 'transparent', weight: 0,
-                    fillColor: windColor, fillOpacity: 0.55
-                }).addTo(layers.vento);
-
-                // Solo arco esterno — nessun raggio, contorno sfumato
-                const arcPts = _arcPoints(latCorrente, lonCorrente, R_WIND, wdir, HALF_ANG, STEPS);
-                L.polyline(arcPts, {
-                    color: windColor, weight: 2.5, opacity: 0.75,
-                    smoothFactor: 1
-                }).addTo(layers.vento);
-
-                // Sigla cardinale e velocità — ore 6 (sotto centro mappa)
-                const cardDir = (d) => {
-                    const dirs = ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSO','SO','OSO','O','ONO','NO','NNO'];
-                    return dirs[Math.round(d / 22.5) % 16];
-                };
-                const labelLatLon = _offsetLatLon(latCorrente, lonCorrente, R_WIND * 0.52, 180);
-                const windHtml = `<div style="text-align:center;line-height:1.3;pointer-events:none;font-family:'Audiowide',sans-serif;">
-                    <div style="font-size:36px;color:${windColor};text-shadow:0 0 6px rgba(0,0,0,0.9),0 0 2px rgba(0,0,0,1);">${cardDir(wdir)}</div>
-                    <div style="font-size:26px;color:${windColor};opacity:0.9;text-shadow:0 0 5px rgba(0,0,0,0.9),0 0 2px rgba(0,0,0,1);">${vsKmh} km/h</div>
-                </div>`;
-                L.marker(labelLatLon, {
-                    icon: L.divIcon({ html: windHtml, className: '', iconSize: [120, 70], iconAnchor: [60, 8] }),
-                    interactive: false, keyboard: false
-                }).addTo(layers.vento);
-            }
+            _disegnaLayerVento(vs, wdir, R_NUV);
         }
 
 
