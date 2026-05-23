@@ -1268,13 +1268,9 @@ function toggleLock(id) {
 
             let dD = parseInt(document.getElementById('dither-duration').value)||0;
 
-            // Mostra righe HDR e imposta dither freq
+            // Mostra righe HDR (la frequenza dither resta sempre manuale,
+            // _dFreqG è usato solo come fallback nei calcoli budget se il campo è vuoto)
             aggiornaRigheHDR(_hdrExpG);
-            (isM ? framesMono : framesColor).forEach(f => {
-                if (f.id.includes('dark') || f.id.includes('bias')) return;
-                let _dFrqEl = document.getElementById(`${f.id}-dfreq`);
-                if (_dFrqEl) _dFrqEl.value = _dFreqG;
-            });
 
             // ── LUMINANZA (m-l): esposizione calibrata per categoria + correzione magnitudine ────────────────
             // Logica separata dalla base dei filtri RGB/narrowband perché L satura molto prima.

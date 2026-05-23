@@ -180,7 +180,18 @@
             let wl = document.getElementById('target-wiki'); if(targetSelezionato.link) { wl.href = targetSelezionato.link; wl.style.display = 'inline-block'; } else wl.style.display = 'none';
             
             // CALCOLO ASTRONOMICO E REGOLA DEI 30 GRADI
-            let dOggi = getSessionDate(); if (isSessionDateToday() && dOggi.getHours() < 12) dOggi.setDate(dOggi.getDate() - 1); 
+            let dOggi = getSessionDate();
+            // Se la sessione è oggi e siamo ancora prima della fine della notte astronomica
+            // (notte iniziata ieri sera ancora in corso), riportiamo dOggi a ieri per calcolare
+            // gli orari della notte in corso e non di quella che inizierà stasera.
+            if (isSessionDateToday()) {
+                const _now = new Date();
+                const _todayTimes = SunCalc.getTimes(_now, latCorrente, lonCorrente);
+                const _todayNightEnd = _todayTimes.nightEnd || _todayTimes.sunrise;
+                if (_todayNightEnd && !isNaN(_todayNightEnd) && _now < _todayNightEnd) {
+                    dOggi.setDate(dOggi.getDate() - 1);
+                }
+            }
             let atStart = SunCalc.getTimes(dOggi, latCorrente, lonCorrente);
             let dDomani = new Date(dOggi.getTime() + 86400000); let atEnd = SunCalc.getTimes(dDomani, latCorrente, lonCorrente);
             let ft = (x) => x && !isNaN(x) ? x.toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'}) : '--:--';
@@ -808,7 +819,17 @@
 
             // Stessa logica astronomica di selezionaTarget ma senza scroll/toggleSensorMode
             let dOggi = getSessionDate();
-            if (isSessionDateToday() && dOggi.getHours() < 12) dOggi.setDate(dOggi.getDate() - 1);
+            // Se la sessione è oggi e siamo ancora prima della fine della notte astronomica
+            // (notte iniziata ieri sera ancora in corso), riportiamo dOggi a ieri per calcolare
+            // gli orari della notte in corso e non di quella che inizierà stasera.
+            if (isSessionDateToday()) {
+                const _now = new Date();
+                const _todayTimes = SunCalc.getTimes(_now, latCorrente, lonCorrente);
+                const _todayNightEnd = _todayTimes.nightEnd || _todayTimes.sunrise;
+                if (_todayNightEnd && !isNaN(_todayNightEnd) && _now < _todayNightEnd) {
+                    dOggi.setDate(dOggi.getDate() - 1);
+                }
+            }
             let atStart = SunCalc.getTimes(dOggi, latCorrente, lonCorrente);
             let dDomani = new Date(dOggi.getTime() + 86400000);
             let atEnd   = SunCalc.getTimes(dDomani, latCorrente, lonCorrente);
