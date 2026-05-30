@@ -13,9 +13,14 @@
 
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 let k = el.getAttribute('data-i18n');
-                if (el.tagName === 'INPUT') el.placeholder = t(k); else el.innerHTML = t(k);
+                if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') el.placeholder = t(k);
+                else el.innerHTML = t(k);
                 let titleKey = el.getAttribute('data-i18n-title');
                 if (titleKey) el.title = t(titleKey);
+            });
+            // Gestione data-i18n-placeholder (input, textarea, select)
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                el.placeholder = t(el.getAttribute('data-i18n-placeholder'));
             });
 
             ['it','en','es','zh'].forEach(lg => {
@@ -41,9 +46,11 @@
         // ── FORM CONTATTO ─────────────────────────────────────────────────
         function apriContatto() {
             document.getElementById('contact-modal').style.display = 'block';
-            // Aggiorna placeholder soggetto in base alla lingua
+            // Aggiorna placeholder in base alla lingua corrente
             let ph = document.getElementById('contact-subject');
             if (ph) ph.placeholder = t('contact_subject_ph');
+            let phMsg = document.getElementById('contact-message');
+            if (phMsg) phMsg.placeholder = t('contact_message_ph');
         }
 
         function chiudiContatto() {
@@ -65,7 +72,7 @@
 
             // Costruisce il corpo con mittente incluso nel testo (mailto non supporta Reply-To)
             let body = `Da: ${from}\n\n${msg}`;
-            let mailtoLink = `mailto:enrico.salis@gmail.com?subject=${encodeURIComponent(subject || 'AstroDashboard PRO - Messaggio')}&body=${encodeURIComponent(body)}`;
+            let mailtoLink = `mailto:astrodashboardpro@gmail.com?subject=${encodeURIComponent(subject || 'AstroDashboard PRO - Messaggio')}&body=${encodeURIComponent(body)}`;
             window.location.href = mailtoLink;
 
             // Chiude il modal dopo un attimo

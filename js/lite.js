@@ -105,31 +105,41 @@ function calcolaTempiLite() {
     const mp = (sw / (px / 1000)) * (sh / (px / 1000)) / 1e6;
     const lightOverhead = Math.max(1.5, 1.2 + mp * 0.08);
 
-    // ── 5. Budget Lite: finestra − 20 min overhead fisso ────────────────────
+    // ── 5. Budget Lite: finestra − 20 min overhead fisso − tempo Dark/Bias ───
     const LITE_OVERHEAD_SEC = 1200; // 20 minuti
-    const budget = Math.max(0, finestra - LITE_OVERHEAD_SEC);
+    // Dark e Bias sono facoltativi: se inseriti vengono sottratti dal budget Light.
+    const darkCount   = parseInt((_el('c-dark-count') || {}).value) || 0;
+    const darkExp     = parseFloat((_el('c-dark-exp')   || {}).value) || 0;
+    const biasCount   = parseInt((_el('c-bias-count') || {}).value) || 0;
+    const biasExp     = parseFloat((_el('c-bias-exp')   || {}).value) || 0;
+    const darkBiasSec = (darkCount * darkExp) + (biasCount * biasExp);
+    const budget      = Math.max(0, finestra - LITE_OVERHEAD_SEC - darkBiasSec);
 
     // ── 6. Esposizione e numero pose ─────────────────────────────────────────
-    const eS    = targetSelezionato ? calcolaEsposizioneLite() : 120;
+    // Se il lucchetto secondi è attivo, usa il valore inserito dall'utente
+    // invece di quello calcolato automaticamente.
+    const _expLockEl = _el('c-light-lock');
+    const _expLocked = _expLockEl && (_expLockEl.dataset.locked === '1' || _expLockEl.classList.contains('locked'));
+    const cLightExpEl = _el('c-light-exp');
+    const eSauto = targetSelezionato ? calcolaEsposizioneLite() : 120;
+    const eS     = _expLocked && cLightExpEl && parseFloat(cLightExpEl.value) > 0
+                   ? parseFloat(cLightExpEl.value)
+                   : eSauto;
     const ciclo = eS + lightOverhead;                          // secondi per posa
     const pose  = ciclo > 0 ? Math.floor(budget / ciclo) : 0;
 
     // ── 7. Tempo totale Lite ─────────────────────────────────────────────────
-    // = pose Light + overhead fisso (senza dark/bias)
-    const tSec = pose * ciclo + LITE_OVERHEAD_SEC;
+    const tSec = pose * ciclo + darkBiasSec + LITE_OVERHEAD_SEC;
 
     // ── 8. Aggiorna campi c-light nella griglia filtri ───────────────────────
     const cLightCount = _el('c-light-count');
     const cLightExp   = _el('c-light-exp');
     const cLightTot   = _el('c-light-tot');
 
-    // Rispetta il lucchetto pose se l'utente lo ha attivato manualmente
-    const _countLocked = (function() {
-        const lk = _el('c-light-count-lock');
-        return lk && lk.classList.contains('locked');
-    })();
-    if (cLightCount && !_countLocked) cLightCount.value = pose;
-    if (cLightExp)   cLightExp.value   = eS;
+    // Il lucchetto pose è nascosto in Lite (CSS), ma per sicurezza lo ignoriamo
+    if (cLightCount) cLightCount.value = pose;
+    // Rispetta il lucchetto secondi: non sovrascrivere se bloccato
+    if (cLightExp && !_expLocked) cLightExp.value = eS;
     if (cLightTot)   cLightTot.innerHTML = typeof formatSeconds === 'function'
         ? formatSeconds(pose * ciclo) : '0h 0m';
 
@@ -142,14 +152,17 @@ function calcolaTempiLite() {
         }
     });
 
-    // Nascondi righe Dark e Bias: in Lite non rientrano nel calcolo.
-    // Vengono ripristinate da disattivaModaLite() al ritorno alla modalità Avanzata.
-    ['c-dark', 'c-bias'].forEach(fid => {
-        const row = _el(fid + '-row');
-        if (row) row.style.display = 'none';
-        // Azzera il count per non interferire con calcolaTempi() se si torna in Avanzato
-        const cnt = _el(fid + '-count');
-        if (cnt) cnt.value = '0';
+    // Dark e Bias: visibili e facoltativi in Lite (già sottratti dal budget sopra).
+    // Listener input: ricalcola calcolaTempiLite() ad ogni modifica
+    // così la barra si aggiorna in tempo reale (es. diventa rossa se si sfora).
+    ['c-dark-count','c-dark-exp','c-bias-count','c-bias-exp'].forEach(function(id) {
+        var el = _el(id);
+        if (el && !el._liteDarkBiasAttached) {
+            el.addEventListener('input', function() {
+                if (typeof calcolaTempiLite === 'function') calcolaTempiLite();
+            });
+            el._liteDarkBiasAttached = true;
+        }
     });
 
     // In Lite l'HDR non esiste: azzera il campo esposizione HDR del filtro Light
@@ -341,8 +354,13 @@ function aggiornaBarraLite() {
         }
     }
 
-    // Tooltip con valori sintetici
+    // Tooltip con valori sintetici — usa i18n se disponibile
     if (tooltip) {
+        var _lang = localStorage.getItem('ad_lang') || 'it';
+        var _t = (typeof i18n !== 'undefined' && i18n[_lang]) ? i18n[_lang] : {};
+        var lblWindow   = _t.lite_window   || 'Finestra';
+        var lblAcq      = _t.lite_acq      || 'Acquisizione';
+        var lblResidual = overflow ? (_t.lite_overflow || 'Sforamento') : (_t.lite_residual || 'Residuo');
         var sessH = Math.floor(sessionSec / 3600);
         var sessM = Math.floor((sessionSec % 3600) / 60);
         var acqH  = Math.floor(totalSec / 3600);
@@ -350,13 +368,12 @@ function aggiornaBarraLite() {
         var res   = Math.abs(sessionSec - totalSec);
         var resH  = Math.floor(res / 3600);
         var resM  = Math.floor((res % 3600) / 60);
-        var resLabel = overflow ? 'Sforamento' : 'Residuo';
         var resColor = overflow ? '#e05050' : '#2ec96c';
         tooltip.innerHTML =
-            'Finestra: ' + sessH + 'h ' + sessM + 'm' +
-            '&nbsp;&nbsp;|&nbsp;&nbsp;Acquisizione: ' + acqH + 'h ' + acqM + 'm' +
+            lblWindow + ': ' + sessH + 'h ' + sessM + 'm' +
+            '&nbsp;&nbsp;|&nbsp;&nbsp;' + lblAcq + ': ' + acqH + 'h ' + acqM + 'm' +
             '&nbsp;&nbsp;|&nbsp;&nbsp;<span style="color:' + resColor + '">' +
-            resLabel + ': ' + resH + 'h ' + resM + 'm</span>';
+            lblResidual + ': ' + resH + 'h ' + resM + 'm</span>';
     }
 }
 
@@ -396,3 +413,67 @@ function _aggiornaTempoManualeLite() {
     // Aggiorna la barra
     if (typeof aggiornaBarraLite === 'function') aggiornaBarraLite();
 }
+
+/**
+ * Wrapper di generaSequenzaOttimale() per la modalità Lite.
+ * Salva i valori Dark e Bias prima della chiamata (che li azzera),
+ * li ripristina dopo, poi ricalcola con calcolaTempiLite().
+ */
+function _generaSequenzaLite() {
+    var _el = function(id) { return document.getElementById(id); };
+    // Salva Dark e Bias
+    var dk  = _el('c-dark-count'),  dkE = _el('c-dark-exp');
+    var bk  = _el('c-bias-count'),  bkE = _el('c-bias-exp');
+    var darkCnt = dk  ? dk.value  : '0';
+    var darkE   = dkE ? dkE.value : '0';
+    var biasCnt = bk  ? bk.value  : '0';
+    var biasE   = bkE ? bkE.value : '0';
+    // Esegui generaSequenzaOttimale
+    if (typeof generaSequenzaOttimale === 'function') generaSequenzaOttimale();
+    // Ripristina Dark e Bias
+    if (dk)  dk.value  = darkCnt;
+    if (dkE) dkE.value = darkE;
+    if (bk)  bk.value  = biasCnt;
+    if (bkE) bkE.value = biasE;
+    // Ricalcola con i valori ripristinati
+    if (typeof calcolaTempiLite === 'function') setTimeout(calcolaTempiLite, 50);
+}
+
+/**
+ * Calcola e mostra la copertura nuvolosa risultante nel pulsante unificato Lite.
+ * Formula fisica: 100 - (1-basse/100) × (1-medie/100) × (1-alte/100)
+ * Osserva i tre span val-basse, val-medie, val-alte e aggiorna val-nuvole-lite.
+ */
+(function _syncNuvoleLite() {
+    function _parsePerc(el) {
+        if (!el) return 0;
+        return parseFloat(el.textContent) || 0;
+    }
+    function _aggiorna() {
+        var src_b = document.getElementById('val-basse');
+        var src_m = document.getElementById('val-medie');
+        var src_a = document.getElementById('val-alte');
+        var dst   = document.getElementById('val-nuvole-lite');
+        if (!dst) return;
+        var b = _parsePerc(src_b) / 100;
+        var m = _parsePerc(src_m) / 100;
+        var a = _parsePerc(src_a) / 100;
+        var risultante = Math.round(100 * (1 - (1-b) * (1-m) * (1-a)));
+        dst.textContent = risultante + '%';
+    }
+    function _avvia() {
+        // Aggiorna subito e poi osserva le modifiche di tutti e tre gli span
+        _aggiorna();
+        ['val-basse', 'val-medie', 'val-alte'].forEach(function(id) {
+            var el = document.getElementById(id);
+            if (!el) return;
+            new MutationObserver(_aggiorna)
+                .observe(el, { childList: true, characterData: true, subtree: true });
+        });
+    }
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', _avvia);
+    } else {
+        _avvia();
+    }
+})();

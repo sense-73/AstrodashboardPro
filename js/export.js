@@ -187,6 +187,21 @@
             let doWarm    = document.getElementById('nina-warm')   ? document.getElementById('nina-warm').checked   : false;
             let doPark    = document.getElementById('nina-park')   ? document.getElementById('nina-park').checked   : false;
 
+            // ── Modalità Base: override opzioni non disponibili in Lite ──────────
+            // In Lite: solo OSC/colori, nessun AF, nessun flip.
+            // Il blocco è completamente inerte quando modaLite === false.
+            if (typeof modaLite !== 'undefined' && modaLite) {
+                isMono     = false; // Lite usa sempre camera a colori OSC
+                doAfStart  = false; // Autofocus non disponibile in Lite
+                doAfFilter = false;
+                doAfHfr    = false;
+                doAfTemp   = false;
+                doFlip     = false; // Meridian Flip incluso nell'overhead fisso
+                // HDR non disponibile in Lite: azzera il campo esposizione HDR
+                const _hdrEl = document.getElementById('c-light-hdr');
+                if (_hdrEl) _hdrEl.value = '';
+            }
+
             // ── Raccolta esposizioni ──────────────────────────────────
             // Tipo filtro OSC (dual/quad-band) — letto dall'elemento UI
             let filterOscType = (document.getElementById('filter-osc-type') || {value:'none'}).value;
@@ -213,6 +228,7 @@
                 let dithChk   = document.getElementById(`${f.id}-dither`);
                 let dithFrq   = document.getElementById(`${f.id}-dfreq`);
                 let doDither  = isLight && dithChk ? dithChk.checked : false;
+                if (typeof modaLite !== 'undefined' && modaLite) doDither = false; // Lite: no dither
                 let ditherFreq= parseInt(dithFrq ? dithFrq.value : 4) || 4;
                 // OSC con filtro dual/quad: usa il nome del filtro OSC per SwitchFilter
                 let filterName= isMono && isLight ? (document.getElementById(`nina-name-${f.id}`) || {value:''}).value.trim()

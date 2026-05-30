@@ -331,7 +331,24 @@ function _npPopolaPopup(analisi, dsoList) {
 
 // ── Entry point pubblico ───────────────────────────────────────────────────────
 // Chiamata da scaricaDatiPrevisionali() dopo il caricamento dei dati meteo.
+// Se l'onboarding non è completo, l'apertura viene messa in coda e ripresa
+// alla fine del flusso onboarding (da _chiudiOnboardingConfirm in globals.js).
+let _nightPopupPending = false;
 function mostraNightPopup() {
+    // Onboarding non completo: metti in coda e attendi.
+    // Usa le chiavi primarie (lang_chosen + mode_chosen) invece di ad_onboarding_complete
+    // per evitare problemi di timing al riavvio (il meteo si carica prima del DOMContentLoaded).
+    if (!localStorage.getItem('ad_lang_chosen') || !localStorage.getItem('ad_mode_chosen')) {
+        _nightPopupPending = true;
+        return;
+    }
+
+    // Scelta A: nessuna posizione impostata → non mostrare il popup.
+    // Apparirà automaticamente la prossima volta che l'utente torna
+    // con la posizione già salvata e i dati meteo caricati.
+    const hasPosition = localStorage.getItem('ad_lat') || localStorage.getItem('ad_location-lat');
+    if (!hasPosition) return;
+
     const analisi = _npAnalisiNotte();
     if (!analisi) return;
 
@@ -344,6 +361,15 @@ function mostraNightPopup() {
     }
 }
 
+/** Ripresa night-popup dopo la fine dell'onboarding. */
+function riprendiNightPopupSePendente() {
+    if (_nightPopupPending) {
+        _nightPopupPending = false;
+        // Chiamata diretta — onboarding ora è completo
+        mostraNightPopup();
+    }
+}
+
 // ── Navigazione al planetario ─────────────────────────────────────────────────
 function _npApriNelPlanetario(dso) {
     chiudiNightPopup();
@@ -352,5 +378,13 @@ function _npApriNelPlanetario(dso) {
 
 function chiudiNightPopup() {
     const modal = document.getElementById('night-popup-modal');
-    if (modal) modal.style.display = 'none';
+    if (!modal) return;
+    // Fade-out fluido prima della chiusura
+    modal.style.transition = 'opacity .25s ease';
+    modal.style.opacity = '0';
+    setTimeout(() => {
+        modal.style.display = 'none';
+        modal.style.opacity = '';
+        modal.style.transition = '';
+    }, 250);
 }

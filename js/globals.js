@@ -930,3 +930,376 @@ function stimaAFNotturni() {
 
     return ris;
 }
+
+// ══════════════════════════════════════════════════════════════════
+// ── MODALITÀ BASE (LITE) ─────────────────────────────────────────
+// Variabile globale e funzioni di attivazione/disattivazione.
+// Default: false → modalità Avanzata (comportamento invariato).
+// La scelta viene persistita in localStorage con chiave 'ad_mode_lite'.
+// ══════════════════════════════════════════════════════════════════
+
+let modaLite = (localStorage.getItem('ad_mode_lite') === '1');
+
+/**
+ * Attiva la modalità Base (Lite).
+ * Azioni:
+ *  1. Imposta modaLite = true e persiste in localStorage
+ *  2. Aggiunge classe 'mode-lite' al body (CSS nasconde .lite-hidden)
+ *  3. Salva snapshot dei valori avanzati (per ripristino)
+ *  4. Forza sensor-type = 'color' e capture-mode = 'single'
+ *  5. Deseleziona tutti i trigger AF
+ *  6. Chiama calcolaTempiLite() se target + finestra disponibili
+ */
+function attivaModaLite() {
+    modaLite = true;
+    localStorage.setItem('ad_mode_lite', '1');
+    document.body.classList.add('mode-lite');
+
+    // ── Salva snapshot valori avanzati per ripristino ─────────────
+    const snap = {};
+    const _snapEl = id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        snap[id] = (el.type === 'checkbox') ? el.checked : el.value;
+    };
+    ['sensor-type', 'capture-mode',
+     'smart-af-start', 'smart-af-filter', 'smart-af-hfr', 'smart-af-temp',
+     'dither-duration'].forEach(_snapEl);
+    try { sessionStorage.setItem('ad_lite_snap', JSON.stringify(snap)); } catch(e) {}
+
+    // ── Forza valori compatibili con Lite ─────────────────────────
+    const sensorEl = document.getElementById('sensor-type');
+    if (sensorEl && sensorEl.value !== 'color') {
+        sensorEl.value = 'color';
+        if (typeof toggleSensorMode === 'function') toggleSensorMode();
+    }
+    const captureEl = document.getElementById('capture-mode');
+    if (captureEl) captureEl.value = 'single';
+
+    // In Lite il meteo mostra solo oggi: se la data sessione è nel futuro
+    // la resettiamo a oggi per evitare che lo slider meteo mostri giorni futuri.
+    if (typeof isSessionDateToday === 'function' && !isSessionDateToday()) {
+        if (typeof setSessionDate === 'function') setSessionDate(new Date());
+    }
+
+    // Deseleziona tutti i trigger AF (non rientrano nel calcolo Lite)
+    ['smart-af-start', 'smart-af-filter', 'smart-af-hfr', 'smart-af-temp']
+        .forEach(id => {
+            const el = document.getElementById(id);
+            if (el && el.type === 'checkbox') el.checked = false;
+        });
+
+    // ── Aggiorna la UI del selettore modalità ─────────────────────
+    _aggiornaModeSelectUI();
+
+    // ── Avvia calcolo Lite se le condizioni sono pronte ───────────
+    if (typeof calcolaTempiLite === 'function') calcolaTempiLite();
+}
+
+/**
+ * Disattiva la modalità Base, tornando alla modalità Avanzata.
+ * Ripristina i valori avanzati salvati nello snapshot.
+ */
+function disattivaModaLite() {
+    modaLite = false;
+    localStorage.setItem('ad_mode_lite', '0');
+    document.body.classList.remove('mode-lite');
+
+    // ── Ripristina valori avanzati dallo snapshot ─────────────────
+    try {
+        const raw = sessionStorage.getItem('ad_lite_snap');
+        if (raw) {
+            const snap = JSON.parse(raw);
+            Object.keys(snap).forEach(id => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                if (el.type === 'checkbox') el.checked = !!snap[id];
+                else el.value = snap[id];
+            });
+            sessionStorage.removeItem('ad_lite_snap');
+            // Riallinea sensor mode se era mono
+            const sensorEl = document.getElementById('sensor-type');
+            if (sensorEl && sensorEl.value === 'mono') {
+                if (typeof toggleSensorMode === 'function') toggleSensorMode();
+            }
+        }
+    } catch(e) {}
+
+    // ── Aggiorna la UI del selettore modalità ─────────────────────
+    _aggiornaModeSelectUI();
+
+    // ── Ripristina row calibration nascoste in Lite ───────────────
+    // calcolaTempiLite() le nasconde; qui le rendiamo di nuovo visibili
+    // prima che calcolaTempi() aggiorni la griglia filtri avanzata.
+    ['c-dark', 'c-bias'].forEach(fid => {
+        const row = document.getElementById(fid + '-row');
+        if (row) row.style.display = '';
+    });
+
+    // ── Ricalcola con l'algoritmo avanzato ────────────────────────
+    if (typeof calcolaTempi === 'function') calcolaTempi();
+}
+
+/**
+ * Toggle: chiamato dal dropdown Base/Avanzato nel navbar.
+ * @param {string} mode - 'lite' oppure 'advanced'
+ */
+function setModalita(mode) {
+    if (mode === 'lite' && !modaLite)       attivaModaLite();
+    else if (mode === 'advanced' && modaLite) disattivaModaLite();
+    // Chiudi il menu a tendina
+    const menu = document.getElementById('mode-select-menu');
+    if (menu) menu.classList.remove('open');
+}
+
+/**
+ * Aggiorna UI del pulsante/menu selettore modalità.
+ * Aggiorna icona, label, colori del pulsante navbar in base a modaLite.
+ */
+function _aggiornaModeSelectUI() {
+    const btn   = document.getElementById('mode-select-btn');
+    const items = document.querySelectorAll('.mode-menu-item');
+    if (btn) {
+        const isLite  = modaLite;
+        const color   = isLite ? '#58a6ff' : '#c49a3c';
+        const bg      = isLite ? '#1c2d3a' : '#1a1a2e';
+        const label   = isLite
+            ? (typeof i18n !== 'undefined' ? (i18n[localStorage.getItem('ad_lang') || 'it'] || {}).mode_base || 'Base' : 'Base')
+            : (typeof i18n !== 'undefined' ? (i18n[localStorage.getItem('ad_lang') || 'it'] || {}).mode_advanced || 'Avanzato' : 'Avanzato');
+        const iconSvg = isLite
+            ? '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="' + color + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 10l-4 4l6 6l4 -16l-18 7l4 2l2 6l3 -4"/></svg>'
+            : '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="' + color + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 13a8 8 0 0 1 7 7a6 6 0 0 0 3 -5a9 9 0 0 0 6 -8a3 3 0 0 0 -3 -3a9 9 0 0 0 -8 6a6 6 0 0 0 -5 3"/><path d="M7 14a6 6 0 0 0 -3 6a6 6 0 0 0 6 -3"/><path d="M14 9a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/></svg>';
+        btn.style.background   = bg;
+        btn.style.borderColor  = color;
+        btn.style.color        = color;
+        btn.style.boxShadow    = '0 0 8px ' + color + '26';
+        const iconEl  = document.getElementById('mode-btn-icon');
+        const labelEl = btn.querySelector('.mode-btn-label');
+        const chevron = document.getElementById('mode-btn-chevron');
+        if (iconEl)  iconEl.innerHTML = iconSvg;
+        if (labelEl) labelEl.textContent = label;
+        if (chevron) chevron.setAttribute('stroke', color);
+    }
+    items.forEach(item => {
+        const isActive = modaLite ? item.dataset.mode === 'lite' : item.dataset.mode === 'advanced';
+        item.style.color = isActive ? '#c49a3c' : '#c9d1d9';
+        item.style.fontWeight = isActive ? '700' : '400';
+    });
+}
+
+/**
+ * Router calcolaTempi: usato dagli oninput/onchange in index.html.
+ * In modalità Avanzata → calcolaTempi() (invariato)
+ * In modalità Base     → calcolaTempiLite() (nuovo algoritmo)
+ */
+function _ct() {
+    if (modaLite) {
+        if (typeof calcolaTempiLite === 'function') calcolaTempiLite();
+    } else {
+        if (typeof calcolaTempi === 'function') calcolaTempi();
+    }
+}
+
+// ── Inizializzazione al caricamento pagina ────────────────────────
+// Applica subito la classe CSS corretta in base al valore salvato.
+(function _initModaLite() {
+    if (modaLite) {
+        document.body.classList.add('mode-lite');
+    }
+})();
+
+// ══════════════════════════════════════════════════════════════════
+// ── ONBOARDING SCELTA MODALITÀ ────────────────────────────────────
+// Mostrato al primo accesso alla planning-view se l'utente non ha
+// ancora scelto una modalità (chiave localStorage 'ad_mode_chosen').
+// ══════════════════════════════════════════════════════════════════
+
+/** Mostra il modal onboarding con fade-in fluido (se la scelta non è ancora stata fatta). */
+function _mostraOnboardingSeNecessario() {
+    if (localStorage.getItem('ad_mode_chosen')) return;
+    const modal = document.getElementById('onboarding-modal');
+    const content = document.getElementById('onboarding-modal-content');
+    if (!modal) return;
+    modal.style.display = 'flex';
+    // forza reflow prima della transizione
+    void modal.offsetWidth;
+    modal.style.opacity = '1';
+    if (content) content.style.transform = 'scale(1)';
+}
+
+/** Nasconde il modal onboarding con fade-out. */
+function _chiudiOnboardingModal() {
+    const modal = document.getElementById('onboarding-modal');
+    const content = document.getElementById('onboarding-modal-content');
+    if (!modal) return;
+    modal.style.opacity = '0';
+    if (content) content.style.transform = 'scale(.95)';
+    setTimeout(() => { modal.style.display = 'none'; }, 350);
+}
+
+/** L'utente ha scelto la modalità dal modal onboarding. */
+function _onboardingScegliModalita(mode) {
+    localStorage.setItem('ad_mode_chosen', '1');
+    _chiudiOnboardingModal();
+    // Imposta modalità
+    if (mode === 'lite') attivaModaLite();
+    else disattivaModaLite();
+    // Mostra popup conferma dopo che il modal si è chiuso
+    setTimeout(() => _mostraOnboardingConfirm(mode), 400);
+}
+
+/** L'utente ha cliccato X Salta — salva la scelta senza cambiare modalità. */
+function _onboardingSkip() {
+    localStorage.setItem('ad_mode_chosen', '1');
+    _chiudiOnboardingModal();
+}
+
+/** Mostra il popup di conferma con highlight del pulsante navbar. */
+function _mostraOnboardingConfirm(mode) {
+    const modal = document.getElementById('onboarding-confirm-modal');
+    if (!modal) return;
+    const isLite    = mode === 'lite';
+    const color     = isLite ? '#58a6ff' : '#c49a3c';
+    const bgColor   = isLite ? '#1c2d3a' : '#1a1a2e';
+    const iconSvg   = isLite
+        ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="' + color + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 10l-4 4l6 6l4 -16l-18 7l4 2l2 6l3 -4"/></svg>'
+        : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="' + color + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 13a8 8 0 0 1 7 7a6 6 0 0 0 3 -5a9 9 0 0 0 6 -8a3 3 0 0 0 -3 -3a9 9 0 0 0 -8 6a6 6 0 0 0 -5 3"/><path d="M7 14a6 6 0 0 0 -3 6a6 6 0 0 0 6 -3"/><path d="M14 9a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/></svg>';
+    const label     = isLite ? (typeof i18n !== 'undefined' ? (i18n[localStorage.getItem('ad_lang') || 'it'] || {}).mode_base || 'Base' : 'Base') : (typeof i18n !== 'undefined' ? (i18n[localStorage.getItem('ad_lang') || 'it'] || {}).mode_advanced || 'Avanzato' : 'Avanzato');
+    // Aggiorna preview pulsante nel popup
+    const previewBtn = document.getElementById('confirm-modal-btn-preview');
+    if (previewBtn) { previewBtn.style.background = bgColor; previewBtn.style.borderColor = color; previewBtn.style.boxShadow = '0 0 12px ' + color + '44'; }
+    const previewIcon  = document.getElementById('confirm-modal-btn-icon');
+    const previewLabel = document.getElementById('confirm-modal-btn-label');
+    const arrowEl      = previewBtn ? previewBtn.querySelector('div') : null;
+    if (previewIcon)  previewIcon.innerHTML = iconSvg;
+    if (previewLabel) { previewLabel.textContent = label; previewLabel.style.color = color; }
+    if (arrowEl)      arrowEl.style.color = color;
+    // Icona centrale
+    const iconWrap = document.getElementById('confirm-modal-icon-wrap');
+    if (iconWrap) { iconWrap.style.background = bgColor; iconWrap.innerHTML = iconSvg.replace('18" height="18', '22" height="22'); }
+    // Titolo con i18n
+    const lang = localStorage.getItem('ad_lang') || 'it';
+    const t = (typeof i18n !== 'undefined' && i18n[lang]) ? i18n[lang] : {};
+    const modeLabel = isLite ? (t.mode_base || 'Base') : (t.mode_advanced || 'Avanzato');
+    const activated = t.onboarding_activated || 'attivata';
+    const title = document.getElementById('confirm-modal-title');
+    if (title) title.textContent = 'Modalità ' + modeLabel + ' ' + activated;
+    // CTA
+    const cta = document.getElementById('confirm-modal-cta');
+    if (cta) { cta.style.background = color; }
+    modal.style.display = 'flex';
+}
+
+/** Chiude il popup di conferma e finalizza l'onboarding (riprende night-popup). */
+function _chiudiOnboardingConfirm() {
+    const modal = document.getElementById('onboarding-confirm-modal');
+    if (modal) modal.style.display = 'none';
+    _finalizzaOnboarding();
+}
+
+// ──────────────────────────────────────────────────────────────────
+// ONBOARDING COMPLETO: Lingua → Modalità → Conferma → Night-popup
+// Sequenza:
+//   1. _avviaOnboarding() chiamato al DOMContentLoaded
+//   2. Se ad_lang_chosen mancante → mostra modal lingua
+//   3. Quando lingua scelta → mostra modal modalità (se ad_mode_chosen mancante)
+//   4. Quando modalità scelta → mostra popup conferma istruzioni
+//   5. Quando conferma chiusa → setta ad_onboarding_complete
+//   6. Riprende il night-popup se era in attesa
+// ──────────────────────────────────────────────────────────────────
+
+/** Avvia il flusso onboarding al boot. Chiamato dal DOMContentLoaded di index.html. */
+function _avviaOnboarding() {
+    // Se entrambe le scelte sono già fatte → onboarding già completo
+    if (localStorage.getItem('ad_lang_chosen') && localStorage.getItem('ad_mode_chosen')) {
+        localStorage.setItem('ad_onboarding_complete', '1');
+        return;
+    }
+    // Step 1: scelta lingua se non ancora scelta
+    if (!localStorage.getItem('ad_lang_chosen')) {
+        // Piccolo delay per permettere all'app di renderizzare
+        setTimeout(_mostraOnboardingLingua, 300);
+    } else if (!localStorage.getItem('ad_mode_chosen')) {
+        // Lingua già scelta ma modalità no → salta a step 2
+        setTimeout(_mostraOnboardingSeNecessario, 300);
+    }
+}
+
+/** Mostra il modal scelta lingua con fade-in. */
+function _mostraOnboardingLingua() {
+    const modal = document.getElementById('onboarding-lang-modal');
+    const content = document.getElementById('onboarding-lang-content');
+    if (!modal) return;
+    modal.style.display = 'flex';
+    void modal.offsetWidth;
+    modal.style.opacity = '1';
+    if (content) content.style.transform = 'scale(1)';
+}
+
+/** Nasconde il modal lingua con fade-out. */
+function _chiudiOnboardingLingua(callback) {
+    const modal = document.getElementById('onboarding-lang-modal');
+    const content = document.getElementById('onboarding-lang-content');
+    if (!modal) { if (callback) callback(); return; }
+    modal.style.opacity = '0';
+    if (content) content.style.transform = 'scale(.95)';
+    setTimeout(() => {
+        modal.style.display = 'none';
+        if (callback) callback();
+    }, 350);
+}
+
+/** L'utente ha scelto una lingua. */
+function _onboardingScegliLingua(lang) {
+    localStorage.setItem('ad_lang', lang);
+    localStorage.setItem('ad_lang_chosen', '1');
+    if (typeof changeLanguage === 'function') changeLanguage(lang);
+    _chiudiOnboardingLingua(() => {
+        // Pausa breve per dare respiro tra i due modal
+        setTimeout(() => {
+            if (!localStorage.getItem('ad_mode_chosen')) {
+                _mostraOnboardingSeNecessario();
+            } else {
+                _finalizzaOnboarding();
+            }
+        }, 400);
+    });
+}
+
+/** L'utente ha cliccato X — default inglese. */
+function _onboardingLinguaSkip() {
+    localStorage.setItem('ad_lang', 'en');
+    localStorage.setItem('ad_lang_chosen', '1');
+    if (typeof changeLanguage === 'function') changeLanguage('en');
+    _chiudiOnboardingLingua(() => {
+        setTimeout(() => {
+            if (!localStorage.getItem('ad_mode_chosen')) {
+                _mostraOnboardingSeNecessario();
+            } else {
+                _finalizzaOnboarding();
+            }
+        }, 400);
+    });
+}
+
+/** Finalizza l'onboarding e riprende il night-popup se era in attesa. */
+function _finalizzaOnboarding() {
+    localStorage.setItem('ad_onboarding_complete', '1');
+    if (typeof riprendiNightPopupSePendente === 'function') {
+        riprendiNightPopupSePendente();
+    }
+}
+
+/**
+ * Fa lampeggiare 3 volte il pulsante modalità nel navbar.
+ * Chiamato dopo il click sulla card Modalità Base nella landing.
+ */
+function _blinkaModeBtn() {
+    var btn = document.getElementById('mode-select-btn');
+    if (!btn) return;
+    btn.classList.add('mode-btn-blinking');
+    // Rimuove la classe dopo 3 lampeggi (3 × 0.45s = 1.35s + margine)
+    setTimeout(function() {
+        btn.classList.remove('mode-btn-blinking');
+    }, 1500);
+}

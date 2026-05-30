@@ -349,6 +349,8 @@
             }
             
             disegnaGraficoAltezza(); toggleSensorMode(); calcolaTempi(); aggiornaBottoneAccessorio(); window.scrollTo(0,0);
+            // ── Modalità Base: ricalcola con algoritmo Lite (sovrascrive i display) ──
+            if (typeof modaLite !== 'undefined' && modaLite && typeof calcolaTempiLite === 'function') calcolaTempiLite();
         }
 
         function tornaDashboard() {
@@ -424,6 +426,8 @@
             aggiornaFOV();
             if (typeof calcolaTempi === 'function') calcolaTempi();
             if (typeof aggiornaAI   === 'function') aggiornaAI();
+            // ── Modalità Base ──
+            if (typeof modaLite !== 'undefined' && modaLite && typeof calcolaTempiLite === 'function') calcolaTempiLite();
         }
 
         function aggiornaBottoneAccessorio() {
@@ -470,6 +474,8 @@
                 aggiornaFOV();
                 if (typeof calcolaTempi === 'function') calcolaTempi();
                 if (typeof aggiornaStimaAF === 'function') aggiornaStimaAF();
+                // ── Modalità Base ──
+                if (typeof modaLite !== 'undefined' && modaLite && typeof calcolaTempiLite === 'function') calcolaTempiLite();
             }
         }
         
@@ -873,6 +879,8 @@
 
             disegnaGraficoAltezza();
             if (typeof calcolaTempi === 'function') calcolaTempi();
+            // ── Modalità Base ──
+            if (typeof modaLite !== 'undefined' && modaLite && typeof calcolaTempiLite === 'function') calcolaTempiLite();
         }
 
         document.addEventListener('sessionDateChanged', function() {

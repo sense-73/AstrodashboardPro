@@ -1575,10 +1575,65 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         // ⚠️ AGGIORNARE VERSIONE QUI quando si rilascia una nuova versione:
         // cl_close_btn = testo del pulsante nel modal changelog (NON è hardcoded in index.html)
         // Aggiornare anche: title tag, badge navbar (>vX.X</button>), landing (>vX.X</span>), modal badge, pulsante "Inizia a usare" in index.html
-        i18n.it.cl_close_btn = "Inizia a usare v7.0 🚀";
-        i18n.en.cl_close_btn = "Start using v7.0 🚀";
-        i18n.es.cl_close_btn = "Empezar a usar v7.0 🚀";
-        i18n.zh.cl_close_btn = "开始使用 v7.0 🚀";
+        // ── Changelog v8.0 ──────────────────────────────────────────────────
+        i18n.it.cl_v80_lite_title = "Modalità Base";
+        i18n.en.cl_v80_lite_title = "Basic Mode";
+        i18n.es.cl_v80_lite_title = "Modo Básico";
+        i18n.zh.cl_v80_lite_title = "基础模式";
+        i18n.it.cl_v80_lite_desc = "Nuovo livello di utilizzo guidato per neofiti: calcolo automatico delle pose ottimali in base al setup e alla notte disponibile, meteo semplificato con nuvole unificate e Jet Stream, Dark e Bias facoltativi con impatto diretto sul budget temporale, export N.I.N.A. pronto in un click senza configurazioni complesse.";
+        i18n.en.cl_v80_lite_desc = "New guided usage level for beginners: automatic calculation of optimal frames based on setup and available night, simplified weather with unified clouds and Jet Stream, optional Dark and Bias frames with direct impact on the time budget, N.I.N.A. export ready in one click without complex settings.";
+        i18n.es.cl_v80_lite_desc = "Nuevo nivel de uso guiado para principiantes: cálculo automático de poses óptimas según el setup y la noche disponible, meteorología simplificada con nubes unificadas y Jet Stream, Darks y Bias opcionales con impacto directo en el presupuesto de tiempo, exportación N.I.N.A. lista en un click sin configuraciones complejas.";
+        i18n.zh.cl_v80_lite_desc = "面向初学者的全新引导使用级别：根据设备配置和可用夜间自动计算最佳曝光帧数，简化天气显示（统一云层和急流），可选暗场和偏置场并直接影响时间预算，一键生成 N.I.N.A. 序列，无需复杂设置。";
+
+        i18n.it.cl_v80_onboarding_title = "Onboarding al primo accesso";
+        i18n.en.cl_v80_onboarding_title = "First-access onboarding";
+        i18n.es.cl_v80_onboarding_title = "Incorporación en el primer acceso";
+        i18n.zh.cl_v80_onboarding_title = "首次访问引导流程";
+        i18n.it.cl_v80_onboarding_desc = "Al primo accesso l'app guida l'utente in tre step: scelta della lingua (con bandiere SVG universali), scelta della modalità Base o Avanzata, popup istruzioni con highlight del pulsante di cambio. Il night-popup appare solo dopo che la posizione è stata impostata.";
+        i18n.en.cl_v80_onboarding_desc = "On first access, the app guides the user through three steps: language selection (with universal SVG flags), choice of Basic or Advanced mode, instruction popup highlighting the mode-switch button. The night popup only appears after the location has been set.";
+        i18n.es.cl_v80_onboarding_desc = "En el primer acceso, la app guía al usuario en tres pasos: selección de idioma (con banderas SVG universales), elección del modo Básico o Avanzado, popup de instrucciones con resaltado del botón de cambio. El popup nocturno solo aparece tras configurar la ubicación.";
+        i18n.zh.cl_v80_onboarding_desc = "首次访问时，应用通过三个步骤引导用户：语言选择（使用通用 SVG 国旗）、选择基础或高级模式、带有模式切换按钮高亮的说明弹窗。夜间弹窗仅在设置位置后出现。";
+
+        i18n.it.cl_v80_bar_title = "Barra temporale sessione";
+        i18n.en.cl_v80_bar_title = "Session timeline bar";
+        i18n.es.cl_v80_bar_title = "Barra temporal de sesión";
+        i18n.zh.cl_v80_bar_title = "会话时间轴条";
+        i18n.it.cl_v80_bar_desc = "Nella Modalità Base la finestra sessione è visualizzata come barra grafica: gli estremi della notte astronomica agli estremi, gli input orario di inizio e fine sessione al centro, e un riempimento verde (acquisizione nei tempi) o rosso (sforamento) che si aggiorna in tempo reale al variare delle pose, dei Dark e dei Bias.";
+        i18n.en.cl_v80_bar_desc = "In Basic Mode the session window is shown as a graphic bar: astronomical night times at the edges, session start and end time inputs in the center, and a green (on time) or red (overtime) fill that updates in real time as frames, Dark and Bias values change.";
+        i18n.es.cl_v80_bar_desc = "En Modo Básico la ventana de sesión se muestra como una barra gráfica: los extremos de la noche astronómica en los bordes, los campos de inicio y fin de sesión en el centro, y un relleno verde (en tiempo) o rojo (excedido) que se actualiza en tiempo real al variar las poses, los Darks y los Bias.";
+        i18n.zh.cl_v80_bar_desc = "在基础模式中，会话窗口以图形条形显示：天文夜时间在两端，会话开始和结束时间输入在中间，绿色（按时）或红色（超时）填充随帧数、暗场和偏置场值实时更新。";
+
+        i18n.it.cl_v80_btn_title = "Pulsante modalità nel navbar";
+        i18n.en.cl_v80_btn_title = "Mode button in navbar";
+        i18n.es.cl_v80_btn_title = "Botón de modo en la barra de navegación";
+        i18n.zh.cl_v80_btn_title = "导航栏中的模式按钮";
+        i18n.it.cl_v80_btn_desc = "Nuovo pulsante prominente nel menu in alto che cambia icona e colore in base alla modalità attiva: aereo di carta blu per la Modalità Base, razzo dorato per la Avanzata. Un dropdown permette di cambiare modalità in qualsiasi momento.";
+        i18n.en.cl_v80_btn_desc = "New prominent button in the top menu that changes icon and color based on the active mode: blue paper plane for Basic Mode, golden rocket for Advanced. A dropdown allows switching modes at any time.";
+        i18n.es.cl_v80_btn_desc = "Nuevo botón destacado en el menú superior que cambia icono y color según el modo activo: avión de papel azul para el Modo Básico, cohete dorado para el Avanzado. Un menú desplegable permite cambiar de modo en cualquier momento.";
+        i18n.zh.cl_v80_btn_desc = "顶部菜单中的新突出按钮，根据当前模式更改图标和颜色：基础模式为蓝色纸飞机，高级模式为金色火箭。下拉菜单可随时切换模式。";
+
+        i18n.it.cl_v80_landing_title = "Landing page rinnovata";
+        i18n.en.cl_v80_landing_title = "Renewed landing page";
+        i18n.es.cl_v80_landing_title = "Página de inicio renovada";
+        i18n.zh.cl_v80_landing_title = "全新首页";
+        i18n.it.cl_v80_landing_desc = "La card Modalità Base appare in evidenza a piena larghezza sopra la griglia delle funzioni, con testo descrittivo delle due modalità e animazione blink sul pulsante navbar al click. Nuova icona cometa per il pulsante Comincia.";
+        i18n.en.cl_v80_landing_desc = "The Basic Mode card appears prominently at full width above the feature grid, with descriptive text of both modes and a blink animation on the navbar button on click. New comet icon for the Start button.";
+        i18n.es.cl_v80_landing_desc = "La tarjeta Modo Básico aparece en primer plano a ancho completo sobre la cuadrícula de funciones, con texto descriptivo de ambos modos y animación de parpadeo en el botón de la barra de navegación al hacer click. Nuevo icono de cometa para el botón Comenzar.";
+        i18n.zh.cl_v80_landing_desc = "基础模式卡片以全宽显示在功能网格上方，包含两种模式的描述文字，点击时导航栏按钮会闪烁动画。开始按钮采用全新彗星图标。";
+
+        i18n.it.cl_v80_manual_title = "Manuale aggiornato";
+        i18n.en.cl_v80_manual_title = "Updated manual";
+        i18n.es.cl_v80_manual_title = "Manual actualizado";
+        i18n.zh.cl_v80_manual_title = "手册更新";
+        i18n.it.cl_v80_manual_desc = "Nuova sezione 0 'Modalità Base e Avanzata' aggiunta in tutte e 4 le lingue nel manuale integrato. Spiega le differenze tra i due livelli e come passare da uno all'altro.";
+        i18n.en.cl_v80_manual_desc = "New section 0 'Basic and Advanced Mode' added in all 4 languages in the integrated manual. Explains the differences between the two levels and how to switch between them.";
+        i18n.es.cl_v80_manual_desc = "Nueva sección 0 'Modo Básico y Avanzado' añadida en los 4 idiomas del manual integrado. Explica las diferencias entre los dos niveles y cómo cambiar entre ellos.";
+        i18n.zh.cl_v80_manual_desc = "在集成手册的全部 4 种语言中新增第 0 节「基础模式与高级模式」，说明两个级别的区别以及如何在它们之间切换。";
+
+        i18n.it.cl_close_btn = "Inizia a usare v8.0 🚀";
+        i18n.en.cl_close_btn = "Start using v8.0 🚀";
+        i18n.es.cl_close_btn = "Empezar a usar v8.0 🚀";
+        i18n.zh.cl_close_btn = "开始使用 v8.0 🚀";
 
         i18n.it.cl1_title           = "Database telescopi e sensori ampliato";
         i18n.en.cl1_title           = "Expanded telescope and sensor database";
@@ -1903,10 +1958,202 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.es.land_contact       = "Contáctanos";
         i18n.zh.land_contact       = "联系我们";
 
+        // ── Form contatti ─────────────────────────────────────────────────────
+        i18n.it.contact_email_label  = "La tua email";
+        i18n.en.contact_email_label  = "Your email";
+        i18n.es.contact_email_label  = "Tu email";
+        i18n.zh.contact_email_label  = "您的邮箱";
+
+        i18n.it.contact_subject_label = "Oggetto";
+        i18n.en.contact_subject_label = "Subject";
+        i18n.es.contact_subject_label = "Asunto";
+        i18n.zh.contact_subject_label = "主题";
+
+        i18n.it.contact_subject_ph   = "Oggetto del messaggio";
+        i18n.en.contact_subject_ph   = "Message subject";
+        i18n.es.contact_subject_ph   = "Asunto del mensaje";
+        i18n.zh.contact_subject_ph   = "消息主题";
+
+        i18n.it.contact_message_label = "Messaggio";
+        i18n.en.contact_message_label = "Message";
+        i18n.es.contact_message_label = "Mensaje";
+        i18n.zh.contact_message_label = "消息";
+
+        i18n.it.contact_message_ph   = "Scrivi qui il tuo messaggio...";
+        i18n.en.contact_message_ph   = "Write your message here...";
+        i18n.es.contact_message_ph   = "Escribe tu mensaje aquí...";
+        i18n.zh.contact_message_ph   = "在此输入您的消息...";
+
+        i18n.it.contact_info         = "Cliccando <b>Invia</b> si aprirà il tuo client email con il messaggio precompilato.";
+        i18n.en.contact_info         = "Clicking <b>Send</b> will open your email client with the pre-filled message.";
+        i18n.es.contact_info         = "Al hacer clic en <b>Enviar</b> se abrirá tu cliente de email con el mensaje prellenado.";
+        i18n.zh.contact_info         = "点击<b>发送</b>将打开您的邮件客户端并预填消息。";
+
+        i18n.it.contact_privacy      = "Non vengono inviati dati a server esterni.";
+        i18n.en.contact_privacy      = "No data is sent to external servers.";
+        i18n.es.contact_privacy      = "No se envían datos a servidores externos.";
+        i18n.zh.contact_privacy      = "不向外部服务器发送任何数据。";
+
+        i18n.it.contact_cancel       = "Annulla";
+        i18n.en.contact_cancel       = "Cancel";
+        i18n.es.contact_cancel       = "Cancelar";
+        i18n.zh.contact_cancel       = "取消";
+
+        i18n.it.contact_send         = "Invia";
+        i18n.en.contact_send         = "Send";
+        i18n.es.contact_send         = "Enviar";
+        i18n.zh.contact_send         = "发送";
+
         i18n.it.land_visits = "Visite totali:";
         i18n.en.land_visits = "Total visits:";
         i18n.es.land_visits = "Visitas totales:";
         i18n.zh.land_visits = "总访问量:";
+
+        // ── Modalità Base (Lite) — dropdown navbar ────────────────────────
+        i18n.it.mode_base     = "Base";     i18n.en.mode_base     = "Base";     i18n.es.mode_base     = "Base";     i18n.zh.mode_base     = "基础";
+        i18n.it.mode_advanced = "Avanzato"; i18n.en.mode_advanced = "Advanced"; i18n.es.mode_advanced = "Avanzado"; i18n.zh.mode_advanced = "高级";
+
+        i18n.it.onboarding_here = "qui puoi cambiare";
+        i18n.en.onboarding_here = "change here";
+        i18n.es.onboarding_here = "cambia aquí";
+        i18n.zh.onboarding_here = "在此切换";
+        i18n.it.onboarding_confirm_text = "Puoi cambiare modalità in qualsiasi momento usando il pulsante qui sopra.";
+        i18n.en.onboarding_confirm_text = "You can switch mode at any time using the button above.";
+        i18n.es.onboarding_confirm_text = "Puedes cambiar el modo en cualquier momento usando el botón de arriba.";
+        i18n.zh.onboarding_confirm_text = "您可以随时使用上方按钮切换模式。";
+
+        // ── Modal onboarding modalità ─────────────────────────────────────────
+        i18n.it.onboarding_how        = "Come vuoi usare AstroDashboard PRO?";
+        i18n.en.onboarding_how        = "How do you want to use AstroDashboard PRO?";
+        i18n.es.onboarding_how        = "¿Cómo quieres usar AstroDashboard PRO?";
+        i18n.zh.onboarding_how        = "您想如何使用 AstroDashboard PRO？";
+
+        i18n.it.onboarding_choose     = "Scegli la modalità — potrai cambiarla in qualsiasi momento.";
+        i18n.en.onboarding_choose     = "Choose your mode — you can change it at any time.";
+        i18n.es.onboarding_choose     = "Elige el modo — puedes cambiarlo en cualquier momento.";
+        i18n.zh.onboarding_choose     = "选择模式——您可以随时更改。";
+
+        i18n.it.onboarding_recommended = "CONSIGLIATA";
+        i18n.en.onboarding_recommended = "RECOMMENDED";
+        i18n.es.onboarding_recommended = "RECOMENDADA";
+        i18n.zh.onboarding_recommended = "推荐";
+
+        i18n.it.onboarding_base_desc  = "Calcolo automatico delle pose, solo camera a colori. Sequenza N.I.N.A. pronta in un click — senza configurazioni complesse.";
+        i18n.en.onboarding_base_desc  = "Automatic exposure calculation, color camera only. Ready-to-use N.I.N.A. sequence in one click — no complex settings.";
+        i18n.es.onboarding_base_desc  = "Cálculo automático de poses, solo cámara color. Secuencia N.I.N.A. lista en un click — sin configuraciones complejas.";
+        i18n.zh.onboarding_base_desc  = "自动曝光计算，仅限彩色相机。一键生成 N.I.N.A. 序列——无需复杂设置。";
+
+        i18n.it.onboarding_adv_desc   = "Controllo completo su filtri, autofocus, dither, HDR e sequenze multi-notte. Per chi conosce già il workflow.";
+        i18n.en.onboarding_adv_desc   = "Full control over filters, autofocus, dither, HDR and multi-night sequences. For experienced users.";
+        i18n.es.onboarding_adv_desc   = "Control total sobre filtros, autofocus, dither, HDR y secuencias multi-noche. Para usuarios con experiencia.";
+        i18n.zh.onboarding_adv_desc   = "全面控制滤镜、自动对焦、抖动、HDR 和多夜序列。适合有经验的用户。";
+
+        i18n.it.onboarding_start      = "Inizia →";
+        i18n.en.onboarding_start      = "Start →";
+        i18n.es.onboarding_start      = "Empezar →";
+        i18n.zh.onboarding_start      = "开始 →";
+
+        i18n.it.onboarding_continue   = "Continua →";
+        i18n.en.onboarding_continue   = "Continue →";
+        i18n.es.onboarding_continue   = "Continuar →";
+        i18n.zh.onboarding_continue   = "继续 →";
+
+        i18n.it.onboarding_activated  = "attivata";
+        i18n.en.onboarding_activated  = "activated";
+        i18n.es.onboarding_activated  = "activado";
+        i18n.zh.onboarding_activated  = "已启用";
+
+        i18n.it.onboarding_got_it     = "Ho capito";
+        i18n.en.onboarding_got_it     = "Got it";
+        i18n.es.onboarding_got_it     = "Entendido";
+        i18n.zh.onboarding_got_it     = "明白了";
+
+        // ── Pulsante supporto PayPal ──────────────────────────────────────────
+        i18n.it.support_btn           = "Supporta il progetto";
+        i18n.en.support_btn           = "Support the project";
+        i18n.es.support_btn           = "Apoya el proyecto";
+        i18n.zh.support_btn           = "支持项目";
+
+        // ── Testi modal onboarding ────────────────────────────────────
+        i18n.it.onboarding_how        = "Come vuoi usare AstroDashboard PRO?";
+        i18n.en.onboarding_how        = "How do you want to use AstroDashboard PRO?";
+        i18n.es.onboarding_how        = "¿Cómo quieres usar AstroDashboard PRO?";
+        i18n.zh.onboarding_how        = "您想如何使用 AstroDashboard PRO？";
+
+        i18n.it.onboarding_choose     = "Scegli la modalità — potrai cambiarla in qualsiasi momento.";
+        i18n.en.onboarding_choose     = "Choose your mode — you can change it at any time.";
+        i18n.es.onboarding_choose     = "Elige el modo — podrás cambiarlo en cualquier momento.";
+        i18n.zh.onboarding_choose     = "选择模式 — 您可以随时更改。";
+
+        i18n.it.onboarding_recommended = "CONSIGLIATA";
+        i18n.en.onboarding_recommended = "RECOMMENDED";
+        i18n.es.onboarding_recommended = "RECOMENDADA";
+        i18n.zh.onboarding_recommended = "推荐";
+
+        i18n.it.onboarding_base_desc  = "Calcolo automatico delle pose, solo camera a colori. Sequenza N.I.N.A. pronta in un click — senza configurazioni complesse.";
+        i18n.en.onboarding_base_desc  = "Automatic exposure calculation, color camera only. Ready-to-use N.I.N.A. sequence in one click — no complex settings.";
+        i18n.es.onboarding_base_desc  = "Cálculo automático de poses, solo cámara en color. Secuencia N.I.N.A. lista en un clic — sin configuraciones complejas.";
+        i18n.zh.onboarding_base_desc  = "自动曝光计算，仅支持彩色相机。一键生成 N.I.N.A. 序列——无需复杂设置。";
+
+        i18n.it.onboarding_adv_desc   = "Controllo completo su filtri, autofocus, dither, HDR e sequenze multi-notte. Per chi conosce già il workflow.";
+        i18n.en.onboarding_adv_desc   = "Full control over filters, autofocus, dither, HDR and multi-night sequences. For experienced users.";
+        i18n.es.onboarding_adv_desc   = "Control total sobre filtros, autofocus, dither, HDR y secuencias multinoche. Para usuarios con experiencia.";
+        i18n.zh.onboarding_adv_desc   = "完全控制滤镜、自动对焦、抖动、HDR 和多夜序列。适合有经验的用户。";
+
+        i18n.it.onboarding_start      = "Inizia →";
+        i18n.en.onboarding_start      = "Start →";
+        i18n.es.onboarding_start      = "Empezar →";
+        i18n.zh.onboarding_start      = "开始 →";
+
+        i18n.it.onboarding_continue   = "Continua →";
+        i18n.en.onboarding_continue   = "Continue →";
+        i18n.es.onboarding_continue   = "Continuar →";
+        i18n.zh.onboarding_continue   = "继续 →";
+
+        i18n.it.onboarding_activated  = "Modalità {mode} attivata";
+        i18n.en.onboarding_activated  = "{mode} Mode activated";
+        i18n.es.onboarding_activated  = "Modo {mode} activado";
+        i18n.zh.onboarding_activated  = "{mode} 模式已激活";
+
+        i18n.it.onboarding_got_it     = "Ho capito";
+        i18n.en.onboarding_got_it     = "Got it";
+        i18n.es.onboarding_got_it     = "Entendido";
+        i18n.zh.onboarding_got_it     = "明白了";
+
+        // ── Pulsante supporto ─────────────────────────────────────────
+        i18n.it.support_btn           = "Supporta il progetto";
+        i18n.en.support_btn           = "Support the project";
+        i18n.es.support_btn           = "Apoya el proyecto";
+        i18n.zh.support_btn           = "支持项目";
+
+        // ── Card Lite nella landing page ──────────────────────────────────
+        i18n.it.land_flit_step = "Per i neofiti";
+        i18n.en.land_flit_step = "For beginners";
+        i18n.es.land_flit_step = "Para principiantes";
+        i18n.zh.land_flit_step = "适合初学者";
+
+        i18n.it.land_flit_name = "Modalità Base";
+        i18n.en.land_flit_name = "Base Mode";
+        i18n.es.land_flit_name = "Modo Base";
+        i18n.zh.land_flit_name = "基础模式";
+
+        i18n.it.land_flit_desc = "Setup guidato per chi inizia: meteo semplificato, calcolo automatico delle pose e sequenza N.I.N.A. pronta all'uso — senza configurazioni complesse.";
+        i18n.en.land_flit_desc = "Guided setup for beginners: simplified weather, automatic exposure calculation and a ready-to-use N.I.N.A. sequence — no complex settings.";
+        i18n.es.land_flit_desc = "Configuracion guiada para principiantes: meteorologia simplificada, calculo automatico de poses y secuencia N.I.N.A. lista para usar.";
+        i18n.zh.land_flit_desc = "面向初学者的引导设置：简化天气、自动曝光计算和即用型 N.I.N.A. 序列——无需复杂配置。";
+
+        // ── Card Base landing — testo descrittivo ─────────────────────────────
+        i18n.it.land_flit_body = "Modalità base/avanzata: scegli il tuo livello di utilizzo in base alla tua esperienza. Puoi modificare in qualsiasi momento la modalità. Se è la prima volta per te inizia con la versione base.";
+        i18n.en.land_flit_body = "Basic/advanced mode: choose your level of use based on your experience. You can change mode at any time. If it's your first time, start with the basic version.";
+        i18n.es.land_flit_body = "Modo básico/avanzado: elige tu nivel de uso según tu experiencia. Puedes cambiar el modo en cualquier momento. Si es tu primera vez, empieza con la versión básica.";
+        i18n.zh.land_flit_body = "基础/高级模式：根据您的经验选择使用级别。您可以随时更改模式。如果是第一次使用，请从基础版本开始。";
+
+        // ── Tooltip barra temporale Lite ──────────────────────────────────────
+        i18n.it.lite_window   = "Finestra";    i18n.en.lite_window   = "Window";      i18n.es.lite_window   = "Ventana";      i18n.zh.lite_window   = "时间窗口";
+        i18n.it.clouds_unified = "Nuvole";     i18n.en.clouds_unified = "Clouds";     i18n.es.clouds_unified = "Nubes";       i18n.zh.clouds_unified = "云";
+        i18n.it.lite_acq      = "Acquisizione"; i18n.en.lite_acq      = "Acquisition"; i18n.es.lite_acq      = "Adquisición";  i18n.zh.lite_acq      = "采集";
+        i18n.it.lite_residual = "Residuo";     i18n.en.lite_residual = "Remaining";   i18n.es.lite_residual = "Restante";     i18n.zh.lite_residual = "剩余";
+        i18n.it.lite_overflow = "Sforamento";  i18n.en.lite_overflow = "Overflow";    i18n.es.lite_overflow = "Excedido";     i18n.zh.lite_overflow = "超时";
 
         i18n.it.nav_home    = "Home";    i18n.en.nav_home    = "Home";    i18n.es.nav_home    = "Inicio";   i18n.zh.nav_home    = "首页";
         i18n.it.nav_weather = "Meteo";   i18n.en.nav_weather = "Weather"; i18n.es.nav_weather = "Meteo";    i18n.zh.nav_weather = "天气";

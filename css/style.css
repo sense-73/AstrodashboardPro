@@ -566,3 +566,96 @@
 
         /* ── GPS toast spinner ── */
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        /* ══════════════════════════════════════════════════════════════
+           ── MODALITÀ BASE (LITE) ──────────────────────────────────────
+           Nasconde gli elementi marcati .lite-hidden quando il body
+           ha la classe .mode-lite. Zero impatto sulla modalità avanzata.
+           ══════════════════════════════════════════════════════════════ */
+        body.mode-lite .lite-hidden {
+            display: none !important;
+        }
+
+        /* ── Dropdown selettore modalità Base/Avanzato ── */
+        #mode-select-wrap {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        #mode-select-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: transparent;
+            border: 1px solid #21293a;
+            border-radius: 6px;
+            padding: 5px 8px;
+            color: #6e7a8a;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all .2s;
+            white-space: nowrap;
+        }
+        #mode-select-btn:hover {
+            border-color: rgba(196,154,60,0.4);
+            color: #c9d1d9;
+        }
+        body.mode-lite #mode-select-btn {
+            border-color: rgba(88,166,255,0.4);
+            color: #58a6ff;
+        }
+
+        #mode-select-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: calc(100% + 6px);
+            background: #161b22;
+            border: 1px solid #2d3a50;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+            z-index: 500;
+            min-width: 140px;
+        }
+        #mode-select-menu.open {
+            display: block;
+        }
+        .mode-menu-item {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            width: 100%;
+            background: transparent;
+            border: none;
+            padding: 9px 14px;
+            cursor: pointer;
+            color: #c9d1d9;
+            font-size: 12px;
+            transition: background .15s;
+            text-align: left;
+        }
+        .mode-menu-item:hover {
+            background: #21293a;
+        }
+        .mode-menu-item.active {
+            color: #c49a3c;
+        }
+
+        /* ── Badge "Base" nel navbar ── */
+        #mode-lite-badge {
+            display: none;
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 7px;
+            border-radius: 20px;
+            background: #1c2d3a;
+            color: #58a6ff;
+            border: 0.5px solid rgba(88,166,255,0.4);
+            margin-left: 4px;
+            vertical-align: middle;
+        }
+        body.mode-lite #mode-lite-badge {
+            display: inline-block;
+        }
