@@ -1212,7 +1212,7 @@ function _chiudiOnboardingConfirm() {
 function _avviaOnboarding() {
     // Se entrambe le scelte sono già fatte → onboarding già completo
     if (localStorage.getItem('ad_lang_chosen') && localStorage.getItem('ad_mode_chosen')) {
-        localStorage.setItem('ad_onboarding_complete', '1');
+        _finalizzaOnboarding();
         return;
     }
     // Step 1: scelta lingua se non ancora scelta

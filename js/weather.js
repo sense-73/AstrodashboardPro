@@ -1014,3 +1014,13 @@
             // Aggiorna slider meteo (funziona per oggi e previsioni)
             if (datiMeteo || _hasMeteo) cambiaOraMeteo();
         });
+
+        // ── Boot automatico meteo se posizione già salvata ─────────────
+        // Riproduce selezionaLuogo() senza interazione utente.
+        // Necessario per mostraNightPopup() al riavvio della pagina.
+        document.addEventListener('DOMContentLoaded', function() {
+            if (localStorage.getItem('ad_lat') && localStorage.getItem('ad_lon')) {
+                aggiornaEffemeridi(getSessionDate());
+                scaricaDatiPrevisionali();
+            }
+        });
