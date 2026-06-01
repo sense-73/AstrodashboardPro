@@ -20,6 +20,7 @@
     img: null,
     rowMap: null,
     profile: [],
+    _suspended: false,        // se true, hzProfile ritorna [] senza cancellare i dati (usato dalla Modalità Base)
     srcW: 0,
     srcH: 0,
     opts: {
@@ -1060,10 +1061,19 @@
   };
 
   // Espone il profilo per fov.js
+  // Se HZ._suspended è true (Modalità Base) ritorna [] senza toccare i dati,
+  // così i calcoli ignorano l'orizzonte ma il profilo resta intatto per il ritorno in Avanzata.
   Object.defineProperty(window, 'hzProfile', {
-    get: () => HZ.profile,
+    get: () => HZ._suspended ? [] : HZ.profile,
     enumerable: true,
   });
+
+  // Sospende/riattiva l'effetto dell'orizzonte sui calcoli SENZA distruggere il profilo.
+  // Chiamata da globals.js entrando/uscendo dalla Modalità Base.
+  window.hzSetSuspended = function (flag) {
+    HZ._suspended = !!flag;
+    refreshFovChart(); // ricalcola la finestra utile con/senza vincolo orizzonte
+  };
 
   // Ripristino automatico da localStorage all'avvio
   document.addEventListener('DOMContentLoaded', () => {

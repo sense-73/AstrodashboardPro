@@ -950,6 +950,72 @@ let modaLite = (localStorage.getItem('ad_mode_lite') === '1');
  *  5. Deseleziona tutti i trigger AF
  *  6. Chiama calcolaTempiLite() se target + finestra disponibili
  */
+
+/**
+ * Spegne i layer meteo non disponibili in Base (umidità, vento) salvando
+ * quali erano attivi in sessionStorage['ad_lite_layers'], così da poterli
+ * ripristinare al ritorno in Avanzata (disattivaModaLite).
+ * Le card sono nascoste via CSS in Base ma il layer Leaflet resterebbe
+ * disegnato sulla mappa: qui lo rimuoviamo davvero.
+ * Riusa toggleLayer() di weather.js (che aggiorna card + _saveLayerState).
+ */
+function _sincronizzaLayerLite() {
+    if (typeof toggleLayer !== 'function') return; // mappa non ancora pronta
+    const _liteLayers = ['umidita', 'vento'];
+    const attivi = _liteLayers.filter(n => {
+        const b = document.getElementById('btn-' + n);
+        return b && b.classList.contains('active');
+    });
+    try { sessionStorage.setItem('ad_lite_layers', JSON.stringify(attivi)); } catch(e) {}
+    attivi.forEach(n => toggleLayer(n)); // li spegne sulla mappa
+}
+
+/**
+ * Neutralizza in Base gli stati impostati in Avanzata che continuerebbero a
+ * influenzare i calcoli (filtro OSC dual/quad, accessorio ottico, orizzonte),
+ * salvandoli in sessionStorage['ad_lite_fov'] per il ripristino in Avanzata.
+ * NON modifica alcun algoritmo: cambia solo gli INPUT letti in Base.
+ * Idempotente: se ad_lite_fov esiste già non sovrascrive lo snapshot.
+ */
+function _neutralizzaStatiFovLite() {
+    // Snapshot (solo se non già presente, per non perdere i valori avanzati originali)
+    if (sessionStorage.getItem('ad_lite_fov') === null) {
+        const fovSnap = {
+            oscType: (document.getElementById('filter-osc-type') || {}).value || 'none',
+            accFatt: localStorage.getItem('ad_accessorio_fattore'),
+            accVal:  localStorage.getItem('ad_accessorio_value'),
+            accNome: localStorage.getItem('ad_accessorio_nome')
+        };
+        try { sessionStorage.setItem('ad_lite_fov', JSON.stringify(fovSnap)); } catch(e) {}
+    }
+
+    // 1. Filtro OSC dual/quad → none (la card è lite-hidden ma il valore resterebbe)
+    const oscEl = document.getElementById('filter-osc-type');
+    if (oscEl && oscEl.value !== 'none') {
+        oscEl.value = 'none';
+        if (typeof aggiornaFiltroOSC === 'function') aggiornaFiltroOSC();
+    }
+
+    // 2. Accessorio ottico (barlow/riduttore) → fattore neutro 1.0
+    if (localStorage.getItem('ad_accessorio_fattore') !== null &&
+        localStorage.getItem('ad_accessorio_fattore') !== '1.0') {
+        localStorage.setItem('ad_accessorio_fattore', '1.0');
+        localStorage.setItem('ad_accessorio_value', 'none');
+        localStorage.setItem('ad_accessorio_nome', '');
+        if (typeof aggiornaBottoneAccessorio === 'function') aggiornaBottoneAccessorio();
+        if (typeof aggiornaFOV === 'function') aggiornaFOV();
+    }
+
+    // 3. Orizzonte → sospeso (i dati restano, ma non vincolano la finestra in Base)
+    if (typeof window.hzSetSuspended === 'function') window.hzSetSuspended(true);
+
+    // Se siamo in Base, rigenera l'analisi con gli input neutralizzati.
+    // Necessario al boot: lì calcolaTempiLite() (lite.js, ~50ms) genera
+    // l'analisi PRIMA di questa pulizia (~900ms), lasciando a schermo warning
+    // basati sul filtro/accessorio avanzato. Qui la riallineamo.
+    if (modaLite && typeof calcolaTempiLite === 'function') calcolaTempiLite();
+}
+
 function attivaModaLite() {
     modaLite = true;
     localStorage.setItem('ad_mode_lite', '1');
@@ -992,6 +1058,12 @@ function attivaModaLite() {
     // ── Aggiorna la UI del selettore modalità ─────────────────────
     _aggiornaModeSelectUI();
 
+    // ── Spegni i layer non-Base (umidità/vento) salvandoli per il ripristino ──
+    _sincronizzaLayerLite();
+
+    // ── Neutralizza stati FOV/filtri/orizzonte non-Base (salvati per ripristino) ──
+    _neutralizzaStatiFovLite();
+
     // ── Avvia calcolo Lite se le condizioni sono pronte ───────────
     if (typeof calcolaTempiLite === 'function') calcolaTempiLite();
 }
@@ -1027,6 +1099,45 @@ function disattivaModaLite() {
 
     // ── Aggiorna la UI del selettore modalità ─────────────────────
     _aggiornaModeSelectUI();
+
+    // ── Ripristina i layer umidità/vento spenti entrando in Base ──
+    try {
+        const rawL = sessionStorage.getItem('ad_lite_layers');
+        if (rawL && typeof toggleLayer === 'function') {
+            const prevLayers = JSON.parse(rawL);
+            prevLayers.forEach(n => {
+                const b = document.getElementById('btn-' + n);
+                if (b && !b.classList.contains('active')) toggleLayer(n); // riaccende
+            });
+        }
+        sessionStorage.removeItem('ad_lite_layers');
+    } catch(e) {}
+
+    // ── Ripristina stati FOV/filtri/orizzonte neutralizzati in Base ──
+    try {
+        const rawF = sessionStorage.getItem('ad_lite_fov');
+        if (rawF) {
+            const f = JSON.parse(rawF);
+            // 1. Filtro OSC
+            const oscEl = document.getElementById('filter-osc-type');
+            if (oscEl && typeof f.oscType === 'string') {
+                oscEl.value = f.oscType;
+                if (typeof aggiornaFiltroOSC === 'function') aggiornaFiltroOSC();
+            }
+            // 2. Accessorio ottico (ripristina solo se era stato salvato un valore)
+            if (f.accFatt !== null && f.accFatt !== undefined) {
+                localStorage.setItem('ad_accessorio_fattore', f.accFatt);
+                if (f.accVal  !== null && f.accVal  !== undefined) localStorage.setItem('ad_accessorio_value', f.accVal);
+                if (f.accNome !== null && f.accNome !== undefined) localStorage.setItem('ad_accessorio_nome',  f.accNome);
+                if (typeof aggiornaBottoneAccessorio === 'function') aggiornaBottoneAccessorio();
+                if (typeof aggiornaFOV === 'function') aggiornaFOV();
+            }
+        }
+        sessionStorage.removeItem('ad_lite_fov');
+    } catch(e) {}
+
+    // 3. Orizzonte → riattivato (vincola di nuovo la finestra utile in Avanzata)
+    if (typeof window.hzSetSuspended === 'function') window.hzSetSuspended(false);
 
     // ── Ripristina row calibration nascoste in Lite ───────────────
     // calcolaTempiLite() le nasconde; qui le rendiamo di nuovo visibili
@@ -1107,6 +1218,20 @@ function _ct() {
         document.body.classList.add('mode-lite');
     }
 })();
+
+// Al boot in Base: pulisce dalla mappa eventuali layer umidità/vento che
+// _restoreLayerState() (weather.js) potrebbe riaccendere da localStorage
+// se erano attivi in una sessione Avanzata precedente, e neutralizza gli
+// stati FOV/filtri/orizzonte salvati da una sessione Avanzata precedente.
+// Gira dopo il DOMContentLoaded + un breve delay per attendere l'init mappa
+// di weather.js e il ripristino orizzonte di horizon.js.
+document.addEventListener('DOMContentLoaded', function() {
+    if (!modaLite) return;
+    setTimeout(function() {
+        if (typeof _sincronizzaLayerLite === 'function') _sincronizzaLayerLite();
+        if (typeof _neutralizzaStatiFovLite === 'function') _neutralizzaStatiFovLite();
+    }, 900);
+});
 
 // ══════════════════════════════════════════════════════════════════
 // ── ONBOARDING SCELTA MODALITÀ ────────────────────────────────────
