@@ -1060,7 +1060,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                             </div>
                             <div style="width: 65px;"></div>
                         </div>
-                        <div style="display: flex; align-items: center; width: 100%;">
+                        <div class="lite-hidden" style="display: flex; align-items: center; width: 100%;">
                             <label style="min-width: 100px; margin: 0; color: #c49a3c; font-weight: bold; text-align: left;" data-i18n="rotation">Rotazione:</label>
                             <div class="range-wrapper" style="flex: 1; margin: 0 10px;">
                                 <div class="gradient-bar" style="background: #181f2a;"></div>
@@ -1375,9 +1375,9 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                 <div style="background: #222; padding: 15px; border-radius: 8px;">
                     <h4 style="margin: 0 0 10px 0; color: #c49a3c; display:flex; align-items:center; gap:6px;"><span data-i18n="pro_af_title">Autofocus</span><span class="info-icon" onmouseenter="mostraTooltip(this, 'info_af_triggers')" onmouseleave="nascondiTooltip()">ℹ️</span></h4>
                     <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: #6e7a8a; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="smart-af-start" checked style="transform: scale(1.2);" onchange="window._afModoManuale=false; window._sequenzaGenerata ? generaSequenzaOttimale() : calcolaTempi()"> <span data-i18n="pro_af_start">All'avvio sequenza</span></label>
-                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: #6e7a8a; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="smart-af-filter" style="transform: scale(1.2);" onchange="window._afModoManuale=false; window._sequenzaGenerata ? generaSequenzaOttimale() : calcolaTempi()"> <span data-i18n="pro_af_filter">Al cambio filtro</span></label>
-                    <label style="display: flex; align-items: center; gap: 8px; color: #6e7a8a; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="smart-af-hfr" style="transform: scale(1.2);" onchange="window._afModoManuale=false; window._sequenzaGenerata ? generaSequenzaOttimale() : calcolaTempi()"> <span data-i18n="pro_af_hfr">Alla variazione dell'HFR</span></label>
-                    <label style="display: flex; align-items: center; gap: 8px; margin-top: 10px; color: #6e7a8a; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="smart-af-temp" style="transform: scale(1.2);" onchange="window._afModoManuale=false; window._sequenzaGenerata ? generaSequenzaOttimale() : calcolaTempi()"> <span data-i18n="pro_af_temp_lbl">Variazione</span> ΔT <input type="number" id="smart-af-temp-val" value="2" min="0.5" max="10" step="0.5" onclick="event.stopPropagation()" oninput="window._afModoManuale=false; window._sequenzaGenerata ? generaSequenzaOttimale() : calcolaTempi()" style="width: 40px!important; padding: 3px!important; text-align: center;"> °C</label>
+                    <label class="lite-hidden" style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: #6e7a8a; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="smart-af-filter" style="transform: scale(1.2);" onchange="window._afModoManuale=false; window._sequenzaGenerata ? generaSequenzaOttimale() : calcolaTempi()"> <span data-i18n="pro_af_filter">Al cambio filtro</span></label>
+                    <label class="lite-hidden" style="display: flex; align-items: center; gap: 8px; color: #6e7a8a; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="smart-af-hfr" style="transform: scale(1.2);" onchange="window._afModoManuale=false; window._sequenzaGenerata ? generaSequenzaOttimale() : calcolaTempi()"> <span data-i18n="pro_af_hfr">Alla variazione dell'HFR</span></label>
+                    <label class="lite-hidden" style="display: flex; align-items: center; gap: 8px; margin-top: 10px; color: #6e7a8a; font-size: 0.85em; white-space: nowrap;"><input type="checkbox" id="smart-af-temp" style="transform: scale(1.2);" onchange="window._afModoManuale=false; window._sequenzaGenerata ? generaSequenzaOttimale() : calcolaTempi()"> <span data-i18n="pro_af_temp_lbl">Variazione</span> ΔT <input type="number" id="smart-af-temp-val" value="2" min="0.5" max="10" step="0.5" onclick="event.stopPropagation()" oninput="window._afModoManuale=false; window._sequenzaGenerata ? generaSequenzaOttimale() : calcolaTempi()" style="width: 40px!important; padding: 3px!important; text-align: center;"> °C</label>
                 </div>
                 <div style="background: #222; padding: 15px; border-radius: 8px;">
                     <h4 style="margin: 0 0 10px 0; color: #c49a3c;" data-i18n="pro_preflight">Pre-Flight</h4>
@@ -1390,7 +1390,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; width: 100%; cursor: pointer; color: #6e7a8a; font-size: 0.9em;">
                         <input type="checkbox" id="nina-slew" checked style="transform: scale(1.2);"> <span data-i18n="slew_center">Slew & Center (Plate Solve)</span>
                     </label>
-                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; width: 100%; cursor: pointer; color: #6e7a8a; font-size: 0.9em;">
+                    <label class="lite-hidden" style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; width: 100%; cursor: pointer; color: #6e7a8a; font-size: 0.9em;">
                         <input type="checkbox" id="nina-rotate" style="transform: scale(1.2);"> <span data-i18n="rotate_target">Ruota Camera (Rotatore Auto)</span>
                     </label>
                     <label style="display: flex; align-items: center; gap: 8px; width: 100%; cursor: pointer; color: #6e7a8a; font-size: 0.9em;">
