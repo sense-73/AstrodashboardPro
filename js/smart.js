@@ -394,6 +394,7 @@ function toggleLock(id) {
                     hdrR.innerHTML = `
                         <div style="display:flex;align-items:center;gap:4px;">
                             <span style="color:#bb86fc;font-size:0.82em;font-weight:bold;">✦ Light HDR</span>
+                            <button id="${f.id}-hdr-toggle" onclick="toggleHdrRowSmart('${f.id}')" title="Disattiva HDR" style="background:#3a2050;color:#bb86fc;border:1px solid #7c4dff;border-radius:3px;font-size:0.72em;padding:2px 6px;cursor:pointer;white-space:nowrap;">Disattiva</button>
                             <span class="info-icon" style="font-size:1.0em;margin-left:2px;cursor:help;" onmouseenter="mostraTooltip(this,'info_hdr_row')" onmouseleave="nascondiTooltip()">ℹ️</span>
                         </div>
                         <div style="display:flex;align-items:center;gap:3px;">
@@ -448,17 +449,77 @@ function toggleLock(id) {
                 if (f.id.includes('dark') || f.id.includes('bias')) return;
                 let hdrRow = document.getElementById(`${f.id}-hdr-row`);
                 if (!hdrRow) return;
+                // Se l'utente ha disattivato manualmente questa riga col toggle,
+                // la riga resta visibile ma grigia/disabilitata finché non la riattiva.
+                if (hdrRow.dataset.hdrUserOff === '1') {
+                    hdrRow.style.display = show ? 'grid' : 'none';
+                    if (show && typeof _setHdrRowDisabledSmart === 'function') _setHdrRowDisabledSmart(f.id, true);
+                    return;
+                }
                 hdrRow.style.display = show ? 'grid' : 'none';
                 if (show && hdrExp > 0) {
                     let expEl = document.getElementById(`${f.id}-hdr-exp`);
                     let expLock = document.getElementById(`${f.id}-hdr-exp-lock`);
-                    if (expEl && (!expLock || !expLock.classList.contains('locked'))) {
+                    // Salva il default suggerito per l'oggetto (usato al riattivo del toggle)
+                    if (expEl) expEl.dataset.hdrDefault = hdrExp;
+                    // Sovrascrivi l'exp col default SOLO se il campo è vuoto e non lockato.
+                    // Se l'utente ha già inserito un valore, lo rispettiamo nel ricalcolo.
+                    let _userVal = expEl ? (expEl.value || '').trim() : '';
+                    if (expEl && (!expLock || !expLock.classList.contains('locked')) && _userVal === '') {
                         expEl.value = hdrExp;
                     }
                 }
             });
             calcolaTempi();
             if (typeof aggiornaFiltroOSC === 'function') aggiornaFiltroOSC();
+        }
+
+        // ── Toggle HDR per singola riga (Smart) ──────────────────────────────
+        // Disattiva/riattiva la riga HDR di UN filtro. Da spenta, generaSequenza
+        // la vede come inattiva (display:none) e ridistribuisce il tempo alle
+        // pose normali. Da riattivata, ripristina l'esposizione di default
+        // suggerita per l'oggetto e ricalcola al successivo "Genera Sequenza".
+        function toggleHdrRowSmart(filterId) {
+            let row = document.getElementById(`${filterId}-hdr-row`);
+            let btn = document.getElementById(`${filterId}-hdr-toggle`);
+            if (!row) return;
+            let isOff = row.dataset.hdrUserOff === '1';
+            if (isOff) {
+                // Riattiva
+                row.dataset.hdrUserOff = '0';
+                _setHdrRowDisabledSmart(filterId, false);
+                let expEl = document.getElementById(`${filterId}-hdr-exp`);
+                if (expEl) {
+                    let _def = parseInt(expEl.dataset.hdrDefault) || 0;
+                    let expLock = document.getElementById(`${filterId}-hdr-exp-lock`);
+                    if (_def > 0 && (!expLock || !expLock.classList.contains('locked'))) {
+                        expEl.value = _def;
+                    }
+                }
+                if (btn) { btn.textContent = 'Disattiva'; btn.title = 'Disattiva HDR'; }
+            } else {
+                // Disattiva: riga visibile ma grigia e con input bloccati
+                row.dataset.hdrUserOff = '1';
+                _setHdrRowDisabledSmart(filterId, true);
+                let cntEl = document.getElementById(`${filterId}-hdr-count`);
+                if (cntEl) cntEl.value = 0;
+                if (btn) { btn.textContent = 'Riattiva'; btn.title = 'Riattiva HDR'; }
+            }
+            calcolaTempi();
+        }
+
+        // Applica/rimuove lo stato "disabilitato" (grigio + input non cliccabili)
+        // a una riga HDR Smart. Il bottone toggle resta sempre attivo.
+        function _setHdrRowDisabledSmart(filterId, disabled) {
+            let row = document.getElementById(`${filterId}-hdr-row`);
+            if (!row) return;
+            row.style.opacity = disabled ? '0.45' : '1';
+            // Disabilita/riabilita tutti gli input/select della riga,
+            // esclusi il bottone toggle e i lucchetti.
+            let ctrls = row.querySelectorAll('input, select');
+            ctrls.forEach(el => { el.disabled = disabled; });
+            let locks = row.querySelectorAll('[id$="-lock"]');
+            locks.forEach(el => { el.style.pointerEvents = disabled ? 'none' : ''; el.style.opacity = disabled ? '0.3' : ''; });
         }
 
         function sincronizzaDarkDaLight() {
@@ -1008,7 +1069,7 @@ function toggleLock(id) {
                 // HDR companion row: overhead incluso anche sui frame HDR
                 if (!f.id.includes('dark') && !f.id.includes('bias')) {
                     let _hdrRow = document.getElementById(`${f.id}-hdr-row`);
-                    if (_hdrRow && _hdrRow.style.display !== 'none') {
+                    if (_hdrRow && _hdrRow.style.display !== 'none' && _hdrRow.dataset.hdrUserOff !== '1') {
                         let _hdrC = parseInt((document.getElementById(`${f.id}-hdr-count`)||{}).value)||0;
                         let _hdrE = parseInt((document.getElementById(`${f.id}-hdr-exp`)||{}).value)||0;
                         let _hdrSec = _hdrC * (_hdrE + (_hdrC > 0 ? lightOverhead : 0));
@@ -1037,7 +1098,7 @@ function toggleLock(id) {
             fL.forEach(f => {
                 if (f.id.includes('dark') || f.id.includes('bias')) return;
                 let _hdrRow = document.getElementById(`${f.id}-hdr-row`);
-                if (!_hdrRow || _hdrRow.style.display === 'none') return;
+                if (!_hdrRow || _hdrRow.style.display === 'none' || _hdrRow.dataset.hdrUserOff === '1') return;
                 let _hdrDChk = document.getElementById(`${f.id}-hdr-dither`);
                 if (_hdrDChk && _hdrDChk.checked) {
                     let _hdrCnt = parseInt((document.getElementById(`${f.id}-hdr-count`)||{}).value)||0;
@@ -1168,13 +1229,18 @@ function toggleLock(id) {
             fL.forEach(f => {
                 if (f.id.includes('dark') || f.id.includes('bias')) return;
                 let _hdrRowRs = document.getElementById(`${f.id}-hdr-row`);
-                if (!_hdrRowRs || _hdrRowRs.style.display === 'none') return;
+                if (!_hdrRowRs || _hdrRowRs.style.display === 'none' || _hdrRowRs.dataset.hdrUserOff === '1') return;
                 let _hdrCLock = document.getElementById(`${f.id}-hdr-count-lock`);
                 let _hdrCLocked = _hdrCLock && _hdrCLock.classList.contains('locked');
                 // Solo il lock sul CONTEGGIO attiva la sottrazione dal budget
                 if (_hdrCLocked) {
                     let _hdrC = parseInt((document.getElementById(`${f.id}-hdr-count`)||{}).value)||0;
-                    let _hdrE = parseInt((document.getElementById(`${f.id}-hdr-exp`)||{}).value)||0;
+                    let _hdrExpEl = document.getElementById(`${f.id}-hdr-exp`);
+                    let _hdrE = parseInt((_hdrExpEl||{}).value)||0;
+                    // Se l'exp HDR è vuoto/0, usa il default suggerito per non
+                    // sottostimare il tempo riservato (altrimenti le pose normali
+                    // non si ridistribuiscono correttamente).
+                    if (_hdrE <= 0) _hdrE = parseInt((_hdrExpEl||{}).dataset?.hdrDefault) || 0;
                     hdrLockedSec += _hdrC * (_hdrE + _lightOvhG);
                     // Includi anche il dither HDR nel budget sottratto
                     let _hdrDChk  = document.getElementById(`${f.id}-hdr-dither`);
@@ -1369,7 +1435,7 @@ function toggleLock(id) {
                 // costo nel denominatore prima di calcolare le pose light — altrimenti
                 // i frame HDR vengono aggiunti sopra il budget causando sforamento.
                 let _hdrRowGen = document.getElementById(`${f.id}-hdr-row`);
-                let _hdrActive = _hdrRowGen && _hdrRowGen.style.display !== 'none';
+                let _hdrActive = _hdrRowGen && _hdrRowGen.style.display !== 'none' && _hdrRowGen.dataset.hdrUserOff !== '1';
                 let _hdrCountLock = _hdrActive ? document.getElementById(`${f.id}-hdr-count-lock`) : null;
                 let _hdrCountIsLocked = _hdrCountLock && _hdrCountLock.classList.contains('locked');
                 let _hdrEeS = 0;
