@@ -953,7 +953,7 @@ let modaLite = (localStorage.getItem('ad_mode_lite') === '1');
 
 /**
  * Spegne i layer meteo non disponibili in Base (umidità, vento) salvando
- * quali erano attivi in sessionStorage['ad_lite_layers'], così da poterli
+ * quali erano attivi in localStorage['ad_lite_layers'], così da poterli
  * ripristinare al ritorno in Avanzata (disattivaModaLite).
  * Le card sono nascoste via CSS in Base ma il layer Leaflet resterebbe
  * disegnato sulla mappa: qui lo rimuoviamo davvero.
@@ -966,27 +966,27 @@ function _sincronizzaLayerLite() {
         const b = document.getElementById('btn-' + n);
         return b && b.classList.contains('active');
     });
-    try { sessionStorage.setItem('ad_lite_layers', JSON.stringify(attivi)); } catch(e) {}
+    try { localStorage.setItem('ad_lite_layers', JSON.stringify(attivi)); } catch(e) {}
     attivi.forEach(n => toggleLayer(n)); // li spegne sulla mappa
 }
 
 /**
  * Neutralizza in Base gli stati impostati in Avanzata che continuerebbero a
  * influenzare i calcoli (filtro OSC dual/quad, accessorio ottico, orizzonte),
- * salvandoli in sessionStorage['ad_lite_fov'] per il ripristino in Avanzata.
+ * salvandoli in localStorage['ad_lite_fov'] per il ripristino in Avanzata.
  * NON modifica alcun algoritmo: cambia solo gli INPUT letti in Base.
  * Idempotente: se ad_lite_fov esiste già non sovrascrive lo snapshot.
  */
 function _neutralizzaStatiFovLite() {
     // Snapshot (solo se non già presente, per non perdere i valori avanzati originali)
-    if (sessionStorage.getItem('ad_lite_fov') === null) {
+    if (localStorage.getItem('ad_lite_fov') === null) {
         const fovSnap = {
             oscType: (document.getElementById('filter-osc-type') || {}).value || 'none',
             accFatt: localStorage.getItem('ad_accessorio_fattore'),
             accVal:  localStorage.getItem('ad_accessorio_value'),
             accNome: localStorage.getItem('ad_accessorio_nome')
         };
-        try { sessionStorage.setItem('ad_lite_fov', JSON.stringify(fovSnap)); } catch(e) {}
+        try { localStorage.setItem('ad_lite_fov', JSON.stringify(fovSnap)); } catch(e) {}
     }
 
     // 1. Filtro OSC dual/quad → none (la card è lite-hidden ma il valore resterebbe)
@@ -1031,7 +1031,7 @@ function attivaModaLite() {
     ['sensor-type', 'capture-mode',
      'smart-af-start', 'smart-af-filter', 'smart-af-hfr', 'smart-af-temp',
      'dither-duration'].forEach(_snapEl);
-    try { sessionStorage.setItem('ad_lite_snap', JSON.stringify(snap)); } catch(e) {}
+    try { localStorage.setItem('ad_lite_snap', JSON.stringify(snap)); } catch(e) {}
 
     // ── Forza valori compatibili con Lite ─────────────────────────
     const sensorEl = document.getElementById('sensor-type');
@@ -1079,7 +1079,7 @@ function disattivaModaLite() {
 
     // ── Ripristina valori avanzati dallo snapshot ─────────────────
     try {
-        const raw = sessionStorage.getItem('ad_lite_snap');
+        const raw = localStorage.getItem('ad_lite_snap');
         if (raw) {
             const snap = JSON.parse(raw);
             Object.keys(snap).forEach(id => {
@@ -1088,7 +1088,7 @@ function disattivaModaLite() {
                 if (el.type === 'checkbox') el.checked = !!snap[id];
                 else el.value = snap[id];
             });
-            sessionStorage.removeItem('ad_lite_snap');
+            localStorage.removeItem('ad_lite_snap');
             // Riallinea sensor mode se era mono
             const sensorEl = document.getElementById('sensor-type');
             if (sensorEl && sensorEl.value === 'mono') {
@@ -1102,7 +1102,7 @@ function disattivaModaLite() {
 
     // ── Ripristina i layer umidità/vento spenti entrando in Base ──
     try {
-        const rawL = sessionStorage.getItem('ad_lite_layers');
+        const rawL = localStorage.getItem('ad_lite_layers');
         if (rawL && typeof toggleLayer === 'function') {
             const prevLayers = JSON.parse(rawL);
             prevLayers.forEach(n => {
@@ -1110,12 +1110,12 @@ function disattivaModaLite() {
                 if (b && !b.classList.contains('active')) toggleLayer(n); // riaccende
             });
         }
-        sessionStorage.removeItem('ad_lite_layers');
+        localStorage.removeItem('ad_lite_layers');
     } catch(e) {}
 
     // ── Ripristina stati FOV/filtri/orizzonte neutralizzati in Base ──
     try {
-        const rawF = sessionStorage.getItem('ad_lite_fov');
+        const rawF = localStorage.getItem('ad_lite_fov');
         if (rawF) {
             const f = JSON.parse(rawF);
             // 1. Filtro OSC
@@ -1133,7 +1133,7 @@ function disattivaModaLite() {
                 if (typeof aggiornaFOV === 'function') aggiornaFOV();
             }
         }
-        sessionStorage.removeItem('ad_lite_fov');
+        localStorage.removeItem('ad_lite_fov');
     } catch(e) {}
 
     // 3. Orizzonte → riattivato (vincola di nuovo la finestra utile in Avanzata)
