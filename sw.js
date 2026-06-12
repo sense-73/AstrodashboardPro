@@ -4,7 +4,7 @@
 
 // CACHE_NAME usa un timestamp fisso aggiornato ad ogni deploy
 // Non serve più incrementare manualmente — basta cambiare questa data
-const CACHE_TIMESTAMP = '20260609-002';
+const CACHE_TIMESTAMP = '20260613-001';
 const CACHE_NAME = 'astrodash-' + CACHE_TIMESTAMP;
 const APP_VERSION = CACHE_TIMESTAMP;
 
@@ -71,6 +71,12 @@ self.addEventListener('activate', event => {
 // ── FETCH ──────────────────────────────────────────────────────
 self.addEventListener('fetch', event => {
     const url = new URL(event.request.url);
+
+    // 0. Ignora schemi non-web (chrome-extension://, data:, ecc.).
+    //    La Cache API non li supporta: cache.put lancerebbe un'eccezione,
+    //    rendendo il SW instabile e impedendo a Chrome di concedere la
+    //    persistenza dello storage (localStorage cancellato alla chiusura).
+    if (!url.protocol.startsWith('http')) return;
 
     // 1. API live + CDN esterni → sempre dalla rete, con fallback silenzioso
     if (NETWORK_ONLY_DOMAINS.some(domain => url.hostname.includes(domain))) {

@@ -1319,6 +1319,9 @@ function _mostraOnboardingConfirm(mode) {
 function _chiudiOnboardingConfirm() {
     const modal = document.getElementById('onboarding-confirm-modal');
     if (modal) modal.style.display = 'none';
+    // Evidenzia il pulsante modalità nel navbar con 3 lampeggi,
+    // dopo che il popup è sparito (evita sovrapposizione visiva).
+    setTimeout(_blinkaModeBtn, 200);
     _finalizzaOnboarding();
 }
 
