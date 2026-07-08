@@ -65,8 +65,8 @@ function _npAnalisiNotte() {
                        : 40 + (m - 60) / 40 * 15;
         // Nuvole alte (cirri): filtrano ma non bloccano completamente
         const penAlte  = a <= 20 ? 0
-                       : a <= 50 ? (a - 20) / 30 * 20
-                       : 20 + (a - 50) / 50 * 15;
+                       : a <= 50 ? (a - 20) / 30 * 30
+                       : 30 + (a - 50) / 50 * 38;
         const cloudOpacity = Math.min(100, penBasse + penMedie + penAlte);
         const transp = Math.max(0, 100 - cloudOpacity);
         sumTransp += transp;
