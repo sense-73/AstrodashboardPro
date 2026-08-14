@@ -612,12 +612,11 @@
 
                 const rect   = anchorEl.getBoundingClientRect();
                 const popupW = 300;
-                const popupH = 320;
+                const popupH = popup.offsetHeight || 320;
                 let   left   = rect.left + rect.width / 2 - popupW / 2;
                 if (left < 8) left = 8;
                 if (left + popupW > window.innerWidth - 8) left = window.innerWidth - popupW - 8;
-                let   top    = rect.top - popupH - 14;
-                if (top < 8) top = rect.bottom + 14;
+                let   top    = rect.top - popupH - 8;
                 popup.style.left = left + 'px';
                 popup.style.top  = top  + 'px';
 
