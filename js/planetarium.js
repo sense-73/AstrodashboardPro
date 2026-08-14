@@ -34,7 +34,7 @@
             vP.sort((a, b) => b.alt - a.alt).forEach(i => pL.appendChild(i.html));
 
             let vD = [];
-            if (typeof dsoDatabase !== 'undefined') dsoDatabase.forEach(d => { let pos = calcolaAltAz(d.ra, d.dec, latCorrente, lonCorrente, dOra); if (pos.alt > 15) vD.push({ html: creaCardHTML(d, pos.alt, pos.az, true), alt: pos.alt }); });
+            if (typeof dsoDatabase !== 'undefined') dsoDatabase.forEach(d => { let pos = calcolaAltAz(d.ra, d.dec, latCorrente, lonCorrente, dOra); if (pos.alt > 30) vD.push({ html: creaCardHTML(d, pos.alt, pos.az, true), alt: pos.alt }); });
             vD.sort((a, b) => b.alt - a.alt); if (vD.length > 0) vD[0].html.classList.add('top-target');
             vD.forEach(i => dL.appendChild(i.html));
             if (dL.innerHTML === '') dL.innerHTML = `<p style="color:#777; padding:10px;">${t("no_target")}</p>`;
