@@ -328,6 +328,8 @@
         function chiudiProView() { setCalcMode('smart'); }
 
         function disegnaGrigliaPro() {
+            let proSel = document.getElementById('pro-sensor-type');
+            if (proSel) proSel.value = document.getElementById('sensor-type').value;
             let isMono = document.getElementById('sensor-type').value === 'mono'; 
             
             aggiornaFiltriNinaPro(); // Richiama i filtri appena creati!
