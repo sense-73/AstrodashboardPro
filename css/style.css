@@ -190,8 +190,8 @@
 
         /* Fallback: nasconde TUTTI gli elementi non-canvas dentro aladin */
         #aladin-lite-div > *:not(canvas) { display: none !important; }
-        #fov-rectangle { position: absolute; pointer-events: none; transition: width 0.1s, height 0.1s; z-index: 1000;}
-        .center-cross { position: absolute; color: rgba(68, 255, 68, 0.7); font-size: 1.5em; pointer-events: none; z-index: 1000;}
+        #fov-rectangle { position: absolute; pointer-events: none; transition: width 0.1s, height 0.1s; z-index: 5;}
+        .center-cross { position: absolute; color: rgba(68, 255, 68, 0.7); font-size: 1.5em; pointer-events: none; z-index: 5;}
         .chart-container { background-color: var(--bg-panel); padding: 15px; border-radius: 8px; height: 160px; margin-top: 15px; box-shadow: inset 0 0 10px rgba(0,0,0,0.5);}
         .zoom-control { display: flex; align-items: center; justify-content: center; padding: 10px; background: var(--bg-card); border-radius: 0 0 8px 8px;}
 
