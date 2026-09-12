@@ -497,6 +497,61 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.es.overhead_col_tip  = "El tiempo por fila incluye la sobrecarga técnica por fotograma: lectura del sensor + descarga USB + guardado FITS en disco (~1.2s + 0.08s/MP). Los Bias tienen exp=0 pero requieren igualmente este overhead. El dithering se añade por separado según la frecuencia de cada filtro.";
         i18n.zh.overhead_col_tip  = "每行时间包含每帧技术开销：传感器读出 + USB传输 + FITS保存至磁盘（约1.2秒 + 0.08秒/百万像素）。偏置帧曝光=0但仍需此开销。抖动时间根据每个滤镜的频率单独计算。";
 
+        i18n.it.tbl_col_filter = "Filtro";
+        i18n.en.tbl_col_filter = "Filter";
+        i18n.es.tbl_col_filter = "Filtro";
+        i18n.zh.tbl_col_filter = "滤镜";
+
+        i18n.it.tbl_col_pose = "Pose";
+        i18n.en.tbl_col_pose = "Poses";
+        i18n.es.tbl_col_pose = "Tomas";
+        i18n.zh.tbl_col_pose = "张数";
+
+        i18n.it.tbl_col_secs = "Secs";
+        i18n.en.tbl_col_secs = "Secs";
+        i18n.es.tbl_col_secs = "Segs";
+        i18n.zh.tbl_col_secs = "秒";
+
+        i18n.it.tbl_col_gain = "Gain";
+        i18n.en.tbl_col_gain = "Gain";
+        i18n.es.tbl_col_gain = "Ganancia";
+        i18n.zh.tbl_col_gain = "增益";
+
+        i18n.it.tbl_col_offset = "Offset";
+        i18n.en.tbl_col_offset = "Offset";
+        i18n.es.tbl_col_offset = "Offset";
+        i18n.zh.tbl_col_offset = "偏置";
+
+        i18n.it.tbl_col_bin = "Bin";
+        i18n.en.tbl_col_bin = "Bin";
+        i18n.es.tbl_col_bin = "Bin";
+        i18n.zh.tbl_col_bin = "像素合并";
+
+        i18n.it.tbl_col_dither = "Dither";
+        i18n.en.tbl_col_dither = "Dither";
+        i18n.es.tbl_col_dither = "Dither";
+        i18n.zh.tbl_col_dither = "抖动";
+
+        i18n.it.tbl_col_total = "Totale";
+        i18n.en.tbl_col_total = "Total";
+        i18n.es.tbl_col_total = "Total";
+        i18n.zh.tbl_col_total = "总计";
+
+        i18n.it.tbl_col_dither_freq = "Dither (Freq.)";
+        i18n.en.tbl_col_dither_freq = "Dither (Freq.)";
+        i18n.es.tbl_col_dither_freq = "Dither (Frec.)";
+        i18n.zh.tbl_col_dither_freq = "抖动（频率）";
+
+        i18n.it.nina_osc_camera = "OSC Camera.";
+        i18n.en.nina_osc_camera = "OSC Camera.";
+        i18n.es.nina_osc_camera = "Cámara OSC.";
+        i18n.zh.nina_osc_camera = "OSC 彩色相机。";
+
+        i18n.it.nina_osc_no_map = "Sensore OSC Color. Mappatura non necessaria.";
+        i18n.en.nina_osc_no_map = "OSC Color sensor. Mapping not required.";
+        i18n.es.nina_osc_no_map = "Sensor OSC Color. Mapeo no necesario.";
+        i18n.zh.nina_osc_no_map = "OSC彩色传感器。无需映射。";
+
         i18n.it.bias_overhead_tip = "Tempo tecnico stimato per frame (readout sensore + salvataggio FITS). I Bias hanno exp=0 ma richiedono comunque questo overhead per file.";
         i18n.en.bias_overhead_tip = "Estimated technical overhead per frame (sensor readout + FITS save). Bias frames have exp=0 but still require this per-frame overhead.";
         i18n.es.bias_overhead_tip = "Sobrecarga técnica estimada por fotograma (lectura del sensor + guardado FITS). Los Bias tienen exp=0 pero requieren este tiempo.";

@@ -320,8 +320,8 @@ function toggleLock(id) {
             let header = document.createElement('div');
             header.id = 'smart-grid-header';
             header.style.cssText = 'display:grid; grid-template-columns: 2fr 0.7fr 0.9fr 0.7fr 0.7fr 0.7fr 1fr 0.9fr; gap:4px; font-size:0.75em; color:#aaa; text-align:center; border-bottom:1px solid #444; padding-bottom:5px; margin-bottom:6px;';
-            header.innerHTML = '<div style="text-align:left;">Filtro</div><div>Pose</div><div>Secs</div>'
-                + '<div>Gain</div><div>Offset</div><div>Bin</div><div>Dither</div><div style="text-align:right;">Totale <span onmouseenter="mostraTooltip(this,\'overhead_col_tip\')" onmouseleave="nascondiTooltip()" style="color:#888;cursor:help;display:inline-flex;align-items:center;vertical-align:middle;"><svg width=\'13\' height=\'13\' style=\'vertical-align:middle\'><use href=\'#i-settings\'/></svg></span></div>';
+            header.innerHTML = `<div style="text-align:left;">${t('tbl_col_filter')}</div><div>${t('tbl_col_pose')}</div><div>${t('tbl_col_secs')}</div>`
+                + `<div>${t('tbl_col_gain')}</div><div>${t('tbl_col_offset')}</div><div>${t('tbl_col_bin')}</div><div>${t('tbl_col_dither')}</div><div style="text-align:right;">${t('tbl_col_total')} <span onmouseenter="mostraTooltip(this,'overhead_col_tip')" onmouseleave="nascondiTooltip()" style="color:#888;cursor:help;display:inline-flex;align-items:center;vertical-align:middle;"><svg width='13' height='13' style='vertical-align:middle'><use href='#i-settings'/></svg></span></div>`;
             c.appendChild(header);
 
             (isM ? framesMono : framesColor).forEach(f => {
@@ -1508,7 +1508,7 @@ function toggleLock(id) {
         function aggiornaFiltriNina() {
             let isM = document.getElementById('sensor-type').value === 'mono', c = document.getElementById('nina-filters-container'); if (!c) return;
             c.innerHTML = '';
-            if (!isM) { c.innerHTML = `<span style="color:#aaa; font-size:0.9em;">OSC Camera.</span>`; return; }
+            if (!isM) { c.innerHTML = `<span style="color:#aaa; font-size:0.9em;">${t('nina_osc_camera')}</span>`; return; }
             framesMono.forEach(f => {
                 if (!f.id.includes('dark') && !f.id.includes('bias')) {
                     let savedName = localStorage.getItem('nina_filter_' + f.id) || f.name;
@@ -1536,7 +1536,7 @@ function toggleLock(id) {
             c.innerHTML = '';
             
             if (!isM) { 
-                c.innerHTML = `<span style="color:#aaa; font-size:0.9em;">Sensore OSC Color. Mappatura non necessaria.</span>`; 
+                c.innerHTML = `<span style="color:#aaa; font-size:0.9em;">${t('nina_osc_no_map')}</span>`; 
                 return; 
             }
             

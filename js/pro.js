@@ -349,14 +349,14 @@
                     <span class="info-icon" style="font-size:1.0em; margin-left:4px; cursor:help;" onmouseenter="mostraTooltip(this,'info_hdr_row')" onmouseleave="nascondiTooltip()">ℹ️</span>
                 </div>
                 <div style="display: grid; grid-template-columns: 1fr 0.8fr 0.8fr 0.65fr 0.65fr 0.65fr 1fr 0.9fr; gap: 5px; font-size: 0.8em; color: #aaa; text-align: center; border-bottom: 1px solid #444; padding-bottom: 5px;">
-                    <div style="text-align: left;">Filtro</div>
-                    <div>Pose</div>
-                    <div>Secs</div>
-                    <div>Gain</div>
-                    <div>Offset</div>
-                    <div>Bin</div>
-                    <div>Dither (Freq.)</div>
-                    <div>Totale <span onmouseenter="mostraTooltip(this,'overhead_col_tip')" onmouseleave="nascondiTooltip()" style="color:#888;cursor:help;display:inline-flex;align-items:center;vertical-align:middle;"><svg width='13' height='13' style='vertical-align:middle'><use href='#i-settings'/></svg></span></div>
+                    <div style="text-align: left;">${t('tbl_col_filter')}</div>
+                    <div>${t('tbl_col_pose')}</div>
+                    <div>${t('tbl_col_secs')}</div>
+                    <div>${t('tbl_col_gain')}</div>
+                    <div>${t('tbl_col_offset')}</div>
+                    <div>${t('tbl_col_bin')}</div>
+                    <div>${t('tbl_col_dither_freq')}</div>
+                    <div>${t('tbl_col_total')} <span onmouseenter="mostraTooltip(this,'overhead_col_tip')" onmouseleave="nascondiTooltip()" style="color:#888;cursor:help;display:inline-flex;align-items:center;vertical-align:middle;"><svg width='13' height='13' style='vertical-align:middle'><use href='#i-settings'/></svg></span></div>
                 </div>
             `;
 
