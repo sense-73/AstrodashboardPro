@@ -2003,10 +2003,10 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.es.land_f6_desc       = "Secuencia N.I.N.A., informe HTML y coordenadas AsiAir";
         i18n.zh.land_f6_desc       = "N.I.N.A.序列、HTML报告和AsiAir坐标";
 
-        i18n.it.land_privacy       = "Questa app non invia alcun dato a terzi. Tutto viene salvato localmente sul tuo dispositivo.";
-        i18n.en.land_privacy       = "This app does not send any data to third parties. Everything is saved locally on your device.";
-        i18n.es.land_privacy       = "Esta app no envía ningún dato a terceros. Todo se guarda localmente en tu dispositivo.";
-        i18n.zh.land_privacy       = "本应用不向任何第三方发送数据。所有内容均保存在您的设备本地。";
+        i18n.it.land_privacy       = "Nessun cookie. Conteggio visite anonimo. I tuoi dati restano salvati localmente sul tuo dispositivo.";
+        i18n.en.land_privacy       = "No cookies. Anonymous visit counting. Your data stays saved locally on your device.";
+        i18n.es.land_privacy       = "Sin cookies. Recuento de visitas anónimo. Tus datos se guardan localmente en tu dispositivo.";
+        i18n.zh.land_privacy       = "无 Cookie。匿名访问计数。您的数据仅保存在您的设备本地。";
 
         i18n.it.land_contact       = "Contattaci";
         i18n.en.land_contact       = "Contact us";

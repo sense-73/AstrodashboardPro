@@ -695,8 +695,8 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <div style="width:5px;height:5px;border-radius:50%;background:#44ff44;flex-shrink:0;"></div>
                     <span data-i18n="land_privacy">Questa app non invia alcun dato a terzi. Tutto viene salvato localmente sul tuo dispositivo.</span>
                 </div>
-                <div style="display:flex; align-items:center; gap:6px; font-size:10px; color:#3d4852;">
-                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#3d4852" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                <div id="visit-counter-row" style="display:none; align-items:center; gap:6px; font-size:10px; color:#3d4852;">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#3d4852" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                     <span data-i18n="land_visits">Visite:</span> <span id="visit-counter" style="color:#6e7a8a;">—</span>
                 </div>
             </div>
@@ -2550,20 +2550,24 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
     <!-- ═══ Visit Counter ═══ -->
     <script>
         (function() {
-            fetch('https://api.counterapi.dev/v1/sense-73-github-io/astrodashboardpro/up')
-                .then(r => r.json())
-                .then(data => {
-                    let el = document.getElementById('visit-counter');
-                    if (el && data && data.count !== undefined) {
-                        el.textContent = data.count.toLocaleString();
-                    }
-                })
-                .catch(() => {
-                    let el = document.getElementById('visit-counter');
-                    if (el) el.style.display = 'none';
-                });
+            var row = document.getElementById('visit-counter-row');
+            var el = document.getElementById('visit-counter');
+            function hide() { if (row) row.style.display = 'none'; }
+            // Attende che GoatCounter registri la visita corrente, poi legge il totale
+            setTimeout(function() {
+                fetch('https://sense73.goatcounter.com/counter/TOTAL.json')
+                    .then(function(r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+                    .then(function(data) {
+                        if (el && data && data.count !== undefined) {
+                            el.textContent = String(data.count).replace(/\s/g, '.');
+                            if (row) row.style.display = 'flex';
+                        } else { hide(); }
+                    })
+                    .catch(hide);
+            }, 1500);
         })();
     </script>
+    <script data-goatcounter="https://sense73.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
     <!-- ═══ Rive Animation ═══ -->
     <script src="rive.js"></script>
     <script>
