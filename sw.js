@@ -4,7 +4,7 @@
 
 // CACHE_NAME usa un timestamp fisso aggiornato ad ogni deploy
 // Non serve più incrementare manualmente — basta cambiare questa data
-const CACHE_TIMESTAMP = '20261009-001';
+const CACHE_TIMESTAMP = '20261010-001';
 const CACHE_NAME = 'astrodash-' + CACHE_TIMESTAMP;
 const APP_VERSION = CACHE_TIMESTAMP;
 
@@ -39,7 +39,9 @@ const NETWORK_ONLY_DOMAINS = [
     'nominatim.openstreetmap.org',
     'cds.unistra.fr',
     'wikipedia.org',
-    'aladin.cds.unistra.fr'
+    'aladin.cds.unistra.fr',
+    'goatcounter.com',   // contatore visite (mai in cache)
+    'zgo.at'             // script GoatCounter (gc.zgo.at)
 ];
 
 // ── INSTALL ────────────────────────────────────────────────────
