@@ -972,7 +972,17 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                 <div class="input-group"><label data-i18n="width">Larg. W (mm):</label><input type="number" id="sensor-width" value="23.5" step="0.1" oninput="aggiornaFOV()"></div>
                 <div class="input-group"><label data-i18n="height">Alet. H (mm):</label><input type="number" id="sensor-height" value="15.7" step="0.1" oninput="aggiornaFOV()"></div>
                 <div class="input-group"><label data-i18n="pixel_size">Pixel (µm):</label><input type="number" id="pixel-size" value="3.76" step="0.01" oninput="aggiornaFOV()"></div>
-                
+
+                <div class="lite-hidden" style="border-top:1px dashed #444; border-bottom:1px dashed #444; margin-top:12px; padding-top:12px; padding-bottom:12px;">
+                    <div class="input-group" style="margin-bottom:0;">
+                        <label data-i18n="lens_label">Lenti:</label>
+                        <button id="accessorio-btn" onclick="apriModalAccessorio()" style="background:#1a1a1a; color:#6e7a8a; font-weight:500; border:1px solid #6e7a8a; cursor:pointer; font-size:0.85em; padding:6px 12px; border-radius:4px; display:inline-flex; align-items:center; gap:5px;">
+                            <svg width="12" height="12" stroke="currentColor" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+                            <span id="accessorio-btn-label" data-i18n="acc_none">Nessun accessorio</span>
+                        </button>
+                    </div>
+                </div>
+
                 <div class="lite-hidden" style="margin-top: 15px; padding: 15px; background-color: #222; border-radius: 8px; border: 1px solid #444;">
                     <div class="input-group" style="margin-bottom: 5px; display: flex; align-items: center;">
                         <label data-i18n="mode" style="width: auto; margin-right:10px; font-weight: bold; color: #c49a3c;">Modalità:</label>
@@ -1036,10 +1046,10 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <h3 style="padding: 15px 20px 0 20px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;">
                         <span><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-ruler"/></svg> <span data-i18n="fov_sim">Simulatore FOV Realistico (DSS2)</span></span>
                         <span style="display:inline-flex; align-items:center; gap:6px; padding-right:4px;">
-                            <button id="accessorio-btn" class="lite-hidden" onclick="apriModalAccessorio()" style="background:#1a1a1a; color:#6e7a8a; font-weight:500; border:1px solid #6e7a8a; cursor:pointer; font-size:0.78em; padding:4px 10px; border-radius:4px; display:inline-flex; align-items:center; gap:5px;">
+                            <span id="accessorio-fov-label" class="lite-hidden" style="color:#6e7a8a; font-weight:500; font-size:0.78em; padding:4px 10px; display:inline-flex; align-items:center; gap:5px;">
                                 <svg width="12" height="12" stroke="currentColor" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
-                                <span id="accessorio-btn-label" data-i18n="acc_none">Nessun accessorio</span>
-                            </button>
+                                <span id="accessorio-fov-label-text" data-i18n="acc_none">Nessun accessorio</span>
+                            </span>
                             <span id="accessorio-active-label" style="display:none; font-size:0.75em; color:#ffaa00; font-weight:500;" data-i18n="acc_active">attivo</span>
                             <span class="info-icon" onmouseenter="mostraTooltip(this,'acc_info_tip')" onmouseleave="nascondiTooltip()">ℹ️</span>
                         </span>

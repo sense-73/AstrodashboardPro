@@ -436,18 +436,31 @@
             let btn     = document.getElementById('accessorio-btn');
             let label   = btn ? btn.querySelector('#accessorio-btn-label') : null;
             let activeSpan = document.getElementById('accessorio-active-label');
+            // Etichetta di stato non cliccabile nell'header del FOV
+            let fovLbl     = document.getElementById('accessorio-fov-label');
+            let fovTxt     = document.getElementById('accessorio-fov-label-text');
             if (!btn || !label) return;
             if (fattore === 1.0 || !nome) {
                 btn.style.color        = '#6e7a8a';
                 btn.style.borderColor  = '#6e7a8a';
                 label.setAttribute('data-i18n', 'acc_none');
                 label.textContent = t('acc_none');
+                if (fovLbl) fovLbl.style.color = '#6e7a8a';
+                if (fovTxt) {
+                    fovTxt.setAttribute('data-i18n', 'acc_none');
+                    fovTxt.textContent = t('acc_none');
+                }
                 if (activeSpan) activeSpan.style.display = 'none';
             } else {
                 btn.style.color        = '#ffaa00';
                 btn.style.borderColor  = '#ffaa00';
                 label.removeAttribute('data-i18n');
                 label.textContent = nome;
+                if (fovLbl) fovLbl.style.color = '#ffaa00';
+                if (fovTxt) {
+                    fovTxt.removeAttribute('data-i18n');
+                    fovTxt.textContent = nome;
+                }
                 if (activeSpan) {
                     activeSpan.textContent  = t('acc_active');
                     activeSpan.style.display = 'inline';

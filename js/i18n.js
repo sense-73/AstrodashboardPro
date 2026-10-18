@@ -616,6 +616,10 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.en.acc_reducer        = "Reducer";
         i18n.es.acc_reducer        = "Reductor";
         i18n.zh.acc_reducer        = "减焦镜";
+        i18n.it.lens_label         = "Lenti:";
+        i18n.en.lens_label         = "Lenses:";
+        i18n.es.lens_label         = "Lentes:";
+        i18n.zh.lens_label         = "镜片:";
 
         i18n.it.gps_btn_label      = "Posizione attuale";
         i18n.en.gps_btn_label      = "Current location";
