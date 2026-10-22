@@ -2,6 +2,13 @@
 // ============================================================
         window._sequenzaGenerata = false;
         window._afModoManuale    = false;  // true = utente ha scritto af-count a mano
+
+        // ── Wrapper cella griglia filtri (card mobile) ─────────────────────
+        // Su PC .adp-cell ha display:contents → layout tabella invariato.
+        // Su smartphone verticale (style.css) diventa una cella card con etichetta.
+        function _adpCell(cls, lbl, html) {
+            return '<div class="adp-cell adp-c-' + cls + '"' + (lbl ? ' data-lbl="' + lbl + '"' : '') + '>' + html + '</div>';
+        }
 function toggleLock(id) {
             let el = document.getElementById(id + '-lock');
             if (!el) return;
@@ -319,6 +326,7 @@ function toggleLock(id) {
             // Header colonne
             let header = document.createElement('div');
             header.id = 'smart-grid-header';
+            header.className = 'adp-grid-head';
             header.style.cssText = 'display:grid; grid-template-columns: 2fr 0.7fr 0.9fr 0.7fr 0.7fr 0.7fr 1fr 0.9fr; gap:4px; font-size:0.75em; color:#aaa; text-align:center; border-bottom:1px solid #444; padding-bottom:5px; margin-bottom:6px;';
             header.innerHTML = `<div style="text-align:left;">${t('tbl_col_filter')}</div><div>${t('tbl_col_pose')}</div><div>${t('tbl_col_secs')}</div>`
                 + `<div>${t('tbl_col_gain')}</div><div>${t('tbl_col_offset')}</div><div>${t('tbl_col_bin')}</div><div>${t('tbl_col_dither')}</div><div style="text-align:right;">${t('tbl_col_total')} <span onmouseenter="mostraTooltip(this,'overhead_col_tip')" onmouseleave="nascondiTooltip()" style="color:#888;cursor:help;display:inline-flex;align-items:center;vertical-align:middle;"><svg width='13' height='13' style='vertical-align:middle'><use href='#i-settings'/></svg></span></div>`;
@@ -372,18 +380,18 @@ function toggleLock(id) {
                     ? `<div style="display:flex;align-items:center;gap:3px;justify-content:center;"><input type="checkbox" id="${f.id}-dither" checked style="transform:scale(1.1);cursor:pointer;"><input type="number" id="${f.id}-dfreq" value="4" min="1" style="width:32px!important;padding:2px!important;text-align:center;" oninput="calcolaTempi()"></div>`
                     : `<div style="color:#555;text-align:center;">—</div>`;
 
-                r.innerHTML = `
-                    ${nameCell}
-                    ${countCell}
-                    ${expInput}
-                    <input type="text" id="${f.id}-gain" value="${defGain}" style="width:100%!important;text-align:center;padding:3px!important;">
-                    <input type="text" id="${f.id}-offset" value="Auto" style="width:100%!important;text-align:center;padding:3px!important;">
-                    <select id="${f.id}-bin" style="width:100%!important;padding:3px!important;">
+                r.classList.add('adp-row');
+                r.innerHTML =
+                    _adpCell('name', '', nameCell) +
+                    _adpCell('pose', t('tbl_col_pose'), countCell) +
+                    _adpCell('secs', t('tbl_col_secs'), expInput) +
+                    _adpCell('gain', t('tbl_col_gain'), `<input type="text" id="${f.id}-gain" value="${defGain}" style="width:100%!important;text-align:center;padding:3px!important;">`) +
+                    _adpCell('off', t('tbl_col_offset'), `<input type="text" id="${f.id}-offset" value="Auto" style="width:100%!important;text-align:center;padding:3px!important;">`) +
+                    _adpCell('bin', t('tbl_col_bin'), `<select id="${f.id}-bin" style="width:100%!important;padding:3px!important;">
                         <option value="1">1x1</option><option value="2">2x2</option><option value="3">3x3</option><option value="4">4x4</option>
-                    </select>
-                    ${ditherCell}
-                    <div class="calc-total" id="${f.id}-tot" style="text-align:right;">0h 0m</div>
-                `;
+                    </select>`) +
+                    _adpCell(isL ? 'dith' : 'dith adp-empty', t('tbl_col_dither'), ditherCell) +
+                    _adpCell('tot', '', `<div class="calc-total" id="${f.id}-tot" style="text-align:right;">0h 0m</div>`);
                 c.appendChild(r);
                 // ── Riga companion Light HDR ─────────────────────────────────────
                 if (isL) {
@@ -391,31 +399,31 @@ function toggleLock(id) {
                     hdrR.id = `${f.id}-hdr-row`;
                     hdrR.dataset.smartHdrRow = '1';
                     hdrR.style.cssText = 'display:none; grid-template-columns: 2fr 0.7fr 0.9fr 0.7fr 0.7fr 0.7fr 1fr 0.9fr; gap:4px; align-items:center; background:#1a0d2e; padding:5px 6px 5px 24px; border-radius:5px; border-left:3px solid #7c4dff; margin-bottom:6px; margin-top:-2px;';
-                    hdrR.innerHTML = `
-                        <div style="display:flex;align-items:center;gap:4px;">
+                    hdrR.className = 'adp-row adp-row-hdr';
+                    hdrR.innerHTML =
+                        _adpCell('name', '', `<div style="display:flex;align-items:center;gap:4px;">
                             <span style="color:#bb86fc;font-size:0.82em;font-weight:bold;">✦ Light HDR</span>
                             <button id="${f.id}-hdr-toggle" onclick="toggleHdrRowSmart('${f.id}')" title="Disattiva HDR" style="background:#3a2050;color:#bb86fc;border:1px solid #7c4dff;border-radius:3px;font-size:0.72em;padding:2px 6px;cursor:pointer;white-space:nowrap;">Disattiva</button>
                             <span class="info-icon" style="font-size:1.0em;margin-left:2px;cursor:help;" onmouseenter="mostraTooltip(this,'info_hdr_row')" onmouseleave="nascondiTooltip()">ℹ️</span>
-                        </div>
-                        <div style="display:flex;align-items:center;gap:3px;">
+                        </div>`) +
+                        _adpCell('pose', t('tbl_col_pose'), `<div style="display:flex;align-items:center;gap:3px;">
                             <input type="number" id="${f.id}-hdr-count" value="0" min="0" oninput="calcolaTempi()" style="width:100%!important;text-align:center;padding:3px!important;background:#1a0d2e;color:#bb86fc;border:1px solid #3a2050;">
                             <span id="${f.id}-hdr-count-lock" onclick="toggleLock('${f.id}-hdr-count')" title="Blocca pose HDR" style="cursor:pointer;opacity:0.4;user-select:none;line-height:1;display:inline-flex;align-items:center;" data-locked="0"><svg width="15" height="15" style="vertical-align:middle"><use href="#i-lock-open"/></svg></span>
-                        </div>
-                        <div style="display:flex;align-items:center;gap:3px;">
+                        </div>`) +
+                        _adpCell('secs', t('tbl_col_secs'), `<div style="display:flex;align-items:center;gap:3px;">
                             <input type="number" id="${f.id}-hdr-exp" value="" placeholder="s" min="0" oninput="calcolaTempi()" style="width:48px!important;text-align:center;padding:3px!important;flex:1;color:#bb86fc;background:#1a0d2e;border:1px solid #3a2050;">
                             <span id="${f.id}-hdr-exp-lock" onclick="toggleLock('${f.id}-hdr-exp')" title="Blocca secondi HDR" style="cursor:pointer;opacity:0.4;user-select:none;line-height:1;display:inline-flex;align-items:center;" data-locked="0"><svg width="15" height="15" style="vertical-align:middle"><use href="#i-lock-open"/></svg></span>
-                        </div>
-                        <input type="text" id="${f.id}-hdr-gain" value="Auto" style="width:100%!important;text-align:center;padding:3px!important;background:#1a0d2e;border:1px solid #3a2050;">
-                        <input type="text" id="${f.id}-hdr-offset" value="Auto" style="width:100%!important;text-align:center;padding:3px!important;background:#1a0d2e;border:1px solid #3a2050;">
-                        <select id="${f.id}-hdr-bin" style="width:100%!important;padding:3px!important;background:#1a0d2e;border:1px solid #3a2050;">
+                        </div>`) +
+                        _adpCell('gain', t('tbl_col_gain'), `<input type="text" id="${f.id}-hdr-gain" value="Auto" style="width:100%!important;text-align:center;padding:3px!important;background:#1a0d2e;border:1px solid #3a2050;">`) +
+                        _adpCell('off', t('tbl_col_offset'), `<input type="text" id="${f.id}-hdr-offset" value="Auto" style="width:100%!important;text-align:center;padding:3px!important;background:#1a0d2e;border:1px solid #3a2050;">`) +
+                        _adpCell('bin', t('tbl_col_bin'), `<select id="${f.id}-hdr-bin" style="width:100%!important;padding:3px!important;background:#1a0d2e;border:1px solid #3a2050;">
                             <option value="1">1x1</option><option value="2">2x2</option><option value="3">3x3</option><option value="4">4x4</option>
-                        </select>
-                        <div style="display:flex;align-items:center;gap:3px;justify-content:center;">
+                        </select>`) +
+                        _adpCell('dith', t('tbl_col_dither'), `<div style="display:flex;align-items:center;gap:3px;justify-content:center;">
                             <input type="checkbox" id="${f.id}-hdr-dither" checked style="transform:scale(1.1);cursor:pointer;" onchange="calcolaTempi()">
                             <input type="number" id="${f.id}-hdr-dfreq" value="4" min="1" style="width:32px!important;padding:2px!important;text-align:center;background:#1a0d2e;border:1px solid #3a2050;" oninput="calcolaTempi()">
-                        </div>
-                        <div class="calc-total" id="${f.id}-hdr-tot" style="text-align:right;color:#bb86fc;">—</div>
-                    `;
+                        </div>`) +
+                        _adpCell('tot', '', `<div class="calc-total" id="${f.id}-hdr-tot" style="text-align:right;color:#bb86fc;">—</div>`);
                     c.appendChild(hdrR);
                 }
             });
@@ -1917,3 +1925,185 @@ function toggleLock(id) {
                 spiegEl.style.display = 'block';
             }
         }
+
+        // ── Rotazione smartphone: mantiene in vista la sezione che si stava guardando ──
+        // Causa del salto: ruotando cambia la larghezza, i contenuti sopra si ridispongono
+        // e cambiano altezza, ma il browser conserva lo scroll in pixel → si finisce più in basso.
+        // Soluzione: memorizza l'elemento in vista (o il campo attivo) e lo ripristina dopo
+        // la rotazione. Attivo SOLO su dispositivi touch: nessun effetto su PC.
+        (function() {
+            if (!window.matchMedia || !window.matchMedia('(pointer: coarse)').matches) return;
+            let _anchorEl = null, _anchorTop = 0, _lastW = window.innerWidth;
+            let _restoring = false, _saveT = null;
+
+            function _saveAnchor() {
+                if (_restoring) return;
+                let a = document.activeElement;
+                if (!a || a === document.body || a === document.documentElement) {
+                    // Punto a metà schermo: evita la navbar sticky in alto
+                    a = document.elementFromPoint(window.innerWidth / 2, window.innerHeight / 2);
+                }
+                if (!a || a === document.body || a === document.documentElement) return;
+                _anchorEl  = a;
+                _anchorTop = a.getBoundingClientRect().top;
+            }
+
+            window.addEventListener('scroll', function() {
+                clearTimeout(_saveT);
+                _saveT = setTimeout(_saveAnchor, 150);
+            }, { passive: true });
+            document.addEventListener('focusin', _saveAnchor);
+
+            function _onResize() {
+                // La rotazione cambia la larghezza; la tastiera no → la tastiera non attiva il ripristino
+                if (window.innerWidth === _lastW) return;
+                _lastW = window.innerWidth;
+                if (!_anchorEl || !document.body.contains(_anchorEl)) return;
+                _restoring = true;
+                clearTimeout(_saveT);
+                let el = _anchorEl, relTop = _anchorTop;
+                // Due passaggi: il layout mobile si assesta in più frame dopo la rotazione
+                [250, 600].forEach(function(ms) {
+                    setTimeout(function() {
+                        let off = Math.max(80, Math.min(relTop, window.innerHeight * 0.5));
+                        let y = el.getBoundingClientRect().top + window.scrollY - off;
+                        window.scrollTo(0, Math.max(0, y));
+                        if (ms === 600) { _restoring = false; _anchorTop = el.getBoundingClientRect().top; }
+                    }, ms);
+                });
+            }
+            window.addEventListener('resize', _onResize);
+        })();
+
+
+        // ── Popup numerico (solo smartphone / touch) per la griglia filtri Smart + PRO ──
+        // Sostituisce la tastiera di sistema sui campi numerici delle righe .adp-row
+        // (Light, Dark, Bias, HDR). Il valore viene scritto nel campo originale e
+        // vengono generati gli eventi 'input' e 'change' → calcoli e salvataggi invariati.
+        (function() {
+            if (!window.matchMedia || !window.matchMedia('(pointer: coarse)').matches) return;
+
+            const STEP = { pose: 10, secs: 10, gain: 10, off: 10, dith: 1 };
+            const SEL  = '.adp-row input[type="number"], .adp-row input[type="text"]';
+            let _target = null, _val = '', _fresh = true, _kind = '', _pop = null;
+
+            function _tt(k, fb) {
+                try { let v = (typeof t === 'function') ? t(k) : ''; return (v && v !== k) ? v : fb; }
+                catch (e) { return fb; }
+            }
+
+            function _build() {
+                _pop = document.createElement('div');
+                _pop.id = 'adp-numpad';
+                _pop.innerHTML =
+                    '<div class="anp-dim"></div>' +
+                    '<div class="anp-box">' +
+                      '<div class="anp-left">' +
+                        '<div class="anp-ttl"></div>' +
+                        '<div class="anp-disp">' +
+                          '<button type="button" class="anp-step" data-k="minus">−</button>' +
+                          '<div class="anp-val"></div>' +
+                          '<button type="button" class="anp-step" data-k="plus">+</button>' +
+                        '</div>' +
+                        '<div class="anp-act">' +
+                          '<button type="button" class="anp-b anp-cancel" data-k="cancel"></button>' +
+                          '<button type="button" class="anp-b anp-ok" data-k="ok">OK</button>' +
+                        '</div>' +
+                      '</div>' +
+                      '<div class="anp-keys">' +
+                        ['1','2','3','4','5','6','7','8','9'].map(d => '<button type="button" class="anp-k" data-k="' + d + '">' + d + '</button>').join('') +
+                        '<button type="button" class="anp-k anp-alt anp-spec" data-k="spec">C</button>' +
+                        '<button type="button" class="anp-k" data-k="0">0</button>' +
+                        '<button type="button" class="anp-k anp-alt" data-k="back">⌫</button>' +
+                      '</div>' +
+                    '</div>';
+                document.body.appendChild(_pop);
+                _pop.addEventListener('click', function(e) {
+                    if (e.target.classList.contains('anp-dim')) { _close(); return; }
+                    let b = e.target.closest('[data-k]');
+                    if (b) _press(b.dataset.k);
+                });
+            }
+
+            function _render() {
+                let v = _pop.querySelector('.anp-val');
+                v.textContent = _val === '' ? '—' : _val;
+                if (_kind === 'secs' && _val !== '' && _val !== 'Auto') {
+                    let s = document.createElement('small'); s.textContent = 's'; v.appendChild(s);
+                }
+            }
+
+            function _press(k) {
+                if (k === 'cancel') { _close(); return; }
+                if (k === 'ok') { _commit(); return; }
+                if (k === 'minus' || k === 'plus') {
+                    let n = parseInt(_val, 10); if (isNaN(n)) n = 0;
+                    n += (k === 'plus' ? 1 : -1) * (STEP[_kind] || 1);
+                    let mn = parseInt(_target.getAttribute('min'), 10);
+                    if (!isNaN(mn) && n < mn) n = mn;
+                    if (n < 0) n = 0;
+                    _val = String(n); _fresh = false; _render(); return;
+                }
+                if (k === 'spec') {
+                    _val = (_kind === 'gain' || _kind === 'off') ? 'Auto' : '';
+                    _fresh = true; _render(); return;
+                }
+                if (k === 'back') {
+                    _val = (_val === 'Auto') ? '' : _val.slice(0, -1);
+                    _fresh = false; _render(); return;
+                }
+                // cifra: la prima digitazione sostituisce il valore iniziale
+                if (_fresh || _val === 'Auto' || _val === '0') _val = '';
+                if (_val.length < 6) _val += k;
+                _fresh = false; _render();
+            }
+
+            function _commit() {
+                if (_target) {
+                    _target.value = _val;
+                    _target.dispatchEvent(new Event('input',  { bubbles: true }));
+                    _target.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+                _close();
+            }
+
+            function _close() {
+                if (_pop) _pop.classList.remove('open');
+                _target = null;
+            }
+
+            function _open(input) {
+                if (!_pop) _build();
+                let cell = input.closest('.adp-cell');
+                let row  = input.closest('.adp-row');
+                let m = cell ? cell.className.match(/adp-c-(pose|secs|gain|off|dith)/) : null;
+                _kind = m ? m[1] : '';
+                let lbl = (cell && cell.dataset.lbl) || '';
+                let nameEl = row ? (row.querySelector('.adp-c-name label') ||
+                                    row.querySelector('.adp-c-name span:not(:empty)') ||
+                                    row.querySelector('.adp-c-name > div')) : null;
+                let name = nameEl ? nameEl.textContent.trim() : '';
+                _pop.querySelector('.anp-ttl').innerHTML = (name ? name + ' · ' : '') + '<b>' + lbl + '</b>';
+                _pop.querySelector('.anp-spec').textContent = (_kind === 'gain' || _kind === 'off') ? 'Auto' : 'C';
+                _pop.querySelector('.anp-cancel').textContent = _tt('btn_cancel', 'Annulla');
+                _target = input;
+                _val = (input.value || '').trim();
+                _fresh = true;
+                _render();
+                _pop.classList.add('open');
+            }
+
+            // inputmode="none" impostato prima del focus → la tastiera di sistema non compare
+            document.addEventListener('pointerdown', function(e) {
+                let el = e.target.closest && e.target.closest(SEL);
+                if (el && !el.disabled) el.setAttribute('inputmode', 'none');
+            }, true);
+
+            document.addEventListener('focusin', function(e) {
+                let el = e.target;
+                if (!el.matches || !el.matches(SEL) || el.disabled) return;
+                el.setAttribute('inputmode', 'none');
+                el.blur();
+                _open(el);
+            });
+        })();

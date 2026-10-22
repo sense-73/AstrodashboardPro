@@ -348,7 +348,7 @@
                     </button>
                     <span class="info-icon" style="font-size:1.0em; margin-left:4px; cursor:help;" onmouseenter="mostraTooltip(this,'info_hdr_row')" onmouseleave="nascondiTooltip()">ℹ️</span>
                 </div>
-                <div style="display: grid; grid-template-columns: 1fr 0.8fr 0.8fr 0.65fr 0.65fr 0.65fr 1fr 0.9fr; gap: 5px; font-size: 0.8em; color: #aaa; text-align: center; border-bottom: 1px solid #444; padding-bottom: 5px;">
+                <div class="adp-grid-head" style="display: grid; grid-template-columns: 1fr 0.8fr 0.8fr 0.65fr 0.65fr 0.65fr 1fr 0.9fr; gap: 5px; font-size: 0.8em; color: #aaa; text-align: center; border-bottom: 1px solid #444; padding-bottom: 5px;">
                     <div style="text-align: left;">${t('tbl_col_filter')}</div>
                     <div>${t('tbl_col_pose')}</div>
                     <div>${t('tbl_col_secs')}</div>
@@ -371,53 +371,53 @@
                 let row = document.createElement('div');
                 row.style.cssText = "display: grid; grid-template-columns: 1fr 0.8fr 0.8fr 0.65fr 0.65fr 0.65fr 1fr 0.9fr; gap: 5px; align-items: center; background: #1a1a1a; padding: 10px; border-radius: 4px; border-left: 3px solid #00c6ff;";
                 
-                row.innerHTML = `
-                    <div style="font-weight: bold; color: #fff; font-size: 0.9em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${defaultName}">${defaultName}</div>
-                    <input type="number" id="pro-${f.id}-count" value="${defaultCount}" min="0" oninput="calcolaNightFillBar()" style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box;">
-                    <input type="number" id="pro-${f.id}-exp" value="${defaultExp}" min="1" oninput="calcolaNightFillBar()" style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box;">
-                    <input type="text" id="pro-${f.id}-gain" value="Auto" style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box;">
-                    <input type="text" id="pro-${f.id}-offset" value="Auto" style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box;">
-                    <select id="pro-${f.id}-bin" style="width: 100%!important; padding: 4px!important; text-align: center; box-sizing: border-box;">
+                row.className = 'adp-row';
+                row.innerHTML =
+                    _adpCell('name', '', `<div style="font-weight: bold; color: #fff; font-size: 0.9em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${defaultName}">${defaultName}</div>`) +
+                    _adpCell('pose', t('tbl_col_pose'), `<input type="number" id="pro-${f.id}-count" value="${defaultCount}" min="0" oninput="calcolaNightFillBar()" style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box;">`) +
+                    _adpCell('secs', t('tbl_col_secs'), `<input type="number" id="pro-${f.id}-exp" value="${defaultExp}" min="1" oninput="calcolaNightFillBar()" style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box;">`) +
+                    _adpCell('gain', t('tbl_col_gain'), `<input type="text" id="pro-${f.id}-gain" value="Auto" style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box;">`) +
+                    _adpCell('off', t('tbl_col_offset'), `<input type="text" id="pro-${f.id}-offset" value="Auto" style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box;">`) +
+                    _adpCell('bin', t('tbl_col_bin'), `<select id="pro-${f.id}-bin" style="width: 100%!important; padding: 4px!important; text-align: center; box-sizing: border-box;">
                         <option value="1">1x1</option><option value="2">2x2</option><option value="3">3x3</option>
-                    </select>
-                    <div style="display: flex; align-items: center; gap: 5px; justify-content: center;">
+                    </select>`) +
+                    _adpCell('dith', t('tbl_col_dither_freq'), `<div style="display: flex; align-items: center; gap: 5px; justify-content: center;">
                         <input type="checkbox" id="pro-${f.id}-dither" checked style="transform: scale(1.2); cursor: pointer;" onchange="calcolaNightFillBar()">
                         <input type="number" id="pro-${f.id}-dfreq" value="4" min="1" style="width: 45px!important; padding: 4px!important; text-align: center;" oninput="calcolaNightFillBar()">
-                    </div>
-                    <div id="pro-${f.id}-tot" style="text-align: center; color: #aaa; font-size: 0.82em;">—</div>
-                `;
+                    </div>`) +
+                    _adpCell('tot', '', `<div id="pro-${f.id}-tot" style="text-align: center; color: #aaa; font-size: 0.82em;">—</div>`);
                 container.appendChild(row);
                 // ── Riga companion Light HDR (nascosta di default, attivabile globalmente) ───
                 let hdrRowPro = document.createElement('div');
                 hdrRowPro.id = `pro-${f.id}-hdr-row`;
                 hdrRowPro.dataset.hdrActive = '0';
                 hdrRowPro.style.cssText = 'display: none; grid-template-columns: 1fr 0.8fr 0.8fr 0.65fr 0.65fr 0.65fr 1fr 0.9fr; gap: 5px; align-items: center; background: #160d24; padding: 8px 10px; border-radius: 4px; border-left: 3px solid #7c4dff; margin-top: 3px; margin-bottom: 8px;';
-                hdrRowPro.innerHTML = `
-                    <div style="display:flex;align-items:center;gap:6px;flex-wrap:nowrap;">
+                hdrRowPro.className = 'adp-row adp-row-hdr';
+                hdrRowPro.innerHTML =
+                    _adpCell('name', '', `<div style="display:flex;align-items:center;gap:6px;flex-wrap:nowrap;">
                         <span style="color:#bb86fc;font-weight:bold;font-size:0.82em;white-space:nowrap;">✦ Light HDR</span>
                         <button id="pro-${f.id}-hdr-toggle"
                             onclick="toggleHdrRowPro('${f.id}')"
                             style="background:#444;color:#888;border:none;border-radius:3px;padding:2px 8px;font-size:0.7em;font-weight:700;cursor:pointer;letter-spacing:0.5px;flex-shrink:0;">OFF</button>
-                    </div>
-                    <input type="number" id="pro-${f.id}-hdr-count" value="0" min="0" oninput="calcolaNightFillBar()"
-                        style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box; background:#1a0d2e; border:1px solid #3a2050; color:#bb86fc;">
-                    <input type="number" id="pro-${f.id}-hdr-exp" value="" placeholder="s" min="0" oninput="calcolaNightFillBar()"
-                        style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box; background:#1a0d2e; border:1px solid #3a2050; color:#bb86fc;">
-                    <input type="text" id="pro-${f.id}-hdr-gain" value="Auto"
-                        style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box; background:#1a0d2e; border:1px solid #3a2050;">
-                    <input type="text" id="pro-${f.id}-hdr-offset" value="Auto"
-                        style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box; background:#1a0d2e; border:1px solid #3a2050;">
-                    <select id="pro-${f.id}-hdr-bin"
+                    </div>`) +
+                    _adpCell('pose', t('tbl_col_pose'), `<input type="number" id="pro-${f.id}-hdr-count" value="0" min="0" oninput="calcolaNightFillBar()"
+                        style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box; background:#1a0d2e; border:1px solid #3a2050; color:#bb86fc;">`) +
+                    _adpCell('secs', t('tbl_col_secs'), `<input type="number" id="pro-${f.id}-hdr-exp" value="" placeholder="s" min="0" oninput="calcolaNightFillBar()"
+                        style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box; background:#1a0d2e; border:1px solid #3a2050; color:#bb86fc;">`) +
+                    _adpCell('gain', t('tbl_col_gain'), `<input type="text" id="pro-${f.id}-hdr-gain" value="Auto"
+                        style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box; background:#1a0d2e; border:1px solid #3a2050;">`) +
+                    _adpCell('off', t('tbl_col_offset'), `<input type="text" id="pro-${f.id}-hdr-offset" value="Auto"
+                        style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box; background:#1a0d2e; border:1px solid #3a2050;">`) +
+                    _adpCell('bin', t('tbl_col_bin'), `<select id="pro-${f.id}-hdr-bin"
                         style="width: 100%!important; padding: 4px!important; box-sizing: border-box; background:#1a0d2e; border:1px solid #3a2050;">
                         <option value="1">1x1</option><option value="2">2x2</option><option value="3">3x3</option>
-                    </select>
-                    <div style="display: flex; align-items: center; gap: 5px; justify-content: center;">
+                    </select>`) +
+                    _adpCell('dith', t('tbl_col_dither_freq'), `<div style="display: flex; align-items: center; gap: 5px; justify-content: center;">
                         <input type="checkbox" id="pro-${f.id}-hdr-dither" checked style="transform: scale(1.2); cursor: pointer;" onchange="calcolaNightFillBar()">
                         <input type="number" id="pro-${f.id}-hdr-dfreq" value="4" min="1"
                             style="width: 45px!important; padding: 4px!important; text-align: center; background:#1a0d2e; border:1px solid #3a2050;" oninput="calcolaNightFillBar()">
-                    </div>
-                    <div id="pro-${f.id}-hdr-tot" style="text-align: center; color: #bb86fc; font-size: 0.82em;">—</div>
-                `;
+                    </div>`) +
+                    _adpCell('tot', '', `<div id="pro-${f.id}-hdr-tot" style="text-align: center; color: #bb86fc; font-size: 0.82em;">—</div>`);
                 container.appendChild(hdrRowPro);
             });
 
@@ -457,18 +457,18 @@
                            <span style="display:none" id="pro-${f.id}-exp">${biasOverhead}</span>
                        </div>`;
 
-                row.innerHTML = `
-                    <div style="font-weight: bold; color: #aaa; font-size: 0.9em;">${defaultName}</div>
-                    <input type="number" id="pro-${f.id}-count" value="${defaultCount}" min="0" oninput="calcolaNightFillBar()" style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box;">
-                    ${expCell}
-                    <input type="text" id="pro-${f.id}-gain" value="${f.id.includes('bias') ? '0' : 'Auto'}" style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box;">
-                    <input type="text" id="pro-${f.id}-offset" value="Auto" style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box;">
-                    <select id="pro-${f.id}-bin" style="width: 100%!important; padding: 4px!important; box-sizing: border-box;">
+                row.className = 'adp-row';
+                row.innerHTML =
+                    _adpCell('name', '', `<div style="font-weight: bold; color: #aaa; font-size: 0.9em;">${defaultName}</div>`) +
+                    _adpCell('pose', t('tbl_col_pose'), `<input type="number" id="pro-${f.id}-count" value="${defaultCount}" min="0" oninput="calcolaNightFillBar()" style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box;">`) +
+                    _adpCell('secs', t('tbl_col_secs'), expCell) +
+                    _adpCell('gain', t('tbl_col_gain'), `<input type="text" id="pro-${f.id}-gain" value="${f.id.includes('bias') ? '0' : 'Auto'}" style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box;">`) +
+                    _adpCell('off', t('tbl_col_offset'), `<input type="text" id="pro-${f.id}-offset" value="Auto" style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box;">`) +
+                    _adpCell('bin', t('tbl_col_bin'), `<select id="pro-${f.id}-bin" style="width: 100%!important; padding: 4px!important; box-sizing: border-box;">
                         <option value="1">1x1</option><option value="2">2x2</option><option value="3">3x3</option>
-                    </select>
-                    <div style="color:#555; text-align:center; font-size:0.85em;">—</div>
-                    <div id="pro-${f.id}-tot" style="text-align: center; color: #aaa; font-size: 0.82em;">—</div>
-                `;
+                    </select>`) +
+                    _adpCell('dith adp-empty', '', `<div style="color:#555; text-align:center; font-size:0.85em;">—</div>`) +
+                    _adpCell('tot', '', `<div id="pro-${f.id}-tot" style="text-align: center; color: #aaa; font-size: 0.82em;">—</div>`);
                 container.appendChild(row);
             });
 
