@@ -5,18 +5,37 @@
 // ============================================================
 
 // ── Legge il FOV del setup ottico da localStorage ─────────────────────────────
-// Restituisce { fovW, fovH, fovMin, fovMax } in arcominuti, oppure null se
-// il setup non è ancora stato configurato dall'utente.
+// Restituisce { fovW, fovH, fovMin, fovMax } in arcominuti e scala in "/px
+// (null se il pixel non è noto), oppure null se il setup non è ancora stato
+// configurato dall'utente.
+// Il setup è salvato da equipment.js in 'ad_instrument' (JSON con gli ID dei campi).
 function _npGetFov() {
-    const fl  = parseFloat(adLoad('focal-length')) || 0;
-    const sw  = parseFloat(adLoad('sensor-w'))     || 0;
-    const sh  = parseFloat(adLoad('sensor-h'))     || 0;
+    let inst = {};
+    try { inst = JSON.parse(localStorage.getItem('ad_instrument') || '{}') || {}; } catch (e) { inst = {}; }
+    const fl  = parseFloat(inst['focal-length'])  || 0;
+    const sw  = parseFloat(inst['sensor-width'])  || 0;
+    const sh  = parseFloat(inst['sensor-height']) || 0;
+    const px  = parseFloat(inst['pixel-size'])    || 0;   // µm (0 = non disponibile)
     const fat = parseFloat(localStorage.getItem('ad_accessorio_fattore') || '1.0');
     if (!fl || !sw || !sh) return null;
     const flEff = fl * fat;
     const fovW  = 2 * Math.atan(sw / (2 * flEff)) * (180 / Math.PI) * 60; // arcmin
     const fovH  = 2 * Math.atan(sh / (2 * flEff)) * (180 / Math.PI) * 60; // arcmin
-    return { fovW, fovH, fovMin: Math.min(fovW, fovH), fovMax: Math.max(fovW, fovH) };
+    const scala = px ? (px / flEff) * 206.265 : null;                       // "/px, BIN 1×1
+    return { fovW, fovH, fovMin: Math.min(fovW, fovH), fovMax: Math.max(fovW, fovH), scala };
+}
+
+// ── Il DSO è fotografabile con il setup? ──────────────────────────────────────
+// Escluso se più grande del lato lungo del FOV (servirebbe un mosaico) oppure
+// se copre meno di NP_MIN_PIXEL pixel sul sensore. Se il pixel non è noto,
+// il limite minimo diventa il 10% del lato corto del FOV.
+const NP_MIN_PIXEL      = 150;   // pixel (BIN 1×1)
+const NP_MIN_FRAZ_LATO  = 0.10;  // fallback senza pixel-size
+
+function _npEntraNelCampo(sz, fov) {
+    if (sz > fov.fovMax) return false;
+    if (fov.scala) return (sz * 60) / fov.scala >= NP_MIN_PIXEL;
+    return sz >= fov.fovMin * NP_MIN_FRAZ_LATO;
 }
 
 // ── Calcola l'analisi della notte astronomica ──────────────────────────────────
@@ -111,43 +130,44 @@ function _npAnalisiNotte() {
 }
 
 // ── Seleziona i DSO migliori per la notte ─────────────────────────────────────
-// Calcola l'altitudine massima di ogni DSO nella finestra notturna.
-// Se il setup è configurato, applica un bonus/malus di compatibilità FOV.
+// Un istante è "utile" se il DSO è sopra NP_ALT_MIN e sopra il profilo
+// d'orizzonte personalizzato (stessa regola della finestra utile in fov.js).
+// Punteggio = ore utili pesate per altezza: ogni campione vale sin(alt), quindi
+// conta di più quando l'oggetto è alto (meno atmosfera). Campionamento 10 min.
+// Se il setup è configurato, esclude i DSO che non sono fotografabili con il FOV.
+const NP_ALT_MIN  = 30;        // gradi
+const NP_STEP_MIN = 10;        // minuti tra un campione e l'altro
+
+function _npHorizonAt(az) {
+    // hzAtAzGlobal (fov.js) restituisce 0 se non c'è un profilo o in Modalità Base
+    return (typeof hzAtAzGlobal === 'function') ? hzAtAzGlobal(az) : 0;
+}
+
 function _npSelezionaDso(nightStart, nightEnd) {
-    const fov = _npGetFov();
+    const fov    = _npGetFov();
+    const stepMs = NP_STEP_MIN * 60000;
 
-    const candidati = dsoDatabase.map(dso => {
-        // Campiona ogni 30 min per trovare il massimo in altitudine
-        let maxAlt = -90;
+    const candidati = dsoDatabase
+    .filter(dso => !fov || _npEntraNelCampo(dso.size || 30, fov)) // size in arcmin
+    .map(dso => {
+        let minutiUtili = 0, score = 0, maxAlt = -90, bestTime = null;
+        // Ogni campione rappresenta l'intervallo [cur, cur+10 min); l'ultimo conta
+        // solo per la parte che cade prima della fine della notte
         let cur = new Date(nightStart.getTime());
-        while (cur <= nightEnd) {
+        while (cur < nightEnd) {
+            const durMin = Math.min(stepMs, nightEnd - cur) / 60000;
             const pos = calcolaAltAz(dso.ra, dso.dec, latCorrente, lonCorrente, cur);
-            if (pos.alt > maxAlt) maxAlt = pos.alt;
-            cur = new Date(cur.getTime() + 1800000);
-        }
-
-        let score   = maxAlt;
-        let fovNote = null;
-
-        // Compatibilità FOV (solo se setup configurato e oggetto visibile)
-        if (fov && maxAlt > 25) {
-            const sz = dso.size || 30; // arcmin
-            if (sz >= fov.fovMin * 0.15 && sz <= fov.fovMax * 1.1) {
-                score  += 15;
-                fovNote = 'ok';
-            } else if (sz > fov.fovMax * 2) {
-                score  -= 10;
-                fovNote = 'large';
-            } else if (sz < fov.fovMin * 0.05) {
-                score  -= 10;
-                fovNote = 'small';
+            if (pos.alt >= NP_ALT_MIN && pos.alt > _npHorizonAt(pos.az)) {
+                minutiUtili += durMin;
+                score       += (durMin / 60) * Math.sin(pos.alt * Math.PI / 180);
+                if (pos.alt > maxAlt) { maxAlt = pos.alt; bestTime = new Date(cur.getTime()); }
             }
+            cur = new Date(cur.getTime() + stepMs);
         }
-
-        return { dso, maxAlt: Math.round(maxAlt), score, fovNote };
+        return { dso, maxAlt: Math.round(maxAlt), minutiUtili: Math.round(minutiUtili), score, bestTime };
     })
-    .filter(d => d.maxAlt > 25)
-    .sort((a, b) => b.score - a.score)
+    .filter(d => d.minutiUtili > 0)
+    .sort((a, b) => (b.score - a.score) || (b.maxAlt - a.maxAlt))
     .slice(0, 4);
 
     return candidati;
@@ -277,7 +297,7 @@ function _npPopolaPopup(analisi, dsoList) {
         return;
     }
 
-    dsoList.forEach(({ dso, maxAlt, fovNote }) => {
+    dsoList.forEach(({ dso, maxAlt, minutiUtili, bestTime }) => {
         const nome   = dso[lang] || dso.it || dso.name;
         const imgSrc = _DSO_IMGS[dso.id] || null;
 
@@ -296,11 +316,6 @@ function _npPopolaPopup(analisi, dsoList) {
             iconWrap.innerHTML = _SVG_EYESTAR_HTML;
         }
 
-        let fovBadge = '';
-        if (fovNote === 'ok')    fovBadge = `<span style="font-size:10px;color:#2ecc71;">● ${t('np_fov_ok')}</span>`;
-        if (fovNote === 'large') fovBadge = `<span style="font-size:10px;color:#e67e22;">● ${t('np_fov_large')}</span>`;
-        if (fovNote === 'small') fovBadge = `<span style="font-size:10px;color:#6e7a8a;">● ${t('np_fov_small')}</span>`;
-
         const row = document.createElement('div');
         row.style.cssText = 'display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #161b22;cursor:pointer;transition:background .15s;';
         row.onmouseenter = () => { row.style.background = '#161b22'; };
@@ -311,19 +326,29 @@ function _npPopolaPopup(analisi, dsoList) {
         textDiv.innerHTML = `
             <div style="font-size:12px;color:#c9d1d9;font-weight:600;">${dso.name}
                 <span style="font-weight:400;color:#6e7a8a;"> — ${nome}</span>
-            </div>
-            ${fovBadge ? '<div style="margin-top:2px;">' + fovBadge + '</div>' : ''}`;
+            </div>`;
 
+        // "10h 10m · max 75°" — ore utili (bianco) e altezza massima nella finestra utile (oro)
+        const ore = Math.floor(minutiUtili / 60);
+        const min = minutiUtili % 60;
         const altSpan = document.createElement('span');
         altSpan.style.cssText = 'font-size:11px;color:#c49a3c;flex-shrink:0;font-family:\'Audiowide\',sans-serif;white-space:nowrap;';
-        altSpan.textContent = t('np_max') + ' ' + maxAlt + '°';
+        const oreSpan = document.createElement('span');
+        oreSpan.style.color = '#c9d1d9';
+        oreSpan.textContent = ore + 'h ' + String(min).padStart(2, '0') + 'm';
+        const sepSpan = document.createElement('span');
+        sepSpan.style.cssText = 'color:#3d4852;margin:0 4px;';
+        sepSpan.textContent = '·';
+        altSpan.appendChild(oreSpan);
+        altSpan.appendChild(sepSpan);
+        altSpan.appendChild(document.createTextNode(t('np_max') + ' ' + maxAlt + '°'));
 
         row.appendChild(iconWrap);
         row.appendChild(textDiv);
         row.appendChild(altSpan);
 
-        // Click → chiude popup, apre planetario e scrolla alla card del DSO
-        row.onclick = () => _npApriNelPlanetario(dso);
+        // Click → chiude popup, apre il carosello DSO all'ora migliore e scrolla alla card
+        row.onclick = () => _npApriNelPlanetario(dso, bestTime);
 
         container.appendChild(row);
     });
@@ -371,9 +396,65 @@ function riprendiNightPopupSePendente() {
 }
 
 // ── Navigazione al planetario ─────────────────────────────────────────────────
-function _npApriNelPlanetario(dso) {
+// Apre la dashboard, porta lo slider orario all'ora migliore del DSO (massima
+// altezza nella finestra utile), ricalcola il carosello, scorre fino alla card
+// e la evidenzia per qualche secondo.
+function _npApriNelPlanetario(dso, bestTime) {
     chiudiNightPopup();
     if (typeof vaiPlanetario === 'function') vaiPlanetario();
+    if (!bestTime || typeof syncSliders !== 'function') return;
+    const step = _npStepPerOra(bestTime);
+    if (step === null) return;
+    syncSliders(step);
+    // vaiPlanetario scorre al campo di ricerca dopo 200 ms: si scorre alla card dopo
+    setTimeout(() => _npEvidenziaCard(dso.id), 350);
+}
+
+// Ora mostrata dallo slider per un dato step.
+// DEVE restare allineata al calcolo di dOra in cambiaOraAstro() (planetarium.js).
+function _npOraDelloStep(step) {
+    if (!isSessionDateToday()) {
+        const base = getSessionDate();
+        base.setHours(18, 0, 0, 0);
+        return new Date(base.getTime() + step * 3600000);
+    }
+    if (datiMeteo && datiMeteo.time && datiMeteo.time[indicePartenza + step]) {
+        return new Date(datiMeteo.time[indicePartenza + step]);
+    }
+    const base = new Date();
+    base.setHours(18, 0, 0, 0);
+    return new Date(base.getTime() + step * 3600000);
+}
+
+// Step dello slider la cui ora è più vicina a "quando"; null se lo slider non c'è.
+function _npStepPerOra(quando) {
+    const slider = document.getElementById('astroSlider');
+    if (!slider) return null;
+    const min = parseInt(slider.min) || 0;
+    const max = parseInt(slider.max) || 23;
+    let best = min, bestDiff = Infinity;
+    for (let s = min; s <= max; s++) {
+        const diff = Math.abs(_npOraDelloStep(s) - quando);
+        if (diff < bestDiff) { bestDiff = diff; best = s; }
+    }
+    return best;
+}
+
+// Scorre il carosello fino alla card del DSO e la evidenzia per 3 secondi.
+function _npEvidenziaCard(dsoId) {
+    const list = document.getElementById('dso-list');
+    if (!list) return;
+    const card = Array.from(list.querySelectorAll('[data-dso-id]')).find(el => el.dataset.dsoId === dsoId);
+    if (!card) { list.scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
+    card.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+    card.style.outline       = '2px solid #4fc3f7';
+    card.style.outlineOffset = '-2px';
+    card.style.boxShadow     = '0 0 18px rgba(79,195,247,0.45)';
+    setTimeout(() => {
+        card.style.outline = '';
+        card.style.outlineOffset = '';
+        card.style.boxShadow = '';
+    }, 3000);
 }
 
 function chiudiNightPopup() {

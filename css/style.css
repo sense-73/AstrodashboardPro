@@ -91,6 +91,8 @@
         .dso-container { margin-top: 20px; text-align: left; padding: 20px; background-color: var(--bg-panel); border-radius: 8px;}
         .astro-section { width: 100%; display: block; }
         .horizontal-scroll { display: flex; overflow-x: auto; gap: 15px; padding-bottom: 15px; margin-top: 10px; scrollbar-width: thin; scrollbar-color: var(--accent) var(--bg-card); flex-wrap: nowrap;}
+        /* Spazio in alto: la stellina .top-target::after (top:-10px) e l'hover delle card non vengono tagliati dall'overflow */
+        #dso-list { padding-top: 12px; }
         .horizontal-scroll::-webkit-scrollbar { height: 8px; }
         .horizontal-scroll::-webkit-scrollbar-track { background-color: var(--bg-panel); border-radius: 4px; }
         .horizontal-scroll::-webkit-scrollbar-thumb { background-color: var(--border-hi); border-radius: 4px; }

@@ -98,6 +98,7 @@
         function creaCardHTML(tObj, alt, az, c) {
             const div = document.createElement('div');
             div.className = c ? 'dso-card card-clickable' : 'dso-card card-static';
+            if (tObj.id) div.dataset.dsoId = tObj.id; // usato dal popup notturno per ritrovare la card
             const finalName = getLocalizedName(tObj);
             const imgPath   = (typeof dsoImgMap !== 'undefined') ? (dsoImgMap[tObj.id] || null) : null;
             const altClass  = alt >= 50 ? 'alt-high' : alt >= 30 ? 'alt-mid' : 'alt-low';
