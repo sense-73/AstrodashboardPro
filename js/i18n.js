@@ -1022,7 +1022,7 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.es.rpt_label_tpt       = "Objetivo TPT";
         i18n.zh.rpt_label_tpt       = "TPT目标";
 
-        i18n.it.rpt_label_context   = "Modalita ripresa";
+        i18n.it.rpt_label_context   = "Modalità ripresa";
         i18n.en.rpt_label_context   = "Capture Mode";
         i18n.es.rpt_label_context   = "Modo de captura";
         i18n.zh.rpt_label_context   = "拍摄模式";
@@ -3289,3 +3289,31 @@ i18n.it.alert_no_frames       = "Nessuna posa programmata. Aggiungi almeno una p
 i18n.en.alert_no_frames       = "No exposures planned. Add at least one exposure before exporting.";
 i18n.es.alert_no_frames       = "Sin exposiciones programadas. Añade al menos una exposición antes de exportar.";
 i18n.zh.alert_no_frames       = "未安排曝光。导出前请至少添加一次曝光。";
+
+// ── Chiavi mancanti (audit A2, 24/10/2026) ───────────────────────────────────
+// Prima di questa aggiunta t() restituiva il nome della chiave, visibile a schermo.
+i18n.it.af_triggers_lbl       = "Trigger AF attivati";
+i18n.en.af_triggers_lbl       = "Active AF triggers";
+i18n.es.af_triggers_lbl       = "Disparadores AF activos";
+i18n.zh.af_triggers_lbl       = "已启用的自动对焦触发器";
+
+// Bottoni "Annulla" dei modal di reset: stesse traduzioni di btn_cancel
+i18n.it.cancel                = i18n.it.btn_cancel;
+i18n.en.cancel                = i18n.en.btn_cancel;
+i18n.es.cancel                = i18n.es.btn_cancel;
+i18n.zh.cancel                = i18n.zh.btn_cancel;
+
+i18n.it.contact_err_email     = "Inserisci un indirizzo email valido.";
+i18n.en.contact_err_email     = "Please enter a valid email address.";
+i18n.es.contact_err_email     = "Introduce una dirección de correo válida.";
+i18n.zh.contact_err_email     = "请输入有效的电子邮件地址。";
+
+i18n.it.contact_err_msg       = "Il messaggio è troppo breve (minimo 5 caratteri).";
+i18n.en.contact_err_msg       = "The message is too short (at least 5 characters).";
+i18n.es.contact_err_msg       = "El mensaje es demasiado corto (mínimo 5 caracteres).";
+i18n.zh.contact_err_msg       = "消息太短（至少5个字符）。";
+
+i18n.it.nominatim_err         = "Ricerca luogo non disponibile. Riprova più tardi.";
+i18n.en.nominatim_err         = "Place search unavailable. Please try again later.";
+i18n.es.nominatim_err         = "Búsqueda de lugar no disponible. Inténtalo más tarde.";
+i18n.zh.nominatim_err         = "地点搜索暂不可用，请稍后重试。";

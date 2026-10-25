@@ -364,8 +364,10 @@
             frameList.forEach(f => {
                 if(f.id.includes('dark') || f.id.includes('bias')) return;
 
-                let defaultCount = document.getElementById(`${f.id}-count`) ? document.getElementById(`${f.id}-count`).value : 0;
-                let defaultExp = document.getElementById(`${f.id}-exp`) ? document.getElementById(`${f.id}-exp`).value : f.dE;
+                // PRO indipendente da Smart: valori predefiniti del filtro; i valori
+                // PRO salvati vengono ripristinati da _proRipristinaValori() a fine costruzione
+                let defaultCount = f.dC;
+                let defaultExp = f.dE;
                 let defaultName = localStorage.getItem('nina_filter_' + f.id) || f.name;
 
                 let row = document.createElement('div');
@@ -439,11 +441,10 @@
                 if(!f.id.includes('dark') && !f.id.includes('bias')) return;
 
                 let isDark = f.id.includes('dark');
-                // Dark: default exp = primo Light disponibile; Bias: mostra overhead stimato
-                let defaultCount = document.getElementById(`${f.id}-count`) ? document.getElementById(`${f.id}-count`).value : 0;
-                let firstLightExp = 0;
-                frameList.forEach(lf => { if (!lf.id.includes('dark') && !lf.id.includes('bias') && firstLightExp === 0) { let el = document.getElementById(`${lf.id}-exp`); if (el) firstLightExp = parseInt(el.value)||0; } });
-                let defaultExp = isDark ? firstLightExp : 0;
+                // Dark: default exp = primo Light PRO (applicato in _proRipristinaValori se
+                // l'utente non ha mai impostato l'exp Dark); Bias: mostra overhead stimato
+                let defaultCount = f.dC;
+                let defaultExp = 0;
                 let defaultName = f.name;
                 let borderColor = isDark ? '#555' : '#888';
 
@@ -472,8 +473,83 @@
                 container.appendChild(row);
             });
 
+            _proRipristinaValori(frameList);
             calcolaNightFillBar();
         }
+
+        // ── PRO indipendente da Smart: ripristino e salvataggio dei valori ─────────
+        // Valori numerici, guadagno, offset, BIN e frequenza dither sono già salvati da
+        // salvaPreferenze() (globals.js) con chiavi ad_pro-<filtro>-<campo>.
+        // Qui si salvano in più: dither sì/no e stato delle righe HDR
+        // (chiave ad_pro-<filtro>-hdr-stato: '0' nascosta, '1' visibile ON, '2' visibile OFF).
+        const _PRO_CAMPI     = ['count', 'exp', 'gain', 'offset', 'bin', 'dfreq', 'dither'];
+        const _PRO_CAMPI_HDR = ['count', 'exp', 'gain', 'offset', 'bin', 'dfreq', 'dither'];
+
+        function _proCaricaCampo(id) {
+            let el = document.getElementById(id);
+            if (!el || (el.tagName !== 'INPUT' && el.tagName !== 'SELECT')) return false;
+            let v = adLoad(id);
+            if (v === null || v === undefined || v === 'undefined') return false;
+            if (el.type === 'checkbox') el.checked = (v === '1');
+            else el.value = v;
+            return true;
+        }
+
+        function _proApplicaStatoHdr(row, stato) {
+            let btn = row.querySelector('button');
+            let visibile = stato !== '0';
+            let attivo   = stato === '1';
+            row.style.display    = visibile ? 'grid' : 'none';
+            row.dataset.hdrActive = attivo ? '1' : '0';
+            row.style.opacity    = (visibile && !attivo) ? '0.4' : '1';
+            if (btn) { btn.textContent = attivo ? 'ON' : 'OFF'; btn.style.background = attivo ? '#7c4dff' : '#444'; btn.style.color = attivo ? '#fff' : '#888'; }
+            row.querySelectorAll('input, select').forEach(el => { el.disabled = !attivo; });
+        }
+
+        function _proAggiornaBtnHdrGlobale() {
+            let btn = document.getElementById('btn-hdr-globale');
+            let lbl = document.getElementById('btn-hdr-globale-label');
+            let righe = document.querySelectorAll('#pro-sequence-grid [id$="-hdr-row"]');
+            let visibile = Array.from(righe).some(r => r.style.display !== 'none');
+            if (btn) { btn.style.background = visibile ? '#7c4dff' : '#1a0d2e'; btn.style.color = visibile ? '#fff' : '#7c4dff'; btn.style.borderColor = '#7c4dff'; }
+            if (lbl) lbl.textContent = visibile ? 'Disattiva HDR' : 'Attiva HDR';
+        }
+
+        function _proRipristinaValori(frameList) {
+            frameList.forEach(f => {
+                let isCalib = f.id.includes('dark') || f.id.includes('bias');
+                _PRO_CAMPI.forEach(c => _proCaricaCampo(`pro-${f.id}-${c}`));
+                if (isCalib) return;
+                _PRO_CAMPI_HDR.forEach(c => _proCaricaCampo(`pro-${f.id}-hdr-${c}`));
+                let row = document.getElementById(`pro-${f.id}-hdr-row`);
+                let stato = adLoad(`pro-${f.id}-hdr-stato`);
+                if (row && (stato === '0' || stato === '1' || stato === '2')) _proApplicaStatoHdr(row, stato);
+            });
+            // Exp Dark mai impostata in PRO → parte dall'exp del primo Light PRO
+            let dark = frameList.find(f => f.id.includes('dark'));
+            let primoLight = frameList.find(f => !f.id.includes('dark') && !f.id.includes('bias'));
+            if (dark && primoLight && adLoad(`pro-${dark.id}-exp`) === null) {
+                let dExp = document.getElementById(`pro-${dark.id}-exp`);
+                let lExp = document.getElementById(`pro-${primoLight.id}-exp`);
+                if (dExp && lExp) dExp.value = lExp.value;
+            }
+            _proAggiornaBtnHdrGlobale();
+        }
+
+        function _proSalvaStati() {
+            let grid = document.getElementById('pro-sequence-grid');
+            if (!grid) return;
+            grid.querySelectorAll('input[type="checkbox"][id^="pro-"]').forEach(el => adSave(el.id, el.checked ? '1' : '0'));
+            grid.querySelectorAll('[id$="-hdr-row"]').forEach(row => {
+                let stato = row.style.display === 'none' ? '0' : (row.dataset.hdrActive === '1' ? '1' : '2');
+                adSave(row.id.replace(/-row$/, '-stato'), stato);
+            });
+        }
+
+        // Salva dither/HDR a ogni modifica nella griglia PRO (i valori numerici li salva già salvaPreferenze)
+        document.addEventListener('change', function(e) {
+            if (e.target && e.target.closest && e.target.closest('#pro-sequence-grid')) _proSalvaStati();
+        });
 
         function calcolaNightFillBar() {
             // Aggiorna la stima AF dai trigger attivi prima di calcolare i totali
@@ -1151,14 +1227,16 @@
             btn.style.background = isActive ? '#7c4dff' : '#444';
             btn.style.color = isActive ? '#fff' : '#888';
             row.querySelectorAll('input, select').forEach(el => { el.disabled = !isActive; });
+            _proSalvaStati();
             calcolaNightFillBar();
         }
 
-        // ── Toggle globale HDR: mostra/nasconde tutte le righe HDR ────────────
+        // ── Toggle globale HDR: mostra/nasconde tutte le righe HDR della griglia PRO ──
         function toggleHdrGlobale() {
             let btn = document.getElementById('btn-hdr-globale');
             let lbl = document.getElementById('btn-hdr-globale-label');
-            let righeHdr = document.querySelectorAll('[id$="-hdr-row"]');
+            // Solo righe HDR PRO: senza il contenitore il selettore prendeva anche quelle Smart
+            let righeHdr = document.querySelectorAll('#pro-sequence-grid [id$="-hdr-row"]');
             if (!righeHdr.length) return;
 
             // Legge lo stato attuale dal primo elemento trovato
@@ -1185,6 +1263,7 @@
             // Aggiorna il pulsante globale
             if (btn) { btn.style.background = nuovoStato ? '#7c4dff' : '#1a0d2e'; btn.style.color = nuovoStato ? '#fff' : '#7c4dff'; btn.style.borderColor = '#7c4dff'; }
             if (lbl) lbl.textContent = nuovoStato ? 'Disattiva HDR' : 'Attiva HDR';
+            _proSalvaStati();
             calcolaNightFillBar();
         }
 

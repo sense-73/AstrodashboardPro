@@ -174,8 +174,8 @@
         function generaReportNotte() {
             if (!targetSelezionato) { mostraAvviso(_t('rpt_alert_no_target'), 'warn'); return; }
 
-            var isPro = document.getElementById('pro-view') &&
-                        document.getElementById('pro-view').style.display !== 'none';
+            var isPro = document.getElementById('mode-pro-section') &&
+                        document.getElementById('mode-pro-section').style.display !== 'none';
             var isM   = isPro
                 ? document.getElementById('pro-sensor-type').value === 'mono'
                 : document.getElementById('sensor-type').value === 'mono';
