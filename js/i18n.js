@@ -1634,6 +1634,61 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         // ⚠️ AGGIORNARE VERSIONE QUI quando si rilascia una nuova versione:
         // cl_close_btn = testo del pulsante nel modal changelog (NON è hardcoded in index.html)
         // Aggiornare anche: title tag, badge navbar (>vX.X</button>), landing (>vX.X</span>), modal badge, pulsante "Inizia a usare" in index.html
+        // ── Changelog v8.1 (25/10/2026) ─────────────────
+        i18n.it.cl_v81_popup_title = "Analisi Notturna più personale";
+        i18n.en.cl_v81_popup_title = "More personal Night Analysis";
+        i18n.es.cl_v81_popup_title = "Análisis Nocturno más personal";
+        i18n.zh.cl_v81_popup_title = "更个性化的夜间分析";
+        i18n.it.cl_v81_popup_desc = "Il popup di apertura ora tiene conto del tuo setup e del tuo orizzonte: esclude gli oggetti troppo grandi o troppo piccoli per il campo inquadrato e ordina i target per ore utili sopra i 30°, dando più peso a quando sono alti. Una nuova riga sotto il titolo indica su quali dati si basano i consigli. Toccando un oggetto si apre la dashboard alla sua ora migliore, con la card evidenziata.";
+        i18n.en.cl_v81_popup_desc = "The opening popup now takes your setup and horizon into account. It excludes objects too large or too small for your field of view and ranks targets by usable hours above 30°, giving more weight to when they are high. A new line under the title shows which data the suggestions are based on. Tap an object to open the dashboard at its best time, with its card highlighted.";
+        i18n.es.cl_v81_popup_desc = "La ventana de inicio ahora tiene en cuenta tu equipo y tu horizonte. Excluye los objetos demasiado grandes o pequeños para tu campo y ordena los objetivos por horas útiles por encima de 30°, dando más peso a cuando están altos. Una nueva línea bajo el título indica en qué datos se basan las sugerencias. Al tocar un objeto se abre el panel en su mejor hora, con su tarjeta resaltada.";
+        i18n.zh.cl_v81_popup_desc = "开机弹窗现在会考虑你的设备和地平线：排除对视场来说过大或过小的天体，并按30°以上的可用时长对目标排序，天体越高的时段权重越大。标题下方新增一行，说明推荐所依据的数据。点击天体即可打开定位到其最佳时间的仪表盘，并高亮显示该卡片。";
+
+        i18n.it.cl_v81_mobile_title = "Smartphone più comodo";
+        i18n.en.cl_v81_mobile_title = "Better on smartphones";
+        i18n.es.cl_v81_mobile_title = "Más cómodo en el smartphone";
+        i18n.zh.cl_v81_mobile_title = "手机使用更便捷";
+        i18n.it.cl_v81_mobile_desc = "Sui dispositivi touch i campi numerici della griglia Smart e PRO usano un tastierino dedicato: la tastiera del telefono non copre più la sequenza. Ruotando lo smartphone la pagina resta sulla sezione che stavi guardando.";
+        i18n.en.cl_v81_mobile_desc = "On touch devices the numeric fields of the Smart and PRO grids use a dedicated keypad, so the phone keyboard no longer covers the sequence. When you rotate the phone, the page stays on the section you were viewing.";
+        i18n.es.cl_v81_mobile_desc = "En dispositivos táctiles los campos numéricos de las cuadrículas Smart y PRO usan un teclado propio, así que el teclado del teléfono ya no tapa la secuencia. Al girar el teléfono, la página se queda en la sección que estabas viendo.";
+        i18n.zh.cl_v81_mobile_desc = "在触屏设备上，Smart 和 PRO 网格的数字字段使用专用数字键盘，手机键盘不再遮挡序列。旋转手机时，页面会停留在你正在查看的部分。";
+
+        i18n.it.cl_v81_report_title = "Report e Modalità PRO corretti";
+        i18n.en.cl_v81_report_title = "Reports and PRO Mode fixed";
+        i18n.es.cl_v81_report_title = "Informes y Modo PRO corregidos";
+        i18n.zh.cl_v81_report_title = "报告与 PRO 模式修复";
+        i18n.it.cl_v81_report_desc = "Il report della notte generato da PRO mostra i dati PRO. Il report Smart non include più i filtri disattivati. I valori della griglia PRO sono indipendenti da Smart e vengono conservati cambiando modalità e ricaricando la pagina. \"Attiva HDR\" agisce solo sulla griglia PRO.";
+        i18n.en.cl_v81_report_desc = "The night report generated from PRO shows PRO data. The Smart report no longer includes disabled filters. PRO grid values are independent of Smart and are kept when switching modes and reloading the page. \"Enable HDR\" acts only on the PRO grid.";
+        i18n.es.cl_v81_report_desc = "El informe de la noche generado desde PRO muestra los datos PRO. El informe Smart ya no incluye filtros desactivados. Los valores de la cuadrícula PRO son independientes de Smart y se conservan al cambiar de modo y al recargar la página. \"Activar HDR\" actúa solo sobre la cuadrícula PRO.";
+        i18n.zh.cl_v81_report_desc = "从 PRO 生成的夜间报告显示 PRO 数据；Smart 报告不再包含已停用的滤镜；PRO 网格的数值独立于 Smart，切换模式和重新加载页面后都会保留；“启用 HDR”仅作用于 PRO 网格。";
+
+        i18n.it.cl_v81_i18n_title = "Traduzioni complete";
+        i18n.en.cl_v81_i18n_title = "Complete translations";
+        i18n.es.cl_v81_i18n_title = "Traducciones completas";
+        i18n.zh.cl_v81_i18n_title = "翻译完善";
+        i18n.it.cl_v81_i18n_desc = "Tradotti i testi rimasti in italiano fisso. Corrette nelle 4 lingue le etichette che mostravano il nome tecnico al posto del testo.";
+        i18n.en.cl_v81_i18n_desc = "Texts left in fixed Italian are now translated. Labels that showed a technical name instead of text are fixed in all 4 languages.";
+        i18n.es.cl_v81_i18n_desc = "Se han traducido los textos que seguían fijos en italiano. Se han corregido en los 4 idiomas las etiquetas que mostraban un nombre técnico en lugar del texto.";
+        i18n.zh.cl_v81_i18n_desc = "翻译了仍固定为意大利语的文本；修正了4种语言中显示技术名称而非文字的标签。";
+
+        i18n.it.cl_v81_fix_title = "Correzioni varie";
+        i18n.en.cl_v81_fix_title = "Various fixes";
+        i18n.es.cl_v81_fix_title = "Correcciones varias";
+        i18n.zh.cl_v81_fix_title = "其他修复";
+        i18n.it.cl_v81_fix_desc = "Il pulsante per scegliere riduttori e Barlow è ora nel setup ottico, accanto alle lenti; nel simulatore FOV un'etichetta mostra l'accessorio attivo. La stellina del miglior DSO non viene più tagliata nel carosello.";
+        i18n.en.cl_v81_fix_desc = "The button for choosing reducers and Barlows is now in the optical setup, next to the lenses; in the FOV simulator, a label shows the active accessory. The best DSO's star is no longer cut off in the carousel.";
+        i18n.es.cl_v81_fix_desc = "El botón para elegir reductores y Barlow está ahora en la configuración óptica, junto a las lentes; en el simulador FOV una etiqueta muestra el accesorio activo. La estrella del mejor DSO ya no aparece cortada en el carrusel.";
+        i18n.zh.cl_v81_fix_desc = "选择减焦镜和巴洛镜的按钮现位于光学设置中，紧邻镜头选项；FOV 模拟器中有标签显示当前配件。轮播中最佳深空天体的星标不再被截断。";
+
+        i18n.it.cl_v81_manual_title = "Manuale aggiornato";
+        i18n.en.cl_v81_manual_title = "Updated manual";
+        i18n.es.cl_v81_manual_title = "Manual actualizado";
+        i18n.zh.cl_v81_manual_title = "手册更新";
+        i18n.it.cl_v81_manual_desc = "Nuovo capitolo \"Analisi Notturna\" nelle 4 lingue: criteri del giudizio, significato degli indicatori e funzionamento dei consigli.";
+        i18n.en.cl_v81_manual_desc = "New \"Night Analysis\" chapter in all 4 languages: how the verdict works, what the indicators mean and how suggestions are chosen.";
+        i18n.es.cl_v81_manual_desc = "Nuevo capítulo \"Análisis Nocturno\" en los 4 idiomas: cómo funciona el veredicto, qué significan los indicadores y cómo se eligen las sugerencias.";
+        i18n.zh.cl_v81_manual_desc = "4种语言新增“夜间分析”章节：介绍评估方式、各指标含义以及推荐的选择方法。";
+
         // ── Changelog v8.0 ──────────────────────────────────────────────────
         i18n.it.cl_v80_lite_title = "Modalità Base";
         i18n.en.cl_v80_lite_title = "Basic Mode";
@@ -1689,10 +1744,10 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.es.cl_v80_manual_desc = "Nueva sección 0 'Modo Básico y Avanzado' añadida en los 4 idiomas del manual integrado. Explica las diferencias entre los dos niveles y cómo cambiar entre ellos.";
         i18n.zh.cl_v80_manual_desc = "在集成手册的全部 4 种语言中新增第 0 节「基础模式与高级模式」，说明两个级别的区别以及如何在它们之间切换。";
 
-        i18n.it.cl_close_btn = "Inizia a usare v8.0 🚀";
-        i18n.en.cl_close_btn = "Start using v8.0 🚀";
-        i18n.es.cl_close_btn = "Empezar a usar v8.0 🚀";
-        i18n.zh.cl_close_btn = "开始使用 v8.0 🚀";
+        i18n.it.cl_close_btn = "Inizia a usare v8.1 🚀";
+        i18n.en.cl_close_btn = "Start using v8.1 🚀";
+        i18n.es.cl_close_btn = "Empezar a usar v8.1 🚀";
+        i18n.zh.cl_close_btn = "开始使用 v8.1 🚀";
 
         i18n.it.cl1_title           = "Database telescopi e sensori ampliato";
         i18n.en.cl1_title           = "Expanded telescope and sensor database";
@@ -2836,7 +2891,7 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.it.np_non_vale_tag     = "Condizioni difficili. Esci solo se hai un obiettivo specifico.";
         i18n.it.np_lascia_perdere   = "Lascia Perdere";
         i18n.it.np_lascia_perdere_tag = "Notte compromessa. Riposati e pianifica per un'altra sera.";
-        i18n.it.np_no_dso           = "Nessun oggetto sopra 25° stanotte.";
+        i18n.it.np_no_dso           = "Nessun oggetto sopra 30° stanotte.";
         i18n.it.np_fov_ok           = "FOV ottimale";
         i18n.it.np_fov_large        = "grande, valuta mosaico";
         i18n.it.np_fov_small        = "piccolo, alta focale";
@@ -2859,7 +2914,7 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.en.np_non_vale_tag     = "Tough conditions. Go out only if you have a specific target in mind.";
         i18n.en.np_lascia_perdere   = "Skip It";
         i18n.en.np_lascia_perdere_tag = "Night is a write-off. Rest up and plan for another evening.";
-        i18n.en.np_no_dso           = "No objects above 25° tonight.";
+        i18n.en.np_no_dso           = "No objects above 30° tonight.";
         i18n.en.np_fov_ok           = "optimal FOV";
         i18n.en.np_fov_large        = "large, consider mosaic";
         i18n.en.np_fov_small        = "small, high focal length";
@@ -2882,7 +2937,7 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.es.np_non_vale_tag     = "Condiciones difíciles. Sal solo si tienes un objetivo específico.";
         i18n.es.np_lascia_perdere   = "Olvídalo";
         i18n.es.np_lascia_perdere_tag = "Noche comprometida. Descansa y planifica para otra noche.";
-        i18n.es.np_no_dso           = "Ningún objeto sobre 25° esta noche.";
+        i18n.es.np_no_dso           = "Ningún objeto sobre 30° esta noche.";
         i18n.es.np_fov_ok           = "FOV óptimo";
         i18n.es.np_fov_large        = "grande, considera mosaico";
         i18n.es.np_fov_small        = "pequeño, focal larga";
@@ -2905,7 +2960,7 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.zh.np_non_vale_tag     = "条件较差，仅在有特定目标时考虑出门。";
         i18n.zh.np_lascia_perdere   = "放弃吧";
         i18n.zh.np_lascia_perdere_tag = "今晚条件太差，好好休息，计划下一次吧。";
-        i18n.zh.np_no_dso           = "今晚无目标高于25°。";
+        i18n.zh.np_no_dso           = "今晚无目标高于30°。";
         i18n.zh.np_fov_ok           = "视场匹配";
         i18n.zh.np_fov_large        = "目标偏大，考虑拼接";
         i18n.zh.np_fov_small        = "目标偏小，需长焦";
@@ -3317,3 +3372,37 @@ i18n.it.nominatim_err         = "Ricerca luogo non disponibile. Riprova più tar
 i18n.en.nominatim_err         = "Place search unavailable. Please try again later.";
 i18n.es.nominatim_err         = "Búsqueda de lugar no disponible. Inténtalo más tarde.";
 i18n.zh.nominatim_err         = "地点搜索暂不可用，请稍后重试。";
+
+// ── Popup notturno: riga sotto "Target consigliati" (25/10/2026) ─────────────
+// Spiega su quali dati si basano i consigli. Scelta in night_popup.js
+// (_npAggiornaHint) in base a setup salvato, profilo d'orizzonte e Modalità Base.
+i18n.it.np_hint_none          = "Inserisci setup e orizzonte per risultati personalizzati";
+i18n.en.np_hint_none          = "Add your setup and horizon for personalized results";
+i18n.es.np_hint_none          = "Introduce tu equipo y horizonte para resultados personalizados";
+i18n.zh.np_hint_none          = "输入设备和地平线以获得个性化结果";
+
+i18n.it.np_hint_setup         = "Scelti per il tuo setup: aggiungi l'orizzonte per affinarli";
+i18n.en.np_hint_setup         = "Picked for your setup: add your horizon to refine them";
+i18n.es.np_hint_setup         = "Elegidos para tu equipo: añade el horizonte para afinarlos";
+i18n.zh.np_hint_setup         = "根据您的设备推荐：添加地平线可进一步优化";
+
+i18n.it.np_hint_sky           = "Scelti per il tuo cielo: aggiungi il setup per affinarli";
+i18n.en.np_hint_sky           = "Picked for your sky: add your setup to refine them";
+i18n.es.np_hint_sky           = "Elegidos para tu cielo: añade tu equipo para afinarlos";
+i18n.zh.np_hint_sky           = "根据您的天空推荐：添加设备可进一步优化";
+
+i18n.it.np_hint_full          = "Scelti per il tuo setup e il tuo cielo";
+i18n.en.np_hint_full          = "Picked for your setup and your sky";
+i18n.es.np_hint_full          = "Elegidos para tu equipo y tu cielo";
+i18n.zh.np_hint_full          = "根据您的设备和天空推荐";
+
+// Modalità Base: l'orizzonte personalizzato non viene usato, quindi non si cita
+i18n.it.np_hint_none_base     = "Inserisci il setup per risultati personalizzati";
+i18n.en.np_hint_none_base     = "Add your setup for personalized results";
+i18n.es.np_hint_none_base     = "Introduce tu equipo para resultados personalizados";
+i18n.zh.np_hint_none_base     = "输入设备以获得个性化结果";
+
+i18n.it.np_hint_setup_base    = "Scelti per il tuo setup";
+i18n.en.np_hint_setup_base    = "Picked for your setup";
+i18n.es.np_hint_setup_base    = "Elegidos para tu equipo";
+i18n.zh.np_hint_setup_base    = "根据您的设备推荐";

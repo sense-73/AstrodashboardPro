@@ -173,6 +173,30 @@ function _npSelezionaDso(nightStart, nightEnd) {
     return candidati;
 }
 
+// ── Riga sotto "Target consigliati": su quali dati si basano i consigli ──────
+// Setup = stesso controllo del filtro FOV (_npGetFov); orizzonte = profilo
+// salvato, ignorato in Modalità Base (come in hzAtAzGlobal).
+function _npAggiornaHint(container) {
+    let hint = document.getElementById('np-dso-hint');
+    if (!hint) {
+        hint = document.createElement('div');
+        hint.id = 'np-dso-hint';
+        hint.style.cssText = 'font-size:11px;color:#6e7a8a;text-align:center;' +
+                             'line-height:1.4;margin:-4px 0 10px;';
+        container.parentNode.insertBefore(hint, container);
+    }
+    const base   = (typeof modaLite !== 'undefined' && modaLite);
+    const setup  = _npGetFov() !== null;
+    const orizz  = !base && !!(window.hzProfile && window.hzProfile.length);
+    let key;
+    if (base)                key = setup ? 'np_hint_setup_base' : 'np_hint_none_base';
+    else if (setup && orizz) key = 'np_hint_full';
+    else if (setup)          key = 'np_hint_setup';
+    else if (orizz)          key = 'np_hint_sky';
+    else                     key = 'np_hint_none';
+    hint.textContent = t(key);
+}
+
 // ── Popola il DOM del popup con i dati calcolati ──────────────────────────────
 function _npPopolaPopup(analisi, dsoList) {
     const { categoria, pct, avgSeeing, avgTransp, avgMoon } = analisi;
@@ -291,6 +315,7 @@ function _npPopolaPopup(analisi, dsoList) {
     // Lista DSO
     const container = document.getElementById('np-dso-list');
     container.innerHTML = '';
+    _npAggiornaHint(container);
 
     if (dsoList.length === 0) {
         container.innerHTML = `<div style="font-size:12px;color:#6e7a8a;padding:4px 0;">${t('np_no_dso')}</div>`;

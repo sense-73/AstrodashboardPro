@@ -103,7 +103,7 @@
                     offsetVal = _val('pro-'+pid+'-offset');
                     binVal    = _val('pro-'+pid+'-bin');
                 } else {
-                    var chk = document.getElementById(pid);
+                    var chk = document.getElementById(pid+'-check');
                     if (chk && !chk.checked) return;
                     countEl   = document.getElementById(pid+'-count');
                     expEl     = document.getElementById(pid+'-exp');

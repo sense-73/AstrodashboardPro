@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AstroDashboardPRO v8.0 - Global Edition</title>
+    <title>AstroDashboardPRO v8.1 - Global Edition</title>
     
     <link rel="manifest" href="manifest.json?v=3">
     <meta name="theme-color" content="#121212">
@@ -538,7 +538,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 19a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6l0 13" /><path d="M12 6l0 13" /><path d="M21 6l0 13" /></svg>
                     <span class="nav-manual-text" data-i18n="manual_btn" style="letter-spacing:.3px;">Guida</span>
                 </button>
-                <button onclick="mostraChangelogManuale()" title="Versione & novità" class="nav-version-btn" style="background:rgba(196,154,60,0.08); border:1px solid rgba(196,154,60,0.3); border-radius:5px; padding:3px 8px; color:#c49a3c; font-size:10px; font-weight:700; cursor:pointer; flex-shrink:0; letter-spacing:.5px;">v8.0</button>
+                <button onclick="mostraChangelogManuale()" title="Versione & novità" class="nav-version-btn" style="background:rgba(196,154,60,0.08); border:1px solid rgba(196,154,60,0.3); border-radius:5px; padding:3px 8px; color:#c49a3c; font-size:10px; font-weight:700; cursor:pointer; flex-shrink:0; letter-spacing:.5px;">v8.1</button>
             </div>
         </div>
 
@@ -710,7 +710,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                 <a href="https://www.paypal.com/donate/?business=enrico.salis%40gmail.com&currency_code=EUR" target="_blank" rel="noopener" style="background:linear-gradient(135deg,#003087,#009cde); border:none; border-radius:6px; padding:6px 14px; color:#fff; font-size:12px; font-weight:700; cursor:pointer; display:flex; align-items:center; gap:6px; text-decoration:none; transition:opacity 0.2s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c1.379 3.53-.923 7.947-6.712 7.947H11.23l-1.332 8.453h3.288c.524 0 .968-.382 1.05-.9l.87-5.505h2.163c4.298 0 7.066-2.076 7.953-6.36.41-1.99.073-3.466-.8-4.094z"/></svg>
                     <span data-i18n="support_btn">Supporta il progetto</span>                </a>
-                <span style="font-size:14px; color:#3d4852;">v8.0</span>
+                <span style="font-size:14px; color:#3d4852;">v8.1</span>
             </div>
         </div>
 
@@ -1796,6 +1796,30 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                 <p style="margin-top:10px;">A questi si aggiunge la <strong>Modalità Base</strong>, pensata per guidare il neofita passo passo senza configurazioni complesse — descritta nella sezione 0 qui sotto.</p>
             </div>
 
+            <!-- Analisi Notturna (popup di apertura) — aggiunta 25/10/2026 -->
+            <div class="guide-section">
+                <h3><svg width="28" height="28" viewBox="0 0 24 24" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"/><path d="M9.608 17.682c-2.558 -.71 -4.76 -2.603 -6.608 -5.682c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"/><path d="M17.8 20.817l-2.172 1.138a.392 .392 0 0 1 -.568 -.41l.415 -2.411l-1.757 -1.707a.389 .389 0 0 1 .217 -.665l2.428 -.352l1.086 -2.193a.392 .392 0 0 1 .702 0l1.086 2.193l2.428 .352a.39 .39 0 0 1 .217 .665l-1.757 1.707l.414 2.41a.39 .39 0 0 1 -.567 .411l-2.172 -1.138"/></svg> Analisi Notturna: la notte in un colpo d'occhio</h3>
+                <p>All'apertura dell'app, appena i dati meteo sono caricati, un popup ti dice subito se la notte merita. In pochi secondi sai se preparare l'attrezzatura o rimandare, senza leggere mappe e grafici ora per ora. Compare dopo la scelta di lingua e modalità, solo se hai già una posizione salvata. Analizza la notte astronomica (dal buio completo all'alba astronomica) della data di sessione.</p>
+                <ul>
+                    <li><strong>Giudizio in 5 livelli:</strong> l'app conta le ore <em>utilizzabili</em>, cioè con trasparenza oltre il 55% e seeing almeno 3/5, e le confronta con quelle della notte.
+                        <ul>
+                            <li><em>Condizioni Perfette</em>: almeno l'85% delle ore e seeing medio da 4/5 in su;</li>
+                            <li><em>Nottata Promettente</em>: almeno il 70%;</li>
+                            <li><em>Nottata Incerta</em>: almeno il 50%;</li>
+                            <li><em>Non Ne Vale la Pena</em>: almeno il 31%;</li>
+                            <li><em>Lascia Perdere</em>: sotto il 31%.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Cielo libero:</strong> trasparenza media della notte. Le nuvole basse pesano di più, le medie un po' meno; i cirri alti filtrano la luce ma la bloccano poco. I tre strati si sommano.</li>
+                    <li><strong>Seeing medio:</strong> stabilità dell'atmosfera da 1 a 5, con la stessa formula del pannello meteo (jet stream, raffiche, instabilità).</li>
+                    <li><strong>Luna:</strong> inquinamento lunare medio, secondo fase e altezza. Vale zero quando la Luna è sotto l'orizzonte.</li>
+                    <li><strong>Target consigliati:</strong> fino a 4 oggetti del database, scelti in base alle ore in cui restano sopra i 30°. Contano di più le ore in cui sono alti, dove l'atmosfera disturba meno. Per ognuno vedi le ore utili e l'altezza massima.</li>
+                    <li><strong>Consigli personalizzati:</strong> con il setup salvato vengono esclusi gli oggetti troppo grandi per il campo inquadrato (servirebbe un mosaico) e quelli troppo piccoli (meno di 150 pixel sul sensore). Con un profilo d'orizzonte contano solo le ore in cui l'oggetto lo supera. La riga sotto il titolo indica quali dati sono stati usati. In Modalità Base l'orizzonte non viene considerato.</li>
+                    <li><strong>Dal popup al planetario:</strong> clicca su un oggetto e si apre la dashboard già posizionata alla sua ora migliore, con la card evidenziata nel carosello.</li>
+                    <li><strong>Una stima, non una garanzia:</strong> il giudizio si basa sulle previsioni del momento. Prima di uscire controlla sempre i dati meteo aggiornati.</li>
+                </ul>
+            </div>
+
             <div class="guide-section">
                 <h3><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-globe"/></svg> 0. Modalità Base e Avanzata</h3>
                 <p>AstroDashboard PRO offre due livelli di utilizzo selezionabili in qualsiasi momento dal pulsante in alto a destra nel menu.</p>
@@ -1923,6 +1947,30 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                 <p>AstroDashboardPRO was born from a simple question: <em>why do I need four different apps to plan a single night?</em> The answer is this platform — one unified environment combining real-time weather, a predictive planetarium, optical calculations, sequence generation and hardware automation.</p>
                 <p style="margin-top:10px;">The software has two distinct modes. In <strong>Smart</strong> mode, you are a pilot on autopilot: describe your setup and the system calculates times, frames and filter balance for you. In <strong>PRO</strong> mode, you are the manual commander: you decide every parameter and the software translates your choices into a perfect N.I.N.A. sequence.</p>
                 <p style="margin-top:10px;">A third level — <strong>Basic Mode</strong> — is designed to guide beginners step by step without complex settings. See section 0 below.</p>
+            </div>
+
+            <!-- Analisi Notturna (popup di apertura) — aggiunta 25/10/2026 -->
+            <div class="guide-section">
+                <h3><svg width="28" height="28" viewBox="0 0 24 24" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"/><path d="M9.608 17.682c-2.558 -.71 -4.76 -2.603 -6.608 -5.682c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"/><path d="M17.8 20.817l-2.172 1.138a.392 .392 0 0 1 -.568 -.41l.415 -2.411l-1.757 -1.707a.389 .389 0 0 1 .217 -.665l2.428 -.352l1.086 -2.193a.392 .392 0 0 1 .702 0l1.086 2.193l2.428 .352a.39 .39 0 0 1 .217 .665l-1.757 1.707l.414 2.41a.39 .39 0 0 1 -.567 .411l-2.172 -1.138"/></svg> Night Analysis: the night at a glance</h3>
+                <p>When the app opens, as soon as weather data is loaded, a popup tells you right away whether the night is worth it. In a few seconds you know whether to set up your gear or postpone, without reading maps and charts hour by hour. It appears after you choose language and mode, and only if you already have a saved location. It analyses the astronomical night (from full darkness to astronomical dawn) of the session date.</p>
+                <ul>
+                    <li><strong>5-level verdict:</strong> the app counts the <em>usable</em> hours (transparency above 55% and seeing at least 3/5) and compares them with the hours of the night.
+                        <ul>
+                            <li><em>Perfect Conditions</em>: at least 85% of the hours and average seeing of 4/5 or better;</li>
+                            <li><em>Promising Night</em>: at least 70%;</li>
+                            <li><em>Uncertain Night</em>: at least 50%;</li>
+                            <li><em>Not Worth It</em>: at least 31%;</li>
+                            <li><em>Skip It</em>: below 31%.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Clear Sky:</strong> average transparency of the night. Low clouds weigh the most, mid-level clouds a little less; high cirrus filters the light but blocks little of it. The three layers add up.</li>
+                    <li><strong>Avg Seeing:</strong> atmospheric stability from 1 to 5, using the same formula as the weather panel (jet stream, gusts, instability).</li>
+                    <li><strong>Moon:</strong> average moonlight pollution, based on phase and altitude. It is zero when the Moon is below the horizon.</li>
+                    <li><strong>Suggested Targets:</strong> up to 4 objects from the database, chosen by the hours they stay above 30°. Hours when they are high count more, because the atmosphere disturbs less there. For each one you see the usable hours and the maximum altitude.</li>
+                    <li><strong>Personalized suggestions:</strong> with a saved setup, objects too large for your field of view (they would need a mosaic) or too small (under 150 pixels on the sensor) are excluded. With a horizon profile, only the hours when the object clears it are counted. The line under the title tells you which data were used. In Basic Mode the horizon is not considered.</li>
+                    <li><strong>From the popup to the planetarium:</strong> click an object to open the dashboard already set to its best time, with its card highlighted in the carousel.</li>
+                    <li><strong>An estimate, not a guarantee:</strong> the verdict is based on the current forecast. Always check the latest weather data before heading out.</li>
+                </ul>
             </div>
 
             <div class="guide-section">
@@ -2054,6 +2102,30 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                 <p style="margin-top:10px;">Un tercer nivel — el <strong>Modo Básico</strong> — está diseñado para guiar al principiante paso a paso sin configuraciones complejas. Ver sección 0 a continuación.</p>
             </div>
 
+            <!-- Analisi Notturna (popup di apertura) — aggiunta 25/10/2026 -->
+            <div class="guide-section">
+                <h3><svg width="28" height="28" viewBox="0 0 24 24" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"/><path d="M9.608 17.682c-2.558 -.71 -4.76 -2.603 -6.608 -5.682c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"/><path d="M17.8 20.817l-2.172 1.138a.392 .392 0 0 1 -.568 -.41l.415 -2.411l-1.757 -1.707a.389 .389 0 0 1 .217 -.665l2.428 -.352l1.086 -2.193a.392 .392 0 0 1 .702 0l1.086 2.193l2.428 .352a.39 .39 0 0 1 .217 .665l-1.757 1.707l.414 2.41a.39 .39 0 0 1 -.567 .411l-2.172 -1.138"/></svg> Análisis Nocturno: la noche de un vistazo</h3>
+                <p>Al abrir la app, en cuanto se cargan los datos meteorológicos, una ventana te dice enseguida si la noche merece la pena. En pocos segundos sabes si preparar el equipo o aplazarlo, sin leer mapas y gráficos hora por hora. Aparece después de elegir idioma y modo, y solo si ya tienes una ubicación guardada. Analiza la noche astronómica (desde la oscuridad total hasta el alba astronómica) de la fecha de la sesión.</p>
+                <ul>
+                    <li><strong>Veredicto en 5 niveles:</strong> la app cuenta las horas <em>aprovechables</em> (transparencia superior al 55% y seeing de al menos 3/5) y las compara con las horas de la noche.
+                        <ul>
+                            <li><em>Condiciones Perfectas</em>: al menos el 85% de las horas y seeing medio de 4/5 o más;</li>
+                            <li><em>Noche Prometedora</em>: al menos el 70%;</li>
+                            <li><em>Noche Incierta</em>: al menos el 50%;</li>
+                            <li><em>No Vale la Pena</em>: al menos el 31%;</li>
+                            <li><em>Olvídalo</em>: por debajo del 31%.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Cielo despejado:</strong> transparencia media de la noche. Las nubes bajas pesan más, las medias algo menos; los cirros altos filtran la luz pero la bloquean poco. Las tres capas se suman.</li>
+                    <li><strong>Seeing medio:</strong> estabilidad atmosférica de 1 a 5, con la misma fórmula del panel meteorológico (corriente en chorro, ráfagas, inestabilidad).</li>
+                    <li><strong>Luna:</strong> contaminación lunar media, según la fase y la altura. Es cero cuando la Luna está bajo el horizonte.</li>
+                    <li><strong>Objetivos sugeridos:</strong> hasta 4 objetos de la base de datos, elegidos según las horas que permanecen por encima de 30°. Cuentan más las horas en que están altos, donde la atmósfera molesta menos. Para cada uno ves las horas útiles y la altura máxima.</li>
+                    <li><strong>Sugerencias personalizadas:</strong> con el equipo guardado se excluyen los objetos demasiado grandes para tu campo (necesitarían un mosaico) o demasiado pequeños (menos de 150 píxeles en el sensor). Con un perfil de horizonte solo cuentan las horas en que el objeto lo supera. La línea bajo el título indica qué datos se han usado. En el Modo Básico no se tiene en cuenta el horizonte.</li>
+                    <li><strong>De la ventana al planetario:</strong> haz clic en un objeto para abrir el panel ya situado en su mejor hora, con su tarjeta resaltada en el carrusel.</li>
+                    <li><strong>Una estimación, no una garantía:</strong> el veredicto se basa en la previsión del momento. Antes de salir comprueba siempre los datos meteorológicos actualizados.</li>
+                </ul>
+            </div>
+
             <div class="guide-section">
                 <h3><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-globe"/></svg> 0. Modo Básico y Avanzado</h3>
                 <p>AstroDashboard PRO ofrece dos niveles de uso seleccionables en cualquier momento desde el botón en el menú superior derecho.</p>
@@ -2182,6 +2254,30 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                 <p>AstroDashboardPRO 诞生于一个简单的问题：<em>为什么我需要四个不同的软件来规划一个夜晚的拍摄？</em>这个平台就是答案 — 一个集实时气象、预测星图、光学计算、序列生成和硬件自动化于一体的统一环境。</p>
                 <p style="margin-top:10px;">软件拥有两种截然不同的模式。在<strong>智能</strong>模式下，您是自动驾驶的飞行员：描述您的设备，系统为您计算时间、帧数和滤镜平衡。在 <strong>PRO</strong> 模式下，您是手动指挥官：您决定每一个参数，软件将您的决策翻译成完美的 N.I.N.A. 序列。</p>
                 <p style="margin-top:10px;">第三个级别 — <strong>基础模式</strong> — 专为引导初学者逐步操作而设计，无需复杂配置。详见下方第 0 节。</p>
+            </div>
+
+            <!-- Analisi Notturna (popup di apertura) — aggiunta 25/10/2026 -->
+            <div class="guide-section">
+                <h3><svg width="28" height="28" viewBox="0 0 24 24" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"/><path d="M9.608 17.682c-2.558 -.71 -4.76 -2.603 -6.608 -5.682c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"/><path d="M17.8 20.817l-2.172 1.138a.392 .392 0 0 1 -.568 -.41l.415 -2.411l-1.757 -1.707a.389 .389 0 0 1 .217 -.665l2.428 -.352l1.086 -2.193a.392 .392 0 0 1 .702 0l1.086 2.193l2.428 .352a.39 .39 0 0 1 .217 .665l-1.757 1.707l.414 2.41a.39 .39 0 0 1 -.567 .411l-2.172 -1.138"/></svg> 夜间分析：一眼看清今晚</h3>
+                <p>打开应用并加载天气数据后，弹窗会立即告诉你今晚是否值得拍摄。几秒钟内就能决定是准备设备还是改天再拍，无需逐小时查看地图和图表。弹窗在选择语言和模式之后出现，且仅在已保存位置时显示。它分析拍摄日期当晚的天文夜（从完全天黑到天文晨光）。</p>
+                <ul>
+                    <li><strong>5级评估：</strong> 应用统计“可用”小时数（透明度高于55%且视宁度至少3/5），并与整晚的小时数比较。
+                        <ul>
+                            <li><em>绝佳条件</em>：至少85%的小时可用，且平均视宁度达到4/5或以上；</li>
+                            <li><em>夜况不错</em>：至少70%；</li>
+                            <li><em>夜况不稳</em>：至少50%；</li>
+                            <li><em>不太值得</em>：至少31%；</li>
+                            <li><em>放弃吧</em>：低于31%。</li>
+                        </ul>
+                    </li>
+                    <li><strong>晴空率：</strong> 整晚的平均透明度。低云影响最大，中云稍次；高空卷云会过滤光线，但遮挡较少。三层云的影响相加。</li>
+                    <li><strong>平均视宁度：</strong> 大气稳定度，范围1到5，采用与天气面板相同的公式（高空急流、阵风、不稳定度）。</li>
+                    <li><strong>月光：</strong> 平均月光污染，取决于月相和月亮高度。月亮在地平线以下时为零。</li>
+                    <li><strong>推荐目标：</strong> 从数据库中选出最多4个天体，依据它们保持在30°以上的时长。天体越高的时段权重越大，因为此时大气干扰更小。每个目标会显示可用时长和最大高度。</li>
+                    <li><strong>个性化推荐：</strong> 保存设备后，会排除对视场来说过大（需要拼接）或过小（在传感器上不足150像素）的天体。设置地平线轮廓后，只计算天体高于轮廓的时段。标题下方的一行会说明使用了哪些数据。基础模式下不考虑地平线。</li>
+                    <li><strong>从弹窗到星图：</strong> 点击某个天体，即可打开已定位到其最佳时间的仪表盘，并在轮播中高亮显示该卡片。</li>
+                    <li><strong>仅为估算，并非保证：</strong> 评估基于当前预报。出门前请务必查看最新的天气数据。</li>
+                </ul>
             </div>
 
             <div class="guide-section">
@@ -2965,7 +3061,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                 <div style="color:#c49a3c;"><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-rocket"/></svg></div>
                 <div>
                     <div style="font-size:0.75em; color:#c49a3c; text-transform:uppercase; letter-spacing:1px; font-weight:700;" data-i18n="cl_update_label">Aggiornamento</div>
-                    <div style="font-size:1.25em; font-weight:800; color:#c9d1d9; letter-spacing:.5px;">AstroDashboardPRO <span style="color:#c49a3c;">v8.0</span></div>
+                    <div style="font-size:1.25em; font-weight:800; color:#c9d1d9; letter-spacing:.5px;">AstroDashboardPRO <span style="color:#c49a3c;">v8.1</span></div>
                 </div>
                 <button onclick="chiudiChangelog()" style="
                     margin-left:auto; background:transparent; border:none;
@@ -2981,49 +3077,50 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
             <!-- Changelog items -->
             <div style="display:flex; flex-direction:column; gap:10px;">
 
-                <!-- ── v8.0 ── -->
-                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #58a6ff; box-shadow:0 0 0 1px rgba(0,0,0,0.15); margin-bottom:8px;">
-                    <span style="flex-shrink:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#58a6ff" stroke-width="2"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 10l-4 4l6 6l4 -16l-18 7l4 2l2 6l3 -4"/></svg></span>
-                    <div>
-                        <div style="font-weight:700; color:#58a6ff; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v80_lite_title">Modalità Base</div>
-                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v80_lite_desc"></div>
-                    </div>
-                </div>
-                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #2ec96c; box-shadow:0 0 0 1px rgba(0,0,0,0.15); margin-bottom:8px;">
-                    <span style="flex-shrink:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2ec96c" stroke-width="2"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
-                    <div>
-                        <div style="font-weight:700; color:#2ec96c; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v80_onboarding_title">Onboarding al primo accesso</div>
-                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v80_onboarding_desc"></div>
-                    </div>
-                </div>
+                <!-- ── v8.1 ── -->
                 <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #c49a3c; box-shadow:0 0 0 1px rgba(0,0,0,0.15); margin-bottom:8px;">
-                    <span style="flex-shrink:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c49a3c" stroke-width="2"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><g transform="rotate(-75,12,12)"><path d="m 15.5,18.5 -3,1.5 0.5,-3.5 -2,-2 3,-0.5 1.5,-3 1.5,3 3,0.5 -2,2 0.5,3.5 -3,-1.5"/><path d="m 4,4 7,7"/><path d="m 9,4 3.5,3.5"/><path d="m 4,9 3.5,3.5"/></g></svg></span>
+                    <span style="flex-shrink:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c49a3c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"/><path d="M9.608 17.682c-2.558 -.71 -4.76 -2.603 -6.608 -5.682c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"/><path d="M17.8 20.817l-2.172 1.138a.392 .392 0 0 1 -.568 -.41l.415 -2.411l-1.757 -1.707a.389 .389 0 0 1 .217 -.665l2.428 -.352l1.086 -2.193a.392 .392 0 0 1 .702 0l1.086 2.193l2.428 .352a.39 .39 0 0 1 .217 .665l-1.757 1.707l.414 2.41a.39 .39 0 0 1 -.567 .411l-2.172 -1.138"/></svg></span>
                     <div>
-                        <div style="font-weight:700; color:#c49a3c; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v80_bar_title">Barra temporale sessione</div>
-                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v80_bar_desc"></div>
+                        <div style="font-weight:700; color:#c49a3c; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v81_popup_title">Analisi Notturna più personale</div>
+                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v81_popup_desc"></div>
                     </div>
                 </div>
                 <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #00c6ff; box-shadow:0 0 0 1px rgba(0,0,0,0.15); margin-bottom:8px;">
-                    <span style="flex-shrink:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00c6ff" stroke-width="2"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 13a8 8 0 0 1 7 7a6 6 0 0 0 3 -5a9 9 0 0 0 6 -8a3 3 0 0 0 -3 -3a9 9 0 0 0 -8 6a6 6 0 0 0 -5 3"/><path d="M7 14a6 6 0 0 0 -3 6a6 6 0 0 0 6 -3"/><path d="M14 9a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/></svg></span>
+                    <span style="flex-shrink:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00c6ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 5a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2v-14z"/><path d="M11 4h2"/><path d="M12 17v.01"/></svg></span>
                     <div>
-                        <div style="font-weight:700; color:#00c6ff; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v80_btn_title">Pulsante modalità nel navbar</div>
-                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v80_btn_desc"></div>
+                        <div style="font-weight:700; color:#00c6ff; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v81_mobile_title">Smartphone più comodo</div>
+                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v81_mobile_desc"></div>
+                    </div>
+                </div>
+                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #2ec96c; box-shadow:0 0 0 1px rgba(0,0,0,0.15); margin-bottom:8px;">
+                    <span style="flex-shrink:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2ec96c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"/><path d="M9 9l1 0"/><path d="M9 13l6 0"/><path d="M9 17l6 0"/></svg></span>
+                    <div>
+                        <div style="font-weight:700; color:#2ec96c; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v81_report_title">Report e Modalità PRO corretti</div>
+                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v81_report_desc"></div>
                     </div>
                 </div>
                 <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #bb86fc; box-shadow:0 0 0 1px rgba(0,0,0,0.15); margin-bottom:8px;">
-                    <span style="flex-shrink:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#bb86fc" stroke-width="2"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
+                    <span style="flex-shrink:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#bb86fc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 5h7"/><path d="M9 3v2c0 4.418 -2.239 8 -5 8"/><path d="M5 9c0 2.144 2.952 3.908 6.7 4"/><path d="M12 20l4 -9l4 9"/><path d="M19.1 18h-6.2"/></svg></span>
                     <div>
-                        <div style="font-weight:700; color:#bb86fc; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v80_landing_title">Landing page rinnovata</div>
-                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v80_landing_desc"></div>
+                        <div style="font-weight:700; color:#bb86fc; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v81_i18n_title">Traduzioni complete</div>
+                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v81_i18n_desc"></div>
+                    </div>
+                </div>
+                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #58a6ff; box-shadow:0 0 0 1px rgba(0,0,0,0.15); margin-bottom:8px;">
+                    <span style="flex-shrink:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#58a6ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 10h3v-3l-3.5 -3.5a6 6 0 0 1 8 8l6 6a2 2 0 0 1 -3 3l-6 -6a6 6 0 0 1 -8 -8l3.5 3.5"/></svg></span>
+                    <div>
+                        <div style="font-weight:700; color:#58a6ff; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v81_fix_title">Correzioni varie</div>
+                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v81_fix_desc"></div>
                     </div>
                 </div>
                 <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #5DCAA5; box-shadow:0 0 0 1px rgba(0,0,0,0.15); margin-bottom:8px;">
-                    <span style="flex-shrink:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#5DCAA5" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>
+                    <span style="flex-shrink:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#5DCAA5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>
                     <div>
-                        <div style="font-weight:700; color:#5DCAA5; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v80_manual_title">Manuale aggiornato</div>
-                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v80_manual_desc"></div>
+                        <div style="font-weight:700; color:#5DCAA5; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v81_manual_title">Manuale aggiornato</div>
+                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v81_manual_desc"></div>
                     </div>
                 </div>
+
             </div>
 
             <!-- Footer -->
@@ -3042,7 +3139,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
 
     <script>
         (function() {
-            const CURRENT_VERSION = '8.0';
+            const CURRENT_VERSION = '8.1';
             const STORAGE_KEY = 'ad_last_version';
 
             function mostraChangelogManuale() {
