@@ -549,9 +549,13 @@
         ini += 'maptex_top = 90\n';
         ini += 'maptex_bottom = -90\n';
       } else {
-        // Panoramica parziale: usa i parametri calcolati dagli slider
-        ini += 'maptex_top = '    + (HZ.opts.centerAltitude + HZ.opts.vfov / 2).toFixed(1) + '\n';
-        ini += 'maptex_bottom = ' + (HZ.opts.centerAltitude - HZ.opts.vfov / 2).toFixed(1) + '\n';
+        // Panoramica parziale: usa i parametri calcolati dagli slider.
+        // Limiti fisici [-90°, +90°]: valori oltre lo zenit/nadir fanno ribaltare
+        // la texture in Stellarium (A12).
+        const mtTop = Math.min( 90, HZ.opts.centerAltitude + HZ.opts.vfov / 2);
+        const mtBot = Math.max(-90, HZ.opts.centerAltitude - HZ.opts.vfov / 2);
+        ini += 'maptex_top = '    + mtTop.toFixed(1) + '\n';
+        ini += 'maptex_bottom = ' + mtBot.toFixed(1) + '\n';
       }
     } else {
       ini += 'type = polygonal\n';
@@ -730,6 +734,7 @@
       hz_param_sm:    'Smussamento della linea rilevata. Bassi (1–5) = dettaglio ma rumoroso. Alti (20–50) = curva morbida. Consigliato 10–20 per uso astronomico.',
       hz_param_stop:  'La ricerca parte da questa percentuale dall\'alto. Aumenta per escludere sole o cielo vicino allo zenith.',
       hz_param_sbot:  'La ricerca si ferma a questa percentuale dall\'alto. Abbassa se l\'orizzonte è basso; aumenta se è alto (muri, edifici in primo piano).',
+      hz_warn_nonsphere: 'Foto non sferica (proporzioni diverse da 2:1): campo verticale e altitudine centro sono stati riportati ai valori predefiniti. Verificali prima del rilevamento.',
     },
     en: {
       hz_param_vfov:  'How many degrees the photo covers vertically. For 360°×180° spherical photos (Google Pixel, GoPro Max) use 180°, set automatically. For horizontal smartphone panoramas use 60–90°.',
@@ -740,6 +745,7 @@
       hz_param_sm:    'Smoothing of the detected line. Low (1–5) = detailed but noisy. High (20–50) = smooth curve. 10–20 recommended for astronomical use.',
       hz_param_stop:  'Detection starts from this percentage from the top. Increase to exclude the sun or sky near the zenith.',
       hz_param_sbot:  'Detection stops at this percentage from the top. Decrease if the horizon is low; increase if it is high (walls, buildings in the foreground).',
+      hz_warn_nonsphere: 'Non-spherical photo (aspect ratio other than 2:1): vertical FOV and center altitude have been reset to defaults. Check them before running detection.',
     },
     es: {
       hz_param_vfov:  'Cuántos grados cubre la foto verticalmente. Para fotos esféricas 360°×180° (Google Pixel, GoPro Max) usa 180°, configurado automáticamente. Para panorámicas con smartphone horizontal usa 60–90°.',
@@ -750,6 +756,7 @@
       hz_param_sm:    'Suavizado de la línea detectada. Bajo (1–5) = detalle pero ruidoso. Alto (20–50) = curva suave. Se recomienda 10–20 para uso astronómico.',
       hz_param_stop:  'La detección comienza desde este porcentaje desde arriba. Aumenta para excluir el sol o el cielo cerca del cénit.',
       hz_param_sbot:  'La detección se detiene en este porcentaje desde arriba. Baja si el horizonte es bajo; sube si es alto (muros, edificios en primer plano).',
+      hz_warn_nonsphere: 'Foto no esférica (proporción distinta de 2:1): el FOV vertical y la altitud central se han restablecido a los valores predeterminados. Verifícalos antes de la detección.',
     },
     zh: {
       hz_param_vfov:  '照片垂直方向覆盖的角度。对于360°×180°球形照片（Google Pixel、GoPro Max）请使用180°（自动设置）。对于水平方向拍摄的手机全景照片，使用60–90°。',
@@ -760,6 +767,7 @@
       hz_param_sm:    '检测线的平滑程度。低（1–5）=细节丰富但有噪点。高（20–50）=平滑曲线。天文用途推荐10–20。',
       hz_param_stop:  '检测从顶部此百分比处开始。增大可排除天顶附近的太阳或天空。',
       hz_param_sbot:  '检测在顶部此百分比处停止。若地平线较低则减小；若较高（墙壁、前景建筑）则增大。',
+      hz_warn_nonsphere: '非球形照片（宽高比不是2:1）：垂直视场和中心高度角已恢复为默认值。请在检测前确认。',
     },
   };
 
@@ -847,6 +855,19 @@
           setText('hz-calt-v', '0°');
           HZ.opts.vfov = 180;
           HZ.opts.centerAltitude = 0;
+        } else if (+v('hz-vfov') === 180) {
+          // Foto NON sferica ma campo verticale rimasto a 180° da una sferica
+          // caricata in precedenza: ripristina i valori predefiniti del modulo
+          // e avvisa l'utente (A12 — profilo alzato e maptex_top > 90°).
+          setVal('hz-vfov', 90);
+          setVal('hz-calt', 10);
+          setText('hz-vfov-v', '90°');
+          setText('hz-calt-v', '+10°');
+          HZ.opts.vfov = 90;
+          HZ.opts.centerAltitude = 10;
+          // Toast in-app coerente col tema; alert() solo come ripiego
+          if (typeof mostraAvviso === 'function') mostraAvviso(_getTip('hz_warn_nonsphere'), 'warn');
+          else showMsg(_getTip('hz_warn_nonsphere'));
         }
         // Nome file con badge sfera
         const sphereBadge = isFullSphere ? ' · 📐 360°' : '';
