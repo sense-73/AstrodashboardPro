@@ -3406,3 +3406,19 @@ i18n.it.np_hint_setup_base    = "Scelti per il tuo setup";
 i18n.en.np_hint_setup_base    = "Picked for your setup";
 i18n.es.np_hint_setup_base    = "Elegidos para tu equipo";
 i18n.zh.np_hint_setup_base    = "根据您的设备推荐";
+
+// Bottone "Previsione" (solo dispositivi touch): riapre il popup Analisi Notturna
+i18n.it.np_forecast_btn       = "Previsione";
+i18n.en.np_forecast_btn       = "Forecast";
+i18n.es.np_forecast_btn       = "Previsión";
+i18n.zh.np_forecast_btn       = "预测";
+
+i18n.it.np_forecast_na        = "Previsione non disponibile. Controlla di aver impostato una posizione e di essere connesso.";
+i18n.en.np_forecast_na        = "Forecast not available. Make sure a location is set and you're online.";
+i18n.es.np_forecast_na        = "Previsión no disponible. Comprueba que has configurado una ubicación y que tienes conexión.";
+i18n.zh.np_forecast_na        = "预测不可用。请确认已设置位置并已联网。";
+
+i18n.it.np_ok                 = "OK";
+i18n.en.np_ok                 = "OK";
+i18n.es.np_ok                 = "OK";
+i18n.zh.np_ok                 = "确定";

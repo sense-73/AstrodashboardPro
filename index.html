@@ -841,6 +841,11 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
     <div id="dashboard-view" style="display:none;">
         <div class="container" style="margin-bottom: 0;">
             <div class="ephemeris-box">
+                <!-- Bottone "Previsione": solo dispositivi touch (css), riapre il popup Analisi Notturna -->
+                <button type="button" class="np-forecast-btn" onclick="apriPrevisioneNotte()">
+                    <span class="np-forecast-circle"><svg width="60" height="40" viewBox="0 0 110.39362 74.348602" aria-hidden="true"><g transform="translate(-57.505933,-129.55751)"><path fill="currentColor" d="m 111.71042,129.69407 c -5.24226,0.0263 -10.74815,16.87136 -14.973754,19.97398 -4.22562,3.10261 -20.68279,-3.57272 -22.27771,1.4211 -1.59492,4.99381 11.46067,22.32 13.10566,27.29756 1.64498,4.97755 -3.6323,21.89556 0.62425,24.95558 4.25655,3.06003 18.612084,-7.33188 23.854354,-7.3582 5.24224,-0.0263 19.70159,10.22105 23.9272,7.11842 4.22561,-3.10261 -1.2213,-19.96692 0.37362,-24.96075 1.59491,-4.99381 14.40338,-24.00881 12.7584,-28.98634 -1.64498,-4.97756 -17.96174,3.42125 -22.21829,0.36122 -4.25654,-3.06002 -9.93148,-19.8489 -15.17373,-19.82257 z m -10.60762,21.50309 v 1.71307 h 3.10007 v -1.71152 c 5.70357,0.78068 9.95539,5.65185 9.95805,11.4086 -0.008,1.49741 -0.30811,2.97887 -0.88315,4.36149 l -1.40405,-0.8108 -1.55029,2.68459 1.39888,0.8077 c -2.17408,2.81418 -5.526,4.46659 -9.08213,4.47725 -3.581866,-0.0113 -6.954714,-1.68796 -9.126054,-4.53668 l 1.38183,-0.79788 -1.5503,-2.68459 -1.36891,0.79013 c -0.55714,-1.36253 -0.84797,-2.8192 -0.85679,-4.29121 0.004,-5.76558 4.26885,-10.64069 9.982844,-11.41015 z m 1.53738,9.14724 c -1.28013,2.4e-4 -2.31774,1.03808 -2.31769,2.3182 2.3e-4,1.27993 1.03776,2.31745 2.31769,2.31769 1.28012,5e-5 2.31797,-1.03756 2.3182,-2.31769 5e-5,-1.28032 -1.03788,-2.31825 -2.3182,-2.3182 z m 18.41643,0.0786 c 1.1557,0.0255 2.25169,0.51852 3.03753,1.36633 2.63599,-1.03453 4.42298,-1.39618 4.64985,-0.94103 0.22448,0.45652 -1.14895,1.65615 -3.57343,3.12125 0.31991,1.86254 -0.62244,3.71386 -2.31665,4.55115 -1.69471,0.83661 -3.7378,0.4597 -5.02242,-0.92656 -2.63596,1.03452 -4.42294,1.39615 -4.64984,0.94102 -0.2235,-0.4568 1.14981,-1.65614 3.57342,-3.12074 -0.31991,-1.86253 0.62244,-3.71384 2.31665,-4.55113 0.61653,-0.30443 1.29746,-0.45547 1.98489,-0.44029 z m -18.41643,0.96015 c 0.70675,-2.6e-4 1.27976,0.57275 1.2795,1.2795 -3e-5,0.70656 -0.57295,1.27926 -1.2795,1.279 -0.70636,-3e-5 -1.27897,-0.57264 -1.279,-1.279 -2.6e-4,-0.70655 0.57244,-1.27947 1.279,-1.2795 z m 24.137,0.12351 c -0.45362,-0.0333 -1.31312,0.16391 -2.44636,0.5612 0.1779,0.22804 0.33217,0.47355 0.46044,0.73277 0.12538,0.26182 0.22372,0.53574 0.29352,0.81752 1.42415,-0.93283 2.17402,-1.65863 2.02985,-1.96473 -0.0437,-0.0843 -0.15718,-0.13361 -0.33745,-0.14676 z m -9.93633,4.25916 c -1.42414,0.93283 -2.17401,1.65864 -2.02984,1.96474 0.15584,0.30022 1.1878,0.14579 2.79362,-0.41806 -0.18128,-0.22643 -0.33903,-0.47074 -0.47078,-0.72915 -0.1252,-0.26184 -0.22337,-0.53577 -0.293,-0.81753 z m 2.52801,10.49239 c 0.3671,-0.004 0.70808,0.22955 0.82631,0.59841 0.14552,0.45397 -0.10311,0.9366 -0.55708,1.0821 0,0 -0.38436,0.19058 -0.98547,0.47336 a 1.601903,1.601903 0 0 1 -1.09864,1.32188 1.601903,1.601903 0 0 1 -1.39371,-0.20825 c -1.2724,0.5405 -2.76303,1.13141 -4.26433,1.62522 -2.12231,0.69812 -5.1015,0.90486 -5.1015,0.90486 -0.4687,0.0871 -0.93658,-0.10311 -1.0821,-0.55708 -0.14551,-0.45398 0.10257,-0.93659 0.55655,-1.0821 0,0 3.02225,-0.13243 5.18728,-0.8015 1.26394,-0.39059 2.7143,-0.98761 4.01681,-1.5689 a 1.601903,1.601903 0 0 1 1.10329,-1.36271 1.601903,1.601903 0 0 1 1.38234,0.19586 c 0.69144,-0.34036 1.15445,-0.57929 1.15445,-0.57929 0.0851,-0.0273 0.17108,-0.041 0.2558,-0.0419 z"/><path fill="none" stroke="currentColor" stroke-width="1.76202" stroke-linecap="round" d="m 58.386945,192.79405 22.745783,-9.87357"/><path fill="none" stroke="currentColor" stroke-width="1.53351" stroke-linecap="round" d="M 58.616699,165.53057 74.303986,165.281"/><path fill="none" stroke="currentColor" stroke-width="1.56973" stroke-linecap="round" d="m 63.140395,130.43878 19.117152,14.61125"/><path fill="none" stroke="currentColor" stroke-width="1.76202" stroke-linecap="round" d="m 167.01855,195.60389 -22.74578,-9.87357"/><path fill="none" stroke="currentColor" stroke-width="1.53351" stroke-linecap="round" d="m 166.78879,168.34041 -15.68728,-0.24957"/><path fill="none" stroke="currentColor" stroke-width="1.56973" stroke-linecap="round" d="m 152.10974,130.34237 -19.11715,14.61125"/></g></svg></span>
+                    <span class="np-forecast-lbl" data-i18n="np_forecast_btn">Previsione</span>
+                </button>
                 <div class="moon-container">
                     <div id="moon-emoji" class="moon-icon">🌕</div>
                     <div id="moon-phase-name" class="moon-phase-name">Caricamento...</div>
@@ -4111,6 +4116,26 @@ document.addEventListener('DOMContentLoaded', function() {
     </script>
 
 <!-- ── Night Popup Modal ─────────────────────────────────────────── -->
+<!-- Avviso "Previsione non disponibile" (bottone Previsione, dispositivi touch) -->
+<div id="np-forecast-alert" onclick="if(event.target===this)chiudiAvvisoPrevisione()">
+    <div class="npa-box">
+        <div class="npa-msg" data-i18n="np_forecast_na">Previsione non disponibile. Controlla di aver impostato una posizione e di essere connesso.</div>
+        <button type="button" class="npa-ok" data-i18n="np_ok" onclick="chiudiAvvisoPrevisione()">OK</button>
+    </div>
+</div>
+<script>
+// Apre il popup Analisi Notturna; se non si apre (posizione, meteo o notte non disponibili) mostra l'avviso.
+function apriPrevisioneNotte() {
+    if (typeof mostraNightPopup === 'function') mostraNightPopup();
+    const modal = document.getElementById('night-popup-modal');
+    if (!modal || modal.style.display !== 'flex') {
+        document.getElementById('np-forecast-alert').style.display = 'flex';
+    }
+}
+function chiudiAvvisoPrevisione() {
+    document.getElementById('np-forecast-alert').style.display = 'none';
+}
+</script>
 <div id="night-popup-modal"
      style="display:none; position:fixed; inset:0;
             background:rgba(0,0,0,0.78); z-index:20000;

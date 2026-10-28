@@ -791,3 +791,42 @@
     #adp-numpad .anp-keys { flex: 1.1; }
     #adp-numpad .anp-k { height: 40px; }
 }
+
+/* ── Bottone "Previsione" sopra la fase lunare: solo dispositivi touch ── */
+.np-forecast-btn { display: none; }
+@media (pointer: coarse) {
+    .np-forecast-btn {
+        display: flex; flex-direction: column; align-items: center; gap: 4px;
+        background: transparent; border: none; padding: 0; margin-bottom: 12px;
+        color: var(--accent); cursor: pointer; -webkit-tap-highlight-color: transparent;
+    }
+}
+/* Smartphone (riquadro in colonna): linea a tutta larghezza tra Previsione e Luna, come quella del meteo */
+@media (pointer: coarse) and (max-width: 768px) {
+    .np-forecast-btn { width: 100%; margin-bottom: 0; padding-bottom: 15px; border-bottom: 1px solid var(--border-hi); }
+}
+/* Schermi touch larghi (tablet orizzontale, riquadro in riga): linea verticale a destra del bottone */
+@media (pointer: coarse) and (min-width: 769px) {
+    .np-forecast-btn { margin: 0 20px 0 0; padding-right: 20px; border-right: 1px solid var(--border-hi); }
+}
+.np-forecast-circle {
+    width: 76px; height: 76px; border-radius: 50%; border: 1px solid var(--accent);
+    display: flex; align-items: center; justify-content: center;
+}
+.np-forecast-btn:active .np-forecast-circle { background: rgba(196, 154, 60, 0.15); }
+.np-forecast-lbl { font-size: 0.75em; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; }
+
+/* ── Finestrella "Previsione non disponibile" ── */
+#np-forecast-alert {
+    display: none; position: fixed; inset: 0; z-index: 20001;
+    background: rgba(0, 0, 0, 0.6); align-items: center; justify-content: center; padding: 16px;
+}
+#np-forecast-alert .npa-box {
+    background: var(--bg-panel); border: 1px solid var(--accent); border-radius: 8px;
+    padding: 20px 18px; max-width: 320px; text-align: center;
+}
+#np-forecast-alert .npa-msg { color: #c9d1d9; font-size: 0.95em; line-height: 1.5; margin-bottom: 16px; }
+#np-forecast-alert .npa-ok {
+    background: var(--accent); color: var(--bg-deep); border: none; border-radius: 6px;
+    padding: 8px 32px; font-weight: bold; font-size: 0.95em; cursor: pointer;
+}
