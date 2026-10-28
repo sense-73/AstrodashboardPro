@@ -135,6 +135,126 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
 </style>
 </head>
 <body>
+<!-- ═══ ADP · Avviso servizi esterni lenti all'avvio (blocco autonomo) ═══
+     Compare se dopo 6 s l'avvio (DOMContentLoaded) non è completato, per esempio
+     quando aladin.js (CDS Strasburgo, caricato con defer) non risponde.
+     Non modifica né dipende da altre logiche dell'app: legge solo 'ad_lang'. -->
+<style>
+    #adp-svcw{display:none;position:fixed;inset:0;z-index:2147483000;background:rgba(0,0,0,.6);align-items:center;justify-content:center;padding:18px;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+    #adp-svcw .svcw-box{width:100%;max-width:400px;background:#161b22;border:1px solid rgba(227,163,59,.6);border-radius:12px;padding:16px;box-shadow:0 16px 40px rgba(0,0,0,.7);color:#c9d1d9;font-size:13px;line-height:1.45}
+    #adp-svcw .svcw-head{display:flex;gap:10px;align-items:center;margin-bottom:10px}
+    #adp-svcw .svcw-ic{font-size:22px}
+    #adp-svcw .svcw-title{font-weight:700;color:#fff;font-size:15px}
+    #adp-svcw .svcw-svc{display:flex;gap:8px;align-items:center;background:rgba(227,163,59,.1);border-radius:6px;padding:6px 8px;font-size:12.5px;margin:10px 0}
+    #adp-svcw .svcw-dot{width:9px;height:9px;border-radius:50%;background:#e3a33b;flex-shrink:0;animation:adpSvcwPulse 1.2s infinite}
+    @keyframes adpSvcwPulse{50%{opacity:.3}}
+    #adp-svcw p{margin:0 0 8px}
+    #adp-svcw .svcw-msg2{color:#8b949e;font-size:12.5px}
+    #adp-svcw .svcw-acts{display:flex;justify-content:flex-end;margin-top:12px}
+    #adp-svcw .svcw-btn{background:transparent;border:1px solid #58a6ff;color:#58a6ff;border-radius:6px;padding:7px 18px;font-size:13px;cursor:pointer}
+</style>
+<div id="adp-svcw" role="alertdialog" aria-modal="true" aria-labelledby="adp-svcw-title">
+    <div class="svcw-box">
+        <div class="svcw-head"><span class="svcw-ic">⚠️</span><span class="svcw-title" id="adp-svcw-title"></span></div>
+        <div class="svcw-svc"><span class="svcw-dot"></span><span id="adp-svcw-svc"></span></div>
+        <p id="adp-svcw-msg1"></p>
+        <p class="svcw-msg2" id="adp-svcw-msg2"></p>
+        <div class="svcw-acts"><button type="button" class="svcw-btn" id="adp-svcw-ok"></button></div>
+    </div>
+</div>
+<script>
+(function () {
+    var SOGLIA_MS = 6000;
+    var T = {
+        it: {
+            ok: 'Ho capito',
+            a: { title: 'Servizio esterno lento',
+                 svc: 'CDS Strasburgo (SIMBAD / Aladin) non risponde',
+                 m1: "Il caricamento dell'app richiede più tempo del normale per un disservizio esterno, non per un problema del tuo dispositivo.",
+                 m2: "Attendi qualche istante: l'app si avvierà appena il servizio risponde o va in timeout. Alcune funzioni potrebbero essere ridotte." },
+            b: { title: 'Caricamento rallentato',
+                 svc: 'Uno o più servizi esterni rispondono lentamente',
+                 m1: "Il caricamento dell'app richiede più tempo del normale per un disservizio esterno o una connessione lenta.",
+                 m2: "Attendi qualche istante: l'app si avvierà appena possibile. Alcune funzioni potrebbero essere ridotte." }
+        },
+        en: {
+            ok: 'Got it',
+            a: { title: 'External service slow',
+                 svc: 'CDS Strasbourg (SIMBAD / Aladin) is not responding',
+                 m1: 'The app is taking longer than usual to load because of an external service outage, not a problem with your device.',
+                 m2: 'Please wait a moment: the app will start as soon as the service responds or times out. Some features may be limited.' },
+            b: { title: 'Slow loading',
+                 svc: 'One or more external services are responding slowly',
+                 m1: 'The app is taking longer than usual to load because of an external service outage or a slow connection.',
+                 m2: 'Please wait a moment: the app will start as soon as possible. Some features may be limited.' }
+        },
+        es: {
+            ok: 'Entendido',
+            a: { title: 'Servicio externo lento',
+                 svc: 'CDS Estrasburgo (SIMBAD / Aladin) no responde',
+                 m1: 'La app tarda más de lo normal en cargar debido a una interrupción de un servicio externo, no a un problema de tu dispositivo.',
+                 m2: 'Espera un momento: la app se iniciará en cuanto el servicio responda o se agote el tiempo de espera. Algunas funciones podrían estar limitadas.' },
+            b: { title: 'Carga ralentizada',
+                 svc: 'Uno o más servicios externos responden lentamente',
+                 m1: 'La app tarda más de lo normal en cargar debido a una interrupción de un servicio externo o a una conexión lenta.',
+                 m2: 'Espera un momento: la app se iniciará lo antes posible. Algunas funciones podrían estar limitadas.' }
+        },
+        zh: {
+            ok: '知道了',
+            a: { title: '外部服务响应缓慢',
+                 svc: '斯特拉斯堡 CDS（SIMBAD / Aladin）无响应',
+                 m1: '由于外部服务中断，应用加载时间比平时长，并非您的设备出现问题。',
+                 m2: '请稍候：服务一旦响应或超时，应用将立即启动。部分功能可能受限。' },
+            b: { title: '加载缓慢',
+                 svc: '一个或多个外部服务响应缓慢',
+                 m1: '由于外部服务中断或网络连接较慢，应用加载时间比平时长。',
+                 m2: '请稍候：应用将尽快启动。部分功能可能受限。' }
+        }
+    };
+
+    // Lingua: scelta dell'utente (ad_lang) → lingua del telefono → italiano
+    function lingua() {
+        var l = null;
+        try { l = localStorage.getItem('ad_lang'); } catch (e) {}
+        if (l && T[l]) return l;
+        var n = ((navigator.language || navigator.userLanguage || '') + '').slice(0, 2).toLowerCase();
+        return T[n] ? n : 'it';
+    }
+
+    var avvioCompletato = false;
+    var mostrato = false;
+
+    function chiudi() {
+        var el = document.getElementById('adp-svcw');
+        if (el) el.style.display = 'none';
+    }
+
+    // N.B. non si usa document.readyState: diventa 'interactive' PRIMA che gli
+    // script defer (aladin.js) siano eseguiti, mentre DOMContentLoaded li attende.
+    document.addEventListener('DOMContentLoaded', function () {
+        avvioCompletato = true;
+        chiudi();
+    });
+
+    setTimeout(function () {
+        if (avvioCompletato || mostrato) return;
+        var el = document.getElementById('adp-svcw');
+        if (!el) return;
+        mostrato = true;
+        var t = T[lingua()];
+        var v = (typeof window.A === 'undefined') ? t.a : t.b; // A = Aladin Lite
+        document.getElementById('adp-svcw-title').textContent = v.title;
+        document.getElementById('adp-svcw-svc').textContent   = v.svc;
+        document.getElementById('adp-svcw-msg1').textContent  = v.m1;
+        document.getElementById('adp-svcw-msg2').textContent  = v.m2;
+        var btn = document.getElementById('adp-svcw-ok');
+        btn.textContent = t.ok;
+        btn.onclick = chiudi;
+        el.style.display = 'flex';
+    }, SOGLIA_MS);
+})();
+</script>
+<!-- ═══ fine blocco avviso servizi ═══ -->
 <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
 
   <!-- map-pin · 📍 -->

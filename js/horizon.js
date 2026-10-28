@@ -527,10 +527,13 @@
     const lonStr = (HZ.lon != null ? (HZ.lon >= 0 ? '+' : '') : '+') + lon;
     const name   = HZ.locationName || 'La mia postazione';
 
-    // angle_rotatez in Stellarium 25.x:
-    // - ruota in senso antiorario (convenzione opposta alla nostra)
-    // - offset +90° corregge lo sfasamento N/E osservato empiricamente
-    const rotZ = ((360 - HZ.opts.startAzimuth + 90) % 360).toFixed(4);
+    // angle_rotatez in Stellarium (LandscapeSpherical, Landscape.cpp):
+    // con rotazione 0 il bordo sinistro dell'immagine è a Est (90°);
+    // angle_rotatez positivo ruota in senso ORARIO →
+    //   azimut bordo sinistro = 90° + angle_rotatez
+    // quindi angle_rotatez = startAzimuth − 90° (A13 — la vecchia formula
+    // 450° − startAzimuth era corretta solo con bordo sinistro a 90°/270°).
+    const rotZ = (((HZ.opts.startAzimuth - 90) % 360 + 360) % 360).toFixed(4);
 
     // Rileva foto sferica completa (aspect ratio 2:1 ± 5%)
     const isFullSphere = HZ.img &&
