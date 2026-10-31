@@ -214,6 +214,58 @@
         }
         setupSearch('search-dash-input', 'sugg-dash'); setupSearch('search-plan-input', 'sugg-plan');
 
+        // --- RISOLUTORE COORDINATE (A12): SIMBAD/Sesame con paracadute sul catalogo locale ---
+        // Restituisce SEMPRE testo in formato Sesame (%J, %T, %M, %D): il parser di eseguiRicerca resta invariato.
+        // CDS attivo → risponde SIMBAD. CDS fermo, lento o risposta vuota (503 del service worker) → js/catalogs.json.
+        // Dopo un guasto il CDS non viene richiamato per 10 minuti (niente attese a ogni ricerca).
+        const _CDS_TIMEOUT_MS = 2000, _CDS_PAUSA_MS = 10 * 60 * 1000;
+        let _cdsGiuFinoA = 0, _catLocale = null;
+
+        function _catKey(s) {
+            s = String(s).toLowerCase().replace(/[\s\-_.]+/g, '');
+            s = s.replace(/^messier/, 'm').replace(/^caldwell/, 'c').replace(/^barnard/, 'b')
+                 .replace(/^collinder/, 'cr').replace(/^melotte/, 'mel').replace(/^sharpless2?/, 'sh2')
+                 .replace(/^sh(?!2)/, 'sh2');
+            return s.replace(/^(sh2|[a-z]+)0+(?=\d)/, '$1');
+        }
+
+        function _caricaCatalogoLocale() {
+            if (!_catLocale) {
+                _catLocale = fetch('js/catalogs.json')
+                    .then(r => { if (!r.ok) throw new Error('catalogo HTTP ' + r.status); return r.json(); })
+                    .then(c => { let m = new Map(); c.o.forEach(o => o[6].split('|').forEach(n => m.set(_catKey(n), o))); return m; })
+                    .catch(() => { _catLocale = null; return null; });
+            }
+            return _catLocale;
+        }
+
+        function _sesameDaCatalogo(q) {
+            return _caricaCatalogoLocale().then(m => {
+                let o = m ? m.get(_catKey(q)) : null;
+                if (!o) return '';
+                let t = `%J ${o[0]} ${o[1]}\n`;
+                if (o[2]) t += `%T ${o[2]}\n`;
+                if (o[3] !== null) t += `%M ${o[3]} [V]\n`;
+                if (o[5] !== null) t += `%D ${o[5]} kpc\n`;
+                return t;
+            });
+        }
+
+        function _risolviSesame(q) {
+            let daCatalogo = () => _sesameDaCatalogo(q).then(t => { if (!t) throw new Error('CDS giu e oggetto non nel catalogo'); return t; });
+            if (Date.now() < _cdsGiuFinoA) return daCatalogo();
+            let ctrl = new AbortController(), timer = setTimeout(() => ctrl.abort(), _CDS_TIMEOUT_MS);
+            return fetch(`https://cds.unistra.fr/cgi-bin/nph-sesame/-oI/A?${encodeURIComponent(q)}`, { signal: ctrl.signal })
+                .then(r => { if (!r.ok) throw new Error('CDS HTTP ' + r.status); return r.text(); })
+                .then(d => {
+                    clearTimeout(timer);
+                    if (!d.trim()) throw new Error('CDS risposta vuota');
+                    if (/^%J/m.test(d)) return d;                                  // trovato da SIMBAD
+                    return _sesameDaCatalogo(q).then(t => t || d);                 // SIMBAD non lo conosce: prova il catalogo
+                })
+                .catch(() => { clearTimeout(timer); _cdsGiuFinoA = Date.now() + _CDS_PAUSA_MS; return daCatalogo(); });
+        }
+
         function eseguiRicerca(iId) {
             if (typeof dsoDatabase === 'undefined') return;
             let inp = document.getElementById(iId), rawQ = inp.value.trim(); if (!rawQ) return;
@@ -236,14 +288,14 @@
             let qn = q.toLowerCase().replace(/\s+/g, '').replace(/-/g, ''), st = document.getElementById('status-' + iId);
             if(st) st.style.display = 'none';
 
-            let ex = dsoDatabase.find(d => d.id.toLowerCase() === qn || (d[lang] && d[lang].toLowerCase().replace(/\s+/g, '') === qn));
+            let ex = dsoDatabase.find(d => d.id.toLowerCase() === qn || _catKey(d.id) === _catKey(q) || (d[lang] && d[lang].toLowerCase().replace(/\s+/g, '') === qn)); // A14: _catKey riconosce anche sh2-240, m033, Messier 33
             let pt = dsoDatabase.find(d => d.name.toLowerCase().replace(/\s+/g, '').includes(qn) || (d[lang] && d[lang].toLowerCase().replace(/\s+/g, '').includes(qn)));
             
             if (ex) { inp.value = getLocalizedName(ex); apriPianificazione(ex); return; } 
             if (pt) { inp.value = getLocalizedName(pt); apriPianificazione(pt); return; }
 
             if(st) { st.style.display = 'block'; st.style.color = '#ffaa00'; st.innerText = "SIMBAD Search..."; }
-            fetch(`https://cds.unistra.fr/cgi-bin/nph-sesame/-oI/A?${encodeURIComponent(q)}`).then(r => r.text()).then(d => {
+            _risolviSesame(q).then(d => {
                 let lines = d.split('\n'), fc = false, ra, dec, ty = "", rawType = "", mg = "N/D", dist = "N/D";
 
                     // Heuristic: tipo noto per catalogo anche prima di leggere %T
