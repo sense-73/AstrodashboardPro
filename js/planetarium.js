@@ -243,7 +243,7 @@
             return _caricaCatalogoLocale().then(m => {
                 let o = m ? m.get(_catKey(q)) : null;
                 if (!o) return '';
-                let t = `%J ${o[0]} ${o[1]}\n`;
+                let t = `#=ADP-catalogo\n%J ${o[0]} ${o[1]}\n`;   // firma: dati dal catalogo locale (riga di commento, ignorata dal parser)
                 if (o[2]) t += `%T ${o[2]}\n`;
                 if (o[3] !== null) t += `%M ${o[3]} [V]\n`;
                 if (o[5] !== null) t += `%D ${o[5]} kpc\n`;
@@ -362,12 +362,19 @@
                     // Costruisce descrizione di fallback da dati SIMBAD
                     function _simbadDesc() {
                         let tyLabel = ty ? mapTypeTrans(ty) : null;
+                        // Articolo concordato con il tipo (es. "un Ammasso Aperto", "an Emission Nebula") e niente punto doppio dopo "a.l."
+                        let _art = l2 => { let w = String(tyLabel || '').trim();
+                            if (l2 === 'it') return /^(ammasso|resto|gruppo|oggetto)/i.test(w) ? 'un' : 'una';
+                            if (l2 === 'es') return /^(cúmulo|remanente|grupo|objeto)/i.test(w) ? 'un' : 'una';
+                            return /^([aeiou]|h ii)/i.test(w) ? 'an' : 'a'; };
+                        let _pt = /\.$/.test(String(dist)) ? '' : '.';
                         let dscBase = tyLabel
-                            ? { it: `${qClean.toUpperCase()} è una ${tyLabel}.`, en: `${qClean.toUpperCase()} is a ${tyLabel}.`, es: `${qClean.toUpperCase()} es una ${tyLabel}.`, zh: `${qClean.toUpperCase()} 是一个${tyLabel}。` }
+                            ? { it: `${qClean.toUpperCase()} è ${_art('it')} ${tyLabel}.`, en: `${qClean.toUpperCase()} is ${_art('en')} ${tyLabel}.`, es: `${qClean.toUpperCase()} es ${_art('es')} ${tyLabel}.`, zh: `${qClean.toUpperCase()} 是一个${tyLabel}。` }
                             : { it: `${qClean.toUpperCase()} — oggetto astronomico.`, en: `${qClean.toUpperCase()} — astronomical object.`, es: `${qClean.toUpperCase()} — objeto astronómico.`, zh: `${qClean.toUpperCase()} — 天文天体。` };
                         let mgLine = mg !== "N/D" ? { it:` Magnitudine: ${mg}.`, en:` Magnitude: ${mg}.`, es:` Magnitud: ${mg}.`, zh:` 星等：${mg}。` } : {it:'',en:'',es:'',zh:''};
-                        let dLine  = dist !== "N/D" ? { it:` Distanza stimata: ${dist}.`, en:` Estimated distance: ${dist}.`, es:` Distancia estimada: ${dist}.`, zh:` 估计距离：${dist}。` } : {it:'',en:'',es:'',zh:''};
+                        let dLine  = dist !== "N/D" ? { it:` Distanza stimata: ${dist}${_pt}`, en:` Estimated distance: ${dist}${_pt}`, es:` Distancia estimada: ${dist}${_pt}`, zh:` 估计距离：${dist}。` } : {it:'',en:'',es:'',zh:''};
                         let src    = { it:" (Fonte: SIMBAD / CDS Strasburgo)", en:" (Source: SIMBAD / CDS Strasbourg)", es:" (Fuente: SIMBAD / CDS Estrasburgo)", zh:" （数据来源：SIMBAD / CDS 斯特拉斯堡）" };
+                        if (d.indexOf('#=ADP-catalogo') === 0) src = { it:" (Fonte: catalogo Stellarium / OpenNGC)", en:" (Source: Stellarium / OpenNGC catalogue)", es:" (Fuente: catálogo Stellarium / OpenNGC)", zh:" （数据来源：Stellarium / OpenNGC 星表）" };
                         return (dscBase[wLang]||dscBase['en'])+(mgLine[wLang]||'')+(dLine[wLang]||'')+(src[wLang]||src['en']);
                     }
 

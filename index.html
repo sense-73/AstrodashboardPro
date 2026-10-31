@@ -2061,6 +2061,19 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <li><strong>Persistenza e backup:</strong> Il profilo viene salvato automaticamente in localStorage — al prossimo avvio dell'app sarà già attivo nel grafico FOV senza ricaricare la foto. Il pulsante <em>Backup (.json)</em> scarica un file di ripristino completo: se la cache viene svuotata, usa <em>↩ Ripristina</em> sopra il grafico per riacquisire il profilo in un clic, con applicazione automatica al FOV.</li>
                 </ul>
             </div>
+
+            <div class="guide-section" id="guide-credits-it">
+                <h3><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-book"/></svg> 9. Fonti dei dati e crediti</h3>
+                <p>AstroDashboard PRO usa dati e servizi di terze parti. Ringraziamo gli autori; l'elenco completo con le licenze è nel file README della repository.</p>
+                <ul>
+                    <li><strong>Catalogo locale degli oggetti:</strong> <a href="https://github.com/Stellarium/stellarium" target="_blank" rel="noopener" style="color:#58a6ff;">Catalogo DSO di Stellarium</a> (GPL-2.0+) e <a href="https://github.com/mattiaverga/OpenNGC" target="_blank" rel="noopener" style="color:#58a6ff;">OpenNGC</a> di Mattia Verga (CC BY-SA 4.0): NGC, IC, Messier, Caldwell, Barnard, Sharpless, van den Bergh, LDN, LBN, Collinder, Melotte. Viene usato quando SIMBAD non risponde; in quel caso la scheda indica «Fonte: catalogo Stellarium / OpenNGC».</li>
+                    <li><strong>Ricerca oggetti:</strong> <a href="https://simbad.cds.unistra.fr/" target="_blank" rel="noopener" style="color:#58a6ff;">SIMBAD</a> e Sesame del CDS di Strasburgo (ODbL). This research has made use of the SIMBAD database, operated at CDS, Strasbourg, France.</li>
+                    <li><strong>Simulatore FOV:</strong> <a href="https://aladin.cds.unistra.fr/AladinLite/" target="_blank" rel="noopener" style="color:#58a6ff;">Aladin Lite</a> del CDS (GPL-3.0). Immagini Digitized Sky Survey (DSS2 a colori) dal CDS, con copie di riserva di ESA ESASky e NASA MAST/STScI. The Digitized Sky Surveys were produced at the Space Telescope Science Institute under U.S. Government grant NAG W-2166.</li>
+                    <li><strong>Meteo e mappe:</strong> <a href="https://open-meteo.com/" target="_blank" rel="noopener" style="color:#58a6ff;">Open-Meteo</a> (CC BY 4.0); <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener" style="color:#58a6ff;">© OpenStreetMap contributors</a> e Nominatim (ODbL); mappa di base <a href="https://carto.com/attributions" target="_blank" rel="noopener" style="color:#58a6ff;">© CARTO</a>; <a href="https://djlorenz.github.io/astronomy/lp/" target="_blank" rel="noopener" style="color:#58a6ff;">Light Pollution Atlas 2024</a> di D. Lorenz (dati VIIRS).</li>
+                    <li><strong>Descrizioni e immagini:</strong> <a href="https://www.wikipedia.org/" target="_blank" rel="noopener" style="color:#58a6ff;">Wikipedia</a> (CC BY-SA 4.0), <a href="https://www.wikidata.org/" target="_blank" rel="noopener" style="color:#58a6ff;">Wikidata</a> (CC0), <a href="https://images.nasa.gov/" target="_blank" rel="noopener" style="color:#58a6ff;">NASA Image and Video Library</a>.</li>
+                    <li><strong>Librerie:</strong> Leaflet, SunCalc, Chart.js, jsPDF, jsPDF-AutoTable, Rive, font Audiowide (SIL OFL). Statistiche di visita anonime: GoatCounter.</li>
+                </ul>
+            </div>
         </div>
 
         <div id="guide-en" style="display:none;">
@@ -2212,6 +2225,19 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <li><strong>N.I.N.A. export (.hrz):</strong> The file follows the standard astronomical convention: Azimuth 0°=North, increasing eastward; altitude in degrees above the mathematical horizon. The profile is already corrected with your GPS coordinates — it's essential to also enter them in N.I.N.A.'s Observatory settings, otherwise visibility calculations will be inaccurate.</li>
                     <li><strong>Stellarium export (.zip):</strong> The zip includes the panoramic photo as PNG (with alpha channel), the <em>landscape.ini</em> file of spherical type with site coordinates and correct rotation for North alignment, and the <em>horizon.txt</em> file with the az/alt profile. Extract the zip into Stellarium's <code>landscapes/</code> folder and select the landscape in settings.</li>
                     <li><strong>Persistence and backup:</strong> The profile is saved automatically to localStorage — on the next app launch it will already be active in the FOV chart without reloading the photo. The <em>Backup (.json)</em> button downloads a complete restore file: if the cache is cleared, use <em>↩ Restore</em> above the chart to recover the profile in one click, with automatic FOV application.</li>
+                </ul>
+            </div>
+
+            <div class="guide-section" id="guide-credits-en">
+                <h3><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-book"/></svg> 9. Data Sources &amp; Credits</h3>
+                <p>AstroDashboard PRO uses third-party data and services. We thank their authors; the full list with licences is in the repository README file.</p>
+                <ul>
+                    <li><strong>Local object catalogue:</strong> <a href="https://github.com/Stellarium/stellarium" target="_blank" rel="noopener" style="color:#58a6ff;">Stellarium DSO catalogue</a> (GPL-2.0+) and <a href="https://github.com/mattiaverga/OpenNGC" target="_blank" rel="noopener" style="color:#58a6ff;">OpenNGC</a> by Mattia Verga (CC BY-SA 4.0): NGC, IC, Messier, Caldwell, Barnard, Sharpless, van den Bergh, LDN, LBN, Collinder, Melotte. Used when SIMBAD does not respond; the card then shows “Source: Stellarium / OpenNGC catalogue”.</li>
+                    <li><strong>Object search:</strong> <a href="https://simbad.cds.unistra.fr/" target="_blank" rel="noopener" style="color:#58a6ff;">SIMBAD</a> and Sesame by CDS Strasbourg (ODbL). This research has made use of the SIMBAD database, operated at CDS, Strasbourg, France.</li>
+                    <li><strong>FOV simulator:</strong> <a href="https://aladin.cds.unistra.fr/AladinLite/" target="_blank" rel="noopener" style="color:#58a6ff;">Aladin Lite</a> by CDS (GPL-3.0). Digitized Sky Survey images (DSS2 colour) from CDS, with backup copies from ESA ESASky and NASA MAST/STScI. The Digitized Sky Surveys were produced at the Space Telescope Science Institute under U.S. Government grant NAG W-2166.</li>
+                    <li><strong>Weather &amp; maps:</strong> <a href="https://open-meteo.com/" target="_blank" rel="noopener" style="color:#58a6ff;">Open-Meteo</a> (CC BY 4.0); <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener" style="color:#58a6ff;">© OpenStreetMap contributors</a> and Nominatim (ODbL); base map <a href="https://carto.com/attributions" target="_blank" rel="noopener" style="color:#58a6ff;">© CARTO</a>; <a href="https://djlorenz.github.io/astronomy/lp/" target="_blank" rel="noopener" style="color:#58a6ff;">Light Pollution Atlas 2024</a> by D. Lorenz (VIIRS data).</li>
+                    <li><strong>Descriptions &amp; images:</strong> <a href="https://www.wikipedia.org/" target="_blank" rel="noopener" style="color:#58a6ff;">Wikipedia</a> (CC BY-SA 4.0), <a href="https://www.wikidata.org/" target="_blank" rel="noopener" style="color:#58a6ff;">Wikidata</a> (CC0), <a href="https://images.nasa.gov/" target="_blank" rel="noopener" style="color:#58a6ff;">NASA Image and Video Library</a>.</li>
+                    <li><strong>Libraries:</strong> Leaflet, SunCalc, Chart.js, jsPDF, jsPDF-AutoTable, Rive, Audiowide font (SIL OFL). Anonymous visit statistics: GoatCounter.</li>
                 </ul>
             </div>
         </div>
@@ -2367,6 +2393,19 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
     
 
         </div>
+
+            <div class="guide-section" id="guide-credits-es">
+                <h3><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-book"/></svg> 9. Fuentes de datos y créditos</h3>
+                <p>AstroDashboard PRO utiliza datos y servicios de terceros. Agradecemos a sus autores; la lista completa con las licencias está en el archivo README del repositorio.</p>
+                <ul>
+                    <li><strong>Catálogo local de objetos:</strong> <a href="https://github.com/Stellarium/stellarium" target="_blank" rel="noopener" style="color:#58a6ff;">Catálogo DSO de Stellarium</a> (GPL-2.0+) y <a href="https://github.com/mattiaverga/OpenNGC" target="_blank" rel="noopener" style="color:#58a6ff;">OpenNGC</a> de Mattia Verga (CC BY-SA 4.0): NGC, IC, Messier, Caldwell, Barnard, Sharpless, van den Bergh, LDN, LBN, Collinder, Melotte. Se usa cuando SIMBAD no responde; en ese caso la ficha indica «Fuente: catálogo Stellarium / OpenNGC».</li>
+                    <li><strong>Búsqueda de objetos:</strong> <a href="https://simbad.cds.unistra.fr/" target="_blank" rel="noopener" style="color:#58a6ff;">SIMBAD</a> y Sesame del CDS de Estrasburgo (ODbL). This research has made use of the SIMBAD database, operated at CDS, Strasbourg, France.</li>
+                    <li><strong>Simulador FOV:</strong> <a href="https://aladin.cds.unistra.fr/AladinLite/" target="_blank" rel="noopener" style="color:#58a6ff;">Aladin Lite</a> del CDS (GPL-3.0). Imágenes Digitized Sky Survey (DSS2 en color) del CDS, con copias de respaldo de ESA ESASky y NASA MAST/STScI. The Digitized Sky Surveys were produced at the Space Telescope Science Institute under U.S. Government grant NAG W-2166.</li>
+                    <li><strong>Meteorología y mapas:</strong> <a href="https://open-meteo.com/" target="_blank" rel="noopener" style="color:#58a6ff;">Open-Meteo</a> (CC BY 4.0); <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener" style="color:#58a6ff;">© OpenStreetMap contributors</a> y Nominatim (ODbL); mapa base <a href="https://carto.com/attributions" target="_blank" rel="noopener" style="color:#58a6ff;">© CARTO</a>; <a href="https://djlorenz.github.io/astronomy/lp/" target="_blank" rel="noopener" style="color:#58a6ff;">Light Pollution Atlas 2024</a> de D. Lorenz (datos VIIRS).</li>
+                    <li><strong>Descripciones e imágenes:</strong> <a href="https://www.wikipedia.org/" target="_blank" rel="noopener" style="color:#58a6ff;">Wikipedia</a> (CC BY-SA 4.0), <a href="https://www.wikidata.org/" target="_blank" rel="noopener" style="color:#58a6ff;">Wikidata</a> (CC0), <a href="https://images.nasa.gov/" target="_blank" rel="noopener" style="color:#58a6ff;">NASA Image and Video Library</a>.</li>
+                    <li><strong>Bibliotecas:</strong> Leaflet, SunCalc, Chart.js, jsPDF, jsPDF-AutoTable, Rive, fuente Audiowide (SIL OFL). Estadísticas de visitas anónimas: GoatCounter.</li>
+                </ul>
+            </div>
         </div>
 
 
@@ -2517,6 +2556,19 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <li><strong>N.I.N.A.导出（.hrz）：</strong>文件遵循标准天文惯例：方位角0°=北，向东增加。还必须在N.I.N.A.的天文台设置中输入GPS坐标，否则可见性计算将不准确。</li>
                     <li><strong>Stellarium导出（.zip）：</strong>压缩包包含PNG格式全景照片（带透明通道）、spherical类型的landscape.ini（含站点坐标和北向旋转）以及horizon.txt文件。将压缩包解压到Stellarium的<code>landscapes/</code>文件夹中。</li>
                     <li><strong>持久化与备份：</strong>轮廓自动保存到localStorage。使用<em>备份（.json）</em>下载恢复文件：若缓存被清除，点击<em>↩ 恢复</em>即可一键恢复并自动应用到FOV。</li>
+                </ul>
+            </div>
+
+            <div class="guide-section" id="guide-credits-zh">
+                <h3><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-book"/></svg> 9. 数据来源与致谢</h3>
+                <p>AstroDashboard PRO 使用第三方数据和服务。我们感谢其作者；包含许可证的完整列表见代码仓库中的 README 文件。</p>
+                <ul>
+                    <li><strong>本地天体星表:</strong> <a href="https://github.com/Stellarium/stellarium" target="_blank" rel="noopener" style="color:#58a6ff;">Stellarium 深空天体星表</a>（GPL-2.0+）和 Mattia Verga 的 <a href="https://github.com/mattiaverga/OpenNGC" target="_blank" rel="noopener" style="color:#58a6ff;">OpenNGC</a>（CC BY-SA 4.0）：NGC、IC、梅西耶、科德威尔、巴纳德、沙普利斯、范登堡、LDN、LBN、Collinder、Melotte。当 SIMBAD 无响应时使用；此时天体卡片显示“数据来源：Stellarium / OpenNGC 星表”。</li>
+                    <li><strong>天体搜索:</strong> 斯特拉斯堡 CDS 的 <a href="https://simbad.cds.unistra.fr/" target="_blank" rel="noopener" style="color:#58a6ff;">SIMBAD</a> 和 Sesame（ODbL）。This research has made use of the SIMBAD database, operated at CDS, Strasbourg, France.</li>
+                    <li><strong>视场模拟器:</strong> CDS 的 <a href="https://aladin.cds.unistra.fr/AladinLite/" target="_blank" rel="noopener" style="color:#58a6ff;">Aladin Lite</a>（GPL-3.0）。数字化巡天（DSS2 彩色）图像来自 CDS，备用副本来自 ESA ESASky 和 NASA MAST/STScI。The Digitized Sky Surveys were produced at the Space Telescope Science Institute under U.S. Government grant NAG W-2166.</li>
+                    <li><strong>天气与地图:</strong> <a href="https://open-meteo.com/" target="_blank" rel="noopener" style="color:#58a6ff;">Open-Meteo</a>（CC BY 4.0）；<a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener" style="color:#58a6ff;">© OpenStreetMap contributors</a> 与 Nominatim（ODbL）；底图 <a href="https://carto.com/attributions" target="_blank" rel="noopener" style="color:#58a6ff;">© CARTO</a>；D. Lorenz 的 <a href="https://djlorenz.github.io/astronomy/lp/" target="_blank" rel="noopener" style="color:#58a6ff;">Light Pollution Atlas 2024</a>（VIIRS 数据）。</li>
+                    <li><strong>描述与图像:</strong> <a href="https://www.wikipedia.org/" target="_blank" rel="noopener" style="color:#58a6ff;">Wikipedia</a>（CC BY-SA 4.0）、<a href="https://www.wikidata.org/" target="_blank" rel="noopener" style="color:#58a6ff;">Wikidata</a>（CC0）、<a href="https://images.nasa.gov/" target="_blank" rel="noopener" style="color:#58a6ff;">NASA Image and Video Library</a>。</li>
+                    <li><strong>程序库:</strong> Leaflet、SunCalc、Chart.js、jsPDF、jsPDF-AutoTable、Rive、Audiowide 字体（SIL OFL）。匿名访问统计：GoatCounter。</li>
                 </ul>
             </div>
         </div>
