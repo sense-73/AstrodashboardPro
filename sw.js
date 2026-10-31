@@ -4,7 +4,7 @@
 
 // CACHE_NAME usa un timestamp fisso aggiornato ad ogni deploy
 // Non serve più incrementare manualmente — basta cambiare questa data
-const CACHE_TIMESTAMP = '20261031-001';
+const CACHE_TIMESTAMP = '20261031-004';
 const CACHE_NAME = 'astrodash-' + CACHE_TIMESTAMP;
 const APP_VERSION = CACHE_TIMESTAMP;
 
@@ -42,6 +42,9 @@ const NETWORK_ONLY_DOMAINS = [
     'cds.unistra.fr',
     'wikipedia.org',
     'aladin.cds.unistra.fr',
+    'alasky.unistra.fr',       // log di avvio di Aladin (A15)
+    'esac.esa.int',            // immagini ESA di riserva per Aladin (A15)
+    'stpubdata.s3.us-east-1.amazonaws.com', // immagini MAST di riserva (A15)
     'goatcounter.com',   // contatore visite (mai in cache)
     'zgo.at'             // script GoatCounter (gc.zgo.at)
 ];
@@ -49,7 +52,7 @@ const NETWORK_ONLY_DOMAINS = [
 // ── INSTALL ────────────────────────────────────────────────────
 self.addEventListener('install', event => {
     event.waitUntil(
-        caches.open(CACHE_NAME).then(cache => cache.addAll(FILES_TO_CACHE))
+        caches.open(CACHE_NAME).then(cache => cache.addAll(FILES_TO_CACHE.map(u => new Request(u, { cache: 'reload' })))) // A16: sempre dal server, mai dalla cache HTTP
     );
     self.skipWaiting();
 });

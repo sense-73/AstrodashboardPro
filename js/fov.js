@@ -55,6 +55,117 @@
             if (event.target == document.getElementById('report-modal')) { chiudiReport(); }
         }
 
+        // ── ALADIN SENZA DIPENDENZA DAL CDS (A15) ─────────────────────────────
+        // La libreria non blocca più l'avvio: si carica in sottofondo da CDN con versione bloccata.
+        // Immagini DSS2 a colori: CDS (priorità) → ESA → MAST. La scelta si fa una volta per sessione.
+        // Se nessuna fonte risponde, nel riquadro FOV compare un avviso al posto del nero.
+        const _ALADIN_LIB = ['https://cdn.jsdelivr.net/npm/aladin-lite@3.8.2/dist/aladin.js',
+                             'https://unpkg.com/aladin-lite@3.8.2/dist/aladin.js'];
+        const _ALADIN_FONTI = [
+            { id: 'CDS',  survey: 'P/DSS2/color', base: 'https://alasky.cds.unistra.fr/DSS/DSSColor' },
+            { id: 'ESA',  survey: 'https://skies.esac.esa.int/DSSColor/', base: 'https://skies.esac.esa.int/DSSColor' },
+            { id: 'MAST', survey: 'https://stpubdata.s3.us-east-1.amazonaws.com/mast/skybackgrounds/DSSColor/', base: 'https://stpubdata.s3.us-east-1.amazonaws.com/mast/skybackgrounds/DSSColor' }
+        ];
+        const _ALADIN_PROVA_MS = 2000;
+        let _aladinPronto = null, _aladinInCreazione = false;
+
+        function _aladinCaricaLibreria() {
+            if (typeof A !== 'undefined' && A && A.aladin) return Promise.resolve();
+            let i = 0;
+            let prova = () => import(_ALADIN_LIB[i]).then(m => { window.A = m.default; })
+                .catch(e => { i++; if (i < _ALADIN_LIB.length) return prova(); throw e; });
+            return prova().then(() => A.init);
+        }
+
+        function _aladinProvaFonte(f) {
+            return new Promise((ok, ko) => {
+                let img = new Image();
+                let tm = setTimeout(() => { img.onload = img.onerror = null; ko(); }, _ALADIN_PROVA_MS);
+                img.onload  = () => { clearTimeout(tm); ok(f); };
+                img.onerror = () => { clearTimeout(tm); ko(); };
+                img.src = f.base + '/Norder3/Dir0/Npix0.jpg?t=' + Date.now();
+            });
+        }
+
+        // Libreria + fonte delle immagini, in parallelo. Risultato: la fonte scelta (oggetto di _ALADIN_FONTI).
+        function _aladinPrepara() {
+            if (!_aladinPronto) {
+                if (navigator.onLine === false) return Promise.reject('offline');
+                let prove = Promise.allSettled(_ALADIN_FONTI.map(_aladinProvaFonte)).then(r => {
+                    let ok = r.find(x => x.status === 'fulfilled');
+                    if (!ok) throw 'nessuna fonte';
+                    return ok.value;                                   // il primo in ordine di priorità
+                });
+                _aladinPronto = Promise.all([_aladinCaricaLibreria(), prove]).then(r => r[1]);
+                _aladinPronto.catch(() => { _aladinPronto = null; });  // al prossimo tentativo si riprova
+            }
+            return _aladinPronto;
+        }
+
+        // Avviso / etichetta nel riquadro FOV (fuori da #aladin-lite-div, che nasconde tutto tranne i canvas)
+        function _aladinAvviso(tipo, fonte) {
+            let box = document.getElementById('fov-simulator-container');
+            if (!box) return;
+            let el = document.getElementById('fov-sky-notice');
+            if (!tipo) { if (el) el.remove(); return; }
+            if (!el) { el = document.createElement('div'); el.id = 'fov-sky-notice'; box.appendChild(el); }
+            if (tipo === 'fonte') {
+                el.style.cssText = 'position:absolute;right:8px;bottom:8px;z-index:5;pointer-events:none;font-size:11px;color:#8b949e;background:rgba(13,17,23,.75);border:1px solid #21293a;border-radius:4px;padding:3px 7px;';
+                el.textContent = t('fov_sky_src_badge').replace('{src}', fonte);
+                return;
+            }
+            let off = (tipo === 'offline');
+            el.style.cssText = 'position:absolute;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;padding:18px;background:#000;';
+            el.innerHTML = '<div style="max-width:300px;text-align:center;border:1px solid rgba(227,163,59,.55);background:rgba(227,163,59,.07);border-radius:10px;padding:14px 16px;">'
+                + '<div style="font-size:22px">' + (off ? '📡' : '🔭') + '</div>'
+                + '<div style="font-weight:700;color:#fff;font-size:14px;margin:6px 0"></div>'
+                + '<p style="font-size:12.5px;color:#8b949e;line-height:1.5;margin:0"></p></div>';
+            el.querySelector('div > div:nth-child(2)').textContent = t(off ? 'fov_sky_off_title' : 'fov_sky_na_title');
+            el.querySelector('p').textContent = t(off ? 'fov_sky_off_msg' : 'fov_sky_na_msg');
+            if (!off) {
+                let b = document.createElement('button');
+                b.type = 'button'; b.textContent = t('fov_sky_retry');
+                b.style.cssText = 'margin-top:10px;background:transparent;border:1px solid #58a6ff;color:#58a6ff;border-radius:6px;padding:6px 16px;font-size:12.5px;cursor:pointer;';
+                b.onclick = () => { _aladinAvviso(null); _aladinCrea(); };
+                el.firstChild.appendChild(b);
+            }
+        }
+
+        // Crea la mappa (stesse opzioni e stessi agganci di prima) quando libreria e immagini sono pronte
+        function _aladinCrea() {
+            if (aladinSkyMap || _aladinInCreazione) return;
+            _aladinInCreazione = true;
+            _aladinPrepara().then(fonte => {
+                _aladinInCreazione = false;
+                if (aladinSkyMap || !targetSelezionato) return;
+                aladinSkyMap = A.aladin('#aladin-lite-div', {
+                    survey: fonte.survey,
+                    fov: 2,
+                    target: (targetSelezionato.ra * 15) + " " + targetSelezionato.dec,
+                    showReticle: false,
+                    showZoomControl: false,
+                    showFullscreenControl: false,
+                    showLayersControl: false,
+                    showGotoControl: false,
+                    showFrame: false,
+                    showCoordinatesGrid: false
+                });
+                aladinSkyMap.on('positionChanged', function(pos) {
+                    aggiornaCoordinateFOV(pos.ra, pos.dec);
+                });
+                _aladinAvviso(fonte.id === 'CDS' ? null : 'fonte', fonte.id);
+                aggiornaCoordinateFOVdaTarget();
+                setTimeout(() => { toggleMosaic(); }, 300);
+            }).catch(err => {
+                _aladinInCreazione = false;
+                _aladinAvviso(err === 'offline' || navigator.onLine === false ? 'offline' : 'nonDisponibile');
+            });
+        }
+
+        // Precaricamento in sottofondo, qualche secondo dopo l'avvio (non blocca nulla)
+        window.addEventListener('load', () => { setTimeout(() => { _aladinPrepara().catch(() => {}); }, 3000); });
+        // ─────────────────────────────────────────────────────────────────────
+
         function apriPianificazione(tObj) {
             targetSelezionato = tObj; document.getElementById('dashboard-view').style.display = 'none'; document.getElementById('planning-view').style.display = 'block';
             sessionStorage.setItem('ad_current_target', JSON.stringify(tObj));
@@ -316,37 +427,14 @@
                 document.getElementById('time-end').value   = ft(_rawEnd);
             }
 
-            // Generazione Mappa Stellare — solo se Aladin è disponibile
-            if (!aladinSkyMap && typeof A !== 'undefined') {
-                A.init.then(() => {
-                    aladinSkyMap = A.aladin('#aladin-lite-div', {
-                        survey: "P/DSS2/color",
-                        fov: 2,
-                        target: (targetSelezionato.ra * 15) + " " + targetSelezionato.dec,
-                        showReticle: false,
-                        showZoomControl: false,
-                        showFullscreenControl: false,
-                        showLayersControl: false,
-                        showGotoControl: false,
-                        showFrame: false,
-                        showCoordinatesGrid: false
-                    });
-                    aladinSkyMap.on('positionChanged', function(pos) {
-                        aggiornaCoordinateFOV(pos.ra, pos.dec);
-                    });
-                    aggiornaCoordinateFOVdaTarget();
-                    setTimeout(() => { toggleMosaic(); }, 300);
-                }).catch(() => {
-                    // Aladin WASM non disponibile — continua senza mappa stellare
-                });
-            } else {
-                setTimeout(() => {
-                    fovCenterOverride = null;
-                    if (aladinSkyMap) aladinSkyMap.gotoRaDec(targetSelezionato.ra * 15, targetSelezionato.dec);
-                    aggiornaCoordinateFOVdaTarget();
-                    toggleMosaic();
-                }, 100); 
-            }
+            // Generazione Mappa Stellare — Aladin si carica in sottofondo (A15): se non è ancora pronto, la mappa compare appena possibile
+            if (!aladinSkyMap) _aladinCrea();
+            setTimeout(() => {
+                fovCenterOverride = null;
+                if (aladinSkyMap) aladinSkyMap.gotoRaDec(targetSelezionato.ra * 15, targetSelezionato.dec);
+                aggiornaCoordinateFOVdaTarget();
+                toggleMosaic();
+            }, 100);
             
             disegnaGraficoAltezza(); toggleSensorMode(); calcolaTempi(); aggiornaBottoneAccessorio(); window.scrollTo(0,0);
             // ── Modalità Base: ricalcola con algoritmo Lite (sovrascrive i display) ──
