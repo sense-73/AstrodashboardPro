@@ -754,6 +754,14 @@ function aggiungiNotte() {
             let savedTarget = sessionStorage.getItem('ad_current_target');
             let savedView = sessionStorage.getItem('ad_current_view'); // Controlla se eravamo nella PRO
             
+            // Ripristina l'oggetto solo se alla ricarica si era nel pianificatore (FOV / sequenza);
+            // altrimenti l'oggetto viene dimenticato e index.html riapre la pagina in cui si era
+            let savedSection = sessionStorage.getItem('ad_active_section');
+            if (savedTarget && savedSection && savedSection !== 'planning-view') {
+                sessionStorage.removeItem('ad_current_target');
+                savedTarget = null;
+            }
+
             if (savedTarget) {
                 try { 
                     apriPianificazione(JSON.parse(savedTarget));

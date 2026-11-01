@@ -3640,6 +3640,9 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                         }
                     }, 100);
                 }, 50);
+            } else if (savedSection === 'horizon-view') {
+                // Pagina Orizzonte: riaperta con la sua funzione normale
+                setTimeout(() => { if (typeof mostraOrizzonte === 'function') mostraOrizzonte(); }, 50);
             }
             // planning-view WITH savedTarget is handled by multinight.js DOMContentLoaded
         });
@@ -3898,10 +3901,33 @@ const _STEPPER_STEPS = [
 ];
 
 let _activeStepId = null;
+// Passo attivo della sessione precedente, letto prima che l'avvio lo modifichi
+const _adpStepAlCaricamento = sessionStorage.getItem('ad_active_step');
 
 function setActiveStep(id) {
     _activeStepId = id;
+    // Memorizza il passo per ripristinarlo dopo una ricarica
+    try { if (id) sessionStorage.setItem('ad_active_step', id); else sessionStorage.removeItem('ad_active_step'); } catch (e) {}
     renderStepper();
+}
+
+// Dopo una ricarica: riporta al passo esatto (illuminato nella barra) e scorre alla sua sezione.
+// Agisce solo se il passo appartiene alla pagina ripristinata; non richiama le funzioni di navigazione.
+function _adpRipristinaStep() {
+    const id = _adpStepAlCaricamento;
+    const pagina = { pos: 'dashboard-view', dso: 'dashboard-view', fov: 'planning-view', seq: 'planning-view', exp: 'planning-view' }[id];
+    const pv = pagina ? document.getElementById(pagina) : null;
+    if (!pv || getComputedStyle(pv).display === 'none') return;
+    const ancora = {
+        pos: 'map',
+        dso: 'search-dash-input',
+        fov: 'preset-telescope',
+        seq: sessionStorage.getItem('ad_current_view') === 'pro' ? 'btn-mode-pro' : 'btn-mode-smart',
+        exp: 'btn-export-nina'
+    }[id];
+    setActiveStep(id);
+    const el = document.getElementById(ancora);
+    if (el) el.scrollIntoView({ block: 'center' });
 }
 
 function renderStepper() {
@@ -3996,6 +4022,8 @@ document.addEventListener('DOMContentLoaded', function() {
         if (sessionStorage.getItem('ad_current_target')) setActiveStep('fov');
         else setActiveStep('seq');
     }
+    // Passo esatto: dopo il ripristino di pagina, oggetto e modalità (multinight.js / ripristino sezione)
+    if (_adpStepAlCaricamento) setTimeout(_adpRipristinaStep, 700);
 });
 </script>
 

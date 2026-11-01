@@ -80,7 +80,7 @@
         function _aladinProvaFonte(f) {
             return new Promise((ok, ko) => {
                 let img = new Image();
-                let tm = setTimeout(() => { img.onload = img.onerror = null; ko(); }, _ALADIN_PROVA_MS);
+                let tm = setTimeout(() => { img.onload = img.onerror = null; img.src = ''; ko(); }, _ALADIN_PROVA_MS);
                 img.onload  = () => { clearTimeout(tm); ok(f); };
                 img.onerror = () => { clearTimeout(tm); ko(); };
                 img.src = f.base + '/Norder3/Dir0/Npix0.jpg?t=' + Date.now();
