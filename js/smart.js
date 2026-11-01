@@ -112,6 +112,9 @@ function toggleLock(id) {
 
         // ── Database flusso Bortle OSC (e/px/s, f/5, QE 80%, px 3.8µm) ─
         const _bortleFluxOSC = {1:0.013,2:0.027,3:0.05,4:0.10,5:0.20,6:0.40,7:0.83,8:1.67,9:3.33};
+        // ── Luminosità del fondo cielo per classe Bortle (SQM, mag/arcsec²) ─
+        // Valori centrali delle zone descritte nei tooltip lp_z* (i18n.js)
+        const _bortleSqm = {1:21.9,2:21.7,3:21.4,4:20.9,5:20.0,6:19.2,7:18.6,8:18.0,9:17.5};
 
         // ── Modal Filtro OSC ──────────────────────────────────────────
         function apriModalFiltroOSC() {
@@ -242,16 +245,29 @@ function toggleLock(id) {
                 if (warnEl) warnEl.style.display = 'none';
                 return;
             }
-            let baseFlux  = _bortleFluxOSC[bortle] || 0.20;
-            let filterRed = bw / 300;
-            let pixCorr   = Math.pow(px / 3.8, 2);
-            let flux      = baseFlux * (1 / Math.pow(fR,2)) * filterRed * qe * pixCorr;
+            // Flusso del fondo cielo per pixel [e⁻/px/s], calcolo fisico:
+            // 1.0e4 fotoni/s/cm²/nm/arcsec² a mag 0 (banda V) × 10^(-0.4·SQM)
+            // × area apertura × angolo solido del pixel (dipende solo da px e f/)
+            // × banda vista dal singolo pixel (OSC: ogni pixel vede metà della banda totale)
+            // × QE × trasmissione ottica 0.85
+            let sqm   = _bortleSqm[bortle] || 20.0;
+            let bwPx  = bw / 2;
+            let pxCm  = px * 1e-4;
+            let flux  = 1.0e4 * Math.pow(10, -0.4 * sqm)
+                      * (Math.PI / 4) * Math.pow(206265 * pxCm / fR, 2)
+                      * bwPx * qe * 0.85;
             let fRCorr    = fR<=2?1.6:fR<=3?1.22:fR<=4?1.12:1.0;
             flux = flux / fRCorr;
             // Filtri OIII+SII: SII tipicamente 3-5x più debole di Ha → posa più conservativa
             if (isOIIISIIFilter()) flux = flux * 0.60;
             let tMin = flux > 0 ? Math.round((10 * rn * rn) / flux) : 600;
-            tMin = Math.max(60, Math.min(3600, tMin));
+            // Minimo di efficienza: posa ≥ 9 × tempo di scarico/salvataggio per frame
+            // (tempo perso ≤ 10%), stessa formula dell'overhead usata in calcolaTempi
+            let _swF = parseFloat((document.getElementById('sensor-width') ||{}).value) || 23.5;
+            let _shF = parseFloat((document.getElementById('sensor-height')||{}).value) || 15.7;
+            let _mpF = (_swF / (px / 1000)) * (_shF / (px / 1000)) / 1e6;
+            let tFloor = Math.round(9 * Math.max(1.5, 1.2 + _mpF * 0.08));
+            tMin = Math.max(tFloor, Math.min(3600, tMin));
             let tStr = tMin >= 60 ? Math.round(tMin/60)+' min' : tMin+' sec';
             if (resEl)  resEl.textContent  = tStr;
             if (noteEl) noteEl.textContent = '(Bortle '+bortle+', f/'+fR.toFixed(1)+', '+bw+'nm)';
