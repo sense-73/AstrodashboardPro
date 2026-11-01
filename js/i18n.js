@@ -3448,3 +3448,17 @@ i18n.it.fov_sky_off_msg    = "Le immagini del cielo richiedono una connessione. 
 i18n.en.fov_sky_off_msg    = "Sky images require a connection. All app calculations work normally.";
 i18n.es.fov_sky_off_msg    = "Las imágenes del cielo requieren conexión. Todos los cálculos de la app funcionan con normalidad.";
 i18n.zh.fov_sky_off_msg    = "星空图像需要网络连接。应用的所有计算均正常运行。";
+
+// ── Preset telescopio/camera modificato a mano (equipment.js, _adpPreset*) ──
+i18n.it.preset_custom  = "✎ Personalizzato";
+i18n.en.preset_custom  = "✎ Custom";
+i18n.es.preset_custom  = "✎ Personalizado";
+i18n.zh.preset_custom  = "✎ 自定义";
+i18n.it.preset_mod_tel = "Stai modificando i valori preimpostati del telescopio \"{name}\" (ora {f} mm, Ø {d} mm, f/{r}). Campo inquadrato, rapporto focale e tempi useranno questi valori; la stima dell'autofocus userà parametri ottici standard. Ti consigliamo di salvarlo come telescopio personalizzato (Salva).";
+i18n.en.preset_mod_tel = "You are changing the preset values of the telescope \"{name}\" (now {f} mm, Ø {d} mm, f/{r}). Field of view, focal ratio and timings will use these values; the autofocus estimate will use standard optical parameters. We recommend saving it as a custom telescope (Save).";
+i18n.es.preset_mod_tel = "Estás modificando los valores predefinidos del telescopio \"{name}\" (ahora {f} mm, Ø {d} mm, f/{r}). Campo de visión, relación focal y tiempos usarán estos valores; la estimación del autoenfoque usará parámetros ópticos estándar. Te recomendamos guardarlo como telescopio personalizado (Guardar).";
+i18n.zh.preset_mod_tel = "您正在修改望远镜“{name}”的预设参数（当前 {f} mm，Ø {d} mm，f/{r}）。视场、焦比和时间将使用这些数值；自动对焦估算将使用标准光学参数。建议将其保存为自定义望远镜（保存）。";
+i18n.it.preset_mod_cam = "Stai modificando i valori preimpostati del sensore \"{name}\" (ora {w} × {h} mm, pixel {p} µm). Campo inquadrato, campionamento, rumore di lettura e posa minima verranno calcolati con questi valori. Ti consigliamo di salvarlo come sensore personalizzato (Salva).";
+i18n.en.preset_mod_cam = "You are changing the preset values of the sensor \"{name}\" (now {w} × {h} mm, pixel {p} µm). Field of view, sampling, read noise and minimum exposure will be calculated with these values. We recommend saving it as a custom sensor (Save).";
+i18n.es.preset_mod_cam = "Estás modificando los valores predefinidos del sensor \"{name}\" (ahora {w} × {h} mm, píxel {p} µm). Campo de visión, muestreo, ruido de lectura y exposición mínima se calcularán con estos valores. Te recomendamos guardarlo como sensor personalizado (Guardar).";
+i18n.zh.preset_mod_cam = "您正在修改传感器“{name}”的预设参数（当前 {w} × {h} mm，像素 {p} µm）。视场、采样、读出噪声和最短曝光将使用这些数值计算。建议将其保存为自定义传感器（保存）。";

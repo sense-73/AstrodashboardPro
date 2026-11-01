@@ -435,5 +435,132 @@
                 if (el) el.addEventListener('change', salvaImpostazioniStrumento);
                 if (el) el.addEventListener('input', salvaImpostazioniStrumento);
             });
+            if (typeof _adpPresetInit === 'function') _adpPresetInit();
         }
 
+        // ── Preset telescopio/camera modificato a mano → "✎ Personalizzato" + avviso ──
+        // Se i campi non corrispondono più al modello scelto dal menu, il menu mostra
+        // "✎ Personalizzato" (voce non selezionabile) e sotto i pulsanti compare un avviso
+        // con il modello di partenza. Tornando ai valori originali si ripristina il nome.
+        // Stato salvato in ad_instrument come "__custom__|<valore del modello di partenza>".
+        const _ADP_PRESET_CUSTOM = '__custom__|';
+        const _ADP_PRESET_CFG = {
+            tel: { sel: 'preset-telescope', fields: ['focal-length', 'aperture'],                     msg: 'preset_mod_tel' },
+            cam: { sel: 'preset-sensor',    fields: ['sensor-width', 'sensor-height', 'pixel-size'], msg: 'preset_mod_cam' }
+        };
+        const _adpPresetState = { tel: { origin: '', ready: false }, cam: { origin: '', ready: false } };
+
+        function _adpPresetFmt(v) {
+            let s = String(v).trim();
+            return (lang === 'it' || lang === 'es') ? s.replace('.', ',') : s;
+        }
+
+        function _adpPresetFindOption(selEl, value) {
+            for (let i = 0; i < selEl.options.length; i++) {
+                if (selEl.options[i].value === value) return selEl.options[i];
+            }
+            return null;
+        }
+
+        // true se almeno un campo è diverso dal valore del modello (stessa lettura dei preset)
+        function _adpPresetDiffers(kind, presetValue) {
+            let p = presetValue.split(',');
+            let fields = _ADP_PRESET_CFG[kind].fields;
+            for (let i = 0; i < fields.length; i++) {
+                let pv = p[i];
+                if (kind === 'tel' && i === 1 && !pv) pv = '100';   // come applicaPresetTelescopio
+                if (pv === undefined || pv === '') continue;          // pixel assente: non impostato dal preset
+                let el = document.getElementById(fields[i]);
+                if (!el) continue;
+                let a = parseFloat(el.value), b = parseFloat(pv);
+                if (isNaN(a) || isNaN(b) || Math.abs(a - b) > 1e-6) return true;
+            }
+            return false;
+        }
+
+        function _adpPresetNotice(kind, selEl, show, originOpt) {
+            let id = 'adp-preset-notice-' + kind;
+            let box = document.getElementById(id);
+            if (!show) { if (box) box.remove(); return; }
+            if (!box) {
+                box = document.createElement('div');
+                box.id = id;
+                box.style.cssText = 'margin-top:6px; padding:8px 10px; background:rgba(88,166,255,0.08); border-left:3px solid #58a6ff; border-radius:4px; color:#c9d1d9; font-size:0.8em; line-height:1.45;';
+                let after = (selEl.nextElementSibling && selEl.nextElementSibling.tagName === 'DIV') ? selEl.nextElementSibling : selEl;
+                after.insertAdjacentElement('afterend', box);
+            }
+            let v = id => (document.getElementById(id) || {}).value || '';
+            let name = originOpt.textContent.replace('⭐ ', '').trim();
+            let txt = t(_ADP_PRESET_CFG[kind].msg).replace('{name}', name);
+            if (kind === 'tel') {
+                let f = parseFloat(v('focal-length')), d = parseFloat(v('aperture'));
+                let r = (f > 0 && d > 0) ? (f / d).toFixed(1) : '--';
+                txt = txt.replace('{f}', _adpPresetFmt(v('focal-length'))).replace('{d}', _adpPresetFmt(v('aperture'))).replace('{r}', _adpPresetFmt(r));
+            } else {
+                txt = txt.replace('{w}', _adpPresetFmt(v('sensor-width'))).replace('{h}', _adpPresetFmt(v('sensor-height'))).replace('{p}', _adpPresetFmt(v('pixel-size')));
+            }
+            box.textContent = 'ⓘ ' + txt;
+        }
+
+        function _adpPresetRefresh(kind) {
+            let cfg = _ADP_PRESET_CFG[kind], st = _adpPresetState[kind];
+            let selEl = document.getElementById(cfg.sel);
+            if (!selEl) return;
+            let before = selEl.value;
+            // Un modello normale selezionato diventa il riferimento
+            if (before && before.indexOf(_ADP_PRESET_CUSTOM) !== 0) st.origin = before;
+            let originOpt = st.origin ? _adpPresetFindOption(selEl, st.origin) : null;
+            if (!originOpt) st.origin = '';
+            let modified = !!originOpt && _adpPresetDiffers(kind, st.origin);
+            let customOpt = selEl.querySelector('option[data-adp-custom]');
+            if (modified) {
+                let customVal = _ADP_PRESET_CUSTOM + st.origin;
+                if (!customOpt) {
+                    customOpt = document.createElement('option');
+                    customOpt.setAttribute('data-adp-custom', '1');
+                    customOpt.setAttribute('data-i18n', 'preset_custom');
+                    customOpt.disabled = true;
+                    // subito dopo "-- Seleziona --" (figlio diretto: il menu camera usa optgroup)
+                    let firstOpt = selEl.querySelector(':scope > option');
+                    selEl.insertBefore(customOpt, firstOpt ? firstOpt.nextSibling : selEl.firstChild);
+                }
+                customOpt.value = customVal;
+                customOpt.textContent = t('preset_custom');
+                selEl.value = customVal;
+            } else {
+                if (customOpt) customOpt.remove();
+                if (originOpt) selEl.value = st.origin;
+            }
+            _adpPresetNotice(kind, selEl, modified, originOpt);
+            // Salva se il valore del menu differisce da quello memorizzato
+            let savedSel = '';
+            try { savedSel = (JSON.parse(localStorage.getItem('ad_instrument') || '{}') || {})[cfg.sel] || ''; } catch (e) {}
+            if (selEl.value !== savedSel && typeof salvaImpostazioniStrumento === 'function') salvaImpostazioniStrumento();
+        }
+
+        // Chiamata a fine inizializzaPersistenzaStrumento (dopo il ripristino dei dati salvati)
+        function _adpPresetInit() {
+            let saved = {};
+            try { saved = JSON.parse(localStorage.getItem('ad_instrument') || '{}') || {}; } catch (e) { saved = {}; }
+            Object.keys(_ADP_PRESET_CFG).forEach(kind => {
+                let cfg = _ADP_PRESET_CFG[kind], st = _adpPresetState[kind];
+                let selEl = document.getElementById(cfg.sel);
+                if (!selEl) return;
+                let sv = String(saved[cfg.sel] || '');
+                if (sv.indexOf(_ADP_PRESET_CUSTOM) === 0) st.origin = sv.slice(_ADP_PRESET_CUSTOM.length);
+                if (!st.ready) {
+                    st.ready = true;
+                    cfg.fields.forEach(id => {
+                        let el = document.getElementById(id);
+                        if (el) el.addEventListener('input', () => _adpPresetRefresh(kind));
+                    });
+                    selEl.addEventListener('change', () => {
+                        if (selEl.value === '') st.origin = '';
+                        _adpPresetRefresh(kind);
+                    });
+                    // Il menu viene ricostruito dopo salvataggio/eliminazione di un modello
+                    if (window.MutationObserver) new MutationObserver(() => _adpPresetRefresh(kind)).observe(selEl, { childList: true });
+                }
+                _adpPresetRefresh(kind);
+            });
+        }
