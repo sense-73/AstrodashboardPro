@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AstroDashboardPRO v8.1 - Global Edition</title>
+    <title>AstroDashboardPRO v8.2 - Global Edition</title>
     
     <link rel="manifest" href="manifest.json?v=3">
     <meta name="theme-color" content="#121212">
@@ -657,7 +657,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 19a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6l0 13" /><path d="M12 6l0 13" /><path d="M21 6l0 13" /></svg>
                     <span class="nav-manual-text" data-i18n="manual_btn" style="letter-spacing:.3px;">Guida</span>
                 </button>
-                <button onclick="mostraChangelogManuale()" title="Versione & novità" class="nav-version-btn" style="background:rgba(196,154,60,0.08); border:1px solid rgba(196,154,60,0.3); border-radius:5px; padding:3px 8px; color:#c49a3c; font-size:10px; font-weight:700; cursor:pointer; flex-shrink:0; letter-spacing:.5px;">v8.1</button>
+                <button onclick="mostraChangelogManuale()" title="Versione & novità" class="nav-version-btn" style="background:rgba(196,154,60,0.08); border:1px solid rgba(196,154,60,0.3); border-radius:5px; padding:3px 8px; color:#c49a3c; font-size:10px; font-weight:700; cursor:pointer; flex-shrink:0; letter-spacing:.5px;">v8.2</button>
             </div>
         </div>
 
@@ -829,7 +829,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                 <a href="https://www.paypal.com/donate/?business=enrico.salis%40gmail.com&currency_code=EUR" target="_blank" rel="noopener" style="background:linear-gradient(135deg,#003087,#009cde); border:none; border-radius:6px; padding:6px 14px; color:#fff; font-size:12px; font-weight:700; cursor:pointer; display:flex; align-items:center; gap:6px; text-decoration:none; transition:opacity 0.2s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c1.379 3.53-.923 7.947-6.712 7.947H11.23l-1.332 8.453h3.288c.524 0 .968-.382 1.05-.9l.87-5.505h2.163c4.298 0 7.066-2.076 7.953-6.36.41-1.99.073-3.466-.8-4.094z"/></svg>
                     <span data-i18n="support_btn">Supporta il progetto</span>                </a>
-                <span style="font-size:14px; color:#3d4852;">v8.1</span>
+                <span style="font-size:14px; color:#3d4852;">v8.2</span>
             </div>
         </div>
 
@@ -3237,7 +3237,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                 <div style="color:#c49a3c;"><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-rocket"/></svg></div>
                 <div>
                     <div style="font-size:0.75em; color:#c49a3c; text-transform:uppercase; letter-spacing:1px; font-weight:700;" data-i18n="cl_update_label">Aggiornamento</div>
-                    <div style="font-size:1.25em; font-weight:800; color:#c9d1d9; letter-spacing:.5px;">AstroDashboardPRO <span style="color:#c49a3c;">v8.1</span></div>
+                    <div style="font-size:1.25em; font-weight:800; color:#c9d1d9; letter-spacing:.5px;">AstroDashboardPRO <span style="color:#c49a3c;">v8.2</span></div>
                 </div>
                 <button onclick="chiudiChangelog()" style="
                     margin-left:auto; background:transparent; border:none;
@@ -3253,47 +3253,47 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
             <!-- Changelog items -->
             <div style="display:flex; flex-direction:column; gap:10px;">
 
-                <!-- ── v8.1 ── -->
-                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #c49a3c; box-shadow:0 0 0 1px rgba(0,0,0,0.15); margin-bottom:8px;">
-                    <span style="flex-shrink:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c49a3c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"/><path d="M9.608 17.682c-2.558 -.71 -4.76 -2.603 -6.608 -5.682c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"/><path d="M17.8 20.817l-2.172 1.138a.392 .392 0 0 1 -.568 -.41l.415 -2.411l-1.757 -1.707a.389 .389 0 0 1 .217 -.665l2.428 -.352l1.086 -2.193a.392 .392 0 0 1 .702 0l1.086 2.193l2.428 .352a.39 .39 0 0 1 .217 .665l-1.757 1.707l.414 2.41a.39 .39 0 0 1 -.567 .411l-2.172 -1.138"/></svg></span>
+                <!-- ── v8.2 ── -->
+<div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #c49a3c; box-shadow:0 0 0 1px rgba(0,0,0,0.15); margin-bottom:8px;">
+                    <span style="flex-shrink:0; color:#c49a3c;"><svg width="24" height="24" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-search"/></svg></span>
                     <div>
-                        <div style="font-weight:700; color:#c49a3c; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v81_popup_title">Analisi Notturna più personale</div>
-                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v81_popup_desc"></div>
+                        <div style="font-weight:700; color:#c49a3c; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v82_search_title">Ricerca sempre disponibile</div>
+                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v82_search_desc"></div>
                     </div>
                 </div>
                 <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #00c6ff; box-shadow:0 0 0 1px rgba(0,0,0,0.15); margin-bottom:8px;">
-                    <span style="flex-shrink:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00c6ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 5a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2v-14z"/><path d="M11 4h2"/><path d="M12 17v.01"/></svg></span>
+                    <span style="flex-shrink:0; color:#00c6ff;"><svg width="24" height="24" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-stars"/></svg></span>
                     <div>
-                        <div style="font-weight:700; color:#00c6ff; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v81_mobile_title">Smartphone più comodo</div>
-                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v81_mobile_desc"></div>
+                        <div style="font-weight:700; color:#00c6ff; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v82_fov_title">Simulatore FOV più robusto</div>
+                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v82_fov_desc"></div>
                     </div>
                 </div>
                 <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #2ec96c; box-shadow:0 0 0 1px rgba(0,0,0,0.15); margin-bottom:8px;">
-                    <span style="flex-shrink:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2ec96c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"/><path d="M9 9l1 0"/><path d="M9 13l6 0"/><path d="M9 17l6 0"/></svg></span>
+                    <span style="flex-shrink:0; color:#2ec96c;"><svg width="24" height="24" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-algo"/></svg></span>
                     <div>
-                        <div style="font-weight:700; color:#2ec96c; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v81_report_title">Report e Modalità PRO corretti</div>
-                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v81_report_desc"></div>
+                        <div style="font-weight:700; color:#2ec96c; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v82_exposure_title">Posa minima calcolata scientificamente</div>
+                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v82_exposure_desc"></div>
                     </div>
                 </div>
                 <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #bb86fc; box-shadow:0 0 0 1px rgba(0,0,0,0.15); margin-bottom:8px;">
-                    <span style="flex-shrink:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#bb86fc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 5h7"/><path d="M9 3v2c0 4.418 -2.239 8 -5 8"/><path d="M5 9c0 2.144 2.952 3.908 6.7 4"/><path d="M12 20l4 -9l4 9"/><path d="M19.1 18h-6.2"/></svg></span>
+                    <span style="flex-shrink:0; color:#bb86fc;"><svg width="24" height="24" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-edit"/></svg></span>
                     <div>
-                        <div style="font-weight:700; color:#bb86fc; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v81_i18n_title">Traduzioni complete</div>
-                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v81_i18n_desc"></div>
+                        <div style="font-weight:700; color:#bb86fc; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v82_custom_title">Telescopio e sensore personalizzati</div>
+                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v82_custom_desc"></div>
                     </div>
                 </div>
                 <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #58a6ff; box-shadow:0 0 0 1px rgba(0,0,0,0.15); margin-bottom:8px;">
-                    <span style="flex-shrink:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#58a6ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 10h3v-3l-3.5 -3.5a6 6 0 0 1 8 8l6 6a2 2 0 0 1 -3 3l-6 -6a6 6 0 0 1 -8 -8l3.5 3.5"/></svg></span>
+                    <span style="flex-shrink:0; color:#58a6ff;"><svg width="24" height="24" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-refresh"/></svg></span>
                     <div>
-                        <div style="font-weight:700; color:#58a6ff; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v81_fix_title">Correzioni varie</div>
-                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v81_fix_desc"></div>
+                        <div style="font-weight:700; color:#58a6ff; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v82_reload_title">Avvio più rapido e ricarica precisa</div>
+                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v82_reload_desc"></div>
                     </div>
                 </div>
                 <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #5DCAA5; box-shadow:0 0 0 1px rgba(0,0,0,0.15); margin-bottom:8px;">
-                    <span style="flex-shrink:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#5DCAA5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>
+                    <span style="flex-shrink:0; color:#5DCAA5;"><svg width="24" height="24" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-book"/></svg></span>
                     <div>
-                        <div style="font-weight:700; color:#5DCAA5; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v81_manual_title">Manuale aggiornato</div>
-                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v81_manual_desc"></div>
+                        <div style="font-weight:700; color:#5DCAA5; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v82_credits_title">Fonti dei dati e crediti</div>
+                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v82_credits_desc"></div>
                     </div>
                 </div>
 
@@ -3315,7 +3315,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
 
     <script>
         (function() {
-            const CURRENT_VERSION = '8.1';
+            const CURRENT_VERSION = '8.2';
             const STORAGE_KEY = 'ad_last_version';
 
             function mostraChangelogManuale() {

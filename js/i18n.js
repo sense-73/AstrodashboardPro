@@ -1634,6 +1634,61 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         // ⚠️ AGGIORNARE VERSIONE QUI quando si rilascia una nuova versione:
         // cl_close_btn = testo del pulsante nel modal changelog (NON è hardcoded in index.html)
         // Aggiornare anche: title tag, badge navbar (>vX.X</button>), landing (>vX.X</span>), modal badge, pulsante "Inizia a usare" in index.html
+        // ── Changelog v8.2 (01/11/2026) ─────────────────
+        i18n.it.cl_v82_search_title = "Ricerca sempre disponibile";
+        i18n.en.cl_v82_search_title = "Search always available";
+        i18n.es.cl_v82_search_title = "Búsqueda siempre disponible";
+        i18n.zh.cl_v82_search_title = "搜索始终可用";
+        i18n.it.cl_v82_search_desc = "Se i server SIMBAD di Strasburgo non rispondono, la ricerca usa un catalogo interno di oltre 14.000 oggetti (NGC, IC, Messier, Caldwell, Sharpless, Barnard, LDN, LBN, vdB…), disponibile anche offline. Niente più lunghe attese. Corrette anche ricerche come \"Sh2-240\".";
+        i18n.en.cl_v82_search_desc = "If the SIMBAD servers in Strasbourg do not respond, search uses a built-in catalogue of over 14,000 objects (NGC, IC, Messier, Caldwell, Sharpless, Barnard, LDN, LBN, vdB…), also available offline. No more long waits. Searches such as \"Sh2-240\" have also been fixed.";
+        i18n.es.cl_v82_search_desc = "Si los servidores de SIMBAD en Estrasburgo no responden, la búsqueda usa un catálogo interno de más de 14.000 objetos (NGC, IC, Messier, Caldwell, Sharpless, Barnard, LDN, LBN, vdB…), disponible también sin conexión. Se acabaron las largas esperas. También se han corregido búsquedas como \"Sh2-240\".";
+        i18n.zh.cl_v82_search_desc = "当斯特拉斯堡的 SIMBAD 服务器无响应时，搜索将使用内置的 14,000 多个天体目录（NGC、IC、梅西耶、科德韦尔、沙普利斯、巴纳德、LDN、LBN、vdB…），离线也可使用，不再长时间等待。同时修复了“Sh2-240”等名称的搜索。";
+
+        i18n.it.cl_v82_fov_title = "Simulatore FOV più robusto";
+        i18n.en.cl_v82_fov_title = "More robust FOV simulator";
+        i18n.es.cl_v82_fov_title = "Simulador FOV más robusto";
+        i18n.zh.cl_v82_fov_title = "视场模拟器更稳定";
+        i18n.it.cl_v82_fov_desc = "Quando il CDS non è raggiungibile, le immagini del cielo arrivano da fonti di riserva (ESA, MAST) e un'etichetta indica la fonte in uso. Se nessuna fonte risponde, un avviso offre il pulsante \"Riprova\".";
+        i18n.en.cl_v82_fov_desc = "When CDS is unreachable, sky images come from backup sources (ESA, MAST) and a label shows the source in use. If no source responds, a notice offers a \"Retry\" button.";
+        i18n.es.cl_v82_fov_desc = "Cuando el CDS no está disponible, las imágenes del cielo llegan de fuentes de respaldo (ESA, MAST) y una etiqueta indica la fuente en uso. Si ninguna fuente responde, un aviso ofrece el botón \"Reintentar\".";
+        i18n.zh.cl_v82_fov_desc = "当 CDS 无法访问时，星空图像将来自备用来源（ESA、MAST），并有标签显示当前来源。若所有来源均无响应，将提示并提供“重试”按钮。";
+
+        i18n.it.cl_v82_exposure_title = "Posa minima calcolata scientificamente";
+        i18n.en.cl_v82_exposure_title = "Scientifically calculated minimum exposure";
+        i18n.es.cl_v82_exposure_title = "Exposición mínima calculada científicamente";
+        i18n.zh.cl_v82_exposure_title = "科学计算的最短曝光";
+        i18n.it.cl_v82_exposure_desc = "Nella configurazione del filtro OSC, la posa minima consigliata nasce ora da un calcolo fisico (criterio di Robin Glover): luminosità del cielo per il tuo Bortle, rapporto focale, pixel, banda del filtro e rumore di lettura del sensore.";
+        i18n.en.cl_v82_exposure_desc = "In the OSC filter settings, the recommended minimum exposure now comes from a physical calculation (Robin Glover's criterion): sky brightness for your Bortle class, focal ratio, pixel size, filter bandwidth and sensor read noise.";
+        i18n.es.cl_v82_exposure_desc = "En la configuración del filtro OSC, la exposición mínima recomendada procede ahora de un cálculo físico (criterio de Robin Glover): brillo del cielo según tu Bortle, relación focal, píxel, ancho de banda del filtro y ruido de lectura del sensor.";
+        i18n.zh.cl_v82_exposure_desc = "在 OSC 滤镜设置中，推荐的最短曝光现在基于物理计算（Robin Glover 准则）：根据您的 Bortle 等级的天空亮度、焦比、像素、滤镜带宽和传感器读出噪声。";
+
+        i18n.it.cl_v82_custom_title = "Telescopio e sensore personalizzati";
+        i18n.en.cl_v82_custom_title = "Custom telescope and sensor";
+        i18n.es.cl_v82_custom_title = "Telescopio y sensor personalizados";
+        i18n.zh.cl_v82_custom_title = "自定义望远镜和传感器";
+        i18n.it.cl_v82_custom_desc = "Se modifichi a mano focale, diametro o i dati del sensore, il menu mostra \"Personalizzato\" e un avviso ti ricorda il modello di partenza, invitandoti a salvarlo.";
+        i18n.en.cl_v82_custom_desc = "If you manually change the focal length, aperture or sensor data, the menu shows \"Custom\" and a notice reminds you of the original model, inviting you to save it.";
+        i18n.es.cl_v82_custom_desc = "Si modificas a mano la focal, el diámetro o los datos del sensor, el menú muestra \"Personalizado\" y un aviso te recuerda el modelo de partida y te invita a guardarlo.";
+        i18n.zh.cl_v82_custom_desc = "如果手动修改焦距、口径或传感器参数，菜单将显示“自定义”，并提示原始型号，建议您保存。";
+
+        i18n.it.cl_v82_reload_title = "Avvio più rapido e ricarica precisa";
+        i18n.en.cl_v82_reload_title = "Faster startup and accurate reload";
+        i18n.es.cl_v82_reload_title = "Inicio más rápido y recarga precisa";
+        i18n.zh.cl_v82_reload_title = "启动更快，刷新更准确";
+        i18n.it.cl_v82_reload_desc = "L'app non resta più \"in caricamento\" quando un servizio esterno è lento. Ricaricando la pagina ritrovi la sezione in cui eri: Localizzazione, DSO, Setup ottico, Sequenza o Esportazione.";
+        i18n.en.cl_v82_reload_desc = "The app no longer stays \"loading\" when an external service is slow. When you reload the page you return to the section you were in: Location, DSO, Optical setup, Sequence or Export.";
+        i18n.es.cl_v82_reload_desc = "La app ya no se queda \"cargando\" cuando un servicio externo es lento. Al recargar la página vuelves a la sección en la que estabas: Localización, DSO, Setup óptico, Secuencia o Exportación.";
+        i18n.zh.cl_v82_reload_desc = "外部服务响应缓慢时，应用不再一直显示“加载中”。刷新页面后将回到您所在的部分：定位、深空天体、光学设置、序列或导出。";
+
+        i18n.it.cl_v82_credits_title = "Fonti dei dati e crediti";
+        i18n.en.cl_v82_credits_title = "Data sources and credits";
+        i18n.es.cl_v82_credits_title = "Fuentes de datos y créditos";
+        i18n.zh.cl_v82_credits_title = "数据来源与致谢";
+        i18n.it.cl_v82_credits_desc = "Nuovo capitolo del manuale con tutte le fonti e i servizi usati dall'app e le relative licenze. La scheda dell'oggetto indica sempre da dove provengono i dati.";
+        i18n.en.cl_v82_credits_desc = "New manual chapter listing all the data sources and services used by the app, with their licences. The object card always shows where the data comes from.";
+        i18n.es.cl_v82_credits_desc = "Nuevo capítulo del manual con todas las fuentes y servicios que usa la app y sus licencias. La ficha del objeto indica siempre de dónde proceden los datos.";
+        i18n.zh.cl_v82_credits_desc = "手册新增章节，列出应用使用的所有数据来源、服务及其许可证。天体卡片始终注明数据来源。";
+
         // ── Changelog v8.1 (25/10/2026) ─────────────────
         i18n.it.cl_v81_popup_title = "Analisi Notturna più personale";
         i18n.en.cl_v81_popup_title = "More personal Night Analysis";
@@ -1744,10 +1799,10 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.es.cl_v80_manual_desc = "Nueva sección 0 'Modo Básico y Avanzado' añadida en los 4 idiomas del manual integrado. Explica las diferencias entre los dos niveles y cómo cambiar entre ellos.";
         i18n.zh.cl_v80_manual_desc = "在集成手册的全部 4 种语言中新增第 0 节「基础模式与高级模式」，说明两个级别的区别以及如何在它们之间切换。";
 
-        i18n.it.cl_close_btn = "Inizia a usare v8.1 🚀";
-        i18n.en.cl_close_btn = "Start using v8.1 🚀";
-        i18n.es.cl_close_btn = "Empezar a usar v8.1 🚀";
-        i18n.zh.cl_close_btn = "开始使用 v8.1 🚀";
+        i18n.it.cl_close_btn = "Inizia a usare v8.2 🚀";
+        i18n.en.cl_close_btn = "Start using v8.2 🚀";
+        i18n.es.cl_close_btn = "Empezar a usar v8.2 🚀";
+        i18n.zh.cl_close_btn = "开始使用 v8.2 🚀";
 
         i18n.it.cl1_title           = "Database telescopi e sensori ampliato";
         i18n.en.cl1_title           = "Expanded telescope and sensor database";
