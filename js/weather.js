@@ -530,10 +530,27 @@
         }
 
         function scaricaDatiPrevisionali() {
+            let _meteoRicevuti = false;   // true quando i dati sono arrivati e validi
             fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latCorrente}&longitude=${lonCorrente}&hourly=cloud_cover_low,cloud_cover_mid,cloud_cover_high,wind_speed_250hPa,wind_speed_10m,wind_direction_10m,temperature_2m,relative_humidity_2m,lifted_index,cape,wind_gusts_10m&forecast_days=3&timezone=auto`)
-            .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+            .then(r => r.text().then(txt => {
+                // Risposta del servizio: errore HTTP, testo non JSON o {"error":true,"reason":...}
+                // Testo vuoto = nessuna risposta reale (es. risposta di ripiego del service worker)
+                let d = null; try { d = JSON.parse(txt); } catch (e) {}
+                if (!r.ok || !d || d.error) {
+                    let err = new Error('meteo');
+                    err._meteoTipo   = txt ? 'servizio' : 'rete';
+                    err._meteoMotivo = (d && d.reason) || ('HTTP ' + r.status);
+                    throw err;
+                }
+                return d;
+            }))
             .then(data => {
-                if (!data.hourly || !data.hourly.time) throw new Error('invalid_data');
+                if (!data.hourly || !data.hourly.time) {
+                    let err = new Error('invalid_data');
+                    err._meteoTipo = 'servizio'; err._meteoMotivo = 'risposta senza dati orari';
+                    throw err;
+                }
+                _meteoRicevuti = true;
                 datiMeteo = data.hourly; let adesso = new Date();
                 indicePartenza = Math.max(0, datiMeteo.time.findIndex(x => parseMeteoTime(x).getTime() >= adesso.getTime() - 3600000));
                 document.getElementById('timeSlider').disabled = false; document.getElementById('timeSlider').value = 0; 
@@ -541,8 +558,21 @@
                 applicaGradienteGiornoNotte();
                 cambiaOraMeteo(); cambiaOraAstro();
                 if (typeof mostraNightPopup === 'function') mostraNightPopup();
-            }).catch(() => {
-                mostraAvviso('❌ Dati meteo non disponibili. Controlla la connessione e riprova.', 'error');
+            }).catch(err => {
+                // Avviso specifico: servizio esterno in errore / non raggiungibile / offline / errore imprevisto
+                let tipo = (err && err._meteoTipo) || (_meteoRicevuti ? 'app' : 'rete');
+                if (navigator.onLine === false) tipo = 'offline';
+                if (tipo === 'servizio') console.warn('[Meteo] Open-Meteo:', err._meteoMotivo);
+                else if (tipo === 'app') console.error('[Meteo] errore imprevisto:', err);
+                const _msg = {
+                    servizio: ['meteo_err_service',     '⚠️ Open-Meteo sovraccarico o in errore: non dipende dall\'app. Riprova tra poco.', 'warn'],
+                    rete:     ['meteo_err_unreachable', '⚠️ Open-Meteo non risponde. Se sei connesso, riprova tra poco.', 'warn'],
+                    offline:  ['meteo_err_offline',     '❌ Nessuna connessione Internet: meteo non scaricabile.', 'error'],
+                    app:      ['meteo_err_unexpected',  '❌ Errore imprevisto nei dati meteo. Riprova tra poco.', 'error']
+                }[tipo];
+                let testo = (typeof t === 'function') ? t(_msg[0]) : _msg[1];
+                if (!testo || testo === _msg[0]) testo = _msg[1];
+                mostraAvviso(testo, _msg[2]);
             });
         }
 

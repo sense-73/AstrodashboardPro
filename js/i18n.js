@@ -3517,3 +3517,21 @@ i18n.it.preset_mod_cam = "Stai modificando i valori preimpostati del sensore \"{
 i18n.en.preset_mod_cam = "You are changing the preset values of the sensor \"{name}\" (now {w} × {h} mm, pixel {p} µm). Field of view, sampling, read noise and minimum exposure will be calculated with these values. We recommend saving it as a custom sensor (Save).";
 i18n.es.preset_mod_cam = "Estás modificando los valores predefinidos del sensor \"{name}\" (ahora {w} × {h} mm, píxel {p} µm). Campo de visión, muestreo, ruido de lectura y exposición mínima se calcularán con estos valores. Te recomendamos guardarlo como sensor personalizado (Guardar).";
 i18n.zh.preset_mod_cam = "您正在修改传感器“{name}”的预设参数（当前 {w} × {h} mm，像素 {p} µm）。视场、采样、读出噪声和最短曝光将使用这些数值计算。建议将其保存为自定义传感器（保存）。";
+
+// ── Avvisi meteo specifici (weather.js, scaricaDatiPrevisionali) ──
+i18n.it.meteo_err_service     = "⚠️ Open-Meteo sovraccarico o in errore: non dipende dall'app. Riprova tra poco.";
+i18n.en.meteo_err_service     = "⚠️ Open-Meteo overloaded or failing: not an app problem. Try again shortly.";
+i18n.es.meteo_err_service     = "⚠️ Open-Meteo saturado o con errores: no depende de la app. Inténtalo en breve.";
+i18n.zh.meteo_err_service     = "⚠️ Open-Meteo 过载或出错：与应用无关，请稍后重试。";
+i18n.it.meteo_err_unreachable = "⚠️ Open-Meteo non risponde. Se sei connesso, riprova tra poco.";
+i18n.en.meteo_err_unreachable = "⚠️ Open-Meteo is not responding. If you are online, try again shortly.";
+i18n.es.meteo_err_unreachable = "⚠️ Open-Meteo no responde. Si tienes conexión, inténtalo en breve.";
+i18n.zh.meteo_err_unreachable = "⚠️ Open-Meteo 无响应。如已联网，请稍后重试。";
+i18n.it.meteo_err_offline     = "❌ Nessuna connessione Internet: meteo non scaricabile.";
+i18n.en.meteo_err_offline     = "❌ No Internet connection: weather data unavailable.";
+i18n.es.meteo_err_offline     = "❌ Sin conexión a Internet: no se puede descargar el tiempo.";
+i18n.zh.meteo_err_offline     = "❌ 无网络连接：无法下载天气数据。";
+i18n.it.meteo_err_unexpected  = "❌ Errore imprevisto nei dati meteo. Riprova tra poco.";
+i18n.en.meteo_err_unexpected  = "❌ Unexpected error in weather data. Try again shortly.";
+i18n.es.meteo_err_unexpected  = "❌ Error inesperado en los datos meteorológicos. Inténtalo en breve.";
+i18n.zh.meteo_err_unexpected  = "❌ 天气数据出现意外错误，请稍后重试。";
