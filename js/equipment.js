@@ -3,33 +3,57 @@
 
         const dbTelescopiBase = [
             { nome: "Samyang 135mm f/2",         focale: 135,  diametro: 67,  otaType: "photo",   deltaT: 10  },
-            { nome: "Comethunter",               focale: 731,  diametro: 152, otaType: "achro",   deltaT: 3.0 },
+            { nome: "Explore Scientific Comet Hunter 152", focale: 731, diametro: 152, otaType: "newton", deltaT: 4.0 },  // Mak-Newton f/4.8
             { nome: "ZWO Seestar S50",           focale: 250,  diametro: 50,  otaType: "special", deltaT: 10  },
             { nome: "ZWO FF65 APO",              focale: 416,  diametro: 65,  otaType: "apo",     deltaT: 2.0 },
-            { nome: "WO RedCat 51",              focale: 250,  diametro: 51,  otaType: "apo",     deltaT: 2.0 },
-            { nome: "WO RedCat 71",              focale: 350,  diametro: 71,  otaType: "apo",     deltaT: 2.0 },
-            { nome: "WO ZenithStar 81",          focale: 559,  diametro: 81,  otaType: "apo",     deltaT: 2.0 },
+            { nome: "William Optics RedCat 51",              focale: 250,  diametro: 51,  otaType: "apo",     deltaT: 2.0 },
+            { nome: "William Optics RedCat 71",              focale: 350,  diametro: 71,  otaType: "apo",     deltaT: 2.0 },
+            { nome: "William Optics ZenithStar 81",          focale: 559,  diametro: 81,  otaType: "apo",     deltaT: 2.0 },
             { nome: "Askar FMA180",              focale: 180,  diametro: 40,  otaType: "apo",     deltaT: 2.0 },
             { nome: "Askar FRA300 Pro",          focale: 300,  diametro: 60,  otaType: "apo",     deltaT: 2.0 },
             { nome: "Askar FRA400",              focale: 400,  diametro: 72,  otaType: "apo",     deltaT: 2.0 },
             { nome: "Askar FRA500",              focale: 500,  diametro: 90,  otaType: "apo",     deltaT: 2.0 },
             { nome: "Askar 107PHQ",              focale: 749,  diametro: 107, otaType: "apo",     deltaT: 2.0 },
-            { nome: "SW Evoguide 50ED",          focale: 242,  diametro: 50,  otaType: "apo",     deltaT: 2.5 },
-            { nome: "SW 72ED Evostar",           focale: 420,  diametro: 72,  otaType: "apo",     deltaT: 2.5 },
-            { nome: "SW 80ED Evostar",           focale: 600,  diametro: 80,  otaType: "apo",     deltaT: 2.5 },
-            { nome: "SW Esprit 80ED",            focale: 400,  diametro: 80,  otaType: "apo",     deltaT: 2.0 },
-            { nome: "SW Esprit 100ED",           focale: 550,  diametro: 100, otaType: "apo",     deltaT: 2.0 },
-            { nome: "SW Esprit 120ED",           focale: 840,  diametro: 120, otaType: "apo",     deltaT: 2.0 },
-            { nome: "SW Explorer 130 PDS",       focale: 650,  diametro: 130, otaType: "newton",  deltaT: 4.0 },
-            { nome: "SW Explorer 150PDS",        focale: 750,  diametro: 150, otaType: "newton",  deltaT: 4.0 },
-            { nome: "SW Quattro 150P",           focale: 600,  diametro: 150, otaType: "newton",  deltaT: 4.0 },
-            { nome: "SW Quattro 200P",           focale: 800,  diametro: 200, otaType: "newton",  deltaT: 4.0 },
+            { nome: "Sky-Watcher Evoguide 50ED",          focale: 242,  diametro: 50,  otaType: "apo",     deltaT: 2.5 },
+            { nome: "Sky-Watcher 72ED Evostar",           focale: 420,  diametro: 72,  otaType: "apo",     deltaT: 2.5 },
+            { nome: "Sky-Watcher 80ED Evostar",           focale: 600,  diametro: 80,  otaType: "apo",     deltaT: 2.5 },
+            { nome: "Sky-Watcher Esprit 80ED",            focale: 400,  diametro: 80,  otaType: "apo",     deltaT: 2.0 },
+            { nome: "Sky-Watcher Esprit 100ED",           focale: 550,  diametro: 100, otaType: "apo",     deltaT: 2.0 },
+            { nome: "Sky-Watcher Esprit 120ED",           focale: 840,  diametro: 120, otaType: "apo",     deltaT: 2.0 },
+            { nome: "Sky-Watcher Explorer 130 PDS",       focale: 650,  diametro: 130, otaType: "newton",  deltaT: 4.0 },
+            { nome: "Sky-Watcher Explorer 150PDS",        focale: 750,  diametro: 150, otaType: "newton",  deltaT: 4.0 },
+            { nome: "Sky-Watcher Quattro 150P",           focale: 600,  diametro: 150, otaType: "newton",  deltaT: 4.0 },
+            { nome: "Sky-Watcher Quattro 200P",           focale: 800,  diametro: 200, otaType: "newton",  deltaT: 4.0 },
             { nome: "Celestron RASA 8",          focale: 400,  diametro: 203, otaType: "sct",     deltaT: 1.0 },
             { nome: "Celestron RASA 11",         focale: 620,  diametro: 279, otaType: "sct",     deltaT: 1.0 },
             { nome: "Celestron EdgeHD 8",        focale: 2032, diametro: 203, otaType: "sct",     deltaT: 0.8 },
             { nome: "Celestron EdgeHD 8 @ f/7",  focale: 1422, diametro: 203, otaType: "sct",     deltaT: 0.8 },
             { nome: "Celestron C8 SCT",          focale: 2032, diametro: 203, otaType: "sct",     deltaT: 0.8 },
-            { nome: "Celestron C8 @ f/6.3",      focale: 1280, diametro: 203, otaType: "sct",     deltaT: 0.8 }
+            { nome: "Celestron C8 @ f/6.3",      focale: 1280, diametro: 203, otaType: "sct",     deltaT: 0.8 },
+            // ── 9.0: telescopi aggiunti (schede produttori / guide 2026) ──
+            { nome: "ZWO Seestar S30",            focale: 150,  diametro: 30,  otaType: "special", deltaT: 10 },
+            { nome: "ZWO Seestar S30 Pro",        focale: 160,  diametro: 30,  otaType: "special", deltaT: 10 },
+            { nome: "ZWO FF80 APO",               focale: 600,  diametro: 80,  otaType: "apo",     deltaT: 2.0 },
+            { nome: "ZWO FF107 APO",              focale: 749,  diametro: 107, otaType: "apo",     deltaT: 2.0 },
+            { nome: "DwarfLab DWARF 3",           focale: 150,  diametro: 35,  otaType: "special", deltaT: 10 },
+            { nome: "Vaonis Vespera II",          focale: 250,  diametro: 50,  otaType: "special", deltaT: 10 },
+            { nome: "Celestron Origin (RASA 6)",  focale: 335,  diametro: 152, otaType: "sct",     deltaT: 1.0 },
+            { nome: "Celestron EdgeHD 11",        focale: 2800, diametro: 280, otaType: "sct",     deltaT: 0.8 },
+            { nome: "Askar SQA55",                focale: 264,  diametro: 55,  otaType: "apo",     deltaT: 2.0 },
+            { nome: "Askar 71F",                  focale: 490,  diametro: 71,  otaType: "apo",     deltaT: 2.0 },
+            { nome: "Askar 103APO",               focale: 700,  diametro: 103, otaType: "apo",     deltaT: 2.0 },
+            { nome: "Askar FRA600",               focale: 600,  diametro: 108, otaType: "apo",     deltaT: 2.0 },
+            { nome: "William Optics RedCat 61",               focale: 300,  diametro: 61,  otaType: "apo",     deltaT: 2.0 },
+            { nome: "William Optics Cat 91",                  focale: 450,  diametro: 91,  otaType: "apo",     deltaT: 2.0 },
+            { nome: "Sky-Watcher Evolux 62ED",             focale: 400,  diametro: 62,  otaType: "apo",     deltaT: 2.5 },
+            { nome: "Sky-Watcher Evolux 82ED",             focale: 530,  diametro: 82,  otaType: "apo",     deltaT: 2.5 },
+            { nome: "Sky-Watcher Esprit 150ED",            focale: 1050, diametro: 150, otaType: "apo",     deltaT: 2.0 },
+            { nome: "Sky-Watcher Explorer 200PDS",         focale: 1000, diametro: 200, otaType: "newton",  deltaT: 4.0 },
+            { nome: "Svbony SV503 80ED",          focale: 560,  diametro: 80,  otaType: "apo",     deltaT: 2.5 },
+            { nome: "Svbony SV503 102ED",         focale: 714,  diametro: 102, otaType: "apo",     deltaT: 2.5 },
+            { nome: "Apertura 75Q",               focale: 405,  diametro: 75,  otaType: "apo",     deltaT: 2.0 },
+            { nome: "Apertura CarbonStar 150",    focale: 600,  diametro: 150, otaType: "newton",  deltaT: 4.0 },
+            { nome: "Apertura CarbonStar 200",    focale: 800,  diametro: 200, otaType: "newton",  deltaT: 4.0 },
         ];
 
         // ── Mappa globale nome→{otaType,deltaT} per lookup rapido ──────────────
@@ -56,80 +80,118 @@
             { nome: "Sony IMX455  (61MP   FF)",        w: 36.0,  h: 24.0,  p: 3.76 },
 
             // ── ZWO ASI — Planetarie / EAA ────────────────────────────────────
-            { nome: "ZWO ASI120MM/MC",                 w:  4.8,  h:  3.6,  p: 3.75 },
-            { nome: "ZWO ASI174MM/MC",                 w: 11.3,  h:  7.1,  p: 5.86 },
-            { nome: "ZWO ASI178MM/MC",                 w:  7.37, h:  4.92, p: 2.4  },
-            { nome: "ZWO ASI224MC",                    w:  4.9,  h:  3.7,  p: 3.75 },
-            { nome: "ZWO ASI290MM/MC",                 w:  5.64, h:  3.17, p: 2.9  },
-            { nome: "ZWO ASI385MC",                    w:  7.4,  h:  4.16, p: 2.9  },
-            { nome: "ZWO ASI462MC",                    w:  6.46, h:  4.72, p: 2.9  },
-            { nome: "ZWO ASI662MC",                    w:  7.68, h:  4.32, p: 2.9  },
-            { nome: "ZWO ASI715MC",                    w:  7.56, h:  5.35, p: 1.85 },
+            { nome: "ZWO ASI120MC",                    w:  4.8,  h:  3.6,  p: 3.75, tipo: "C" },
+            { nome: "ZWO ASI120MM",                    w:  4.8,  h:  3.6,  p: 3.75, tipo: "M" },
+            { nome: "ZWO ASI174MC",                    w: 11.3,  h:  7.1,  p: 5.86, tipo: "C" },
+            { nome: "ZWO ASI174MM",                    w: 11.3,  h:  7.1,  p: 5.86, tipo: "M" },
+            { nome: "ZWO ASI178MC",                    w:  7.37, h:  4.92, p: 2.4, tipo: "C" },
+            { nome: "ZWO ASI178MM",                    w:  7.37, h:  4.92, p: 2.4, tipo: "M" },
+            { nome: "ZWO ASI224MC",                    w:  4.9,  h:  3.7,  p: 3.75, tipo: "C" },
+            { nome: "ZWO ASI290MC",                    w:  5.64, h:  3.17, p: 2.9, tipo: "C" },
+            { nome: "ZWO ASI290MM",                    w:  5.64, h:  3.17, p: 2.9, tipo: "M" },
+            { nome: "ZWO ASI385MC",                    w:  7.4,  h:  4.16, p: 2.9, tipo: "C" },
+            { nome: "ZWO ASI462MC",                    w:  6.46, h:  4.72, p: 2.9, tipo: "C" },
+            { nome: "ZWO ASI662MC",                    w:  7.68, h:  4.32, p: 2.9, tipo: "C" },
+            { nome: "ZWO ASI715MC",                    w:  7.56, h:  5.35, p: 1.85, tipo: "C" },
 
             // ── ZWO ASI — Deep Sky ────────────────────────────────────────────
-            { nome: "ZWO ASI183MM/MC (1\")",           w: 13.2,  h:  8.8,  p: 2.4  },
-            { nome: "ZWO ASI294MM/MC (4/3\")",         w: 19.1,  h: 13.0,  p: 4.63 },
-            { nome: "ZWO ASI432MM",                    w: 12.8,  h: 10.7,  p: 9.0  },
-            { nome: "ZWO ASI485MC",                    w: 13.0,  h:  8.7,  p: 2.9  },
-            { nome: "ZWO ASI533MM/MC (sq)",            w: 11.31, h: 11.31, p: 3.76 },
-            { nome: "ZWO ASI585MC",                    w: 11.14, h:  6.26, p: 2.9  },
-            { nome: "ZWO ASI1600MM/MC (4/3\")",        w: 17.7,  h: 13.4,  p: 3.8  },
-            { nome: "ZWO ASI2600MM/MC (APS-C)",        w: 23.5,  h: 15.7,  p: 3.76 },
-            { nome: "ZWO ASI2400MC (FF)",              w: 35.9,  h: 23.9,  p: 5.94 },
-            { nome: "ZWO ASI6200MM/MC (FF)",           w: 36.0,  h: 24.0,  p: 3.76 },
+            { nome: "ZWO ASI183MC (1\")",              w: 13.2,  h:  8.8,  p: 2.4, tipo: "C" },
+            { nome: "ZWO ASI183MM (1\")",              w: 13.2,  h:  8.8,  p: 2.4, tipo: "M" },
+            { nome: "ZWO ASI294MC (4/3\")",            w: 19.1,  h: 13.0,  p: 4.63, tipo: "C" },
+            { nome: "ZWO ASI294MM (4/3\")",            w: 19.1,  h: 13.0,  p: 4.63, tipo: "M" },
+            { nome: "ZWO ASI432MM",                    w: 12.8,  h: 10.7,  p: 9.0, tipo: "M" },
+            { nome: "ZWO ASI485MC",                    w: 13.0,  h:  8.7,  p: 2.9, tipo: "C" },
+            { nome: "ZWO ASI533MC (sq)",               w: 11.31, h: 11.31, p: 3.76, tipo: "C" },
+            { nome: "ZWO ASI533MM (sq)",               w: 11.31, h: 11.31, p: 3.76, tipo: "M" },
+            { nome: "ZWO ASI585MC",                    w: 11.14, h:  6.26, p: 2.9, tipo: "C" },
+            { nome: "ZWO ASI1600MC (4/3\")",           w: 17.7,  h: 13.4,  p: 3.8, tipo: "C" },
+            { nome: "ZWO ASI1600MM (4/3\")",           w: 17.7,  h: 13.4,  p: 3.8, tipo: "M" },
+            { nome: "ZWO ASI2600MC (APS-C)",           w: 23.5,  h: 15.7,  p: 3.76, tipo: "C" },
+            { nome: "ZWO ASI2600MM (APS-C)",           w: 23.5,  h: 15.7,  p: 3.76, tipo: "M" },
+            { nome: "ZWO ASI2400MC (FF)",              w: 35.9,  h: 23.9,  p: 5.94, tipo: "C" },
+            { nome: "ZWO ASI6200MC (FF)",              w: 36.0,  h: 24.0,  p: 3.76, tipo: "C" },
+            { nome: "ZWO ASI6200MM (FF)",              w: 36.0,  h: 24.0,  p: 3.76, tipo: "M" },
 
             // ── QHY ──────────────────────────────────────────────────────────
-            { nome: "QHY163M/C (4/3\")",               w: 17.7,  h: 13.4,  p: 3.8  },
-            { nome: "QHY183M/C (1\")",                 w: 13.2,  h:  8.8,  p: 2.4  },
-            { nome: "QHY294M/C (4/3\")",               w: 19.1,  h: 13.0,  p: 4.63 },
-            { nome: "QHY533M/C (1\" sq)",              w: 11.31, h: 11.31, p: 3.76 },
-            { nome: "QHY268M/C (APS-C)",               w: 23.5,  h: 15.7,  p: 3.76 },
-            { nome: "QHY485C (1\")",                   w: 13.0,  h:  8.7,  p: 2.9  },
-            { nome: "QHY600M/C (FF)",                  w: 36.0,  h: 24.0,  p: 3.76 },
-            { nome: "QHY128C (APS-C Canon)",           w: 22.3,  h: 14.9,  p: 4.3  },
-            { nome: "QHY367C (FF)",                    w: 35.8,  h: 23.9,  p: 4.88 },
-            { nome: "QHY miniCAM8M/C (IMX585)",         w: 11.14, h:  6.26, p: 2.9  }, // 1/1.2" — AGGIUNTO
+            { nome: "QHY163C (4/3\")",                 w: 17.7,  h: 13.4,  p: 3.8, tipo: "C" },
+            { nome: "QHY163M (4/3\")",                 w: 17.7,  h: 13.4,  p: 3.8, tipo: "M" },
+            { nome: "QHY183C (1\")",                   w: 13.2,  h:  8.8,  p: 2.4, tipo: "C" },
+            { nome: "QHY183M (1\")",                   w: 13.2,  h:  8.8,  p: 2.4, tipo: "M" },
+            { nome: "QHY294C (4/3\")",                 w: 19.1,  h: 13.0,  p: 4.63, tipo: "C" },
+            { nome: "QHY294M (4/3\")",                 w: 19.1,  h: 13.0,  p: 4.63, tipo: "M" },
+            { nome: "QHY533C (1\" sq)",                w: 11.31, h: 11.31, p: 3.76, tipo: "C" },
+            { nome: "QHY533M (1\" sq)",                w: 11.31, h: 11.31, p: 3.76, tipo: "M" },
+            { nome: "QHY268C (APS-C)",                 w: 23.5,  h: 15.7,  p: 3.76, tipo: "C" },
+            { nome: "QHY268M (APS-C)",                 w: 23.5,  h: 15.7,  p: 3.76, tipo: "M" },
+            { nome: "QHY485C (1\")",                   w: 13.0,  h:  8.7,  p: 2.9, tipo: "C" },
+            { nome: "QHY600C (FF)",                    w: 36.0,  h: 24.0,  p: 3.76, tipo: "C" },
+            { nome: "QHY600M (FF)",                    w: 36.0,  h: 24.0,  p: 3.76, tipo: "M" },
+            { nome: "QHY128C (APS-C Canon)",           w: 22.3,  h: 14.9,  p: 4.3, tipo: "C" },
+            { nome: "QHY367C (FF)",                    w: 35.8,  h: 23.9,  p: 4.88, tipo: "C" },
+            { nome: "QHY miniCAM8 Color (IMX585)",      w: 11.14, h:  6.26, p: 2.9, tipo: "C" }, // 1/1.2" — AGGIUNTO
+            { nome: "QHY miniCAM8 Mono (IMX585)",       w: 11.14, h:  6.26, p: 2.9, tipo: "M" },
 
             // ── PlayerOne ────────────────────────────────────────────────────
             // Fonte: player-one-astronomy.com/cooled-camera/ + planetary-camera/ (verificato mar 2026)
-            { nome: "PlayerOne Mars-C II (IMX662)",        w:  7.68, h:  4.32, p: 2.9   }, // 1/2.8"
-            { nome: "PlayerOne Neptune-C II (IMX464)",     w:  9.55, h:  7.17, p: 2.9   }, // 4/3" ridotto
-            { nome: "PlayerOne Saturn-C SQR (IMX533)",     w: 11.31, h: 11.31, p: 3.76  }, // 1" sq — CORRETTO (era IMX183)
-            { nome: "PlayerOne Saturn-M SQR (IMX533)",     w: 11.31, h: 11.31, p: 3.76  }, // 1" sq
-            { nome: "PlayerOne Uranus-C/M PRO (IMX585)",   w: 11.14, h:  6.26, p: 2.9   }, // 1/1.2"
-            { nome: "PlayerOne Ares-C/M PRO (IMX533)",     w: 11.31, h: 11.31, p: 3.76  }, // 1" sq — NUOVO
-            { nome: "PlayerOne Artemis-C PRO (IMX294)",    w: 19.1,  h: 13.0,  p: 4.63  }, // 4/3" color — CORRETTO
-            { nome: "PlayerOne Artemis-M PRO (IMX492)",    w: 19.2,  h: 13.0,  p: 2.315 }, // 4/3" mono — CORRETTO
-            { nome: "PlayerOne Poseidon-C/M PRO (IMX571)", w: 23.5,  h: 15.7,  p: 3.76  }, // APS-C — CORRETTO
-            { nome: "PlayerOne Zeus 455C/M PRO (IMX455)",  w: 36.0,  h: 24.0,  p: 3.76  }, // FF — CORRETTO (era Apollo-M Max)
+            { nome: "PlayerOne Mars-C II (IMX662)",        w:  7.68, h:  4.32, p: 2.9, tipo: "C" }, // 1/2.8"
+            { nome: "PlayerOne Neptune-C II (IMX464)",     w:  9.55, h:  7.17, p: 2.9, tipo: "C" }, // 4/3" ridotto
+            { nome: "PlayerOne Saturn-C SQR (IMX533)",     w: 11.31, h: 11.31, p: 3.76, tipo: "C" }, // 1" sq — CORRETTO (era IMX183)
+            { nome: "PlayerOne Saturn-M SQR (IMX533)",     w: 11.31, h: 11.31, p: 3.76, tipo: "M" }, // 1" sq
+            { nome: "PlayerOne Uranus-C PRO (IMX585)",     w: 11.14, h:  6.26, p: 2.9, tipo: "C" }, // 1/1.2"
+            { nome: "PlayerOne Uranus-M PRO (IMX585)",     w: 11.14, h:  6.26, p: 2.9, tipo: "M" },
+            { nome: "PlayerOne Ares-C PRO (IMX533)",       w: 11.31, h: 11.31, p: 3.76, tipo: "C" }, // 1" sq — NUOVO
+            { nome: "PlayerOne Ares-M PRO (IMX533)",       w: 11.31, h: 11.31, p: 3.76, tipo: "M" },
+            { nome: "PlayerOne Artemis-C PRO (IMX294)",    w: 19.1,  h: 13.0,  p: 4.63, tipo: "C" }, // 4/3" color — CORRETTO
+            { nome: "PlayerOne Artemis-M PRO (IMX492)",    w: 19.2,  h: 13.0,  p: 2.315, tipo: "M" }, // 4/3" mono — CORRETTO
+            { nome: "PlayerOne Poseidon-C PRO (IMX571)",   w: 23.5,  h: 15.7,  p: 3.76, tipo: "C" }, // APS-C — CORRETTO
+            { nome: "PlayerOne Poseidon-M PRO (IMX571)",   w: 23.5,  h: 15.7,  p: 3.76, tipo: "M" },
+            { nome: "PlayerOne Zeus 455C PRO (IMX455)",    w: 36.0,  h: 24.0,  p: 3.76, tipo: "C" }, // FF — CORRETTO (era Apollo-M Max)
+            { nome: "PlayerOne Zeus 455M PRO (IMX455)",    w: 36.0,  h: 24.0,  p: 3.76, tipo: "M" },
 
             // ── Atik ─────────────────────────────────────────────────────────
-            { nome: "Atik 314L+ (ICX285)",             w:  6.5,  h:  4.8,  p: 4.65 },
-            { nome: "Atik 383L+ (KAF-8300)",           w: 17.6,  h: 13.5,  p: 5.4  },
-            { nome: "Atik 460EX (ICX694)",             w: 15.1,  h: 15.1,  p: 4.54 },
-            { nome: "Atik Infinity",                   w:  5.7,  h:  4.28, p: 5.6  },
-            { nome: "Atik Horizon (APS-C CMOS)",       w: 23.4,  h: 15.6,  p: 3.69 },
-            { nome: "Atik 16200 (KAF-16200, FF)",      w: 35.8,  h: 23.9,  p: 6.0  },
+            { nome: "Atik 314L+ Color (ICX285)",       w:  6.5,  h:  4.8,  p: 4.65, tipo: "C" },
+            { nome: "Atik 314L+ Mono (ICX285)",        w:  6.5,  h:  4.8,  p: 4.65, tipo: "M" },
+            { nome: "Atik 383L+ Color (KAF-8300)",     w: 17.6,  h: 13.5,  p: 5.4, tipo: "C" },
+            { nome: "Atik 383L+ Mono (KAF-8300)",      w: 17.6,  h: 13.5,  p: 5.4, tipo: "M" },
+            { nome: "Atik 460EX Color (ICX694)",       w: 15.1,  h: 15.1,  p: 4.54, tipo: "C" },
+            { nome: "Atik 460EX Mono (ICX694)",        w: 15.1,  h: 15.1,  p: 4.54, tipo: "M" },
+            { nome: "Atik Infinity Color",             w:  5.7,  h:  4.28, p: 5.6, tipo: "C" },
+            { nome: "Atik Infinity Mono",              w:  5.7,  h:  4.28, p: 5.6, tipo: "M" },
+            { nome: "Atik Horizon Color (APS-C CMOS)", w: 23.4,  h: 15.6,  p: 3.69, tipo: "C" },
+            { nome: "Atik Horizon Mono (APS-C CMOS)",  w: 23.4,  h: 15.6,  p: 3.69, tipo: "M" },
+            { nome: "Atik 16200 Color (KAF-16200, FF)", w: 35.8,  h: 23.9,  p: 6.0, tipo: "C" },
+            { nome: "Atik 16200 Mono (KAF-16200, FF)", w: 35.8,  h: 23.9,  p: 6.0, tipo: "M" },
 
             // ── Canon DSLR / Mirrorless ───────────────────────────────────────
-            { nome: "Canon 450D/550D/600D/700D (APS-C)", w: 22.3, h: 14.9, p: 4.29 },
-            { nome: "Canon 60Da (APS-C Astro)",        w: 22.3,  h: 14.9,  p: 4.3  },
-            { nome: "Canon 7D MkII (APS-C)",           w: 22.4,  h: 15.0,  p: 4.09 },
-            { nome: "Canon 90D (APS-C)",               w: 22.3,  h: 14.9,  p: 3.21 },
-            { nome: "Canon 6D (FF)",                   w: 35.8,  h: 23.9,  p: 6.54 },
-            { nome: "Canon 6D MkII (FF)",              w: 35.9,  h: 24.0,  p: 5.74 },
-            { nome: "Canon Ra / EOS R (FF Astro)",     w: 35.9,  h: 24.0,  p: 4.39 },
+            { nome: "Canon 450D/550D/600D/700D (APS-C)", w: 22.3, h: 14.9, p: 4.29, tipo: "C" },
+            { nome: "Canon 60Da (APS-C Astro)",        w: 22.3,  h: 14.9,  p: 4.3, tipo: "C" },
+            { nome: "Canon 7D MkII (APS-C)",           w: 22.4,  h: 15.0,  p: 4.09, tipo: "C" },
+            { nome: "Canon 90D (APS-C)",               w: 22.3,  h: 14.9,  p: 3.21, tipo: "C" },
+            { nome: "Canon 6D (FF)",                   w: 35.8,  h: 23.9,  p: 6.54, tipo: "C" },
+            { nome: "Canon 6D MkII (FF)",              w: 35.9,  h: 24.0,  p: 5.74, tipo: "C" },
+            { nome: "Canon Ra / EOS R (FF Astro)",     w: 35.9,  h: 24.0,  p: 4.39, tipo: "C" },
 
             // ── Nikon DSLR ───────────────────────────────────────────────────
-            { nome: "Nikon D3300/D5300/D5500 (APS-C)", w: 23.5,  h: 15.6,  p: 3.89 },
-            { nome: "Nikon D7500 (APS-C)",             w: 23.5,  h: 15.7,  p: 4.22 },
-            { nome: "Nikon D810A (FF Astro)",          w: 35.9,  h: 24.0,  p: 4.88 },
-            { nome: "Nikon D850 (FF)",                 w: 35.9,  h: 23.9,  p: 4.35 },
+            { nome: "Nikon D3300/D5300/D5500 (APS-C)", w: 23.5,  h: 15.6,  p: 3.89, tipo: "C" },
+            { nome: "Nikon D7500 (APS-C)",             w: 23.5,  h: 15.7,  p: 4.22, tipo: "C" },
+            { nome: "Nikon D810A (FF Astro)",          w: 35.9,  h: 24.0,  p: 4.88, tipo: "C" },
+            { nome: "Nikon D850 (FF)",                 w: 35.9,  h: 23.9,  p: 4.35, tipo: "C" },
 
             // ── Sony Mirrorless ──────────────────────────────────────────────
-            { nome: "Sony A6000/A6100/A6400 (APS-C)",  w: 23.5,  h: 15.6,  p: 3.89 },
-            { nome: "Sony A7 III / A7C (FF)",          w: 35.6,  h: 23.8,  p: 5.97 },
-            { nome: "Sony A7R III / IV (FF HiRes)",    w: 35.7,  h: 23.8,  p: 4.51 },
+            { nome: "Sony A6000/A6100/A6400 (APS-C)",  w: 23.5,  h: 15.6,  p: 3.89, tipo: "C" },
+            { nome: "Sony A7 III / A7C (FF)",          w: 35.6,  h: 23.8,  p: 5.97, tipo: "C" },
+            { nome: "Sony A7R III / IV (FF HiRes)",    w: 35.7,  h: 23.8,  p: 4.51, tipo: "C" },
+            // ── 9.0: camere aggiunte (schede produttori) ──
+            { nome: "ZWO ASI676MC (IMX676)",             w: 7.1, h: 7.1, p: 2.0, tipo: "C" },
+            { nome: "ZWO ASI678MC (IMX678)",             w: 7.68, h: 4.32, p: 2.0, tipo: "C" },
+            { nome: "ZWO ASI664MC (IMX664)",             w: 7.86, h: 4.46, p: 2.9, tipo: "C" },
+            { nome: "ZWO ASI461MM Pro (IMX461)",         w: 43.8, h: 32.9, p: 3.76, tipo: "M" },
+            { nome: "Svbony SV605CC (IMX533)",           w: 11.31, h: 11.31, p: 3.76, tipo: "C" },
+            { nome: "Svbony SV705C (IMX585)",            w: 11.14, h: 6.26, p: 2.9, tipo: "C" },
+            { nome: "Canon EOS R6 (FF)",                 w: 35.9, h: 23.9, p: 6.56, tipo: "C" },
+            { nome: "Canon EOS R6 Mark II / R8 (FF)",    w: 35.9, h: 23.9, p: 5.98, tipo: "C" },
+            { nome: "Nikon Z6 / Z6 II (FF)",             w: 35.9, h: 23.9, p: 5.94, tipo: "C" },
+            { nome: "Sony A7S III (FF)",                 w: 35.6, h: 23.8, p: 8.4, tipo: "C" },
         ];
 
 
@@ -153,14 +215,31 @@
             
             let customTels = _lsGetJSON('ad_custom_telescopes', []);
             
-            let allTels = [...customTels, ...dbTelescopiBase];
-            allTels.forEach(t => { 
-                let opt = document.createElement('option'); 
-                opt.value = t.focale + ',' + t.diametro + ',' + t.nome; 
-                opt.textContent = (customTels.some(ct => ct.nome === t.nome) ? "⭐ " : "") + t.nome; 
-                selTel.appendChild(opt);
+            // 9.0: telescopi personalizzati in cima, poi il database diviso per marca
+            // (gruppi in ordine alfabetico, dentro ogni marca per focale crescente)
+            const nuovaOpt = (t, stella) => {
+                let opt = document.createElement('option');
+                opt.value = t.focale + ',' + t.diametro + ',' + t.nome;
+                opt.textContent = (stella ? "⭐ " : "") + t.nome;
                 // Aggiorna la mappa globale nome→{otaType,deltaT}
                 window._telOtaMap[t.nome] = { otaType: t.otaType || 'apo', deltaT: t.deltaT || 2.0 };
+                return opt;
+            };
+            if (customTels.length) {
+                let g = document.createElement('optgroup');
+                g.label = '⭐ ' + (lang==='it'?'I miei telescopi':lang==='en'?'My telescopes':lang==='es'?'Mis telescopios':'我的望远镜');
+                customTels.forEach(t => g.appendChild(nuovaOpt(t, true)));
+                selTel.appendChild(g);
+            }
+            const MARCHE2 = ['Explore Scientific', 'Sky-Watcher', 'William Optics'];   // marche di due parole
+            const marca = t => MARCHE2.find(m => t.nome.indexOf(m + ' ') === 0) || t.nome.split(' ')[0];
+            const perMarca = {};
+            dbTelescopiBase.forEach(t => { (perMarca[marca(t)] = perMarca[marca(t)] || []).push(t); });
+            Object.keys(perMarca).sort((a, b) => a.localeCompare(b)).forEach(m => {
+                let g = document.createElement('optgroup');
+                g.label = m;
+                perMarca[m].slice().sort((a, b) => a.focale - b.focale).forEach(t => g.appendChild(nuovaOpt(t, false)));
+                selTel.appendChild(g);
             });
 
             const selCam = document.getElementById('preset-sensor'); 
@@ -178,16 +257,25 @@
                 });
                 selCam.appendChild(grpCustom);
             }
-            // Sensori base
-            let grpBase = document.createElement('optgroup');
-            grpBase.label = lang==='it'?'Database sensori':lang==='en'?'Sensor database':lang==='es'?'Base de datos':'传感器数据库';
-            dbCamereBase.forEach(c => { 
-                let opt = document.createElement('option'); 
-                opt.value = `${c.w},${c.h},${c.p},${c.nome}`; 
-                opt.textContent = c.nome; 
-                grpBase.appendChild(opt);
+            // Sensori base — 9.0: gruppi per marca in ordine alfabetico (dentro: per dimensione del sensore);
+            // i chip Sony generici in un gruppo a parte, in fondo
+            const GENERICI = '~gen';
+            const marcaCam = c => /^Sony IMX/.test(c.nome) ? GENERICI : /^QHY/.test(c.nome) ? 'QHY' : c.nome.split(' ')[0];   // QHY: nomi senza spazio (QHY268C)
+            const perMarcaCam = {};
+            dbCamereBase.forEach(c => { (perMarcaCam[marcaCam(c)] = perMarcaCam[marcaCam(c)] || []).push(c); });
+            const etichGen = lang==='it'?'Sony IMX – chip generici':lang==='en'?'Sony IMX – generic chips':lang==='es'?'Sony IMX – chips genéricos':'Sony IMX – 通用芯片';
+            Object.keys(perMarcaCam).sort((a, b) => a === GENERICI ? 1 : b === GENERICI ? -1 : a.localeCompare(b)).forEach(m => {
+                let grp = document.createElement('optgroup');
+                grp.label = m === GENERICI ? etichGen : m;
+                perMarcaCam[m].slice().sort((a, b) => (a.w * a.h - b.w * b.h) || a.nome.localeCompare(b.nome)).forEach(c => {
+                    let opt = document.createElement('option');
+                    opt.value = `${c.w},${c.h},${c.p},${c.nome}`;
+                    opt.textContent = c.nome;
+                    if (c.tipo) opt.dataset.tipo = c.tipo;            // C = colore, M = mono (9.0)
+                    grp.appendChild(opt);
+                });
+                selCam.appendChild(grp);
             });
-            selCam.appendChild(grpBase);
         }
 
         function applicaPresetTelescopio() { 
@@ -222,7 +310,67 @@
                 if(p[2]) document.getElementById('pixel-size').value=p[2];
                 aggiornaFOV();
                 if (typeof aggiornaAI === 'function') aggiornaAI();
+                _adpTipoDaSensore();
             } 
+        }
+
+        // ── 9.0: il sensore scelto imposta Colore/Mono nella Sequenza (Smart e PRO) ──
+        // Solo per le voci del database con tipo definito (C/M); i chip Sony generici
+        // e i sensori personalizzati lasciano la scelta all'utente. In modalità Base
+        // il sensore resta sempre a colori (come prima).
+        function _adpTipoDaSensore() {
+            const sel = document.getElementById('preset-sensor');
+            const o = sel && sel.selectedIndex >= 0 ? sel.options[sel.selectedIndex] : null;
+            const tipo = o && o.dataset ? o.dataset.tipo : '';
+            if (!tipo || document.body.classList.contains('mode-lite')) return;
+            const val = tipo === 'M' ? 'mono' : 'color';
+            const st = document.getElementById('sensor-type');
+            if (!st || st.value === val) return;
+            st.value = val;
+            st.dispatchEvent(new Event('change', { bubbles: true }));     // toggleSensorMode, calcolaTempi, filtri, salvataggio
+            const ps = document.getElementById('pro-sensor-type');
+            if (ps) {
+                ps.value = val;
+                ['disegnaGrigliaPro', 'aggiornaFiltriNinaPro'].forEach(f => { if (typeof window[f] === 'function') { try { window[f](); } catch (e) {} } });
+            }
+            if (typeof mostraAvviso === 'function') mostraAvviso(t(val === 'mono' ? 'sensor_auto_mono' : 'sensor_auto_color'), 'info');
+        }
+
+        // ── 9.0: compatibilità con i nomi dei telescopi del database precedente ──
+        // Un valore salvato che non esiste più (es. "250,51,WO RedCat 51") viene ricondotto
+        // alla voce con stessa focale e diametro; se ce n'è più d'una, a quella che
+        // finisce con lo stesso modello. Mantiene il prefisso "__custom__|".
+        function _adpTelescopioCompat(val) {
+            const sel = document.getElementById('preset-telescope');
+            if (!sel || !val) return val;
+            const pref = val.indexOf('__custom__|') === 0 ? '__custom__|' : '';
+            const v = val.slice(pref.length);
+            if (Array.from(sel.options).some(o => o.value === v)) return val;
+            const parti = v.split(','), fd = parti.slice(0, 2).join(',') + ',';
+            const modello = parti.slice(2).join(',').replace(/^(SW|WO)\s+/, '').trim().toLowerCase();
+            const cand = Array.from(sel.options).filter(o => o.value.indexOf(fd) === 0);
+            if (!cand.length) return val;
+            const scelto = cand.find(o => o.textContent.trim().toLowerCase().endsWith(modello)) || (cand.length === 1 ? cand[0] : null);
+            return scelto ? pref + scelto.value : val;
+        }
+
+        // ── 9.0: compatibilità con le voci "M/C" del database precedente ──
+        // Un valore salvato che non esiste più (es. "...,ZWO ASI2600MM/MC (APS-C)") viene
+        // ricondotto alla nuova voce con stesse misure, stessa marca e tipo uguale a quello
+        // salvato in "sensor-type". Mantiene anche il prefisso "__custom__|".
+        function _adpSensoreCompat(val, tipoSalvato) {
+            const sel = document.getElementById('preset-sensor');
+            if (!sel || !val) return val;
+            const pref = val.indexOf('__custom__|') === 0 ? '__custom__|' : '';
+            const v = val.slice(pref.length);
+            if (Array.from(sel.options).some(o => o.value === v)) return val;
+            const parti = v.split(','), misure = parti.slice(0, 3).join(','), marca = (parti.slice(3).join(',').trim().split(/\s+/)[0] || '').toLowerCase();
+            const cand = Array.from(sel.options).filter(o => o.dataset.tipo && o.value.indexOf(misure + ',') === 0 &&
+                (o.textContent.trim().split(/\s+/)[0] || '').toLowerCase() === marca);
+            if (!cand.length) return val;
+            const voluto = tipoSalvato === 'mono' ? 'M' : 'C';
+            const scelto = cand.find(o => o.dataset.tipo === voluto) || cand[0];
+            return pref + scelto.value;
         }
 
         
@@ -407,6 +555,14 @@
             if (!saved) return;
             try {
                 let data = JSON.parse(saved);
+                if (data['preset-telescope']) {                    // nomi telescopi cambiati nella 9.0 (SW → Sky-Watcher, WO → William Optics, Comethunter)
+                    const nuovoT = _adpTelescopioCompat(data['preset-telescope']);
+                    if (nuovoT !== data['preset-telescope']) { data['preset-telescope'] = nuovoT; localStorage.setItem('ad_instrument', JSON.stringify(data)); }
+                }
+                if (data['preset-sensor']) {                       // voci "M/C" del database precedente
+                    const nuovo = _adpSensoreCompat(data['preset-sensor'], data['sensor-type']);
+                    if (nuovo !== data['preset-sensor']) { data['preset-sensor'] = nuovo; localStorage.setItem('ad_instrument', JSON.stringify(data)); }
+                }
                 AD_INSTRUMENT_FIELDS.forEach(id => {
                     let el = document.getElementById(id);
                     if (el && data[id] !== undefined) el.value = data[id];

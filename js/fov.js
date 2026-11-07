@@ -587,7 +587,7 @@
             document.getElementById('mosaic-settings').style.display = isMosaic ? 'flex' : 'none';
             document.getElementById('mosaic-fov-result').style.display = isMosaic ? 'block' : 'none';
             document.getElementById('btn-export-nina').style.display = isMosaic ? 'none' : 'inline-block';
-            let btnAsiair = document.getElementById('btn-export-asiair'); if(btnAsiair) btnAsiair.style.display = isMosaic ? 'none' : 'inline-block';
+            let btnAsiair = document.getElementById('btn-export-asiair'); if(btnAsiair) btnAsiair.style.display = isMosaic ? 'none' : '';
             document.getElementById('btn-report-mosaic').style.display = isMosaic ? 'inline-block' : 'none';
             document.getElementById('nina-mosaic-msg').style.display = isMosaic ? 'block' : 'none';
             document.getElementById('mosaic-total-badge').style.display = isMosaic ? 'inline-block' : 'none';

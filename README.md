@@ -1,6 +1,8 @@
 # AstrodashboardPro
 Dashboard per la pianificazione astrofotografica totale globale
 
+**Licenza:** codice © 2025-2026 Enrico Salis, tutti i diritti riservati (non open source). L'app è gratuita su www.astrodashboardpro.com. I componenti di terze parti mantengono le proprie licenze (vedi sotto e il file `LICENSE`).
+
 ## Fonti dei dati, servizi e licenze
 
 AstroDashboard PRO usa dati e servizi di terze parti. Ringraziamo gli autori e citiamo qui fonti e licenze.

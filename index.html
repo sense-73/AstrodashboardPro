@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AstroDashboardPRO v8.2 - Global Edition</title>
+    <title>AstroDashboardPRO v9.0 - Global Edition</title>
     
     <link rel="manifest" href="manifest.json?v=3">
     <meta name="theme-color" content="#121212">
@@ -657,7 +657,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 19a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6l0 13" /><path d="M12 6l0 13" /><path d="M21 6l0 13" /></svg>
                     <span class="nav-manual-text" data-i18n="manual_btn" style="letter-spacing:.3px;">Guida</span>
                 </button>
-                <button onclick="mostraChangelogManuale()" title="Versione & novità" class="nav-version-btn" style="background:rgba(196,154,60,0.08); border:1px solid rgba(196,154,60,0.3); border-radius:5px; padding:3px 8px; color:#c49a3c; font-size:10px; font-weight:700; cursor:pointer; flex-shrink:0; letter-spacing:.5px;">v8.2</button>
+                <button onclick="mostraChangelogManuale()" title="Versione & novità" class="nav-version-btn" style="background:rgba(196,154,60,0.08); border:1px solid rgba(196,154,60,0.3); border-radius:5px; padding:3px 8px; color:#c49a3c; font-size:10px; font-weight:700; cursor:pointer; flex-shrink:0; letter-spacing:.5px;">v9.0</button>
             </div>
         </div>
 
@@ -829,7 +829,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                 <a href="https://www.paypal.com/donate/?business=enrico.salis%40gmail.com&currency_code=EUR" target="_blank" rel="noopener" style="background:linear-gradient(135deg,#003087,#009cde); border:none; border-radius:6px; padding:6px 14px; color:#fff; font-size:12px; font-weight:700; cursor:pointer; display:flex; align-items:center; gap:6px; text-decoration:none; transition:opacity 0.2s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c1.379 3.53-.923 7.947-6.712 7.947H11.23l-1.332 8.453h3.288c.524 0 .968-.382 1.05-.9l.87-5.505h2.163c4.298 0 7.066-2.076 7.953-6.36.41-1.99.073-3.466-.8-4.094z"/></svg>
                     <span data-i18n="support_btn">Supporta il progetto</span>                </a>
-                <span style="font-size:14px; color:#3d4852;">v8.2</span>
+                <span style="font-size:14px; color:#3d4852;">v9.0</span>
             </div>
         </div>
 
@@ -838,18 +838,20 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
 
 
     <div id="dashboard-view" style="display:none;">
-        <div class="container" style="margin-bottom: 0;">
+        <div data-adp-sez="pos" class="container" style="margin-bottom: 0;">
             <div class="ephemeris-box">
+                <div id="adp-date-tab" class="adp-date-tab"></div>
                 <!-- Bottone "Previsione": solo dispositivi touch (css), riapre il popup Analisi Notturna -->
                 <button type="button" class="np-forecast-btn" onclick="apriPrevisioneNotte()">
                     <span class="np-forecast-circle"><svg width="60" height="40" viewBox="0 0 110.39362 74.348602" aria-hidden="true"><g transform="translate(-57.505933,-129.55751)"><path fill="currentColor" d="m 111.71042,129.69407 c -5.24226,0.0263 -10.74815,16.87136 -14.973754,19.97398 -4.22562,3.10261 -20.68279,-3.57272 -22.27771,1.4211 -1.59492,4.99381 11.46067,22.32 13.10566,27.29756 1.64498,4.97755 -3.6323,21.89556 0.62425,24.95558 4.25655,3.06003 18.612084,-7.33188 23.854354,-7.3582 5.24224,-0.0263 19.70159,10.22105 23.9272,7.11842 4.22561,-3.10261 -1.2213,-19.96692 0.37362,-24.96075 1.59491,-4.99381 14.40338,-24.00881 12.7584,-28.98634 -1.64498,-4.97756 -17.96174,3.42125 -22.21829,0.36122 -4.25654,-3.06002 -9.93148,-19.8489 -15.17373,-19.82257 z m -10.60762,21.50309 v 1.71307 h 3.10007 v -1.71152 c 5.70357,0.78068 9.95539,5.65185 9.95805,11.4086 -0.008,1.49741 -0.30811,2.97887 -0.88315,4.36149 l -1.40405,-0.8108 -1.55029,2.68459 1.39888,0.8077 c -2.17408,2.81418 -5.526,4.46659 -9.08213,4.47725 -3.581866,-0.0113 -6.954714,-1.68796 -9.126054,-4.53668 l 1.38183,-0.79788 -1.5503,-2.68459 -1.36891,0.79013 c -0.55714,-1.36253 -0.84797,-2.8192 -0.85679,-4.29121 0.004,-5.76558 4.26885,-10.64069 9.982844,-11.41015 z m 1.53738,9.14724 c -1.28013,2.4e-4 -2.31774,1.03808 -2.31769,2.3182 2.3e-4,1.27993 1.03776,2.31745 2.31769,2.31769 1.28012,5e-5 2.31797,-1.03756 2.3182,-2.31769 5e-5,-1.28032 -1.03788,-2.31825 -2.3182,-2.3182 z m 18.41643,0.0786 c 1.1557,0.0255 2.25169,0.51852 3.03753,1.36633 2.63599,-1.03453 4.42298,-1.39618 4.64985,-0.94103 0.22448,0.45652 -1.14895,1.65615 -3.57343,3.12125 0.31991,1.86254 -0.62244,3.71386 -2.31665,4.55115 -1.69471,0.83661 -3.7378,0.4597 -5.02242,-0.92656 -2.63596,1.03452 -4.42294,1.39615 -4.64984,0.94102 -0.2235,-0.4568 1.14981,-1.65614 3.57342,-3.12074 -0.31991,-1.86253 0.62244,-3.71384 2.31665,-4.55113 0.61653,-0.30443 1.29746,-0.45547 1.98489,-0.44029 z m -18.41643,0.96015 c 0.70675,-2.6e-4 1.27976,0.57275 1.2795,1.2795 -3e-5,0.70656 -0.57295,1.27926 -1.2795,1.279 -0.70636,-3e-5 -1.27897,-0.57264 -1.279,-1.279 -2.6e-4,-0.70655 0.57244,-1.27947 1.279,-1.2795 z m 24.137,0.12351 c -0.45362,-0.0333 -1.31312,0.16391 -2.44636,0.5612 0.1779,0.22804 0.33217,0.47355 0.46044,0.73277 0.12538,0.26182 0.22372,0.53574 0.29352,0.81752 1.42415,-0.93283 2.17402,-1.65863 2.02985,-1.96473 -0.0437,-0.0843 -0.15718,-0.13361 -0.33745,-0.14676 z m -9.93633,4.25916 c -1.42414,0.93283 -2.17401,1.65864 -2.02984,1.96474 0.15584,0.30022 1.1878,0.14579 2.79362,-0.41806 -0.18128,-0.22643 -0.33903,-0.47074 -0.47078,-0.72915 -0.1252,-0.26184 -0.22337,-0.53577 -0.293,-0.81753 z m 2.52801,10.49239 c 0.3671,-0.004 0.70808,0.22955 0.82631,0.59841 0.14552,0.45397 -0.10311,0.9366 -0.55708,1.0821 0,0 -0.38436,0.19058 -0.98547,0.47336 a 1.601903,1.601903 0 0 1 -1.09864,1.32188 1.601903,1.601903 0 0 1 -1.39371,-0.20825 c -1.2724,0.5405 -2.76303,1.13141 -4.26433,1.62522 -2.12231,0.69812 -5.1015,0.90486 -5.1015,0.90486 -0.4687,0.0871 -0.93658,-0.10311 -1.0821,-0.55708 -0.14551,-0.45398 0.10257,-0.93659 0.55655,-1.0821 0,0 3.02225,-0.13243 5.18728,-0.8015 1.26394,-0.39059 2.7143,-0.98761 4.01681,-1.5689 a 1.601903,1.601903 0 0 1 1.10329,-1.36271 1.601903,1.601903 0 0 1 1.38234,0.19586 c 0.69144,-0.34036 1.15445,-0.57929 1.15445,-0.57929 0.0851,-0.0273 0.17108,-0.041 0.2558,-0.0419 z"/><path fill="none" stroke="currentColor" stroke-width="1.76202" stroke-linecap="round" d="m 58.386945,192.79405 22.745783,-9.87357"/><path fill="none" stroke="currentColor" stroke-width="1.53351" stroke-linecap="round" d="M 58.616699,165.53057 74.303986,165.281"/><path fill="none" stroke="currentColor" stroke-width="1.56973" stroke-linecap="round" d="m 63.140395,130.43878 19.117152,14.61125"/><path fill="none" stroke="currentColor" stroke-width="1.76202" stroke-linecap="round" d="m 167.01855,195.60389 -22.74578,-9.87357"/><path fill="none" stroke="currentColor" stroke-width="1.53351" stroke-linecap="round" d="m 166.78879,168.34041 -15.68728,-0.24957"/><path fill="none" stroke="currentColor" stroke-width="1.56973" stroke-linecap="round" d="m 152.10974,130.34237 -19.11715,14.61125"/></g></svg></span>
-                    <span class="np-forecast-lbl" data-i18n="np_forecast_btn">Previsione</span>
+                    <span class="np-forecast-lbl" data-i18n="np_forecast_btn">Analisi notte</span>
                 </button>
                 <div class="moon-container">
                     <div id="moon-emoji" class="moon-icon">🌕</div>
                     <div id="moon-phase-name" class="moon-phase-name">Caricamento...</div>
                 </div>
                 <div class="weather-container" style="min-width: 120px;">
+                    <span id="adp-wx-when" class="adp-wx-when"></span>
                     <span id="current-weather-icon" style="font-size: 3.5em; text-shadow: 0 0 15px rgba(255, 255, 255, 0.2); margin-bottom: 5px;">☁️</span>
                     <span id="current-weather-desc" style="font-size: 1em; font-weight: bold; color: #c9d1d9; text-transform: uppercase; text-align: center;">Meteo...</span>
                 </div>
@@ -862,7 +864,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
             </div>
         </div>
 
-        <div class="container">
+        <div data-adp-sez="pos" class="container adp-meteo">
             <div class="panel">
                 <h3><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-pin"/></svg> <span data-i18n="pos_title">Posizione</span> <span class="info-icon" onmouseenter="mostraTooltip(this, 'info_pos')" onmouseleave="nascondiTooltip()">ℹ️</span></h3>
                 <div class="input-group">
@@ -914,10 +916,43 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                         <span class="info-icon" style="font-size:1.1em;" onmouseenter="mostraTooltip(this, 'bortle_info_tip')" onmouseleave="nascondiTooltip()">ℹ️</span>
                     </div>
                 </div>
+                <div class="adp-lp-slot">
+                    <div class="meteo-item disabled" id="btn-lp" onclick="toggleLayerLP()" style="border-color:#c49a3c; color:#c49a3c;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;margin:0 auto 4px;flex-shrink:0"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 12h1m8-9v1m8 8h1m-15.4-6.4l.7.7m12.1-.7l-.7.7"/><path d="M9 16a5 5 0 1 1 6 0a3.5 3.5 0 0 0-1 3a2 2 0 0 1-4 0a3.5 3.5 0 0 0-1-3"/><path d="M9.7 17l4.6 0"/></svg><h4 data-i18n="lp_layer">Inq. Luminoso</h4><span>Atlas</span></div>
+                </div>
+                <div class="adp-notti">
+                    <div class="adp-notti-head"><span id="adp-notti-title" class="adp-notti-title"></span>
+            <div class="adp-session-date" style="display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap; margin-bottom:10px; padding:7px 12px; background:rgba(255,255,255,0.04); border:1px solid #21293a; border-radius:8px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c49a3c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                <label style="color:#c9d1d9; font-size:0.88em; white-space:nowrap;" data-i18n="session_date">Data sessione:</label>
+                <input type="date" id="session-date-picker" class="lite-hidden" style="background:#c8cfd6; color:#1a2533; border:1.5px solid #9aaab8; border-radius:7px; padding:6px 12px; font-size:1.6em; font-weight:600; cursor:pointer; width:auto;" onchange="onSessionDateChange(this.value)">
+                <button onclick="resetSessionDateToday()" class="lite-hidden" style="display:flex;flex-direction:column;align-items:center;gap:1px;padding:5px 12px;border-radius:7px;cursor:pointer;border:1px solid #2a3347;background:transparent;" data-i18n-parent="today_btn"><span style="font-size:0.85em;font-weight:600;color:#8899aa;" data-i18n="today_btn">Oggi</span><span class="today-btn-date" style="font-size:0.72em;color:#6e7a8a;"></span></button>
+                <div id="session-day-btns" class="lite-hidden" style="display:flex;gap:6px;flex-shrink:0;"></div>
+            </div>
+                    </div>
+                    <div id="adp-notti-list" class="adp-notti-list"></div>
+                </div>
             </div>
 
-            <div class="panel">
-                <h3><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-sliders"/></svg> <span data-i18n="env_data">Dati Ambientali</span> <span class="info-icon" onmouseenter="mostraTooltip(this, 'info_env')" onmouseleave="nascondiTooltip()">ℹ️</span></h3>
+            <div class="panel adp-meteo-map">
+            <div class="timeline-container" style="position: relative;">
+                <span class="info-icon" style="position: absolute; right: 15px; top: 15px; font-size: 1.2em;" onmouseenter="mostraTooltip(this, 'info_map')" onmouseleave="nascondiTooltip()">ℹ️</span>
+                <div class="adp-time-head">
+                <div id="time-display" class="time-display">Caricamento Timeline Meteo...</div>
+                </div>
+                <div class="adp-time-row">
+                    <button type="button" id="adp-play" class="adp-play" onclick="adpTogglePlay()"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4l13 8-13 8z"/></svg></button>
+                <div class="range-wrapper">
+                    <div id="meteo-gradient" class="gradient-bar"></div>
+                    <input type="range" id="timeSlider" min="0" max="23" value="0" oninput="syncSliders(this.value)" disabled>
+                </div>
+                </div>
+                <div style="display:flex; justify-content: space-between; font-size:0.8em; color:#6e7a8a; padding-top: 5px;">
+                    <span data-i18n="now">Adesso</span><span>+12h</span><span>+24h</span>
+                </div>
+            </div>
+                <div class="adp-map-wrap">
+                    <div class="adp-layers">
+                <h3><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-sliders"/></svg> <span data-i18n="env_data">Dati Ambientali</span> <span class="info-icon" onmouseenter="mostraTooltip(this, 'info_env')" onmouseleave="nascondiTooltip()">ℹ️</span><span class="adp-lay-arrow" aria-hidden="true"></span></h3>
                 <div class="meteo-grid">
                     <!-- ── Modalità Base: pulsante nuvole unificato (attiva tutti e tre i layer) ── -->
                     <div class="meteo-item m-bassa active lite-only" id="btn-nuvole-lite"
@@ -929,7 +964,6 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <div class="meteo-item m-luna disabled" id="btn-luna" onclick="toggleLayer('luna')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;margin:0 auto 4px;flex-shrink:0"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M16.418 4.157a8 8 0 0 0 0 15.686"/><path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0-18 0"/></svg><h4 data-i18n="moon_poll">Inq. Lunare</h4><span id="val-luna">--%</span></div>
                     <div class="meteo-item m-umidita disabled lite-hidden" id="btn-umidita" onclick="toggleLayer('umidita')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;margin:0 auto 4px;flex-shrink:0"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4.072 20.3a2.999 2.999 0 0 0 3.856 0a3.002 3.002 0 0 0 .67-3.798l-2.095-3.227a.6.6 0 0 0-1.005 0l-2.098 3.227a3.003 3.003 0 0 0 .671 3.798"/><path d="M16.072 20.3a2.999 2.999 0 0 0 3.856 0a3.002 3.002 0 0 0 .67-3.798l-2.095-3.227a.6.6 0 0 0-1.005 0l-2.098 3.227a3.003 3.003 0 0 0 .671 3.798"/><path d="M10.072 10.3a2.999 2.999 0 0 0 3.856 0a3.002 3.002 0 0 0 .67-3.798l-2.095-3.227a.6.6 0 0 0-1.005 0l-2.098 3.227a3.003 3.003 0 0 0 .671 3.798"/></svg><h4 data-i18n="humidity">Umidità</h4><span id="val-umidita-layer" style="color:#00ffff;">--%</span></div>
                     <div class="meteo-item m-vento disabled lite-hidden" id="btn-vento" onclick="toggleLayer('vento')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;margin:0 auto 4px;flex-shrink:0"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 8c.291-1.711 1.611-3 3.284-3c2.057 0 3.716 1.75 3.716 3.778c0 2.954-2.804 4.222-5 4.222h-4"/><path d="M13 17.778c0-2.028 1.659-3.778 3.716-3.778c1.673 0 2.993 1.289 3.284 3"/><path d="M3 12h14.5c1.93 0 3.5 1.57 3.5 3.5s-1.57 3.5-3.5 3.5h-.5"/></svg><h4 data-i18n="wind_layer">Vento</h4><span id="val-vento-layer" style="color:#44ff88;">-- km/h</span></div>
-                    <div class="meteo-item disabled" id="btn-lp" onclick="toggleLayerLP()" style="border-color:#c49a3c; color:#c49a3c;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;margin:0 auto 4px;flex-shrink:0"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 12h1m8-9v1m8 8h1m-15.4-6.4l.7.7m12.1-.7l-.7.7"/><path d="M9 16a5 5 0 1 1 6 0a3.5 3.5 0 0 0-1 3a2 2 0 0 1-4 0a3.5 3.5 0 0 0-1-3"/><path d="M9.7 17l4.6 0"/></svg><h4 data-i18n="lp_layer">Inq. Luminoso</h4><span>Atlas</span></div>
                     <div class="meteo-item m-seeing active" id="btn-seeing" onclick="apriScalaSeeing()" style="cursor:pointer; padding:10px 12px; text-align:left; grid-column: span 2;">
                         <div style="display:flex; flex-direction:row; align-items:center; gap:10px;">
                             <svg id="seeing-star-svg" width="56" height="56" viewBox="0 0 36 36" style="flex-shrink:0; border-radius:6px; display:block;">
@@ -947,6 +981,10 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                         </div>
                     </div>
                 </div>
+                    </div>
+            <div id="map"></div>
+                    <div id="adp-future-frame" class="adp-future-frame"></div>
+                    <div id="adp-future-banner" class="adp-future-banner"></div>
 
                 <!-- Legenda Inquinamento Luminoso \u2014 visibile solo con layer LP attivo -->
                 <div id="lp-legend" style="display:none; margin-top:10px; padding:10px 14px; background:#161b22; border:1px solid #ffaa00; border-radius:8px;">
@@ -964,35 +1002,13 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                         <span style="font-size:13px; color:#555; margin-left:6px;" data-i18n="lp_tap_hint">tocca per info</span>
                     </div>
                 </div>
+                </div>
             </div>
         </div>
 
-        <div class="container" style="flex-direction: column;">
-            <div class="timeline-container" style="position: relative;">
-                <span class="info-icon" style="position: absolute; right: 15px; top: 15px; font-size: 1.2em;" onmouseenter="mostraTooltip(this, 'info_map')" onmouseleave="nascondiTooltip()">ℹ️</span>
-                <div id="time-display" class="time-display">Caricamento Timeline Meteo...</div>
-                <div class="range-wrapper">
-                    <div id="meteo-gradient" class="gradient-bar"></div>
-                    <input type="range" id="timeSlider" min="0" max="23" value="0" oninput="syncSliders(this.value)" disabled>
-                </div>
-                <div style="display:flex; justify-content: space-between; font-size:0.8em; color:#6e7a8a; padding-top: 5px;">
-                    <span data-i18n="now">Adesso</span><span>+12h</span><span>+24h</span>
-                </div>
-            </div>
-            <div id="map"></div>
-        </div>
-
-        <div class="container dso-container" style="flex-direction: column;">
+        <div data-adp-sez="dso" class="container dso-container" style="flex-direction: column;">
             <h3><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-telescope"/></svg> <span data-i18n="hybrid_planetarium">Planetario Predittivo Ibrido</span> <span class="info-icon" onmouseenter="mostraTooltip(this, 'info_planetarium')" onmouseleave="nascondiTooltip()">ℹ️</span></h3>
             
-            <!-- ── Selezione data sessione (Planetario) ── -->
-            <div style="display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap; margin-bottom:10px; padding:7px 12px; background:rgba(255,255,255,0.04); border:1px solid #21293a; border-radius:8px;">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c49a3c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                <label style="color:#c9d1d9; font-size:0.88em; white-space:nowrap;" data-i18n="session_date">Data sessione:</label>
-                <input type="date" id="session-date-picker" class="lite-hidden" style="background:#c8cfd6; color:#1a2533; border:1.5px solid #9aaab8; border-radius:7px; padding:6px 12px; font-size:1.6em; font-weight:600; cursor:pointer; width:auto;" onchange="onSessionDateChange(this.value)">
-                <button onclick="resetSessionDateToday()" class="lite-hidden" style="display:flex;flex-direction:column;align-items:center;gap:1px;padding:5px 12px;border-radius:7px;cursor:pointer;border:1px solid #2a3347;background:transparent;" data-i18n-parent="today_btn"><span style="font-size:0.85em;font-weight:600;color:#8899aa;" data-i18n="today_btn">Oggi</span><span class="today-btn-date" style="font-size:0.72em;color:#6e7a8a;"></span></button>
-                <div id="session-day-btns" class="lite-hidden" style="display:flex;gap:6px;flex-shrink:0;"></div>
-            </div>
             <!-- ── Warning meteo date future ── -->
             <div id="future-date-meteo-warn" style="display:none; align-items:flex-start; gap:8px; margin-bottom:10px; padding:7px 12px; background:rgba(196,154,60,0.07); border:1px solid rgba(196,154,60,0.25); border-radius:8px; font-size:0.82em; color:#c49a3c;">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><path d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
@@ -1032,7 +1048,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
     </div>
 
     <div id="planning-view">
-        <div class="planning-header-row">
+        <div data-adp-sez="fov" class="planning-header-row">
             <button class="btn-a-secondary" style="padding:7px 14px; font-size:0.82em; border-color:#ff4444; color:#ff6666; margin-left:10px; display:inline-flex; align-items:center; gap:6px;" onclick="apriModalResetGenerale()" onmouseenter="mostraTooltip(this,'reset_general_tooltip')" onmouseleave="nascondiTooltip()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M5 12v-7a2 2 0 0 1 2 -2h7l5 5v4" /><path d="M3 12l18 0" /><path d="M6 16l0 2" /><path d="M10 16l0 6" /><path d="M14 16l0 2" /><path d="M18 16l0 4" /></svg> <span data-i18n="reset_general_btn">Reset</span></button>
             <div class="search-wrapper" style="margin-bottom: 30px;">
                 <div style="display: flex; align-items: center;">
@@ -1044,21 +1060,8 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
             </div>
         </div>
         
-        <h2 id="plan-target-name">Nome Oggetto</h2>
-        
-        <div class="panel" style="margin-bottom: 20px;">
-            <h3 style="margin-top:0;"><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-book"/></svg> <span data-i18n="dossier">Dossier Astrofotografico</span></h3>
-            <div class="stat-grid">
-                <div class="stat-box t-type"><span data-i18n="type">Tipologia</span><b id="stat-type">--</b></div>
-                <div class="stat-box t-mag"><span data-i18n="app_mag">Magnitudine App.</span><b id="stat-mag">--</b></div>
-                <div class="stat-box t-dist"><span data-i18n="distance">Distanza</span><b id="stat-dist">--</b></div>
-            </div>
-            <div class="info-box"><span id="target-description">Caricamento...</span><br><a href="#" id="target-wiki" class="wiki-link" target="_blank"><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-link"></use></svg> <span data-i18n="wiki_link">Wikipedia</span></a></div>
-            <div class="tip-box"><b><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-bulb"/></svg> <span data-i18n="tactical_tip">Consiglio Tattico:</span></b> <span id="target-tips">--</span></div>
-        </div>
-
-        <div class="planning-grid">
-            <div class="panel">
+        <div data-adp-sez="fov seq" class="planning-grid">
+            <div data-adp-sez="fov" class="panel">
                 <h3><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-camera"/></svg> <span data-i18n="optical_setup">Setup Ottico</span> <span class="info-icon" onmouseenter="mostraTooltip(this, 'info_setup')" onmouseleave="nascondiTooltip()">ℹ️</span> <span id="profile-btn" onclick="apriModalProfilo()" style="cursor:pointer; font-size:0.72em; font-weight:500; color:#8b949e; border:1px solid #21293a; border-radius:6px; padding:3px 10px; margin-left:8px; transition:all .2s; vertical-align:middle;" onmouseover="this.style.borderColor='rgba(196,154,60,0.4)';this.style.color='#c49a3c'" onmouseout="this.style.borderColor='#21293a';this.style.color='#8b949e'" onmouseenter="_profileMouseEnter(this)" onmouseleave="nascondiTooltip()" ontouchstart="_profileTouchStart(this)" ontouchend="_profileTouchEnd()" ontouchcancel="_profileTouchEnd()">👤 <span class="profile-btn-label" data-i18n="prof_btn">Profilo</span></span></h3>
                 <div class="input-group" style="display:flex; align-items:flex-start; gap:5px;">
                     <label data-i18n="telescope" style="padding-top:6px;">Telescopio:</label>
@@ -1165,8 +1168,24 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                 </div>
             </div>
             
-            <div style="display: flex; flex-direction: column;">
-                <div class="panel" style="padding:0; overflow:hidden;">
+            <div data-adp-sez="fov seq" style="display: flex; flex-direction: column;">
+                <div data-adp-sez="fov" class="panel adp-dossier">
+                    <h3 style="margin-top:0;"><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-book"/></svg> <span data-i18n="dossier">Dossier Astrofotografico</span></h3>
+                    <div class="adp-dos-testa">
+                        <div id="adp-dos-img" class="adp-dos-img" aria-hidden="true"></div>
+                        <div class="adp-dos-info">
+                            <h2 id="plan-target-name">Nome Oggetto</h2>
+                            <div class="stat-grid">
+                                <div class="stat-box t-type"><span data-i18n="type">Tipologia</span><b id="stat-type">--</b></div>
+                                <div class="stat-box t-mag"><span data-i18n="app_mag">Magnitudine App.</span><b id="stat-mag">--</b></div>
+                                <div class="stat-box t-dist"><span data-i18n="distance">Distanza</span><b id="stat-dist">--</b></div>
+                            </div>
+                            <div class="info-box"><span id="target-description">Caricamento...</span><br><a href="#" id="target-wiki" class="wiki-link" target="_blank"><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-link"></use></svg> <span data-i18n="wiki_link">Wikipedia</span></a></div>
+                        </div>
+                    </div>
+                    <div class="tip-box"><b><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-bulb"/></svg> <span data-i18n="tactical_tip">Consiglio Tattico:</span></b> <span id="target-tips">--</span></div>
+                </div>
+                <div data-adp-sez="fov" class="panel" style="padding:0; overflow:hidden;">
                     <h3 style="padding: 15px 20px 0 20px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;">
                         <span><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-ruler"/></svg> <span data-i18n="fov_sim">Simulatore FOV Realistico (DSS2)</span></span>
                         <span style="display:inline-flex; align-items:center; gap:6px; padding-right:4px;">
@@ -1222,7 +1241,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                         </div>
                     </div>
                 </div>
-                <div class="lite-hidden" style="display:flex; align-items:center; justify-content:flex-start; gap:8px; margin-bottom:6px; flex-wrap:wrap;">
+                <div data-adp-sez="seq" class="lite-hidden" style="display:flex; align-items:center; justify-content:flex-start; gap:8px; margin-bottom:6px; flex-wrap:wrap;">
                   <input type="file" id="hz-restore-chart-input" accept=".json" style="display:none" onchange="hzRestoreFromFile(this.files[0])">
                   <button onclick="mostraOrizzonte()"
                     style="display:inline-flex;align-items:center;gap:7px;background:transparent;border:1px solid rgba(46,204,113,0.35);border-radius:6px;padding:7px 18px;color:#6e7a8a;font-size:13px;cursor:pointer;transition:all .2s;"
@@ -1245,12 +1264,12 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <span data-i18n="hz_remove_fov_btn">Reset orizzonte</span>
                   </button>
                 </div>
-                <div class="chart-container"><canvas id="altitudeChart"></canvas></div>
+                <div data-adp-sez="seq" class="chart-container"><canvas id="altitudeChart"></canvas></div>
             </div>
         </div>
 
         <!-- ═══ SEZIONE SMART/PRO comune ═══ -->
-        <div class="twilight-grid lite-hidden" style="grid-template-columns: repeat(5, 1fr);">
+        <div data-adp-sez="seq" class="twilight-grid lite-hidden" style="grid-template-columns: repeat(5, 1fr);">
             <div class="twilight-item"><span class="icon"><svg width="32" height="32" style="display:inline-block;vertical-align:middle;flex-shrink:0"><use href="#i-sunset"/></svg></span><span class="label" data-i18n="sunset">Tramonto</span><b id="info-sunset">--:--</b></div>
             <div class="twilight-item"><span class="icon"><svg width="32" height="32" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-stars"/></svg></span><span class="label" data-i18n="night_start">Inizio Notte Astr.</span><b id="info-nightstart" class="twilight-night">--:--</b></div>
             <div class="twilight-item"><span class="icon"><svg width="32" height="32" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-switch"/></svg></span><span class="label" data-i18n="meridian_flip_time">Meridian Flip</span><b id="info-meridianflip" class="twilight-night" style="color:#c49a3c;">--:--</b></div>
@@ -1259,7 +1278,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
         </div>
         
         <!-- ── Data sessione nella sezione Smart (sincronizzata con Planetario) ── -->
-        <div style="display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap; margin-bottom:10px; padding:7px 12px; background:rgba(255,255,255,0.04); border:1px solid #21293a; border-radius:8px;">
+        <div data-adp-sez="seq" style="display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap; margin-bottom:10px; padding:7px 12px; background:rgba(255,255,255,0.04); border:1px solid #21293a; border-radius:8px;">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c49a3c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
             <label style="color:#c9d1d9; font-size:0.88em; white-space:nowrap;" data-i18n="session_date">Data sessione:</label>
             <input type="date" id="session-date-picker-smart" class="lite-hidden" style="background:#c8cfd6; color:#1a2533; border:1.5px solid #9aaab8; border-radius:7px; padding:6px 12px; font-size:1.6em; font-weight:600; cursor:pointer; width:auto;" onchange="onSessionDateChange(this.value)">
@@ -1267,9 +1286,9 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
             <div id="session-day-btns-smart" class="lite-hidden" style="display:flex;gap:6px;flex-shrink:0;"></div>
         </div>
         <!-- ── Label data centrata sopra inizio/fine sessione ── -->
-        <div id="session-date-centered-label" style="text-align:center; font-size:0.88em; font-weight:600; color:#c49a3c; margin-bottom:8px; letter-spacing:0.2px;"></div>
+        <div data-adp-sez="seq" id="session-date-centered-label" style="text-align:center; font-size:0.88em; font-weight:600; color:#c49a3c; margin-bottom:8px; letter-spacing:0.2px;"></div>
 
-        <div class="panel lite-hidden" style="margin-bottom: 20px; text-align: center; display: flex; justify-content: space-around; flex-wrap: wrap;">
+        <div data-adp-sez="seq" class="panel lite-hidden" style="margin-bottom: 20px; text-align: center; display: flex; justify-content: space-around; flex-wrap: wrap;">
             <div class="input-group" style="margin: 0;"><label style="width: auto; margin-right: 10px; color:#c9d1d9;" data-i18n="session_start">Inizio Sessione:</label><input type="time" id="time-start" onchange="calcolaTempi()"></div>
             <div class="input-group" style="margin: 0; flex-direction:column; align-items:flex-start; gap:4px;">
                 <div style="display:flex; align-items:center; gap:10px;">
@@ -1281,7 +1300,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
         </div>
 
         <!-- ═══ RIGA TEMPI (unica riga orizzontale) ═══ -->
-        <div class="lite-hidden" style="display: flex; gap: 15px; margin-top: 20px; flex-wrap: wrap;">
+        <div data-adp-sez="seq" class="lite-hidden" style="display: flex; gap: 15px; margin-top: 20px; flex-wrap: wrap;">
             <div class="summary-box" style="flex: 1; min-width: 150px; text-align: center; margin-bottom: 0;">
                 <h4 data-i18n="avail_window">Finestra Disponibile</h4>
                 <span id="calc-available">--h --m</span>
@@ -1298,7 +1317,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
         </div>
 
         <!-- ═══ BARRA TEMPORALE MODALITÀ BASE ═══ -->
-        <div id="lite-timeline-wrap" class="lite-only" style="margin:16px 0 24px; padding:0 2px;">
+        <div data-adp-sez="seq" id="lite-timeline-wrap" class="lite-only" style="margin:16px 0 24px; padding:0 2px;">
 
             <!-- Riga superiore: notte astr. estremi + input sessione al centro -->
             <div style="display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:10px; gap:8px;">
@@ -1362,7 +1381,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
         </div>
 
         <!-- ═══ TOGGLE SMART / PRO ═══ -->
-        <div style="margin-top: 20px; display:flex; justify-content:flex-start;">
+        <div data-adp-sez="seq" style="margin-top: 20px; display:flex; justify-content:flex-start;">
             <div id="mode-toggle-bar" style="display:flex; gap:0; border-radius:8px; overflow:hidden; border:1px solid #2d3a50; background:#0d1117;">
                 <button id="btn-mode-smart" onclick="setCalcMode('smart')" style="padding:10px 28px; font-size:0.95em; font-weight:700; border:none; cursor:pointer; background:#00c6ff; color:#0d1117; display:flex; align-items:center; gap:8px; transition:all 0.2s;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0;"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M16 19a1 1 0 0 1 0 -2a1 1 0 0 0 1 -1c0 -1.333 2 -1.333 2 0a1 1 0 0 0 1 1c1.333 0 1.333 2 0 2a1 1 0 0 0 -1 1c0 1.333 -2 1.333 -2 0a1 1 0 0 0 -1 -1" /><path d="M3 11a5 5 0 0 0 5 -5c0 -1.333 2 -1.333 2 0a5 5 0 0 0 5 5c1.333 0 1.333 2 0 2a5 5 0 0 0 -5 5a1 1 0 0 1 -2 0a5 5 0 0 0 -5 -5c-1.333 0 -1.333 -2 0 -2" /><path d="M16 7a1 1 0 0 1 0 -2a1 1 0 0 0 1 -1c0 -1.333 2 -1.333 2 0a1 1 0 0 0 1 1c1.333 0 1.333 2 0 2a1 1 0 0 0 -1 1c0 1.333 -2 1.333 -2 0a1 1 0 0 0 -1 -1" /></svg>
@@ -1377,13 +1396,13 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
 
         <!-- ═══ IMPOSTAZIONE SEQUENZA ═══ -->
 
-        <div id="mode-smart-section">
-        <div id="bortle-warning-banner" style="display:none; margin-bottom:10px; padding:10px 14px; background:rgba(196,122,60,0.12); border:1px solid #c47a3c; border-left:4px solid #c47a3c; border-radius:6px; font-size:0.85em; color:#c47a3c; align-items:center; gap:10px; flex-wrap:wrap;">
+        <div data-adp-sez="seq exp" id="mode-smart-section">
+        <div data-adp-sez="seq" id="bortle-warning-banner" style="display:none; margin-bottom:10px; padding:10px 14px; background:rgba(196,122,60,0.12); border:1px solid #c47a3c; border-left:4px solid #c47a3c; border-radius:6px; font-size:0.85em; color:#c47a3c; align-items:center; gap:10px; flex-wrap:wrap;">
             <span>⚠️</span>
             <span data-i18n="bortle_unconfirmed_banner" style="flex:1;">Indice Bortle non confermato per la tua zona — l'analisi potrebbe essere imprecisa.</span>
             <button onclick="vaiABortle()" data-i18n="bortle_goto_btn" style="background:transparent; border:1px solid #c47a3c; color:#c47a3c; border-radius:4px; padding:3px 10px; font-size:0.82em; cursor:pointer; white-space:nowrap;">Vai al Bortle</button>
         </div>
-        <div class="panel" style="margin-top: 20px;">
+        <div data-adp-sez="seq" class="panel" style="margin-top: 20px;">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
                 <h3 style="margin: 0;"><span data-i18n="seq_setup">Impostazione Sequenza</span> <span class="info-icon" onmouseenter="mostraTooltip(this, 'info_seq_opt')" onmouseleave="nascondiTooltip()">ℹ️</span></h3>
                 <div style="display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-left:auto;">
@@ -1500,9 +1519,9 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
         </div>
 
         <!-- ═══ ANALISI STRATEGICA ═══ -->
-        <div id="ai-advisor-panel" style="display:none; text-align:left; background:#161b22; padding:15px; border-radius:5px; border:1px solid #21293a; margin-top: 15px;"></div>
+        <div data-adp-sez="seq" id="ai-advisor-panel" style="display:none; text-align:left; background:#161b22; padding:15px; border-radius:5px; border:1px solid #21293a; margin-top: 15px;"></div>
 
-        <div class="panel" style="margin-top: 20px; border: 1px solid #c49a3c; background: linear-gradient(180deg, #1a1a1a 0%, #121212 100%);">
+        <div data-adp-sez="exp" class="panel" style="margin-top: 20px; border: 1px solid #c49a3c; background: linear-gradient(180deg, #1a1a1a 0%, #121212 100%);">
             <h3><svg width="30" height="30" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-chip"/></svg> <span data-i18n="nina_export_title">Esportazione N.I.N.A. Advanced Sequencer</span> <span class="info-icon" onmouseenter="mostraTooltip(this, 'info_nina')" onmouseleave="nascondiTooltip()">ℹ️</span></h3>
             
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px;">
@@ -1577,16 +1596,16 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
         </div>
         </div><!-- /mode-smart-section -->
         <!-- ═══ SEZIONE PRO ═══ -->
-        <div id="mode-pro-section" class="lite-hidden" style="display:none;">
-        <div id="bortle-warning-banner" style="display:none; margin-bottom:10px; padding:10px 14px; background:rgba(196,122,60,0.12); border:1px solid #c47a3c; border-left:4px solid #c47a3c; border-radius:6px; font-size:0.85em; color:#c47a3c; align-items:center; gap:10px; flex-wrap:wrap;">
+        <div data-adp-sez="seq exp" id="mode-pro-section" class="lite-hidden" style="display:none;">
+        <div data-adp-sez="seq" id="bortle-warning-banner" style="display:none; margin-bottom:10px; padding:10px 14px; background:rgba(196,122,60,0.12); border:1px solid #c47a3c; border-left:4px solid #c47a3c; border-radius:6px; font-size:0.85em; color:#c47a3c; align-items:center; gap:10px; flex-wrap:wrap;">
             <span>⚠️</span>
             <span data-i18n="bortle_unconfirmed_banner" style="flex:1;">Indice Bortle non confermato per la tua zona — l'analisi potrebbe essere imprecisa.</span>
             <button onclick="vaiABortle()" data-i18n="bortle_goto_btn" style="background:transparent; border:1px solid #c47a3c; color:#c47a3c; border-radius:4px; padding:3px 10px; font-size:0.82em; cursor:pointer; white-space:nowrap;">Vai al Bortle</button>
         </div>
 
 
-        <div style="display: flex; flex-direction: column; gap: 20px;">
-            <div class="panel">
+        <div data-adp-sez="seq exp" style="display: flex; flex-direction: column; gap: 20px;">
+            <div data-adp-sez="exp" class="panel">
                 <div style="margin-bottom: 10px;">
                     <h4 style="margin: 0; color: #c9d1d9;">
                         <span data-i18n="filter_map">Mappatura Nomi Filtri</span> 
@@ -1606,8 +1625,8 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px;" id="pro-nina-filters-container">
                 </div>
             </div>
-            <div class="panel">
-                <div style="border-bottom: 1px solid #21293a; padding-bottom: 15px; margin-bottom: 15px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;">
+            <div data-adp-sez="seq exp" class="panel">
+                <div data-adp-sez="seq" style="border-bottom: 1px solid #21293a; padding-bottom: 15px; margin-bottom: 15px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;">
                     <h3 style="margin: 0; color: #c9d1d9;"><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-camera"/></svg> <span data-i18n="pro_seq_builder">Calcolatore di Sequenze</span> <span class="info-icon" onmouseenter="mostraTooltip(this, 'info_pro_seq')" onmouseleave="nascondiTooltip()">ℹ️</span></h3>
                     <div style="display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-left:auto;">
                             <select id="pro-sensor-type" onchange="document.getElementById('sensor-type').value=this.value; toggleSensorMode(); disegnaGrigliaPro(); aggiornaFiltriNinaPro(); aggiornaFiltroOSC();" style="background:#1a1a1a; color:#00c6ff; font-weight:bold; border-color:#00c6ff; cursor:pointer; width:auto !important; font-size:0.82em; padding:4px 8px; border-radius:4px;">
@@ -1626,20 +1645,20 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     </div>
                 </div>
                 
-                <div id="rotate-hint-pro" style="display:none; align-items:center; gap:10px; background:rgba(187,134,252,0.08); border:1px solid rgba(187,134,252,0.3); border-radius:6px; padding:10px 14px; margin:0 0 10px 0; font-size:0.82em; color:#c49a3c;">
+                <div data-adp-sez="seq" id="rotate-hint-pro" style="display:none; align-items:center; gap:10px; background:rgba(187,134,252,0.08); border:1px solid rgba(187,134,252,0.3); border-radius:6px; padding:10px 14px; margin:0 0 10px 0; font-size:0.82em; color:#c49a3c;">
                     <svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-smartphone"/></svg>
                     <span data-i18n="rotate_hint">Per una visualizzazione ottimale della griglia filtri, ruota il telefono in orizzontale.</span>
                 </div>
-                <div id="pro-sequence-grid" style="display: flex; flex-direction: column; gap: 10px;"></div>
+                <div data-adp-sez="seq" id="pro-sequence-grid" style="display: flex; flex-direction: column; gap: 10px;"></div>
                 
-                <div style="width: 100%; background: #1a1a1a; border: 1px solid #444; border-radius: 8px; height: 30px; position: relative; overflow: hidden; margin-top: 20px;">
+                <div data-adp-sez="seq" style="width: 100%; background: #1a1a1a; border: 1px solid #444; border-radius: 8px; height: 30px; position: relative; overflow: hidden; margin-top: 20px;">
                     <div id="pro-fill-bar" style="height: 100%; width: 0%; background: #44ff44; transition: width 0.3s, background 0.3s;"></div>
                     <span id="pro-fill-text" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-weight: bold; color: #c9d1d9; text-shadow: 1px 1px 2px #000; font-size: 0.9em; white-space: nowrap;">0h 0m / 0h 0m (0%)</span>
                 </div>
-                <button id="btn-pro-multinight" class="btn-a-secondary btn-a-red" style="display: none; width: 100%; margin-top: 10px; padding: 11px;" onclick="apriMultiNight('pro');"><svg width="30" height="30" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" style="display:inline-block;vertical-align:middle;flex-shrink:0;"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M11 21h-5a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v3.5" /><path d="M16 3v4" /><path d="M8 3v4" /><path d="M4 11h11" /><path d="M17.8 20.817l-2.172 1.138a.392 .392 0 0 1 -.568 -.41l.415 -2.411l-1.757 -1.707a.389 .389 0 0 1 .217 -.665l2.428 -.352l1.086 -2.193a.392 .392 0 0 1 .702 0l1.086 2.193l2.428 .352a.39 .39 0 0 1 .217 .665l-1.757 1.707l.414 2.41a.39 .39 0 0 1 -.567 .411l-2.172 -1.138" /></svg> <span data-i18n="pro_overflow">Sforamento! Dividi in Multi-Notte</span></button>
+                <button data-adp-sez="seq" id="btn-pro-multinight" class="btn-a-secondary btn-a-red" style="display: none; width: 100%; margin-top: 10px; padding: 11px;" onclick="apriMultiNight('pro');"><svg width="30" height="30" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" style="display:inline-block;vertical-align:middle;flex-shrink:0;"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M11 21h-5a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v3.5" /><path d="M16 3v4" /><path d="M8 3v4" /><path d="M4 11h11" /><path d="M17.8 20.817l-2.172 1.138a.392 .392 0 0 1 -.568 -.41l.415 -2.411l-1.757 -1.707a.389 .389 0 0 1 .217 -.665l2.428 -.352l1.086 -2.193a.392 .392 0 0 1 .702 0l1.086 2.193l2.428 .352a.39 .39 0 0 1 .217 .665l-1.757 1.707l.414 2.41a.39 .39 0 0 1 -.567 .411l-2.172 -1.138" /></svg> <span data-i18n="pro_overflow">Sforamento! Dividi in Multi-Notte</span></button>
 
                 <!-- ── Riga Dithering PRO ───────────────────────────────── -->
-                <div class="calc-row" style="border-left-color: #c49a3c; margin-top: 14px; background: #2a2a2a;">
+                <div data-adp-sez="seq" class="calc-row" style="border-left-color: #c49a3c; margin-top: 14px; background: #2a2a2a;">
                     <div style="display:flex; align-items:center; width: 140px;">
                         <label style="color: #c49a3c;" data-i18n="dither_setting">Impostazione tempo dither</label>
                         <span class="info-icon" style="margin-left: 8px; color: #c49a3c; font-size: 1.1em;" onmouseenter="mostraTooltip(this, 'info_dither')" onmouseleave="nascondiTooltip()">ℹ️</span>
@@ -1653,7 +1672,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                 </div>
 
                 <!-- ── Riga Budget Autofocus PRO (collassabile) ───────────── -->
-                <div class="calc-row" id="pro-af-budget-row"
+                <div data-adp-sez="seq" class="calc-row" id="pro-af-budget-row"
                      style="border-left-color: #00aaff; margin-top: 6px; background: #1a2235; cursor: pointer; flex-wrap: wrap;"
                      onclick="toggleProAFPanel()">
                     <div style="display:flex; align-items:center; width: 140px;">
@@ -1681,14 +1700,14 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     </div>
                 </div>
                 <!-- Pannello stima AF PRO (nascosto di default) -->
-                <div id="pro-af-stima-panel" style="display:none; background:#111d2e; border-left:3px solid #00aaff44;
+                <div data-adp-sez="seq" id="pro-af-stima-panel" style="display:none; background:#111d2e; border-left:3px solid #00aaff44;
                      border-radius:0 0 6px 6px; padding:10px 14px; margin-top:1px; font-size:0.82em; color:#6e7a8a;">
                     <span style="font-size:0.85em; color:#4a5a6a;">I trigger AF si configurano nel pannello N.I.N.A. Export qui sotto — i valori sono sincronizzati con la sezione Smart.</span>
                 </div>
                 <!-- ── Warning Meridian Flip PRO ── -->
-                <div class="calc-row" id="pro-flip-warning-row" style="display:none; border-left-color: #ffaa00; margin-top: 6px; background: #1a1a0d; color:#ffaa00; font-size:0.9em;"><div style="display:flex; align-items:center; gap:8px; flex:1;">⚠ <span id="pro-flip-warning-text"></span></div></div>
+                <div data-adp-sez="seq" class="calc-row" id="pro-flip-warning-row" style="display:none; border-left-color: #ffaa00; margin-top: 6px; background: #1a1a0d; color:#ffaa00; font-size:0.9em;"><div style="display:flex; align-items:center; gap:8px; flex:1;">⚠ <span id="pro-flip-warning-text"></span></div></div>
 
-    <div style="display:flex; flex-direction:column; gap:20px;">
+    <div data-adp-sez="exp" style="display:flex; flex-direction:column; gap:20px;">
                             <div class="panel" style="display: flex; flex-direction: column; gap: 15px;">
                                     <h3 style="margin-top:0; border-bottom: 1px solid #21293a; padding-bottom: 5px;"><svg width="30" height="30" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-chip"/></svg> <span data-i18n="nina_export_title">Esportazione N.I.N.A. Advanced Sequencer</span> <span class="info-icon" onmouseenter="mostraTooltip(this, 'info_nina')" onmouseleave="nascondiTooltip()">ℹ️</span></h3>
                                     
@@ -1941,6 +1960,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <li><strong>Consigli personalizzati:</strong> con il setup salvato vengono esclusi gli oggetti troppo grandi per il campo inquadrato (servirebbe un mosaico) e quelli troppo piccoli (meno di 150 pixel sul sensore). Con un profilo d'orizzonte contano solo le ore in cui l'oggetto lo supera. La riga sotto il titolo indica quali dati sono stati usati. In Modalità Base l'orizzonte non viene considerato.</li>
                     <li><strong>Dal popup al planetario:</strong> clicca su un oggetto e si apre la dashboard già posizionata alla sua ora migliore, con la card evidenziata nel carosello.</li>
                     <li><strong>Una stima, non una garanzia:</strong> il giudizio si basa sulle previsioni del momento. Prima di uscire controlla sempre i dati meteo aggiornati.</li>
+                    <li><strong>Pulsante Analisi notte:</strong> si trova nel riquadro in alto, tra la fase lunare e il meteo, ed è sempre disponibile. Il suo anello prende il colore del giudizio della notte della data scelta: verde per Perfette, oro per Promettente, arancio per Incerta, rosso per Non ne vale la pena o Lascia perdere, grigio se mancano i dati meteo. Toccandolo riapri l'analisi completa con i target consigliati.</li>
                 </ul>
             </div>
 
@@ -1955,15 +1975,26 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
             </div>
 
             <div class="guide-section">
+                <h3>0a. Navigazione a sezioni</h3>
+                <p>L'app è impostata per seguire un percorso logico che ti guida nella costruzione di una sessione astrofotografica in 5 sezioni: <strong>Meteo</strong> (che tempo fa dove stai tu?), <strong>DSO</strong> (cosa mi piace fotografare?), <strong>Setup</strong> (con quali strumenti), <strong>Sequenza</strong> (il cuore della sessione, con pose e tempi), <strong>Download</strong> (esporta il tuo progetto completo).</p>
+                <p style="margin-top:10px;">La barra in alto mostra dove sei: clicca una sezione per raggiungerla, oppure usa i pulsanti <em>Indietro/Avanti</em> in fondo alla pagina per passare a quella vicina. Setup, Sequenza e Download dipendono dall'oggetto scelto: se non ne hai ancora scelto uno, la sezione ti invita ad andare in DSO. Scelto l'oggetto, il suo nome resta fisso in alto mentre scorri, con il pulsante <em>Cambia oggetto</em>.</p>
+                <p style="margin-top:10px;">Sullo smartphone la barra in alto mostra solo il logo e il menu <strong>☰</strong>, che raccoglie Modalità (Base/Avanzata), Lingua, Manuale e Novità della versione. I menu a tendina si aprono come un pannello dal basso, con caratteri grandi e, negli elenchi lunghi (telescopi, sensori, filtri), una casella di ricerca.</p>
+            </div>
+
+            <div class="guide-section">
                 <h3><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-globe"/></svg> 1. Dati Ambientali e Meteo Tattico</h3>
-                <p>Prima di puntare il telescopio, devi sapere cosa ti aspetta sopra la testa. Questa sezione aggrega dati satellitari professionali in tempo reale direttamente nel tuo browser.</p>
+                <p>Prima di puntare il telescopio, devi sapere cosa ti aspetta sopra la testa. Questa sezione raccoglie le previsioni meteo orarie (modelli Open-Meteo) per la tua posizione.</p>
                 <ul>
-                    <li><strong>Mappa a Raggio (50 Km):</strong> Progettata per gli astrofotografi itineranti. Il cerchio simbolico di 50 km ti permette di valutare a colpo d'occhio dove spostarti per trovare "buchi di sereno". Attiva i layer sovrapposti (Nuvole Basse, Medie, Alte, Jet Stream, Umidità, Luna) e scorri la timeline per vedere l'evoluzione nelle prossime ore.</li>
+                    <li><strong>Mappa del meteo sul posto:</strong> le nubi basse, medie e alte sono mostrate come copertura reale prevista su 25 km intorno a te; Jet stream, Umidità e Luna nel raggio indicato. I livelli si accendono dal pannello a scomparsa a sinistra della mappa.</li>
+                    <li><strong>Linea temporale e ▶:</strong> scorri le ore o premi ▶ per vedere la notte scorrere (0,5 s per ora). Alla prima apertura il giro parte da solo una volta.</li>
+                    <li><strong>Previsione futura:</strong> con una data diversa da oggi la mappa mostra una fascia e una cornice colorate: stai guardando una previsione, meno affidabile più la data è lontana.</li>
+                    <li><strong>Le prossime notti:</strong> sotto il Bortle, tre schede riassumono le prossime notti; un clic le apre.</li>
                     <li><strong>Jet Stream:</strong> Il vero nemico del Seeing. Un valore sotto i 50 km/h sopra la tua posizione garantisce cieli stabili e stelle puntiformi. Oltre i 100 km/h la turbolenza atmosferica devasterà i dettagli fini — inutile usare focali lunghe.</li>
                     <li><strong>Allarme Umidità:</strong> Se il dato supera l'85% (indicatore rosso), attiva le fasce riscaldanti anticondensa al massimo della potenza <em>prima</em> che la temperatura scenda al punto di rugiada. Una volta che l'ottica è appannata, la serata è compromessa.</li>
                     <li><strong>Inquinamento Lunare:</strong> Mostra la percentuale di cielo "bruciato" dalla luce della Luna in base alla sua fase e posizione. La penalità si azzera automaticamente quando la Luna è sotto l'orizzonte. Un valore alto scoraggia le riprese a banda larga — considera filtri narrowband (Ha, OIII, SII) che tagliano il continuo lunare.</li>
-                    <li><strong>Inquinamento Luminoso (Layer Atlas 2024):</strong> Attiva il layer <em>Inq. Luminoso</em> per sovrapporre alla mappa la scala di Bortle a colori reali (dati VIIRS 2024 di David Lorenz): blu scuro = cielo pristino (Bortle 1–2), verde = rurale (3–4), giallo = suburbano (5), arancione = periferia urbana (6–7), bianco = centro città (8–9). Quando il layer è attivo compare automaticamente la legenda colorata sotto i pulsanti. Usa questo layer per individuare visivamente il tuo livello Bortle reale e impostarlo nel selettore — influisce direttamente sui consigli filtri dell'assistente.</li>
+                    <li><strong>Inquinamento Luminoso (Layer Atlas 2024):</strong> Attiva il pulsante <em>Inquinamento Luminoso</em> (sotto il selettore Bortle) per sovrapporre alla mappa la scala di Bortle a colori reali (dati VIIRS 2024 di David Lorenz): blu scuro = cielo pristino (Bortle 1–2), verde = rurale (3–4), giallo = suburbano (5), arancione = periferia urbana (6–7), bianco = centro città (8–9). Quando il layer è attivo, sulla mappa compare la legenda colorata. Usa questo layer per individuare visivamente il tuo livello Bortle reale e impostarlo nel selettore — influisce direttamente sui consigli filtri dell'assistente.</li>
                     <li><strong>Selettore Bortle:</strong> Imposta il livello di inquinamento luminoso del tuo sito di osservazione (1 = cielo buio totale, 9 = centro città). Il valore viene usato dall'assistente filtri per calibrare i consigli sui filtri: cieli scuri (1–3) non richiedono filtri LP; cieli suburbani (4–7) beneficiano di filtri broadband (CLS, L-Pro, Quadband); cieli urbani (8–9) rendono indispensabile il narrowband (Ha/OIII dual-band). Clicca ℹ️ per istruzioni su come trovare il tuo Bortle con il layer mappa.</li>
+                    <li><strong>Seeing sulla mappa:</strong> la stima del seeing è sempre visibile in basso al centro della mappa, con voto e giudizio. Toccandola si apre la scala di Antoniadi. Sullo smartphone il selettore Bortle e il pulsante Inquinamento Luminoso stanno sotto la mappa, e quando accendi il layer la pagina si sposta da sola sulla mappa.</li>
                 </ul>
             </div>
 
@@ -1972,7 +2003,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                 <p>Il planetario non mostra semplicemente le stelle: calcola in tempo reale l'altitudine sull'orizzonte di ogni oggetto e ti presenta solo i target fotografi camente utili per la tua nottata.</p>
                 <ul>
                     <li><strong>Database Locale (Oggetti Consigliati):</strong> Contiene i target più celebri con metadati completi: tipo, magnitudine, distanza e "Consiglio Tattico" specifico. Il consiglio non è generico — suggerisce filtri, avverte di saturazioni al nucleo, indica la stagionalità ottimale.</li>
-                    <li><strong>Slider Temporale:</strong> Trascina la barra dell'orario per simulare la volta celeste a qualsiasi ora della notte. Gli oggetti scompaiono quando scendono sotto i 20° di altitudine (zona di turbolenza e bassa trasparenza), in modo da non mostrarti mai target inutilizzabili.</li>
+                    <li><strong>Slider della notte:</strong> copre la notte della data scelta, dalla fine del crepuscolo civile (Sole a −6°) all'alba. Il colore della barra segue il buio del cielo e le tacche segnano la notte astronomica. Premi ▶ per farla scorrere (1 s per ora): le card si sostituiscono con una dissolvenza. Gli oggetti del cielo profondo compaiono sopra i 30° di altezza, i pianeti sopra i 10°.</li>
                     <li><strong>Ricerca Universale SIMBAD:</strong> Se l'oggetto che cerchi non è nel database locale, inserisci il nome (es. "Sh2-132", "Abell 85", "IC 1871") e il motore interroga in tempo reale l'Università di Strasburgo. Riceverai le coordinate assolute J2000 e potrai pianificare immediatamente la ripresa.</li>
                     <li><strong>Sistema Solare:</strong> Pianeti e Luna sono sempre visibili in lista separata. Utile per pianificare sessioni planetarie o verificare l'interferenza lunare sul tuo target Deep Sky.</li>
                 </ul>
@@ -1983,9 +2014,12 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                 <p>Questa sezione trasforma i dati fisici del tuo strumento in informazioni operative: quanti arcsec copre il tuo sensore? L'oggetto entra nel campo? A che angolo devi orientare la camera?</p>
                 <ul>
                     <li><strong>Scala di Campionamento (arcsec/pixel):</strong> Inserisci focale (mm) e dimensione pixel (µm): il sistema calcola il campionamento e lo classifica in tre zone. <em>Verde</em>: campionamento ideale (1–2 arcsec/px). <em>Giallo</em>: sottocampionamento lieve (stelle leggermente squadrate). <em>Rosso</em>: sovracampionamento eccessivo — stai sprecando fotoni e risoluzione.</li>
+                    <li><strong>Dossier Astrofotografico:</strong> sopra il simulatore FOV trovi la scheda dell'oggetto, con foto (la tua, se l'hai caricata), tipo, magnitudine, distanza, descrizione con link a Wikipedia e consiglio tattico.</li>
                     <li><strong>Simulatore FOV Realistico (DSS2):</strong> Carica l'immagine reale del cielo profondo dall'archivio DSS2 e vi sovrappone il rettangolo del tuo sensore in scala e orientamento corretti. Quello che vedi è esattamente quello che otterrai nella tua immagine finale.</li>
                     <li><strong>Rotazione FOV e Position Angle (PA):</strong> Lo slider di rotazione (0–360°) ruota il rettangolo del sensore sulla mappa. L'angolo scelto viene salvato nella sequenza e comunicato al rotatore automatico di N.I.N.A. durante l'export. Se trascini la mappa per spostare il centro del FOV rispetto al target originale, le coordinate aggiornate vengono mostrate in tempo reale nel box "Centro FOV" con indicatore di offset attivo — e puoi sempre tornare al centro esatto con il bottone ⌖ Reset.</li>
                     <li><strong>Modalità Mosaico:</strong> Quando il target è più grande del tuo campo inquadrato, attiva il mosaico e imposta la griglia (es. 2×2, 3×2) con la percentuale di sovrapposizione desiderata. Il sistema calcola automaticamente il tempo disponibile per pannello e genera il report strategico. Per N.I.N.A. usa il Framing Assistant con le coordinate del centro: il software divide automaticamente i pannelli.</li>
+                    <li><strong>Sensore a colori o mono:</strong> nel database le camere che esistono in due versioni sono elencate separatamente (es. ASI2600MC e ASI2600MM). Scegliendone una, la Sequenza si imposta da sola su Colore (OSC) o Mono, con un avviso; puoi comunque cambiarla a mano. Per i chip Sony generici e per i sensori personalizzati la scelta resta tua. In Modalità Base il sensore è sempre a colori.</li>
+                    <li><strong>Setup senza oggetto:</strong> puoi impostare telescopio, sensore e accessori anche prima di scegliere un oggetto. Dossier e simulatore FOV compaiono quando lo scegli.</li>
                 </ul>
             </div>
 
@@ -2011,6 +2045,8 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <li><strong>Dithering Smart:</strong> Se attivi il dithering, specifica la frequenza (ogni N pose). Il sistema sottrae automaticamente l'overhead di dithering dal tempo totale: quello che vedi in "Tempo Acquisizione" è il tempo reale di integrazione netta.</li>
                     <li><strong>Mappatura Nomi Filtri N.I.N.A.:</strong> Per i sensori Mono, ogni filtro ha un campo dove inserire il nome esatto come lo riconosce la tua ruota portafiltri in N.I.N.A. (es. "Hα 3nm" invece di "Ha"). Se i nomi non corrispondono esattamente, N.I.N.A. darà errore durante la sequenza.</li>
                     <li><strong>Multinotte Smart:</strong> Se l'integrazione calcolata supera la finestra notturna disponibile, il sistema mostra il pulsante "Pianifica Progetto Multi-Notte". Qui il riferimento è l'obiettivo calcolato dall'assistente smart. Aggiungi quante sessioni servono, assegna le pose per notte e scarica un file N.I.N.A. separato per ciascuna.</li>
+                    <li><strong>Data della sessione:</strong> sta in cima alla sezione, perché grafico, orari del crepuscolo e finestra disponibile dipendono da lei. La striscia dell'oggetto indica "Stanotte" oppure, in ambra, "tra N giorni" se la notte è futura.</li>
+                    <li><strong>Grafico dell'altezza:</strong> mostra l'altezza dell'oggetto dalle 18 alle 6. Lo sfondo segue il cielo: più chiaro nel crepuscolo, scuro nella notte astronomica. Se la data è oggi, una linea gialla segna l'ora attuale. Così vedi subito quando l'oggetto è alto <strong>e</strong> il cielo è buio.</li>
                 </ul>
             </div>
 
@@ -2058,7 +2094,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <li><strong>Integrazione nel grafico FOV:</strong> Una volta applicato con il pulsante <em>Applica a FOV</em>, il profilo appare nel grafico altitudine come zona rossa — esattamente come N.I.N.A. La soglia varia nel tempo seguendo l'azimut del DSO: quando il target entra in una zona di ostruzione, il grafico lo mostra chiaramente prima che accada.</li>
                     <li><strong>Export per N.I.N.A. (.hrz):</strong> Il file segue la convenzione astronomica standard: Azimut 0°=Nord, crescente verso Est; altitudine in gradi sopra l'orizzonte matematico. Il profilo è già corretto con le tue coordinate GPS — fondamentale inserirle anche nelle impostazioni dell'Osservatorio in N.I.N.A. altrimenti i calcoli di visibilità saranno imprecisi.</li>
                     <li><strong>Export per Stellarium (.zip):</strong> Lo zip include la foto panoramica in PNG (con canale alfa), il file <em>landscape.ini</em> di tipo spherical con le coordinate della postazione e la rotazione corretta per l'allineamento Nord, e il file <em>horizon.txt</em> con il profilo az/alt. Estrai lo zip nella cartella <code>landscapes/</code> di Stellarium e seleziona il paesaggio nelle impostazioni.</li>
-                    <li><strong>Persistenza e backup:</strong> Il profilo viene salvato automaticamente in localStorage — al prossimo avvio dell'app sarà già attivo nel grafico FOV senza ricaricare la foto. Il pulsante <em>Backup (.json)</em> scarica un file di ripristino completo: se la cache viene svuotata, usa <em>↩ Ripristina</em> sopra il grafico per riacquisire il profilo in un clic, con applicazione automatica al FOV.</li>
+                    <li><strong>Persistenza e backup:</strong> Il profilo viene salvato automaticamente in localStorage — al prossimo avvio dell'app sarà già attivo nel grafico FOV senza ricaricare la foto. Il pulsante <em>Backup (.json)</em> scarica un file di ripristino completo: se la cache viene svuotata, usa <em>File orizzonte</em> sopra il grafico in Sequenza per riacquisire il profilo in un clic, con applicazione automatica al FOV.</li>
                 </ul>
             </div>
 
@@ -2107,6 +2143,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <li><strong>Personalized suggestions:</strong> with a saved setup, objects too large for your field of view (they would need a mosaic) or too small (under 150 pixels on the sensor) are excluded. With a horizon profile, only the hours when the object clears it are counted. The line under the title tells you which data were used. In Basic Mode the horizon is not considered.</li>
                     <li><strong>From the popup to the planetarium:</strong> click an object to open the dashboard already set to its best time, with its card highlighted in the carousel.</li>
                     <li><strong>An estimate, not a guarantee:</strong> the verdict is based on the current forecast. Always check the latest weather data before heading out.</li>
+                    <li><strong>Night analysis button:</strong> it sits in the top box, between the Moon phase and the weather, and is always available. Its ring takes the colour of the verdict for the selected night: green for Perfect, gold for Promising, orange for Uncertain, red for Not worth it or Forget it, grey when weather data is missing. Tap it to reopen the full analysis with the recommended targets.</li>
                 </ul>
             </div>
 
@@ -2121,15 +2158,26 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
             </div>
 
             <div class="guide-section">
+                <h3>0a. Section navigation</h3>
+                <p>The app follows a logical path that guides you through building an astrophotography session in 5 sections: <strong>Weather</strong> (what's the weather like where you are?), <strong>DSO</strong> (what do I want to photograph?), <strong>Setup</strong> (with which equipment), <strong>Sequence</strong> (the heart of the session, with subs and timing), <strong>Download</strong> (export your complete project).</p>
+                <p style="margin-top:10px;">The bar at the top shows where you are: click a section to jump to it, or use the <em>Back/Next</em> buttons at the bottom of the page to move to the adjacent one. Setup, Sequence and Download depend on the chosen object: if you haven't chosen one yet, the section invites you to go to DSO. Once the object is chosen, its name stays fixed at the top while you scroll, with the <em>Change object</em> button.</p>
+                <p style="margin-top:10px;">On smartphones the top bar shows only the logo and the <strong>☰</strong> menu, which gathers Mode (Basic/Advanced), Language, Manual and What's new. Drop-down menus open as a panel from the bottom, with large text and, in long lists (telescopes, sensors, filters), a search box.</p>
+            </div>
+
+            <div class="guide-section">
                 <h3><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-globe"/></svg> 1. Tactical Weather &amp; Environmental Data</h3>
-                <p>Before pointing your telescope, you need to know what's above your head. This section aggregates professional satellite data in real time directly in your browser.</p>
+                <p>Before pointing your telescope, you need to know what's above your head. This section gathers hourly weather forecasts (Open-Meteo models) for your location.</p>
                 <ul>
-                    <li><strong>50km Radius Map:</strong> Designed for mobile astrophotographers. The symbolic 50km circle lets you instantly evaluate where to relocate to find "clear sky holes". Activate overlapping layers (Low/Mid/High Clouds, Jet Stream, Humidity, Moon) and scroll the timeline to forecast conditions over the next hours.</li>
+                    <li><strong>Local weather map:</strong> low, mid and high clouds are shown as real forecast coverage over 25 km around you; Jet stream, Humidity and Moon within the radius shown. Turn layers on from the collapsible panel on the left of the map.</li>
+                    <li><strong>Timeline and ▶:</strong> drag through the hours or press ▶ to watch the night play (0.5 s per hour). On first opening it plays once by itself.</li>
+                    <li><strong>Future forecast:</strong> with a date other than today the map shows a coloured band and frame: you are looking at a forecast, less reliable the further away the date.</li>
+                    <li><strong>The next nights:</strong> below the Bortle, three cards summarise the next nights; one click opens them.</li>
                     <li><strong>Jet Stream:</strong> The true enemy of Seeing. Values below 50 km/h guarantee stable skies and pinpoint stars. Above 100 km/h, atmospheric turbulence will destroy fine detail — avoid long focal lengths.</li>
                     <li><strong>Humidity Alarm:</strong> If the reading exceeds 85% (red indicator), activate your dew heaters at full power <em>before</em> the temperature drops to the dew point. Once optics fog up, the session is ruined.</li>
                     <li><strong>Moon Pollution:</strong> Shows the percentage of sky "burned" by moonlight based on current phase and position. The penalty automatically drops to zero when the Moon is below the horizon. High values discourage broadband imaging — consider narrowband filters (Ha, OIII, SII) which cut lunar continuum.</li>
-                    <li><strong>Light Pollution Layer (Atlas 2024):</strong> Enable the <em>Light Pollution</em> layer to overlay the Bortle colour scale on the map (VIIRS 2024 data by David Lorenz): dark blue = pristine sky (Bortle 1–2), green = rural (3–4), yellow = suburban (5), orange = urban fringe (6–7), white = city centre (8–9). When the layer is active, a colour legend appears automatically below the buttons. Use this layer to visually identify your real Bortle level and set it in the selector — it directly affects the filter advisor recommendations.</li>
+                    <li><strong>Light Pollution Layer (Atlas 2024):</strong> Enable the <em>Light Pollution</em> button (below the Bortle selector) to overlay the Bortle colour scale on the map (VIIRS 2024 data by David Lorenz): dark blue = pristine sky (Bortle 1–2), green = rural (3–4), yellow = suburban (5), orange = urban fringe (6–7), white = city centre (8–9). When the layer is active, a colour legend appears on the map. Use this layer to visually identify your real Bortle level and set it in the selector — it directly affects the filter advisor recommendations.</li>
                     <li><strong>Bortle Selector:</strong> Sets the light pollution level of your observing site (1 = pristine dark sky, 9 = city centre). The value is used by the filter advisor to calibrate filter advice: dark skies (1–3) need no LP filters; suburban skies (4–7) benefit from broadband filters (CLS, L-Pro, Quadband); urban skies (8–9) make narrowband (Ha/OIII dual-band) essential. Click ℹ️ for instructions on finding your Bortle using the map layer.</li>
+                    <li><strong>Seeing on the map:</strong> the seeing estimate is always visible at the bottom centre of the map, with score and verdict. Tap it to open the Antoniadi scale. On smartphones the Bortle selector and the Light Pollution button sit below the map, and when you turn the layer on the page scrolls to the map by itself.</li>
                 </ul>
             </div>
 
@@ -2138,7 +2186,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                 <p>The planetarium doesn't just show stars: it calculates altitude above the horizon for every object in real time and presents only the targets that are photographically useful for your night.</p>
                 <ul>
                     <li><strong>Local Database (Recommended Targets):</strong> Contains the most celebrated targets with full metadata: type, magnitude, distance and specific "Tactical Tip". Tips are not generic — they suggest filters, warn of core saturation, indicate optimal seasons.</li>
-                    <li><strong>Time Slider:</strong> Drag the time bar to simulate the sky at any hour of the night. Objects disappear when they drop below 20° altitude (turbulence and low transparency zone), so you never see unusable targets.</li>
+                    <li><strong>Night slider:</strong> covers the night of the selected date, from the end of civil twilight (Sun at −6°) to dawn. The bar colour follows the darkness of the sky and the ticks mark astronomical night. Press ▶ to play it (1 s per hour): the cards change with a cross-fade. Deep-sky objects appear above 30° altitude, planets above 10°.</li>
                     <li><strong>Universal SIMBAD Search:</strong> If your target isn't in the local database, type its name (e.g. "Sh2-132", "Abell 85", "IC 1871") and the engine queries the University of Strasbourg in real time. You'll receive J2000 absolute coordinates and can immediately plan your session.</li>
                     <li><strong>Solar System:</strong> Planets and the Moon are always available in a separate list. Useful for planning planetary sessions or checking lunar interference on your Deep Sky target.</li>
                 </ul>
@@ -2149,9 +2197,12 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                 <p>This section transforms your instrument's physical data into operational information: how many arcseconds does your sensor cover? Does the object fit the frame? What angle should you orient the camera?</p>
                 <ul>
                     <li><strong>Sampling Scale (arcsec/pixel):</strong> Enter focal length (mm) and pixel size (µm): the system calculates your image scale and classifies it into three zones. <em>Green</em>: ideal sampling (1–2 arcsec/px). <em>Yellow</em>: slight undersampling (slightly blocky stars). <em>Red</em>: excessive oversampling — you are wasting photons and resolution.</li>
+                    <li><strong>Astrophotography Dossier:</strong> above the FOV simulator you'll find the object card, with photo (yours, if you uploaded one), type, magnitude, distance, description with a Wikipedia link and tactical tip.</li>
                     <li><strong>Realistic FOV Simulator (DSS2):</strong> Loads the real deep sky image from the DSS2 archive and overlays your sensor rectangle at the correct scale and orientation. What you see is exactly what you'll get in your final image.</li>
                     <li><strong>FOV Rotation &amp; Position Angle (PA):</strong> The rotation slider (0–360°) rotates the sensor rectangle on the map. The chosen angle is saved in the sequence and sent to N.I.N.A.'s auto-rotator during export. If you drag the map to offset the FOV center from the original target, updated coordinates are shown in real time in the "FOV Center" box with an active offset indicator — and you can always return to the exact center with the ⌖ Reset button.</li>
                     <li><strong>Mosaic Mode:</strong> When the target is larger than your field of view, enable mosaic and set the grid (e.g. 2×2, 3×2) with the desired overlap percentage. The system automatically calculates the time per panel and generates the strategic report. For N.I.N.A. use the Framing Assistant with the center coordinates.</li>
+                    <li><strong>Colour or mono sensor:</strong> cameras that exist in two versions are listed separately in the database (e.g. ASI2600MC and ASI2600MM). When you pick one, the Sequence switches to Colour (OSC) or Mono by itself, with a notice; you can still change it manually. For generic Sony chips and custom sensors the choice stays yours. In Basic Mode the sensor is always colour.</li>
+                    <li><strong>Setup without an object:</strong> you can set telescope, sensor and accessories even before choosing an object. The dossier and FOV simulator appear once you choose one.</li>
                 </ul>
             </div>
 
@@ -2177,6 +2228,8 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <li><strong>Smart Dithering:</strong> Enable dithering and specify frequency (every N frames). The system automatically subtracts dithering overhead from total available time — the "Acquisition Time" shown is real net integration time, already accounting for all overhead.</li>
                     <li><strong>N.I.N.A. Filter Name Mapping:</strong> For Mono sensors, each filter has a field where you enter its exact name as N.I.N.A. recognizes it from your filter wheel (e.g. "Hα 3nm" instead of "Ha"). If names don't match exactly, N.I.N.A. will throw an error during the sequence.</li>
                     <li><strong>Smart Multi-Night:</strong> If the calculated integration exceeds the available night window, the "Plan Multi-Night Project" button appears. The reference here is the smart assistant's calculated goal. Add as many sessions as needed, assign frames per night and download a separate N.I.N.A. file for each.</li>
+                    <li><strong>Session date:</strong> it sits at the top of the section, because the chart, twilight times and available window depend on it. The object strip shows "Tonight" or, in amber, "in N days" when the night is in the future.</li>
+                    <li><strong>Altitude chart:</strong> shows the object's altitude from 18:00 to 06:00. The background follows the sky: lighter during twilight, dark during astronomical night. If the date is today, a yellow line marks the current time. You can see at a glance when the object is high <strong>and</strong> the sky is dark.</li>
                 </ul>
             </div>
 
@@ -2224,7 +2277,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <li><strong>FOV chart integration:</strong> Once applied with the <em>Apply to FOV</em> button, the profile appears in the altitude chart as a red zone — exactly like N.I.N.A. The threshold varies over time following the DSO azimuth: when the target enters an obstruction zone, the chart shows it clearly before it happens.</li>
                     <li><strong>N.I.N.A. export (.hrz):</strong> The file follows the standard astronomical convention: Azimuth 0°=North, increasing eastward; altitude in degrees above the mathematical horizon. The profile is already corrected with your GPS coordinates — it's essential to also enter them in N.I.N.A.'s Observatory settings, otherwise visibility calculations will be inaccurate.</li>
                     <li><strong>Stellarium export (.zip):</strong> The zip includes the panoramic photo as PNG (with alpha channel), the <em>landscape.ini</em> file of spherical type with site coordinates and correct rotation for North alignment, and the <em>horizon.txt</em> file with the az/alt profile. Extract the zip into Stellarium's <code>landscapes/</code> folder and select the landscape in settings.</li>
-                    <li><strong>Persistence and backup:</strong> The profile is saved automatically to localStorage — on the next app launch it will already be active in the FOV chart without reloading the photo. The <em>Backup (.json)</em> button downloads a complete restore file: if the cache is cleared, use <em>↩ Restore</em> above the chart to recover the profile in one click, with automatic FOV application.</li>
+                    <li><strong>Persistence and backup:</strong> The profile is saved automatically to localStorage — on the next app launch it will already be active in the FOV chart without reloading the photo. The <em>Backup (.json)</em> button downloads a complete restore file: if the cache is cleared, use <em>Horizon file</em> above the chart in Sequence to recover the profile in one click, with automatic FOV application.</li>
                 </ul>
             </div>
 
@@ -2273,6 +2326,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <li><strong>Sugerencias personalizadas:</strong> con el equipo guardado se excluyen los objetos demasiado grandes para tu campo (necesitarían un mosaico) o demasiado pequeños (menos de 150 píxeles en el sensor). Con un perfil de horizonte solo cuentan las horas en que el objeto lo supera. La línea bajo el título indica qué datos se han usado. En el Modo Básico no se tiene en cuenta el horizonte.</li>
                     <li><strong>De la ventana al planetario:</strong> haz clic en un objeto para abrir el panel ya situado en su mejor hora, con su tarjeta resaltada en el carrusel.</li>
                     <li><strong>Una estimación, no una garantía:</strong> el veredicto se basa en la previsión del momento. Antes de salir comprueba siempre los datos meteorológicos actualizados.</li>
+                    <li><strong>Botón Análisis nocturno:</strong> está en el recuadro superior, entre la fase lunar y el tiempo, y siempre disponible. Su anillo toma el color del veredicto de la noche elegida: verde para Perfectas, oro para Prometedora, naranja para Incierta, rojo para No vale la pena o Olvídalo, gris si faltan los datos meteorológicos. Al tocarlo vuelves a abrir el análisis completo con los objetivos recomendados.</li>
                 </ul>
             </div>
 
@@ -2287,15 +2341,26 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
             </div>
 
             <div class="guide-section">
+                <h3>0a. Navegación por secciones</h3>
+                <p>La app sigue un recorrido lógico que te guía en la construcción de una sesión astrofotográfica en 5 secciones: <strong>Tiempo</strong> (¿qué tiempo hace donde estás?), <strong>DSO</strong> (¿qué quiero fotografiar?), <strong>Setup</strong> (con qué equipo), <strong>Secuencia</strong> (el corazón de la sesión, con tomas y tiempos), <strong>Descarga</strong> (exporta tu proyecto completo).</p>
+                <p style="margin-top:10px;">La barra superior muestra dónde estás: haz clic en una sección para ir a ella, o usa los botones <em>Atrás/Siguiente</em> al final de la página para pasar a la contigua. Setup, Secuencia y Descarga dependen del objeto elegido: si aún no has elegido uno, la sección te invita a ir a DSO. Una vez elegido, su nombre queda fijo arriba mientras te desplazas, con el botón <em>Cambiar objeto</em>.</p>
+                <p style="margin-top:10px;">En el smartphone la barra superior muestra solo el logo y el menú <strong>☰</strong>, que reúne Modo (Básico/Avanzado), Idioma, Manual y Novedades. Los menús desplegables se abren como un panel desde abajo, con letra grande y, en las listas largas (telescopios, sensores, filtros), una casilla de búsqueda.</p>
+            </div>
+
+            <div class="guide-section">
                 <h3><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-globe"/></svg> 1. Clima Táctico y Datos Ambientales</h3>
-                <p>Antes de apuntar el telescopio, necesitas saber qué hay sobre tu cabeza. Esta sección agrega datos satelitales profesionales en tiempo real directamente en tu navegador.</p>
+                <p>Antes de apuntar el telescopio, necesitas saber qué hay sobre tu cabeza. Esta sección reúne las previsiones meteorológicas horarias (modelos Open-Meteo) para tu ubicación.</p>
                 <ul>
-                    <li><strong>Mapa de Radio 50km:</strong> Diseñado para astrofotógrafos itinerantes. El círculo de 50 km te permite evaluar de un vistazo dónde desplazarte para encontrar "claros en las nubes". Activa las capas superpuestas y desliza la línea de tiempo para prever las condiciones de las próximas horas.</li>
+                    <li><strong>Mapa del tiempo en tu ubicación:</strong> las nubes bajas, medias y altas se muestran como cobertura real prevista en 25 km a tu alrededor; Jet stream, Humedad y Luna en el radio indicado. Las capas se activan desde el panel desplegable a la izquierda del mapa.</li>
+                    <li><strong>Línea temporal y ▶:</strong> desliza las horas o pulsa ▶ para ver avanzar la noche (0,5 s por hora). Al abrirla por primera vez se reproduce sola una vez.</li>
+                    <li><strong>Previsión futura:</strong> con una fecha distinta de hoy, el mapa muestra una franja y un marco de color: estás viendo una previsión, menos fiable cuanto más lejana es la fecha.</li>
+                    <li><strong>Las próximas noches:</strong> bajo el Bortle, tres tarjetas resumen las próximas noches; un clic las abre.</li>
                     <li><strong>Jet Stream:</strong> El verdadero enemigo del Seeing. Por debajo de 50 km/h garantiza cielos estables y estrellas puntiformes. Por encima de 100 km/h, la turbulencia atmosférica destruirá los detalles finos — evita focales largas.</li>
                     <li><strong>Alarma de Humedad:</strong> Si supera el 85% (indicador rojo), activa las cintas calefactoras anticondensación a máxima potencia <em>antes</em> de que la temperatura baje al punto de rocío. Una vez que la óptica se empaña, la sesión está arruinada.</li>
                     <li><strong>Contaminación Lunar:</strong> Muestra el porcentaje de cielo "quemado" por la luz de la Luna según su fase y posición actual. La penalización se anula automáticamente cuando la Luna está bajo el horizonte. Valores altos desaconsejan la fotografía de banda ancha — considera filtros narrowband (Ha, OIII, SII).</li>
-                    <li><strong>Capa de Contaminación Lumínica (Atlas 2024):</strong> Activa la capa <em>Contam. Lumínica</em> para superponer en el mapa la escala Bortle en colores reales (datos VIIRS 2024 de David Lorenz): azul oscuro = cielo prístino (Bortle 1–2), verde = rural (3–4), amarillo = suburbano (5), naranja = periferia urbana (6–7), blanco = centro ciudad (8–9). Al activar la capa aparece automáticamente la leyenda de colores bajo los botones. Usa esta capa para identificar visualmente tu nivel Bortle real y configurarlo en el selector.</li>
+                    <li><strong>Capa de Contaminación Lumínica (Atlas 2024):</strong> Activa el botón <em>Contaminación Lumínica</em> (bajo el selector Bortle) para superponer en el mapa la escala Bortle en colores reales (datos VIIRS 2024 de David Lorenz): azul oscuro = cielo prístino (Bortle 1–2), verde = rural (3–4), amarillo = suburbano (5), naranja = periferia urbana (6–7), blanco = centro ciudad (8–9). Al activar la capa aparece la leyenda de colores en el mapa. Usa esta capa para identificar visualmente tu nivel Bortle real y configurarlo en el selector.</li>
                     <li><strong>Selector Bortle:</strong> Establece el nivel de contaminación lumínica de tu sitio de observación (1 = cielo oscuro total, 9 = centro urbano). El valor lo usa el asistente de filtros para calibrar los consejos de filtros: cielos oscuros (1–3) no requieren filtros LP; cielos suburbanos (4–7) se benefician de filtros broadband (CLS, L-Pro, Quadband); cielos urbanos (8–9) hacen indispensable el narrowband (dual-band Ha/OIII). Haz clic en ℹ️ para instrucciones sobre cómo encontrar tu Bortle con la capa del mapa.</li>
+                    <li><strong>Seeing en el mapa:</strong> la estimación del seeing está siempre visible abajo en el centro del mapa, con nota y veredicto. Al tocarla se abre la escala de Antoniadi. En el smartphone el selector Bortle y el botón Contaminación Lumínica están debajo del mapa, y al activar la capa la página se desplaza sola hasta el mapa.</li>
                 </ul>
             </div>
 
@@ -2304,7 +2369,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                 <p>El planetario no solo muestra estrellas: calcula en tiempo real la altitud sobre el horizonte de cada objeto y te presenta únicamente los objetivos fotográficamente útiles para tu noche.</p>
                 <ul>
                     <li><strong>Base de Datos Local (Objetivos Recomendados):</strong> Contiene los objetivos más célebres con metadatos completos: tipo, magnitud, distancia y "Consejo Táctico" específico. Los consejos no son genéricos — sugieren filtros, advierten de saturaciones en el núcleo, indican la estacionalidad óptima.</li>
-                    <li><strong>Control Deslizante de Tiempo:</strong> Arrastra la barra de tiempo para simular el cielo a cualquier hora de la noche. Los objetos desaparecen cuando bajan de los 20° de altitud (zona de turbulencia y baja transparencia).</li>
+                    <li><strong>Barra de la noche:</strong> cubre la noche de la fecha elegida, desde el final del crepúsculo civil (Sol a −6°) hasta el amanecer. El color de la barra sigue la oscuridad del cielo y las marcas señalan la noche astronómica. Pulsa ▶ para reproducirla (1 s por hora): las tarjetas cambian con un fundido. Los objetos de cielo profundo aparecen por encima de 30° de altura, los planetas por encima de 10°.</li>
                     <li><strong>Búsqueda Universal SIMBAD:</strong> Si tu objetivo no está en la base de datos local, escribe su nombre (ej. "Sh2-132", "Abell 85") y el motor consulta en tiempo real la Universidad de Estrasburgo. Recibirás las coordenadas absolutas J2000 y podrás planificar la sesión inmediatamente.</li>
                     <li><strong>Sistema Solar:</strong> Planetas y Luna están siempre disponibles en una lista separada. Útil para planificar sesiones planetarias o verificar la interferencia lunar en tu objetivo Deep Sky.</li>
                 </ul>
@@ -2315,9 +2380,12 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                 <p>Esta sección transforma los datos físicos de tu instrumento en información operativa: ¿cuántos segundos de arco cubre tu sensor? ¿El objeto entra en el campo? ¿A qué ángulo debes orientar la cámara?</p>
                 <ul>
                     <li><strong>Escala de Muestreo (arcsec/pixel):</strong> Introduce distancia focal (mm) y tamaño de píxel (µm): el sistema calcula tu escala de imagen y la clasifica. <em>Verde</em>: muestreo ideal. <em>Amarillo</em>: ligero submuestreo. <em>Rojo</em>: sobremuestreo excesivo — estás desperdiciando fotones y resolución.</li>
+                    <li><strong>Dossier Astrofotográfico:</strong> sobre el simulador FOV encontrarás la ficha del objeto, con foto (la tuya, si la has subido), tipo, magnitud, distancia, descripción con enlace a Wikipedia y consejo táctico.</li>
                     <li><strong>Simulador FOV Realista (DSS2):</strong> Carga la imagen real del cielo profundo del archivo DSS2 y superpone el rectángulo de tu sensor a escala y orientación correctas. Lo que ves es exactamente lo que obtendrás en tu imagen final.</li>
                     <li><strong>Rotación FOV y Ángulo de Posición (PA):</strong> El control deslizante de rotación (0–360°) gira el rectángulo del sensor en el mapa. El ángulo elegido se guarda en la secuencia y se envía al rotador automático de N.I.N.A. durante la exportación. Si arrastras el mapa para desplazar el centro del FOV, las coordenadas actualizadas se muestran en tiempo real con un indicador de desplazamiento activo — y puedes volver al centro exacto con el botón ⌖ Reset.</li>
                     <li><strong>Modo Mosaico:</strong> Cuando el objetivo es más grande que tu campo, activa el mosaico y configura la cuadrícula con el porcentaje de solapamiento deseado. El sistema calcula automáticamente el tiempo por panel y genera el informe estratégico.</li>
+                    <li><strong>Sensor a color o mono:</strong> en la base de datos las cámaras que existen en dos versiones aparecen por separado (p. ej. ASI2600MC y ASI2600MM). Al elegir una, la Secuencia se ajusta sola a Color (OSC) o Mono, con un aviso; siempre puedes cambiarla a mano. Para los chips Sony genéricos y los sensores personalizados la elección sigue siendo tuya. En Modo Básico el sensor es siempre a color.</li>
+                    <li><strong>Setup sin objeto:</strong> puedes configurar telescopio, sensor y accesorios incluso antes de elegir un objeto. El dossier y el simulador FOV aparecen cuando lo eliges.</li>
                 </ul>
             </div>
 
@@ -2343,6 +2411,8 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <li><strong>Dithering Smart:</strong> Activa el dithering y especifica la frecuencia (cada N tomas). El sistema resta automáticamente el overhead de dithering del tiempo total disponible.</li>
                     <li><strong>Mapeo de Nombres de Filtros N.I.N.A.:</strong> Para sensores Mono, cada filtro tiene un campo donde introduces su nombre exacto tal como lo reconoce tu rueda de filtros en N.I.N.A. Si los nombres no coinciden exactamente, N.I.N.A. dará error.</li>
                     <li><strong>Multi-Noche Smart:</strong> Si la integración calculada supera la ventana nocturna disponible, aparece el botón "Planificar Proyecto Multi-Noche". El referente aquí es el objetivo sugerido por la IA. Añade las sesiones necesarias y descarga un archivo N.I.N.A. separado para cada una.</li>
+                    <li><strong>Fecha de la sesión:</strong> está en la parte superior de la sección, porque el gráfico, los horarios del crepúsculo y la ventana disponible dependen de ella. La franja del objeto indica "Esta noche" o, en ámbar, "en N días" si la noche es futura.</li>
+                    <li><strong>Gráfico de altura:</strong> muestra la altura del objeto de las 18 a las 6. El fondo sigue el cielo: más claro en el crepúsculo, oscuro en la noche astronómica. Si la fecha es hoy, una línea amarilla marca la hora actual. Así ves enseguida cuándo el objeto está alto <strong>y</strong> el cielo oscuro.</li>
                 </ul>
             </div>
 
@@ -2388,7 +2458,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <li><strong>Integración en el gráfico FOV:</strong> Una vez aplicado con el botón <em>Aplicar al FOV</em>, el perfil aparece en el gráfico de altitud como zona roja — exactamente como N.I.N.A. El umbral varía con el tiempo siguiendo el azimut del DSO.</li>
                     <li><strong>Exportación para N.I.N.A. (.hrz):</strong> El archivo sigue la convención astronómica estándar: Azimut 0°=Norte, creciente hacia el Este. Es fundamental introducir también las coordenadas GPS en la configuración del Observatorio de N.I.N.A., de lo contrario los cálculos de visibilidad serán imprecisos.</li>
                     <li><strong>Exportación para Stellarium (.zip):</strong> El zip incluye la foto panorámica en PNG (con canal alfa), el archivo <em>landscape.ini</em> de tipo spherical con las coordenadas del sitio y la rotación correcta para la alineación Norte, y el archivo <em>horizon.txt</em>. Extrae el zip en la carpeta <code>landscapes/</code> de Stellarium.</li>
-                    <li><strong>Persistencia y copia de seguridad:</strong> El perfil se guarda automáticamente en localStorage. El botón <em>Backup (.json)</em> descarga un archivo de restauración completo: si se borra la caché, usa <em>↩ Restaurar</em> sobre el gráfico para recuperar el perfil en un clic.</li>
+                    <li><strong>Persistencia y copia de seguridad:</strong> El perfil se guarda automáticamente en localStorage. El botón <em>Backup (.json)</em> descarga un archivo de restauración completo: si se borra la caché, usa <em>Archivo horizonte</em> sobre el gráfico en Secuencia para recuperar el perfil en un clic.</li>
                 </ul>
     
 
@@ -2440,6 +2510,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <li><strong>个性化推荐：</strong> 保存设备后，会排除对视场来说过大（需要拼接）或过小（在传感器上不足150像素）的天体。设置地平线轮廓后，只计算天体高于轮廓的时段。标题下方的一行会说明使用了哪些数据。基础模式下不考虑地平线。</li>
                     <li><strong>从弹窗到星图：</strong> 点击某个天体，即可打开已定位到其最佳时间的仪表盘，并在轮播中高亮显示该卡片。</li>
                     <li><strong>仅为估算，并非保证：</strong> 评估基于当前预报。出门前请务必查看最新的天气数据。</li>
+                    <li><strong>夜间分析按钮：</strong>位于顶部方框中月相与天气之间，随时可用。其外圈会显示所选夜晚评估的颜色：绿色为完美，金色为有希望，橙色为不确定，红色为不值得或放弃，缺少天气数据时为灰色。点击即可重新打开完整分析及推荐目标。</li>
                 </ul>
             </div>
 
@@ -2454,15 +2525,26 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
             </div>
 
             <div class="guide-section">
+                <h3>0a. 分区导航</h3>
+                <p>本应用按照构建一次天文摄影拍摄的逻辑流程分为 5 个部分：<strong>天气</strong>（你所在地的天气如何？）、<strong>深空</strong>（我想拍什么？）、<strong>设置</strong>（用什么器材）、<strong>序列</strong>（拍摄的核心：张数与时间）、<strong>下载</strong>（导出完整项目）。</p>
+                <p style="margin-top:10px;">顶部栏显示当前位置：点击任一部分即可跳转，或使用页面底部的<em>返回/下一步</em>按钮前往相邻部分。设置、序列和下载取决于所选天体：若尚未选择，该部分会提示你前往深空。选定天体后，其名称在滚动时固定显示在顶部，并带有<em>更换天体</em>按钮。</p>
+                <p style="margin-top:10px;">在手机上，顶部栏只显示标志和 <strong>☰</strong> 菜单，其中包含模式（基础/高级）、语言、手册和版本新功能。下拉菜单以底部面板形式打开，字体更大；在较长的列表（望远镜、传感器、滤镜）中还提供搜索框。</p>
+            </div>
+
+            <div class="guide-section">
                 <h3><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-globe"/></svg> 1. 战术气象与环境数据</h3>
-                <p>在指向望远镜之前，您需要了解头顶上方的情况。本部分直接在您的浏览器中实时汇聚专业的卫星数据。</p>
+                <p>在指向望远镜之前，您需要了解头顶上方的情况。本部分汇集您所在位置的逐小时天气预报（Open-Meteo 模型）。</p>
                 <ul>
-                    <li><strong>50公里半径地图：</strong>专为移动天文摄影师设计。象征性的50公里圆圈让您一眼就能评估应移动到哪里寻找"晴空洞"。激活叠加图层（低云、中云、高云、急流、湿度、月光），滑动时间轴预测未来数小时的天气变化。</li>
+                    <li><strong>本地天气地图：</strong>低、中、高云以您周围 25 公里内的真实预报覆盖显示；急流、湿度和月亮显示在标示的半径内。从地图左侧的可折叠面板开启图层。</li>
+                    <li><strong>时间轴与 ▶：</strong>拖动小时或按 ▶ 观看夜晚播放（每小时 0.5 秒）。首次打开时会自动播放一次。</li>
+                    <li><strong>未来预报：</strong>选择非今天的日期时，地图显示彩色横幅和边框：您看到的是预报，日期越远越不可靠。</li>
+                    <li><strong>未来几晚：</strong>在博特尔下方，三张卡片汇总未来几晚的情况；点击即可打开。</li>
                     <li><strong>急流 (Jet Stream)：</strong>视宁度的真正敌人。您所在位置上方低于50 km/h保证天空稳定、星点清晰。超过100 km/h，大气湍流将摧毁精细细节 — 避免使用长焦段。</li>
                     <li><strong>湿度警报：</strong>若读数超过85%（红色指示），请在温度降到露点之前将除露带调到最大功率。一旦光学元件起雾，拍摄会话就毁了。</li>
                     <li><strong>月光污染：</strong>根据当前月相和位置显示被月光"烧毁"的天空百分比。当月亮在地平线以下时，惩罚值自动归零。数值高时不建议宽带拍摄 — 考虑使用能截断月光连续谱的窄带滤镜（Ha、OIII、SII）。</li>
-                    <li><strong>光污染图层（Lorenz 2024 地图集）：</strong>启用<em>光污染</em>图层，将博特尔色彩比例尺叠加到地图上（David Lorenz的VIIRS 2024数据）：深蓝色 = 原始天空（博特尔1–2）、绿色 = 农村（3–4）、黄色 = 郊区（5）、橙色 = 城市边缘（6–7）、白色 = 市中心（8–9）。激活图层时，颜色图例自动显示在按钮下方。使用此图层直观识别您的真实博特尔等级并在选择器中设置 — 直接影响滤镜建议。</li>
+                    <li><strong>光污染图层（Lorenz 2024 地图集）：</strong>点击<em>光污染</em>按钮（位于博特尔选择器下方），将博特尔色彩比例尺叠加到地图上（David Lorenz的VIIRS 2024数据）：深蓝色 = 原始天空（博特尔1–2）、绿色 = 农村（3–4）、黄色 = 郊区（5）、橙色 = 城市边缘（6–7）、白色 = 市中心（8–9）。激活图层时，地图上会显示颜色图例。使用此图层直观识别您的真实博特尔等级并在选择器中设置 — 直接影响滤镜建议。</li>
                     <li><strong>博特尔选择器：</strong>设置您观测地点的光污染等级（1 = 完全黑暗天空，9 = 市中心）。滤镜助手使用此值来校准滤镜建议：暗天空（1–3）不需要LP滤镜；郊区天空（4–7）受益于宽带滤镜（CLS、L-Pro、四频带）；城市天空（8–9）使窄带（Ha/OIII双频带）不可或缺。点击ℹ️获取使用地图图层查找您的博特尔等级的说明。</li>
+                    <li><strong>地图上的视宁度：</strong>视宁度估计始终显示在地图底部中央，包含评分和评价。点击可打开安东尼亚迪标度。在手机上，博特尔选择器和光污染按钮位于地图下方，开启该图层时页面会自动滚动到地图。</li>
                 </ul>
             </div>
 
@@ -2471,7 +2553,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                 <p>星图不只是显示星星：它实时计算每个天体在地平线上的高度，只向您展示今晚摄影上有用的目标。</p>
                 <ul>
                     <li><strong>本地数据库（推荐目标）：</strong>包含最著名的目标及完整元数据：类型、星等、距离和专属"拍摄建议"。建议并非泛泛而谈 — 它们推荐滤镜、警告核心过曝、指示最佳拍摄季节。</li>
-                    <li><strong>时间滑块：</strong>拖动时间条模拟夜间任意时刻的天空。当天体降至20°高度以下（湍流和低透明度区域）时自动消失，确保您看到的都是可用目标。</li>
+                    <li><strong>夜晚滑块：</strong>覆盖所选日期的夜晚，从民用晨昏蒙影结束（太阳 −6°）到黎明。滑块颜色随天空暗度变化，刻度标出天文夜。按 ▶ 播放（每小时 1 秒）：卡片以淡入淡出方式切换。深空天体在高度 30° 以上显示，行星在 10° 以上显示。</li>
                     <li><strong>通用 SIMBAD 搜索：</strong>如果您的目标不在本地数据库中，输入名称（如"Sh2-132"、"Abell 85"），引擎将实时查询斯特拉斯堡大学。您将获得J2000绝对坐标，可立即规划拍摄会话。</li>
                     <li><strong>太阳系：</strong>行星和月球始终在单独列表中。适合规划行星拍摄会话或检查月光对深空目标的干扰。</li>
                 </ul>
@@ -2482,9 +2564,12 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                 <p>本部分将您仪器的物理数据转化为操作信息：您的传感器覆盖多少角秒？目标能否放入画面？应以什么角度定向相机？</p>
                 <ul>
                     <li><strong>采样率 (arcsec/pixel)：</strong>输入焦距（mm）和像素大小（µm）：系统计算您的图像比例并分为三个区间。<em>绿色</em>：理想采样（1–2 arcsec/px）。<em>黄色</em>：轻微欠采样（星点略显方形）。<em>红色</em>：过度过采样 — 您在浪费光子和分辨率。</li>
+                    <li><strong>天文摄影档案：</strong>在视场模拟器上方显示天体卡片，包括照片（如已上传则为您的照片）、类型、星等、距离、带维基百科链接的描述和战术建议。</li>
                     <li><strong>真实视场模拟器 (DSS2)：</strong>从DSS2档案加载真实深空图像，并以正确比例和方向叠加您的传感器矩形。您看到的就是最终图像中将获得的内容。</li>
                     <li><strong>视场旋转与位置角 (PA)：</strong>旋转滑块（0–360°）在地图上旋转传感器矩形。选定角度保存在序列中，并在导出时发送给 N.I.N.A. 的自动旋转器。如果您拖动地图将视场中心偏离原始目标，更新的坐标将实时显示在"视场中心"框中，并有偏移激活指示 — 您随时可以通过 ⌖ 重置按钮返回精确中心。</li>
                     <li><strong>拼接模式：</strong>当目标大于您的视场时，启用拼接并设置网格（如2×2、3×2）和所需重叠百分比。系统自动计算每个面板的可用时间并生成策略报告。</li>
+                    <li><strong>彩色或黑白传感器：</strong>数据库中有两个版本的相机会分别列出（例如 ASI2600MC 和 ASI2600MM）。选择其中一个后，序列会自动设为彩色（OSC）或黑白并给出提示；你仍可手动更改。对于通用索尼芯片和自定义传感器，由你自行选择。在基础模式下传感器始终为彩色。</li>
+                    <li><strong>未选天体时的设置：</strong>即使尚未选择天体，也可以先设置望远镜、传感器和配件。选择天体后会显示档案和视场模拟器。</li>
                 </ul>
             </div>
 
@@ -2510,6 +2595,8 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <li><strong>智能抖动：</strong>启用抖动并指定频率（每N帧）。系统自动从总可用时间中扣除抖动开销 — 您看到的"采集时间"已是扣除所有开销后的真实净积分时间。</li>
                     <li><strong>N.I.N.A. 滤镜名称映射：</strong>对于黑白传感器，每个滤镜都有一个字段用于输入 N.I.N.A. 从滤镜轮识别的确切名称（如"Hα 3nm"而非"Ha"）。名称不完全匹配时，N.I.N.A. 将报错。</li>
                     <li><strong>智能多夜规划：</strong>如果计算的积分超过可用夜间窗口，"计划多夜拍摄"按钮出现。参考目标是智能助手计算的目标。添加所需会话并为每个会话下载单独的 N.I.N.A. 文件。</li>
+                    <li><strong>拍摄日期：</strong>位于该部分顶部，因为高度图、晨昏时间和可用时段都取决于它。天体条显示“今晚”，若为未来夜晚则以琥珀色显示“N天后”。</li>
+                    <li><strong>高度图：</strong>显示天体从 18 点到 6 点的高度。背景随天空变化：晨昏蒙影时较亮，天文夜时较暗。若日期为今天，一条黄线标出当前时间。这样一眼就能看出天体何时既高<strong>又</strong>处于黑暗天空。</li>
                 </ul>
             </div>
 
@@ -2555,7 +2642,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <li><strong>FOV图表集成：</strong>通过<em>应用到FOV</em>按钮应用后，轮廓以红色区域显示在高度图中——与N.I.N.A.完全一致。阈值随时间随DSO方位角变化。</li>
                     <li><strong>N.I.N.A.导出（.hrz）：</strong>文件遵循标准天文惯例：方位角0°=北，向东增加。还必须在N.I.N.A.的天文台设置中输入GPS坐标，否则可见性计算将不准确。</li>
                     <li><strong>Stellarium导出（.zip）：</strong>压缩包包含PNG格式全景照片（带透明通道）、spherical类型的landscape.ini（含站点坐标和北向旋转）以及horizon.txt文件。将压缩包解压到Stellarium的<code>landscapes/</code>文件夹中。</li>
-                    <li><strong>持久化与备份：</strong>轮廓自动保存到localStorage。使用<em>备份（.json）</em>下载恢复文件：若缓存被清除，点击<em>↩ 恢复</em>即可一键恢复并自动应用到FOV。</li>
+                    <li><strong>持久化与备份：</strong>轮廓自动保存到localStorage。使用<em>备份（.json）</em>下载恢复文件：若缓存被清除，点击序列部分图表上方的<em>地平线文件</em>即可一键恢复并自动应用到FOV。</li>
                 </ul>
             </div>
 
@@ -3237,7 +3324,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                 <div style="color:#c49a3c;"><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-rocket"/></svg></div>
                 <div>
                     <div style="font-size:0.75em; color:#c49a3c; text-transform:uppercase; letter-spacing:1px; font-weight:700;" data-i18n="cl_update_label">Aggiornamento</div>
-                    <div style="font-size:1.25em; font-weight:800; color:#c9d1d9; letter-spacing:.5px;">AstroDashboardPRO <span style="color:#c49a3c;">v8.2</span></div>
+                    <div style="font-size:1.25em; font-weight:800; color:#c9d1d9; letter-spacing:.5px;">AstroDashboardPRO <span style="color:#c49a3c;">v9.0</span></div>
                 </div>
                 <button onclick="chiudiChangelog()" style="
                     margin-left:auto; background:transparent; border:none;
@@ -3253,47 +3340,68 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
             <!-- Changelog items -->
             <div style="display:flex; flex-direction:column; gap:10px;">
 
-                <!-- ── v8.2 ── -->
+                <!-- ── v9.0 ── -->
 <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #c49a3c; box-shadow:0 0 0 1px rgba(0,0,0,0.15); margin-bottom:8px;">
-                    <span style="flex-shrink:0; color:#c49a3c;"><svg width="24" height="24" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-search"/></svg></span>
+                    <span style="flex-shrink:0; color:#c49a3c;"><svg width="24" height="24" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-map"/></svg></span>
                     <div>
-                        <div style="font-weight:700; color:#c49a3c; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v82_search_title">Ricerca sempre disponibile</div>
-                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v82_search_desc"></div>
+                        <div style="font-weight:700; color:#c49a3c; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v90_meteo_title"></div>
+                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v90_meteo_desc"></div>
                     </div>
                 </div>
                 <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #00c6ff; box-shadow:0 0 0 1px rgba(0,0,0,0.15); margin-bottom:8px;">
-                    <span style="flex-shrink:0; color:#00c6ff;"><svg width="24" height="24" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-stars"/></svg></span>
+                    <span style="flex-shrink:0; color:#00c6ff;"><svg width="24" height="24" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-globe"/></svg></span>
                     <div>
-                        <div style="font-weight:700; color:#00c6ff; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v82_fov_title">Simulatore FOV più robusto</div>
-                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v82_fov_desc"></div>
+                        <div style="font-weight:700; color:#00c6ff; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v90_nubi_title"></div>
+                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v90_nubi_desc"></div>
                     </div>
                 </div>
                 <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #2ec96c; box-shadow:0 0 0 1px rgba(0,0,0,0.15); margin-bottom:8px;">
-                    <span style="flex-shrink:0; color:#2ec96c;"><svg width="24" height="24" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-algo"/></svg></span>
+                    <span style="flex-shrink:0; color:#2ec96c;"><svg width="24" height="24" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-switch"/></svg></span>
                     <div>
-                        <div style="font-weight:700; color:#2ec96c; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v82_exposure_title">Posa minima calcolata scientificamente</div>
-                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v82_exposure_desc"></div>
+                        <div style="font-weight:700; color:#2ec96c; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v90_sezioni_title"></div>
+                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v90_sezioni_desc"></div>
                     </div>
                 </div>
                 <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #bb86fc; box-shadow:0 0 0 1px rgba(0,0,0,0.15); margin-bottom:8px;">
-                    <span style="flex-shrink:0; color:#bb86fc;"><svg width="24" height="24" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-edit"/></svg></span>
+                    <span style="flex-shrink:0; color:#bb86fc;"><svg width="24" height="24" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-planet"/></svg></span>
                     <div>
-                        <div style="font-weight:700; color:#bb86fc; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v82_custom_title">Telescopio e sensore personalizzati</div>
-                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v82_custom_desc"></div>
+                        <div style="font-weight:700; color:#bb86fc; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v90_planetario_title"></div>
+                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v90_planetario_desc"></div>
                     </div>
                 </div>
                 <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #58a6ff; box-shadow:0 0 0 1px rgba(0,0,0,0.15); margin-bottom:8px;">
-                    <span style="flex-shrink:0; color:#58a6ff;"><svg width="24" height="24" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-refresh"/></svg></span>
+                    <span style="flex-shrink:0; color:#58a6ff;"><svg width="24" height="24" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-target"/></svg></span>
                     <div>
-                        <div style="font-weight:700; color:#58a6ff; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v82_reload_title">Avvio più rapido e ricarica precisa</div>
-                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v82_reload_desc"></div>
+                        <div style="font-weight:700; color:#58a6ff; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v90_dossier_title"></div>
+                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v90_dossier_desc"></div>
                     </div>
                 </div>
                 <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #5DCAA5; box-shadow:0 0 0 1px rgba(0,0,0,0.15); margin-bottom:8px;">
-                    <span style="flex-shrink:0; color:#5DCAA5;"><svg width="24" height="24" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-book"/></svg></span>
+                    <span style="flex-shrink:0; color:#5DCAA5;"><svg width="24" height="24" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-calendar"/></svg></span>
                     <div>
-                        <div style="font-weight:700; color:#5DCAA5; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v82_credits_title">Fonti dei dati e crediti</div>
-                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v82_credits_desc"></div>
+                        <div style="font-weight:700; color:#5DCAA5; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v90_data_title"></div>
+                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v90_data_desc"></div>
+                    </div>
+                </div>
+                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #2ecc71; box-shadow:0 0 0 1px rgba(0,0,0,0.15); margin-bottom:8px;">
+                    <span style="flex-shrink:0; color:#2ecc71;"><svg width="24" height="24" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-moon"/></svg></span>
+                    <div>
+                        <div style="font-weight:700; color:#2ecc71; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v90_analisi_title"></div>
+                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v90_analisi_desc"></div>
+                    </div>
+                </div>
+                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #bb86fc; box-shadow:0 0 0 1px rgba(0,0,0,0.15); margin-bottom:8px;">
+                    <span style="flex-shrink:0; color:#bb86fc;"><svg width="24" height="24" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-chip"/></svg></span>
+                    <div>
+                        <div style="font-weight:700; color:#bb86fc; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v90_sensore_title"></div>
+                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v90_sensore_desc"></div>
+                    </div>
+                </div>
+                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #f2c94c; box-shadow:0 0 0 1px rgba(0,0,0,0.15); margin-bottom:8px;">
+                    <span style="flex-shrink:0; color:#f2c94c;"><svg width="24" height="24" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-smartphone"/></svg></span>
+                    <div>
+                        <div style="font-weight:700; color:#f2c94c; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v90_mobile_title"></div>
+                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v90_mobile_desc"></div>
                     </div>
                 </div>
 
@@ -3315,7 +3423,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
 
     <script>
         (function() {
-            const CURRENT_VERSION = '8.2';
+            const CURRENT_VERSION = '9.0';
             const STORAGE_KEY = 'ad_last_version';
 
             function mostraChangelogManuale() {
@@ -4025,6 +4133,331 @@ document.addEventListener('DOMContentLoaded', function() {
     // Passo esatto: dopo il ripristino di pagina, oggetto e modalità (multinight.js / ripristino sezione)
     if (_adpStepAlCaricamento) setTimeout(_adpRipristinaStep, 700);
 });
+</script>
+<script>
+// ══════════════════════════════════════════════════════════════════
+// ── M2 · T1 (03/11/2026): una sezione alla volta ─────────────────
+// Ogni blocco di dashboard-view / planning-view ha data-adp-sez con la
+// sezione (pos=Meteo, dso=DSO, fov=Setup, seq=Sequenza, exp=Download).
+// Il passo attivo della barra diventa la sezione visibile (attributo su
+// <body>; il CSS nasconde i blocchi delle altre sezioni). Nessun blocco
+// spostato, nessuna funzione esistente modificata: solo "avvolte".
+// ══════════════════════════════════════════════════════════════════
+(function() {
+    const PAGINA = { pos:'dashboard-view', dso:'dashboard-view', fov:'planning-view', seq:'planning-view', exp:'planning-view' };
+    const NOMI = {
+        it: { pos:'Meteo',   dso:'DSO',  fov:'Setup', seq:'Sequenza',  exp:'Download' },
+        en: { pos:'Weather', dso:'DSO',  fov:'Setup', seq:'Sequence',  exp:'Download' },
+        es: { pos:'Tiempo',  dso:'DSO',  fov:'Setup', seq:'Secuencia', exp:'Descarga' },
+        zh: { pos:'天气',     dso:'深空', fov:'设置',  seq:'序列',       exp:'下载' }
+    };
+    window._adpNomiSez = NOMI;
+    function viste() { try { return JSON.parse(sessionStorage.getItem('adp_sez_viste') || '[]'); } catch (e) { return []; } }
+
+    // Applica la sezione e ridisegna i componenti che erano nascosti
+    function applica(id) {
+        const prima = document.body.getAttribute('data-adp-sez');
+        if (id && PAGINA[id]) document.body.setAttribute('data-adp-sez', id);
+        else document.body.removeAttribute('data-adp-sez');
+        if (!id || !PAGINA[id] || id === prima) return;
+        try { const v = viste(); if (!v.includes(id)) { v.push(id); sessionStorage.setItem('adp_sez_viste', JSON.stringify(v)); } } catch (e) {}
+        if (prima) window.scrollTo(0, 0);                       // cambio di sezione: si riparte dall'alto
+        setTimeout(() => {
+            if (id === 'pos' && window._leafletMap && window._leafletMap.invalidateSize) window._leafletMap.invalidateSize({ animate: false });
+            const pv = document.getElementById('planning-view');
+            if (id === 'fov' && typeof aggiornaFOV === 'function' && pv && getComputedStyle(pv).display !== 'none') aggiornaFOV();
+        }, 60);
+    }
+
+    // setActiveStep: il passo attivo decide anche la sezione visibile
+    const _setOrig = setActiveStep;
+    setActiveStep = function(id) { _setOrig(id); applica(id); };
+
+    // _showView: se si apre una pagina con una sezione che non le appartiene,
+    // si passa alla sezione predefinita della pagina (mai una pagina vuota).
+    // Il controllo è rimandato di un ciclo: chi chiama spesso imposta il passo subito dopo.
+    const _showOrig = _showView;
+    _showView = function(v) {
+        const r = _showOrig.apply(this, arguments);
+        if (v === 'dashboard-view' || v === 'planning-view') setTimeout(() => {
+            const pagina = document.getElementById(v);
+            if (!pagina || getComputedStyle(pagina).display === 'none') return;
+            if (PAGINA[_activeStepId] !== v) setActiveStep(v === 'dashboard-view' ? 'pos' : 'fov');
+        }, 0);
+        return r;
+    };
+
+    // Barra: nome sotto ogni icona, sezioni già viste in verde, Setup attenuato senza oggetto
+    const _renderOrig = renderStepper;
+    renderStepper = function() {
+        _renderOrig.apply(this, arguments);
+        const nomi = NOMI[(typeof lang !== 'undefined' && NOMI[lang]) ? lang : 'it'];
+        const v = viste();
+        document.querySelectorAll('#nav-stepper .adp-step').forEach((el, i) => {
+            const s = _STEPPER_STEPS[i]; if (!s) return;
+            const sp = document.createElement('span'); sp.className = 'adp-step-nome'; sp.textContent = nomi[s.id] || '';
+            el.appendChild(sp);
+            el.classList.toggle('adp-vista', v.includes(s.id) && s.id !== _activeStepId);
+            el.classList.toggle('adp-senza-ogg', s.id === 'fov' && (typeof targetSelezionato === 'undefined' || !targetSelezionato));
+        });
+    };
+    if (document.readyState !== 'loading') renderStepper();
+})();
+</script>
+<script>
+// ══════════════════════════════════════════════════════════════════
+// ── M2 · T2 (03/11/2026): ogni ingresso porta alla sezione giusta ──
+// Solo funzioni "avvolte" o voci della barra ridefinite qui: nessuna
+// riga delle funzioni originali è modificata.
+// ══════════════════════════════════════════════════════════════════
+(function() {
+    const vis = id => { const e = document.getElementById(id); return !!(e && getComputedStyle(e).display !== 'none'); };
+
+    // 1) Scelta di un DSO (carosello, galleria, ricerca, Invio, Pianifica, Cambia,
+    //    risposta SIMBAD/Wikidata, ripristino all'avvio) → sezione Setup.
+    //    Correzioni: la sezione viene salvata (F5 non perde più l'oggetto) e resta
+    //    visibile una sola pagina anche se la risposta di rete arriva dopo.
+    if (typeof apriPianificazione === 'function') {
+        const _apriOrig = apriPianificazione;
+        apriPianificazione = function() {
+            setActiveStep('fov');                                   // prima: Setup è già visibile mentre si crea il FOV
+            const r = _apriOrig.apply(this, arguments);
+            ['landing-view', 'guide-view', 'horizon-view', 'dashboard-view'].forEach(v => { const e = document.getElementById(v); if (e) e.style.display = 'none'; });
+            const pv = document.getElementById('planning-view'); if (pv) pv.style.display = 'block';
+            try { sessionStorage.setItem('ad_active_section', 'planning-view'); } catch (e) {}
+            if (typeof aggiornaNavLinks === 'function') aggiornaNavLinks();
+            return r;
+        };
+    }
+
+    // 2) Voci della barra: si entra in cima alla sezione, senza scorrimenti verso ancore
+    //    (Setup puntava a #scope-preset, che non esiste). Sequenza rispetta l'ultima
+    //    modalità usata (Smart o PRO) invece di forzare Smart; Download funziona anche in PRO.
+    const voce = id => _STEPPER_STEPS.find(s => s.id === id);
+    if (voce('fov')) voce('fov').nav = () => { setActiveStep('fov'); _showView('planning-view'); };
+    if (voce('seq')) voce('seq').nav = () => {
+        const pro = sessionStorage.getItem('ad_current_view') === 'pro' && !document.body.classList.contains('mode-lite');
+        _showView('planning-view'); setActiveStep('seq');
+        setTimeout(() => { if (typeof setCalcMode === 'function') setCalcMode(pro ? 'pro' : 'smart'); }, 50);
+    };
+    if (voce('exp')) voce('exp').nav = () => { setActiveStep('exp'); _showView('planning-view'); };
+
+    // 3) Guida aperta dalla pagina Orizzonte: alla chiusura si torna all'Orizzonte
+    //    (prima restavano visibili due pagine). Chiudendo verso Meteo si ridisegna la mappa.
+    if (typeof apriGuida === 'function') {
+        const _guidaOrig = apriGuida;
+        apriGuida = function() {
+            const daOrizzonte = vis('horizon-view');
+            const r = _guidaOrig.apply(this, arguments);
+            if (daOrizzonte) { document.getElementById('horizon-view').style.display = 'none'; vistaPrecedente = 'horizon-view'; }
+            return r;
+        };
+    }
+    if (typeof chiudiGuida === 'function') {
+        const _chiudiOrig = chiudiGuida;
+        chiudiGuida = function() {
+            const r = _chiudiOrig.apply(this, arguments);
+            if (vis('dashboard-view')) setTimeout(() => { if (window._leafletMap) window._leafletMap.invalidateSize({ animate: false }); }, 100);
+            return r;
+        };
+    }
+
+    // 4) Orizzonte "Applica": il grafico è stato ridisegnato mentre era nascosto → ridimensiona
+    if (typeof window.hzApplyToFov === 'function') {
+        const _hzOrig = window.hzApplyToFov;
+        window.hzApplyToFov = function() {
+            const r = _hzOrig.apply(this, arguments);
+            setTimeout(() => { try { const c = window.Chart && Chart.getChart('altitudeChart'); if (c) c.resize(); } catch (e) {} }, 80);
+            return r;
+        };
+    }
+
+    // 4b) F5: si torna alla sezione esatta, partendo dall'inizio (non più dall'ancora interna)
+    if (typeof _adpRipristinaStep === 'function') {
+        const _ripOrig = _adpRipristinaStep;
+        _adpRipristinaStep = function() { const r = _ripOrig.apply(this, arguments); window.scrollTo(0, 0); return r; };
+    }
+
+    // 5) Meteo e DSO si aprono dall'inizio della sezione: si annulla solo lo scorrimento
+    //    automatico verso la mappa / il campo di ricerca (il resto delle funzioni è invariato).
+    //    Il night popup continua a scorrere fino alla card del DSO consigliato.
+    function senzaScorrimento(idEl, ms) {
+        const el = document.getElementById(idEl);
+        if (!el) return;
+        el.scrollIntoView = function() {};
+        setTimeout(() => { delete el.scrollIntoView; }, ms);
+    }
+    document.addEventListener('DOMContentLoaded', function() {          // dopo i wrapper dei passi (index.html)
+        const _meteo = window.vaiMeteo, _plan = window.vaiPlanetario;
+        if (typeof _meteo === 'function') window.vaiMeteo = function() { senzaScorrimento('map', 600); return _meteo.apply(this, arguments); };
+        if (typeof _plan === 'function') window.vaiPlanetario = function() { senzaScorrimento('search-dash-input', 600); return _plan.apply(this, arguments); };
+    });
+})();
+</script>
+<script>
+// ══════════════════════════════════════════════════════════════════
+// ── M2 · T3 (03/11/2026): Avanti/Indietro, promemoria dell'oggetto,
+//    invito in Setup e avviso non bloccante in Sequenza/Download.
+//    Elementi creati qui via JS: nessun blocco esistente modificato.
+// ══════════════════════════════════════════════════════════════════
+(function() {
+    const TXT = {
+        it: { back:'Indietro', next:'Avanti', change:'Cambia oggetto', none:'Nessun oggetto scelto: sequenza generica', choose:'Scegli un oggetto',
+              invT:'Nessun oggetto scelto.', invP:'Puoi impostare il setup ottico; dossier e inquadratura compariranno quando scegli un oggetto.', go:'Scegli un oggetto', fovT:'Simulatore FOV e Dossier', fovP:'Scegli un oggetto in DSO per vedere l\'inquadratura reale del tuo setup e la scheda dell\'oggetto.', fovGo:'Vai a DSO', tonight:'Stanotte', tomorrow:'domani', inDays:n=>`tra ${n} giorni` },
+        en: { back:'Back', next:'Next', change:'Change object', none:'No object selected: generic sequence', choose:'Choose an object',
+              invT:'No object selected.', invP:'You can set up your optics; the dossier and framing will appear once you choose an object.', go:'Choose an object', fovT:'FOV simulator and Dossier', fovP:'Choose an object in DSO to see the real framing of your setup and the object card.', fovGo:'Go to DSO', tonight:'Tonight', tomorrow:'tomorrow', inDays:n=>`in ${n} days` },
+        es: { back:'Atrás', next:'Siguiente', change:'Cambiar objeto', none:'Ningún objeto elegido: secuencia genérica', choose:'Elige un objeto',
+              invT:'Ningún objeto elegido.', invP:'Puedes configurar la óptica; el dossier y el encuadre aparecerán cuando elijas un objeto.', go:'Elige un objeto', fovT:'Simulador FOV y Dossier', fovP:'Elige un objeto en DSO para ver el encuadre real de tu equipo y la ficha del objeto.', fovGo:'Ir a DSO', tonight:'Esta noche', tomorrow:'mañana', inDays:n=>`en ${n} días` },
+        zh: { back:'返回', next:'下一步', change:'更换天体', none:'未选择天体：通用序列', choose:'选择天体',
+              invT:'未选择天体。', invP:'您可以先设置光学设备；选择天体后将显示档案和取景。', go:'选择天体', fovT:'视场模拟器与档案', fovP:'在深空部分选择天体，即可查看您设备的真实取景和天体卡片。', fovGo:'前往深空', tonight:'今晚', tomorrow:'明天', inDays:n=>`${n}天后` }
+    };
+    const ORDINE = ['pos', 'dso', 'fov', 'seq', 'exp'];
+    const L = () => TXT[(typeof lang !== 'undefined' && TXT[lang]) ? lang : 'it'];
+    const N = id => ((window._adpNomiSez || {})[(typeof lang !== 'undefined' && window._adpNomiSez && window._adpNomiSez[lang]) ? lang : 'it'] || {})[id] || id;
+    const vai = id => _stepperNav(ORDINE.indexOf(id));
+    const esc = t => String(t == null ? '' : t).replace(/[&<>"]/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c]));
+    const haOggetto = () => (typeof targetSelezionato !== 'undefined' && !!targetSelezionato);
+
+    function crea(tag, cls, sez) { const e = document.createElement(tag); e.className = cls; if (sez) e.setAttribute('data-adp-sez', sez); return e; }
+    const els = {};
+
+    function costruisci() {
+        const meteo = document.querySelector('#dashboard-view .adp-meteo');
+        const dso = document.querySelector('#dashboard-view .dso-container');
+        const grid = document.querySelector('#planning-view .planning-grid');
+        const fine = document.getElementById('mode-pro-section');
+        const testa = document.querySelector('#planning-view .planning-header-row');
+        if (!meteo || !dso || !grid || !fine || !testa) return false;
+        ORDINE.forEach(id => { els['nav_' + id] = crea('div', 'adp-sez-nav', id); });
+        meteo.after(els.nav_pos);
+        dso.after(els.nav_dso);
+        grid.after(els.nav_fov);
+        fine.after(els.nav_seq);
+        els.nav_seq.after(els.nav_exp);
+        els.ogg = crea('div', 'adp-ogg', 'fov seq exp');        // nome dell'oggetto / avviso: fisso in cima (G1)
+        grid.before(els.ogg);
+        els.inv = crea('div', 'adp-invito', 'fov');              // avviso in Setup senza oggetto (non bloccante)
+        testa.before(els.inv);
+        els.fovVuoto = crea('div', 'panel adp-fov-vuoto', 'fov'); // al posto di Dossier e FOV, senza oggetto
+        const dos = document.querySelector('#planning-view .adp-dossier');
+        if (dos) dos.before(els.fovVuoto);
+        // C: barra "Data sessione" in cima alla Sequenza, subito sotto la striscia
+        const pk = document.getElementById('session-date-picker-smart');
+        if (pk && pk.parentElement) { pk.parentElement.classList.add('adp-data-bar'); els.ogg.after(pk.parentElement); }
+        [els.nav_pos, els.nav_dso, els.nav_fov, els.nav_seq, els.nav_exp, els.ogg, els.inv, els.fovVuoto].forEach(e =>
+            e.addEventListener('click', ev => { const b = ev.target.closest('[data-vai]'); if (b) vai(b.dataset.vai); }));
+        return true;
+    }
+
+    function aggiorna() {
+        if (!els.ogg && !costruisci()) return;
+        const t = L();
+        ORDINE.forEach((id, i) => {
+            const prec = ORDINE[i - 1], succ = ORDINE[i + 1];
+            els['nav_' + id].innerHTML =
+                (prec ? `<button type="button" class="adp-nav-back" data-vai="${prec}">← ${esc(t.back)}: ${esc(N(prec))}</button>` : '<span></span>') +
+                (succ ? `<button type="button" class="adp-nav-next" data-vai="${succ}">${esc(t.next)}: ${esc(N(succ))} →</button>` : '<span></span>');
+        });
+        const ok = haOggetto();
+        document.body.classList.toggle('adp-no-ogg', !ok);
+        if (ok) {
+            const nome = (typeof getLocalizedName === 'function') ? getLocalizedName(targetSelezionato) : targetSelezionato.name;
+            els.ogg.className = 'adp-ogg';
+            els.ogg.innerHTML = `<span class="adp-ogg-ic adp-ogg-img"></span><span class="adp-ogg-t"><b>${esc(nome)}</b><span class="adp-ogg-data"></span></span>
+                <button type="button" class="adp-ogg-btn" data-vai="dso">${esc(t.change)}</button>`;
+        } else {
+            els.ogg.className = 'adp-ogg adp-ogg-vuoto';
+            els.ogg.innerHTML = `<span class="adp-ogg-ic">ⓘ</span><span class="adp-ogg-t">${esc(t.none)}<span class="adp-ogg-data"></span></span>
+                <button type="button" class="adp-ogg-btn" data-vai="dso">${esc(t.choose)}</button>`;
+        }
+        iconaStriscia();
+        dataStriscia();
+        els.inv.innerHTML = `<span class="adp-ogg-ic">ⓘ</span><span class="adp-ogg-t"><b>${esc(t.invT)}</b> ${esc(t.invP)}</span>
+            <button type="button" class="adp-ogg-btn" data-vai="dso">${esc(t.go)}</button>`;
+        els.fovVuoto.innerHTML = `<div class="adp-fov-vuoto-ic">⛶</div><b>${esc(t.fovT)}</b><p>${esc(t.fovP)}</p>
+            <button type="button" class="adp-ogg-btn" data-vai="dso">${esc(t.fovGo)}</button>`;
+    }
+
+    // Aggiornamento: cambio di sezione, scelta di un oggetto, cambio lingua (renderStepper)
+    // ── G1: icona del Dossier (tua foto → foto del catalogo → emoji del catalogo → icona per tipo) ──
+    function iconaPerTipo(tipo) {
+        const t = String(tipo || '').toLowerCase();
+        if (/galass|galax|星系/.test(t)) return '🌌';
+        if (/planetar|行星状/.test(t)) return '💠';
+        if (/supernov|resto|remnant|remanente|遗迹/.test(t)) return '💥';
+        if (/ammass|cluster|cúmulo|cumulo|星团/.test(t)) return '✨';
+        if (/nebul|h\s?ii|星云/.test(t)) return '☁️';
+        return '✦';
+    }
+    let _imgPer = null;
+    // ── C: data della sessione nella striscia (Sequenza e Download) ──
+    function dataStriscia() {
+        const box = els.ogg && els.ogg.querySelector('.adp-ogg-data');
+        if (typeof getSessionDate !== 'function') return;
+        const t = L(), d = getSessionDate(), oggi = new Date();
+        const a = new Date(d.getFullYear(), d.getMonth(), d.getDate()), b = new Date(oggi.getFullYear(), oggi.getMonth(), oggi.getDate());
+        const gg = Math.round((a - b) / 86400000);
+        document.body.classList.toggle('adp-data-futura', gg > 0);
+        if (!box) return;
+        const loc = { it:'it-IT', en:'en-GB', es:'es-ES', zh:'zh-CN' }[(typeof lang !== 'undefined' && lang) || 'it'] || 'it-IT';
+        let txt = d.toLocaleDateString(loc, { weekday:'short', day:'numeric', month:'short' }).replace(/\./g, '');
+        txt = txt.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+        if (gg === 0) { box.className = 'adp-ogg-data adp-oggi'; box.textContent = '🌙 ' + t.tonight; }
+        else { box.className = 'adp-ogg-data' + (gg > 0 ? ' adp-fut' : ' adp-oggi');
+               box.textContent = '📅 ' + txt + (gg === 1 ? ' · ' + t.tomorrow : gg > 1 ? ' · ' + t.inDays(gg) : ''); }
+    }
+    document.addEventListener('sessionDateChanged', dataStriscia);
+    // Icona della striscia con il nome: la stessa del Dossier (foto, emoji o icona per tipo)
+    function iconaStriscia() {
+        const dst = els.ogg && els.ogg.querySelector('.adp-ogg-img');
+        const src = document.getElementById('adp-dos-img');
+        if (!dst) return;
+        dst.innerHTML = (src && src.innerHTML.trim()) ? src.innerHTML : '✦';
+    }
+    function iconaDossier() {
+        const box = document.getElementById('adp-dos-img');
+        if (!box || !haOggetto()) return;
+        const o = targetSelezionato, chiave = (o.id || o.name || '') + '|' + (o.type || '');
+        if (_imgPer === chiave) return;
+        _imgPer = chiave;
+        const tipoEl = document.getElementById('stat-type');
+        const emoji = o.icon || iconaPerTipo((o.type || '') + ' ' + (tipoEl ? tipoEl.innerText : ''));
+        const metti = src => { const im = document.createElement('img'); im.alt = ''; im.src = src;
+            im.onerror = () => { box.textContent = emoji; iconaStriscia(); }; box.innerHTML = ''; box.appendChild(im); iconaStriscia(); };
+        const catalogo = (typeof dsoImgMap !== 'undefined' && o.id) ? dsoImgMap[o.id] : null;
+        if (catalogo) metti(catalogo); else { box.textContent = emoji; iconaStriscia(); }
+        if (typeof UserImgDB !== 'undefined' && o.id) UserImgDB.get(o.id).then(u => { if (u && _imgPer === chiave) metti(u); });
+    }
+
+    // ── G1: altezza della barra in alto (per la striscia fissa) e comparsa della striscia in Setup ──
+    function altezzaBarra() {
+        const nav = document.getElementById('top-nav');
+        document.documentElement.style.setProperty('--adp-nav-h', (nav ? nav.offsetHeight : 0) + 'px');
+    }
+    window.addEventListener('resize', altezzaBarra);
+    document.addEventListener('DOMContentLoaded', () => {
+        altezzaBarra();
+        const dos = document.querySelector('.adp-dossier');
+        if (dos && 'IntersectionObserver' in window) new IntersectionObserver(en => {
+            const e = en[0];
+            const g = document.querySelector('#planning-view .planning-grid');
+            if (g) { const r = g.getBoundingClientRect();                     // stessa larghezza e posizione del contenuto
+                document.documentElement.style.setProperty('--adp-ogg-w', r.width + 'px');
+                document.documentElement.style.setProperty('--adp-ogg-x', r.left + 'px'); }
+            document.body.classList.toggle('adp-ogg-fisso', !e.isIntersecting && e.boundingClientRect.top < 0);
+        }, { threshold: 0, rootMargin: '-' + ((document.getElementById('top-nav') || {}).offsetHeight || 0) + 'px 0px 0px 0px' }).observe(dos);   // la barra fissa copre la parte alta
+    });
+
+    const _setT3 = setActiveStep;
+    setActiveStep = function() { const r = _setT3.apply(this, arguments); aggiorna(); altezzaBarra(); return r; };
+    if (typeof apriPianificazione === 'function') {
+        const _apriT3 = apriPianificazione;
+        apriPianificazione = function() { const r = _apriT3.apply(this, arguments); setTimeout(() => { aggiorna(); _imgPer = null; iconaDossier(); }, 0); return r; };
+    }
+    const _renderT3 = renderStepper;
+    renderStepper = function() { const r = _renderT3.apply(this, arguments); if (els.ogg) aggiorna(); return r; };
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', aggiorna); else aggiorna();
+})();
 </script>
 
 

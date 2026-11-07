@@ -1,0 +1,22 @@
+AstroDashboard PRO
+Copyright (c) 2025-2026 Enrico Salis. All rights reserved.
+
+The source code in this repository is published for transparency.
+It is NOT open source: no licence is granted to copy, modify,
+redistribute or reuse it, in whole or in part, without the author's
+written permission.
+
+The app itself is free to use at https://www.astrodashboardpro.com
+
+Third-party components keep their own licences:
+- js/catalogs.json is derived from the Stellarium DSO catalogue
+  (GPL-2.0-or-later, https://github.com/Stellarium/stellarium) and
+  from OpenNGC by Mattia Verga (CC BY-SA 4.0,
+  https://github.com/mattiaverga/OpenNGC). This file remains subject
+  to those licences.
+- rive.js (Rive web runtime, MIT) and the Audiowide font
+  (SIL Open Font License 1.1) are included under their own licences.
+- Other libraries and online services: see README.md, section
+  "Fonti dei dati, servizi e licenze".
+
+Contact: use the contact form in the app.

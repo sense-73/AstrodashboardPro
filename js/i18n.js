@@ -33,9 +33,9 @@ let lang = localStorage.getItem('ad_lang') || 'it';
                 "jupiter": "Giove", "mars": "Marte", "venus": "Venere", "moon": "Luna", "sun": "Sole", "weather": "Meteo", "mercury": "Mercurio", "saturn": "Saturno", "uranus": "Urano", "neptune": "Nettuno",
                 "mode": "Modalità:", "single_panel": "Scatto Singolo", "mosaic": "Mosaico", "panels": "Pannelli (X, Y):", "overlap": "Sovrapposizione:", "time_per_panel": "Tempo per Pannello", "fov_warning": "L'oggetto è più grande del campo! Valuta un mosaico.", "nina_mosaic_msg": "Modalità Mosaico attiva. Usa il Framing Assistant di N.I.N.A. per le coordinate.",
                 "gen_report_btn": "Genera Report Strategico", "report_title": "Dossier Mosaico", "copy_report": "Copia negli Appunti", "copied": "Copiato!", "report_general": "Info Generali Mosaico", "report_strategy": "Strategia Singolo Pannello", "report_plan": "Piano di Scatto (Per Pannello)",
-                "info_pos": "Cerca un luogo o inserisci coordinate. La mappa mostra un raggio di 50km utile per trovare 'buchi di sereno' spostandoti.",
-                "info_env": "Dati meteo professionali estratti dal satellite in tempo reale.",
-                "info_planetarium": "Mostra i target visibili calcolando l'altezza sull'orizzonte. Sposta lo slider per simulare la volta celeste stanotte.",
+                "info_pos": "Cerca un luogo o inserisci le coordinate. Sotto trovi l'indice di Bortle, l'inquinamento luminoso e le prossime notti; a destra la mappa con il meteo previsto sul posto.",
+                "info_env": "Previsioni meteo orarie per l'ora scelta sulla linea temporale (modelli Open-Meteo). Con una data futura i valori sono una previsione per quella notte.",
+                "info_planetarium": "Mostra i pianeti e gli oggetti visibili, ordinati per altezza sull'orizzonte. Lo slider copre la notte della data scelta, dalla fine del crepuscolo civile all'alba; le tacche segnano la notte astronomica. Premi ▶ per vederla scorrere.",
                 "info_search": "Cerca un oggetto non in lista. Il sistema interrogherà l'università di Strasburgo (SIMBAD) per scaricare le coordinate assolute.",
                 "info_setup": "Inquadra il bersaglio sulla mappa. Se è troppo grande, attiva la modalità 'Mosaico' per far dividere automaticamente al sistema i tempi notturni.",
                 "info_smart": "Il sistema riempie il tuo buio notturno generando pose ottimali per cluster, galassie o nebulose, calcolando anche le calibrazioni per sensori Mono.",
@@ -116,9 +116,9 @@ let lang = localStorage.getItem('ad_lang') || 'it';
                 "jupiter": "Jupiter", "mars": "Mars", "venus": "Venus", "moon": "Moon", "sun": "Sun", "weather": "Weather", "mercury": "Mercury", "saturn": "Saturn", "uranus": "Uranus", "neptune": "Neptune",
                 "mode": "Mode:", "single_panel": "Single Panel", "mosaic": "Mosaic", "panels": "Panels (X, Y):", "overlap": "Overlap:", "time_per_panel": "Time per Panel", "fov_warning": "Target is larger than your FOV! Consider a mosaic.", "nina_mosaic_msg": "Mosaic Mode active. Use N.I.N.A.'s Framing Assistant to generate panel coordinates.",
                 "gen_report_btn": "Generate Strategic Report", "report_title": "Mosaic Dossier", "copy_report": "Copy to Clipboard", "copied": "Copied!", "report_general": "General Info", "report_strategy": "Per-Panel Strategy", "report_plan": "Exposure Plan (Per Panel)",
-                "info_pos": "Search a location. The map shows a 50km radius to help you find 'clear sky holes' while moving under the clouds.",
-                "info_env": "Professional real-time satellite weather data.",
-                "info_planetarium": "Shows visible targets based on altitude. Use the slider to simulate the night sky hours.",
+                "info_pos": "Search for a place or enter coordinates. Below you'll find the Bortle index, light pollution and the next nights; on the right, the map with the forecast weather at your location.",
+                "info_env": "Hourly weather forecast for the hour selected on the timeline (Open-Meteo models). With a future date, values are a forecast for that night.",
+                "info_planetarium": "Shows visible planets and objects, sorted by altitude above the horizon. The slider covers the night of the selected date, from the end of civil twilight to dawn; the ticks mark astronomical night. Press ▶ to watch it play.",
                 "info_search": "Search any custom object. The system will connect to SIMBAD Strasbourg to download absolute coordinates.",
                 "info_setup": "Calculate your FOV. If the target is too big, use 'Mosaic' mode: the system will automatically split your available darkness time.",
                 "info_smart": "The system generates optimal exposures based on darkness, target type, and sensor type (Mono or Color).",
@@ -199,9 +199,9 @@ let lang = localStorage.getItem('ad_lang') || 'it';
                 "jupiter": "Júpiter", "mars": "Marte", "venus": "Venus", "moon": "Luna", "sun": "Sol", "weather": "Clima", "mercury": "Mercurio", "saturn": "Saturno", "uranus": "Urano", "neptune": "Neptuno",
                 "mode": "Modo:", "single_panel": "Panel Único", "mosaic": "Mosaico", "panels": "Paneles (X, Y):", "overlap": "Solapamiento:", "time_per_panel": "Tiempo por Panel", "fov_warning": "¡El objeto es más grande que tu campo visual! Considera un mosaico.", "nina_mosaic_msg": "Modo Mosaico activo. Utiliza el Framing Assistant de N.I.N.A. para crear las coordenadas de los paneles.",
                 "gen_report_btn": "Generar Informe Estratégico", "report_title": "Dosier Mosaico", "copy_report": "Copiar al Portapapeles", "copied": "¡Copiado!", "report_general": "Info General", "report_strategy": "Estrategia por Panel", "report_plan": "Plan de Captura",
-                "info_pos": "El mapa muestra un radio de 50km para encontrar claros en las nubes si te desplazas.",
-                "info_env": "Datos meteorológicos satelitales en tiempo real.",
-                "info_planetarium": "Muestra objetivos visibles. Desliza la barra temporal para simular el cielo.",
+                "info_pos": "Busca un lugar o introduce las coordenadas. Debajo encontrarás el índice de Bortle, la contaminación lumínica y las próximas noches; a la derecha, el mapa con el tiempo previsto en tu ubicación.",
+                "info_env": "Previsión meteorológica horaria para la hora elegida en la línea temporal (modelos Open-Meteo). Con una fecha futura, los valores son una previsión para esa noche.",
+                "info_planetarium": "Muestra los planetas y objetos visibles, ordenados por altura sobre el horizonte. La barra cubre la noche de la fecha elegida, desde el final del crepúsculo civil hasta el amanecer; las marcas señalan la noche astronómica. Pulsa ▶ para verla avanzar.",
                 "info_search": "Busca cualquier objeto. La IA conectará con SIMBAD para descargar las coordenadas.",
                 "info_setup": "Si el objeto es más grande que tu sensor, usa Mosaico. La IA dividirá el tiempo nocturno.",
                 "info_smart": "La IA asigna tiempos ideales basados en tus horas de oscuridad y tu tipo de cámara.",
@@ -282,9 +282,9 @@ let lang = localStorage.getItem('ad_lang') || 'it';
                 "jupiter": "木星", "mars": "火星", "venus": "金星", "moon": "月球", "sun": "太阳", "weather": "天气", "mercury": "水星", "saturn": "土星", "uranus": "天王星", "neptune": "海王星",
                 "mode": "模式:", "single_panel": "单面板", "mosaic": "拼接", "panels": "面板 (X, Y):", "overlap": "重叠度:", "time_per_panel": "每块面板时间", "fov_warning": "目标比你的视场还要大！考虑使用拼接拍摄。", "nina_mosaic_msg": "拼接模式已激活。请使用 N.I.N.A. 的构图助手生成面板坐标。",
                 "gen_report_btn": "生成策略报告", "report_title": "拼接拍摄档案", "copy_report": "复制到剪贴板", "copied": "已复制!", "report_general": "基本信息", "report_strategy": "单面板策略", "report_plan": "曝光计划",
-                "info_pos": "搜索位置。地图显示 50 公里半径，帮助您在云层下寻找晴空区。",
-                "info_env": "专业的实时卫星气象数据。",
-                "info_planetarium": "显示可见目标。滑动时间轴以模拟今晚的星空。",
+                "info_pos": "搜索地点或输入坐标。下方显示 Bortle 指数、光污染和未来几晚的情况；右侧地图显示您所在位置的天气预报。",
+                "info_env": "时间轴所选时刻的逐小时天气预报（Open-Meteo 模型）。选择未来日期时，数值为该晚的预报。",
+                "info_planetarium": "按地平高度排序显示可见的行星和天体。滑块覆盖所选日期的夜晚，从民用晨昏蒙影结束到黎明；刻度标出天文夜。按 ▶ 播放。",
                 "info_search": "如果本地数据库没有，系统将连接斯特拉斯堡 (SIMBAD) 获取坐标。",
                 "info_setup": "计算视场。如果目标太大，请选择'拼接'，系统会将黑夜时间分配给各面板。",
                 "info_smart": "系统根据可用黑夜时间自动分配最佳曝光参数。",
@@ -349,10 +349,10 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.en.mosaic_active_msg = "Mosaic Mode active.";
         i18n.es.mosaic_active_msg = "Modo Mosaico activo.";
         i18n.zh.mosaic_active_msg = "拼接模式已激活。";
-	i18n.it.info_map = "Mappa Empirica di Visibilità. Visualizza un raggio simbolico di 50 km per mostrarti a colpo d'occhio le reali condizioni del cielo. La sovrapposizione dei vari strati ti farà capire subito se la serata sarà limpida o compromessa. Usa i bottoni superiori per attivare i filtri meteo (Nuvole, Jet Stream, Umidità) e scorri la linea temporale per prevedere la loro evoluzione nelle prossime ore.";
-        i18n.en.info_map = "Empirical Visibility Map. Shows a symbolic 50 km radius to give you at-a-glance real sky conditions. The overlay of different layers will let you know immediately if the night will be clear or compromised. Use the top buttons to toggle weather filters (Clouds, Jet Stream, Humidity) and slide the timeline to forecast their evolution.";
-        i18n.es.info_map = "Mapa Empírico de Visibilidad. Muestra un radio simbólico de 50 km para indicarte de un vistazo las condiciones reales del cielo. La superposición de capas te hará entender de inmediato si la noche será despejada o comprometida. Usa los botones superiores para activar filtros (Nubes, Jet Stream, Humedad) y desliza la línea temporal para prever su evolución.";
-        i18n.zh.info_map = "经验能见度地图。显示象征性的 50 公里半径，让您一目了然地了解真实的天空状况。不同图层的叠加将立即让您知道今晚是晴朗还是恶劣。使用顶部按钮激活天气滤镜（云层、急流、湿度），并滑动时间轴以预测它们在未来几小时内的演变。";
+	i18n.it.info_map = "Mappa del cielo sopra di te. Le nubi sono mostrate come copertura reale su 25 km intorno alla tua posizione; Jet stream, Umidità e Luna nel raggio indicato. Attiva i livelli dal pannello a sinistra della mappa, scorri la linea temporale o premi ▶ per vedere l'evoluzione nelle ore notturne.";
+        i18n.en.info_map = "Map of the sky above you. Clouds are shown as real coverage over 25 km around your location; Jet stream, Humidity and Moon within the radius shown. Turn layers on from the panel on the left of the map, drag the timeline or press ▶ to see how things evolve through the night.";
+        i18n.es.info_map = "Mapa del cielo sobre ti. Las nubes se muestran como cobertura real en 25 km alrededor de tu ubicación; Jet stream, Humedad y Luna en el radio indicado. Activa las capas desde el panel a la izquierda del mapa, desliza la línea temporal o pulsa ▶ para ver la evolución durante la noche.";
+        i18n.zh.info_map = "您头顶的天空地图。云层以您所在位置周围 25 公里的真实覆盖显示；急流、湿度和月亮显示在标示的半径内。从地图左侧面板开启图层，拖动时间轴或按 ▶ 查看夜间的变化。";
         i18n.it.info_seq_opt = "Se clicchi sul pulsante <b>'Genera Sequenza Ottimale'</b> il sistema calcola i tempi e il numero di pose in base alle tempistiche di integrazione impostate, con un algoritmo ragionato su tipologia di subframe (Luminanza, banda larga o banda stretta...).<br><br>Se la modalità mosaico è attiva, il sistema dividerà ulteriormente l'integrazione totale per il numero di pannelli.";
         i18n.en.info_seq_opt = "If you click the <b>'Generate Optimal Sequence'</b> button, the system calculates times and exposure counts based on the integration timeframe, using an algorithm tailored to the subframe type (Luminance, broadband, or narrowband...).<br><br>If mosaic mode is active, the system will further divide the total integration by the number of panels.";
         i18n.es.info_seq_opt = "Si haces clic en el botón <b>'Generar Secuencia Óptima'</b>, el sistema calcula los tiempos y el número de tomas en función del tiempo de integración, con un algoritmo adaptado al tipo de subframe (Luminancia, banda ancha o banda estrecha...).<br><br>Si el modo mosaico está activo, el sistema dividirá aún más la integración total por el número de paneles.";
@@ -1634,6 +1634,81 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         // ⚠️ AGGIORNARE VERSIONE QUI quando si rilascia una nuova versione:
         // cl_close_btn = testo del pulsante nel modal changelog (NON è hardcoded in index.html)
         // Aggiornare anche: title tag, badge navbar (>vX.X</button>), landing (>vX.X</span>), modal badge, pulsante "Inizia a usare" in index.html
+        // ── Changelog v9.0 (03/11/2026) ─────────────────
+        i18n.it.cl_v90_meteo_title = "Meteo più chiaro";
+        i18n.it.cl_v90_meteo_desc = "Livelli dentro la mappa in un pannello a scomparsa, Seeing sempre in vista in basso al centro, inquinamento luminoso sotto il Bortle e le prossime 3 notti a colpo d'occhio. Con una data futura la mappa mostra l'avviso \"Previsione futura\".";
+        i18n.en.cl_v90_meteo_title = "Clearer weather";
+        i18n.en.cl_v90_meteo_desc = "Layers inside the map in a collapsible panel, Seeing always in view at the bottom centre, light pollution below the Bortle and the next 3 nights at a glance. With a future date the map shows a \"Future forecast\" warning.";
+        i18n.es.cl_v90_meteo_title = "Tiempo más claro";
+        i18n.es.cl_v90_meteo_desc = "Capas dentro del mapa en un panel desplegable, Seeing siempre a la vista abajo en el centro, contaminación lumínica bajo el Bortle y las próximas 3 noches de un vistazo. Con una fecha futura el mapa muestra el aviso \"Previsión futura\".";
+        i18n.zh.cl_v90_meteo_title = "更清晰的天气";
+        i18n.zh.cl_v90_meteo_desc = "图层收纳在地图内的可折叠面板中，视宁度始终显示在地图底部中央，光污染位于博特尔下方，未来 3 晚一目了然。选择未来日期时，地图会显示“未来预报”提示。";
+        i18n.it.cl_v90_nubi_title = "Nubi reali sul territorio";
+        i18n.it.cl_v90_nubi_desc = "Niente più cerchi simbolici: la mappa mostra la copertura nuvolosa prevista su 25 km intorno a te. Premi ▶ per vedere la notte scorrere.";
+        i18n.en.cl_v90_nubi_title = "Real clouds over your area";
+        i18n.en.cl_v90_nubi_desc = "No more symbolic circles: the map shows the forecast cloud cover over 25 km around you. Press ▶ to watch the night play.";
+        i18n.es.cl_v90_nubi_title = "Nubes reales sobre el terreno";
+        i18n.es.cl_v90_nubi_desc = "Se acabaron los círculos simbólicos: el mapa muestra la nubosidad prevista en 25 km a tu alrededor. Pulsa ▶ para ver avanzar la noche.";
+        i18n.zh.cl_v90_nubi_title = "真实的本地云层";
+        i18n.zh.cl_v90_nubi_desc = "不再是象征性的圆圈：地图显示您周围 25 公里内的云量预报。按 ▶ 观看夜晚播放。";
+        i18n.it.cl_v90_sezioni_title = "Un passo alla volta";
+        i18n.it.cl_v90_sezioni_desc = "L'app segue il percorso di una sessione in 5 sezioni (Meteo, DSO, Setup, Sequenza, Download), con la barra in alto e i pulsanti Avanti/Indietro. Il nome dell'oggetto scelto resta sempre visibile.";
+        i18n.en.cl_v90_sezioni_title = "One step at a time";
+        i18n.en.cl_v90_sezioni_desc = "The app follows the path of a session in 5 sections (Weather, DSO, Setup, Sequence, Download), with the bar at the top and Back/Next buttons. The chosen object's name always stays visible.";
+        i18n.es.cl_v90_sezioni_title = "Paso a paso";
+        i18n.es.cl_v90_sezioni_desc = "La app sigue el recorrido de una sesión en 5 secciones (Tiempo, DSO, Setup, Secuencia, Descarga), con la barra superior y los botones Atrás/Siguiente. El nombre del objeto elegido siempre queda visible.";
+        i18n.zh.cl_v90_sezioni_title = "一步一步来";
+        i18n.zh.cl_v90_sezioni_desc = "应用按拍摄流程分为 5 个部分（天气、深空、设置、序列、下载），配有顶部栏和返回/下一步按钮。所选天体的名称始终可见。";
+        i18n.it.cl_v90_planetario_title = "Planetario notturno";
+        i18n.it.cl_v90_planetario_desc = "Lo slider DSO copre solo le ore in cui gli oggetti sono visibili, con il cielo che si scurisce e le tacche della notte astronomica. Premi ▶ per farlo scorrere: le card cambiano con una dissolvenza.";
+        i18n.en.cl_v90_planetario_title = "Night planetarium";
+        i18n.en.cl_v90_planetario_desc = "The DSO slider covers only the hours when objects are visible, with the sky getting darker and ticks for astronomical night. Press ▶ to play it: the cards change with a cross-fade.";
+        i18n.es.cl_v90_planetario_title = "Planetario nocturno";
+        i18n.es.cl_v90_planetario_desc = "La barra DSO cubre solo las horas en que los objetos son visibles, con el cielo oscureciéndose y las marcas de la noche astronómica. Pulsa ▶ para reproducirla: las tarjetas cambian con un fundido.";
+        i18n.zh.cl_v90_planetario_title = "夜间星图";
+        i18n.zh.cl_v90_planetario_desc = "深空滑块只覆盖天体可见的时段，天空颜色逐渐变暗并标出天文夜。按 ▶ 播放：卡片以淡入淡出方式切换。";
+        i18n.it.cl_v90_dossier_title = "Dossier accanto al FOV";
+        i18n.it.cl_v90_dossier_desc = "La scheda dell'oggetto, con foto, dati, descrizione e consiglio tattico, ora sta sopra il simulatore FOV.";
+        i18n.en.cl_v90_dossier_title = "Dossier next to the FOV";
+        i18n.en.cl_v90_dossier_desc = "The object card, with photo, data, description and tactical tip, now sits above the FOV simulator.";
+        i18n.es.cl_v90_dossier_title = "Dossier junto al FOV";
+        i18n.es.cl_v90_dossier_desc = "La ficha del objeto, con foto, datos, descripción y consejo táctico, ahora está sobre el simulador FOV.";
+        i18n.zh.cl_v90_dossier_title = "档案紧邻视场";
+        i18n.zh.cl_v90_dossier_desc = "天体卡片（照片、数据、描述和战术建议）现在位于视场模拟器上方。";
+        i18n.it.cl_v90_data_title = "Data sempre in vista";
+        i18n.it.cl_v90_data_desc = "In Sequenza la data della sessione è in cima e la striscia dell'oggetto dice \"Stanotte\" o \"tra N giorni\", in ambra se la notte è futura. Il grafico dell'altezza è più grande, con le fasce del crepuscolo e della notte astronomica e la linea dell'ora attuale.";
+        i18n.en.cl_v90_data_title = "Date always in view";
+        i18n.en.cl_v90_data_desc = "In Sequence the session date is at the top and the object strip says \"Tonight\" or \"in N days\", in amber when the night is in the future. The altitude chart is bigger, with twilight and astronomical-night bands and a line for the current time.";
+        i18n.es.cl_v90_data_title = "Fecha siempre a la vista";
+        i18n.es.cl_v90_data_desc = "En Secuencia la fecha de la sesión está arriba y la franja del objeto indica \"Esta noche\" o \"en N días\", en ámbar si la noche es futura. El gráfico de altura es más grande, con franjas del crepúsculo y de la noche astronómica y una línea con la hora actual.";
+        i18n.zh.cl_v90_data_title = "日期始终可见";
+        i18n.zh.cl_v90_data_desc = "在序列中，拍摄日期位于顶部，天体条显示“今晚”或“N天后”，未来夜晚以琥珀色显示。高度图更大，带有晨昏蒙影和天文夜色带以及当前时间线。";
+
+        i18n.it.cl_v90_analisi_title = "Analisi notte a colpo d'occhio";
+        i18n.it.cl_v90_analisi_desc = "Il pulsante tra Luna e Meteo prende il colore del giudizio della notte (verde, oro, arancio, rosso): un tocco e hai consigli e target migliori.";
+        i18n.en.cl_v90_analisi_title = "Night analysis at a glance";
+        i18n.en.cl_v90_analisi_desc = "The button between Moon and Weather takes the colour of the night's verdict (green, gold, orange, red): one tap gives you advice and the best targets.";
+        i18n.es.cl_v90_analisi_title = "Análisis nocturno de un vistazo";
+        i18n.es.cl_v90_analisi_desc = "El botón entre Luna y Tiempo toma el color del veredicto de la noche (verde, oro, naranja, rojo): un toque y tienes consejos y los mejores objetivos.";
+        i18n.zh.cl_v90_analisi_title = "夜间分析一目了然";
+        i18n.zh.cl_v90_analisi_desc = "月亮与天气之间的按钮会随夜晚评估改变颜色（绿、金、橙、红）：轻点即可查看建议和最佳目标。";
+        i18n.it.cl_v90_sensore_title = "Il sensore decide la sequenza";
+        i18n.it.cl_v90_sensore_desc = "Scegli una camera a colori o mono e la Sequenza si imposta da sola; le camere disponibili in entrambe le versioni ora sono separate. Il Setup ottico si può impostare anche prima di scegliere un oggetto.";
+        i18n.en.cl_v90_sensore_title = "The sensor sets the sequence";
+        i18n.en.cl_v90_sensore_desc = "Pick a colour or mono camera and the Sequence sets itself; cameras available in both versions are now listed separately. The optical setup can be configured even before choosing an object.";
+        i18n.es.cl_v90_sensore_title = "El sensor decide la secuencia";
+        i18n.es.cl_v90_sensore_desc = "Elige una cámara a color o mono y la Secuencia se ajusta sola; las cámaras disponibles en ambas versiones ahora están separadas. El Setup óptico se puede configurar incluso antes de elegir un objeto.";
+        i18n.zh.cl_v90_sensore_title = "传感器决定序列";
+        i18n.zh.cl_v90_sensore_desc = "选择彩色或黑白相机，序列会自动设置；两种版本的相机现已分开列出。即使尚未选择天体，也可以先设置光学设备。";
+        i18n.it.cl_v90_mobile_title = "Smartphone su misura";
+        i18n.it.cl_v90_mobile_desc = "Menu a tendina con la grafica dell'app, ricerca e caratteri grandi; menu ☰ per modalità, lingua e manuale; schermate più compatte e grafico che si adatta quando ruoti il telefono.";
+        i18n.en.cl_v90_mobile_title = "Made for smartphones";
+        i18n.en.cl_v90_mobile_desc = "Drop-down menus in the app's style with search and large text; a ☰ menu for mode, language and manual; more compact screens and a chart that adapts when you rotate the phone.";
+        i18n.es.cl_v90_mobile_title = "Hecho para el smartphone";
+        i18n.es.cl_v90_mobile_desc = "Menús desplegables con el estilo de la app, búsqueda y letra grande; menú ☰ para modo, idioma y manual; pantallas más compactas y un gráfico que se adapta al girar el teléfono.";
+        i18n.zh.cl_v90_mobile_title = "专为手机优化";
+        i18n.zh.cl_v90_mobile_desc = "下拉菜单采用应用风格，支持搜索和大字体；☰ 菜单包含模式、语言和手册；界面更紧凑，旋转手机时图表自动适应。";
+
         // ── Changelog v8.2 (01/11/2026) ─────────────────
         i18n.it.cl_v82_search_title = "Ricerca sempre disponibile";
         i18n.en.cl_v82_search_title = "Search always available";
@@ -1799,10 +1874,10 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.es.cl_v80_manual_desc = "Nueva sección 0 'Modo Básico y Avanzado' añadida en los 4 idiomas del manual integrado. Explica las diferencias entre los dos niveles y cómo cambiar entre ellos.";
         i18n.zh.cl_v80_manual_desc = "在集成手册的全部 4 种语言中新增第 0 节「基础模式与高级模式」，说明两个级别的区别以及如何在它们之间切换。";
 
-        i18n.it.cl_close_btn = "Inizia a usare v8.2 🚀";
-        i18n.en.cl_close_btn = "Start using v8.2 🚀";
-        i18n.es.cl_close_btn = "Empezar a usar v8.2 🚀";
-        i18n.zh.cl_close_btn = "开始使用 v8.2 🚀";
+        i18n.it.cl_close_btn = "Inizia a usare v9.0 🚀";
+        i18n.en.cl_close_btn = "Start using v9.0 🚀";
+        i18n.es.cl_close_btn = "Empezar a usar v9.0 🚀";
+        i18n.zh.cl_close_btn = "开始使用 v9.0 🚀";
 
         i18n.it.cl1_title           = "Database telescopi e sensori ampliato";
         i18n.en.cl1_title           = "Expanded telescope and sensor database";
@@ -1896,7 +1971,7 @@ let lang = localStorage.getItem('ad_lang') || 'it';
 
         function t(key) { return i18n[lang][key] || key; }
 
-        i18n.it.info_mn_nina = "<b>Orari predefiniti per la notte</b><br><br>L'orario di <b>inizio</b> viene impostato automaticamente sull'alba astronomica (quando il Sole scende a –18°) oppure sul momento in cui il soggetto supera i 30° sull'orizzonte — viene usato il valore più tardivo tra i due.<br><br>L'orario di <b>fine</b> coincide con l'alba astronomica del mattino successivo.<br><br>Puoi modificare liberamente questi orari per adattarli alle tue esigenze reali.";
+        i18n.it.info_mn_nina = "<b>Orari predefiniti per la notte</b><br><br>L'orario di <b>inizio</b> viene impostato automaticamente sull'inizio della notte astronomica (quando il Sole scende a –18°) oppure sul momento in cui il soggetto supera i 30° sull'orizzonte — viene usato il valore più tardivo tra i due.<br><br>L'orario di <b>fine</b> coincide con l'alba astronomica del mattino successivo.<br><br>Puoi modificare liberamente questi orari per adattarli alle tue esigenze reali.";
         i18n.en.info_mn_nina = "<b>Default night times</b><br><br>The <b>start</b> time is automatically set to astronomical dusk (Sun at –18°) or the moment the target rises above 30° — whichever comes later.<br><br>The <b>end</b> time coincides with the following morning's astronomical dawn.<br><br>You can freely adjust these times to match your actual needs.";
         i18n.es.info_mn_nina = "<b>Horarios predeterminados de la noche</b><br><br>El horario de <b>inicio</b> se establece automáticamente al anochecer astronómico (Sol a –18°) o cuando el objetivo supera los 30° sobre el horizonte — se usa el valor más tardío.<br><br>El horario de <b>fin</b> coincide con el amanecer astronómico de la mañana siguiente.<br><br>Puedes modificar estos horarios libremente para adaptarlos a tus necesidades.";
         i18n.zh.info_mn_nina = "<b>默认夜间时间</b><br><br><b>开始</b>时间自动设置为天文薄暮（太阳位于–18°）或目标升至地平线30°以上的时刻——取两者中较晚的一个。<br><br><b>结束</b>时间与次日清晨的天文晨光一致。<br><br>您可以根据实际需要自由调整这些时间。";
@@ -3463,15 +3538,24 @@ i18n.es.np_hint_setup_base    = "Elegidos para tu equipo";
 i18n.zh.np_hint_setup_base    = "根据您的设备推荐";
 
 // Bottone "Previsione" (solo dispositivi touch): riapre il popup Analisi Notturna
-i18n.it.np_forecast_btn       = "Previsione";
-i18n.en.np_forecast_btn       = "Forecast";
-i18n.es.np_forecast_btn       = "Previsión";
-i18n.zh.np_forecast_btn       = "预测";
+i18n.it.np_forecast_btn       = "Analisi notte";
+i18n.en.np_forecast_btn       = "Night analysis";
+i18n.es.np_forecast_btn       = "Análisis nocturno";
+i18n.zh.np_forecast_btn       = "夜间分析";
 
-i18n.it.np_forecast_na        = "Previsione non disponibile. Controlla di aver impostato una posizione e di essere connesso.";
-i18n.en.np_forecast_na        = "Forecast not available. Make sure a location is set and you're online.";
-i18n.es.np_forecast_na        = "Previsión no disponible. Comprueba que has configurado una ubicación y que tienes conexión.";
-i18n.zh.np_forecast_na        = "预测不可用。请确认已设置位置并已联网。";
+i18n.it.np_forecast_na        = "Analisi notte non disponibile: servono i dati meteo della notte scelta. Controlla di aver impostato una posizione e di essere connesso.";
+i18n.en.np_forecast_na        = "Night analysis not available: it needs weather data for the selected night. Make sure a location is set and you're online.";
+i18n.es.np_forecast_na        = "Análisis nocturno no disponible: necesita los datos meteorológicos de la noche elegida. Comprueba que has configurado una ubicación y que tienes conexión.";
+i18n.zh.np_forecast_na        = "夜间分析不可用：需要所选夜晚的天气数据。请确认已设置位置并已联网。";
+// 9.0 — tipo sensore impostato dal sensore scelto nel Setup
+i18n.it.sensor_auto_mono  = "Sequenza impostata su sensore Mono dal sensore scelto";
+i18n.en.sensor_auto_mono  = "Sequence set to Mono sensor from the selected camera";
+i18n.es.sensor_auto_mono  = "Secuencia ajustada a sensor Mono según la cámara elegida";
+i18n.zh.sensor_auto_mono  = "已根据所选相机将序列设为黑白传感器";
+i18n.it.sensor_auto_color = "Sequenza impostata su sensore a colori (OSC) dal sensore scelto";
+i18n.en.sensor_auto_color = "Sequence set to colour (OSC) sensor from the selected camera";
+i18n.es.sensor_auto_color = "Secuencia ajustada a sensor a color (OSC) según la cámara elegida";
+i18n.zh.sensor_auto_color = "已根据所选相机将序列设为彩色（OSC）传感器";
 
 i18n.it.np_ok                 = "OK";
 i18n.en.np_ok                 = "OK";

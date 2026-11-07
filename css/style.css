@@ -830,3 +830,581 @@
     background: var(--accent); color: var(--bg-deep); border: none; border-radius: 6px;
     padding: 8px 32px; font-weight: bold; font-size: 0.95em; cursor: pointer;
 }
+
+/* ══════════════════════════════════════════════════════════════
+   ── M1/M1b: sezione meteo riorganizzata (03/11/2026) ─────────
+   Posizione + Bortle + Inq. Luminoso a sinistra; mappa con data,
+   ora, play, livelli e Seeing a destra; avviso "previsione futura"
+   su mappa e striscia. Solo regole nuove con prefisso .adp-:
+   nessuna regola esistente modificata. Versione smartphone da
+   progettare (per ora adattamento minimo sotto i 769 px).
+   ══════════════════════════════════════════════════════════════ */
+
+/* larghezze allineate al Planetario (1200 + 2×20 di padding = 1240) */
+#dashboard-view > .container:first-child, .adp-meteo { max-width: 1240px; }
+#dashboard-view > .container:first-child { padding-top: 16px; }   /* spazio per la linguetta della data */
+
+.adp-meteo-map .timeline-container { margin-top: 0; margin-bottom: 12px; }
+.adp-map-wrap { position: relative; }
+
+/* ── testata: data di sessione + ora ── */
+.adp-time-head { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; padding-right: 30px; }
+.adp-time-head #time-display { flex: 1; min-width: 220px; margin-bottom: 0; }
+.adp-session-date {
+    margin: 0 !important; padding: 0 !important; background: none !important; border: 0 !important;
+    justify-content: flex-start !important; flex-wrap: nowrap !important; gap: 6px !important; flex-shrink: 0;
+}
+.adp-session-date label { display: none; }
+.adp-session-date input[type="date"] { font-size: 1em !important; padding: 4px 8px !important; }
+.adp-session-date button { padding: 4px 9px !important; }
+body.mode-lite .adp-session-date { display: none !important; }
+@media (max-width: 768px) {   /* adattamento minimo: smartphone da riprogettare */
+    .adp-session-date { flex-wrap: wrap !important; flex-shrink: 1; row-gap: 6px; }
+    .adp-time-head #time-display { min-width: 0; }
+}
+
+/* ── riga play + slider ── */
+.adp-time-row { display: flex; align-items: center; gap: 12px; margin-top: 6px; }
+.adp-time-row .range-wrapper { flex: 1; margin-top: 0; }
+.adp-time-row + div { padding-left: 46px; }
+.adp-play {
+    width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0; cursor: pointer;
+    border: 1.5px solid #c49a3c; background: rgba(196, 154, 60, 0.12); color: #f2c94c;
+    display: grid; place-items: center; padding: 0;
+}
+.adp-play:hover { background: rgba(196, 154, 60, 0.25); }
+.adp-play:disabled { opacity: 0.35; cursor: default; }
+
+/* ── Inquinamento Luminoso nel pannello Posizione ── */
+.adp-lp-slot { margin-top: 14px; }
+.adp-lp-slot .meteo-item { display: flex; align-items: center; gap: 10px; text-align: left; padding: 9px 12px; }
+.adp-lp-slot .meteo-item > svg { margin: 0 !important; flex-shrink: 0; }
+.adp-lp-slot .meteo-item h4 { flex: 1; margin: 0; font-size: 0.95em; }
+.adp-lp-slot .meteo-item > span { font-size: 1em; }
+.adp-lp-slot .meteo-item.disabled { opacity: 0.7; }
+
+/* ── avviso previsione futura: fascia + cornice sulla mappa ── */
+.adp-future-frame { display: none; position: absolute; inset: 0; z-index: 1001; pointer-events: none;
+    border: 3px solid transparent; border-radius: 8px; }
+.adp-future-banner { display: none; position: absolute; top: 12px; left: 12px; right: 12px; z-index: 1002;
+    pointer-events: none; justify-content: center; }
+.adp-future-banner span { display: inline-block; text-align: center; padding: 7px 16px; border-radius: 999px;
+    font-size: 13px; font-weight: 700; letter-spacing: 0.5px; box-shadow: 0 4px 18px rgba(0, 0, 0, 0.55); }
+.adp-future-frame.adp-fut { display: block; border-color: #f2c94c; }
+.adp-future-frame.adp-na  { display: block; border-color: #ff8a3d; }
+.adp-future-banner.adp-fut, .adp-future-banner.adp-na { display: flex; }
+.adp-future-banner.adp-fut span { background: #2b2410; border: 1.5px solid #f2c94c; color: #f2c94c; }
+.adp-future-banner.adp-na span  { background: #2b1a10; border: 1.5px solid #ff8a3d; color: #ff8a3d; }
+
+/* ── striscia in alto: linguetta con la data + etichetta meteo ── */
+.ephemeris-box { position: relative; }
+.adp-date-tab { position: absolute; top: -12px; left: 18px; z-index: 2; font-size: 12px; font-weight: 800;
+    letter-spacing: 0.8px; border-radius: 6px; padding: 2px 10px; background: #2a3347; color: #e1e6ee;
+    border: 1px solid #2f3a4c; white-space: nowrap; }
+.adp-date-tab:empty { display: none; }
+.adp-date-tab small { font-weight: 600; letter-spacing: 0.3px; opacity: 0.8; font-size: 1em; }
+.adp-date-tab.adp-fut { background: #f2c94c; color: #1b1b1b; border-color: #f2c94c; }
+.adp-date-tab.adp-na  { background: #ff8a3d; color: #1b1b1b; border-color: #ff8a3d; }
+.ephemeris-box.adp-fut { box-shadow: inset 0 0 0 2px #f2c94c; }
+.ephemeris-box.adp-na  { box-shadow: inset 0 0 0 2px #ff8a3d; }
+.adp-wx-when { font-size: 11px; font-weight: 700; color: #f2c94c; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 2px; }
+.adp-wx-when:empty { display: none; }
+
+@media (min-width: 769px) {
+    .adp-meteo { display: grid; grid-template-columns: minmax(320px, 360px) 1fr; align-items: stretch; }
+    .adp-meteo > .panel { min-width: 0; }
+
+    /* striscia in alto compatta (M1c): etichetta piccola + valore, icone ridotte */
+    .ephemeris-box { padding: 12px 18px; justify-content: flex-start; flex-wrap: nowrap; gap: 0; }
+    .ephemeris-box .np-forecast-btn {
+        display: flex; flex-direction: column; align-items: center; gap: 2px; flex-shrink: 0;
+        background: transparent; border: none; color: var(--accent); cursor: pointer;
+        margin: 0 18px 0 0; padding: 0 18px 0 0; border-right: 1px solid var(--border-hi);
+    }
+    .ephemeris-box .np-forecast-circle { width: 50px; height: 50px; }
+    .ephemeris-box .np-forecast-circle svg { width: 36px; height: 24px; }
+    .ephemeris-box .np-forecast-btn:hover .np-forecast-circle { background: rgba(196, 154, 60, 0.15); }
+    .ephemeris-box .np-forecast-lbl { font-size: 0.68em; }
+    .ephemeris-box .moon-container { flex-direction: row; gap: 10px; margin-right: 18px; min-width: 0; flex-shrink: 0; }
+    .ephemeris-box .moon-icon { font-size: 2.2em; margin-bottom: 0; }
+    .ephemeris-box .moon-phase-name { font-size: 0.95em; text-align: left; max-width: 110px; }
+    .ephemeris-box .weather-container {
+        display: grid; grid-template-columns: auto auto; column-gap: 10px; align-items: center; justify-content: start;
+        margin: 0; padding: 0 18px; min-width: 0; flex-shrink: 0;
+    }
+    .ephemeris-box #current-weather-icon { grid-column: 1; grid-row: 1 / span 2; font-size: 2.2em !important; margin-bottom: 0 !important; }
+    .ephemeris-box .adp-wx-when, .ephemeris-box #current-weather-desc { grid-column: 2; text-align: left !important; }
+    .ephemeris-box .adp-wx-when:empty + #current-weather-icon { grid-row: 1; }   /* oggi: senza etichetta, una riga sola */
+    .ephemeris-box .times-grid { gap: 10px; padding-left: 18px; min-width: 0; }
+    .ephemeris-box .time-item { position: relative; padding-left: 32px; text-align: left; }
+    .ephemeris-box .time-item .icon-normal { position: absolute; left: 0; top: 50%; transform: translateY(-50%); margin: 0; }
+    .ephemeris-box .time-item .icon-normal svg { width: 22px; height: 22px; }
+    .ephemeris-box .time-item > span[data-i18n] { display: inline; font-size: 12.5px; font-weight: 600; color: var(--text-muted); margin: 0; }
+    .ephemeris-box .time-item br { display: none; }
+    .ephemeris-box .time-item > span[id] { display: block; font-size: 19px; margin-top: 1px; }
+
+    /* fascia "previsione futura": centrata nello spazio libero a destra del pannello livelli */
+    .adp-future-banner { left: 239px; right: 150px; }
+
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ── M1d: pannello livelli a tendina + nubi sul territorio ─────
+   Pannello sovrapposto alla mappa su PC e smartphone, a tutta
+   altezza, richiudibile dalla testata (chiuso = solo testata).
+   ══════════════════════════════════════════════════════════════ */
+.adp-layers {
+    position: absolute; top: 12px; left: 12px; bottom: 12px; z-index: 1000; width: 215px;
+    display: flex; flex-direction: column; overflow-y: auto;
+    background: rgba(13, 17, 23, 0.86); border: 1px solid #2a3240; border-radius: 10px; padding: 8px;
+    backdrop-filter: blur(3px);
+}
+.adp-layers h3 { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: #8b95a5;
+    margin: 0 0 6px; padding: 2px 4px; display: flex; align-items: center; gap: 6px; cursor: pointer; user-select: none; flex-shrink: 0; }
+.adp-layers h3 svg { width: 14px; height: 14px; }
+.adp-layers h3 .info-icon { margin-left: auto; font-size: 1em !important; }
+.adp-lay-arrow::after { content: '▾'; color: #cfd6e0; font-size: 13px; }
+.adp-layers.adp-closed .adp-lay-arrow::after { content: '▸'; }
+.adp-layers .meteo-grid { flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: space-between; gap: 4px; margin-top: 0; }
+.adp-layers .meteo-item {
+    flex: 1 1 0; min-height: 28px; max-height: 46px;
+    display: flex; flex-direction: row; align-items: center; gap: 8px;
+    text-align: left; padding: 0 9px; border-width: 1px; border-radius: 7px; background-color: transparent;
+}
+.adp-layers .meteo-item > svg { display: inline-block !important; margin: 0 !important; flex-shrink: 0; }
+.adp-layers .meteo-item h4 { flex: 1; min-width: 0; margin: 0; font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.adp-layers .meteo-item > span { font-size: 13px; white-space: nowrap; }
+.adp-layers .meteo-item.active { background-color: rgba(255, 255, 255, 0.06); }
+.adp-layers .meteo-item.disabled { opacity: 0.6; }
+.adp-layers .meteo-item span span { font-size: 0.85em; }
+body.mode-lite .adp-layers #btn-nuvole-lite { display: flex !important; }
+.adp-layers.adp-closed { bottom: auto; overflow: visible; padding: 6px 8px; }
+.adp-layers.adp-closed h3 { margin: 0; }
+.adp-layers.adp-closed .meteo-grid { display: none; }
+.adp-layers.adp-lp-on { display: none !important; }      /* Inq. Luminoso acceso: i livelli meteo non servono */
+
+/* tre nubi: quadratino e bordo col tono che si vede sulla mappa */
+.adp-layers #btn-basse h4::before, .adp-layers #btn-nuvole-lite h4::before,
+.adp-layers #btn-medie h4::before, .adp-layers #btn-alte h4::before {
+    content: ''; display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 7px;
+    vertical-align: -1px; border: 1px solid rgba(255, 255, 255, 0.3); }
+.adp-layers #btn-basse h4::before, .adp-layers #btn-nuvole-lite h4::before { background: rgb(235, 238, 242); }
+.adp-layers #btn-medie h4::before { background: rgb(170, 178, 190); }
+.adp-layers #btn-alte h4::before  { background: rgb(205, 220, 255); }
+.adp-layers #btn-basse.active, .adp-layers #btn-nuvole-lite.active { border-color: rgb(235, 238, 242); box-shadow: none; }
+.adp-layers #btn-medie.active { border-color: rgb(170, 178, 190); box-shadow: none; }
+.adp-layers #btn-alte.active  { border-color: rgb(205, 220, 255); box-shadow: none; }
+
+/* Stima Seeing: riga compatta in fondo al pannello */
+.adp-layers #btn-seeing { padding: 0 9px !important; }
+.adp-layers #btn-seeing > div { gap: 8px !important; width: 100%; }
+.adp-layers #seeing-star-svg { width: 24px; height: 24px; }
+.adp-layers #btn-seeing > div > div { flex: 1; flex-direction: row !important; align-items: center !important; gap: 6px !important; }
+.adp-layers #btn-seeing > div > div > span:first-child { flex: 1; font-size: 12.5px !important; color: #c9d1d9 !important; }
+.adp-layers #val-seeing { font-size: 15px !important; }
+.adp-layers #val-seeing-label { display: none; }
+
+/* legenda Bortle sovrapposta in basso a sinistra */
+.adp-map-wrap #lp-legend {
+    position: absolute; left: 12px; bottom: 12px; z-index: 1000; margin-top: 0 !important;
+    max-width: calc(100% - 90px); background: rgba(13, 17, 23, 0.9) !important;
+}
+
+/* etichetta del cerchio "25 km" */
+.adp-25km { color: #f2c94c; font: 700 11px "Segoe UI", system-ui, sans-serif; white-space: nowrap;
+    text-shadow: 0 0 3px #000, 0 0 3px #000; background: none; border: 0; }
+
+@media (max-width: 768px) {
+    .adp-layers { left: 10px; right: 10px; width: auto; top: 58px; bottom: 80px; }   /* libera temperatura e zoom */
+    .adp-layers.adp-closed { top: 10px; right: auto; width: 190px; bottom: auto; }
+    .adp-future-banner { top: 58px; }
+    .adp-layers .meteo-item { max-height: 52px; }
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   ── M1e: "Le prossime notti" sotto il Bortle ──────────────────
+   La colonna Posizione si allunga fino al bordo inferiore della
+   mappa: le tre schede si dividono lo spazio rimasto.
+   ══════════════════════════════════════════════════════════════ */
+.adp-meteo > .panel:first-child { display: flex; flex-direction: column; }
+.adp-notti { flex: 1; display: flex; flex-direction: column; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border-hi); }
+.adp-notti-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+.adp-notti-title { font-size: 0.9em; color: var(--text-muted); font-weight: 600; }
+.adp-notti .adp-session-date > svg,
+.adp-notti .adp-session-date > button,
+.adp-notti #session-day-btns { display: none !important; }      /* restano nel DOM: le schede li sostituiscono */
+.adp-notti-list { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+.adp-notte {
+    flex: 1 1 0; min-height: 58px; display: flex; align-items: center; gap: 12px; width: 100%;
+    padding: 8px 12px; border-radius: 9px; border: 1px solid var(--border-hi); background: rgba(255, 255, 255, 0.02);
+    color: var(--text-main); text-align: left; cursor: pointer; font: inherit;
+}
+.adp-notte:hover { border-color: rgba(196, 154, 60, 0.6); }
+.adp-notte.on { border-color: #c49a3c; background: rgba(196, 154, 60, 0.10); }
+.adp-notte-g { width: 64px; flex-shrink: 0; text-align: center; font-weight: 800; font-size: 0.95em; text-transform: capitalize; }
+.adp-notte-g small { display: block; font-weight: 400; font-size: 0.78em; color: var(--text-muted); }
+.adp-notte-ic { font-size: 1.8em; flex-shrink: 0; }
+.adp-notte-t { flex: 1; min-width: 0; font-size: 0.85em; color: var(--text-muted); }
+.adp-notte-t b { color: var(--text-main); font-size: 1.1em; text-transform: capitalize; }
+.adp-notte-bar { display: block; height: 5px; border-radius: 3px; background: #2a3347; margin-top: 6px; overflow: hidden; }
+.adp-notte-bar i { display: block; height: 100%; background: #cfd6e0; border-radius: 3px; }
+.adp-notte-tag { font-size: 0.68em; font-weight: 800; letter-spacing: 0.6px; color: #1b1b1b; background: #f2c94c; border-radius: 4px; padding: 1px 6px; flex-shrink: 0; }
+body.mode-lite .adp-notti { display: none; }      /* in Modalità Base la scelta della data resta nascosta, come prima */
+
+/* ══════════════════════════════════════════════════════════════
+   ── M2 · T1: una sezione alla volta ─────────────────────────
+   body[data-adp-sez] = sezione attiva (pos/dso/fov/seq/exp).
+   Si nascondono i blocchi etichettati con altre sezioni; un blocco
+   può appartenere a più sezioni (es. "seq exp").
+   ══════════════════════════════════════════════════════════════ */
+body[data-adp-sez="pos"] [data-adp-sez]:not([data-adp-sez~="pos"]),
+body[data-adp-sez="dso"] [data-adp-sez]:not([data-adp-sez~="dso"]),
+body[data-adp-sez="fov"] [data-adp-sez]:not([data-adp-sez~="fov"]),
+body[data-adp-sez="seq"] [data-adp-sez]:not([data-adp-sez~="seq"]),
+body[data-adp-sez="exp"] [data-adp-sez]:not([data-adp-sez~="exp"]) { display: none !important; }
+/* In Sequenza il blocco del Setup mostra solo orizzonte + grafico: a tutta larghezza */
+body[data-adp-sez="seq"] .planning-grid { grid-template-columns: 1fr; }
+/* In Meteo la striscia non ha più il Planetario sotto: margine come gli altri blocchi */
+body[data-adp-sez="dso"] .dso-container { margin-top: 0; }
+
+/* Barra in alto: nome sotto ogni icona */
+#nav-stepper { align-items: flex-start; }
+.adp-step { flex-direction: column; gap: 4px; }
+.adp-conn { margin-top: 25px; }
+.adp-step-nome { font-size: 11px; font-weight: 600; color: #8b95a5; white-space: nowrap; letter-spacing: 0.3px; }
+.adp-step.active .adp-step-nome { color: #c49a3c; }
+.adp-step.adp-vista .adp-step-ico { border-color: rgba(46, 201, 108, 0.55); }
+.adp-step.adp-vista .adp-step-ico svg { stroke: #2ec96c; }
+.adp-step.adp-senza-ogg { opacity: 0.55; }
+#adp-floattip { display: none !important; }      /* il nome ora è sempre visibile */
+@media (max-width: 540px) {
+    .adp-conn { margin-top: 18px; }
+    .adp-step-nome { font-size: 9.5px; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ── M2 · T3: Avanti/Indietro, promemoria oggetto, invito ──────
+   ══════════════════════════════════════════════════════════════ */
+.adp-sez-nav { display: flex; justify-content: space-between; align-items: center; gap: 12px;
+    max-width: 1240px; margin: 24px auto 30px; padding: 16px 0 0; border-top: 1px solid var(--border-hi); }
+#planning-view .adp-sez-nav { max-width: none; }
+.adp-nav-back, .adp-nav-next { font: inherit; cursor: pointer; border-radius: 8px; white-space: nowrap; }
+.adp-nav-back { background: transparent; border: 1px solid var(--border-hi); color: var(--text-muted); padding: 9px 16px; font-weight: 600; }
+.adp-nav-back:hover { border-color: #c49a3c; color: #c49a3c; }
+.adp-nav-next { background: #f2c94c; border: 0; color: #1b1b1b; padding: 10px 20px; font-weight: 800; }
+.adp-nav-next:hover { background: #ffd862; }
+
+.adp-ogg { display: flex; align-items: center; gap: 12px; margin: 0 0 16px; padding: 9px 14px; border-radius: 9px;
+    background: rgba(196, 154, 60, 0.08); border: 1px solid rgba(196, 154, 60, 0.45); }
+.adp-ogg-ic { font-size: 1.4em; color: #f2c94c; flex-shrink: 0; }
+.adp-ogg-t { flex: 1; min-width: 0; color: var(--text-muted); }
+.adp-ogg-t b { color: #f2c94c; font-size: 1.05em; }
+.adp-ogg-t small { display: block; font-size: 0.82em; color: var(--text-muted); text-transform: capitalize; }
+.adp-ogg-btn { font: inherit; font-size: 0.85em; cursor: pointer; background: transparent; border: 1px solid var(--border-hi);
+    color: var(--text-muted); border-radius: 6px; padding: 5px 12px; white-space: nowrap; }
+.adp-ogg-btn:hover { border-color: #c49a3c; color: #c49a3c; }
+.adp-ogg.adp-ogg-vuoto { background: rgba(255, 255, 255, 0.03); border-color: var(--border-hi); border-style: dashed; }
+.adp-ogg.adp-ogg-vuoto .adp-ogg-ic { color: var(--text-muted); }
+
+/* Setup senza oggetto: avviso non bloccante in alto; Dossier e FOV sostituiti da un riquadro che lo spiega */
+.adp-invito { display: none !important; align-items: center; gap: 12px; margin: 0 0 16px; padding: 10px 14px; border-radius: 9px;
+    border: 1px dashed var(--border-hi); background: rgba(255, 255, 255, 0.03); }
+body.adp-no-ogg[data-adp-sez="fov"] .adp-invito { display: flex !important; }
+.adp-invito .adp-ogg-t b { color: var(--text-main); font-size: 1em; }
+.adp-invito .adp-ogg-ic { color: var(--text-muted); }
+.adp-fov-vuoto { display: none !important; }
+body.adp-no-ogg[data-adp-sez="fov"] .adp-fov-vuoto { display: flex !important; flex-direction: column; align-items: center; justify-content: center;
+    gap: 8px; text-align: center; min-height: 300px; padding: 30px; border: 1px dashed var(--border-hi); color: var(--text-muted); flex: none; }
+.adp-fov-vuoto b { color: var(--text-main); }
+.adp-fov-vuoto p { margin: 0 0 6px; max-width: 460px; }
+.adp-fov-vuoto-ic { font-size: 34px; color: #3a4252; }
+body.adp-no-ogg[data-adp-sez="fov"] .adp-dossier,
+body.adp-no-ogg[data-adp-sez="fov"] .adp-dossier ~ .panel { display: none !important; }
+@media (max-width: 768px) {
+    .adp-invito { flex-wrap: wrap; }
+    .adp-invito .adp-ogg-t { min-width: 200px; }
+    body.adp-no-ogg[data-adp-sez="fov"] .adp-fov-vuoto { min-height: 150px; padding: 20px; }
+}
+
+@media (max-width: 540px) {
+    .adp-sez-nav { flex-direction: column-reverse; align-items: stretch; }
+    .adp-nav-back, .adp-nav-next { width: 100%; text-align: center; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ── G1 (03/11/2026): Dossier come scheda sopra il FOV + nome
+   dell'oggetto fisso sotto la barra delle sezioni ─────────────
+   ══════════════════════════════════════════════════════════════ */
+.adp-dossier { margin-bottom: 16px; flex: none; }      /* le .panel hanno flex:1: qui la scheda resta alta quanto il contenuto */
+.adp-dossier > h3 { margin-bottom: 12px; }
+.adp-dos-testa { display: flex; gap: 14px; align-items: flex-start; }
+.adp-dos-img { width: 72px; height: 72px; flex-shrink: 0; border-radius: 8px; overflow: hidden;
+    background: #0d1117; border: 1px solid var(--border-hi); display: grid; place-items: center; font-size: 34px; line-height: 1; }
+.adp-dos-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.adp-dos-info { flex: 1; min-width: 0; }
+.adp-dossier #plan-target-name { margin: 0 0 4px; padding: 0; border: 0; text-align: left; justify-content: flex-start; font-size: 1.3em; color: #f2c94c; }
+.adp-dossier .stat-grid { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 0; margin: 0 0 6px; }
+.adp-dossier .stat-box { flex: none; min-width: 0; background: none; padding: 0; border: 0 !important; border-radius: 0; box-shadow: none;
+    display: inline-flex; align-items: baseline; gap: 5px; }
+.adp-dossier .stat-box + .stat-box::before { content: '·'; color: var(--text-muted); margin: 0 10px; }
+.adp-dossier .stat-box span { font-size: 0.85em; text-transform: none; }
+.adp-dossier .stat-box b { display: inline; margin: 0; font-size: 0.95em; }
+.adp-dossier .info-box { background: none; border: 0; padding: 0; margin: 0; }
+.adp-dossier .info-box br { display: none; }
+.adp-dossier .wiki-link { margin: 0 0 0 10px; white-space: nowrap; }
+.adp-dossier .wiki-link svg { width: 15px; height: 15px; }
+.adp-dossier .tip-box { margin-top: 12px; padding: 8px 12px; }      /* a tutta larghezza, allineato al bordo del riquadro */
+.adp-dossier .tip-box svg { width: 18px; height: 18px; }
+
+/* Striscia con il nome dell'oggetto: fissa sotto la barra in Sequenza e Download;
+   in Setup compare (sovrapposta) solo quando il dossier esce dallo schermo */
+.adp-ogg { position: sticky; top: var(--adp-nav-h, 0px); z-index: 150; background: rgba(22, 27, 34, 0.97);
+    backdrop-filter: blur(3px); box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45); }
+body[data-adp-sez="fov"] .adp-ogg { display: none !important; }
+body[data-adp-sez="fov"].adp-ogg-fisso .adp-ogg { display: flex !important; position: fixed; left: var(--adp-ogg-x, 12px);
+    width: var(--adp-ogg-w, min(1200px, calc(100% - 24px))); box-sizing: border-box; }
+/* Smartphone (una colonna): il Dossier resta in cima al Setup, come prima, seguito da Setup ottico e FOV */
+@media (max-width: 768px) {
+    .planning-grid > [data-adp-sez="fov seq"] { display: contents !important; }   /* ha display:flex inline */
+    .planning-grid .adp-dossier { order: -1; margin-bottom: 0; }
+}
+/* G1b: icona dell'oggetto anche nella striscia con il nome */
+.adp-ogg-img { width: 32px; height: 32px; border-radius: 6px; overflow: hidden; flex-shrink: 0; display: grid; place-items: center;
+    background: #0d1117; border: 1px solid var(--border-hi); font-size: 18px; line-height: 1; }
+.adp-ogg-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* ══════════════════════════════════════════════════════════════
+   ── M3b: slider DSO (play, tacche notte astronomica, etichette)
+   ── G1c: icona più grande nella striscia, testi del Dossier su
+   smartphone allineati al bordo del riquadro
+   ══════════════════════════════════════════════════════════════ */
+.adp-astro-row { margin-top: 4px; }
+.adp-astro-extra { position: relative; }      /* il rientro di 46 px arriva da ".adp-time-row + div" */
+.adp-astro-mks { position: relative; height: 16px; }
+.adp-astro-mk { position: absolute; top: 2px; font-size: 10.5px; color: #6e7a8a; white-space: nowrap; transform: translateX(-2px); }
+.adp-astro-mk::before { content: ''; position: absolute; left: 1px; top: -6px; width: 1px; height: 6px; background: #6e7a8a; }
+.adp-astro-mk.adp-dx { transform: translateX(calc(-100% + 2px)); }
+.adp-astro-mk.adp-dx::before { left: auto; right: 1px; }
+.adp-astro-lbl { display: flex; justify-content: space-between; font-size: 0.8em; color: #6e7a8a; padding-top: 2px; }
+
+.adp-ogg-img { width: 44px; height: 44px; border-radius: 8px; font-size: 24px; }
+@media (max-width: 768px) {
+    /* Dossier: icona accanto a nome e dati; descrizione e Wikipedia sotto, a tutta larghezza come il consiglio tattico */
+    .adp-dos-testa { display: grid; grid-template-columns: auto 1fr; column-gap: 14px; align-items: start; }
+    .adp-dos-info { display: contents; }
+    .adp-dos-img { grid-row: 1 / span 2; }
+    .adp-dossier #plan-target-name { grid-column: 2; }
+    .adp-dossier .stat-grid { grid-column: 2; flex-direction: column; gap: 1px; }
+    .adp-dossier .stat-box + .stat-box::before { content: none; }
+    .adp-dossier .info-box { grid-column: 1 / -1; margin-top: 10px; }
+}
+
+/* ── ADP 9.0 — G2: data della sessione in Sequenza (proposta C) ── */
+.adp-ogg-data { display: inline-flex; align-items: center; gap: 6px; margin-left: 12px; padding: 2px 11px; border-radius: 14px;
+    font-size: 0.82em; font-weight: 600; vertical-align: middle; white-space: nowrap;
+    border: 1px solid #2a3347; color: var(--text-muted); }
+.adp-ogg-data.adp-fut { border-color: rgba(232,163,60,.6); background: rgba(232,163,60,.12); color: #e8a33c; font-weight: 700; }
+.adp-ogg-data:empty { display: none; }
+body[data-adp-sez="fov"] .adp-ogg-data { display: none; }
+.adp-data-bar { margin-top: 0; transition: border-color .3s, background .3s; }
+body.adp-data-futura .adp-data-bar { border-color: rgba(232,163,60,.55) !important; background: rgba(232,163,60,.06) !important; }
+body.adp-data-futura #session-date-picker-smart { background: #1c2433 !important; color: #e8a33c !important; border-color: #e8a33c !important; }
+body:not(.mode-lite) #session-date-centered-label { display: none; }
+@media (max-width: 768px) {
+    .adp-ogg-data { margin-left: 0; margin-top: 3px; display: flex; width: max-content; }
+    .adp-ogg-data:empty { display: none; }
+}
+
+/* ── ADP 9.0 — M5: riquadro Seeing in basso al centro della mappa, su una riga ── */
+.adp-map-wrap > #btn-seeing.adp-see-pill {
+    position: absolute; left: 50%; bottom: 26px; transform: translateX(-50%); z-index: 1000;
+    width: auto; max-height: none; margin: 0; padding: 4px 14px 4px 5px !important; text-align: left;
+    background: rgba(10, 14, 20, 0.86); border: 1.5px solid #22304a; border-radius: 10px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4); white-space: nowrap;
+}
+.adp-see-pill > div { gap: 8px !important; }
+.adp-see-pill #seeing-star-svg { width: 30px; height: 30px; }
+.adp-see-pill > div > div { flex-direction: row !important; align-items: baseline !important; gap: 8px !important; }
+.adp-see-pill > div > div > span:first-child { font-size: 11.5px !important; color: #c9d1d9 !important; font-weight: 400; }
+.adp-see-pill #val-seeing { font-size: 16px !important; }
+.adp-see-pill #val-seeing-label { display: inline; font-size: 11.5px !important; font-weight: 400; }
+.adp-see-pill #val-seeing-label:empty { display: none; }
+.adp-layers.adp-lp-on ~ #btn-seeing.adp-see-pill { display: none; }   /* Inq. Luminoso acceso: come prima, niente Seeing */
+@media (max-width: 768px) {
+    .adp-layers { bottom: 118px; }                               /* il pannello aperto lascia liberi zoom e Seeing */
+    .adp-map-wrap:has(.adp-future-banner.adp-fut, .adp-future-banner.adp-na) .adp-layers:not(.adp-closed) { top: 100px; }
+    .adp-map-wrap > #btn-seeing.adp-see-pill { left: calc(50% - 18px); bottom: 44px; }
+    .adp-see-pill #seeing-star-svg { width: 28px; height: 28px; }
+    .adp-see-pill #val-seeing { font-size: 15px !important; }
+    .adp-see-pill > div > div > span:first-child, .adp-see-pill #val-seeing-label { font-size: 11px !important; }
+}
+
+/* ── ADP 9.0 — S1: riquadro Luna/meteo/effemeridi compatto su smartphone (proposta A) ── */
+@media (max-width: 768px) {
+    .ephemeris-box { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center;
+        gap: 0; padding: 16px 10px 10px; text-align: left; }
+    .ephemeris-box .np-forecast-btn { grid-column: 2; grid-row: 1; width: auto; margin: 0; padding: 0 12px; gap: 2px;
+        border-bottom: none; border-right: 1px solid var(--border-hi); align-self: stretch; justify-content: center; }
+    .ephemeris-box .np-forecast-circle { width: 40px; height: 40px; }
+    .ephemeris-box .np-forecast-circle svg { width: 30px; height: 20px; }
+    .ephemeris-box .np-forecast-lbl { font-size: 0.6em; }
+    .ephemeris-box .moon-container { grid-column: 1; grid-row: 1; flex-direction: row; gap: 8px; margin: 0; min-width: 0;
+        padding: 0 8px; border-right: 1px solid var(--border-hi); align-self: stretch; justify-content: center; }
+    .ephemeris-box .moon-icon { font-size: 2em; margin: 0; flex-shrink: 0; }
+    .ephemeris-box .moon-phase-name { font-size: 0.75em; text-align: left; line-height: 1.2; }
+    .ephemeris-box .weather-container { grid-column: 3; grid-row: 1; display: grid; grid-template-columns: auto minmax(0, 1fr);
+        column-gap: 8px; align-items: center; justify-content: center; border: none; padding: 0 8px; width: auto;
+        min-width: 0 !important; }
+    .ephemeris-box #current-weather-icon { grid-column: 1; grid-row: 1 / span 2; font-size: 2em !important; margin: 0 !important; }
+    .ephemeris-box .adp-wx-when, .ephemeris-box #current-weather-desc { grid-column: 2; text-align: left !important; }
+    .ephemeris-box .adp-wx-when { font-size: 10px; margin: 0; }
+    .ephemeris-box .adp-wx-when:empty + #current-weather-icon { grid-row: 1; }
+    .ephemeris-box #current-weather-desc { font-size: 0.78em !important; line-height: 1.2; }
+    .ephemeris-box .times-grid { grid-column: 1 / -1; grid-row: 2; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px;
+        margin-top: 10px; padding: 10px 0 0; border-top: 1px solid var(--border-hi); min-width: 0; text-align: center; }
+    .ephemeris-box .time-item { font-size: 10px; line-height: 1.25; }
+    .ephemeris-box .time-item .icon-normal { display: block; margin: 0 auto 2px; }
+    .ephemeris-box .time-item .icon-normal svg { width: 18px; height: 18px; }
+    .ephemeris-box .time-item > span[data-i18n] { display: inline; font-size: 10px; font-weight: 400; color: var(--text-muted); margin: 0; }
+    .ephemeris-box .time-item > span[id] { display: block; font-size: 15px; margin-top: 2px; }
+}
+
+/* ── ADP 9.0 — M6: riquadro Bortle + Inq. Luminoso sotto la mappa (solo smartphone) ── */
+@media (max-width: 768px) {
+    .adp-lp-panel { margin-top: 16px; }
+    .adp-lp-panel > .input-group { margin-top: 0 !important; }
+    .adp-lp-panel .adp-lp-slot { margin-top: 10px; }
+}
+
+/* ── ADP 9.0 — S2: grafico dell'altezza che non si restringe ruotando lo smartphone ── */
+.chart-container { position: relative; min-width: 0; max-width: 100%; box-sizing: border-box; }
+.chart-container canvas { max-width: 100%; }
+@media (max-width: 768px) {
+    .planning-grid { grid-template-columns: minmax(0, 1fr) !important; }   /* la colonna non si allarga oltre lo schermo */
+    .planning-grid > * { min-width: 0; }
+}
+
+/* ── ADP 9.0 — S3: Dossier su smartphone e tablet/orizzontale (≤1024 px): icona accanto al nome,
+      dati in colonna, tutto allineato al bordo sinistro ── */
+@media (max-width: 1024px) {
+    .adp-dos-testa { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 12px; align-items: center; }
+    .adp-dos-info { display: contents; }
+    .adp-dossier .adp-dos-img { grid-row: 1; grid-column: 1; width: 48px; height: 48px; }
+    .adp-dossier #plan-target-name { grid-row: 1; grid-column: 2; margin: 0; }
+    .adp-dossier .stat-grid { grid-column: 1 / -1; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 3px 12px;
+        align-items: baseline; margin: 10px 0 0; }
+    .adp-dossier .stat-box { display: contents; }
+    .adp-dossier .stat-box + .stat-box::before { content: none; }
+    .adp-dossier .info-box { grid-column: 1 / -1; margin-top: 10px; }
+}
+/* striscia dell'oggetto: "Cambia oggetto" su due righe per lasciare spazio al nome */
+@media (max-width: 768px) {
+    .adp-ogg-btn { white-space: normal; max-width: 6.5em; line-height: 1.15; text-align: center; padding: 5px 10px; flex-shrink: 0; }
+}
+
+/* ── ADP 9.0 — S4: più spazio tra la riga del logo e le icone delle sezioni (smartphone) ── */
+@media (max-width: 768px) {
+    #nav-stepper { padding-top: 10px !important; }
+}
+/* smartphone: "Meteo delle 22:00" su una riga, sopra icona e descrizione */
+@media (max-width: 768px) {
+    .ephemeris-box .adp-wx-when { grid-column: 1 / -1; grid-row: 1; text-align: center !important; white-space: nowrap; margin-bottom: 3px; }
+    .ephemeris-box .adp-wx-when:not(:empty) ~ #current-weather-icon { grid-row: 2; }
+    .ephemeris-box .adp-wx-when:not(:empty) ~ #current-weather-desc { grid-row: 2; }
+}
+
+/* ── ADP 9.0 — S5: grafico dell'altezza più alto su smartphone ── */
+@media (max-width: 768px) {
+    .chart-container { height: 230px; padding: 8px; }
+}
+@media (min-width: 769px) {
+    .chart-container { height: 280px; }      /* PC: in Sequenza il grafico è a tutta larghezza, serve più altezza */
+}
+
+/* ── ADP 9.0 — S6: menu a tendina come foglio dal basso (smartphone) ── */
+.adp-sheet-wrap { position: fixed; inset: 0; z-index: 10050; pointer-events: none; }
+.adp-sheet-dim { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.55); opacity: 0; transition: opacity .2s; }
+.adp-sheet { position: absolute; left: 0; right: 0; bottom: 0; max-height: 78vh; text-align: left; line-height: 1.3; display: flex; flex-direction: column;
+    background: #161b22; border-top: 1px solid #2a3347; border-radius: 16px 16px 0 0; box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.5);
+    transform: translateY(100%); transition: transform .22s ease; padding-bottom: env(safe-area-inset-bottom, 0); }
+.adp-sheet-wrap.aperto { pointer-events: auto; }
+.adp-sheet-wrap.aperto .adp-sheet-dim { opacity: 1; }
+.adp-sheet-wrap.aperto .adp-sheet { transform: none; }
+html.adp-sheet-lock, html.adp-sheet-lock body { overflow: hidden; }
+.adp-sheet-grab { width: 40px; height: 4px; border-radius: 2px; background: #3a4252; margin: 8px auto 2px; flex-shrink: 0; }
+.adp-sheet-head { display: flex; align-items: center; justify-content: space-between; padding: 4px 16px 8px; flex-shrink: 0; }
+.adp-sheet-head b { color: #e9edf3; font-size: 18px; }
+.adp-sheet-x { background: none; border: 0; color: #8b95a5; font-size: 22px; padding: 4px 6px; cursor: pointer; }
+.adp-sheet-search { margin: 0 16px 8px; padding: 9px 11px; border-radius: 8px; border: 1px solid #30363d; background: #0d1117;
+    color: #e9edf3; font: inherit; font-size: 16px; flex-shrink: 0; width: auto !important; }
+.adp-sheet-chips { display: flex; gap: 6px; padding: 0 16px 8px; overflow-x: auto; flex-shrink: 0; scrollbar-width: none; }
+.adp-sheet-chips:empty { display: none; }
+.adp-sheet-chip { border: 1px solid #2a3347; border-radius: 16px; padding: 6px 13px; font-size: 14px; color: #8b95a5; white-space: nowrap; cursor: pointer; }
+.adp-sheet-chip.on { border-color: #c49a3c; color: #f2c94c; background: rgba(196, 154, 60, 0.1); }
+.adp-sheet-list { overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0 8px 12px; overscroll-behavior: contain; }
+.adp-sheet-gh { color: #c49a3c; font-size: 13px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; padding: 12px 8px 4px; }
+.adp-sheet-sep { height: 1px; background: #2a3347; margin: 6px 8px; }
+.adp-sheet-item { display: flex; align-items: center; gap: 10px; min-height: 48px; padding: 9px 8px; border-radius: 8px; cursor: pointer; }
+.adp-sheet-item:active { background: rgba(255, 255, 255, 0.05); }
+.adp-sheet-item.on { background: rgba(196, 154, 60, 0.12); outline: 1px solid rgba(196, 154, 60, 0.5); }
+.adp-sheet-item.dis { opacity: .4; cursor: default; }
+.adp-sheet-chk { width: 18px; color: #f2c94c; flex-shrink: 0; font-size: 17px; }
+.adp-sheet-t { flex: 1; min-width: 0; color: #e9edf3; font-size: 17px; }
+.adp-sheet-t b { display: block; font-weight: 600; font-size: 17px; }
+.adp-sheet-t small { display: block; color: #8b95a5; font-size: 15px; }
+.adp-sheet-item.on .adp-sheet-t b, .adp-sheet-item.on .adp-sheet-t > span { color: #f2c94c; }
+.adp-sheet-tag { flex-shrink: 0; font-size: 14px; color: #c9d1d9; border: 1px solid #2a3347; border-radius: 6px; padding: 3px 8px; white-space: nowrap; }
+.adp-sheet-empty { color: #8b95a5; text-align: center; padding: 18px; font-size: 16px; }
+
+/* ── ADP 9.0 — S7: pulsante "Analisi notte" tra Luna e Meteo, colorato col giudizio; menu ☰ su smartphone ── */
+.ephemeris-box .np-forecast-btn.adp-an { --an-c: #6e7a8a; }
+.ephemeris-box .adp-an .np-forecast-circle { border: 0; background: #14181f; color: #f2c94c;
+    box-shadow: 0 0 0 2px var(--an-c), 0 0 12px color-mix(in srgb, var(--an-c) 55%, transparent); transition: box-shadow .4s; }
+.ephemeris-box .adp-an .np-an-v { color: var(--an-c); font-size: 0.68em; font-weight: 700; white-space: nowrap; margin-top: -2px; }
+.adp-menu-btn { display: none; width: 36px; height: 36px; flex-shrink: 0; border-radius: 8px; border: 1px solid #2a3240; background: transparent;
+    color: #c9d1d9; font-size: 18px; line-height: 1; cursor: pointer; }
+@media (min-width: 769px) {
+    /* PC: Luna · Analisi notte · Meteo, con icona e testi affiancati */
+    .ephemeris-box .moon-container { order: 1; }
+    .ephemeris-box .np-forecast-btn.adp-an { order: 2; display: grid !important; grid-template-columns: auto auto; column-gap: 10px; align-items: center;
+        margin: 0 18px 0 0; padding: 0 18px; border-left: 1px solid var(--border-hi); border-right: 1px solid var(--border-hi); }
+    .ephemeris-box .adp-an .np-forecast-circle { grid-row: 1 / span 2; width: 42px; height: 42px; }
+    .ephemeris-box .adp-an .np-forecast-circle svg { width: 30px; height: 20px; }
+    .ephemeris-box .adp-an .np-forecast-lbl { align-self: end; font-size: 0.7em; }
+    .ephemeris-box .adp-an .np-an-v { align-self: start; font-size: 0.8em; margin: 0; text-align: left; }
+    .ephemeris-box .weather-container { order: 3; padding-left: 0; }
+    .ephemeris-box .times-grid { order: 4; }
+}
+@media (max-width: 768px) {
+    .ephemeris-box .np-forecast-btn.adp-an { display: flex !important; }       /* anche senza schermo touch */
+    /* barra: logo e nome, menu ☰ */
+    #top-nav #mode-select-wrap, #top-nav #lang-dropdown-wrap, #top-nav #nav-guide-btn, #top-nav .nav-version-btn { display: none !important; }
+    #top-nav .nav-title-text + span { display: none; }                      /* badge PRO */
+    .adp-menu-btn { display: grid; place-items: center; }
+}
+/* foglio del menu ☰ */
+.adp-mn-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; box-sizing: border-box; padding: 14px 8px;
+    border: 0; border-bottom: 1px solid #222a36; background: none; color: #e9edf3; font: inherit; font-size: 16px; text-align: left; }
+.adp-mn-col { flex-direction: column; align-items: stretch; }
+.adp-mn-link { cursor: pointer; }
+.adp-mn-link small { color: #8b95a5; font-size: 14px; }
+.adp-mn-row:last-child { border-bottom: 0; }
+.adp-mn-seg { display: flex; border: 1px solid #2a3347; border-radius: 8px; overflow: hidden; }
+.adp-mn-seg button { flex: 1; background: none; border: 0; border-left: 1px solid #2a3347; color: #8b95a5; font: inherit; font-size: 14px;
+    padding: 8px 12px; cursor: pointer; white-space: nowrap; }
+.adp-mn-seg button:first-child { border-left: 0; }
+.adp-mn-seg button.on { background: rgba(196, 154, 60, 0.15); color: #f2c94c; font-weight: 700; }
+@media (max-width: 480px) {
+    #top-nav .nav-title-text { font-size: 15px; letter-spacing: 0 !important; }
+}
+@media (max-width: 360px) {
+    #top-nav .nav-title-text { font-size: 13px; }
+}
+/* menu ☰: lingue su due righe; con un foglio aperto si nascondono le frecce flottanti */
+.adp-mn-lang { display: grid; grid-template-columns: 1fr 1fr; }
+.adp-mn-lang button { border-left: 0; border-top: 1px solid #2a3347; }
+.adp-mn-lang button:nth-child(even) { border-left: 1px solid #2a3347; }
+.adp-mn-lang button:nth-child(-n+2) { border-top: 0; }
+.adp-mn-seg button { padding: 8px 10px; }
+html.adp-sheet-lock .mobile-nav-fab { display: none !important; }
