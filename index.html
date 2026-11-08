@@ -3151,11 +3151,16 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                         <option value="dual|14|OIII+SII 7nm">Generico OIII+SII 7nm</option>
                     </optgroup>
                     <optgroup label="Quad-band (Ha+OIII+SII+Hβ)">
-                        <option value="quad|20|L-Quad Enhance">Optolong L-Quad Enhance</option>
-                        <option value="quad|20|QuadBand">Altair QuadBand</option>
-                        <option value="quad|24|Triad Ultra">Triad Ultra</option>
-                        <option value="quad|20|SkyMatic">SkyMatic Quad</option>
-                        <option value="quad|20|Antlia Quad">Antlia Quad-band</option>
+                        <option value="quad|70|QuadBand">Altair QuadBand (35+35 nm)</option>
+                        <option value="quad|17|Triad Ultra">Triad Ultra (5+4+4+4 nm)</option>
+                    </optgroup>
+                    <!-- Antinquinamento a banda larga: banda = 2 × banda equivalente per pixel stimata dalle curve dei produttori
+                         (sensibilità IMX585); data-bw-noir = banda senza la finestra infrarossa (camera con vetro IR-cut) -->
+                    <optgroup id="filter-db-lp-group" label="Antinquinamento a banda larga">
+                        <option value="lp|140|L-QEF">Optolong L-Quad Enhance (L-QEF)</option>
+                        <option value="lp|220|Antlia Quad" data-bw-noir="60">Antlia Quad Band Anti-Light Pollution</option>
+                        <option value="lp|120|L-Pro">Optolong L-Pro</option>
+                        <option value="lp|140|LPS-D1">IDAS LPS-D1</option>
                     </optgroup>
                     <option value="custom" data-i18n="filter_osc_custom">— Personalizzato —</option>
                 </select>
@@ -3167,7 +3172,22 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <option value="none" data-i18n="filter_osc_none">Nessun filtro</option>
                     <option value="dual" data-i18n="filter_osc_dual">Dual-band (Ha+OIII)</option>
                     <option value="quad" data-i18n="filter_osc_quad">Quad-band</option>
+                    <option value="lp" data-i18n="filter_osc_lp">Antinquinamento a banda larga</option>
                 </select>
+            </div>
+            <!-- Camera e infrarosso (solo per filtri con banda IR, es. Antlia Quad): riquadro arancio finché
+                 la risposta è "Non so", verde quando è data (colori e testo della domanda impostati da smart.js) -->
+            <div id="filter-ir-row" style="display:none; padding:0 20px; margin-bottom:14px;">
+                <div id="filter-ir-box" style="border:1.5px solid #f2a33c; background:rgba(242,163,60,0.08); border-radius:10px; padding:10px 12px;">
+                    <div id="filter-ir-q" style="font-weight:700; color:#f2c94c; font-size:0.88em;">⚠️ Questo filtro ha una banda infrarossa: la tua camera la vede?</div>
+                    <input type="hidden" id="filter-ir-value" value="nonso">
+                    <div style="display:flex; border:1px solid #2a3347; border-radius:8px; overflow:hidden; margin-top:8px;">
+                        <button type="button" class="adp-ir-opt" data-ir="si" onclick="impostaRispostaIR('si')" style="flex:1; background:none; border:0; color:#8b95a5; font:inherit; font-size:0.82em; padding:9px 6px; cursor:pointer;" data-i18n="filter_ir_yes">Sì — vetro AR</button>
+                        <button type="button" class="adp-ir-opt" data-ir="no" onclick="impostaRispostaIR('no')" style="flex:1; background:none; border:0; border-left:1px solid #2a3347; color:#8b95a5; font:inherit; font-size:0.82em; padding:9px 6px; cursor:pointer;" data-i18n="filter_ir_no">No — vetro IR-cut</button>
+                        <button type="button" class="adp-ir-opt" data-ir="nonso" onclick="impostaRispostaIR('nonso')" style="flex:1; background:none; border:0; border-left:1px solid #2a3347; color:#8b95a5; font:inherit; font-size:0.82em; padding:9px 6px; cursor:pointer;" data-i18n="filter_ir_unknown">Non so</button>
+                    </div>
+                    <div id="filter-ir-note" style="font-size:0.75em; color:#9fb3cc; margin-top:6px;"></div>
+                </div>
             </div>
             <!-- Banda nm -->
             <div style="padding:0 20px; margin-bottom:14px;">
@@ -3175,7 +3195,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <span data-i18n="filter_modal_bw">Banda totale</span><span style="color:#6e7a8a;">(nm)</span>
                     <span class="info-icon" style="font-size:0.9em;" onmouseenter="mostraTooltip(this,'info_filter_bw')" onmouseleave="nascondiTooltip()">ℹ️</span>
                 </label>
-                <input type="number" id="filter-modal-bw" value="14" min="3" max="80" oninput="onBwManualInput()" style="width:100%; background:#0d1117; color:#c9d1d9; border:1px solid #21293a; border-radius:6px; padding:8px 10px; font-size:0.9em; box-sizing:border-box;">
+                <input type="number" id="filter-modal-bw" value="14" min="3" max="250" oninput="onBwManualInput()" style="width:100%; background:#0d1117; color:#c9d1d9; border:1px solid #21293a; border-radius:6px; padding:8px 10px; font-size:0.9em; box-sizing:border-box;">
             </div>
             <!-- Sensore camera — sincronizzato con FOV -->
             <div style="padding:0 20px; margin-bottom:14px;">

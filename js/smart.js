@@ -50,6 +50,11 @@ function toggleLock(id) {
             let nameInputPro = document.getElementById('pro-nina-osc-filter-name');
             if (nameInput    && !nameInput.value)    nameInput.value    = saved;
             if (nameInputPro && !nameInputPro.value) nameInputPro.value = saved;
+            // Etichetta coerente con il tipo (es. ritorno da Base: globals.js ripristina il tipo ma non l'etichetta)
+            let _lbl = document.getElementById('filter-osc-label');
+            if (_lbl && (filterType === 'none') !== (_lbl.getAttribute('data-i18n') === 'filter_osc_none'))
+                _impostaFiltroOSC(filterType, filterType === 'none' ? 'none' : (localStorage.getItem('filter_osc_db') || 'none'));
+            _aggiornaBadgeIR();
         }
 
         // ── Lookup pixel_size → {rn, qe} per il calcolo filtro ────────
@@ -129,6 +134,22 @@ function toggleLock(id) {
             let curType  = (document.getElementById('filter-osc-type')||{}).value || 'none';
             let curBw    = localStorage.getItem('filter_osc_bw') || (curType==='quad'?'20':'14');
             let curDb    = localStorage.getItem('filter_osc_db') || 'none';
+            // 9.0: voci del database cambiate (L-QEF e Antlia → antinquinamento; bande Altair/Triad
+            // corrette; SkyMatic tolto). Le scelte salvate vengono ricondotte alle voci nuove.
+            const _dbConv = { 'quad|20|L-Quad Enhance':'lp|140|L-QEF', 'quad|20|Antlia Quad':'lp|220|Antlia Quad',
+                              'quad|20|QuadBand':'quad|70|QuadBand', 'quad|24|Triad Ultra':'quad|17|Triad Ultra', 'quad|20|SkyMatic':'custom' };
+            if (_dbConv[curDb]) {
+                curDb = _dbConv[curDb];
+                if (curDb !== 'custom') curBw = curDb.split('|')[1];
+                localStorage.setItem('filter_osc_db', curDb); localStorage.setItem('filter_osc_bw', curBw);
+            }
+            // Il tipo segue la voce del menu salvata (il campo nascosto dopo una ricarica vale "none":
+            // con Applica si sarebbe applicato "Nessun filtro" pur vedendo il filtro nel menu)
+            if (curDb !== 'none' && curDb !== 'custom') curType = curDb.split('|')[0];
+            else if (curDb === 'custom') curType = localStorage.getItem('filter_osc_type') || curType;
+            let _lpGroup = document.getElementById('filter-db-lp-group');
+            if (_lpGroup) _lpGroup.label = t('filter_osc_lp');
+            _stileRispostaIR(localStorage.getItem('filter_osc_ir') || 'nonso');
             let typeEl   = document.getElementById('filter-modal-type');
             let bwEl     = document.getElementById('filter-modal-bw');
             let sensEl   = document.getElementById('filter-modal-sensor');
@@ -181,6 +202,56 @@ function toggleLock(id) {
             if (!dbEl || !typeRow) return;
             let isCustom = (dbEl.value === 'custom');
             typeRow.style.display = isCustom ? 'block' : 'none';
+            // Domanda sull'infrarosso: solo per i filtri con banda IR (data-bw-noir)
+            let irRow = document.getElementById('filter-ir-row');
+            if (irRow) irRow.style.display = _filtroDbIR(dbEl) ? 'block' : 'none';
+        }
+
+        // Opzione del database con banda infrarossa (es. Antlia Quad): restituisce la banda senza IR
+        function _filtroDbIR(dbEl) {
+            let opt = dbEl && dbEl.options[dbEl.selectedIndex];
+            return (opt && opt.dataset && opt.dataset.bwNoir) ? opt.dataset.bwNoir : null;
+        }
+        function _rispostaIR() {
+            let h = document.getElementById('filter-ir-value');
+            return h ? h.value : 'nonso';
+        }
+        // Risposta scelta con i pulsanti del riquadro infrarosso
+        function impostaRispostaIR(v) {
+            _stileRispostaIR(v);
+            aggiornaCalcoloFiltro();
+        }
+        // Riquadro infrarosso: arancio finché la risposta è "Non so", verde quando è data
+        function _stileRispostaIR(v) {
+            let h = document.getElementById('filter-ir-value'); if (h) h.value = v;
+            let ok = (v === 'si' || v === 'no');
+            let box = document.getElementById('filter-ir-box');
+            if (box) { box.style.borderColor = ok ? '#2ec96c' : '#f2a33c'; box.style.background = ok ? 'rgba(46,201,108,0.07)' : 'rgba(242,163,60,0.08)'; }
+            let q = document.getElementById('filter-ir-q');
+            if (q) { q.textContent = t(ok ? 'filter_ir_q_' + v : 'filter_ir_q'); q.style.color = ok ? '#7ee2a8' : '#f2c94c'; }
+            document.querySelectorAll('.adp-ir-opt').forEach(b => {
+                let on = b.dataset.ir === v;
+                b.style.background = on ? (ok ? 'rgba(46,201,108,0.15)' : 'rgba(196,154,60,0.18)') : 'none';
+                b.style.color = on ? (ok ? '#7ee2a8' : '#f2c94c') : '#8b95a5';
+                b.style.fontWeight = on ? '700' : '400';
+            });
+        }
+        // Segnale "IR ?" sui pulsanti del filtro (Smart e PRO) finché la risposta manca
+        function _aggiornaBadgeIR() {
+            let dbVal = localStorage.getItem('filter_osc_db') || '';
+            let dbEl  = document.getElementById('filter-db-select');
+            let opt   = dbEl ? Array.from(dbEl.options).find(o => o.value === dbVal) : null;
+            let tipo  = (document.getElementById('filter-osc-type') || {}).value;
+            let manca = tipo === 'lp' && opt && opt.dataset.bwNoir && (localStorage.getItem('filter_osc_ir') || 'nonso') === 'nonso';
+            ['filter-osc-btn', 'pro-filter-osc-btn'].forEach(id => {
+                let btn = document.getElementById(id); if (!btn) return;
+                let bd = btn.querySelector('.adp-ir-badge');
+                if (manca && !bd) {
+                    bd = document.createElement('span'); bd.className = 'adp-ir-badge'; bd.textContent = 'IR ?';
+                    bd.style.cssText = 'background:#f2a33c; color:#0d1117; border-radius:10px; padding:0 6px; font-size:0.85em; font-weight:800; margin-left:4px;';
+                    btn.appendChild(bd);
+                } else if (!manca && bd) bd.remove();
+            });
         }
 
         function selezionaFiltroDB() {
@@ -229,6 +300,16 @@ function toggleLock(id) {
             let infoEl = document.getElementById('filter-sensor-info');
             if (!typeEl || !bwEl || !resEl) return;
             let filterType = typeEl.value;
+            // Filtro con banda infrarossa: la banda dipende da cosa vede la camera
+            // ("Non so" = caso senza infrarosso, posa minima più prudente)
+            let _dbElF = document.getElementById('filter-db-select');
+            let _noIR  = _filtroDbIR(_dbElF);
+            let _irNoteEl = document.getElementById('filter-ir-note');
+            if (_noIR) {
+                let _ir = _rispostaIR();
+                bwEl.value = (_ir === 'si') ? _dbElF.value.split('|')[1] : _noIR;
+                if (_irNoteEl) _irNoteEl.textContent = t('filter_ir_note_' + _ir);
+            } else if (_irNoteEl) _irNoteEl.textContent = '';
             let bw  = parseFloat(bwEl.value) || 14;
             let bortle = parseInt((document.getElementById('bortle-class')||{}).value||5);
             let fL = getFocalEffettiva ? getFocalEffettiva() : (parseFloat((document.getElementById('focal-length')||{}).value)||400);
@@ -270,7 +351,8 @@ function toggleLock(id) {
             tMin = Math.max(tFloor, Math.min(3600, tMin));
             let tStr = tMin >= 60 ? Math.round(tMin/60)+' min' : tMin+' sec';
             if (resEl)  resEl.textContent  = tStr;
-            if (noteEl) noteEl.textContent = '(Bortle '+bortle+', f/'+fR.toFixed(1)+', '+bw+'nm)';
+            if (noteEl) noteEl.textContent = '(Bortle '+bortle+', f/'+fR.toFixed(1)+', '
+                + (filterType === 'lp' ? t('filter_lp_bw_note').replace('{n}', Math.round(bw / 2)) : bw+'nm') + ')';
             if (warnEl) {
                 if (fR <= 4 && bw <= 7) {
                     warnEl.style.display = 'block';
@@ -281,6 +363,54 @@ function toggleLock(id) {
             }
         }
 
+        // Imposta il filtro OSC attivo: campi nascosti (Smart e PRO), nome e colore dei pulsanti
+        function _impostaFiltroOSC(filterType, dbVal) {
+            // Nome da mostrare sul pulsante (i nomi dei filtri non si traducono: niente data-i18n,
+            // così il cambio lingua non riporta l'etichetta a "Nessun filtro")
+            let filterName = t('filter_osc_none');
+            if (filterType !== 'none') {
+                if (dbVal !== 'none' && dbVal !== 'custom') {
+                    let parts = dbVal.split('|');
+                    filterName = (parts[2] || '').replace(/-/g,' ') || (filterType==='dual'?t('filter_osc_dual'):filterType==='lp'?t('filter_osc_lp'):t('filter_osc_quad'));
+                } else if (dbVal === 'custom') {
+                    filterName = t('filter_osc_custom');
+                } else {
+                    filterName = filterType==='dual' ? t('filter_osc_dual') : filterType==='lp' ? t('filter_osc_lp') : t('filter_osc_quad');
+                }
+            }
+            // Aggiorna hidden inputs e label pulsanti
+            ['filter-osc-type','pro-filter-osc-type'].forEach(id => {
+                let el = document.getElementById(id); if (el) el.value = filterType;
+            });
+            let i18nKey = filterType === 'none' ? 'filter_osc_none' : (dbVal === 'custom' ? 'filter_osc_custom' : null);
+            ['filter-osc-label','pro-filter-osc-label'].forEach(id => {
+                let el = document.getElementById(id); if (!el) return;
+                el.textContent = filterName;
+                if (i18nKey) el.setAttribute('data-i18n', i18nKey); else el.removeAttribute('data-i18n');
+            });
+            // Colore pulsanti
+            let smartBtn = document.getElementById('filter-osc-btn');
+            let proBtn   = document.getElementById('pro-filter-osc-btn');
+            let active   = filterType !== 'none';
+            if (smartBtn) { smartBtn.style.borderColor = active?'#c49a3c':'#6e7a8a'; smartBtn.style.color = active?'#c49a3c':'#6e7a8a'; }
+            if (proBtn)   { proBtn.style.borderColor   = active?'#00c6ff':'#6e7a8a'; proBtn.style.color   = active?'#00c6ff':'#6e7a8a'; }
+        }
+
+        // All'avvio: ripristina il filtro dell'ultimo Applica (non in modalità Base, che non usa filtri)
+        function _ripristinaFiltroOSC() {
+            if (typeof modaLite !== 'undefined' && modaLite) return;
+            let dbVal = localStorage.getItem('filter_osc_db');
+            if (!dbVal || dbVal === 'none') return;
+            const conv = { 'quad|20|L-Quad Enhance':'lp|140|L-QEF', 'quad|20|Antlia Quad':'lp|220|Antlia Quad',
+                           'quad|20|QuadBand':'quad|70|QuadBand', 'quad|24|Triad Ultra':'quad|17|Triad Ultra' };
+            if (conv[dbVal]) dbVal = conv[dbVal];
+            let tipo = dbVal === 'custom' ? localStorage.getItem('filter_osc_type') : dbVal.split('|')[0];
+            if (!tipo || ['dual', 'quad', 'lp'].indexOf(tipo) < 0) return;   // es. "Personalizzato" salvato prima di questa correzione
+            _impostaFiltroOSC(tipo, dbVal);
+            aggiornaFiltroOSC();
+        }
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', _ripristinaFiltroOSC); else _ripristinaFiltroOSC();
+
         function applicaFiltroOSC() {
             let typeEl = document.getElementById('filter-modal-type');
             let bwEl   = document.getElementById('filter-modal-bw');
@@ -289,34 +419,12 @@ function toggleLock(id) {
             let filterType = typeEl.value;
             let bw    = bwEl ? bwEl.value : '14';
             let dbVal = dbEl ? dbEl.value : 'none';
-            // Nome da mostrare sul pulsante
-            let filterName = t('filter_osc_none');
-            if (filterType !== 'none') {
-                if (dbVal !== 'none' && dbVal !== 'custom') {
-                    let parts = dbVal.split('|');
-                    filterName = (parts[2] || '').replace(/-/g,' ') || (filterType==='dual'?t('filter_osc_dual'):t('filter_osc_quad'));
-                } else if (dbVal === 'custom') {
-                    filterName = t('filter_osc_custom');
-                } else {
-                    filterName = filterType==='dual' ? t('filter_osc_dual') : t('filter_osc_quad');
-                }
-            }
-            // Aggiorna hidden inputs e label pulsanti
-            ['filter-osc-type','pro-filter-osc-type'].forEach(id => {
-                let el = document.getElementById(id); if (el) el.value = filterType;
-            });
-            ['filter-osc-label','pro-filter-osc-label'].forEach(id => {
-                let el = document.getElementById(id); if (el) el.textContent = filterName;
-            });
-            // Colore pulsanti
-            let smartBtn = document.getElementById('filter-osc-btn');
-            let proBtn   = document.getElementById('pro-filter-osc-btn');
-            let active   = filterType !== 'none';
-            if (smartBtn) { smartBtn.style.borderColor = active?'#c49a3c':'#6e7a8a'; smartBtn.style.color = active?'#c49a3c':'#6e7a8a'; }
-            if (proBtn)   { proBtn.style.borderColor   = active?'#00c6ff':'#6e7a8a'; proBtn.style.color   = active?'#00c6ff':'#6e7a8a'; }
+            _impostaFiltroOSC(filterType, dbVal);
             // Salva in localStorage
             localStorage.setItem('filter_osc_bw',  bw);
             localStorage.setItem('filter_osc_db',     dbVal);
+            localStorage.setItem('filter_osc_type',   filterType);
+            localStorage.setItem('filter_osc_ir',     _rispostaIR());
             // Salva nome NINA dal campo del modal
             let ninaModalEl = document.getElementById('nina-osc-filter-name-modal');
             let ninaEl      = document.getElementById('nina-osc-filter-name');
@@ -629,7 +737,9 @@ function toggleLock(id) {
             let filterOscType = (document.getElementById('filter-osc-type')||{value:'none'}).value;
             let doingOscNB = !isM && (filterOscType === 'dual' || filterOscType === 'quad');
             let doingOIIISII = doingOscNB && isOIIISIIFilter();
-            let sFact = (doingN && !isEmission) ? 2.0 : 1.0;
+            // Filtro OSC antinquinamento a banda larga (L-QEF, L-Pro, IDAS, Antlia): non è narrowband
+            let doingOscLP = !isM && filterOscType === 'lp';
+            let sFact = ((doingN || doingOscNB) && !isEmission) ? 2.0 : 1.0;   // A19: anche filtri OSC dual/quad-band stretti
 
             // 5. INQUINAMENTO LUNARE EFFETTIVO
             // Per oggi: legge val-luna aggiornato da weather.js in tempo reale.
@@ -659,7 +769,7 @@ function toggleLock(id) {
                 inqLuna = lunaEl ? (parseInt(lunaEl.innerText) || 0) : 0;
             }
             let mFact = 1.0;
-            if(!doingN) {
+            if(!(doingN || doingOscNB)) {   // A19: anche filtri OSC dual/quad-band stretti
                 if(inqLuna > 30 && inqLuna <= 70) mFact = 1.5;
                 else if(inqLuna > 70) mFact = 2.0;
             }
@@ -672,10 +782,12 @@ function toggleLock(id) {
             let bortle = parseInt((document.getElementById('bortle-class')||{}).value||5);
             const _lpFactBB = {1:0.6, 2:0.7, 3:0.85, 4:0.95, 5:1.0, 6:1.4, 7:1.9, 8:2.5, 9:3.0};
             const _lpFactNB = {1:0.6, 2:0.7, 3:0.85, 4:0.95, 5:1.0, 6:1.1, 7:1.3, 8:1.5, 9:1.8};
+            // Antinquinamento a banda larga: via di mezzo (stima empirica; guadagno reale minore con i LED)
+            const _lpFactLP = {1:0.6, 2:0.7, 3:0.85, 4:0.95, 5:1.0, 6:1.25, 7:1.6, 8:2.0, 9:2.4};
             // narrowband attivo = mono con filtri NB OPPURE OSC con filtro dual/quad-band
             let usingNarrowband = doingN || doingOscNB;
             // Con filtro OSC dual/quad il comportamento Bortle è sempre narrowband
-            let lpFact = (usingNarrowband) ? (_lpFactNB[bortle]||1.0) : (_lpFactBB[bortle]||1.0);
+            let lpFact = (usingNarrowband) ? (_lpFactNB[bortle]||1.0) : doingOscLP ? (_lpFactLP[bortle]||1.0) : (_lpFactBB[bortle]||1.0);
             let lpApplied = (bortle !== 5); // flag per il messaggio
 
             // 7. FATTORE SENSORE (correzione Bayer + QE)
@@ -787,9 +899,11 @@ function toggleLock(id) {
                     if(totIdConNB !== null && !nbSogliaSuperata && !doingOscNB)
                         reason += ` <br><i style="color:#bb86fc; font-size: 0.9em;">💡 Con filtro Ha/OIII narrowband il tempo stimato scenderebbe a <b>${totIdConNB.toFixed(1)} ore</b>.</i>`;
                     if(doingOscNB && !isEmission)
-                        reason += ` <br><i style="color:#ff9944; font-size: 0.9em;">⚠️ Il filtro dual/quad-band non è adatto a questo tipo di target (${tipoNomeReport}): blocca la luce broadband riducendo drasticamente il segnale. Rimuovi il filtro o scegli una nebulosa a emissione.</i>`;
+                        reason += ` <br><i style="color:#ff9944; font-size: 0.9em;">⚠️ Il filtro narrowband (dual/quad-band) non è adatto a questo tipo di target (${tipoNomeReport}): blocca la luce broadband riducendo drasticamente il segnale. Rimuovi il filtro o scegli una nebulosa a emissione.</i>`;
                     if(doingOscNB && isEmission)
                         reason += ` <br><i style="color:#44ccaa; font-size: 0.9em;">✅ Filtro dual/quad-band attivo: penalità Bortle ridotta per target a emissione.</i>`;
+                    if(doingOscLP && bortle > 5)
+                        reason += ` <br><i style="color:#44ccaa; font-size: 0.9em;">✅ Filtro antinquinamento a banda larga attivo: penalità Bortle ridotta (stima empirica, guadagno minore con lampioni LED).</i>`;
                     if(_sensorNote === 'mono-lrgb') reason += ` <br><i style="color:#aaa; font-size: 0.9em;">🔭 Correttivo sensore mono (LRGB/NB): −25% integrazione vs OSC (fattore ${sensorFact.toFixed(2)}).</i>`;
                     else if(_sensorNote === 'mono-rgb') reason += ` <br><i style="color:#aaa; font-size: 0.9em;">🔭 Correttivo sensore mono (solo RGB): −15% integrazione vs OSC (fattore ${sensorFact.toFixed(2)}).</i>`;
                     else if(_sensorNote === 'osc-nb') reason += ` <br><i style="color:#aaa; font-size: 0.9em;">🔭 Correttivo sensore OSC con filtro NB: +15% integrazione per perdita Bayer (fattore ${sensorFact.toFixed(2)}).</i>`;
@@ -805,9 +919,11 @@ function toggleLock(id) {
                     if(totIdConNB !== null && !nbSogliaSuperata && !doingOscNB)
                         reason += ` <br><i style="color:#bb86fc; font-size: 0.9em;">💡 With a Ha/OIII narrowband filter the estimated time would drop to <b>${totIdConNB.toFixed(1)} hours</b>.</i>`;
                     if(doingOscNB && !isEmission)
-                        reason += ` <br><i style="color:#ff9944; font-size: 0.9em;">⚠️ The dual/quad-band filter is not suitable for this target type (${tipoNomeReport}): it blocks broadband light, drastically reducing signal. Remove the filter or choose an emission nebula.</i>`;
+                        reason += ` <br><i style="color:#ff9944; font-size: 0.9em;">⚠️ The narrowband (dual/quad-band) filter is not suitable for this target type (${tipoNomeReport}): it blocks broadband light, drastically reducing signal. Remove the filter or choose an emission nebula.</i>`;
                     if(doingOscNB && isEmission)
                         reason += ` <br><i style="color:#44ccaa; font-size: 0.9em;">✅ Dual/quad-band filter active: reduced Bortle penalty for emission target.</i>`;
+                    if(doingOscLP && bortle > 5)
+                        reason += ` <br><i style="color:#44ccaa; font-size: 0.9em;">✅ Broadband light pollution filter active: reduced Bortle penalty (empirical estimate, smaller gain with LED lighting).</i>`;
                     if(_sensorNote === 'mono-lrgb') reason += ` <br><i style="color:#aaa; font-size: 0.9em;">🔭 Mono sensor correction (LRGB/NB): −25% integration vs OSC (factor ${sensorFact.toFixed(2)}).</i>`;
                     else if(_sensorNote === 'mono-rgb') reason += ` <br><i style="color:#aaa; font-size: 0.9em;">🔭 Mono sensor correction (RGB only): −15% integration vs OSC (factor ${sensorFact.toFixed(2)}).</i>`;
                     else if(_sensorNote === 'osc-nb') reason += ` <br><i style="color:#aaa; font-size: 0.9em;">🔭 OSC sensor correction with NB filter: +15% integration for Bayer loss (factor ${sensorFact.toFixed(2)}).</i>`;
@@ -823,9 +939,11 @@ function toggleLock(id) {
                     if(totIdConNB !== null && !nbSogliaSuperata && !doingOscNB)
                         reason += ` <br><i style="color:#bb86fc; font-size: 0.9em;">💡 Con filtro narrowband Ha/OIII el tiempo estimado bajaría a <b>${totIdConNB.toFixed(1)} horas</b>.</i>`;
                     if(doingOscNB && !isEmission)
-                        reason += ` <br><i style="color:#ff9944; font-size: 0.9em;">⚠️ El filtro dual/quad-band no es adecuado para este tipo de objetivo (${tipoNomeReport}). Quita el filtro o elige una nebulosa de emisión.</i>`;
+                        reason += ` <br><i style="color:#ff9944; font-size: 0.9em;">⚠️ El filtro narrowband (dual/quad-band) no es adecuado para este tipo de objetivo (${tipoNomeReport}). Quita el filtro o elige una nebulosa de emisión.</i>`;
                     if(doingOscNB && isEmission)
                         reason += ` <br><i style="color:#44ccaa; font-size: 0.9em;">✅ Filtro dual/quad-band activo: penalización Bortle reducida.</i>`;
+                    if(doingOscLP && bortle > 5)
+                        reason += ` <br><i style="color:#44ccaa; font-size: 0.9em;">✅ Filtro anticontaminación de banda ancha activo: penalización Bortle reducida (estimación empírica, menor ganancia con farolas LED).</i>`;
                     if(_sensorNote === 'mono-lrgb') reason += ` <br><i style="color:#aaa; font-size: 0.9em;">🔭 Corrección sensor mono (LRGB/NB): −25% integración vs OSC (factor ${sensorFact.toFixed(2)}).</i>`;
                     else if(_sensorNote === 'mono-rgb') reason += ` <br><i style="color:#aaa; font-size: 0.9em;">🔭 Corrección sensor mono (solo RGB): −15% integración vs OSC (factor ${sensorFact.toFixed(2)}).</i>`;
                     else if(_sensorNote === 'osc-nb') reason += ` <br><i style="color:#aaa; font-size: 0.9em;">🔭 Corrección sensor OSC con filtro NB: +15% integración por pérdida Bayer (factor ${sensorFact.toFixed(2)}).</i>`;
@@ -844,6 +962,8 @@ function toggleLock(id) {
                         reason += ` <br><i style="color:#ff9944; font-size: 0.9em;">⚠️ 双/四波段滤镜不适合此目标（${tipoNomeReport}）。请移除滤镜或选择发射星云。</i>`;
                     if(doingOscNB && isEmission)
                         reason += ` <br><i style="color:#44ccaa; font-size: 0.9em;">✅ 双/四波段滤镜已启用：博特尔惩罚已降低。</i>`;
+                    if(doingOscLP && bortle > 5)
+                        reason += ` <br><i style="color:#44ccaa; font-size: 0.9em;">✅ 宽带抗光害滤镜已启用：博特尔惩罚降低（经验估算，LED 照明下增益较小）。</i>`;
                     if(_sensorNote === 'mono-lrgb') reason += ` <br><i style="color:#aaa; font-size: 0.9em;">🔭 单色传感器校正（LRGB/NB）：比OSC减少25%积分时间（系数 ${sensorFact.toFixed(2)}）。</i>`;
                     else if(_sensorNote === 'mono-rgb') reason += ` <br><i style="color:#aaa; font-size: 0.9em;">🔭 单色传感器校正（仅RGB）：比OSC减少15%积分时间（系数 ${sensorFact.toFixed(2)}）。</i>`;
                     else if(_sensorNote === 'osc-nb') reason += ` <br><i style="color:#aaa; font-size: 0.9em;">🔭 OSC+NB滤镜传感器校正：拜耳损失+15%积分时间（系数 ${sensorFact.toFixed(2)}）。</i>`;
@@ -913,15 +1033,56 @@ function toggleLock(id) {
 
                 if (doingOscNB) {
                     if (!_ftIsEmission) {
-                        filterTipCommon = lang==='it' ? '⚠️ <b>Attenzione filtro:</b> Il filtro dual/quad-band selezionato non è adatto a questo target. Blocca la luce broadband riducendo drasticamente il segnale. <b>Rimuovi il filtro.</b>'
-                                        : lang==='en' ? '⚠️ <b>Filter warning:</b> The selected dual/quad-band filter is not suitable for this target. It blocks broadband light, drastically reducing signal. <b>Remove the filter.</b>'
-                                        : lang==='es' ? '⚠️ <b>Advertencia filtro:</b> El filtro dual/quad-band no es adecuado para este objetivo. Bloquea la luz de banda ancha. <b>Quita el filtro.</b>'
+                        filterTipCommon = lang==='it' ? '⚠️ <b>Attenzione filtro:</b> Il filtro narrowband (dual/quad-band) selezionato non è adatto a questo target. Blocca la luce broadband riducendo drasticamente il segnale. <b>Rimuovi il filtro.</b>'
+                                        : lang==='en' ? '⚠️ <b>Filter warning:</b> The selected narrowband (dual/quad-band) filter is not suitable for this target. It blocks broadband light, drastically reducing signal. <b>Remove the filter.</b>'
+                                        : lang==='es' ? '⚠️ <b>Advertencia filtro:</b> El filtro narrowband (dual/quad-band) no es adecuado para este objetivo. Bloquea la luz de banda ancha. <b>Quita el filtro.</b>'
                                         :               '⚠️ <b>滤镜警告：</b>所选双/四波段滤镜不适合此目标。请移除滤镜。';
                     } else {
                         filterTipCommon = lang==='it' ? '✅ <b>Filtro dual/quad-band attivo</b> — ottima scelta per nebulose a emissione. Riduce il fondo cielo del 94–95%, ideale anche da cieli urbani e con la Luna.'
                                         : lang==='en' ? '✅ <b>Dual/quad-band filter active</b> — excellent choice for emission nebulae. Reduces sky background by 94–95%, ideal even from urban skies and with the Moon.'
                                         : lang==='es' ? '✅ <b>Filtro dual/quad-band activo</b> — excelente para nebulosas de emisión. Reduce el fondo del cielo un 94–95%, ideal incluso desde cielos urbanos y con la Luna.'
                                         :               '✅ <b>双/四波段滤镜已启用</b> ——发射星云绝佳选择，天空背景降低94–95%，城市天空和月光下均可使用。';
+                    }
+                } else if (doingOscLP) {
+                    // Antinquinamento a banda larga: consiglio per tipo di target e Bortle
+                    if (bortle >= 8)
+                        filterTipCommon = lang==='it' ? '⚠️ <b>Filtro antinquinamento oltre Bortle 7</b> — a questo livello di inquinamento i produttori consigliano filtri narrowband. Su galassie e ammassi servono molte ore: valuta un sito più buio.'
+                                        : lang==='en' ? '⚠️ <b>Light pollution filter beyond Bortle 7</b> — at this level manufacturers recommend narrowband filters. Galaxies and clusters need many hours: consider a darker site.'
+                                        : lang==='es' ? '⚠️ <b>Filtro anticontaminación por encima de Bortle 7</b> — a este nivel los fabricantes recomiendan filtros narrowband. Galaxias y cúmulos requieren muchas horas: valora un lugar más oscuro.'
+                                        :               '⚠️ <b>博特尔 7 以上使用抗光害滤镜</b> ——在此污染等级下厂商建议使用窄带滤镜。星系和星团需要很长时间，建议前往更暗的地点。';
+                    else if (_ftIsEmission)
+                        filterTipCommon = lang==='it' ? '✅ <b>Filtro antinquinamento attivo</b> — buono anche per questa nebulosa. Per il massimo contrasto sulle nebulose a emissione un filtro dual-band (Ha/OIII) rende di più.'
+                                        : lang==='en' ? '✅ <b>Light pollution filter active</b> — also good for this nebula. For maximum contrast on emission nebulae a dual-band (Ha/OIII) filter performs better.'
+                                        : lang==='es' ? '✅ <b>Filtro anticontaminación activo</b> — también bueno para esta nebulosa. Para el máximo contraste en nebulosas de emisión rinde más un filtro dual-band (Ha/OIII).'
+                                        :               '✅ <b>抗光害滤镜已启用</b> ——同样适合该星云。若要在发射星云上获得最大对比度，双波段（Ha/OIII）滤镜效果更好。';
+                    else
+                        filterTipCommon = lang==='it' ? '✅ <b>Filtro antinquinamento attivo</b> — adatto a galassie, ammassi e nebulose a riflessione: toglie le righe dei lampioni al sodio e al mercurio mantenendo i colori. Con i lampioni LED il guadagno è minore: non sostituisce un cielo buio.'
+                                        : lang==='en' ? '✅ <b>Light pollution filter active</b> — suitable for galaxies, clusters and reflection nebulae: it removes sodium and mercury streetlight lines while keeping natural colours. With LED lighting the gain is smaller: it does not replace a dark sky.'
+                                        : lang==='es' ? '✅ <b>Filtro anticontaminación activo</b> — adecuado para galaxias, cúmulos y nebulosas de reflexión: elimina las líneas de las farolas de sodio y mercurio manteniendo los colores. Con farolas LED la ganancia es menor: no sustituye un cielo oscuro.'
+                                        :               '✅ <b>抗光害滤镜已启用</b> ——适合星系、星团和反射星云：去除钠灯和汞灯谱线并保持色彩。在 LED 照明下增益较小，无法替代暗夜天空。';
+                    // Filtro con banda infrarossa (es. Antlia Quad): dipende dalla camera e dall'ottica
+                    let _dbSel = document.getElementById('filter-db-select');
+                    let _dbOpt = _dbSel ? Array.from(_dbSel.options).find(o => o.value === (localStorage.getItem('filter_osc_db') || '')) : null;
+                    if (_dbOpt && _dbOpt.dataset.bwNoir) {
+                        let _ir = localStorage.getItem('filter_osc_ir') || 'nonso';
+                        let _telV = (document.getElementById('preset-telescope') || {}).value || '';
+                        let _telN = _telV.replace(/^__custom__\|/, '').split(',').slice(2).join(',');
+                        let _ota = (window._telOtaMap && window._telOtaMap[_telN]) ? window._telOtaMap[_telN].otaType : '';
+                        if (_ir === 'no' && !_ftIsEmission)
+                            filterTipCommon += lang==='it' ? '<br>ℹ️ Con una camera senza infrarosso questo filtro lascia passare poca luce delle galassie: rende poco.'
+                                             : lang==='en' ? '<br>ℹ️ With a camera that does not see infrared this filter passes little galaxy light: limited benefit.'
+                                             : lang==='es' ? '<br>ℹ️ Con una cámara sin infrarrojo este filtro deja pasar poca luz de las galaxias: rinde poco.'
+                                             :               '<br>ℹ️ 对于不感应红外的相机，该滤镜通过的星系光很少，效果有限。';
+                        if (_ir === 'nonso')
+                            filterTipCommon += '<br>ℹ️ ' + (lang==='it' ? 'Per questo filtro conta se la camera vede l\'infrarosso: <a href="#" onclick="apriModalFiltroOSC();return false;" style="color:#58a6ff;">indicalo nella finestra del filtro</a> per avere posa minima e consiglio precisi.'
+                                             : lang==='en' ? 'For this filter it matters whether your camera sees infrared: <a href="#" onclick="apriModalFiltroOSC();return false;" style="color:#58a6ff;">set it in the filter window</a> for accurate minimum exposure and advice.'
+                                             : lang==='es' ? 'Para este filtro importa si la cámara ve el infrarrojo: <a href="#" onclick="apriModalFiltroOSC();return false;" style="color:#58a6ff;">indícalo en la ventana del filtro</a> para obtener exposición mínima y consejo precisos.'
+                                             :               '对于该滤镜，相机是否感应红外很重要：<a href="#" onclick="apriModalFiltroOSC();return false;" style="color:#58a6ff;">请在滤镜窗口中设置</a>，以获得准确的最短曝光和建议。');
+                        if (_ir !== 'no' && (_ota === 'apo' || _ota === 'achro' || _ota === 'photo'))   // ottiche a lenti
+                            filterTipCommon += lang==='it' ? '<br>⚠️ Con un rifrattore l\'infrarosso va a fuoco in un punto diverso: stelle più grandi.'
+                                             : lang==='en' ? '<br>⚠️ With a refractor, infrared comes to focus at a different point: larger stars.'
+                                             : lang==='es' ? '<br>⚠️ Con un refractor el infrarrojo enfoca en un punto distinto: estrellas más grandes.'
+                                             :               '<br>⚠️ 使用折射镜时，红外光的焦点位置不同：星点会变大。';
                     }
                 } else if (bortle <= 3) {
                     filterTipCommon = lang==='it' ? '💡 <b>Filtri:</b> Cielo buio — nessun filtro antinquinamento necessario. Un filtro ridurrebbe il segnale.'
@@ -930,10 +1091,10 @@ function toggleLock(id) {
                                     :               '💡 <b>滤镜：</b>暗天空——不需要光污染滤镜，使用滤镜会降低信号。';
                 } else if (bortle <= 5) {
                     if (_ftIsEmission)
-                        filterTipCommon = lang==='it' ? '💡 <b>Filtri:</b> Cielo suburbano — per nebulose a emissione un filtro antinquinamento broadband è utile (es. CLS, L-Pro, Quadband). Per altri target meglio aumentare il tempo di integrazione.'
-                                        : lang==='en' ? '💡 <b>Filters:</b> Suburban sky — for emission nebulae a broadband light pollution filter is helpful (e.g. CLS, L-Pro, Quadband). For other targets, increase integration time instead.'
-                                        : lang==='es' ? '💡 <b>Filtros:</b> Cielo suburbano — para nebulosas de emisión un filtro anticontaminación broadband es útil (p.ej. CLS, L-Pro, Quadband). Para otros objetivos, aumentar el tiempo de integración.'
-                                        :               '💡 <b>滤镜：</b>郊区天空——对于发射星云，宽带光污染滤镜很有帮助（如CLS、L-Pro、Quadband）。其他目标建议增加曝光时间。';
+                        filterTipCommon = lang==='it' ? '💡 <b>Filtri:</b> Cielo suburbano — per nebulose a emissione un filtro antinquinamento broadband è utile (es. CLS, L-Pro, L-QEF). Per altri target meglio aumentare il tempo di integrazione.'
+                                        : lang==='en' ? '💡 <b>Filters:</b> Suburban sky — for emission nebulae a broadband light pollution filter is helpful (e.g. CLS, L-Pro, L-QEF). For other targets, increase integration time instead.'
+                                        : lang==='es' ? '💡 <b>Filtros:</b> Cielo suburbano — para nebulosas de emisión un filtro anticontaminación broadband es útil (p.ej. CLS, L-Pro, L-QEF). Para otros objetivos, aumentar el tiempo de integración.'
+                                        :               '💡 <b>滤镜：</b>郊区天空——对于发射星云，宽带光污染滤镜很有帮助（如CLS、L-Pro、L-QEF）。其他目标建议增加曝光时间。';
                     else
                         filterTipCommon = lang==='it' ? '💡 <b>Filtri:</b> Cielo suburbano — su galassie e ammassi i filtri antinquinamento hanno effetto limitato. Punta a più ore di integrazione.'
                                         : lang==='en' ? '💡 <b>Filters:</b> Suburban sky — light pollution filters have limited effect on galaxies and clusters. Aim for more integration time.'
@@ -941,21 +1102,21 @@ function toggleLock(id) {
                                         :               '💡 <b>滤镜：</b>郊区天空——光污染滤镜对星系和星团效果有限，建议增加曝光时间。';
                 } else if (bortle <= 7) {
                     if (_ftIsEmission)
-                        filterTipCommon = lang==='it' ? '💡 <b>Filtri:</b> Cielo urbano — <b>filtro antinquinamento broadband consigliato</b> per nebulose (es. CLS, UHC, L-Pro, Quadband). Migliora significativamente il contrasto.'
-                                        : lang==='en' ? '💡 <b>Filters:</b> Urban sky — <b>broadband light pollution filter recommended</b> for nebulae (e.g. CLS, UHC, L-Pro, Quadband). Significantly improves contrast.'
-                                        : lang==='es' ? '💡 <b>Filtros:</b> Cielo urbano — <b>filtro anticontaminación broadband recomendado</b> para nebulosas (p.ej. CLS, UHC, L-Pro, Quadband). Mejora significativamente el contraste.'
-                                        :               '💡 <b>滤镜：</b>城市天空——<b>强烈推荐宽带光污染滤镜</b>用于星云（如CLS、UHC、L-Pro、Quadband），可显著改善对比度。';
+                        filterTipCommon = lang==='it' ? '💡 <b>Filtri:</b> Cielo urbano — <b>filtro antinquinamento broadband consigliato</b> per nebulose (es. CLS, UHC, L-Pro, L-QEF). Migliora significativamente il contrasto.'
+                                        : lang==='en' ? '💡 <b>Filters:</b> Urban sky — <b>broadband light pollution filter recommended</b> for nebulae (e.g. CLS, UHC, L-Pro, L-QEF). Significantly improves contrast.'
+                                        : lang==='es' ? '💡 <b>Filtros:</b> Cielo urbano — <b>filtro anticontaminación broadband recomendado</b> para nebulosas (p.ej. CLS, UHC, L-Pro, L-QEF). Mejora significativamente el contraste.'
+                                        :               '💡 <b>滤镜：</b>城市天空——<b>强烈推荐宽带光污染滤镜</b>用于星云（如CLS、UHC、L-Pro、L-QEF），可显著改善对比度。';
                     else if (_ftIsBroadband)
-                        filterTipCommon = lang==='it' ? '💡 <b>Filtri:</b> Cielo urbano — su galassie e ammassi un filtro antinquinamento broadband (es. L-Pro) aiuta, ma è necessaria molta integrazione (15–20h+).'
-                                        : lang==='en' ? '💡 <b>Filters:</b> Urban sky — for galaxies and clusters a broadband filter (e.g. L-Pro) helps, but long integration is still required (15–20h+).'
-                                        : lang==='es' ? '💡 <b>Filtros:</b> Cielo urbano — para galaxias y cúmulos un filtro broadband (p.ej. L-Pro) ayuda, pero sigue siendo necesaria mucha integración (15–20h+).'
-                                        :               '💡 <b>滤镜：</b>城市天空——对于星系和星团，宽带滤镜（如L-Pro）有所帮助，但仍需大量曝光时间（15-20小时以上）。';
+                        filterTipCommon = lang==='it' ? '💡 <b>Filtri:</b> Cielo urbano — su galassie e ammassi un filtro antinquinamento broadband (es. L-Pro, L-QEF, IDAS LPS-D1) aiuta, ma è necessaria molta integrazione (15–20h+).'
+                                        : lang==='en' ? '💡 <b>Filters:</b> Urban sky — for galaxies and clusters a broadband filter (e.g. L-Pro, L-QEF, IDAS LPS-D1) helps, but long integration is still required (15–20h+).'
+                                        : lang==='es' ? '💡 <b>Filtros:</b> Cielo urbano — para galaxias y cúmulos un filtro broadband (p.ej. L-Pro, L-QEF, IDAS LPS-D1) ayuda, pero sigue siendo necesaria mucha integración (15–20h+).'
+                                        :               '💡 <b>滤镜：</b>城市天空——对于星系和星团，宽带滤镜（如L-Pro、L-QEF、IDAS LPS-D1）有所帮助，但仍需大量曝光时间（15-20小时以上）。';
                 } else {
                     if (_ftIsEmission)
-                        filterTipCommon = lang==='it' ? '💡 <b>Filtri:</b> Cielo da città — <b>filtro narrowband fortemente consigliato</b> per nebulose (es. dual-band Ha/OIII, Quadband, Tri-band). I filtri broadband sono insufficienti a questi livelli di inquinamento.'
-                                        : lang==='en' ? '💡 <b>Filters:</b> Heavy light pollution — <b>narrowband filter strongly recommended</b> for nebulae (e.g. dual-band Ha/OIII, Quadband, Tri-band). Broadband filters are insufficient at these pollution levels.'
-                                        : lang==='es' ? '💡 <b>Filtros:</b> Contaminación severa — <b>filtro narrowband muy recomendado</b> para nebulosas (p.ej. dual-band Ha/OIII, Quadband, Tri-band). Los filtros broadband son insuficientes a estos niveles.'
-                                        :               '💡 <b>滤镜：</b>严重光污染——<b>强烈推荐窄带滤镜</b>用于星云（如双波段Ha/OIII、Quadband、三波段）。宽带滤镜在此污染级别下效果不足。';
+                        filterTipCommon = lang==='it' ? '💡 <b>Filtri:</b> Cielo da città — <b>filtro narrowband fortemente consigliato</b> per nebulose (es. dual-band Ha/OIII, quad-band stretto, Tri-band). I filtri broadband sono insufficienti a questi livelli di inquinamento.'
+                                        : lang==='en' ? '💡 <b>Filters:</b> Heavy light pollution — <b>narrowband filter strongly recommended</b> for nebulae (e.g. dual-band Ha/OIII, narrow quad-band, Tri-band). Broadband filters are insufficient at these pollution levels.'
+                                        : lang==='es' ? '💡 <b>Filtros:</b> Contaminación severa — <b>filtro narrowband muy recomendado</b> para nebulosas (p.ej. dual-band Ha/OIII, quad-band estrecho, Tri-band). Los filtros broadband son insuficientes a estos niveles.'
+                                        :               '💡 <b>滤镜：</b>严重光污染——<b>强烈推荐窄带滤镜</b>用于星云（如双波段Ha/OIII、窄带四波段、三波段）。宽带滤镜在此污染级别下效果不足。';
                     else
                         filterTipCommon = lang==='it' ? '💡 <b>Filtri:</b> Cielo da città — su galassie e ammassi i risultati restano difficili anche con filtro. Considera di spostarti in un sito più buio o di usare un filtro narrowband per nebulose nelle vicinanze.'
                                         : lang==='en' ? '💡 <b>Filters:</b> Heavy light pollution — galaxies and clusters remain challenging even with filters. Consider a darker site or switch to nearby emission nebulae with narrowband filters.'
