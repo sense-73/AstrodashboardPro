@@ -1616,7 +1616,10 @@
             if (document.body.getAttribute('data-adp-sez') !== 'dso') { adpAstroStop(); return; }   // uscito dalla sezione DSO
             if (_adpAstroPlay.t0) _adpAstroPlay.pos += (ts - _adpAstroPlay.t0) / _ADP_MS_ORA_DSO;
             _adpAstroPlay.t0 = ts;
-            if (_adpAstroPlay.pos > mx) { _adpAstroPlay.pos = mn; _adpAstroPlay.ultima = -1; }
+            if (_adpAstroPlay.pos > mx) {
+                if (_adpAstroPlay.singolo) { _adpAstroPlay.pos = mn; adpAstroStop(); return; }   // giro automatico: un solo giro, poi torna all'inizio della notte
+                _adpAstroPlay.pos = mn; _adpAstroPlay.ultima = -1;
+            }
             const h = Math.floor(_adpAstroPlay.pos);
             if (h !== _adpAstroPlay.ultima) { _adpAstroPlay.ultima = h; _adpSync(h); }
             sl.value = _adpAstroPlay.pos;                              // cursore continuo
@@ -1635,7 +1638,7 @@
             if (!sl || sl.disabled) return;
             if (_adpPlay.attivo) adpStopPlay(false);                   // un solo play alla volta
             const mn = parseFloat(sl.min), mx = parseFloat(sl.max), cur = parseFloat(sl.value);
-            Object.assign(_adpAstroPlay, { attivo: true, pos: (cur >= mx ? mn : cur), ultima: -1, t0: 0 });
+            Object.assign(_adpAstroPlay, { attivo: true, singolo: false, pos: (cur >= mx ? mn : cur), ultima: -1, t0: 0 });
             sl.step = 'any';
             _adpAstroIcona();
             _adpAstroPlay.raf = requestAnimationFrame(_adpAstroFrame);
@@ -2155,4 +2158,47 @@
                 setInterval(etichette, 2000);            // lingua o mezzanotte: si aggiorna solo se qualcosa è cambiato
             }
             if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', avvia); else avvia();
+        })();
+
+        // ============================================================
+        // ADP 9.0 — S9: passaggio tra le sezioni e play.
+        // • Uscendo da Meteo il play meteo si ferma (resta l'ora raggiunta).
+        // • Alla PRIMA entrata in DSO parte un solo giro automatico dello slider DSO
+        //   (1 s/ora), che poi torna all'inizio della notte. Non parte se si arriva in
+        //   DSO scegliendo un target dal popup Analisi notte; aspetta che il popup sia
+        //   chiuso; si annulla trascinando lo slider, premendo ▶/❚❚ o uscendo da DSO.
+        // ============================================================
+        (function () {
+            let autoFatto = false, attesa = null;
+            function avviaGiroDSO() {
+                const sl = document.getElementById('astroSlider');
+                if (autoFatto || !sl || document.body.getAttribute('data-adp-sez') !== 'dso') { attesa = null; return; }
+                if (sl.disabled || _adpPopupAperto()) { attesa = setTimeout(avviaGiroDSO, 400); return; }   // dati non pronti o popup aperto
+                attesa = null; autoFatto = true;
+                if (_adpAstroPlay.attivo) return;
+                if (_adpPlay.attivo) _adpInterrompi();
+                const mn = parseFloat(sl.min);
+                Object.assign(_adpAstroPlay, { attivo: true, singolo: true, pos: mn, ultima: -1, t0: 0 });
+                sl.step = 'any';
+                _adpAstroIcona();
+                _adpAstroPlay.raf = requestAnimationFrame(_adpAstroFrame);
+            }
+            new MutationObserver(() => {
+                const sez = document.body.getAttribute('data-adp-sez');
+                if (sez !== 'pos' && _adpPlay.attivo) _adpInterrompi();                      // fuori da Meteo: stop play meteo
+                if (sez === 'dso' && !autoFatto && !attesa) attesa = setTimeout(avviaGiroDSO, 500);
+                if (sez !== 'dso' && attesa) { clearTimeout(attesa); attesa = null; }
+            }).observe(document.body, { attributes: true, attributeFilter: ['data-adp-sez'] });
+            // scelte dell'utente prima che il giro parta: niente giro automatico
+            const annulla = () => { if (!autoFatto) { autoFatto = true; if (attesa) { clearTimeout(attesa); attesa = null; } } };
+            const syncPrima = syncSliders;
+            syncSliders = function () { if (!_adpInterno && document.body.getAttribute('data-adp-sez') === 'dso') annulla(); return syncPrima.apply(this, arguments); };
+            document.addEventListener('click', e => { if (e.target.closest && e.target.closest('#adp-astro-play')) annulla(); }, true);   // ▶/❚❚ premuto a mano
+            function avvolgiPopup() {
+                if (typeof _npApriNelPlanetario !== 'function' || _npApriNelPlanetario._adpS9) return;
+                const orig = _npApriNelPlanetario;
+                _npApriNelPlanetario = function () { annulla(); return orig.apply(this, arguments); };   // target dal popup: resta la sua ora
+                _npApriNelPlanetario._adpS9 = true;
+            }
+            if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', avvolgiPopup); else avvolgiPopup();
         })();
