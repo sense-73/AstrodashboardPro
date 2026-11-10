@@ -3556,6 +3556,24 @@ i18n.it.sensor_auto_color = "Sequenza impostata su sensore a colori (OSC) dal se
 i18n.en.sensor_auto_color = "Sequence set to colour (OSC) sensor from the selected camera";
 i18n.es.sensor_auto_color = "Secuencia ajustada a sensor a color (OSC) según la cámara elegida";
 i18n.zh.sensor_auto_color = "已根据所选相机将序列设为彩色（OSC）传感器";
+// 9.x — gain ottimale impostato dalla camera scelta ({g} = gain, {cam} = nome camera)
+i18n.it.gain_auto_set  = "Gain impostato a {g}: ottimale per {cam} (basso rumore). Dark e bias allineati.";
+i18n.en.gain_auto_set  = "Gain set to {g}: optimal for {cam} (low noise). Darks and bias aligned.";
+i18n.es.gain_auto_set  = "Gain ajustado a {g}: óptimo para {cam} (bajo ruido). Darks y bias alineados.";
+i18n.zh.gain_auto_set  = "增益已设为 {g}：{cam} 的最佳值（低噪声）。暗场和偏置场已同步。";
+i18n.it.gain_auto_nina = "Gain: Auto — per questa camera verrà usato il valore impostato in N.I.N.A.";
+i18n.en.gain_auto_nina = "Gain: Auto — the value set in N.I.N.A. will be used for this camera.";
+i18n.es.gain_auto_nina = "Gain: Auto — para esta cámara se usará el valor configurado en N.I.N.A.";
+i18n.zh.gain_auto_nina = "增益：自动 — 此相机将使用 N.I.N.A. 中设置的值。";
+i18n.it.gain_calib_linked = "Segue il gain dei light: dark e bias devono avere lo stesso gain per la calibrazione";
+i18n.en.gain_calib_linked = "Follows the lights' gain: darks and bias must have the same gain for calibration";
+i18n.es.gain_calib_linked = "Sigue el gain de los lights: darks y bias deben tener el mismo gain para la calibración";
+i18n.zh.gain_calib_linked = "跟随亮场增益：暗场和偏置场必须与亮场增益相同才能校准";
+// 9.x — tooltip "Posa minima consigliata" (finestra Configurazione Filtro Narrowband)
+i18n.it.filter_min_exp_tip = "<b>Posa minima consigliata</b>: la durata più breve di ogni singola posa perché il rumore di lettura della camera diventi trascurabile rispetto alla luce del fondo cielo (meno del 5% di rumore in più). Dipende da Bortle, rapporto focale, filtro e sensore. Pose più lunghe vanno bene; pose più corte aggiungono rumore. Il valore è calcolato per il gain a basso rumore (HCG): a gain 0 la posa minima è molto più lunga.";
+i18n.en.filter_min_exp_tip = "<b>Recommended minimum exposure</b>: the shortest duration of each single sub for the camera's read noise to become negligible compared with the sky background light (less than 5% extra noise). It depends on Bortle class, focal ratio, filter and sensor. Longer subs are fine; shorter subs add noise. The value is computed for the low-noise gain (HCG): at gain 0 the minimum exposure is much longer.";
+i18n.es.filter_min_exp_tip = "<b>Exposición mínima recomendada</b>: la duración más corta de cada toma individual para que el ruido de lectura de la cámara sea despreciable frente a la luz del fondo de cielo (menos del 5% de ruido adicional). Depende de la clase Bortle, la relación focal, el filtro y el sensor. Las tomas más largas están bien; las más cortas añaden ruido. El valor se calcula para el gain de bajo ruido (HCG): con gain 0 la exposición mínima es mucho más larga.";
+i18n.zh.filter_min_exp_tip = "<b>建议最短曝光</b>：每张单帧的最短时长，使相机读出噪声相对于天空背景光可以忽略（噪声增加不到 5%）。它取决于波特尔等级、焦比、滤镜和传感器。更长的单帧没有问题；更短的单帧会增加噪声。该值按低噪声增益（HCG）计算：在增益 0 时最短曝光会长得多。";
 
 i18n.it.np_ok                 = "OK";
 i18n.en.np_ok                 = "OK";

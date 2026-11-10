@@ -139,6 +139,8 @@
             { nome: "PlayerOne Saturn-M SQR (IMX533)",     w: 11.31, h: 11.31, p: 3.76, tipo: "M" }, // 1" sq
             { nome: "PlayerOne Uranus-C PRO (IMX585)",     w: 11.14, h:  6.26, p: 2.9, tipo: "C" }, // 1/1.2"
             { nome: "PlayerOne Uranus-M PRO (IMX585)",     w: 11.14, h:  6.26, p: 2.9, tipo: "M" },
+            { nome: "PlayerOne Uranus-C (IMX585)",         w: 11.14, h:  6.26, p: 2.9, tipo: "C" }, // non raffreddata — 9.x
+            { nome: "PlayerOne Uranus-M (IMX585)",         w: 11.14, h:  6.26, p: 2.9, tipo: "M" }, // non raffreddata — 9.x
             { nome: "PlayerOne Ares-C PRO (IMX533)",       w: 11.31, h: 11.31, p: 3.76, tipo: "C" }, // 1" sq — NUOVO
             { nome: "PlayerOne Ares-M PRO (IMX533)",       w: 11.31, h: 11.31, p: 3.76, tipo: "M" },
             { nome: "PlayerOne Artemis-C PRO (IMX294)",    w: 19.1,  h: 13.0,  p: 4.63, tipo: "C" }, // 4/3" color — CORRETTO
@@ -193,6 +195,52 @@
             { nome: "Nikon Z6 / Z6 II (FF)",             w: 35.9, h: 23.9, p: 5.94, tipo: "C" },
             { nome: "Sony A7S III (FF)",                 w: 35.6, h: 23.8, p: 8.4, tipo: "C" },
         ];
+
+        // ── 9.x: gain ottimale per camera (tabella approvata 10/11/2026, doc ADP_gain_ottimale_camere.md) ──
+        // Valore scritto nei campi gain della Sequenza quando l'utente sceglie la camera.
+        // Criterio: gain in cui si attiva l'HCG (basso rumore); senza HCG: unity gain (1 e-/ADU).
+        // Camere assenti dalla tabella (QHY con più modalità, Atik, reflex, chip generici,
+        // camere personalizzate) → "Auto" = valore impostato in N.I.N.A.
+        const _ADP_GAIN_CAMERA = {
+            // ZWO
+            "ZWO ASI2600MC (APS-C)": 100, "ZWO ASI2600MM (APS-C)": 100,
+            "ZWO ASI6200MC (FF)": 100,    "ZWO ASI6200MM (FF)": 100,
+            "ZWO ASI533MC (sq)": 100,     "ZWO ASI533MM (sq)": 100,
+            "ZWO ASI461MM Pro (IMX461)": 100,
+            "ZWO ASI294MC (4/3\")": 120,  "ZWO ASI294MM (4/3\")": 120,
+            "ZWO ASI2400MC (FF)": 140,
+            "ZWO ASI432MM": 140,
+            "ZWO ASI585MC": 200,
+            "ZWO ASI662MC": 252,
+            "ZWO ASI664MC (IMX664)": 252,
+            "ZWO ASI678MC (IMX678)": 182,
+            "ZWO ASI676MC (IMX676)": 180,
+            "ZWO ASI715MC": 150,
+            "ZWO ASI462MC": 80,
+            "ZWO ASI485MC": 80,
+            "ZWO ASI224MC": 60,
+            "ZWO ASI1600MC (4/3\")": 139, "ZWO ASI1600MM (4/3\")": 139,   // unity (no HCG)
+            "ZWO ASI183MC (1\")": 111,    "ZWO ASI183MM (1\")": 111,      // unity (no HCG)
+            "ZWO ASI174MC": 189,          "ZWO ASI174MM": 189,            // unity (no HCG)
+            "ZWO ASI290MC": 110,          "ZWO ASI290MM": 110,            // unity
+            // Player One
+            "PlayerOne Poseidon-C PRO (IMX571)": 125, "PlayerOne Poseidon-M PRO (IMX571)": 125,
+            "PlayerOne Zeus 455C PRO (IMX455)": 125,  "PlayerOne Zeus 455M PRO (IMX455)": 125,
+            "PlayerOne Ares-C PRO (IMX533)": 125,     "PlayerOne Ares-M PRO (IMX533)": 125,
+            "PlayerOne Saturn-C SQR (IMX533)": 125,   "PlayerOne Saturn-M SQR (IMX533)": 125,
+            "PlayerOne Artemis-C PRO (IMX294)": 120,  "PlayerOne Artemis-M PRO (IMX492)": 120,
+            "PlayerOne Uranus-C PRO (IMX585)": 210,   "PlayerOne Uranus-M PRO (IMX585)": 210,
+            "PlayerOne Uranus-C (IMX585)": 210,       "PlayerOne Uranus-M (IMX585)": 210,
+            "PlayerOne Mars-C II (IMX662)": 210,
+            "PlayerOne Neptune-C II (IMX464)": 80,
+            // Svbony
+            "Svbony SV605CC (IMX533)": 120,
+            "Svbony SV705C (IMX585)": 275,
+            // QHY (solo modelli senza ambiguità di modalità di lettura)
+            "QHY183C (1\")": 10,          "QHY183M (1\")": 10,            // unity
+            "QHY533C (1\" sq)": 60,       "QHY533M (1\" sq)": 60,
+            "QHY miniCAM8 Color (IMX585)": 76, "QHY miniCAM8 Mono (IMX585)": 76
+        };
 
 
         // ── Helper: legge e deserializza JSON dal localStorage in modo sicuro ──
@@ -310,8 +358,9 @@
                 if(p[2]) document.getElementById('pixel-size').value=p[2];
                 aggiornaFOV();
                 if (typeof aggiornaAI === 'function') aggiornaAI();
-                _adpTipoDaSensore();
-            } 
+                const msgTipo = _adpTipoDaSensore();      // dopo l'eventuale ridisegno della griglia
+                _adpGainDaSensore(msgTipo);               // 9.x: gain ottimale per la camera scelta
+            }
         }
 
         // ── 9.0: il sensore scelto imposta Colore/Mono nella Sequenza (Smart e PRO) ──
@@ -333,7 +382,42 @@
                 ps.value = val;
                 ['disegnaGrigliaPro', 'aggiornaFiltriNinaPro'].forEach(f => { if (typeof window[f] === 'function') { try { window[f](); } catch (e) {} } });
             }
-            if (typeof mostraAvviso === 'function') mostraAvviso(t(val === 'mono' ? 'sensor_auto_mono' : 'sensor_auto_color'), 'info');
+            return t(val === 'mono' ? 'sensor_auto_mono' : 'sensor_auto_color');   // 9.x: avviso mostrato da _adpGainDaSensore
+        }
+
+        // ── 9.x: la camera scelta imposta il gain ottimale nella Sequenza (Smart e PRO) ──
+        // Chiamata solo da applicaPresetSensore (scelta della camera da parte dell'utente),
+        // mai all'avvio: il gain salvato dall'utente resta finché non cambia camera.
+        // Scrive lo stesso valore su light, HDR, dark e bias (dark e bias devono avere
+        // lo stesso gain dei light per la calibrazione). L'offset non viene toccato.
+        // msgTipo: eventuale avviso Colore/Mono di _adpTipoDaSensore, unito in un solo messaggio.
+        function _adpGainDaSensore(msgTipo) {
+            const sel = document.getElementById('preset-sensor');
+            const o = sel && sel.selectedIndex >= 0 ? sel.options[sel.selectedIndex] : null;
+            const nome = o ? o.textContent.replace('⭐ ', '').trim() : '';
+            const custom = !!(o && o.value && o.value.indexOf('__custom__') === 0);
+            const g = (!custom && Object.prototype.hasOwnProperty.call(_ADP_GAIN_CAMERA, nome)) ? _ADP_GAIN_CAMERA[nome] : null;
+            const val = g === null ? 'Auto' : String(g);
+
+            const luci = ['c-light', 'm-l', 'm-r', 'm-g', 'm-b', 'm-ha', 'm-oiii', 'm-sii'];
+            const calib = ['c-dark', 'c-bias', 'm-dark', 'm-bias'];
+            const ids = [];
+            ['', 'pro-'].forEach(pre => {
+                luci.forEach(fid => { ids.push(`${pre}${fid}-gain`, `${pre}${fid}-hdr-gain`); });
+                calib.forEach(fid => ids.push(`${pre}${fid}-gain`));
+            });
+            ids.forEach(id => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                el.value = val;
+                if (typeof adSave === 'function') adSave(id, val);
+            });
+
+            if (document.body.classList.contains('mode-lite') || typeof mostraAvviso !== 'function') return;
+            const msgGain = g === null
+                ? t('gain_auto_nina')
+                : t('gain_auto_set').replace('{g}', val).replace('{cam}', nome);
+            mostraAvviso(msgTipo ? `${msgTipo} · ${msgGain}` : msgGain, 'info');
         }
 
         // ── 9.0: compatibilità con i nomi dei telescopi del database precedente ──

@@ -463,7 +463,7 @@
                     _adpCell('name', '', `<div style="font-weight: bold; color: #aaa; font-size: 0.9em;">${defaultName}</div>`) +
                     _adpCell('pose', t('tbl_col_pose'), `<input type="number" id="pro-${f.id}-count" value="${defaultCount}" min="0" oninput="calcolaNightFillBar()" style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box;">`) +
                     _adpCell('secs', t('tbl_col_secs'), expCell) +
-                    _adpCell('gain', t('tbl_col_gain'), `<input type="text" id="pro-${f.id}-gain" value="${f.id.includes('bias') ? '0' : 'Auto'}" style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box;">`) +
+                    _adpCell('gain', t('tbl_col_gain'), `<input type="text" id="pro-${f.id}-gain" value="Auto" readonly title="${t('gain_calib_linked')}" style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box; opacity:0.6; cursor:not-allowed;">`) +   // 9.x: gain = gain dei light (sola lettura)
                     _adpCell('off', t('tbl_col_offset'), `<input type="text" id="pro-${f.id}-offset" value="Auto" style="width: 100%!important; text-align: center; padding: 4px!important; box-sizing: border-box;">`) +
                     _adpCell('bin', t('tbl_col_bin'), `<select id="pro-${f.id}-bin" style="width: 100%!important; padding: 4px!important; box-sizing: border-box;">
                         <option value="1">1x1</option><option value="2">2x2</option><option value="3">3x3</option>
@@ -474,6 +474,8 @@
             });
 
             _proRipristinaValori(frameList);
+            // 9.x: dark e bias riallineati al gain dei light dopo il ripristino dei valori salvati
+            if (typeof _adpSincronizzaGainCalibrazione === 'function') _adpSincronizzaGainCalibrazione('pro-');
             calcolaNightFillBar();
         }
 

@@ -481,7 +481,11 @@ function toggleLock(id) {
                     : `<input type="number" id="${f.id}-count" value="${f.dC}" min="0" oninput="calcolaTempi()" style="width:100%!important;text-align:center;padding:3px!important;">`;
 
                 // Valore default exp: Dark = segue il primo Light, Bias = 0
-                let defGain = isBs ? '0' : 'Auto';
+                // 9.x: gain di dark e bias = gain dei light (sola lettura, vedi _adpSincronizzaGainCalibrazione)
+                let defGain = 'Auto';
+                let gainLock = (isDk || isBs)
+                    ? ` readonly title="${t('gain_calib_linked')}" style="width:100%!important;text-align:center;padding:3px!important;opacity:0.6;cursor:not-allowed;"`
+                    : ` style="width:100%!important;text-align:center;padding:3px!important;"`;
                 let expInput = isDk
                     ? `<input type="number" id="${f.id}-exp" data-is-dark="1" value="${f.dE}" min="0" oninput="calcolaTempi()" style="width:100%!important;text-align:center;padding:3px!important;">`
                     : isBs
@@ -509,7 +513,7 @@ function toggleLock(id) {
                     _adpCell('name', '', nameCell) +
                     _adpCell('pose', t('tbl_col_pose'), countCell) +
                     _adpCell('secs', t('tbl_col_secs'), expInput) +
-                    _adpCell('gain', t('tbl_col_gain'), `<input type="text" id="${f.id}-gain" value="${defGain}" style="width:100%!important;text-align:center;padding:3px!important;">`) +
+                    _adpCell('gain', t('tbl_col_gain'), `<input type="text" id="${f.id}-gain" value="${defGain}"${gainLock}>`) +
                     _adpCell('off', t('tbl_col_offset'), `<input type="text" id="${f.id}-offset" value="Auto" style="width:100%!important;text-align:center;padding:3px!important;">`) +
                     _adpCell('bin', t('tbl_col_bin'), `<select id="${f.id}-bin" style="width:100%!important;padding:3px!important;">
                         <option value="1">1x1</option><option value="2">2x2</option><option value="3">3x3</option><option value="4">4x4</option>
@@ -662,6 +666,41 @@ function toggleLock(id) {
             let darkExp  = document.getElementById(`${darkId}-exp`);
             if (lightExp && darkExp) darkExp.value = lightExp.value;
         }
+
+        // ── 9.x: dark e bias seguono il gain dei light (Smart: pre='' · PRO: pre='pro-') ──
+        // Per la calibrazione dark e bias devono avere lo stesso gain dei light: i loro campi
+        // gain sono in sola lettura e copiano quello del primo light attivo (spuntato e con
+        // pose > 0), oppure del primo light se nessuno è attivo. Chiamata da: cambio gain di
+        // un light, spunta/pose di un filtro (gestore delegato più sotto), avvio dell'app,
+        // ridisegno della griglia PRO.
+        function _adpSincronizzaGainCalibrazione(pre) {
+            pre = pre || '';
+            const isM = (document.getElementById('sensor-type') || {}).value === 'mono';
+            const luci = isM ? ['m-l', 'm-r', 'm-g', 'm-b', 'm-ha', 'm-oiii', 'm-sii'] : ['c-light'];
+            const calib = isM ? ['m-dark', 'm-bias'] : ['c-dark', 'c-bias'];
+            let src = null;
+            for (const fid of luci) {
+                const g = document.getElementById(`${pre}${fid}-gain`);
+                if (!g) continue;
+                if (!src) src = g;                                            // ripiego: primo light
+                const chk = document.getElementById(`${pre}${fid}-check`);    // solo Smart
+                const cnt = document.getElementById(`${pre}${fid}-count`);
+                const attivo = (!chk || chk.checked) && (!cnt || (parseInt(cnt.value) || 0) > 0);
+                if (attivo) { src = g; break; }
+            }
+            if (!src) return;
+            calib.forEach(fid => {
+                const el = document.getElementById(`${pre}${fid}-gain`);
+                if (!el || el.value === src.value) return;
+                el.value = src.value;
+                if (typeof adSave === 'function') adSave(el.id, el.value);
+            });
+        }
+        // Avvio: dopo caricaPreferenze (DOMContentLoaded) riallinea eventuali valori salvati
+        // dalle versioni precedenti (es. bias a gain 0), non più modificabili a mano.
+        window.addEventListener('load', function() {
+            try { _adpSincronizzaGainCalibrazione(''); _adpSincronizzaGainCalibrazione('pro-'); } catch (e) {}
+        });
 
         function aggiornaAI() {
             if(!targetSelezionato) return;
@@ -1820,6 +1859,11 @@ function toggleLock(id) {
                 if (!el || el.tagName !== 'INPUT') return;
                 let id = el.id; // es. "m-l-gain", "pro-m-r-offset"
                 if (!id) return;
+                // 9.x: spunta o numero di pose di un filtro → il "primo light attivo" può cambiare
+                if (id.endsWith('-check') || id.endsWith('-count')) {
+                    _adpSincronizzaGainCalibrazione(id.startsWith('pro-') ? 'pro-' : '');
+                    return;
+                }
                 let field = null;
                 if (id.endsWith('-gain'))   field = 'gain';
                 if (id.endsWith('-offset')) field = 'offset';
@@ -1827,6 +1871,9 @@ function toggleLock(id) {
                 // Ricostruisce il filterId rimuovendo il suffisso "-gain"/"-offset"
                 let filterId = id.slice(0, -(field.length + 1));
                 propagate(filterId, field, el.value);
+                // 9.x: dark e bias seguono il gain dei light (dopo la propagazione al gruppo)
+                if (field === 'gain' && !filterId.includes('dark') && !filterId.includes('bias'))
+                    _adpSincronizzaGainCalibrazione(filterId.startsWith('pro-') ? 'pro-' : '');
             }
 
             document.addEventListener('input',  handler, true);
