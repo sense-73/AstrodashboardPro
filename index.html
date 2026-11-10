@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AstroDashboardPRO v9.0 - Global Edition</title>
+    <title>AstroDashboardPRO v9.1 - Global Edition</title>
     
     <link rel="manifest" href="manifest.json?v=3">
     <meta name="theme-color" content="#121212">
@@ -657,7 +657,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 19a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6l0 13" /><path d="M12 6l0 13" /><path d="M21 6l0 13" /></svg>
                     <span class="nav-manual-text" data-i18n="manual_btn" style="letter-spacing:.3px;">Guida</span>
                 </button>
-                <button onclick="mostraChangelogManuale()" title="Versione & novità" class="nav-version-btn" style="background:rgba(196,154,60,0.08); border:1px solid rgba(196,154,60,0.3); border-radius:5px; padding:3px 8px; color:#c49a3c; font-size:10px; font-weight:700; cursor:pointer; flex-shrink:0; letter-spacing:.5px;">v9.0</button>
+                <button onclick="mostraChangelogManuale()" title="Versione & novità" class="nav-version-btn" style="background:rgba(196,154,60,0.08); border:1px solid rgba(196,154,60,0.3); border-radius:5px; padding:3px 8px; color:#c49a3c; font-size:10px; font-weight:700; cursor:pointer; flex-shrink:0; letter-spacing:.5px;">v9.1</button>
             </div>
         </div>
 
@@ -829,7 +829,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                 <a href="https://www.paypal.com/donate/?business=enrico.salis%40gmail.com&currency_code=EUR" target="_blank" rel="noopener" style="background:linear-gradient(135deg,#003087,#009cde); border:none; border-radius:6px; padding:6px 14px; color:#fff; font-size:12px; font-weight:700; cursor:pointer; display:flex; align-items:center; gap:6px; text-decoration:none; transition:opacity 0.2s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c1.379 3.53-.923 7.947-6.712 7.947H11.23l-1.332 8.453h3.288c.524 0 .968-.382 1.05-.9l.87-5.505h2.163c4.298 0 7.066-2.076 7.953-6.36.41-1.99.073-3.466-.8-4.094z"/></svg>
                     <span data-i18n="support_btn">Supporta il progetto</span>                </a>
-                <span style="font-size:14px; color:#3d4852;">v9.0</span>
+                <span style="font-size:14px; color:#3d4852;">v9.1</span>
             </div>
         </div>
 
@@ -988,7 +988,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
 
                 <!-- Legenda Inquinamento Luminoso \u2014 visibile solo con layer LP attivo -->
                 <div id="lp-legend" style="display:none; margin-top:10px; padding:10px 14px; background:#161b22; border:1px solid #ffaa00; border-radius:8px;">
-                    <div style="font-weight:bold; color:#c49a3c; margin-bottom:8px;"> <svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-globe"/></svg> <span data-i18n="lp_legend_title">Scala Inquinamento Luminoso (Lorenz 2024)</span></div>
+                    <div style="font-weight:bold; color:#c49a3c; margin-bottom:8px;"> <svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-globe"/></svg> <span data-i18n="lp_legend_title">Scala Inquinamento Luminoso (Lorenz 2025)</span></div>
                     <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center;">
                         <span class="lp-zone-chip" style="background:#1a1a1a;" onmouseenter="mostraTooltip(this,'lp_b1')" onmouseleave="nascondiTooltip()" onclick="mostraTooltip(this,'lp_b1')">1</span>
                         <span class="lp-zone-chip" style="background:#404040;" onmouseenter="mostraTooltip(this,'lp_b2')" onmouseleave="nascondiTooltip()" onclick="mostraTooltip(this,'lp_b2')">2</span>
@@ -1992,7 +1992,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <li><strong>Jet Stream:</strong> Il vero nemico del Seeing. Un valore sotto i 50 km/h sopra la tua posizione garantisce cieli stabili e stelle puntiformi. Oltre i 100 km/h la turbolenza atmosferica devasterà i dettagli fini — inutile usare focali lunghe.</li>
                     <li><strong>Allarme Umidità:</strong> Se il dato supera l'85% (indicatore rosso), attiva le fasce riscaldanti anticondensa al massimo della potenza <em>prima</em> che la temperatura scenda al punto di rugiada. Una volta che l'ottica è appannata, la serata è compromessa.</li>
                     <li><strong>Inquinamento Lunare:</strong> Mostra la percentuale di cielo "bruciato" dalla luce della Luna in base alla sua fase e posizione. La penalità si azzera automaticamente quando la Luna è sotto l'orizzonte. Un valore alto scoraggia le riprese a banda larga — considera filtri narrowband (Ha, OIII, SII) che tagliano il continuo lunare.</li>
-                    <li><strong>Inquinamento Luminoso (Layer Atlas 2024):</strong> Attiva il pulsante <em>Inquinamento Luminoso</em> (sotto il selettore Bortle) per sovrapporre alla mappa la scala di Bortle a colori reali (dati VIIRS 2024 di David Lorenz): blu scuro = cielo pristino (Bortle 1–2), verde = rurale (3–4), giallo = suburbano (5), arancione = periferia urbana (6–7), bianco = centro città (8–9). Quando il layer è attivo, sulla mappa compare la legenda colorata. Usa questo layer per individuare visivamente il tuo livello Bortle reale e impostarlo nel selettore — influisce direttamente sui consigli filtri dell'assistente.</li>
+                    <li><strong>Inquinamento Luminoso (Layer Atlas 2025):</strong> Attiva il pulsante <em>Inquinamento Luminoso</em> (sotto il selettore Bortle) per sovrapporre alla mappa la scala di Bortle a colori reali (dati VIIRS 2024 di David Lorenz): blu scuro = cielo pristino (Bortle 1–2), verde = rurale (3–4), giallo = suburbano (5), arancione = periferia urbana (6–7), bianco = centro città (8–9). Quando il layer è attivo, sulla mappa compare la legenda colorata. Usa questo layer per individuare visivamente il tuo livello Bortle reale e impostarlo nel selettore — influisce direttamente sui consigli filtri dell'assistente.</li>
                     <li><strong>Selettore Bortle:</strong> Imposta il livello di inquinamento luminoso del tuo sito di osservazione (1 = cielo buio totale, 9 = centro città). Il valore viene usato dall'assistente filtri per calibrare i consigli sui filtri: cieli scuri (1–3) non richiedono filtri LP; cieli suburbani (4–7) beneficiano di filtri broadband (CLS, L-Pro, Quadband); cieli urbani (8–9) rendono indispensabile il narrowband (Ha/OIII dual-band). Clicca ℹ️ per istruzioni su come trovare il tuo Bortle con il layer mappa.</li>
                     <li><strong>Seeing sulla mappa:</strong> la stima del seeing è sempre visibile in basso al centro della mappa, con voto e giudizio. Toccandola si apre la scala di Antoniadi. Sullo smartphone il selettore Bortle e il pulsante Inquinamento Luminoso stanno sotto la mappa, e quando accendi il layer la pagina si sposta da sola sulla mappa.</li>
                 </ul>
@@ -2105,7 +2105,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <li><strong>Catalogo locale degli oggetti:</strong> <a href="https://github.com/Stellarium/stellarium" target="_blank" rel="noopener" style="color:#58a6ff;">Catalogo DSO di Stellarium</a> (GPL-2.0+) e <a href="https://github.com/mattiaverga/OpenNGC" target="_blank" rel="noopener" style="color:#58a6ff;">OpenNGC</a> di Mattia Verga (CC BY-SA 4.0): NGC, IC, Messier, Caldwell, Barnard, Sharpless, van den Bergh, LDN, LBN, Collinder, Melotte. Viene usato quando SIMBAD non risponde; in quel caso la scheda indica «Fonte: catalogo Stellarium / OpenNGC».</li>
                     <li><strong>Ricerca oggetti:</strong> <a href="https://simbad.cds.unistra.fr/" target="_blank" rel="noopener" style="color:#58a6ff;">SIMBAD</a> e Sesame del CDS di Strasburgo (ODbL). This research has made use of the SIMBAD database, operated at CDS, Strasbourg, France.</li>
                     <li><strong>Simulatore FOV:</strong> <a href="https://aladin.cds.unistra.fr/AladinLite/" target="_blank" rel="noopener" style="color:#58a6ff;">Aladin Lite</a> del CDS (GPL-3.0). Immagini Digitized Sky Survey (DSS2 a colori) dal CDS, con copie di riserva di ESA ESASky e NASA MAST/STScI. The Digitized Sky Surveys were produced at the Space Telescope Science Institute under U.S. Government grant NAG W-2166.</li>
-                    <li><strong>Meteo e mappe:</strong> <a href="https://open-meteo.com/" target="_blank" rel="noopener" style="color:#58a6ff;">Open-Meteo</a> (CC BY 4.0); <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener" style="color:#58a6ff;">© OpenStreetMap contributors</a> e Nominatim (ODbL); mappa di base <a href="https://carto.com/attributions" target="_blank" rel="noopener" style="color:#58a6ff;">© CARTO</a>; <a href="https://djlorenz.github.io/astronomy/lp/" target="_blank" rel="noopener" style="color:#58a6ff;">Light Pollution Atlas 2024</a> di D. Lorenz (dati VIIRS).</li>
+                    <li><strong>Meteo e mappe:</strong> <a href="https://open-meteo.com/" target="_blank" rel="noopener" style="color:#58a6ff;">Open-Meteo</a> (CC BY 4.0); <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener" style="color:#58a6ff;">© OpenStreetMap contributors</a> e Nominatim (ODbL); mappa di base <a href="https://carto.com/attributions" target="_blank" rel="noopener" style="color:#58a6ff;">© CARTO</a>; <a href="https://djlorenz.github.io/astronomy/lp/" target="_blank" rel="noopener" style="color:#58a6ff;">Light Pollution Atlas 2025</a> di D. Lorenz (dati VIIRS).</li>
                     <li><strong>Descrizioni e immagini:</strong> <a href="https://www.wikipedia.org/" target="_blank" rel="noopener" style="color:#58a6ff;">Wikipedia</a> (CC BY-SA 4.0), <a href="https://www.wikidata.org/" target="_blank" rel="noopener" style="color:#58a6ff;">Wikidata</a> (CC0), <a href="https://images.nasa.gov/" target="_blank" rel="noopener" style="color:#58a6ff;">NASA Image and Video Library</a>.</li>
                     <li><strong>Librerie:</strong> Leaflet, SunCalc, Chart.js, jsPDF, jsPDF-AutoTable, Rive, font Audiowide (SIL OFL). Statistiche di visita anonime: GoatCounter.</li>
                 </ul>
@@ -2175,7 +2175,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <li><strong>Jet Stream:</strong> The true enemy of Seeing. Values below 50 km/h guarantee stable skies and pinpoint stars. Above 100 km/h, atmospheric turbulence will destroy fine detail — avoid long focal lengths.</li>
                     <li><strong>Humidity Alarm:</strong> If the reading exceeds 85% (red indicator), activate your dew heaters at full power <em>before</em> the temperature drops to the dew point. Once optics fog up, the session is ruined.</li>
                     <li><strong>Moon Pollution:</strong> Shows the percentage of sky "burned" by moonlight based on current phase and position. The penalty automatically drops to zero when the Moon is below the horizon. High values discourage broadband imaging — consider narrowband filters (Ha, OIII, SII) which cut lunar continuum.</li>
-                    <li><strong>Light Pollution Layer (Atlas 2024):</strong> Enable the <em>Light Pollution</em> button (below the Bortle selector) to overlay the Bortle colour scale on the map (VIIRS 2024 data by David Lorenz): dark blue = pristine sky (Bortle 1–2), green = rural (3–4), yellow = suburban (5), orange = urban fringe (6–7), white = city centre (8–9). When the layer is active, a colour legend appears on the map. Use this layer to visually identify your real Bortle level and set it in the selector — it directly affects the filter advisor recommendations.</li>
+                    <li><strong>Light Pollution Layer (Atlas 2025):</strong> Enable the <em>Light Pollution</em> button (below the Bortle selector) to overlay the Bortle colour scale on the map (VIIRS 2024 data by David Lorenz): dark blue = pristine sky (Bortle 1–2), green = rural (3–4), yellow = suburban (5), orange = urban fringe (6–7), white = city centre (8–9). When the layer is active, a colour legend appears on the map. Use this layer to visually identify your real Bortle level and set it in the selector — it directly affects the filter advisor recommendations.</li>
                     <li><strong>Bortle Selector:</strong> Sets the light pollution level of your observing site (1 = pristine dark sky, 9 = city centre). The value is used by the filter advisor to calibrate filter advice: dark skies (1–3) need no LP filters; suburban skies (4–7) benefit from broadband filters (CLS, L-Pro, Quadband); urban skies (8–9) make narrowband (Ha/OIII dual-band) essential. Click ℹ️ for instructions on finding your Bortle using the map layer.</li>
                     <li><strong>Seeing on the map:</strong> the seeing estimate is always visible at the bottom centre of the map, with score and verdict. Tap it to open the Antoniadi scale. On smartphones the Bortle selector and the Light Pollution button sit below the map, and when you turn the layer on the page scrolls to the map by itself.</li>
                 </ul>
@@ -2288,7 +2288,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <li><strong>Local object catalogue:</strong> <a href="https://github.com/Stellarium/stellarium" target="_blank" rel="noopener" style="color:#58a6ff;">Stellarium DSO catalogue</a> (GPL-2.0+) and <a href="https://github.com/mattiaverga/OpenNGC" target="_blank" rel="noopener" style="color:#58a6ff;">OpenNGC</a> by Mattia Verga (CC BY-SA 4.0): NGC, IC, Messier, Caldwell, Barnard, Sharpless, van den Bergh, LDN, LBN, Collinder, Melotte. Used when SIMBAD does not respond; the card then shows “Source: Stellarium / OpenNGC catalogue”.</li>
                     <li><strong>Object search:</strong> <a href="https://simbad.cds.unistra.fr/" target="_blank" rel="noopener" style="color:#58a6ff;">SIMBAD</a> and Sesame by CDS Strasbourg (ODbL). This research has made use of the SIMBAD database, operated at CDS, Strasbourg, France.</li>
                     <li><strong>FOV simulator:</strong> <a href="https://aladin.cds.unistra.fr/AladinLite/" target="_blank" rel="noopener" style="color:#58a6ff;">Aladin Lite</a> by CDS (GPL-3.0). Digitized Sky Survey images (DSS2 colour) from CDS, with backup copies from ESA ESASky and NASA MAST/STScI. The Digitized Sky Surveys were produced at the Space Telescope Science Institute under U.S. Government grant NAG W-2166.</li>
-                    <li><strong>Weather &amp; maps:</strong> <a href="https://open-meteo.com/" target="_blank" rel="noopener" style="color:#58a6ff;">Open-Meteo</a> (CC BY 4.0); <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener" style="color:#58a6ff;">© OpenStreetMap contributors</a> and Nominatim (ODbL); base map <a href="https://carto.com/attributions" target="_blank" rel="noopener" style="color:#58a6ff;">© CARTO</a>; <a href="https://djlorenz.github.io/astronomy/lp/" target="_blank" rel="noopener" style="color:#58a6ff;">Light Pollution Atlas 2024</a> by D. Lorenz (VIIRS data).</li>
+                    <li><strong>Weather &amp; maps:</strong> <a href="https://open-meteo.com/" target="_blank" rel="noopener" style="color:#58a6ff;">Open-Meteo</a> (CC BY 4.0); <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener" style="color:#58a6ff;">© OpenStreetMap contributors</a> and Nominatim (ODbL); base map <a href="https://carto.com/attributions" target="_blank" rel="noopener" style="color:#58a6ff;">© CARTO</a>; <a href="https://djlorenz.github.io/astronomy/lp/" target="_blank" rel="noopener" style="color:#58a6ff;">Light Pollution Atlas 2025</a> by D. Lorenz (VIIRS data).</li>
                     <li><strong>Descriptions &amp; images:</strong> <a href="https://www.wikipedia.org/" target="_blank" rel="noopener" style="color:#58a6ff;">Wikipedia</a> (CC BY-SA 4.0), <a href="https://www.wikidata.org/" target="_blank" rel="noopener" style="color:#58a6ff;">Wikidata</a> (CC0), <a href="https://images.nasa.gov/" target="_blank" rel="noopener" style="color:#58a6ff;">NASA Image and Video Library</a>.</li>
                     <li><strong>Libraries:</strong> Leaflet, SunCalc, Chart.js, jsPDF, jsPDF-AutoTable, Rive, Audiowide font (SIL OFL). Anonymous visit statistics: GoatCounter.</li>
                 </ul>
@@ -2358,7 +2358,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <li><strong>Jet Stream:</strong> El verdadero enemigo del Seeing. Por debajo de 50 km/h garantiza cielos estables y estrellas puntiformes. Por encima de 100 km/h, la turbulencia atmosférica destruirá los detalles finos — evita focales largas.</li>
                     <li><strong>Alarma de Humedad:</strong> Si supera el 85% (indicador rojo), activa las cintas calefactoras anticondensación a máxima potencia <em>antes</em> de que la temperatura baje al punto de rocío. Una vez que la óptica se empaña, la sesión está arruinada.</li>
                     <li><strong>Contaminación Lunar:</strong> Muestra el porcentaje de cielo "quemado" por la luz de la Luna según su fase y posición actual. La penalización se anula automáticamente cuando la Luna está bajo el horizonte. Valores altos desaconsejan la fotografía de banda ancha — considera filtros narrowband (Ha, OIII, SII).</li>
-                    <li><strong>Capa de Contaminación Lumínica (Atlas 2024):</strong> Activa el botón <em>Contaminación Lumínica</em> (bajo el selector Bortle) para superponer en el mapa la escala Bortle en colores reales (datos VIIRS 2024 de David Lorenz): azul oscuro = cielo prístino (Bortle 1–2), verde = rural (3–4), amarillo = suburbano (5), naranja = periferia urbana (6–7), blanco = centro ciudad (8–9). Al activar la capa aparece la leyenda de colores en el mapa. Usa esta capa para identificar visualmente tu nivel Bortle real y configurarlo en el selector.</li>
+                    <li><strong>Capa de Contaminación Lumínica (Atlas 2025):</strong> Activa el botón <em>Contaminación Lumínica</em> (bajo el selector Bortle) para superponer en el mapa la escala Bortle en colores reales (datos VIIRS 2024 de David Lorenz): azul oscuro = cielo prístino (Bortle 1–2), verde = rural (3–4), amarillo = suburbano (5), naranja = periferia urbana (6–7), blanco = centro ciudad (8–9). Al activar la capa aparece la leyenda de colores en el mapa. Usa esta capa para identificar visualmente tu nivel Bortle real y configurarlo en el selector.</li>
                     <li><strong>Selector Bortle:</strong> Establece el nivel de contaminación lumínica de tu sitio de observación (1 = cielo oscuro total, 9 = centro urbano). El valor lo usa el asistente de filtros para calibrar los consejos de filtros: cielos oscuros (1–3) no requieren filtros LP; cielos suburbanos (4–7) se benefician de filtros broadband (CLS, L-Pro, Quadband); cielos urbanos (8–9) hacen indispensable el narrowband (dual-band Ha/OIII). Haz clic en ℹ️ para instrucciones sobre cómo encontrar tu Bortle con la capa del mapa.</li>
                     <li><strong>Seeing en el mapa:</strong> la estimación del seeing está siempre visible abajo en el centro del mapa, con nota y veredicto. Al tocarla se abre la escala de Antoniadi. En el smartphone el selector Bortle y el botón Contaminación Lumínica están debajo del mapa, y al activar la capa la página se desplaza sola hasta el mapa.</li>
                 </ul>
@@ -2471,7 +2471,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <li><strong>Catálogo local de objetos:</strong> <a href="https://github.com/Stellarium/stellarium" target="_blank" rel="noopener" style="color:#58a6ff;">Catálogo DSO de Stellarium</a> (GPL-2.0+) y <a href="https://github.com/mattiaverga/OpenNGC" target="_blank" rel="noopener" style="color:#58a6ff;">OpenNGC</a> de Mattia Verga (CC BY-SA 4.0): NGC, IC, Messier, Caldwell, Barnard, Sharpless, van den Bergh, LDN, LBN, Collinder, Melotte. Se usa cuando SIMBAD no responde; en ese caso la ficha indica «Fuente: catálogo Stellarium / OpenNGC».</li>
                     <li><strong>Búsqueda de objetos:</strong> <a href="https://simbad.cds.unistra.fr/" target="_blank" rel="noopener" style="color:#58a6ff;">SIMBAD</a> y Sesame del CDS de Estrasburgo (ODbL). This research has made use of the SIMBAD database, operated at CDS, Strasbourg, France.</li>
                     <li><strong>Simulador FOV:</strong> <a href="https://aladin.cds.unistra.fr/AladinLite/" target="_blank" rel="noopener" style="color:#58a6ff;">Aladin Lite</a> del CDS (GPL-3.0). Imágenes Digitized Sky Survey (DSS2 en color) del CDS, con copias de respaldo de ESA ESASky y NASA MAST/STScI. The Digitized Sky Surveys were produced at the Space Telescope Science Institute under U.S. Government grant NAG W-2166.</li>
-                    <li><strong>Meteorología y mapas:</strong> <a href="https://open-meteo.com/" target="_blank" rel="noopener" style="color:#58a6ff;">Open-Meteo</a> (CC BY 4.0); <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener" style="color:#58a6ff;">© OpenStreetMap contributors</a> y Nominatim (ODbL); mapa base <a href="https://carto.com/attributions" target="_blank" rel="noopener" style="color:#58a6ff;">© CARTO</a>; <a href="https://djlorenz.github.io/astronomy/lp/" target="_blank" rel="noopener" style="color:#58a6ff;">Light Pollution Atlas 2024</a> de D. Lorenz (datos VIIRS).</li>
+                    <li><strong>Meteorología y mapas:</strong> <a href="https://open-meteo.com/" target="_blank" rel="noopener" style="color:#58a6ff;">Open-Meteo</a> (CC BY 4.0); <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener" style="color:#58a6ff;">© OpenStreetMap contributors</a> y Nominatim (ODbL); mapa base <a href="https://carto.com/attributions" target="_blank" rel="noopener" style="color:#58a6ff;">© CARTO</a>; <a href="https://djlorenz.github.io/astronomy/lp/" target="_blank" rel="noopener" style="color:#58a6ff;">Light Pollution Atlas 2025</a> de D. Lorenz (datos VIIRS).</li>
                     <li><strong>Descripciones e imágenes:</strong> <a href="https://www.wikipedia.org/" target="_blank" rel="noopener" style="color:#58a6ff;">Wikipedia</a> (CC BY-SA 4.0), <a href="https://www.wikidata.org/" target="_blank" rel="noopener" style="color:#58a6ff;">Wikidata</a> (CC0), <a href="https://images.nasa.gov/" target="_blank" rel="noopener" style="color:#58a6ff;">NASA Image and Video Library</a>.</li>
                     <li><strong>Bibliotecas:</strong> Leaflet, SunCalc, Chart.js, jsPDF, jsPDF-AutoTable, Rive, fuente Audiowide (SIL OFL). Estadísticas de visitas anónimas: GoatCounter.</li>
                 </ul>
@@ -2542,7 +2542,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <li><strong>急流 (Jet Stream)：</strong>视宁度的真正敌人。您所在位置上方低于50 km/h保证天空稳定、星点清晰。超过100 km/h，大气湍流将摧毁精细细节 — 避免使用长焦段。</li>
                     <li><strong>湿度警报：</strong>若读数超过85%（红色指示），请在温度降到露点之前将除露带调到最大功率。一旦光学元件起雾，拍摄会话就毁了。</li>
                     <li><strong>月光污染：</strong>根据当前月相和位置显示被月光"烧毁"的天空百分比。当月亮在地平线以下时，惩罚值自动归零。数值高时不建议宽带拍摄 — 考虑使用能截断月光连续谱的窄带滤镜（Ha、OIII、SII）。</li>
-                    <li><strong>光污染图层（Lorenz 2024 地图集）：</strong>点击<em>光污染</em>按钮（位于博特尔选择器下方），将博特尔色彩比例尺叠加到地图上（David Lorenz的VIIRS 2024数据）：深蓝色 = 原始天空（博特尔1–2）、绿色 = 农村（3–4）、黄色 = 郊区（5）、橙色 = 城市边缘（6–7）、白色 = 市中心（8–9）。激活图层时，地图上会显示颜色图例。使用此图层直观识别您的真实博特尔等级并在选择器中设置 — 直接影响滤镜建议。</li>
+                    <li><strong>光污染图层（Lorenz 2025 地图集）：</strong>点击<em>光污染</em>按钮（位于博特尔选择器下方），将博特尔色彩比例尺叠加到地图上（David Lorenz的VIIRS 2024数据）：深蓝色 = 原始天空（博特尔1–2）、绿色 = 农村（3–4）、黄色 = 郊区（5）、橙色 = 城市边缘（6–7）、白色 = 市中心（8–9）。激活图层时，地图上会显示颜色图例。使用此图层直观识别您的真实博特尔等级并在选择器中设置 — 直接影响滤镜建议。</li>
                     <li><strong>博特尔选择器：</strong>设置您观测地点的光污染等级（1 = 完全黑暗天空，9 = 市中心）。滤镜助手使用此值来校准滤镜建议：暗天空（1–3）不需要LP滤镜；郊区天空（4–7）受益于宽带滤镜（CLS、L-Pro、四频带）；城市天空（8–9）使窄带（Ha/OIII双频带）不可或缺。点击ℹ️获取使用地图图层查找您的博特尔等级的说明。</li>
                     <li><strong>地图上的视宁度：</strong>视宁度估计始终显示在地图底部中央，包含评分和评价。点击可打开安东尼亚迪标度。在手机上，博特尔选择器和光污染按钮位于地图下方，开启该图层时页面会自动滚动到地图。</li>
                 </ul>
@@ -2653,7 +2653,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                     <li><strong>本地天体星表:</strong> <a href="https://github.com/Stellarium/stellarium" target="_blank" rel="noopener" style="color:#58a6ff;">Stellarium 深空天体星表</a>（GPL-2.0+）和 Mattia Verga 的 <a href="https://github.com/mattiaverga/OpenNGC" target="_blank" rel="noopener" style="color:#58a6ff;">OpenNGC</a>（CC BY-SA 4.0）：NGC、IC、梅西耶、科德威尔、巴纳德、沙普利斯、范登堡、LDN、LBN、Collinder、Melotte。当 SIMBAD 无响应时使用；此时天体卡片显示“数据来源：Stellarium / OpenNGC 星表”。</li>
                     <li><strong>天体搜索:</strong> 斯特拉斯堡 CDS 的 <a href="https://simbad.cds.unistra.fr/" target="_blank" rel="noopener" style="color:#58a6ff;">SIMBAD</a> 和 Sesame（ODbL）。This research has made use of the SIMBAD database, operated at CDS, Strasbourg, France.</li>
                     <li><strong>视场模拟器:</strong> CDS 的 <a href="https://aladin.cds.unistra.fr/AladinLite/" target="_blank" rel="noopener" style="color:#58a6ff;">Aladin Lite</a>（GPL-3.0）。数字化巡天（DSS2 彩色）图像来自 CDS，备用副本来自 ESA ESASky 和 NASA MAST/STScI。The Digitized Sky Surveys were produced at the Space Telescope Science Institute under U.S. Government grant NAG W-2166.</li>
-                    <li><strong>天气与地图:</strong> <a href="https://open-meteo.com/" target="_blank" rel="noopener" style="color:#58a6ff;">Open-Meteo</a>（CC BY 4.0）；<a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener" style="color:#58a6ff;">© OpenStreetMap contributors</a> 与 Nominatim（ODbL）；底图 <a href="https://carto.com/attributions" target="_blank" rel="noopener" style="color:#58a6ff;">© CARTO</a>；D. Lorenz 的 <a href="https://djlorenz.github.io/astronomy/lp/" target="_blank" rel="noopener" style="color:#58a6ff;">Light Pollution Atlas 2024</a>（VIIRS 数据）。</li>
+                    <li><strong>天气与地图:</strong> <a href="https://open-meteo.com/" target="_blank" rel="noopener" style="color:#58a6ff;">Open-Meteo</a>（CC BY 4.0）；<a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener" style="color:#58a6ff;">© OpenStreetMap contributors</a> 与 Nominatim（ODbL）；底图 <a href="https://carto.com/attributions" target="_blank" rel="noopener" style="color:#58a6ff;">© CARTO</a>；D. Lorenz 的 <a href="https://djlorenz.github.io/astronomy/lp/" target="_blank" rel="noopener" style="color:#58a6ff;">Light Pollution Atlas 2025</a>（VIIRS 数据）。</li>
                     <li><strong>描述与图像:</strong> <a href="https://www.wikipedia.org/" target="_blank" rel="noopener" style="color:#58a6ff;">Wikipedia</a>（CC BY-SA 4.0）、<a href="https://www.wikidata.org/" target="_blank" rel="noopener" style="color:#58a6ff;">Wikidata</a>（CC0）、<a href="https://images.nasa.gov/" target="_blank" rel="noopener" style="color:#58a6ff;">NASA Image and Video Library</a>。</li>
                     <li><strong>程序库:</strong> Leaflet、SunCalc、Chart.js、jsPDF、jsPDF-AutoTable、Rive、Audiowide 字体（SIL OFL）。匿名访问统计：GoatCounter。</li>
                 </ul>
@@ -3344,7 +3344,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
                 <div style="color:#c49a3c;"><svg width="28" height="28" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-rocket"/></svg></div>
                 <div>
                     <div style="font-size:0.75em; color:#c49a3c; text-transform:uppercase; letter-spacing:1px; font-weight:700;" data-i18n="cl_update_label">Aggiornamento</div>
-                    <div style="font-size:1.25em; font-weight:800; color:#c9d1d9; letter-spacing:.5px;">AstroDashboardPRO <span style="color:#c49a3c;">v9.0</span></div>
+                    <div style="font-size:1.25em; font-weight:800; color:#c9d1d9; letter-spacing:.5px;">AstroDashboardPRO <span style="color:#c49a3c;">v9.1</span></div>
                 </div>
                 <button onclick="chiudiChangelog()" style="
                     margin-left:auto; background:transparent; border:none;
@@ -3360,68 +3360,26 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
             <!-- Changelog items -->
             <div style="display:flex; flex-direction:column; gap:10px;">
 
-                <!-- ── v9.0 ── -->
-<div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #c49a3c; box-shadow:0 0 0 1px rgba(0,0,0,0.15); margin-bottom:8px;">
-                    <span style="flex-shrink:0; color:#c49a3c;"><svg width="24" height="24" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-map"/></svg></span>
+                <!-- ── v9.1 ── -->
+                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #c49a3c; box-shadow:0 0 0 1px rgba(0,0,0,0.15); margin-bottom:8px;">
+                    <span style="flex-shrink:0; color:#c49a3c;"><svg width="24" height="24" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-sliders"/></svg></span>
                     <div>
-                        <div style="font-weight:700; color:#c49a3c; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v90_meteo_title"></div>
-                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v90_meteo_desc"></div>
+                        <div style="font-weight:700; color:#c49a3c; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v91_gain_title"></div>
+                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v91_gain_desc"></div>
+                    </div>
+                </div>
+                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #bb86fc; box-shadow:0 0 0 1px rgba(0,0,0,0.15); margin-bottom:8px;">
+                    <span style="flex-shrink:0; color:#bb86fc;"><svg width="24" height="24" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-camera"/></svg></span>
+                    <div>
+                        <div style="font-weight:700; color:#bb86fc; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v91_filtri_title"></div>
+                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v91_filtri_desc"></div>
                     </div>
                 </div>
                 <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #00c6ff; box-shadow:0 0 0 1px rgba(0,0,0,0.15); margin-bottom:8px;">
                     <span style="flex-shrink:0; color:#00c6ff;"><svg width="24" height="24" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-globe"/></svg></span>
                     <div>
-                        <div style="font-weight:700; color:#00c6ff; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v90_nubi_title"></div>
-                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v90_nubi_desc"></div>
-                    </div>
-                </div>
-                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #2ec96c; box-shadow:0 0 0 1px rgba(0,0,0,0.15); margin-bottom:8px;">
-                    <span style="flex-shrink:0; color:#2ec96c;"><svg width="24" height="24" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-switch"/></svg></span>
-                    <div>
-                        <div style="font-weight:700; color:#2ec96c; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v90_sezioni_title"></div>
-                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v90_sezioni_desc"></div>
-                    </div>
-                </div>
-                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #bb86fc; box-shadow:0 0 0 1px rgba(0,0,0,0.15); margin-bottom:8px;">
-                    <span style="flex-shrink:0; color:#bb86fc;"><svg width="24" height="24" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-planet"/></svg></span>
-                    <div>
-                        <div style="font-weight:700; color:#bb86fc; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v90_planetario_title"></div>
-                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v90_planetario_desc"></div>
-                    </div>
-                </div>
-                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #58a6ff; box-shadow:0 0 0 1px rgba(0,0,0,0.15); margin-bottom:8px;">
-                    <span style="flex-shrink:0; color:#58a6ff;"><svg width="24" height="24" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-target"/></svg></span>
-                    <div>
-                        <div style="font-weight:700; color:#58a6ff; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v90_dossier_title"></div>
-                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v90_dossier_desc"></div>
-                    </div>
-                </div>
-                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #5DCAA5; box-shadow:0 0 0 1px rgba(0,0,0,0.15); margin-bottom:8px;">
-                    <span style="flex-shrink:0; color:#5DCAA5;"><svg width="24" height="24" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-calendar"/></svg></span>
-                    <div>
-                        <div style="font-weight:700; color:#5DCAA5; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v90_data_title"></div>
-                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v90_data_desc"></div>
-                    </div>
-                </div>
-                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #2ecc71; box-shadow:0 0 0 1px rgba(0,0,0,0.15); margin-bottom:8px;">
-                    <span style="flex-shrink:0; color:#2ecc71;"><svg width="24" height="24" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-moon"/></svg></span>
-                    <div>
-                        <div style="font-weight:700; color:#2ecc71; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v90_analisi_title"></div>
-                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v90_analisi_desc"></div>
-                    </div>
-                </div>
-                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #bb86fc; box-shadow:0 0 0 1px rgba(0,0,0,0.15); margin-bottom:8px;">
-                    <span style="flex-shrink:0; color:#bb86fc;"><svg width="24" height="24" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-chip"/></svg></span>
-                    <div>
-                        <div style="font-weight:700; color:#bb86fc; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v90_sensore_title"></div>
-                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v90_sensore_desc"></div>
-                    </div>
-                </div>
-                <div style="display:flex; gap:12px; align-items:flex-start; padding:11px 14px; background:#1c2230; border-radius:10px; border-left:3px solid #f2c94c; box-shadow:0 0 0 1px rgba(0,0,0,0.15); margin-bottom:8px;">
-                    <span style="flex-shrink:0; color:#f2c94c;"><svg width="24" height="24" style="display:inline-block;vertical-align:middle;flex-shrink:0" stroke="currentColor" fill="none"><use href="#i-smartphone"/></svg></span>
-                    <div>
-                        <div style="font-weight:700; color:#f2c94c; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v90_mobile_title"></div>
-                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v90_mobile_desc"></div>
+                        <div style="font-weight:700; color:#00c6ff; font-size:0.9em; margin-bottom:3px;" data-i18n="cl_v91_lp_title"></div>
+                        <div style="color:#6e7a8a; font-size:0.82em; line-height:1.5;" data-i18n="cl_v91_lp_desc"></div>
                     </div>
                 </div>
 
@@ -3443,7 +3401,7 @@ svg.adp-ico { display:inline-block; vertical-align:middle; flex-shrink:0; }
 
     <script>
         (function() {
-            const CURRENT_VERSION = '9.0';
+            const CURRENT_VERSION = '9.1';
             const STORAGE_KEY = 'ad_last_version';
 
             function mostraChangelogManuale() {

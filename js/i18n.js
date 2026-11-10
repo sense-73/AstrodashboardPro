@@ -1709,6 +1709,32 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.zh.cl_v90_mobile_title = "专为手机优化";
         i18n.zh.cl_v90_mobile_desc = "下拉菜单采用应用风格，支持搜索和大字体；☰ 菜单包含模式、语言和手册；界面更紧凑，旋转手机时图表自动适应。";
 
+        // ── Changelog v9.1 (10/11/2026) ─────────────────
+        i18n.it.cl_v91_gain_title = "Gain ottimale per la tua camera";
+        i18n.it.cl_v91_gain_desc = "Quando scegli la camera nel Setup, la Sequenza imposta il gain dove si attiva la modalità a basso rumore (HCG), oppure l'unity gain per le camere senza HCG. Dark e bias usano lo stesso gain dei light. Per le camere non in elenco resta \"Auto\", cioè il valore impostato in N.I.N.A.";
+        i18n.en.cl_v91_gain_title = "Optimal gain for your camera";
+        i18n.en.cl_v91_gain_desc = "When you choose the camera in Setup, the Sequence sets the gain where the low-noise mode (HCG) kicks in, or unity gain for cameras without HCG. Darks and bias use the same gain as the lights. For cameras not in the list it stays \"Auto\", i.e. the value set in N.I.N.A.";
+        i18n.es.cl_v91_gain_title = "Gain óptimo para tu cámara";
+        i18n.es.cl_v91_gain_desc = "Al elegir la cámara en el Setup, la Secuencia ajusta el gain donde se activa el modo de bajo ruido (HCG), o el unity gain para las cámaras sin HCG. Darks y bias usan el mismo gain que los lights. Para las cámaras que no están en la lista queda en \"Auto\", es decir, el valor configurado en N.I.N.A.";
+        i18n.zh.cl_v91_gain_title = "为您的相机设置最佳增益";
+        i18n.zh.cl_v91_gain_desc = "在设置中选择相机后，序列会将增益设为低噪声模式（HCG）启动的值；没有 HCG 的相机则设为单位增益。暗场和偏置场使用与亮场相同的增益。不在列表中的相机保持“自动”，即使用 N.I.N.A. 中设置的值。";
+        i18n.it.cl_v91_filtri_title = "Filtri con banda infrarossa";
+        i18n.it.cl_v91_filtri_desc = "Per i filtri che lasciano passare anche l'infrarosso (es. Antlia Quad Band) l'app chiede se la tua camera lo vede: la risposta cambia la banda utile, la posa minima e i consigli. Nuova categoria per i filtri antinquinamento a banda larga (L-QEF, L-Pro, IDAS…), che non vengono più trattati come narrowband.";
+        i18n.en.cl_v91_filtri_title = "Filters with an infrared band";
+        i18n.en.cl_v91_filtri_desc = "For filters that also pass infrared (e.g. Antlia Quad Band) the app asks whether your camera sees it: the answer changes the useful bandwidth, the minimum exposure and the tips. New category for broadband light-pollution filters (L-QEF, L-Pro, IDAS…), which are no longer treated as narrowband.";
+        i18n.es.cl_v91_filtri_title = "Filtros con banda infrarroja";
+        i18n.es.cl_v91_filtri_desc = "Para los filtros que también dejan pasar el infrarrojo (p. ej. Antlia Quad Band) la app pregunta si tu cámara lo ve: la respuesta cambia la banda útil, la exposición mínima y los consejos. Nueva categoría para los filtros anticontaminación de banda ancha (L-QEF, L-Pro, IDAS…), que ya no se tratan como narrowband.";
+        i18n.zh.cl_v91_filtri_title = "带红外波段的滤镜";
+        i18n.zh.cl_v91_filtri_desc = "对于同时透过红外的滤镜（如 Antlia Quad Band），应用会询问您的相机能否看到红外：答案会改变有效带宽、最短曝光和建议。新增宽带抗光害滤镜类别（L-QEF、L-Pro、IDAS 等），不再按窄带处理。";
+        i18n.it.cl_v91_lp_title = "Mappa dell'inquinamento luminoso 2025";
+        i18n.it.cl_v91_lp_desc = "La mappa e il rilevamento automatico del Bortle usano l'atlante di D. Lorenz aggiornato con i dati satellitari VIIRS del 2025 (prima era il 2024).";
+        i18n.en.cl_v91_lp_title = "2025 light pollution map";
+        i18n.en.cl_v91_lp_desc = "The map and the automatic Bortle detection use D. Lorenz's atlas updated with 2025 VIIRS satellite data (previously 2024).";
+        i18n.es.cl_v91_lp_title = "Mapa de contaminación lumínica 2025";
+        i18n.es.cl_v91_lp_desc = "El mapa y la detección automática del Bortle usan el atlas de D. Lorenz actualizado con los datos satelitales VIIRS de 2025 (antes era 2024).";
+        i18n.zh.cl_v91_lp_title = "2025 年光污染地图";
+        i18n.zh.cl_v91_lp_desc = "地图和博特尔自动检测现采用 D. Lorenz 基于 2025 年 VIIRS 卫星数据更新的地图集（此前为 2024 年）。";
+
         // ── Changelog v8.2 (01/11/2026) ─────────────────
         i18n.it.cl_v82_search_title = "Ricerca sempre disponibile";
         i18n.en.cl_v82_search_title = "Search always available";
@@ -1874,10 +1900,10 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.es.cl_v80_manual_desc = "Nueva sección 0 'Modo Básico y Avanzado' añadida en los 4 idiomas del manual integrado. Explica las diferencias entre los dos niveles y cómo cambiar entre ellos.";
         i18n.zh.cl_v80_manual_desc = "在集成手册的全部 4 种语言中新增第 0 节「基础模式与高级模式」，说明两个级别的区别以及如何在它们之间切换。";
 
-        i18n.it.cl_close_btn = "Inizia a usare v9.0 🚀";
-        i18n.en.cl_close_btn = "Start using v9.0 🚀";
-        i18n.es.cl_close_btn = "Empezar a usar v9.0 🚀";
-        i18n.zh.cl_close_btn = "开始使用 v9.0 🚀";
+        i18n.it.cl_close_btn = "Inizia a usare v9.1 🚀";
+        i18n.en.cl_close_btn = "Start using v9.1 🚀";
+        i18n.es.cl_close_btn = "Empezar a usar v9.1 🚀";
+        i18n.zh.cl_close_btn = "开始使用 v9.1 🚀";
 
         i18n.it.cl1_title           = "Database telescopi e sensori ampliato";
         i18n.en.cl1_title           = "Expanded telescope and sensor database";
