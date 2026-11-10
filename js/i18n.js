@@ -1302,10 +1302,10 @@ let lang = localStorage.getItem('ad_lang') || 'it';
         i18n.es.lp_layer = "Contaminación Lumínica";
         i18n.zh.lp_layer = "光污染";
         // Legenda LP
-        i18n.it.lp_legend_title = "Scala Inquinamento Luminoso (Lorenz 2024)";
-        i18n.en.lp_legend_title = "Light Pollution Scale (Lorenz 2024)";
-        i18n.es.lp_legend_title = "Escala de Contaminación Lumínica (Lorenz 2024)";
-        i18n.zh.lp_legend_title = "光污染等级（Lorenz 2024）";
+        i18n.it.lp_legend_title = "Scala Inquinamento Luminoso (Lorenz 2025)";
+        i18n.en.lp_legend_title = "Light Pollution Scale (Lorenz 2025)";
+        i18n.es.lp_legend_title = "Escala de Contaminación Lumínica (Lorenz 2025)";
+        i18n.zh.lp_legend_title = "光污染等级（Lorenz 2025）";
         i18n.it.bortle_info_tip = "💡 Non sei sicuro del tuo Bortle? Attiva il layer <b>Inq. Luminoso</b> sulla mappa: i colori (blu→verde→giallo→rosso→bianco) corrispondono ai livelli Bortle 1→9. Individua la tua posizione e scegli il valore corrispondente.";
         i18n.en.bortle_info_tip = "💡 Not sure about your Bortle? Enable the <b>Light Pollution</b> layer on the map: colors (blue→green→yellow→red→white) correspond to Bortle levels 1→9. Find your location and pick the matching value.";
         i18n.es.bortle_info_tip = "💡 ¿No estás seguro de tu Bortle? Activa la capa <b>Contaminación Lumínica</b> en el mapa: los colores (azul→verde→amarillo→rojo→blanco) corresponden a los niveles Bortle 1→9. Localiza tu posición y elige el valor correspondiente.";

@@ -20,10 +20,10 @@
             if (_mapEl) { _mapEl.style.position = 'relative'; _mapEl.appendChild(_ov); }
         })();
         let layers = { basse: L.layerGroup().addTo(map), medie: L.layerGroup(), alte: L.layerGroup(), jet: L.layerGroup(), luna: L.layerGroup(), umidita: L.layerGroup(), vento: L.layerGroup() };
-        // Layer LP: tile Lorenz 2024 con formato custom tile_{z}_{x}_{y}.png
+        // Layer LP: tile Lorenz 2025 con formato custom tile_{z}_{x}_{y}.png
         let LorenzLP = L.TileLayer.extend({
             getTileUrl: function(coords) {
-                return `https://djlorenz.github.io/astronomy/image_tiles/tiles2024/tile_${coords.z}_${coords.x}_${coords.y}.png`;
+                return `https://djlorenz.github.io/astronomy/image_tiles/tiles2025/tile_${coords.z}_${coords.x}_${coords.y}.png`;
             }
         });
         let lpLayer = new LorenzLP('', {
@@ -31,7 +31,7 @@
             maxNativeZoom: 6,
             maxZoom: 12,
             tileSize: 256,
-            attribution: '© <a href="https://djlorenz.github.io/astronomy/lp/" target="_blank">Light Pollution Atlas 2024</a> (D.Lorenz/VIIRS)'
+            attribution: '© <a href="https://djlorenz.github.io/astronomy/lp/" target="_blank">Light Pollution Atlas 2025</a> (D.Lorenz/VIIRS)'
         });
         let lpActive = false;
         let _lpSavedLayers = []; // memoria layer meteo attivi prima di LP
@@ -880,7 +880,7 @@
 
 
 
-        // ── Bortle autorilevamento via tile Lorenz 2024 ───────────────────────
+        // ── Bortle autorilevamento via tile Lorenz 2025 ───────────────────────
         // Campiona il colore del tile LP già usato sulla mappa e lo mappa a Bortle
 
         // Tabella colori Lorenz → Bortle (da colorbar ufficiale campionata via PIL)
@@ -936,7 +936,7 @@
             const zoom = 6;
             const tileSize = 256;
             const { tx, ty, px, py } = _pixelInTile(lat, lon, zoom, tileSize);
-            const url = `https://djlorenz.github.io/astronomy/image_tiles/tiles2024/tile_${zoom}_${tx}_${ty}.png`;
+            const url = `https://djlorenz.github.io/astronomy/image_tiles/tiles2025/tile_${zoom}_${tx}_${ty}.png`;
 
             if (DEBUG) console.log('[Bortle] Carico tile:', url, 'pixel:', px, py);
 
